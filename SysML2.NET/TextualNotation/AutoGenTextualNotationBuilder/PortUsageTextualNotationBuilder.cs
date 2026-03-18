@@ -66,7 +66,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }

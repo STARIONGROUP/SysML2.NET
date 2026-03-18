@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -106,17 +107,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>FunctionReference:Expression=ownedRelationship+=ReferenceTyping</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionReference(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFunctionReference(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
-            ownedRelationshipOfFeatureTypingIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureTypingTextualNotationBuilder.BuildReferenceTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
+                {
+                    FeatureTypingTextualNotationBuilder.BuildReferenceTyping(elementAsFeatureTyping, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -168,7 +174,7 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("expr ");
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
             TypeTextualNotationBuilder.BuildFunctionBody(poco, stringBuilder);
 
         }

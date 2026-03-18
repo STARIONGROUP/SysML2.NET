@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>MessageEventMember:ParameterMembership=ownedRelatedElement+=MessageEvent</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMessageEventMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildMessageEventMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfEventOccurrenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Occurrences.EventOccurrenceUsage>().GetEnumerator();
-            ownedRelatedElementOfEventOccurrenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfEventOccurrenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                EventOccurrenceUsageTextualNotationBuilder.BuildMessageEvent(ownedRelatedElementOfEventOccurrenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage elementAsEventOccurrenceUsage)
+                {
+                    EventOccurrenceUsageTextualNotationBuilder.BuildMessageEvent(elementAsEventOccurrenceUsage, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -57,17 +63,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>PayloadParameterMember:ParameterMembership=ownedRelatedElement+=PayloadParameter</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPayloadParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildPayloadParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildPayloadParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildPayloadParameter(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -81,7 +92,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberParameter != null)
             {
-                FeatureTextualNotationBuilder.BuildArgument(poco.ownedMemberParameter, stringBuilder);
+                FeatureTextualNotationBuilder.BuildArgument(poco.ownedMemberParameter, 0, stringBuilder);
             }
 
         }
@@ -91,17 +102,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>ArgumentExpressionMember:ParameterMembership=ownedRelatedElement+=ArgumentExpression</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildArgumentExpressionMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildArgumentExpressionMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-            ownedRelatedElementOfFeatureIterator.MoveNext();
-
-            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                FeatureTextualNotationBuilder.BuildArgumentExpression(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                {
+                    FeatureTextualNotationBuilder.BuildArgumentExpression(elementAsFeature, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -109,17 +125,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>NodeParameterMember:ParameterMembership=ownedRelatedElement+=NodeParameter</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNodeParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildNodeParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildNodeParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildNodeParameter(elementAsReferenceUsage, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -127,17 +148,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>EmptyParameterMember:ParameterMembership=ownedRelatedElement+=EmptyUsage</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEmptyParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildEmptyParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildEmptyUsage(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildEmptyUsage(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -145,17 +171,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>AssignmentTargetMember:ParameterMembership=ownedRelatedElement+=AssignmentTargetParameter</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAssignmentTargetMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildAssignmentTargetMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildAssignmentTargetParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildAssignmentTargetParameter(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -163,17 +194,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>ExpressionParameterMember:ParameterMembership=ownedRelatedElement+=OwnedExpression</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpressionParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildExpressionParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
-            ownedRelatedElementOfExpressionIterator.MoveNext();
-
-            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
+                {
+                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -181,17 +217,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>ActionBodyParameterMember:ParameterMembership=ownedRelatedElement+=ActionBodyParameter</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionBodyParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildActionBodyParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
-            ownedRelatedElementOfActionUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ActionUsageTextualNotationBuilder.BuildActionBodyParameter(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.Actions.IActionUsage elementAsActionUsage)
+                {
+                    ActionUsageTextualNotationBuilder.BuildActionBodyParameter(elementAsActionUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -199,17 +240,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>IfNodeParameterMember:ParameterMembership=ownedRelatedElement+=IfNode</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIfNodeParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildIfNodeParameterMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfIfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.IfActionUsage>().GetEnumerator();
-            ownedRelatedElementOfIfActionUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfIfActionUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                IfActionUsageTextualNotationBuilder.BuildIfNode(ownedRelatedElementOfIfActionUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage elementAsIfActionUsage)
+                {
+                    IfActionUsageTextualNotationBuilder.BuildIfNode(elementAsIfActionUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -217,17 +263,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataArgumentMember:ParameterMembership=ownedRelatedElement+=MetadataArgument</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildMetadataArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-            ownedRelatedElementOfFeatureIterator.MoveNext();
-
-            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                FeatureTextualNotationBuilder.BuildMetadataArgument(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                {
+                    FeatureTextualNotationBuilder.BuildMetadataArgument(elementAsFeature, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -241,7 +292,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberFeature != null)
             {
-                FeatureTextualNotationBuilder.BuildTypeReference(poco.ownedMemberFeature, stringBuilder);
+                FeatureTextualNotationBuilder.BuildTypeReference(poco.ownedMemberFeature, 0, stringBuilder);
             }
 
         }
@@ -257,7 +308,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberParameter != null)
             {
-                FeatureTextualNotationBuilder.BuildPrimaryArgument(poco.ownedMemberParameter, stringBuilder);
+                FeatureTextualNotationBuilder.BuildPrimaryArgument(poco.ownedMemberParameter, 0, stringBuilder);
             }
 
         }
@@ -273,7 +324,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberParameter != null)
             {
-                FeatureTextualNotationBuilder.BuildPrimaryArgument(poco.ownedMemberParameter, stringBuilder);
+                FeatureTextualNotationBuilder.BuildPrimaryArgument(poco.ownedMemberParameter, 0, stringBuilder);
             }
 
         }
@@ -289,7 +340,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberParameter != null)
             {
-                FeatureTextualNotationBuilder.BuildBodyArgument(poco.ownedMemberParameter, stringBuilder);
+                FeatureTextualNotationBuilder.BuildBodyArgument(poco.ownedMemberParameter, 0, stringBuilder);
             }
 
         }
@@ -305,7 +356,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberParameter != null)
             {
-                FeatureTextualNotationBuilder.BuildFunctionReferenceArgument(poco.ownedMemberParameter, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFunctionReferenceArgument(poco.ownedMemberParameter, 0, stringBuilder);
             }
 
         }

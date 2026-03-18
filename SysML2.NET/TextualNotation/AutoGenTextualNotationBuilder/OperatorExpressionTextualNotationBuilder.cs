@@ -56,20 +56,20 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("else ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -95,13 +95,13 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -133,7 +133,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -159,7 +159,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -192,7 +192,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -212,7 +212,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildMetadataArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildMetadataArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
@@ -220,7 +220,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }

@@ -45,7 +45,7 @@ namespace SysML2.NET.TextualNotation
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("succession ");
             stringBuilder.Append("flow ");
-            FlowUsageTextualNotationBuilder.BuildFlowDeclaration(poco, stringBuilder);
+            FlowUsageTextualNotationBuilder.BuildFlowDeclaration(poco, 0, stringBuilder);
             TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
 
         }

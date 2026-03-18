@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -50,10 +51,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionBodyItem:Type=ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=OccurrenceUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildDefinitionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -72,10 +76,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfaceBodyItem:Type=ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=InterfaceNonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=InterfaceOccurrenceUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildInterfaceBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -94,10 +101,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>ActionBodyItem:Type=NonBehaviorBodyItem|ownedRelationship+=InitialNodeMember(ownedRelationship+=ActionTargetSuccessionMember)*|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=ActionBehaviorMember(ownedRelationship+=ActionTargetSuccessionMember)*|ownedRelationship+=GuardedSuccessionMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildActionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -105,10 +115,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>StateBodyItem:Type=NonBehaviorBodyItem|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=BehaviorUsageMember(ownedRelationship+=TargetTransitionUsageMember)*|ownedRelationship+=TransitionUsageMember|ownedRelationship+=EntryActionMember(ownedRelationship+=EntryTransitionMember)*|ownedRelationship+=DoActionMember|ownedRelationship+=ExitActionMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildStateBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -131,7 +144,11 @@ namespace SysML2.NET.TextualNotation
         public static void BuildCalculationBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfResultExpressionMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ResultExpressionMembership>().GetEnumerator();
-            BuildCalculationBodyItem(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = BuildCalculationBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+            }
 
             if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())
             {
@@ -151,25 +168,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>CalculationBodyItem:Type=ActionBodyItem|ownedRelationship+=ReturnParameterMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
-            var ownedRelationship = poco.OwnedRelationship.ToList();
+            var elementsElement = poco.OwnedRelationship[elementIndex];
 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            switch (elementsElement)
             {
-                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+                case SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembership:
+                    ReturnParameterMembershipTextualNotationBuilder.BuildReturnParameterMember(returnParameterMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Core.Types.IType type:
+                    elementIndex = BuildActionBodyItem(type, elementIndex, stringBuilder);
+                    break;
 
-                switch (ownedRelationshipElement)
-                {
-                    case SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembership:
-                        ReturnParameterMembershipTextualNotationBuilder.BuildReturnParameterMember(returnParameterMembership, stringBuilder); break;
-                    default:
-                        ownedRelationshipIndex = BuildActionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
-                        break;
-
-                }
             }
+            return elementIndex;
         }
 
         /// <summary>
@@ -188,35 +203,33 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementBodyItem:Type=DefinitionBodyItem|ownedRelationship+=SubjectMember|ownedRelationship+=RequirementConstraintMember|ownedRelationship+=FramedConcernMember|ownedRelationship+=RequirementVerificationMember|ownedRelationship+=ActorMember|ownedRelationship+=StakeholderMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
-            var ownedRelationship = poco.OwnedRelationship.ToList();
+            var elementsElement = poco.OwnedRelationship[elementIndex];
 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            switch (elementsElement)
             {
-                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+                case SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership subjectMembership:
+                    SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership requirementConstraintMembership:
+                    RequirementConstraintMembershipTextualNotationBuilder.BuildRequirementConstraintMember(requirementConstraintMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership framedConcernMembership:
+                    FramedConcernMembershipTextualNotationBuilder.BuildFramedConcernMember(framedConcernMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership requirementVerificationMembership:
+                    RequirementVerificationMembershipTextualNotationBuilder.BuildRequirementVerificationMember(requirementVerificationMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.ActorMembership actorMembership:
+                    ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.StakeholderMembership stakeholderMembership:
+                    StakeholderMembershipTextualNotationBuilder.BuildStakeholderMember(stakeholderMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Core.Types.IType type:
+                    elementIndex = BuildDefinitionBodyItem(type, elementIndex, stringBuilder);
+                    break;
 
-                switch (ownedRelationshipElement)
-                {
-                    case SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership subjectMembership:
-                        SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership requirementConstraintMembership:
-                        RequirementConstraintMembershipTextualNotationBuilder.BuildRequirementConstraintMember(requirementConstraintMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership framedConcernMembership:
-                        FramedConcernMembershipTextualNotationBuilder.BuildFramedConcernMember(framedConcernMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership requirementVerificationMembership:
-                        RequirementVerificationMembershipTextualNotationBuilder.BuildRequirementVerificationMember(requirementVerificationMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Requirements.ActorMembership actorMembership:
-                        ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Requirements.StakeholderMembership stakeholderMembership:
-                        StakeholderMembershipTextualNotationBuilder.BuildStakeholderMember(stakeholderMembership, stringBuilder); break;
-                    default:
-                        ownedRelationshipIndex = BuildDefinitionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
-                        break;
-
-                }
             }
+            return elementIndex;
         }
 
         /// <summary>
@@ -235,29 +248,27 @@ namespace SysML2.NET.TextualNotation
         /// <para>CaseBodyItem:Type=ActionBodyItem|ownedRelationship+=SubjectMember|ownedRelationship+=ActorMember|ownedRelationship+=ObjectiveMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
-            var ownedRelationship = poco.OwnedRelationship.ToList();
+            var elementsElement = poco.OwnedRelationship[elementIndex];
 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            switch (elementsElement)
             {
-                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+                case SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership subjectMembership:
+                    SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.ActorMembership actorMembership:
+                    ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership objectiveMembership:
+                    ObjectiveMembershipTextualNotationBuilder.BuildObjectiveMember(objectiveMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Core.Types.IType type:
+                    elementIndex = BuildActionBodyItem(type, elementIndex, stringBuilder);
+                    break;
 
-                switch (ownedRelationshipElement)
-                {
-                    case SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership subjectMembership:
-                        SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Requirements.ActorMembership actorMembership:
-                        ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership objectiveMembership:
-                        ObjectiveMembershipTextualNotationBuilder.BuildObjectiveMember(objectiveMembership, stringBuilder); break;
-                    default:
-                        ownedRelationshipIndex = BuildActionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
-                        break;
-
-                }
             }
+            return elementIndex;
         }
 
         /// <summary>
@@ -323,14 +334,15 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            // Have to handle group collection
             stringBuilder.Append(' ');
-            BuildTypeRelationshipPart(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            BuildTypeRelationshipPartInternal(poco, stringBuilder); BuildTypeRelationshipPart(poco, stringBuilder);
 
         }
 
@@ -439,7 +451,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfUnioningIterator.Current != null)
             {
-                UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, stringBuilder);
+                UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, 0, stringBuilder);
             }
 
             while (ownedRelationshipOfUnioningIterator.MoveNext())
@@ -448,7 +460,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfUnioningIterator.Current != null)
                 {
-                    UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, stringBuilder);
+                    UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, 0, stringBuilder);
                 }
 
             }
@@ -469,7 +481,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfIntersectingIterator.Current != null)
             {
-                IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, stringBuilder);
+                IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, 0, stringBuilder);
             }
 
             while (ownedRelationshipOfIntersectingIterator.MoveNext())
@@ -478,7 +490,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfIntersectingIterator.Current != null)
                 {
-                    IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, stringBuilder);
+                    IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, 0, stringBuilder);
                 }
 
             }
@@ -499,7 +511,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfDifferencingIterator.Current != null)
             {
-                DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, stringBuilder);
+                DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, 0, stringBuilder);
             }
 
             while (ownedRelationshipOfDifferencingIterator.MoveNext())
@@ -508,7 +520,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfDifferencingIterator.Current != null)
                 {
-                    DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, stringBuilder);
+                    DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, 0, stringBuilder);
                 }
 
             }
@@ -531,28 +543,28 @@ namespace SysML2.NET.TextualNotation
         /// <para>TypeBodyElement:Type=ownedRelationship+=NonFeatureMember|ownedRelationship+=FeatureMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, int elementIndex, StringBuilder stringBuilder)
         {
-            foreach (var elementInOwnedRelationship in poco.OwnedRelationship)
+            switch (elementInOwnedRelationship)
             {
-                switch (elementInOwnedRelationship)
-                {
-                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership when owningMembership.IsValidForNonFeatureMember():
-                        OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(owningMembership, stringBuilder);
-                        break;
-                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership when owningMembership.IsValidForFeatureMember():
-                        OwningMembershipTextualNotationBuilder.BuildFeatureMember(owningMembership, stringBuilder);
-                        break;
-                    case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
-                        break;
-                    case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
-                        break;
-                }
+                case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership when owningMembership.IsValidForNonFeatureMember():
+                    OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(owningMembership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership when owningMembership.IsValidForFeatureMember():
+                    OwningMembershipTextualNotationBuilder.BuildFeatureMember(owningMembership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
+                    ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                    break;
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -576,22 +588,7 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             using var ownedRelationshipOfResultExpressionMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ResultExpressionMembership>().GetEnumerator();
-            var ownedRelationship = poco.OwnedRelationship.ToList();
-
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
-            {
-                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
-
-                switch (ownedRelationshipElement)
-                {
-                    case SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembership:
-                        ReturnParameterMembershipTextualNotationBuilder.BuildReturnFeatureMember(returnParameterMembership, stringBuilder); break;
-                    default:
-                        ownedRelationshipIndex = BuildTypeBodyElement(ownedRelationshipIndex, ownedRelationship, stringBuilder);
-                        break;
-
-                }
-            }
+            // Have to handle group collection
 
             if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())
             {

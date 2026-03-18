@@ -45,7 +45,7 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
         }
 
@@ -75,7 +75,11 @@ namespace SysML2.NET.TextualNotation
             if (BuildGroupConditionForTransitionPerformActionUsage(poco))
             {
                 stringBuilder.Append("{");
-                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                // Handle collection Non Terminal 
+                for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+                {
+                    ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+                }
                 stringBuilder.Append("}");
                 stringBuilder.Append(' ');
             }

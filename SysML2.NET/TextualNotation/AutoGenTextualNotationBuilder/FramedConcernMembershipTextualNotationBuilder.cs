@@ -49,7 +49,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfConcernUsageIterator.Current != null)
             {
-                ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(ownedRelatedElementOfConcernUsageIterator.Current, stringBuilder);
+                ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(ownedRelatedElementOfConcernUsageIterator.Current, 0, stringBuilder);
             }
 
         }

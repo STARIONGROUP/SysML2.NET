@@ -58,7 +58,11 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
 
         }
 
@@ -75,7 +79,11 @@ namespace SysML2.NET.TextualNotation
             {
                 stringBuilder.Append(" individual ");
             }
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -97,7 +105,11 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append(poco.PortionKind.ToString().ToLower());
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
             // NonParsing Assignment Element : isPortion = true => Does not have to be process
 
@@ -127,7 +139,11 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
 
         }
 

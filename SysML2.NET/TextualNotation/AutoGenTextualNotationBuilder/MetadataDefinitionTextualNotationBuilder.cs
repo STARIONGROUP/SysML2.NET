@@ -49,7 +49,11 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             stringBuilder.Append("metadata ");
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);

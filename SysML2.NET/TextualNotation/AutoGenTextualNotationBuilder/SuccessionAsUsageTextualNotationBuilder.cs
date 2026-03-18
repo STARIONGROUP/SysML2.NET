@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>SourceSuccession:SuccessionAsUsage=ownedRelationship+=SourceEndMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSourceSuccession(SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildSourceSuccession(SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(elementAsEndFeatureMembership, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -65,14 +71,14 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("then ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -100,14 +106,14 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("then ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 

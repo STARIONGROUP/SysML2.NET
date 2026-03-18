@@ -52,7 +52,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfParameterMembershipIterator.Current != null)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }

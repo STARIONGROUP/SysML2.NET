@@ -55,7 +55,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }

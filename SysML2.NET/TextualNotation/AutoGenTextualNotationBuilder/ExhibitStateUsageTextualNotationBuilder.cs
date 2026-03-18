@@ -47,7 +47,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("exhibit ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
             StateUsageTextualNotationBuilder.BuildStateUsageBody(poco, stringBuilder);
 
         }

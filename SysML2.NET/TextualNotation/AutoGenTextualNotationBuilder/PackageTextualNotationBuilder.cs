@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -63,28 +64,28 @@ namespace SysML2.NET.TextualNotation
         /// <para>PackageBodyElement:Package=ownedRelationship+=PackageMember|ownedRelationship+=ElementFilterMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            foreach (var elementInOwnedRelationship in poco.OwnedRelationship)
+            switch (elementInOwnedRelationship)
             {
-                switch (elementInOwnedRelationship)
-                {
-                    case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
-                        ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder);
-                        break;
-                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership:
-                        OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, stringBuilder);
-                        break;
-                    case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
-                        break;
-                    case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
-                        break;
-                }
+                case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
+                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership:
+                    OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
+                    ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                    break;
             }
 
+            return elementIndex;
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfConstraintUsageIterator.Current != null)
             {
-                ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(ownedRelatedElementOfConstraintUsageIterator.Current, stringBuilder);
+                ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(ownedRelatedElementOfConstraintUsageIterator.Current, 0, stringBuilder);
             }
 
         }

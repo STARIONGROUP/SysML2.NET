@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -66,9 +67,9 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
-            BuildSenderReceiverPart(poco, stringBuilder);
+            BuildSenderReceiverPart(poco, 0, stringBuilder);
 
         }
 
@@ -77,10 +78,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>SenderReceiverPart:SendActionUsage='via'ownedRelationship+=NodeParameterMember('to'ownedRelationship+=NodeParameterMember)?|ownedRelationship+=EmptyParameterMember'to'ownedRelationship+=NodeParameterMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSenderReceiverPart(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildSenderReceiverPart(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -109,7 +113,11 @@ namespace SysML2.NET.TextualNotation
             if (BuildGroupConditionForTransitionSendActionUsage(poco))
             {
                 stringBuilder.Append("{");
-                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                // Handle collection Non Terminal 
+                for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+                {
+                    ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+                }
                 stringBuilder.Append("}");
                 stringBuilder.Append(' ');
             }

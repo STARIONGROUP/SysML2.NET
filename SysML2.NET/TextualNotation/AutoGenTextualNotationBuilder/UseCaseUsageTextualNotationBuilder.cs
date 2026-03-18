@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("use ");
             stringBuilder.Append("case ");
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
             TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
 

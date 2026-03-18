@@ -87,7 +87,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
@@ -102,7 +102,8 @@ namespace SysML2.NET.TextualNotation
                     break;
             }
 
-            TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            BuildTypeRelationshipPartInternal(poco, stringBuilder); TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, stringBuilder);
 
         }
 

@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -50,29 +51,27 @@ namespace SysML2.NET.TextualNotation
         /// <para>ViewBodyItem:ViewUsage=DefinitionBodyItem|ownedRelationship+=ElementFilterMember|ownedRelationship+=ViewRenderingMember|ownedRelationship+=Expose</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildViewBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            var ownedRelationship = poco.OwnedRelationship.ToList();
+            var elementsElement = poco.OwnedRelationship[elementIndex];
 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            switch (elementsElement)
             {
-                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+                case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
+                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembership:
+                    ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Views.IExpose expose:
+                    ExposeTextualNotationBuilder.BuildExpose(expose, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Core.Types.IType type:
+                    elementIndex = TypeTextualNotationBuilder.BuildDefinitionBodyItem(type, elementIndex, stringBuilder);
+                    break;
 
-                switch (ownedRelationshipElement)
-                {
-                    case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
-                        ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembership:
-                        ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Views.IExpose expose:
-                        ExposeTextualNotationBuilder.BuildExpose(expose, stringBuilder); break;
-                    default:
-                        ownedRelationshipIndex = TypeTextualNotationBuilder.BuildDefinitionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
-                        break;
-
-                }
             }
+            return elementIndex;
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace SysML2.NET.TextualNotation
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("view ");
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
             BuildViewBody(poco, stringBuilder);
 
         }

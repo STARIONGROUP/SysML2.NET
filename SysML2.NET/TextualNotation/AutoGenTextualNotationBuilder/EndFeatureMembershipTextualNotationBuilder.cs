@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>SourceEndMember:EndFeatureMembership=ownedRelatedElement+=SourceEnd</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSourceEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildSourceEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildSourceEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildSourceEnd(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -57,17 +63,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>ConnectorEndMember:EndFeatureMembership=ownedRelatedElement+=ConnectorEnd</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConnectorEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildConnectorEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildConnectorEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildConnectorEnd(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -75,17 +86,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfaceEndMember:EndFeatureMembership=ownedRelatedElement+=InterfaceEnd</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildInterfaceEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfPortUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.PortUsage>().GetEnumerator();
-            ownedRelatedElementOfPortUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfPortUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                PortUsageTextualNotationBuilder.BuildInterfaceEnd(ownedRelatedElementOfPortUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.Ports.IPortUsage elementAsPortUsage)
+                {
+                    PortUsageTextualNotationBuilder.BuildInterfaceEnd(elementAsPortUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -93,17 +109,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowEndMember:EndFeatureMembership=ownedRelatedElement+=FlowEnd</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFlowEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFlowEndIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd>().GetEnumerator();
-            ownedRelatedElementOfFlowEndIterator.MoveNext();
-
-            if (ownedRelatedElementOfFlowEndIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                FlowEndTextualNotationBuilder.BuildFlowEnd(ownedRelatedElementOfFlowEndIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd elementAsFlowEnd)
+                {
+                    FlowEndTextualNotationBuilder.BuildFlowEnd(elementAsFlowEnd, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -111,17 +132,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>EmptyEndMember:EndFeatureMembership=ownedRelatedElement+=EmptyFeature</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEmptyEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildEmptyEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
     }
 }

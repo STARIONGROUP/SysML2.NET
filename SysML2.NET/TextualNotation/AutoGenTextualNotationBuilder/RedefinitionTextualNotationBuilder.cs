@@ -96,9 +96,9 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("redefinition ");
-            SpecializationTextualNotationBuilder.BuildSpecificType(poco, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildSpecificType(poco, 0, stringBuilder);
             stringBuilder.Append(" :>> ");
-            SpecializationTextualNotationBuilder.BuildGeneralType(poco, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildGeneralType(poco, 0, stringBuilder);
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

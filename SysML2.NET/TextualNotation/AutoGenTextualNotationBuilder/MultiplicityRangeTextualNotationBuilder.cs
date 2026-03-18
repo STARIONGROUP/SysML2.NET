@@ -62,7 +62,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
@@ -72,7 +72,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("]");
 
@@ -94,7 +94,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
@@ -104,7 +104,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("]");
 

@@ -43,7 +43,11 @@ namespace SysML2.NET.TextualNotation
         public static void BuildActorUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("actor ");
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -57,7 +61,11 @@ namespace SysML2.NET.TextualNotation
         public static void BuildStakeholderUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("stakeholder ");
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

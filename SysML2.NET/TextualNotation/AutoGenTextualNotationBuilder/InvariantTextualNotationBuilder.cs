@@ -67,7 +67,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(" false ");
             }
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
             TypeTextualNotationBuilder.BuildFunctionBody(poco, stringBuilder);
 
         }

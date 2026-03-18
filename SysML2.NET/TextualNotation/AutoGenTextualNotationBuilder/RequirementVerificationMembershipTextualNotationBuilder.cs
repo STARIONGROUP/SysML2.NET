@@ -50,7 +50,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfRequirementUsageIterator.Current != null)
             {
-                RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(ownedRelatedElementOfRequirementUsageIterator.Current, stringBuilder);
+                RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(ownedRelatedElementOfRequirementUsageIterator.Current, 0, stringBuilder);
             }
 
         }

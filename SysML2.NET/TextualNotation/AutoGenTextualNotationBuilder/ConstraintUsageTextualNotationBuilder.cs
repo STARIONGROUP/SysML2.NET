@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -43,7 +44,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildConstraintUsageDeclaration(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
         {
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
         }
 
@@ -52,10 +53,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementConstraintUsage:ConstraintUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?RequirementBody|(UsageExtensionKeyword*'constraint'|UsageExtensionKeyword+)ConstraintUsageDeclarationCalculationBody</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildRequirementConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -74,7 +74,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -116,7 +116,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
@@ -137,7 +137,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append("then ");
@@ -145,7 +145,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
@@ -182,7 +182,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
@@ -190,7 +190,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfParameterMembershipIterator.Current != null)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
                 }
 
                 if (ownedRelationshipOfTransitionFeatureMembershipIterator.Current != null)
@@ -227,7 +227,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 

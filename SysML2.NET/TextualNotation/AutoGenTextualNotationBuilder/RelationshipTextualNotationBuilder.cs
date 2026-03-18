@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -50,28 +51,36 @@ namespace SysML2.NET.TextualNotation
         /// <para>RelationshipOwnedElement:Relationship=ownedRelatedElement+=OwnedRelatedElement|ownedRelationship+=OwnedAnnotation</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRelationshipOwnedElement(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildRelationshipOwnedElement(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
-            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
-            if (ownedRelatedElementIterator.MoveNext())
             {
-
-                if (ownedRelatedElementIterator.Current != null)
+                if (elementIndex < poco.OwnedRelatedElement.Count)
                 {
-                    ElementTextualNotationBuilder.BuildOwnedRelatedElement(ownedRelatedElementIterator.Current, stringBuilder);
+                    var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                    if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Root.Elements.IElement elementAsElement)
+                    {
+                        ElementTextualNotationBuilder.BuildOwnedRelatedElement(elementAsElement, stringBuilder);
+                    }
                 }
             }
-            else if (ownedRelationshipOfAnnotationIterator.MoveNext())
+else
             {
-
-                if (ownedRelationshipOfAnnotationIterator.Current != null)
+                if (elementIndex < poco.OwnedRelationship.Count)
                 {
-                    AnnotationTextualNotationBuilder.BuildOwnedAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                    var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                    if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
+                    {
+                        AnnotationTextualNotationBuilder.BuildOwnedAnnotation(elementAsAnnotation, 0, stringBuilder);
+                    }
                 }
             }
 
+            return elementIndex;
         }
     }
 }

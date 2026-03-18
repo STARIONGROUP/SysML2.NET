@@ -105,12 +105,11 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
-                using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-                ownedRelatedElementOfFeatureIterator.MoveNext();
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[0];
 
-                if (ownedRelatedElementOfFeatureIterator.Current != null)
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                 {
-                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
                 }
 
             }
@@ -168,12 +167,11 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
-                using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-                ownedRelatedElementOfFeatureIterator.MoveNext();
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[0];
 
-                if (ownedRelatedElementOfFeatureIterator.Current != null)
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                 {
-                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
                 }
 
             }

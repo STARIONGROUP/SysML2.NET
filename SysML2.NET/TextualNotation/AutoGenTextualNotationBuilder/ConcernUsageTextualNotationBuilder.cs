@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,10 +40,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>FramedConcernUsage:ConcernUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?CalculationBody|(UsageExtensionKeyword*'concern'|UsageExtensionKeyword+)CalculationUsageDeclarationCalculationBody</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFramedConcernUsage(SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFramedConcernUsage(SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>

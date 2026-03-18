@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>SatisfactionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureChainMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSatisfactionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildSatisfactionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
-            ownedRelationshipOfMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
+                {
+                    MembershipTextualNotationBuilder.BuildFeatureChainMember(elementAsMembership, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -57,17 +63,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedExpressionReference:FeatureReferenceExpression=ownedRelationship+=OwnedExpressionMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpressionReference(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildOwnedExpressionReference(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
-            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(elementAsFeatureMembership, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -75,17 +86,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>FunctionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FunctionReferenceMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFunctionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
-            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(elementAsFeatureMembership, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -108,7 +124,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -118,17 +134,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>BodyExpression:FeatureReferenceExpression=ownedRelationship+=ExpressionBodyMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBodyExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildBodyExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
-            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(elementAsFeatureMembership, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
     }
 }

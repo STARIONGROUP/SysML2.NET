@@ -45,7 +45,7 @@ namespace SysML2.NET.TextualNotation
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("verification ");
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
             TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
 

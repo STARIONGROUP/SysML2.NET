@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,24 +40,30 @@ namespace SysML2.NET.TextualNotation
         /// <para>Intersecting=intersectingType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IIntersecting" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIntersecting(SysML2.NET.Core.POCO.Core.Types.IIntersecting poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildIntersecting(SysML2.NET.Core.POCO.Core.Types.IIntersecting poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             if (poco.IntersectingType != null)
             {
                 stringBuilder.Append(poco.IntersectingType.qualifiedName);
                 stringBuilder.Append(' ');
             }
-            else if (ownedRelatedElementOfFeatureIterator.MoveNext())
+            else
             {
-
-                if (ownedRelatedElementOfFeatureIterator.Current != null)
+                if (elementIndex < poco.OwnedRelatedElement.Count)
                 {
-                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                    var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                    if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                    {
+                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
+                    }
                 }
             }
 
+            return elementIndex;
         }
     }
 }
