@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>AnnotatingMember:OwningMembership=ownedRelatedElement+=AnnotatingElement</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAnnotatingMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildAnnotatingMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfAnnotatingElementIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement>().GetEnumerator();
-            ownedRelatedElementOfAnnotatingElementIterator.MoveNext();
-
-            if (ownedRelatedElementOfAnnotatingElementIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(ownedRelatedElementOfAnnotatingElementIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement elementAsAnnotatingElement)
+                {
+                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(elementAsAnnotatingElement, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -107,17 +113,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedCrossFeatureMember:OwningMembership=ownedRelatedElement+=OwnedCrossFeature</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedCrossFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildOwnedCrossFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildOwnedCrossFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildOwnedCrossFeature(elementAsReferenceUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -125,17 +136,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedMultiplicity:OwningMembership=ownedRelatedElement+=MultiplicityRange</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedMultiplicity(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildOwnedMultiplicity(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfMultiplicityRangeIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange>().GetEnumerator();
-            ownedRelatedElementOfMultiplicityRangeIterator.MoveNext();
-
-            if (ownedRelatedElementOfMultiplicityRangeIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(ownedRelatedElementOfMultiplicityRangeIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange elementAsMultiplicityRange)
+                {
+                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(elementAsMultiplicityRange, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -143,23 +159,32 @@ namespace SysML2.NET.TextualNotation
         /// <para>MultiplicityExpressionMember:OwningMembership=ownedRelatedElement+=(LiteralExpression|FeatureReferenceExpression)</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMultiplicityExpressionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildMultiplicityExpressionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementIterator = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.OwnedRelatedElement, typeof(SysML2.NET.Core.POCO.Kernel.Expressions.LiteralExpression), typeof(SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression)).GetEnumerator();
-            ownedRelatedElementIterator.MoveNext();
-
-            switch (ownedRelatedElementIterator.Current)
+            var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+            switch (elementForOwnedRelatedElement)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.LiteralExpression pocoLiteralExpression:
-                    LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(pocoLiteralExpression, stringBuilder);
+
+                    if (pocoLiteralExpression is SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression elementAsLiteralExpression)
+                    {
+                        LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(elementAsLiteralExpression, stringBuilder);
+                    }
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression pocoFeatureReferenceExpression:
-                    FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(pocoFeatureReferenceExpression, stringBuilder);
+
+                    if (pocoFeatureReferenceExpression is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
+                    {
+                        FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(elementAsFeatureReferenceExpression, stringBuilder);
+                    }
                     break;
             }
 
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -167,17 +192,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>EmptyMultiplicityMember:OwningMembership=ownedRelatedElement+=EmptyMultiplicity</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEmptyMultiplicityMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildEmptyMultiplicityMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfMultiplicityIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.Multiplicity>().GetEnumerator();
-            ownedRelatedElementOfMultiplicityIterator.MoveNext();
-
-            if (ownedRelatedElementOfMultiplicityIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                MultiplicityTextualNotationBuilder.BuildEmptyMultiplicity(ownedRelatedElementOfMultiplicityIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Types.IMultiplicity elementAsMultiplicity)
+                {
+                    MultiplicityTextualNotationBuilder.BuildEmptyMultiplicity(elementAsMultiplicity, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -185,17 +215,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>ConjugatedPortDefinitionMember:OwningMembership=ownedRelatedElement+=ConjugatedPortDefinition</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConjugatedPortDefinitionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildConjugatedPortDefinitionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfConjugatedPortDefinitionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortDefinition>().GetEnumerator();
-            ownedRelatedElementOfConjugatedPortDefinitionIterator.MoveNext();
-
-            if (ownedRelatedElementOfConjugatedPortDefinitionIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ConjugatedPortDefinitionTextualNotationBuilder.BuildConjugatedPortDefinition(ownedRelatedElementOfConjugatedPortDefinitionIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition elementAsConjugatedPortDefinition)
+                {
+                    ConjugatedPortDefinitionTextualNotationBuilder.BuildConjugatedPortDefinition(elementAsConjugatedPortDefinition, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -203,17 +238,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedCrossMultiplicityMember:OwningMembership=ownedRelatedElement+=OwnedCrossMultiplicity</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedCrossMultiplicityMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildOwnedCrossMultiplicityMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-            ownedRelatedElementOfFeatureIterator.MoveNext();
-
-            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                FeatureTextualNotationBuilder.BuildOwnedCrossMultiplicity(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                {
+                    FeatureTextualNotationBuilder.BuildOwnedCrossMultiplicity(elementAsFeature, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -221,17 +261,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedFeatureChainMember:OwningMembership=ownedRelatedElement+=OwnedFeatureChain</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildOwnedFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-            ownedRelatedElementOfFeatureIterator.MoveNext();
-
-            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                {
+                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -239,17 +284,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>TransitionSuccessionMember:OwningMembership=ownedRelatedElement+=TransitionSuccession</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionSuccessionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildTransitionSuccessionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfSuccessionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.Succession>().GetEnumerator();
-            ownedRelatedElementOfSuccessionIterator.MoveNext();
-
-            if (ownedRelatedElementOfSuccessionIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                SuccessionTextualNotationBuilder.BuildTransitionSuccession(ownedRelatedElementOfSuccessionIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession elementAsSuccession)
+                {
+                    SuccessionTextualNotationBuilder.BuildTransitionSuccession(elementAsSuccession, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -266,7 +316,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfMetadataUsageIterator.Current != null)
             {
-                MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(ownedRelatedElementOfMetadataUsageIterator.Current, stringBuilder);
+                MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(ownedRelatedElementOfMetadataUsageIterator.Current, 0, stringBuilder);
             }
 
         }

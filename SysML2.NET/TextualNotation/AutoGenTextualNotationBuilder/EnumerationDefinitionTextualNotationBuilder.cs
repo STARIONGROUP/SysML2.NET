@@ -53,7 +53,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEnumerationDefinition(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, StringBuilder stringBuilder)
         {
-            DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             stringBuilder.Append("enum ");
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);

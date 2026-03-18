@@ -83,7 +83,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -109,7 +109,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
             {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }

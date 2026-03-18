@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataReference:MetadataAccessExpression=ownedRelationship+=ElementReferenceMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataReference(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildMetadataReference(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
-            ownedRelationshipOfMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                MembershipTextualNotationBuilder.BuildElementReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
+                {
+                    MembershipTextualNotationBuilder.BuildElementReferenceMember(elementAsMembership, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>

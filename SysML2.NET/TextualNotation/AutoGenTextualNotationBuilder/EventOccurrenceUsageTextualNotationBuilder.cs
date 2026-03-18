@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>MessageEvent:EventOccurrenceUsage=ownedRelationship+=OwnedReferenceSubsetting</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMessageEvent(SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildMessageEvent(SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
-
-            if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>

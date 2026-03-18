@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -124,7 +125,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfSuccessionAsUsageIterator.Current != null)
             {
-                SuccessionAsUsageTextualNotationBuilder.BuildSourceSuccession(ownedRelatedElementOfSuccessionAsUsageIterator.Current, stringBuilder);
+                SuccessionAsUsageTextualNotationBuilder.BuildSourceSuccession(ownedRelatedElementOfSuccessionAsUsageIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -172,17 +173,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowPayloadFeatureMember:FeatureMembership=ownedRelatedElement+=FlowPayloadFeature</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFlowPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfPayloadFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Interactions.PayloadFeature>().GetEnumerator();
-            ownedRelatedElementOfPayloadFeatureIterator.MoveNext();
-
-            if (ownedRelatedElementOfPayloadFeatureIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                PayloadFeatureTextualNotationBuilder.BuildFlowPayloadFeature(ownedRelatedElementOfPayloadFeatureIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Kernel.Interactions.IPayloadFeature elementAsPayloadFeature)
+                {
+                    PayloadFeatureTextualNotationBuilder.BuildFlowPayloadFeature(elementAsPayloadFeature, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -190,17 +196,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowFeatureMember:FeatureMembership=ownedRelatedElement+=FlowFeature</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFlowFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildFlowFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildFlowFeature(elementAsReferenceUsage, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -291,17 +302,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>ForVariableDeclarationMember:FeatureMembership=ownedRelatedElement+=UsageDeclaration</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildForVariableDeclarationMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildForVariableDeclarationMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
-            ownedRelatedElementOfUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                UsageTextualNotationBuilder.BuildUsageDeclaration(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
+                {
+                    UsageTextualNotationBuilder.BuildUsageDeclaration(elementAsUsage, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -387,7 +403,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.ownedMemberFeature != null)
                 {
-                    FeatureTextualNotationBuilder.BuildValuePart(poco.ownedMemberFeature, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildValuePart(poco.ownedMemberFeature, 0, stringBuilder);
                 }
 
                 if (poco.ownedMemberFeature != null)
@@ -423,17 +439,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedExpressionReferenceMember:FeatureMembership=ownedRelationship+=OwnedExpressionReference</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureReferenceExpressionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression>().GetEnumerator();
-            ownedRelationshipOfFeatureReferenceExpressionIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureReferenceExpressionIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(ownedRelationshipOfFeatureReferenceExpressionIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
+                {
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(elementAsFeatureReferenceExpression, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -475,12 +496,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ownedMemberFeature != null)
             {
-                using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
-                ownedRelationshipOfFeatureTypingIterator.MoveNext();
+                var elementForOwnedRelationship = poco.ownedMemberFeature.OwnedRelationship[0];
 
-                if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
-                    FeatureTypingTextualNotationBuilder.BuildReferenceTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+                    FeatureTypingTextualNotationBuilder.BuildReferenceTyping(elementAsFeatureTyping, stringBuilder);
                 }
 
             }
@@ -539,7 +559,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfFeatureIterator.Current != null)
             {
-                FeatureTextualNotationBuilder.BuildPayloadFeature(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                FeatureTextualNotationBuilder.BuildPayloadFeature(ownedRelatedElementOfFeatureIterator.Current, 0, stringBuilder);
             }
 
         }

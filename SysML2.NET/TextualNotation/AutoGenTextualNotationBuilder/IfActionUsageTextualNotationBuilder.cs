@@ -49,13 +49,13 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())

@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        IReadOnlyCollection<IElement> OwnedRelatedElement { get; }
+        IReadOnlyList<IElement> OwnedRelatedElement { get; }
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.

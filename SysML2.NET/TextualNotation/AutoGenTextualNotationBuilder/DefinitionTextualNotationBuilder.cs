@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -39,17 +40,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildDefinitionExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            ownedRelationshipOfOwningMembershipIterator.MoveNext();
-
-            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -69,7 +75,11 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(" variation ");
             }
 
-            BuildDefinitionExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
 
         }
 
@@ -103,7 +113,11 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(" variation ");
             }
 
-            BuildDefinitionExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             stringBuilder.Append("def ");
             BuildDefinition(poco, stringBuilder);
 

@@ -75,7 +75,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
@@ -84,7 +84,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfParameterMembershipIterator.Current != null)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
@@ -130,7 +130,11 @@ namespace SysML2.NET.TextualNotation
             if (BuildGroupConditionForTransitionAcceptActionUsage(poco))
             {
                 stringBuilder.Append("{");
-                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                // Handle collection Non Terminal 
+                for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+                {
+                    ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+                }
                 stringBuilder.Append("}");
                 stringBuilder.Append(' ');
             }

@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -75,7 +76,8 @@ namespace SysML2.NET.TextualNotation
             {
                 ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
             }
-            FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            BuildFeatureSpecializationInternal(poco, stringBuilder); FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, stringBuilder);
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }
@@ -95,7 +97,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
@@ -119,7 +121,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
@@ -146,17 +148,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowFeature:ReferenceUsage=ownedRelationship+=FlowFeatureRedefinition</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFlowFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
-            ownedRelationshipOfRedefinitionIterator.MoveNext();
-
-            if (ownedRelationshipOfRedefinitionIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                RedefinitionTextualNotationBuilder.BuildFlowFeatureRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
+                {
+                    RedefinitionTextualNotationBuilder.BuildFlowFeatureRedefinition(elementAsRedefinition, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -175,17 +182,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>NodeParameter:ReferenceUsage=ownedRelationship+=FeatureBinding</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNodeParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildNodeParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
-            ownedRelationshipOfFeatureValueIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureValueIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureValueTextualNotationBuilder.BuildFeatureBinding(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
+                {
+                    FeatureValueTextualNotationBuilder.BuildFeatureBinding(elementAsFeatureValue, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -214,7 +226,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfFeatureValueIterator.Current != null)
                 {
-                    FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+                    FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(ownedRelationshipOfFeatureValueIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(".");
                 stringBuilder.Append(' ');
@@ -255,7 +267,11 @@ namespace SysML2.NET.TextualNotation
         public static void BuildSubjectUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("subject ");
-            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -265,17 +281,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>SatisfactionParameter:ReferenceUsage=ownedRelationship+=SatisfactionFeatureValue</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSatisfactionParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildSatisfactionParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
-            ownedRelationshipOfFeatureValueIterator.MoveNext();
-
-            if (ownedRelationshipOfFeatureValueIterator.Current != null)
+            if (elementIndex < poco.OwnedRelationship.Count)
             {
-                FeatureValueTextualNotationBuilder.BuildSatisfactionFeatureValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+
+                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
+                {
+                    FeatureValueTextualNotationBuilder.BuildSatisfactionFeatureValue(elementAsFeatureValue, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
 
         /// <summary>
@@ -296,7 +317,7 @@ namespace SysML2.NET.TextualNotation
                 RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
             }
             FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
             TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
 
         }

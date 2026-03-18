@@ -49,7 +49,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelatedElementOfRenderingUsageIterator.Current != null)
             {
-                RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(ownedRelatedElementOfRenderingUsageIterator.Current, stringBuilder);
+                RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(ownedRelatedElementOfRenderingUsageIterator.Current, 0, stringBuilder);
             }
 
         }

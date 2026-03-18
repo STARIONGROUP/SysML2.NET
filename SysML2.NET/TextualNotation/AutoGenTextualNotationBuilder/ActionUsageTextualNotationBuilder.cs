@@ -43,7 +43,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildActionUsageDeclaration(SysML2.NET.Core.POCO.Systems.Actions.IActionUsage poco, StringBuilder stringBuilder)
         {
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
         }
 
@@ -133,7 +133,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildAssignmentTargetMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildAssignmentTargetMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             ownedRelationshipOfMembershipIterator.MoveNext();
 
@@ -146,7 +146,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -168,7 +168,11 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("{");
-            TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+            // Handle collection Non Terminal 
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            {
+                ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+            }
             stringBuilder.Append("}");
 
         }

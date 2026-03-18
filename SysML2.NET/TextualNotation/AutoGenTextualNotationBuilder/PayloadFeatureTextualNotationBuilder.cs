@@ -42,7 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowPayloadFeature(SysML2.NET.Core.POCO.Kernel.Interactions.IPayloadFeature poco, StringBuilder stringBuilder)
         {
-            FeatureTextualNotationBuilder.BuildPayloadFeature(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildPayloadFeature(poco, 0, stringBuilder);
 
         }
     }

@@ -69,14 +69,14 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("to ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
 
         }
@@ -95,14 +95,14 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append(",");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
 
             while (ownedRelationshipOfEndFeatureMembershipIterator.MoveNext())
@@ -111,7 +111,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
                 }
 
             }

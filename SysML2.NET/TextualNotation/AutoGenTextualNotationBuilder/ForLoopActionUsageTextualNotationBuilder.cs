@@ -50,20 +50,20 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
             {
-                FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+                FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(ownedRelationshipOfFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             stringBuilder.Append("in ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfParameterMembershipIterator.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
             }
 
         }

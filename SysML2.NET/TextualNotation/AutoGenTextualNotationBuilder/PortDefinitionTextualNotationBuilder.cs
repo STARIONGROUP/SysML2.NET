@@ -51,7 +51,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
             }
             // NonParsing Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this => Does not have to be process
 

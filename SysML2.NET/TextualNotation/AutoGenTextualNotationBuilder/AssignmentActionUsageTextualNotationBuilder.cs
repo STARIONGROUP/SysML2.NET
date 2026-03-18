@@ -74,7 +74,11 @@ namespace SysML2.NET.TextualNotation
             if (BuildGroupConditionForTransitionAssignmentActionUsage(poco))
             {
                 stringBuilder.Append("{");
-                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                // Handle collection Non Terminal 
+                for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+                {
+                    ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+                }
                 stringBuilder.Append("}");
                 stringBuilder.Append(' ');
             }

@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -50,27 +51,25 @@ namespace SysML2.NET.TextualNotation
         /// <para>ViewDefinitionBodyItem:ViewDefinition=DefinitionBodyItem|ownedRelationship+=ElementFilterMember|ownedRelationship+=ViewRenderingMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewDefinition" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewDefinitionBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildViewDefinitionBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, int elementIndex, StringBuilder stringBuilder)
         {
-            var ownedRelationship = poco.OwnedRelationship.ToList();
+            var elementsElement = poco.OwnedRelationship[elementIndex];
 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            switch (elementsElement)
             {
-                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+                case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
+                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembership:
+                    ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Core.Types.IType type:
+                    elementIndex = TypeTextualNotationBuilder.BuildDefinitionBodyItem(type, elementIndex, stringBuilder);
+                    break;
 
-                switch (ownedRelationshipElement)
-                {
-                    case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
-                        ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder); break;
-                    case SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembership:
-                        ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, stringBuilder); break;
-                    default:
-                        ownedRelationshipIndex = TypeTextualNotationBuilder.BuildDefinitionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
-                        break;
-
-                }
             }
+            return elementIndex;
         }
 
         /// <summary>

@@ -47,13 +47,13 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
             if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
             }
 
         }

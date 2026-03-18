@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -44,7 +45,7 @@ namespace SysML2.NET.TextualNotation
         {
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("message ");
-            BuildMessageDeclaration(poco, stringBuilder);
+            BuildMessageDeclaration(poco, 0, stringBuilder);
             TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
             // NonParsing Assignment Element : isAbstract = true => Does not have to be process
 
@@ -55,10 +56,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>MessageDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember)?|ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMessageDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildMessageDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -66,10 +70,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildFlowDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, int elementIndex, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            return elementIndex;
         }
 
         /// <summary>
@@ -82,7 +89,7 @@ namespace SysML2.NET.TextualNotation
         {
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("flow ");
-            BuildFlowDeclaration(poco, stringBuilder);
+            BuildFlowDeclaration(poco, 0, stringBuilder);
             TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
 
         }

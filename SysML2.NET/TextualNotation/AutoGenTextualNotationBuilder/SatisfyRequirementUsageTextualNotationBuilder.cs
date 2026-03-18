@@ -52,7 +52,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("satisfy ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
-            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
             if (ownedRelationshipOfSubjectMembershipIterator.MoveNext())
             {
@@ -60,7 +60,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipOfSubjectMembershipIterator.Current != null)
                 {
-                    SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(ownedRelationshipOfSubjectMembershipIterator.Current, stringBuilder);
+                    SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(ownedRelationshipOfSubjectMembershipIterator.Current, 0, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }

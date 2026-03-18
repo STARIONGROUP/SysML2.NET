@@ -59,7 +59,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
             {
-                FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+                FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(ownedRelationshipOfFeatureMembershipIterator.Current, 0, stringBuilder);
             }
 
         }

@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -58,17 +59,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>SatisfactionSubjectMember:SubjectMembership=ownedRelatedElement+=SatisfactionParameter</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership" /> from which the rule should be build</param>
+        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSatisfactionSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, StringBuilder stringBuilder)
+        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+        public static int BuildSatisfactionSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, int elementIndex, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (elementIndex < poco.OwnedRelatedElement.Count)
             {
-                ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+
+                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(elementAsReferenceUsage, 0, stringBuilder);
+                }
             }
 
+            return elementIndex;
         }
     }
 }
