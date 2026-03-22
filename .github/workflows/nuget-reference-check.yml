@@ -22,26 +22,117 @@ jobs:
       with:
         dotnet-version: '10.0.x'
 
-    - name: Install dependencies
-      run: dotnet restore SysML2.NET.sln
-
-    - name: Build
-      run: dotnet build SysML2.NET.sln --no-restore /p:ContinuousIntegrationBuild=true
-
-    - name: Checking NuGet vulnerabilites
+    - name: Check for outdated packages
+      id: outdated
       run: |
         set -e
-        dotnet list SysML2.NET.sln package --outdated --include-transitive
 
-        dotnet list SysML2.NET.sln package --deprecated --include-transitive
+        # Packages to ignore (SDK/runtime-managed)
+        IGNORE_PACKAGES="Microsoft\.NETCore\.Platforms|Microsoft\.NETCore\.Targets"
 
-        dotnet list SysML2.NET.sln package --vulnerable --include-transitive 2>&1 | tee vulnerabilities.log
+        dotnet list SysML2.NET.sln package --outdated --include-transitive > outdated-raw.log
 
-        echo "Analyze dotnet list package command log output..."
-        if grep -q -i "\bcritical\b\|\bhigh\b\|\bmoderate\b\|\blow\b" vulnerabilities.log; then
-            echo "Security Vulnerabilities found"
-            exit 1
+        # Filter out ignored core packages
+        grep -v -E "$IGNORE_PACKAGES" outdated-raw.log > outdated.log || true
+
+        # Print full outdated report (including test projects) to action log
+        echo "=== Full outdated packages report ==="
+        cat outdated.log
+
+        # Build issue log: exclude test project sections
+        # dotnet list output groups packages under project headers like:
+        #   Project `ProjectName` has the following updates available:
+        # We remove sections for *.Tests projects
+        awk '
+          /^Project .*.Tests/ { skip=1; next }
+          /^Project / { skip=0 }
+          !skip { print }
+        ' outdated.log > outdated-issue.log
+
+        # Check if non-test outdated packages exist (look for > lines indicating actual packages)
+        if grep -q ">" outdated-issue.log; then
+          echo "Outdated packages found (non-test)"
+          echo "outdated=true" >> $GITHUB_OUTPUT
         else
-            echo "No Security Vulnerabilities found"
-            exit 0
+          echo "No outdated packages found in non-test projects"
+          echo "outdated=false" >> $GITHUB_OUTPUT
         fi
+
+    - name: Check for deprecated packages
+      id: deprecated
+      run: |
+        set -e
+        dotnet list SysML2.NET.sln package --deprecated --include-transitive > deprecated.log
+        if [ -s deprecated.log ]; then
+          echo "Deprecated packages found"
+          echo "deprecated=true" >> $GITHUB_OUTPUT
+        else
+          echo "No deprecated packages found"
+          echo "deprecated=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Check for vulnerable packages
+      id: vulnerable
+      run: |
+        set -e
+        dotnet list SysML2.NET.sln package --vulnerable --include-transitive > vulnerabilities.log
+        if grep -q -i "\bcritical\b\|\bhigh\b\|\bmoderate\b\|\blow\b" vulnerabilities.log; then
+          echo "Security Vulnerabilities found"
+          echo "vulnerable=true" >> $GITHUB_OUTPUT
+        else
+          echo "No Security Vulnerabilities found"
+          echo "vulnerable=false" >> $GITHUB_OUTPUT
+        fi        
+        
+    - name: Create GitHub Issue if issues found
+      if: steps.outdated.outputs.outdated == 'true' || steps.deprecated.outputs.deprecated == 'true' || steps.vulnerable.outputs.vulnerable == 'true'
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GH_ISSUES_TOKEN }}
+        script: |
+          const fs = require('fs');
+
+          let issueBody = `### NuGet Package Issues Detected in [SysML2.NET](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY})\n\n`;
+
+          if ('${{ steps.outdated.outputs.outdated }}' === 'true') {
+            const outdatedLog = fs.readFileSync('outdated-issue.log', 'utf8');
+            issueBody += `#### Outdated Packages\n\`\`\`\n${outdatedLog}\n\`\`\`\n\n`;
+          }
+
+          if ('${{ steps.deprecated.outputs.deprecated }}' === 'true') {
+            const deprecatedLog = fs.readFileSync('deprecated.log', 'utf8');
+            issueBody += `#### Deprecated Packages\n\`\`\`\n${deprecatedLog}\n\`\`\`\n\n`;
+          }
+
+          if ('${{ steps.vulnerable.outputs.vulnerable }}' === 'true') {
+            const vulnerabilitiesLog = fs.readFileSync('vulnerabilities.log', 'utf8');
+            issueBody += `#### Vulnerable Packages\n\`\`\`\n${vulnerabilitiesLog}\n\`\`\`\n\n`;
+          }
+
+          issueBody += '**Action Required:** Please review and update the affected packages.';
+
+          const issueTitle = 'NuGet Package Issues Detected';
+          const { data: issues } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+          });
+
+          const existingIssue = issues.find(issue => issue.title === issueTitle);
+
+          if (existingIssue) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existingIssue.number,
+              body: `New check results:\n${issueBody}`,
+            });
+          } else {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody,
+              labels: ['dependencies', 'maintenance'],
+            });
+          }

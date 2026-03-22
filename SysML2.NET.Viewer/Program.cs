@@ -35,6 +35,8 @@ namespace SysML2.NET.Viewer
     
     using Radzen;
 
+    using ReactiveUI.Builder;
+
     using Serilog;
     
     using SySML2.NET.REST;
@@ -70,7 +72,11 @@ namespace SysML2.NET.Viewer
             
             AddServices(builder);
             AddViewModels(builder);
-            
+
+            RxAppBuilder.CreateReactiveUIBuilder()
+                .WithCoreServices()
+                .BuildApp();
+
             await builder.Build().RunAsync();
         }
 

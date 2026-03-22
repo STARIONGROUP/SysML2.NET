@@ -2,7 +2,7 @@
 
   <PropertyGroup>
       <TargetFramework>net10.0</TargetFramework>
-      <LangVersion>12.0</LangVersion>
+      <LangVersion>14.0</LangVersion>
       <Company>Starion Group S.A.</Company>
       <Authors>Sam Gerene</Authors>
       <Description>Nunit test suite for the SysML2.NET.Viewer project</Description>
