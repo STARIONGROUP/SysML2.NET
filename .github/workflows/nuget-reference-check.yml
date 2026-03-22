@@ -88,7 +88,7 @@ jobs:
       if: steps.outdated.outputs.outdated == 'true' || steps.deprecated.outputs.deprecated == 'true' || steps.vulnerable.outputs.vulnerable == 'true'
       uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.GH_ISSUES_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
 
