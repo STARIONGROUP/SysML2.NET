@@ -19,16 +19,16 @@
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="5.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="5.3.0" />
     <!--
          -->
     <!--
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.xmi\uml4net.xmi.csproj" />
         -->
-    <PackageReference Include="uml4net.HandleBars" Version="6.4.0" />
-    <PackageReference Include="uml4net.Reporting" Version="6.4.0" />
-    <PackageReference Include="uml4net.xmi" Version="5.3.2" />
+    <PackageReference Include="uml4net.HandleBars" Version="6.4.1" />
+    <PackageReference Include="uml4net.Reporting" Version="6.4.1" />
+    <PackageReference Include="uml4net.xmi" Version="5.3.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
