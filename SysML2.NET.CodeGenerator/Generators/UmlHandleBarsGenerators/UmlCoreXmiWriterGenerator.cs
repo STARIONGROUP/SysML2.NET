@@ -165,6 +165,51 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         }
 
         /// <summary>
+        /// Generate the XMI Writer class output code for a specific class
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>An awaitable <see cref="Task{TResult}" /> with the generated code</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If the <paramref name="xmiReaderResult" /> or the
+        /// <paramref name="outputDirectory" /> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">If the <paramref name="className" /> is null or whitespace</exception>
+        public Task<string> GenerateXmiWriterClass(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+            ArgumentException.ThrowIfNullOrWhiteSpace(className);
+
+            return this.GenerateXmiWriterClassInternal(xmiReaderResult, outputDirectory, className);
+        }
+
+        /// <summary>
+        /// Generate the XMI Writer class output code for a specific class
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>An awaitable <see cref="Task{TResult}" /> with the generated code</returns>
+        private async Task<string> GenerateXmiWriterClassInternal(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates[XmiWriterTemplateName];
+
+            var umlClass = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<IClass>())
+                .Single(x => x.Name == className);
+
+            var generatedXmiWriter = template(umlClass);
+            generatedXmiWriter = this.CodeCleanup(generatedXmiWriter);
+
+            var fileName = $"{umlClass.Name.CapitalizeFirstLetter()}Writer.cs";
+            await WriteAsync(generatedXmiWriter, outputDirectory, fileName);
+
+            return generatedXmiWriter;
+        }
+
+        /// <summary>
         /// Register the custom helpers
         /// </summary>
         protected override void RegisterHelpers()

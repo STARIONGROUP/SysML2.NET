@@ -97,6 +97,82 @@
       <None Include="Expected\UML\Core\AutoGenReaders\UsageReader.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\AnnotatingElementWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\AnnotatingElementWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\AssociationWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\AssociationWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\DependencyWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\DependencyWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\EnumerationDefinitionWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\EnumerationDefinitionWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\FeatureWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\FeatureWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\FeatureTypingWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\FeatureTypingWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\FlowWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\FlowWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\FramedConcernMembershipWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\FramedConcernMembershipWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\LiteralIntegerWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\LiteralIntegerWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\LiteralRationalWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\LiteralRationalWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\MembershipWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\MembershipWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\MultiplicityRangeWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\MultiplicityRangeWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\OwningMembershipWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\OwningMembershipWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\ReferenceSubsettingWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\ReferenceSubsettingWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\RequirementUsageWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\RequirementUsageWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\SelectExpressionWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\SelectExpressionWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\SubclassificationWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\SubclassificationWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\TextualRepresentationWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\TextualRepresentationWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenWriters\UsageWriter.cs" />
+      <None Include="Expected\UML\Core\AutoGenWriters\UsageWriter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <Compile Remove="Expected\UML\Core\AutoGenPocoReferenceResolveExtension\AnnotatingElementExtensions.cs" />
       <None Include="Expected\UML\Core\AutoGenPocoReferenceResolveExtension\AnnotatingElementExtensions.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
