@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>12.0</LangVersion>
-        <Version>0.19.0</Version>
+        <Version>0.20.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 MessagePack serializer.</Description>
         <PackageId>SysML2.NET.Serializer.MessagePack</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -13,8 +13,8 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] to SysML2.NET.Extensions version 0.19.0
-            [Update] System.IO.Pipelines to version 10.0.3
+            [Update] to SysML2.NET.Extensions version 0.20.0
+            [Update] System.IO.Pipelines to version 10.0.5
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
