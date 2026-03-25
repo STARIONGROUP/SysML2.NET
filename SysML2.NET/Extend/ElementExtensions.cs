@@ -22,7 +22,11 @@ namespace SysML2.NET.Core.POCO.Root.Elements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
 
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
@@ -41,10 +45,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IDocumentation> ComputeDocumentation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return [..elementSubject.ownedElement.OfType<IDocumentation>()];
         }
 
         /// <summary>
@@ -56,10 +59,21 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsLibraryElement(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            var owner = elementSubject.owner;
+
+            while (owner != null)
+            {
+                if (owner is ILibraryPackage)
+                {
+                    return true;
+                }
+
+                owner = owner.owner;
+            }
+            
+            return false;
         }
 
         /// <summary>
@@ -86,10 +100,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAnnotation> ComputeOwnedAnnotation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return [..elementSubject.OwnedRelationship.OfType<IAnnotation>().Where(x => x.AnnotatedElement == elementSubject)];
         }
 
         /// <summary>
@@ -101,10 +114,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IElement> ComputeOwnedElement(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return [..elementSubject.OwnedRelationship.SelectMany(x => x.OwnedRelatedElement)];
         }
 
         /// <summary>
@@ -116,10 +128,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IElement ComputeOwner(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject.OwningRelationship?.OwningRelatedElement;
         }
 
         /// <summary>
@@ -131,10 +142,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IOwningMembership ComputeOwningMembership(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject.OwningRelationship as IOwningMembership;
         }
 
         /// <summary>
@@ -146,10 +156,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeOwningNamespace(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject.owningMembership?.membershipOwningNamespace;
         }
 
         /// <summary>
@@ -191,12 +200,16 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<ITextualRepresentation> ComputeTextualRepresentation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
-        }
+            if (elementSubject == null)
+            {
+                throw new ArgumentNullException(nameof(elementSubject));
+            }
 
+            return [..elementSubject.ownedElement.OfType<ITextualRepresentation>()];
+        }
+        
         /// <summary>
         /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
         /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
