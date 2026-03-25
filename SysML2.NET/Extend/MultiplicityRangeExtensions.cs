@@ -35,23 +35,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
     /// The <see cref="MultiplicityRangeExtensions"/> class provides extensions methods for
     /// the <see cref="IMultiplicityRange"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class MultiplicityRangeExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="multiplicityRange">
+        /// <param name="multiplicityRangeSubject">
         /// The subject <see cref="IMultiplicityRange"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeBound(this IMultiplicityRange multiplicityRange)
+        internal static List<IExpression> ComputeBound(this IMultiplicityRange multiplicityRangeSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -59,14 +55,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="multiplicityRange">
+        /// <param name="multiplicityRangeSubject">
         /// The subject <see cref="IMultiplicityRange"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeLowerBound(this IMultiplicityRange multiplicityRange)
+        internal static IExpression ComputeLowerBound(this IMultiplicityRange multiplicityRangeSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -74,17 +70,57 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="multiplicityRange">
+        /// <param name="multiplicityRangeSubject">
         /// The subject <see cref="IMultiplicityRange"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeUpperBound(this IMultiplicityRange multiplicityRange)
+        internal static IExpression ComputeUpperBound(this IMultiplicityRange multiplicityRangeSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Check whether this MultiplicityRange represents the range bounded by the given values lower and
+        /// upper, presuming the lowerBound and upperBound Expressions are model-level evaluable.
+        /// </summary>
+        /// <param name="multiplicityRangeSubject">
+        /// The subject <see cref="IMultiplicityRange"/>
+        /// </param>
+        /// <param name="lower">
+        /// No documentation provided
+        /// </param>
+        /// <param name="upper">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeHasBoundsOperation(this IMultiplicityRange multiplicityRangeSubject, int lower, string upper)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Evaluate the given bound Expression (at model level) and return the result represented as a MOF
+        /// UnlimitedNatural value.
+        /// </summary>
+        /// <param name="multiplicityRangeSubject">
+        /// The subject <see cref="IMultiplicityRange"/>
+        /// </param>
+        /// <param name="bound">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeValueOfOperation(this IMultiplicityRange multiplicityRangeSubject, IExpression bound)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

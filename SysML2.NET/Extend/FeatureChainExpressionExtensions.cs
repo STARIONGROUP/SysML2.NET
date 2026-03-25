@@ -36,26 +36,37 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// The <see cref="FeatureChainExpressionExtensions"/> class provides extensions methods for
     /// the <see cref="IFeatureChainExpression"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FeatureChainExpressionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="featureChainExpression">
+        /// <param name="featureChainExpressionSubject">
         /// The subject <see cref="IFeatureChainExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeTargetFeature(this IFeatureChainExpression featureChainExpression)
+        internal static IFeature ComputeTargetFeature(this IFeatureChainExpression featureChainExpressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return the first ownedFeature of the first owned input parameter of this FeatureChainExpression (if
+        /// any).
+        /// </summary>
+        /// <param name="featureChainExpressionSubject">
+        /// The subject <see cref="IFeatureChainExpression"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeSourceTargetFeatureOperation(this IFeatureChainExpression featureChainExpressionSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

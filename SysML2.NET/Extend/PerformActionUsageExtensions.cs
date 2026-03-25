@@ -59,26 +59,38 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="PerformActionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IPerformActionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class PerformActionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="performActionUsage">
+        /// <param name="performActionUsageSubject">
         /// The subject <see cref="IPerformActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputePerformedAction(this IPerformActionUsage performActionUsage)
+        internal static IActionUsage ComputePerformedAction(this IPerformActionUsage performActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// The naming Feature of a PerformActionUsage is its performedAction, if this is different than the
+        /// PerformActionUsage. If the PerformActionUsage is its own performedAction, then the naming Feature is
+        /// the same as the usual default for a Usage.
+        /// </summary>
+        /// <param name="performActionUsageSubject">
+        /// The subject <see cref="IPerformActionUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeRedefinedNamingFeatureOperation(this IPerformActionUsage performActionUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

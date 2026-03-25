@@ -37,14 +37,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="referenceSubsetting">
+        /// <param name="referenceSubsettingSubject">
         /// The subject <see cref="IReferenceSubsetting"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeReferencingFeature(this IReferenceSubsetting referenceSubsetting)
+        internal static IFeature ComputeReferencingFeature(this IReferenceSubsetting referenceSubsettingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

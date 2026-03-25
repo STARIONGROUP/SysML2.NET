@@ -45,6 +45,27 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralExpression : IExpression
     {
+        /// <summary>
+        /// A LiteralExpression is always model-level evaluable.
+        /// </summary>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+
+        /// <summary>
+        /// The model-level value of a LiteralExpression is itself.
+        /// </summary>
+        /// <param name="target">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        new IElement Evaluate(IElement target) => this.ComputeRedefinedEvaluateOperation(target);
     }
 }
 

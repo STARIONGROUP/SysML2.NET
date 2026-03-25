@@ -33,23 +33,19 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     /// The <see cref="ConjugatedPortTypingExtensions"/> class provides extensions methods for
     /// the <see cref="IConjugatedPortTyping"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ConjugatedPortTypingExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="conjugatedPortTyping">
+        /// <param name="conjugatedPortTypingSubject">
         /// The subject <see cref="IConjugatedPortTyping"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IPortDefinition ComputePortDefinition(this IConjugatedPortTyping conjugatedPortTyping)
+        internal static IPortDefinition ComputePortDefinition(this IConjugatedPortTyping conjugatedPortTypingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

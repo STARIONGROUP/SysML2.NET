@@ -57,23 +57,19 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     /// The <see cref="AnalysisCaseDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IAnalysisCaseDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class AnalysisCaseDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="analysisCaseDefinition">
+        /// <param name="analysisCaseDefinitionSubject">
         /// The subject <see cref="IAnalysisCaseDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeResultExpression(this IAnalysisCaseDefinition analysisCaseDefinition)
+        internal static IExpression ComputeResultExpression(this IAnalysisCaseDefinition analysisCaseDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

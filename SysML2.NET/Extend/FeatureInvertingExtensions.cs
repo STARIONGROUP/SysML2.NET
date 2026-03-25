@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// The <see cref="FeatureInvertingExtensions"/> class provides extensions methods for
     /// the <see cref="IFeatureInverting"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FeatureInvertingExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="featureInverting">
+        /// <param name="featureInvertingSubject">
         /// The subject <see cref="IFeatureInverting"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeOwningFeature(this IFeatureInverting featureInverting)
+        internal static IFeature ComputeOwningFeature(this IFeatureInverting featureInvertingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

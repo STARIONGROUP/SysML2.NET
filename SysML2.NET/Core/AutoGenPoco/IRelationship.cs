@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        IReadOnlyCollection<IElement> OwnedRelatedElement { get; }
+        IReadOnlyList<IElement> OwnedRelatedElement { get; }
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
@@ -92,6 +92,25 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         List<IElement> Target { get; set; }
 
+        /// <summary>
+        /// Return whether this Relationship has either an owningRelatedElement or owningRelationship that is a
+        /// library element.
+        /// </summary>
+        /// <returns>
+        /// The expected INamespace
+        /// </returns>
+        new INamespace LibraryNamespace() => this.ComputeRedefinedLibraryNamespaceOperation();
+
+        /// <summary>
+        /// If the owningRelationship of the Relationship is null but its owningRelatedElement is non-null,
+        /// construct the path using the position of the Relationship in the list of ownedRelationships of its
+        /// owningRelatedElement. Otherwise, return the path of the Relationship as specified for an Element in
+        /// general.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        new string Path() => this.ComputeRedefinedPathOperation();
     }
 }
 

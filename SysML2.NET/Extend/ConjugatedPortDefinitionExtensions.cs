@@ -55,23 +55,19 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     /// The <see cref="ConjugatedPortDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IConjugatedPortDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ConjugatedPortDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="conjugatedPortDefinition">
+        /// <param name="conjugatedPortDefinitionSubject">
         /// The subject <see cref="IConjugatedPortDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IPortDefinition ComputeOriginalPortDefinition(this IConjugatedPortDefinition conjugatedPortDefinition)
+        internal static IPortDefinition ComputeOriginalPortDefinition(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -79,17 +75,32 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="conjugatedPortDefinition">
+        /// <param name="conjugatedPortDefinitionSubject">
         /// The subject <see cref="IConjugatedPortDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IPortConjugation ComputeOwnedPortConjugator(this IConjugatedPortDefinition conjugatedPortDefinition)
+        internal static IPortConjugation ComputeOwnedPortConjugator(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// If the name of the originalPortDefinition is non-empty, then return that with the character ~
+        /// prepended.
+        /// </summary>
+        /// <param name="conjugatedPortDefinitionSubject">
+        /// The subject <see cref="IConjugatedPortDefinition"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeRedefinedEffectiveNameOperation(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

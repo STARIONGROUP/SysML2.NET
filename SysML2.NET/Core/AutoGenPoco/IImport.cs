@@ -81,6 +81,17 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674976_798509_43257", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "private")]
         VisibilityKind Visibility { get; set; }
 
+        /// <summary>
+        /// Returns Memberships that are to become importedMemberships of the importOwningNamespace. (The
+        /// excluded parameter is used to handle the possibility of circular Import Relationships.)
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership ImportedMemberships(INamespace excluded) => this.ComputeImportedMembershipsOperation(excluded);
     }
 }
 

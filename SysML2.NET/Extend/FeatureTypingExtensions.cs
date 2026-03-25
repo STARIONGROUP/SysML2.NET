@@ -32,23 +32,19 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// The <see cref="FeatureTypingExtensions"/> class provides extensions methods for
     /// the <see cref="IFeatureTyping"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FeatureTypingExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="featureTyping">
+        /// <param name="featureTypingSubject">
         /// The subject <see cref="IFeatureTyping"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeOwningFeature(this IFeatureTyping featureTyping)
+        internal static IFeature ComputeOwningFeature(this IFeatureTyping featureTypingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

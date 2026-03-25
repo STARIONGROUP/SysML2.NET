@@ -57,23 +57,19 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// The <see cref="RequirementDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IRequirementDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class RequirementDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeActorParameter(this IRequirementDefinition requirementDefinition)
+        internal static List<IPartUsage> ComputeActorParameter(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -81,14 +77,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementDefinition requirementDefinition)
+        internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -96,14 +92,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementDefinition requirementDefinition)
+        internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -111,14 +107,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementDefinition requirementDefinition)
+        internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -126,14 +122,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementDefinition requirementDefinition)
+        internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -141,14 +137,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IUsage ComputeSubjectParameter(this IRequirementDefinition requirementDefinition)
+        internal static IUsage ComputeSubjectParameter(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -156,14 +152,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementDefinition">
+        /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<string> ComputeText(this IRequirementDefinition requirementDefinition)
+        internal static List<string> ComputeText(this IRequirementDefinition requirementDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

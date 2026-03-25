@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// The <see cref="SpecializationExtensions"/> class provides extensions methods for
     /// the <see cref="ISpecialization"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class SpecializationExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="specialization">
+        /// <param name="specializationSubject">
         /// The subject <see cref="ISpecialization"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeOwningType(this ISpecialization specialization)
+        internal static IType ComputeOwningType(this ISpecialization specializationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

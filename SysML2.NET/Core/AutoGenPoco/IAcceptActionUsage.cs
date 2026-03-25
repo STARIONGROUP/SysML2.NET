@@ -94,6 +94,13 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1612814670555_311543_168", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IExpression receiverArgument { get; }
 
+        /// <summary>
+        /// Check if this AcceptActionUsage is the triggerAction of a TransitionUsage.
+        /// </summary>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsTriggerAction() => this.ComputeIsTriggerActionOperation();
     }
 }
 

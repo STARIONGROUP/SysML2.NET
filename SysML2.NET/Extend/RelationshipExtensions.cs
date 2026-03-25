@@ -30,26 +30,55 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     /// The <see cref="RelationshipExtensions"/> class provides extensions methods for
     /// the <see cref="IRelationship"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class RelationshipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="relationship">
+        /// <param name="relationshipSubject">
         /// The subject <see cref="IRelationship"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IElement> ComputeRelatedElement(this IRelationship relationship)
+        internal static List<IElement> ComputeRelatedElement(this IRelationship relationshipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return whether this Relationship has either an owningRelatedElement or owningRelationship that is a
+        /// library element.
+        /// </summary>
+        /// <param name="relationshipSubject">
+        /// The subject <see cref="IRelationship"/>
+        /// </param>
+        /// <returns>
+        /// The expected INamespace
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this IRelationship relationshipSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// If the owningRelationship of the Relationship is null but its owningRelatedElement is non-null,
+        /// construct the path using the position of the Relationship in the list of ownedRelationships of its
+        /// owningRelatedElement. Otherwise, return the path of the Relationship as specified for an Element in
+        /// general.
+        /// </summary>
+        /// <param name="relationshipSubject">
+        /// The subject <see cref="IRelationship"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeRedefinedPathOperation(this IRelationship relationshipSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

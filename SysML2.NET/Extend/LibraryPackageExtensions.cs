@@ -20,17 +20,33 @@
 
 namespace SysML2.NET.Core.POCO.Kernel.Packages
 {
-    using System.Diagnostics.CodeAnalysis;
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="LibraryPackageExtensions"/> class provides extensions methods for
     /// the <see cref="ILibraryPackage"/> interface
     /// </summary>
-    [SuppressMessage(
-        "Major Code Smell",
-        "S2094:Classes should not be empty",
-        Justification = "Extension class intentionally empty; methods are generated conditionally.")]
     internal static class LibraryPackageExtensions
     {
+        /// <summary>
+        /// The libraryNamespace for a LibraryPackage is itself.
+        /// </summary>
+        /// <param name="libraryPackageSubject">
+        /// The subject <see cref="ILibraryPackage"/>
+        /// </param>
+        /// <returns>
+        /// The expected INamespace
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this ILibraryPackage libraryPackageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

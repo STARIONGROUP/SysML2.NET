@@ -36,14 +36,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembership)
+        internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -51,14 +51,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembership)
+        internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -66,14 +66,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeOwnedMemberName(this IOwningMembership owningMembership)
+        internal static string ComputeOwnedMemberName(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -81,17 +81,33 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembership)
+        internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// If the ownedMemberElement of this OwningMembership has a non-null qualifiedName, then return the
+        /// string constructed by appending to that qualifiedName the string "/owningMembership". Otherwise,
+        /// return the path of the OwningMembership as specified for a Relationship in general.
+        /// </summary>
+        /// <param name="owningMembershipSubject">
+        /// The subject <see cref="IOwningMembership"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeRedefinedPathOperation(this IOwningMembership owningMembershipSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

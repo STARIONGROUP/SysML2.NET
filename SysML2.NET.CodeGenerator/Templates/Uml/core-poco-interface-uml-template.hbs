@@ -46,6 +46,14 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         {{ #Property.WriteForPOCOInterface property }}
         
         {{/each}}
+        {{#each (this.OwnedOperation) as | operation | }}
+            {{ #Documentation operation }}
+            {{ #ParameterDocumentation operation }}
+            {{ #Operation.WriteForPOCOInterface operation }}
+            {{#unless @last}}
+            
+            {{/unless}}
+        {{/each}} 
     }
 }
 

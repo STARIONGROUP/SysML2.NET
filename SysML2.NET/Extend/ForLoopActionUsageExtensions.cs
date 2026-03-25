@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="ForLoopActionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IForLoopActionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ForLoopActionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="forLoopActionUsage">
+        /// <param name="forLoopActionUsageSubject">
         /// The subject <see cref="IForLoopActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IReferenceUsage ComputeLoopVariable(this IForLoopActionUsage forLoopActionUsage)
+        internal static IReferenceUsage ComputeLoopVariable(this IForLoopActionUsage forLoopActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="forLoopActionUsage">
+        /// <param name="forLoopActionUsageSubject">
         /// The subject <see cref="IForLoopActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeSeqArgument(this IForLoopActionUsage forLoopActionUsage)
+        internal static IExpression ComputeSeqArgument(this IForLoopActionUsage forLoopActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

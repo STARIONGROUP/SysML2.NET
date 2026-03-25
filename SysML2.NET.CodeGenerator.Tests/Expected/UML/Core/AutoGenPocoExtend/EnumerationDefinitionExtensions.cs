@@ -60,14 +60,14 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="enumerationDefinition">
+        /// <param name="enumerationDefinitionSubject">
         /// The subject <see cref="IEnumerationDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IEnumerationUsage> ComputeEnumeratedValue(this IEnumerationDefinition enumerationDefinition)
+        internal static List<IEnumerationUsage> ComputeEnumeratedValue(this IEnumerationDefinition enumerationDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// The <see cref="FeatureChainingExtensions"/> class provides extensions methods for
     /// the <see cref="IFeatureChaining"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FeatureChainingExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="featureChaining">
+        /// <param name="featureChainingSubject">
         /// The subject <see cref="IFeatureChaining"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeFeatureChained(this IFeatureChaining featureChaining)
+        internal static IFeature ComputeFeatureChained(this IFeatureChaining featureChainingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

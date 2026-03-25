@@ -55,23 +55,19 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
     /// The <see cref="EnumerationDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IEnumerationDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class EnumerationDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="enumerationDefinition">
+        /// <param name="enumerationDefinitionSubject">
         /// The subject <see cref="IEnumerationDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IEnumerationUsage> ComputeEnumeratedValue(this IEnumerationDefinition enumerationDefinition)
+        internal static List<IEnumerationUsage> ComputeEnumeratedValue(this IEnumerationDefinition enumerationDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

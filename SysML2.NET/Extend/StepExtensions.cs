@@ -34,23 +34,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     /// The <see cref="StepExtensions"/> class provides extensions methods for
     /// the <see cref="IStep"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class StepExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="step">
+        /// <param name="stepSubject">
         /// The subject <see cref="IStep"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IBehavior> ComputeBehavior(this IStep step)
+        internal static List<IBehavior> ComputeBehavior(this IStep stepSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -58,14 +54,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="step">
+        /// <param name="stepSubject">
         /// The subject <see cref="IStep"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFeature> ComputeParameter(this IStep step)
+        internal static List<IFeature> ComputeParameter(this IStep stepSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

@@ -36,23 +36,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// The <see cref="TransitionFeatureMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="ITransitionFeatureMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class TransitionFeatureMembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionFeatureMembership">
+        /// <param name="transitionFeatureMembershipSubject">
         /// The subject <see cref="ITransitionFeatureMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IStep ComputeTransitionFeature(this ITransitionFeatureMembership transitionFeatureMembership)
+        internal static IStep ComputeTransitionFeature(this ITransitionFeatureMembership transitionFeatureMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

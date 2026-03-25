@@ -61,6 +61,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         IFeature targetFeature { get; }
 
+        /// <summary>
+        /// Return the first ownedFeature of the first owned input parameter of this FeatureChainExpression (if
+        /// any).
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature SourceTargetFeature() => this.ComputeSourceTargetFeatureOperation();
     }
 }
 

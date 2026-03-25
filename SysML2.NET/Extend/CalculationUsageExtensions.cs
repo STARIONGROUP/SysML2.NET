@@ -60,26 +60,39 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     /// The <see cref="CalculationUsageExtensions"/> class provides extensions methods for
     /// the <see cref="ICalculationUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class CalculationUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="calculationUsage">
+        /// <param name="calculationUsageSubject">
         /// The subject <see cref="ICalculationUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsage)
+        internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// A CalculationUsage is not model-level evaluable.
+        /// </summary>
+        /// <param name="calculationUsageSubject">
+        /// The subject <see cref="ICalculationUsage"/>
+        /// </param>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ICalculationUsage calculationUsageSubject, IFeature visited)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

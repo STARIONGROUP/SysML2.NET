@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// The <see cref="MembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class MembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="membership">
+        /// <param name="membershipSubject">
         /// The subject <see cref="IMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeMemberElementId(this IMembership membership)
+        internal static string ComputeMemberElementId(this IMembership membershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -55,17 +51,38 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="membership">
+        /// <param name="membershipSubject">
         /// The subject <see cref="IMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static INamespace ComputeMembershipOwningNamespace(this IMembership membership)
+        internal static INamespace ComputeMembershipOwningNamespace(this IMembership membershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Whether this Membership is distinguishable from a given other Membership. By default, this is true
+        /// if this Membership has no memberShortName or memberName; or each of the memberShortName and
+        /// memberName are different than both of those of the other Membership; or neither of the metaclasses
+        /// of the memberElement of this Membership and the memberElement of the other Membership conform to the
+        /// other. But this may be overridden in specializations of Membership.
+        /// </summary>
+        /// <param name="membershipSubject">
+        /// The subject <see cref="IMembership"/>
+        /// </param>
+        /// <param name="other">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIsDistinguishableFromOperation(this IMembership membershipSubject, IMembership other)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

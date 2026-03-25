@@ -53,6 +53,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1557528808100_646606_111674", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string Operator { get; set; }
 
+        /// <summary>
+        /// The instantiatedType of an OperatorExpression is the resolution of it's operator from one of the
+        /// packages BaseFunctions, DataFunctions, or ControlFunctions from the Kernel Function Library.
+        /// </summary>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        new IType InstantiatedType() => this.ComputeRedefinedInstantiatedTypeOperation();
     }
 }
 

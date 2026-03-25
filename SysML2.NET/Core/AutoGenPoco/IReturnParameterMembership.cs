@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -46,6 +47,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IReturnParameterMembership : IParameterMembership
     {
+        /// <summary>
+        /// The ownedMemberParameter of a ReturnParameterMembership must have direction out. (This is a leaf
+        /// operation that cannot be further redefined.)
+        /// </summary>
+        /// <returns>
+        /// The expected FeatureDirectionKind
+        /// </returns>
+        new FeatureDirectionKind ParameterDirection() => this.ComputeRedefinedParameterDirectionOperation();
     }
 }
 

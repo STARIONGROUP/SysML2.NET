@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
     /// The <see cref="MetadataUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IMetadataUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class MetadataUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="metadataUsage">
+        /// <param name="metadataUsageSubject">
         /// The subject <see cref="IMetadataUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMetaclass ComputeMetadataDefinition(this IMetadataUsage metadataUsage)
+        internal static IMetaclass ComputeMetadataDefinition(this IMetadataUsage metadataUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

@@ -55,23 +55,19 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     /// The <see cref="DefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class DefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeDirectedUsage(this IDefinition definition)
+        internal static List<IUsage> ComputeDirectedUsage(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -79,14 +75,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IActionUsage> ComputeOwnedAction(this IDefinition definition)
+        internal static List<IActionUsage> ComputeOwnedAction(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -94,14 +90,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAllocationUsage> ComputeOwnedAllocation(this IDefinition definition)
+        internal static List<IAllocationUsage> ComputeOwnedAllocation(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -109,14 +105,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAnalysisCaseUsage> ComputeOwnedAnalysisCase(this IDefinition definition)
+        internal static List<IAnalysisCaseUsage> ComputeOwnedAnalysisCase(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -124,14 +120,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAttributeUsage> ComputeOwnedAttribute(this IDefinition definition)
+        internal static List<IAttributeUsage> ComputeOwnedAttribute(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -139,14 +135,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ICalculationUsage> ComputeOwnedCalculation(this IDefinition definition)
+        internal static List<ICalculationUsage> ComputeOwnedCalculation(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -154,14 +150,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ICaseUsage> ComputeOwnedCase(this IDefinition definition)
+        internal static List<ICaseUsage> ComputeOwnedCase(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -169,14 +165,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConcernUsage> ComputeOwnedConcern(this IDefinition definition)
+        internal static List<IConcernUsage> ComputeOwnedConcern(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -184,14 +180,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConnectorAsUsage> ComputeOwnedConnection(this IDefinition definition)
+        internal static List<IConnectorAsUsage> ComputeOwnedConnection(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -199,14 +195,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConstraintUsage> ComputeOwnedConstraint(this IDefinition definition)
+        internal static List<IConstraintUsage> ComputeOwnedConstraint(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -214,14 +210,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IEnumerationUsage> ComputeOwnedEnumeration(this IDefinition definition)
+        internal static List<IEnumerationUsage> ComputeOwnedEnumeration(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -229,14 +225,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFlowUsage> ComputeOwnedFlow(this IDefinition definition)
+        internal static List<IFlowUsage> ComputeOwnedFlow(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -244,14 +240,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IInterfaceUsage> ComputeOwnedInterface(this IDefinition definition)
+        internal static List<IInterfaceUsage> ComputeOwnedInterface(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -259,14 +255,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IItemUsage> ComputeOwnedItem(this IDefinition definition)
+        internal static List<IItemUsage> ComputeOwnedItem(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -274,14 +270,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IMetadataUsage> ComputeOwnedMetadata(this IDefinition definition)
+        internal static List<IMetadataUsage> ComputeOwnedMetadata(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -289,14 +285,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IOccurrenceUsage> ComputeOwnedOccurrence(this IDefinition definition)
+        internal static List<IOccurrenceUsage> ComputeOwnedOccurrence(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -304,14 +300,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeOwnedPart(this IDefinition definition)
+        internal static List<IPartUsage> ComputeOwnedPart(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -319,14 +315,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPortUsage> ComputeOwnedPort(this IDefinition definition)
+        internal static List<IPortUsage> ComputeOwnedPort(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -334,14 +330,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IReferenceUsage> ComputeOwnedReference(this IDefinition definition)
+        internal static List<IReferenceUsage> ComputeOwnedReference(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -349,14 +345,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IRenderingUsage> ComputeOwnedRendering(this IDefinition definition)
+        internal static List<IRenderingUsage> ComputeOwnedRendering(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -364,14 +360,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IRequirementUsage> ComputeOwnedRequirement(this IDefinition definition)
+        internal static List<IRequirementUsage> ComputeOwnedRequirement(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -379,14 +375,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IStateUsage> ComputeOwnedState(this IDefinition definition)
+        internal static List<IStateUsage> ComputeOwnedState(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -394,14 +390,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ITransitionUsage> ComputeOwnedTransition(this IDefinition definition)
+        internal static List<ITransitionUsage> ComputeOwnedTransition(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -409,14 +405,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeOwnedUsage(this IDefinition definition)
+        internal static List<IUsage> ComputeOwnedUsage(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -424,14 +420,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUseCaseUsage> ComputeOwnedUseCase(this IDefinition definition)
+        internal static List<IUseCaseUsage> ComputeOwnedUseCase(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -439,14 +435,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IVerificationCaseUsage> ComputeOwnedVerificationCase(this IDefinition definition)
+        internal static List<IVerificationCaseUsage> ComputeOwnedVerificationCase(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -454,14 +450,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewUsage> ComputeOwnedView(this IDefinition definition)
+        internal static List<IViewUsage> ComputeOwnedView(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -469,14 +465,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewpointUsage> ComputeOwnedViewpoint(this IDefinition definition)
+        internal static List<IViewpointUsage> ComputeOwnedViewpoint(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -484,14 +480,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeUsage(this IDefinition definition)
+        internal static List<IUsage> ComputeUsage(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -499,14 +495,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeVariant(this IDefinition definition)
+        internal static List<IUsage> ComputeVariant(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -514,14 +510,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="definition">
+        /// <param name="definitionSubject">
         /// The subject <see cref="IDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IVariantMembership> ComputeVariantMembership(this IDefinition definition)
+        internal static List<IVariantMembership> ComputeVariantMembership(this IDefinition definitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

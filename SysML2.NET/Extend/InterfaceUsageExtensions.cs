@@ -30,6 +30,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Structures;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -60,23 +61,19 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     /// The <see cref="InterfaceUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IInterfaceUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class InterfaceUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="interfaceUsage">
+        /// <param name="interfaceUsageSubject">
         /// The subject <see cref="IInterfaceUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IInterfaceDefinition> ComputeInterfaceDefinition(this IInterfaceUsage interfaceUsage)
+        internal static List<IInterfaceDefinition> ComputeInterfaceDefinition(this IInterfaceUsage interfaceUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

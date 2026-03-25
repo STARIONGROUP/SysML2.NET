@@ -50,6 +50,30 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInvocationExpression : IInstantiationExpression
     {
+        /// <summary>
+        /// An InvocationExpression is model-level evaluable if all its argument Expressions are model-level
+        /// evaluable and its function is model-level evaluable.
+        /// </summary>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+
+        /// <summary>
+        /// Apply the Function that is the type of this InvocationExpression to the argument values resulting
+        /// from evaluating each of the argument Expressions on the given target. If the application is not
+        /// possible, then return an empty sequence.
+        /// </summary>
+        /// <param name="target">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        new IElement Evaluate(IElement target) => this.ComputeRedefinedEvaluateOperation(target);
     }
 }
 

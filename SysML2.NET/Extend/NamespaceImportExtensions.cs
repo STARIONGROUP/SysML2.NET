@@ -20,17 +20,37 @@
 
 namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
-    using System.Diagnostics.CodeAnalysis;
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// The <see cref="NamespaceImportExtensions"/> class provides extensions methods for
     /// the <see cref="INamespaceImport"/> interface
     /// </summary>
-    [SuppressMessage(
-        "Major Code Smell",
-        "S2094:Classes should not be empty",
-        Justification = "Extension class intentionally empty; methods are generated conditionally.")]
     internal static class NamespaceImportExtensions
     {
+        /// <summary>
+        /// Returns at least the visible Memberships of the importedNamespace. If isRecursive = true, then
+        /// Memberships are also recursively imported from any ownedMembers of the importedNamespace that are
+        /// themselves Namespaces.
+        /// </summary>
+        /// <param name="namespaceImportSubject">
+        /// The subject <see cref="INamespaceImport"/>
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IMembership ComputeRedefinedImportedMembershipsOperation(this INamespaceImport namespaceImportSubject, INamespace excluded)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

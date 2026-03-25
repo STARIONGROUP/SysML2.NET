@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="SendActionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="ISendActionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class SendActionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="sendActionUsage">
+        /// <param name="sendActionUsageSubject">
         /// The subject <see cref="ISendActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputePayloadArgument(this ISendActionUsage sendActionUsage)
+        internal static IExpression ComputePayloadArgument(this ISendActionUsage sendActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="sendActionUsage">
+        /// <param name="sendActionUsageSubject">
         /// The subject <see cref="ISendActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeReceiverArgument(this ISendActionUsage sendActionUsage)
+        internal static IExpression ComputeReceiverArgument(this ISendActionUsage sendActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -99,14 +95,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="sendActionUsage">
+        /// <param name="sendActionUsageSubject">
         /// The subject <see cref="ISendActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeSenderArgument(this ISendActionUsage sendActionUsage)
+        internal static IExpression ComputeSenderArgument(this ISendActionUsage sendActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

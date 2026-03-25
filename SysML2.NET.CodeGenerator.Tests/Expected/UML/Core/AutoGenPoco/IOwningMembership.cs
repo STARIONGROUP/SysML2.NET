@@ -71,6 +71,15 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         string ownedMemberShortName { get; }
 
+        /// <summary>
+        /// If the ownedMemberElement of this OwningMembership has a non-null qualifiedName, then return the
+        /// string constructed by appending to that qualifiedName the string "/owningMembership". Otherwise,
+        /// return the path of the OwningMembership as specified for a Relationship in general.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        new string Path() => this.ComputeRedefinedPathOperation();
     }
 }
 

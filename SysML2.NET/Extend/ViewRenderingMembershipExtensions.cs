@@ -34,23 +34,19 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// The <see cref="ViewRenderingMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IViewRenderingMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ViewRenderingMembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewRenderingMembership">
+        /// <param name="viewRenderingMembershipSubject">
         /// The subject <see cref="IViewRenderingMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRenderingUsage ComputeOwnedRendering(this IViewRenderingMembership viewRenderingMembership)
+        internal static IRenderingUsage ComputeOwnedRendering(this IViewRenderingMembership viewRenderingMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -58,14 +54,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewRenderingMembership">
+        /// <param name="viewRenderingMembershipSubject">
         /// The subject <see cref="IViewRenderingMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRenderingUsage ComputeReferencedRendering(this IViewRenderingMembership viewRenderingMembership)
+        internal static IRenderingUsage ComputeReferencedRendering(this IViewRenderingMembership viewRenderingMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

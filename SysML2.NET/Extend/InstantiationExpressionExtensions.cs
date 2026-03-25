@@ -36,23 +36,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// The <see cref="InstantiationExpressionExtensions"/> class provides extensions methods for
     /// the <see cref="IInstantiationExpression"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class InstantiationExpressionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="instantiationExpression">
+        /// <param name="instantiationExpressionSubject">
         /// The subject <see cref="IInstantiationExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeArgument(this IInstantiationExpression instantiationExpression)
+        internal static List<IExpression> ComputeArgument(this IInstantiationExpression instantiationExpressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -60,17 +56,34 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="instantiationExpression">
+        /// <param name="instantiationExpressionSubject">
         /// The subject <see cref="IInstantiationExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeInstantiatedType(this IInstantiationExpression instantiationExpression)
+        internal static IType ComputeInstantiatedType(this IInstantiationExpression instantiationExpressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return the Type to act as the instantiatedType for this InstantiationExpression. By default, this is
+        /// the memberElement of the first ownedMembership that is not a FeatureMembership, which must be a
+        /// Type.                            <b>Note.</b> This operation is overridden in the subclass
+        /// OperatorExpression.
+        /// </summary>
+        /// <param name="instantiationExpressionSubject">
+        /// The subject <see cref="IInstantiationExpression"/>
+        /// </param>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IType ComputeInstantiatedTypeOperation(this IInstantiationExpression instantiationExpressionSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

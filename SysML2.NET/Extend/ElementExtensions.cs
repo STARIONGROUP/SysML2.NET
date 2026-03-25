@@ -30,23 +30,19 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     /// The <see cref="ElementExtensions"/> class provides extensions methods for
     /// the <see cref="IElement"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ElementExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IDocumentation> ComputeDocumentation(this IElement element)
+        internal static List<IDocumentation> ComputeDocumentation(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -54,14 +50,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeIsLibraryElement(this IElement element)
+        internal static bool ComputeIsLibraryElement(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -69,14 +65,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeName(this IElement element)
+        internal static string ComputeName(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAnnotation> ComputeOwnedAnnotation(this IElement element)
+        internal static List<IAnnotation> ComputeOwnedAnnotation(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -99,14 +95,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IElement> ComputeOwnedElement(this IElement element)
+        internal static List<IElement> ComputeOwnedElement(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -114,14 +110,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeOwner(this IElement element)
+        internal static IElement ComputeOwner(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -129,14 +125,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IOwningMembership ComputeOwningMembership(this IElement element)
+        internal static IOwningMembership ComputeOwningMembership(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -144,14 +140,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static INamespace ComputeOwningNamespace(this IElement element)
+        internal static INamespace ComputeOwningNamespace(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -159,14 +155,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeQualifiedName(this IElement element)
+        internal static string ComputeQualifiedName(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -174,14 +170,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeShortName(this IElement element)
+        internal static string ComputeShortName(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -189,17 +185,101 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="element">
+        /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ITextualRepresentation> ComputeTextualRepresentation(this IElement element)
+        internal static List<ITextualRepresentation> ComputeTextualRepresentation(this IElement elementSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
+        /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
+        /// otherwise, represented as a restricted name according to the lexical structure of the KerML textual
+        /// notation (i.e., surrounded by single quote characters and with special characters escaped).
+        /// </summary>
+        /// <param name="elementSubject">
+        /// The subject <see cref="IElement"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeEscapedNameOperation(this IElement elementSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Return an effective shortName for this Element. By default this is the same as its
+        /// declaredShortName.
+        /// </summary>
+        /// <param name="elementSubject">
+        /// The subject <see cref="IElement"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeEffectiveShortNameOperation(this IElement elementSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Return an effective name for this Element. By default this is the same as its declaredName.
+        /// </summary>
+        /// <param name="elementSubject">
+        /// The subject <see cref="IElement"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeEffectiveNameOperation(this IElement elementSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// By default, return the library Namespace of the owningRelationship of this Element, if it has one.
+        /// </summary>
+        /// <param name="elementSubject">
+        /// The subject <see cref="IElement"/>
+        /// </param>
+        /// <returns>
+        /// The expected INamespace
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static INamespace ComputeLibraryNamespaceOperation(this IElement elementSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Return a unique description of the location of this Element in the containment structure rooted in a
+        /// root Namespace. If the Element has a non-null qualifiedName, then return that. Otherwise, if it has
+        /// an owningRelationship, then return the string constructed by appending to the path of it's
+        /// owningRelationship the character / followed by the string representation of its position in the list
+        /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
+        /// empty string.                            (Note that this operation is overridden for Relationships
+        /// to use owningRelatedElement when appropriate.)
+        /// </summary>
+        /// <param name="elementSubject">
+        /// The subject <see cref="IElement"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputePathOperation(this IElement elementSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

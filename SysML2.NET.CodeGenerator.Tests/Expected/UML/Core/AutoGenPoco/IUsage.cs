@@ -341,6 +341,23 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         List<IVariantMembership> variantMembership { get; }
 
+        /// <summary>
+        /// If this Usage is a variant, then its naming Feature is the referencedFeature of its
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
+
+        /// <summary>
+        /// If ownedReferenceSubsetting is not null, return the featureTarget of the referencedFeature of the
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature ReferencedFeatureTarget() => this.ComputeReferencedFeatureTargetOperation();
     }
 }
 

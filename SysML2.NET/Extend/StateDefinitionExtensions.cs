@@ -56,23 +56,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// The <see cref="StateDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IStateDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class StateDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="stateDefinition">
+        /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeDoAction(this IStateDefinition stateDefinition)
+        internal static IActionUsage ComputeDoAction(this IStateDefinition stateDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -80,14 +76,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="stateDefinition">
+        /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeEntryAction(this IStateDefinition stateDefinition)
+        internal static IActionUsage ComputeEntryAction(this IStateDefinition stateDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -95,14 +91,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="stateDefinition">
+        /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeExitAction(this IStateDefinition stateDefinition)
+        internal static IActionUsage ComputeExitAction(this IStateDefinition stateDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -110,14 +106,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="stateDefinition">
+        /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IStateUsage> ComputeState(this IStateDefinition stateDefinition)
+        internal static List<IStateUsage> ComputeState(this IStateDefinition stateDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

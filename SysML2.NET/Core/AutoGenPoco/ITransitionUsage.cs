@@ -124,6 +124,23 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         List<IAcceptActionUsage> triggerAction { get; }
 
+        /// <summary>
+        /// Return the payloadParameter of the triggerAction of this TransitionUsage, if it has one.
+        /// </summary>
+        /// <returns>
+        /// The expected IReferenceUsage
+        /// </returns>
+        IReferenceUsage TriggerPayloadParameter() => this.ComputeTriggerPayloadParameterOperation();
+
+        /// <summary>
+        /// Return the Feature to be used as the source of the succession of this TransitionUsage, which is the
+        /// first member of the TransitionUsage that is a Feature, that is owned by the TransitionUsage via a
+        /// Membership that is not a FeatureMembership, and whose featureTarget is an ActionUsage.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature SourceFeature() => this.ComputeSourceFeatureOperation();
     }
 }
 

@@ -26,6 +26,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Threading.Tasks;
 
     using SysML2.NET.CodeGenerator.Extensions;
+    using SysML2.NET.CodeGenerator.HandleBarHelpers;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;
@@ -95,7 +96,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
-                .Where(x => x.OwnedAttribute.Select(y => y.IsDerived || y.IsDerivedUnion).Any())
+                .Where(x => x.OwnedAttribute.Select(y => y.IsDerived || y.IsDerivedUnion).Any() || x.OwnedOperation.Count != 0)
                 .ToList();
 
             foreach (var @class in classes)
@@ -163,14 +164,15 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             this.Handlebars.RegisterStringHelper();
             this.Handlebars.RegisterEnumerableHelper();
-            this.Handlebars.RegisterClassHelper();
-            this.Handlebars.RegisterPropertyHelper();
+            uml4net.HandleBars.ClassHelper.RegisterClassHelper(this.Handlebars);
+            uml4net.HandleBars.PropertyHelper.RegisterPropertyHelper(this.Handlebars);
             this.Handlebars.RegisterGeneralizationHelper();
             this.Handlebars.RegisterDocumentationHelper();
             this.Handlebars.RegisterEnumHelper();
             this.Handlebars.RegisterDecoratorHelper();
-            this.Handlebars.RegisterNamedElementHelper();
+            uml4net.HandleBars.NamedElementHelper.RegisterNamedElementHelper(this.Handlebars);
 
+            OperationHelper.RegisterOperationHelper(this.Handlebars);
             EnumerationLiteralHelper.RegisterTypeNameHelper(this.Handlebars);
             ClassHelper.RegisterClassHelper(this.Handlebars);
             NamedElementHelper.RegisterNamedElementHelper(this.Handlebars);

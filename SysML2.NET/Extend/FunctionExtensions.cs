@@ -35,23 +35,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     /// The <see cref="FunctionExtensions"/> class provides extensions methods for
     /// the <see cref="IFunction"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FunctionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="function">
+        /// <param name="functionSubject">
         /// The subject <see cref="IFunction"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeExpression(this IFunction function)
+        internal static List<IExpression> ComputeExpression(this IFunction functionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -59,14 +55,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="function">
+        /// <param name="functionSubject">
         /// The subject <see cref="IFunction"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeIsModelLevelEvaluable(this IFunction function)
+        internal static bool ComputeIsModelLevelEvaluable(this IFunction functionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -74,14 +70,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="function">
+        /// <param name="functionSubject">
         /// The subject <see cref="IFunction"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeResult(this IFunction function)
+        internal static IFeature ComputeResult(this IFunction functionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

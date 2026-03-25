@@ -55,6 +55,15 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1643588513495_774789_300", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         TriggerKind Kind { get; set; }
 
+        /// <summary>
+        /// Return one of the Functions TriggerWhen, TriggerAt or TriggerAfter, from the Kernel Semantic Library
+        /// Triggers package, depending on whether the kind of this TriggerInvocationExpression is when, at or
+        /// after, respectively.
+        /// </summary>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        new IType InstantiatedType() => this.ComputeRedefinedInstantiatedTypeOperation();
     }
 }
 

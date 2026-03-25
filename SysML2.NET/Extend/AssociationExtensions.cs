@@ -34,23 +34,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
     /// The <see cref="AssociationExtensions"/> class provides extensions methods for
     /// the <see cref="IAssociation"/> interface
     /// </summary>
-    
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]internal static class AssociationExtensions
+    internal static class AssociationExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="association">
+        /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFeature> ComputeAssociationEnd(this IAssociation association)
+        internal static List<IFeature> ComputeAssociationEnd(this IAssociation associationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -58,14 +54,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="association">
+        /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IType> ComputeRelatedType(this IAssociation association)
+        internal static List<IType> ComputeRelatedType(this IAssociation associationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -73,14 +69,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="association">
+        /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeSourceType(this IAssociation association)
+        internal static IType ComputeSourceType(this IAssociation associationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -88,14 +84,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="association">
+        /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IType> ComputeTargetType(this IAssociation association)
+        internal static List<IType> ComputeTargetType(this IAssociation associationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

@@ -33,23 +33,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     /// The <see cref="ElementFilterMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IElementFilterMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ElementFilterMembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="elementFilterMembership">
+        /// <param name="elementFilterMembershipSubject">
         /// The subject <see cref="IElementFilterMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeCondition(this IElementFilterMembership elementFilterMembership)
+        internal static IExpression ComputeCondition(this IElementFilterMembership elementFilterMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

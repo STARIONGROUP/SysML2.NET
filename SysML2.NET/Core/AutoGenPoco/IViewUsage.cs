@@ -109,6 +109,16 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [Property(xmiId: "_19_0_2_12e503d9_1596657318021_274182_5067", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IRenderingUsage viewRendering { get; }
 
+        /// <summary>
+        /// Determine whether the given element meets all the owned and inherited viewConditions.
+        /// </summary>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IncludeAsExposed(IElement element) => this.ComputeIncludeAsExposedOperation(element);
     }
 }
 

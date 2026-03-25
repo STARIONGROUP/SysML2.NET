@@ -34,26 +34,88 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     /// The <see cref="MetadataFeatureExtensions"/> class provides extensions methods for
     /// the <see cref="IMetadataFeature"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class MetadataFeatureExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="metadataFeature">
+        /// <param name="metadataFeatureSubject">
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMetaclass ComputeMetaclass(this IMetadataFeature metadataFeature)
+        internal static IMetaclass ComputeMetaclass(this IMetadataFeature metadataFeatureSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// If the given baseFeature is a feature of this MetadataFeature, or is directly or indirectly
+        /// redefined by a feature, then return the result of evaluating the appropriate (model-level evaluable)
+        /// value Expression for it (if any), with the MetadataFeature as the target.
+        /// </summary>
+        /// <param name="metadataFeatureSubject">
+        /// The subject <see cref="IMetadataFeature"/>
+        /// </param>
+        /// <param name="baseFeature">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IElement ComputeEvaluateFeatureOperation(this IMetadataFeature metadataFeatureSubject, IFeature baseFeature)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Check if this MetadataFeature has a metaclass which is a kind of SemanticMetadata.
+        /// </summary>
+        /// <param name="metadataFeatureSubject">
+        /// The subject <see cref="IMetadataFeature"/>
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIsSemanticOperation(this IMetadataFeature metadataFeatureSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Check if this MetadataFeature has a metaclass that is a kind of KerML::Element (that is, it is from
+        /// the reflective abstract syntax model).
+        /// </summary>
+        /// <param name="metadataFeatureSubject">
+        /// The subject <see cref="IMetadataFeature"/>
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIsSyntacticOperation(this IMetadataFeature metadataFeatureSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// If this MetadataFeature reflectively represents a model element, then return the corresponding
+        /// Element instance from the MOF abstract syntax representation of the model.
+        /// </summary>
+        /// <param name="metadataFeatureSubject">
+        /// The subject <see cref="IMetadataFeature"/>
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IElement ComputeSyntaxElementOperation(this IMetadataFeature metadataFeatureSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

@@ -57,23 +57,19 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     /// The <see cref="CaseDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="ICaseDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class CaseDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="caseDefinition">
+        /// <param name="caseDefinitionSubject">
         /// The subject <see cref="ICaseDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeActorParameter(this ICaseDefinition caseDefinition)
+        internal static List<IPartUsage> ComputeActorParameter(this ICaseDefinition caseDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -81,14 +77,14 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="caseDefinition">
+        /// <param name="caseDefinitionSubject">
         /// The subject <see cref="ICaseDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRequirementUsage ComputeObjectiveRequirement(this ICaseDefinition caseDefinition)
+        internal static IRequirementUsage ComputeObjectiveRequirement(this ICaseDefinition caseDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -96,14 +92,14 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="caseDefinition">
+        /// <param name="caseDefinitionSubject">
         /// The subject <see cref="ICaseDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IUsage ComputeSubjectParameter(this ICaseDefinition caseDefinition)
+        internal static IUsage ComputeSubjectParameter(this ICaseDefinition caseDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

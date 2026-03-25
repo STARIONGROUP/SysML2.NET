@@ -62,6 +62,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
                 }
 
+                var parameters = @class.OwnedOperation.SelectMany(x => x.OwnedParameter);
+
+                foreach (var enumeration in parameters.Where(x => x.Type is IEnumeration).Select(x => x.Type as IEnumeration))
+                {
+                    uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(enumeration));
+                }
+
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
 
                 foreach (var orderedNamespace in orderedNamespaces)
@@ -125,8 +132,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             uniqueNamespaces.Add(@namespace);
                         }
                     }
+                    
+                    foreach (var operation in @class.OwnedOperation)
+                    {
+                        foreach (var parameterType in operation.OwnedParameter.Where(x => x.Type is IClass).Select(x => x.Type as IClass))
+                        {
+                            uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(parameterType));
+                        }
+                    }
                 }
-
+                
                 uniqueNamespaces.Remove(Extensions.NamedElementExtensions.QueryNamespace(@class));
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
 

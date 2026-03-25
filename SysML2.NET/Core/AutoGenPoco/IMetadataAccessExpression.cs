@@ -33,6 +33,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -55,6 +56,41 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         IElement referencedElement { get; }
 
+        /// <summary>
+        /// A MetadataAccessExpression is always model-level evaluable.
+        /// </summary>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+
+        /// <summary>
+        /// Return the ownedElements of the referencedElement that are MetadataFeatures and have the
+        /// referencedElement as an annotatedElement, plus a MetadataFeature whose annotatedElement is the
+        /// referencedElement, whose metaclass is the reflective Metaclass corresponding to the MOF class of the
+        /// referencedElement and whose ownedFeatures are bound to the values of the MOF properties of the
+        /// referencedElement.
+        /// </summary>
+        /// <param name="target">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        new IElement Evaluate(IElement target) => this.ComputeRedefinedEvaluateOperation(target);
+
+        /// <summary>
+        /// Return a MetadataFeature whose annotatedElement is the referencedElement, whose metaclass is the
+        /// reflective Metaclass corresponding to the MOF class of the referencedElement and whose ownedFeatures
+        /// are bound to the MOF properties of the referencedElement.
+        /// </summary>
+        /// <returns>
+        /// The expected IMetadataFeature
+        /// </returns>
+        IMetadataFeature MetaclassFeature() => this.ComputeMetaclassFeatureOperation();
     }
 }
 

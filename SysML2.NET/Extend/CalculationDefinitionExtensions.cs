@@ -57,23 +57,19 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     /// The <see cref="CalculationDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="ICalculationDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class CalculationDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="calculationDefinition">
+        /// <param name="calculationDefinitionSubject">
         /// The subject <see cref="ICalculationDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ICalculationUsage> ComputeCalculation(this ICalculationDefinition calculationDefinition)
+        internal static List<ICalculationUsage> ComputeCalculation(this ICalculationDefinition calculationDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

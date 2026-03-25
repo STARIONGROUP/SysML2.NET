@@ -74,6 +74,32 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
         IExpression upperBound { get; }
 
+        /// <summary>
+        /// Check whether this MultiplicityRange represents the range bounded by the given values lower and
+        /// upper, presuming the lowerBound and upperBound Expressions are model-level evaluable.
+        /// </summary>
+        /// <param name="lower">
+        /// No documentation provided
+        /// </param>
+        /// <param name="upper">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool HasBounds(int lower, string upper) => this.ComputeHasBoundsOperation(lower, upper);
+
+        /// <summary>
+        /// Evaluate the given bound Expression (at model level) and return the result represented as a MOF
+        /// UnlimitedNatural value.
+        /// </summary>
+        /// <param name="bound">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string ValueOf(IExpression bound) => this.ComputeValueOfOperation(bound);
     }
 }
 
