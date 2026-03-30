@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -45,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeImportedMembership(this INamespace namespaceSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : namespaceSubject.ImportedMemberships((INamespace)null);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IElement> ComputeMember(this INamespace namespaceSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.membership.Select(x => x.MemberElement)];
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeMembership(this INamespace namespaceSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.ownedMembership.Union(namespaceSubject.importedMembership)];
         }
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeOwnedMembership(this INamespace namespaceSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.OwnedRelationship.OfType<IMembership>()];
         }
 
         /// <summary>

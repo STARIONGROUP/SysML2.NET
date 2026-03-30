@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -45,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.OwnedRelatedElement.SingleOrDefault();
         }
 
         /// <summary>

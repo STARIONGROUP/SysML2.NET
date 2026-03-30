@@ -23,12 +23,10 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
 
-    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ElementExtensions"/> class provides extensions methods for
@@ -47,7 +45,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static List<IDocumentation> ComputeDocumentation(this IElement elementSubject)
         {
-            return [..elementSubject.ownedElement.OfType<IDocumentation>()];
+            return elementSubject == null ?  throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<IDocumentation>()];
         }
 
         /// <summary>
@@ -61,19 +59,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static bool ComputeIsLibraryElement(this IElement elementSubject)
         {
-            var owner = elementSubject.owner;
-
-            while (owner != null)
-            {
-                if (owner is ILibraryPackage)
-                {
-                    return true;
-                }
-
-                owner = owner.owner;
-            }
-            
-            return false;
+            return elementSubject == null ?  throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.LibraryNamespace() != null;
         }
 
         /// <summary>
@@ -85,10 +71,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeName(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveName();
         }
 
         /// <summary>
@@ -102,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static List<IAnnotation> ComputeOwnedAnnotation(this IElement elementSubject)
         {
-            return [..elementSubject.OwnedRelationship.OfType<IAnnotation>().Where(x => x.AnnotatedElement == elementSubject)];
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.OwnedRelationship.OfType<IAnnotation>().Where(x => x.AnnotatedElement == elementSubject)];
         }
 
         /// <summary>
@@ -116,7 +101,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static List<IElement> ComputeOwnedElement(this IElement elementSubject)
         {
-            return [..elementSubject.OwnedRelationship.SelectMany(x => x.OwnedRelatedElement)];
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.OwnedRelationship.SelectMany(x => x.OwnedRelatedElement)];
         }
 
         /// <summary>
@@ -130,7 +115,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static IElement ComputeOwner(this IElement elementSubject)
         {
-            return elementSubject.OwningRelationship?.OwningRelatedElement;
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) :elementSubject.OwningRelationship?.OwningRelatedElement;
         }
 
         /// <summary>
@@ -144,7 +129,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static IOwningMembership ComputeOwningMembership(this IElement elementSubject)
         {
-            return elementSubject.OwningRelationship as IOwningMembership;
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship as IOwningMembership;
         }
 
         /// <summary>
@@ -158,7 +143,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static INamespace ComputeOwningNamespace(this IElement elementSubject)
         {
-            return elementSubject.owningMembership?.membershipOwningNamespace;
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.owningMembership?.membershipOwningNamespace;
         }
 
         /// <summary>
@@ -170,10 +155,42 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeQualifiedName(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (elementSubject == null)
+            {
+                throw new ArgumentNullException(nameof(elementSubject));
+            }
+
+            if (elementSubject.owningNamespace == null)
+            {
+                return null;
+            }
+
+            if (elementSubject.name != null)
+            {
+                var membersWithTheName = elementSubject.owningNamespace.member.Where(x => x.name == elementSubject.name).ToList();
+
+                if (membersWithTheName.IndexOf(elementSubject) != 0)
+                {
+                    return null;
+                }
+            }
+
+            if (elementSubject.owningNamespace.owner == null)
+            {
+                return elementSubject.EscapedName();
+            }
+            
+            var parentQualifiedName = elementSubject.owningNamespace.qualifiedName;
+            var currentEscaped = elementSubject.EscapedName();
+
+            if (string.IsNullOrWhiteSpace(parentQualifiedName) || string.IsNullOrWhiteSpace(currentEscaped))
+            {
+                return null;
+            }
+
+            return $"{parentQualifiedName}::{currentEscaped}";
         }
 
         /// <summary>
@@ -188,7 +205,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeShortName(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveShortName();
         }
 
         /// <summary>
@@ -202,12 +219,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static List<ITextualRepresentation> ComputeTextualRepresentation(this IElement elementSubject)
         {
-            if (elementSubject == null)
-            {
-                throw new ArgumentNullException(nameof(elementSubject));
-            }
-
-            return [..elementSubject.ownedElement.OfType<ITextualRepresentation>()];
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<ITextualRepresentation>()];
         }
         
         /// <summary>
@@ -222,10 +234,26 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeEscapedNameOperation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (elementSubject == null)
+            {
+                throw new ArgumentNullException(nameof(elementSubject));
+            }
+
+            var targetName = elementSubject.name;
+
+            if (string.IsNullOrWhiteSpace(targetName))
+            {
+                targetName = elementSubject.shortName;
+            }
+
+            if (string.IsNullOrWhiteSpace(targetName))
+            {
+                return null;
+            }
+
+            return targetName.QueryIsBasicName() ? targetName : targetName.ToUnrestrictedName();
         }
 
         /// <summary>
@@ -238,10 +266,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeEffectiveShortNameOperation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.DeclaredShortName;
         }
 
         /// <summary>
@@ -253,10 +280,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeEffectiveNameOperation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.DeclaredName;
         }
 
         /// <summary>
@@ -268,10 +294,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeLibraryNamespaceOperation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship?.LibraryNamespace();
         }
 
         /// <summary>
@@ -289,10 +314,29 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputePathOperation(this IElement elementSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (elementSubject == null)
+            {
+                throw new ArgumentNullException(nameof(elementSubject));
+            }
+
+            var qualifiedName = elementSubject.qualifiedName;
+
+            if (!string.IsNullOrWhiteSpace(qualifiedName))
+            {
+                return qualifiedName;
+            }
+
+            if (elementSubject.OwningRelationship == null)
+            {
+                return string.Empty;
+            }
+            
+            var ownedRelatedElementsIndex =  elementSubject.OwningRelationship.OwnedRelatedElement.ToList().IndexOf(elementSubject) +1;
+            var parentPath = elementSubject.OwningRelationship.Path();
+            
+            return string.IsNullOrWhiteSpace(parentPath) ? $"/{ownedRelatedElementsIndex}": $"{parentPath}/{ownedRelatedElementsIndex}";
         }
     }
 }
