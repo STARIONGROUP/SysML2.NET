@@ -79,6 +79,15 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
         IActionUsage performedAction { get; }
 
+        /// <summary>
+        /// The naming Feature of a PerformActionUsage is its performedAction, if this is different than the
+        /// PerformActionUsage. If the PerformActionUsage is its own performedAction, then the naming Feature is
+        /// the same as the usual default for a Usage.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
     }
 }
 

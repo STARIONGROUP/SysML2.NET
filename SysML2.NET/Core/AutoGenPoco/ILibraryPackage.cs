@@ -50,6 +50,13 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Property(xmiId: "_19_0_4_12e503d9_1665459011301_65344_899", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsStandard { get; set; }
 
+        /// <summary>
+        /// The libraryNamespace for a LibraryPackage is itself.
+        /// </summary>
+        /// <returns>
+        /// The expected INamespace
+        /// </returns>
+        new INamespace LibraryNamespace() => this.ComputeRedefinedLibraryNamespaceOperation();
     }
 }
 

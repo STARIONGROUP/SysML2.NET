@@ -51,6 +51,27 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         List<IExpression> filterCondition { get; }
 
+        /// <summary>
+        /// Exclude Elements that do not meet all the filterConditions.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        new IMembership ImportedMemberships(INamespace excluded) => this.ComputeRedefinedImportedMembershipsOperation(excluded);
+
+        /// <summary>
+        /// Determine whether the given element meets all the filterConditions.
+        /// </summary>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IncludeAsMember(IElement element) => this.ComputeIncludeAsMemberOperation(element);
     }
 }
 

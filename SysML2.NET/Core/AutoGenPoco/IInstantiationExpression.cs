@@ -64,6 +64,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         IType instantiatedType { get; }
 
+        /// <summary>
+        /// Return the Type to act as the instantiatedType for this InstantiationExpression. By default, this is
+        /// the memberElement of the first ownedMembership that is not a FeatureMembership, which must be a
+        /// Type.                            <b>Note.</b> This operation is overridden in the subclass
+        /// OperatorExpression.
+        /// </summary>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        IType InstantiatedType() => this.ComputeInstantiatedTypeOperation();
     }
 }
 

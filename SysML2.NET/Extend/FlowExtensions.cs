@@ -38,23 +38,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// The <see cref="FlowExtensions"/> class provides extensions methods for
     /// the <see cref="IFlow"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FlowExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flow">
+        /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFlowEnd> ComputeFlowEnd(this IFlow flow)
+        internal static List<IFlowEnd> ComputeFlowEnd(this IFlow flowSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -62,14 +58,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flow">
+        /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IInteraction> ComputeInteraction(this IFlow flow)
+        internal static List<IInteraction> ComputeInteraction(this IFlow flowSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -77,14 +73,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flow">
+        /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IPayloadFeature ComputePayloadFeature(this IFlow flow)
+        internal static IPayloadFeature ComputePayloadFeature(this IFlow flowSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -92,14 +88,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flow">
+        /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IClassifier> ComputePayloadType(this IFlow flow)
+        internal static List<IClassifier> ComputePayloadType(this IFlow flowSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -107,14 +103,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flow">
+        /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeSourceOutputFeature(this IFlow flow)
+        internal static IFeature ComputeSourceOutputFeature(this IFlow flowSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -122,14 +118,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flow">
+        /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeTargetInputFeature(this IFlow flow)
+        internal static IFeature ComputeTargetInputFeature(this IFlow flowSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

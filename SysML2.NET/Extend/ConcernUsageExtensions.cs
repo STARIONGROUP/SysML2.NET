@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// The <see cref="ConcernUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IConcernUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ConcernUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="concernUsage">
+        /// <param name="concernUsageSubject">
         /// The subject <see cref="IConcernUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IConcernDefinition ComputeConcernDefinition(this IConcernUsage concernUsage)
+        internal static IConcernDefinition ComputeConcernDefinition(this IConcernUsage concernUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

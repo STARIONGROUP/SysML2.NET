@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     /// The <see cref="AnalysisCaseUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IAnalysisCaseUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class AnalysisCaseUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="analysisCaseUsage">
+        /// <param name="analysisCaseUsageSubject">
         /// The subject <see cref="IAnalysisCaseUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsage)
+        internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="analysisCaseUsage">
+        /// <param name="analysisCaseUsageSubject">
         /// The subject <see cref="IAnalysisCaseUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeResultExpression(this IAnalysisCaseUsage analysisCaseUsage)
+        internal static IExpression ComputeResultExpression(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

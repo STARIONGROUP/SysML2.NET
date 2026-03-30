@@ -32,23 +32,19 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     /// The <see cref="PortConjugationExtensions"/> class provides extensions methods for
     /// the <see cref="IPortConjugation"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class PortConjugationExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="portConjugation">
+        /// <param name="portConjugationSubject">
         /// The subject <see cref="IPortConjugation"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IConjugatedPortDefinition ComputeConjugatedPortDefinition(this IPortConjugation portConjugation)
+        internal static IConjugatedPortDefinition ComputeConjugatedPortDefinition(this IPortConjugation portConjugationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

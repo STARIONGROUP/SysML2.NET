@@ -211,7 +211,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IRelationship.OwnedRelatedElement")]
-        public IReadOnlyCollection<IElement> OwnedRelatedElement => ((IContainedRelationship)this).OwnedRelatedElement;
+        public IReadOnlyList<IElement> OwnedRelatedElement => ((IContainedRelationship)this).OwnedRelatedElement;
 
         /// <summary>Backing field for IRelationship.OwnedRelatedElement</summary>
         ContainerList<IRelationship, IElement> IContainedRelationship.OwnedRelatedElement { get; set; }
@@ -222,7 +222,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
-        public IReadOnlyCollection<IRelationship> OwnedRelationship => ((IContainedElement)this).OwnedRelationship;
+        public IReadOnlyList<IRelationship> OwnedRelationship => ((IContainedElement)this).OwnedRelationship;
 
         /// <summary>Backing field for IElement.OwnedRelationship</summary>
         ContainerList<IElement, IRelationship> IContainedElement.OwnedRelationship { get; set; }

@@ -112,6 +112,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         List<IBehavior> stateDefinition { get; }
 
+        /// <summary>
+        /// Check if this StateUsage is composite and has an owningType that is a StateDefinition or StateUsage
+        /// with the given value of isParallel, but is not an entryAction, doAction, or exitAction. If so, then
+        /// it represents a StateAction that is a substate or exclusiveState (for isParallel = false) of another
+        /// StateAction.
+        /// </summary>
+        /// <param name="isParallel">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsSubstateUsage(bool isParallel) => this.ComputeIsSubstateUsageOperation(isParallel);
     }
 }
 

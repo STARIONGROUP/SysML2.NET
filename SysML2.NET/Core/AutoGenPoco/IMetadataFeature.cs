@@ -52,6 +52,44 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         IMetaclass metaclass { get; }
 
+        /// <summary>
+        /// If the given baseFeature is a feature of this MetadataFeature, or is directly or indirectly
+        /// redefined by a feature, then return the result of evaluating the appropriate (model-level evaluable)
+        /// value Expression for it (if any), with the MetadataFeature as the target.
+        /// </summary>
+        /// <param name="baseFeature">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        IElement EvaluateFeature(IFeature baseFeature) => this.ComputeEvaluateFeatureOperation(baseFeature);
+
+        /// <summary>
+        /// Check if this MetadataFeature has a metaclass which is a kind of SemanticMetadata.
+        /// </summary>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsSemantic() => this.ComputeIsSemanticOperation();
+
+        /// <summary>
+        /// Check if this MetadataFeature has a metaclass that is a kind of KerML::Element (that is, it is from
+        /// the reflective abstract syntax model).
+        /// </summary>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsSyntactic() => this.ComputeIsSyntacticOperation();
+
+        /// <summary>
+        /// If this MetadataFeature reflectively represents a model element, then return the corresponding
+        /// Element instance from the MOF abstract syntax representation of the model.
+        /// </summary>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        IElement SyntaxElement() => this.ComputeSyntaxElementOperation();
     }
 }
 

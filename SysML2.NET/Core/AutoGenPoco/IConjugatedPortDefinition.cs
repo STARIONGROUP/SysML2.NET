@@ -86,6 +86,14 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_280165_440")]
         IPortConjugation ownedPortConjugator { get; }
 
+        /// <summary>
+        /// If the name of the originalPortDefinition is non-empty, then return that with the character ~
+        /// prepended.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        new string EffectiveName() => this.ComputeRedefinedEffectiveNameOperation();
     }
 }
 

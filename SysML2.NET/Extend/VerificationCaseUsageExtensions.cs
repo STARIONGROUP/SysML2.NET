@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     /// The <see cref="VerificationCaseUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IVerificationCaseUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class VerificationCaseUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="verificationCaseUsage">
+        /// <param name="verificationCaseUsageSubject">
         /// The subject <see cref="IVerificationCaseUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsage)
+        internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="verificationCaseUsage">
+        /// <param name="verificationCaseUsageSubject">
         /// The subject <see cref="IVerificationCaseUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IRequirementUsage> ComputeVerifiedRequirement(this IVerificationCaseUsage verificationCaseUsage)
+        internal static List<IRequirementUsage> ComputeVerifiedRequirement(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="IfActionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IIfActionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class IfActionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="ifActionUsage">
+        /// <param name="ifActionUsageSubject">
         /// The subject <see cref="IIfActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeElseAction(this IIfActionUsage ifActionUsage)
+        internal static IActionUsage ComputeElseAction(this IIfActionUsage ifActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="ifActionUsage">
+        /// <param name="ifActionUsageSubject">
         /// The subject <see cref="IIfActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeIfArgument(this IIfActionUsage ifActionUsage)
+        internal static IExpression ComputeIfArgument(this IIfActionUsage ifActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -99,14 +95,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="ifActionUsage">
+        /// <param name="ifActionUsageSubject">
         /// The subject <see cref="IIfActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeThenAction(this IIfActionUsage ifActionUsage)
+        internal static IActionUsage ComputeThenAction(this IIfActionUsage ifActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

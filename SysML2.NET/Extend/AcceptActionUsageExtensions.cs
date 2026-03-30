@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="AcceptActionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IAcceptActionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class AcceptActionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="acceptActionUsage">
+        /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputePayloadArgument(this IAcceptActionUsage acceptActionUsage)
+        internal static IExpression ComputePayloadArgument(this IAcceptActionUsage acceptActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="acceptActionUsage">
+        /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IReferenceUsage ComputePayloadParameter(this IAcceptActionUsage acceptActionUsage)
+        internal static IReferenceUsage ComputePayloadParameter(this IAcceptActionUsage acceptActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -99,17 +95,31 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="acceptActionUsage">
+        /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IExpression ComputeReceiverArgument(this IAcceptActionUsage acceptActionUsage)
+        internal static IExpression ComputeReceiverArgument(this IAcceptActionUsage acceptActionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Check if this AcceptActionUsage is the triggerAction of a TransitionUsage.
+        /// </summary>
+        /// <param name="acceptActionUsageSubject">
+        /// The subject <see cref="IAcceptActionUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIsTriggerActionOperation(this IAcceptActionUsage acceptActionUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

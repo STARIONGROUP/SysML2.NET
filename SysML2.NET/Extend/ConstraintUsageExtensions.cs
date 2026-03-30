@@ -60,26 +60,56 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     /// The <see cref="ConstraintUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IConstraintUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ConstraintUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="constraintUsage">
+        /// <param name="constraintUsageSubject">
         /// The subject <see cref="IConstraintUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsage)
+        internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// The naming Feature of a ConstraintUsage that is owned by a RequirementConstraintMembership and has
+        /// an ownedReferenceSubsetting is the featureTarget of the referencedFeature of that
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <param name="constraintUsageSubject">
+        /// The subject <see cref="IConstraintUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeRedefinedNamingFeatureOperation(this IConstraintUsage constraintUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// A ConstraintUsage is not model-level evaluable.
+        /// </summary>
+        /// <param name="constraintUsageSubject">
+        /// The subject <see cref="IConstraintUsage"/>
+        /// </param>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IConstraintUsage constraintUsageSubject, IFeature visited)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

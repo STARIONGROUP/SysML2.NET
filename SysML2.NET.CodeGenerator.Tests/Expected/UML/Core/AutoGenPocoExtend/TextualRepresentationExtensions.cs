@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="textualRepresentation">
+        /// <param name="textualRepresentationSubject">
         /// The subject <see cref="ITextualRepresentation"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeRepresentedElement(this ITextualRepresentation textualRepresentation)
+        internal static IElement ComputeRepresentedElement(this ITextualRepresentation textualRepresentationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

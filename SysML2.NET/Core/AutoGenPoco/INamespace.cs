@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Decorators;
@@ -96,6 +97,158 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         List<IMembership> ownedMembership { get; }
 
+        /// <summary>
+        /// Return the names of the given element as it is known in this Namespace.
+        /// </summary>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string NamesOf(IElement element) => this.ComputeNamesOfOperation(element);
+
+        /// <summary>
+        /// Returns this visibility of mem relative to this Namespace. If mem is an importedMembership, this is
+        /// the visibility of its Import. Otherwise it is the visibility of the Membership itself.
+        /// </summary>
+        /// <param name="mem">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected VisibilityKind
+        /// </returns>
+        VisibilityKind VisibilityOf(IMembership mem) => this.ComputeVisibilityOfOperation(mem);
+
+        /// <summary>
+        /// If includeAll = true, then return all the Memberships of this Namespace. Otherwise, return only the
+        /// publicly visible Memberships of this Namespace, including ownedMemberships that have a visibility of
+        /// public and Memberships imported with a visibility of public. If isRecursive = true, also recursively
+        /// include all visible Memberships of any public owned Namespaces, or, if IncludeAll = true, all
+        /// Memberships of all owned Namespaces. When computing imported Memberships, ignore this Namespace and
+        /// any Namespaces in the given excluded set.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <param name="isRecursive">
+        /// No documentation provided
+        /// </param>
+        /// <param name="includeAll">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership VisibleMemberships(INamespace excluded, bool isRecursive, bool includeAll) => this.ComputeVisibleMembershipsOperation(excluded, isRecursive, includeAll);
+
+        /// <summary>
+        /// Derive the imported Memberships of this Namespace as the importedMembership of all ownedImports,
+        /// excluding those Imports whose importOwningNamespace is in the excluded set, and excluding
+        /// Memberships that have distinguisibility collisions with each other or with any ownedMembership.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership ImportedMemberships(INamespace excluded) => this.ComputeImportedMembershipsOperation(excluded);
+
+        /// <summary>
+        /// If visibility is not null, return the Memberships of this Namespace with the given visibility,
+        /// including ownedMemberships with the given visibility and Memberships imported with the given
+        /// visibility. If visibility is null, return all ownedMemberships and imported Memberships regardless
+        /// of visibility. When computing imported Memberships, ignore this Namespace and any Namespaces in the
+        /// given excluded set.
+        /// </summary>
+        /// <param name="visibility">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership MembershipsOfVisibility(VisibilityKind visibility, INamespace excluded) => this.ComputeMembershipsOfVisibilityOperation(visibility, excluded);
+
+        /// <summary>
+        /// Resolve the given qualified name to the named Membership (if any), starting with this Namespace as
+        /// the local scope. The qualified name string must conform to the concrete syntax of the KerML textual
+        /// notation. According to the KerML name resolution rules every qualified name will resolve to either a
+        /// single Membership, or to none.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership Resolve(string qualifiedName) => this.ComputeResolveOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve the given qualified name to the named Membership (if any) in the effective global Namespace
+        /// that is the outermost naming scope. The qualified name string must conform to the concrete syntax of
+        /// the KerML textual notation.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership ResolveGlobal(string qualifiedName) => this.ComputeResolveGlobalOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve a simple name starting with this Namespace as the local scope, and continuing with
+        /// containing outer scopes as necessary. However, if this Namespace is a root Namespace, then the
+        /// resolution is done directly in global scope.
+        /// </summary>
+        /// <param name="name">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership ResolveLocal(string name) => this.ComputeResolveLocalOperation(name);
+
+        /// <summary>
+        /// Resolve a simple name from the visible Memberships of this Namespace.
+        /// </summary>
+        /// <param name="name">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership ResolveVisible(string name) => this.ComputeResolveVisibleOperation(name);
+
+        /// <summary>
+        /// Return a string with valid KerML syntax representing the qualification part of a given
+        /// qualifiedName, that is, a qualified name with all the segment names of the given name except the
+        /// last. If the given qualifiedName has only one segment, then return null.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string QualificationOf(string qualifiedName) => this.ComputeQualificationOfOperation(qualifiedName);
+
+        /// <summary>
+        /// Return the simple name that is the last segment name of the given qualifiedName. If this segment
+        /// name has the form of a KerML unrestricted name, then "unescape" it by removing the surrounding
+        /// single quotes and replacing all escape sequences with the specified character.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string UnqualifiedNameOf(string qualifiedName) => this.ComputeUnqualifiedNameOfOperation(qualifiedName);
     }
 }
 

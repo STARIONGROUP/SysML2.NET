@@ -32,26 +32,57 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     /// The <see cref="PackageExtensions"/> class provides extensions methods for
     /// the <see cref="IPackage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class PackageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="package">
+        /// <param name="packageSubject">
         /// The subject <see cref="IPackage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeFilterCondition(this IPackage package)
+        internal static List<IExpression> ComputeFilterCondition(this IPackage packageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Exclude Elements that do not meet all the filterConditions.
+        /// </summary>
+        /// <param name="packageSubject">
+        /// The subject <see cref="IPackage"/>
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IMembership ComputeRedefinedImportedMembershipsOperation(this IPackage packageSubject, INamespace excluded)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Determine whether the given element meets all the filterConditions.
+        /// </summary>
+        /// <param name="packageSubject">
+        /// The subject <see cref="IPackage"/>
+        /// </param>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIncludeAsMemberOperation(this IPackage packageSubject, IElement element)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

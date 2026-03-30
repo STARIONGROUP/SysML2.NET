@@ -35,23 +35,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     /// The <see cref="ExpressionExtensions"/> class provides extensions methods for
     /// the <see cref="IExpression"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ExpressionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="expression">
+        /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFunction ComputeFunction(this IExpression expression)
+        internal static IFunction ComputeFunction(this IExpression expressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -59,14 +55,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="expression">
+        /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeIsModelLevelEvaluable(this IExpression expression)
+        internal static bool ComputeIsModelLevelEvaluable(this IExpression expressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -74,17 +70,81 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="expression">
+        /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeResult(this IExpression expression)
+        internal static IFeature ComputeResult(this IExpression expressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return whether this Expression is model-level evaluable. The visited parameter is used to track
+        /// possible circular Feature references made from FeatureReferenceExpressions (see the redefinition of
+        /// this operation for FeatureReferenceExpression). Such circular references are not allowed in
+        /// model-level evaluable expressions.                            An Expression that is not otherwise
+        /// specialized is model-level evaluable if it has no (non-implied) ownedSpecializations and all its
+        /// ownedFeatures are either in parameters, the result parameter or a result Expression owned via a
+        /// ResultExpressionMembership. The parameters  must not have any ownedFeatures or a FeatureValue, and
+        /// the result Expression must be model-level evaluable.
+        /// </summary>
+        /// <param name="expressionSubject">
+        /// The subject <see cref="IExpression"/>
+        /// </param>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeModelLevelEvaluableOperation(this IExpression expressionSubject, IFeature visited)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// If this Expression isModelLevelEvaluable, then evaluate it using the target as the context Element
+        /// for resolving Feature names and testing classification. The result is a collection of Elements,
+        /// which, for a fully evaluable Expression, will be a LiteralExpression or a Feature that is not an
+        /// Expression.
+        /// </summary>
+        /// <param name="expressionSubject">
+        /// The subject <see cref="IExpression"/>
+        /// </param>
+        /// <param name="target">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IElement ComputeEvaluateOperation(this IExpression expressionSubject, IElement target)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Model-level evaluate this Expression with the given target. If the result is a LiteralBoolean,
+        /// return its value. Otherwise return false.
+        /// </summary>
+        /// <param name="expressionSubject">
+        /// The subject <see cref="IExpression"/>
+        /// </param>
+        /// <param name="target">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeCheckConditionOperation(this IExpression expressionSubject, IElement target)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

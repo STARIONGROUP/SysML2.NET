@@ -81,6 +81,26 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
         IPredicate constraintDefinition { get; }
 
+        /// <summary>
+        /// The naming Feature of a ConstraintUsage that is owned by a RequirementConstraintMembership and has
+        /// an ownedReferenceSubsetting is the featureTarget of the referencedFeature of that
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
+
+        /// <summary>
+        /// A ConstraintUsage is not model-level evaluable.
+        /// </summary>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
     }
 }
 

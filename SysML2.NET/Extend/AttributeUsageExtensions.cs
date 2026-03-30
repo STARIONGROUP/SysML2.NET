@@ -57,23 +57,19 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     /// The <see cref="AttributeUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IAttributeUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class AttributeUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="attributeUsage">
+        /// <param name="attributeUsageSubject">
         /// The subject <see cref="IAttributeUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IDataType> ComputeAttributeDefinition(this IAttributeUsage attributeUsage)
+        internal static List<IDataType> ComputeAttributeDefinition(this IAttributeUsage attributeUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -81,14 +77,14 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="attributeUsage">
+        /// <param name="attributeUsageSubject">
         /// The subject <see cref="IAttributeUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeIsReference(this IAttributeUsage attributeUsage)
+        internal static bool ComputeIsReference(this IAttributeUsage attributeUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

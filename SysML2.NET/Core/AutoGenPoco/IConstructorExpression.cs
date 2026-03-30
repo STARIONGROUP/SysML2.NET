@@ -47,6 +47,17 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConstructorExpression : IInstantiationExpression
     {
+        /// <summary>
+        /// A ConstructorExpression is model-level evaluable if all its argument Expressions are model-level
+        /// evaluable.
+        /// </summary>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
     }
 }
 

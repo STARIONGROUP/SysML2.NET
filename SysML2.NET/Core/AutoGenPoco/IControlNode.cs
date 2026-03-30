@@ -70,6 +70,23 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IControlNode : IActionUsage
     {
+        /// <summary>
+        /// Check that the given Multiplicity has lowerBound and upperBound expressions that are model-level
+        /// evaluable to the given lower and upper values.
+        /// </summary>
+        /// <param name="mult">
+        /// No documentation provided
+        /// </param>
+        /// <param name="lower">
+        /// No documentation provided
+        /// </param>
+        /// <param name="upper">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool MultiplicityHasBounds(IMultiplicity mult, int lower, string upper) => this.ComputeMultiplicityHasBoundsOperation(mult, lower, upper);
     }
 }
 

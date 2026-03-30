@@ -61,14 +61,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IClassifier> ComputeDefinition(this IUsage usage)
+        internal static List<IClassifier> ComputeDefinition(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -76,14 +76,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeDirectedUsage(this IUsage usage)
+        internal static List<IUsage> ComputeDirectedUsage(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -91,14 +91,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeIsReference(this IUsage usage)
+        internal static bool ComputeIsReference(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -106,14 +106,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeMayTimeVary(this IUsage usage)
+        internal static bool ComputeMayTimeVary(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -121,14 +121,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IActionUsage> ComputeNestedAction(this IUsage usage)
+        internal static List<IActionUsage> ComputeNestedAction(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -136,14 +136,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAllocationUsage> ComputeNestedAllocation(this IUsage usage)
+        internal static List<IAllocationUsage> ComputeNestedAllocation(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -151,14 +151,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAnalysisCaseUsage> ComputeNestedAnalysisCase(this IUsage usage)
+        internal static List<IAnalysisCaseUsage> ComputeNestedAnalysisCase(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -166,14 +166,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAttributeUsage> ComputeNestedAttribute(this IUsage usage)
+        internal static List<IAttributeUsage> ComputeNestedAttribute(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -181,14 +181,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ICalculationUsage> ComputeNestedCalculation(this IUsage usage)
+        internal static List<ICalculationUsage> ComputeNestedCalculation(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -196,14 +196,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ICaseUsage> ComputeNestedCase(this IUsage usage)
+        internal static List<ICaseUsage> ComputeNestedCase(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -211,14 +211,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConcernUsage> ComputeNestedConcern(this IUsage usage)
+        internal static List<IConcernUsage> ComputeNestedConcern(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -226,14 +226,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConnectorAsUsage> ComputeNestedConnection(this IUsage usage)
+        internal static List<IConnectorAsUsage> ComputeNestedConnection(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -241,14 +241,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConstraintUsage> ComputeNestedConstraint(this IUsage usage)
+        internal static List<IConstraintUsage> ComputeNestedConstraint(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -256,14 +256,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IEnumerationUsage> ComputeNestedEnumeration(this IUsage usage)
+        internal static List<IEnumerationUsage> ComputeNestedEnumeration(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -271,14 +271,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFlowUsage> ComputeNestedFlow(this IUsage usage)
+        internal static List<IFlowUsage> ComputeNestedFlow(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -286,14 +286,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IInterfaceUsage> ComputeNestedInterface(this IUsage usage)
+        internal static List<IInterfaceUsage> ComputeNestedInterface(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -301,14 +301,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IItemUsage> ComputeNestedItem(this IUsage usage)
+        internal static List<IItemUsage> ComputeNestedItem(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -316,14 +316,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IMetadataUsage> ComputeNestedMetadata(this IUsage usage)
+        internal static List<IMetadataUsage> ComputeNestedMetadata(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -331,14 +331,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IOccurrenceUsage> ComputeNestedOccurrence(this IUsage usage)
+        internal static List<IOccurrenceUsage> ComputeNestedOccurrence(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -346,14 +346,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeNestedPart(this IUsage usage)
+        internal static List<IPartUsage> ComputeNestedPart(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -361,14 +361,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPortUsage> ComputeNestedPort(this IUsage usage)
+        internal static List<IPortUsage> ComputeNestedPort(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -376,14 +376,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IReferenceUsage> ComputeNestedReference(this IUsage usage)
+        internal static List<IReferenceUsage> ComputeNestedReference(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -391,14 +391,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IRenderingUsage> ComputeNestedRendering(this IUsage usage)
+        internal static List<IRenderingUsage> ComputeNestedRendering(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -406,14 +406,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IRequirementUsage> ComputeNestedRequirement(this IUsage usage)
+        internal static List<IRequirementUsage> ComputeNestedRequirement(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -421,14 +421,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IStateUsage> ComputeNestedState(this IUsage usage)
+        internal static List<IStateUsage> ComputeNestedState(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -436,14 +436,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<ITransitionUsage> ComputeNestedTransition(this IUsage usage)
+        internal static List<ITransitionUsage> ComputeNestedTransition(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -451,14 +451,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeNestedUsage(this IUsage usage)
+        internal static List<IUsage> ComputeNestedUsage(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -466,14 +466,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUseCaseUsage> ComputeNestedUseCase(this IUsage usage)
+        internal static List<IUseCaseUsage> ComputeNestedUseCase(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -481,14 +481,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IVerificationCaseUsage> ComputeNestedVerificationCase(this IUsage usage)
+        internal static List<IVerificationCaseUsage> ComputeNestedVerificationCase(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -496,14 +496,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewUsage> ComputeNestedView(this IUsage usage)
+        internal static List<IViewUsage> ComputeNestedView(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -511,14 +511,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewpointUsage> ComputeNestedViewpoint(this IUsage usage)
+        internal static List<IViewpointUsage> ComputeNestedViewpoint(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -526,14 +526,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IDefinition ComputeOwningDefinition(this IUsage usage)
+        internal static IDefinition ComputeOwningDefinition(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -541,14 +541,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IUsage ComputeOwningUsage(this IUsage usage)
+        internal static IUsage ComputeOwningUsage(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -556,14 +556,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeUsage(this IUsage usage)
+        internal static List<IUsage> ComputeUsage(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -571,14 +571,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUsage> ComputeVariant(this IUsage usage)
+        internal static List<IUsage> ComputeVariant(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -586,17 +586,48 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="usage">
+        /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IVariantMembership> ComputeVariantMembership(this IUsage usage)
+        internal static List<IVariantMembership> ComputeVariantMembership(this IUsage usageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// If this Usage is a variant, then its naming Feature is the referencedFeature of its
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <param name="usageSubject">
+        /// The subject <see cref="IUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeRedefinedNamingFeatureOperation(this IUsage usageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// If ownedReferenceSubsetting is not null, return the featureTarget of the referencedFeature of the
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <param name="usageSubject">
+        /// The subject <see cref="IUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeReferencedFeatureTargetOperation(this IUsage usageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

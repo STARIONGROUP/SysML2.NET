@@ -124,7 +124,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
-        IReadOnlyCollection<IRelationship> OwnedRelationship { get; }
+        IReadOnlyList<IRelationship> OwnedRelationship { get; }
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -184,6 +184,55 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         List<ITextualRepresentation> textualRepresentation { get; }
 
+        /// <summary>
+        /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
+        /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
+        /// otherwise, represented as a restricted name according to the lexical structure of the KerML textual
+        /// notation (i.e., surrounded by single quote characters and with special characters escaped).
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string EscapedName() => this.ComputeEscapedNameOperation();
+
+        /// <summary>
+        /// Return an effective shortName for this Element. By default this is the same as its
+        /// declaredShortName.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string EffectiveShortName() => this.ComputeEffectiveShortNameOperation();
+
+        /// <summary>
+        /// Return an effective name for this Element. By default this is the same as its declaredName.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string EffectiveName() => this.ComputeEffectiveNameOperation();
+
+        /// <summary>
+        /// By default, return the library Namespace of the owningRelationship of this Element, if it has one.
+        /// </summary>
+        /// <returns>
+        /// The expected INamespace
+        /// </returns>
+        INamespace LibraryNamespace() => this.ComputeLibraryNamespaceOperation();
+
+        /// <summary>
+        /// Return a unique description of the location of this Element in the containment structure rooted in a
+        /// root Namespace. If the Element has a non-null qualifiedName, then return that. Otherwise, if it has
+        /// an owningRelationship, then return the string constructed by appending to the path of it's
+        /// owningRelationship the character / followed by the string representation of its position in the list
+        /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
+        /// empty string.                            (Note that this operation is overridden for Relationships
+        /// to use owningRelatedElement when appropriate.)
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        string Path() => this.ComputePathOperation();
     }
 }
 

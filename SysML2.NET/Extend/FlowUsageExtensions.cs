@@ -31,6 +31,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
     using SysML2.NET.Core.POCO.Kernel.Associations;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -61,23 +62,19 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
     /// The <see cref="FlowUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IFlowUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FlowUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="flowUsage">
+        /// <param name="flowUsageSubject">
         /// The subject <see cref="IFlowUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IInteraction> ComputeFlowDefinition(this IFlowUsage flowUsage)
+        internal static List<IInteraction> ComputeFlowDefinition(this IFlowUsage flowUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

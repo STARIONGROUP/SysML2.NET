@@ -36,26 +36,70 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// The <see cref="FeatureReferenceExpressionExtensions"/> class provides extensions methods for
     /// the <see cref="IFeatureReferenceExpression"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FeatureReferenceExpressionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="featureReferenceExpression">
+        /// <param name="featureReferenceExpressionSubject">
         /// The subject <see cref="IFeatureReferenceExpression"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeReferent(this IFeatureReferenceExpression featureReferenceExpression)
+        internal static IFeature ComputeReferent(this IFeatureReferenceExpression featureReferenceExpressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// A FeatureReferenceExpression is model-level evaluable if it&#39;s referent                          
+        ///  <ul>                            <li>conforms to the self-reference feature Anything::self;</li>    
+        ///                        <li>is an Expression that is model-level evaluable;</li>                     
+        ///       <li>has an owningType that is a Metaclass or MetadataFeature; or</li>                         
+        ///   <li>has no featuringTypes and, if it has a FeatureValue, the value Expression is model-level
+        /// evaluable.</li>                            </ul>
+        /// </summary>
+        /// <param name="featureReferenceExpressionSubject">
+        /// The subject <see cref="IFeatureReferenceExpression"/>
+        /// </param>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IFeatureReferenceExpression featureReferenceExpressionSubject, IFeature visited)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// First, determine a value Expression for the referent:                            <ul>               
+        ///             <li>If the target Element is a Type that has a feature that is the referent or (directly
+        /// or indirectly) redefines it, then the value Expression of the FeatureValue for that feature (if
+        /// any).</li>                            <li>Else, if the referent has no featuringTypes, the value
+        /// Expression of the FeatureValue for the referent (if any).</li>                            </ul>     
+        ///                       Then:                            <ul>                            <li>If such a
+        /// value Expression exists, return the result of evaluating that Expression on the target.</li>        
+        ///                    <li>Else, if the referent is not an Expression, return the referent.</li>        
+        /// <li>Else return the empty sequence.</li>                            </ul>
+        /// </summary>
+        /// <param name="featureReferenceExpressionSubject">
+        /// The subject <see cref="IFeatureReferenceExpression"/>
+        /// </param>
+        /// <param name="target">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IElement
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IElement ComputeRedefinedEvaluateOperation(this IFeatureReferenceExpression featureReferenceExpressionSubject, IElement target)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

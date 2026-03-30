@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -243,6 +244,203 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IType> unioningType { get; }
 
+        /// <summary>
+        /// The visible Memberships of a Type include inheritedMemberships.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <param name="isRecursive">
+        /// No documentation provided
+        /// </param>
+        /// <param name="includeAll">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        new IMembership VisibleMemberships(INamespace excluded, bool isRecursive, bool includeAll) => this.ComputeRedefinedVisibleMembershipsOperation(excluded, isRecursive, includeAll);
+
+        /// <summary>
+        /// Return the Memberships inheritable from supertypes of this Type with redefined Features removed.
+        /// When computing inheritable Memberships, exclude Imports of excludedNamespaces, Specializations of
+        /// excludedTypes, and, if excludeImplied = true, all implied Specializations.
+        /// </summary>
+        /// <param name="excludedNamespaces">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludedTypes">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership InheritedMemberships(INamespace excludedNamespaces, IType excludedTypes, bool excludeImplied) => this.ComputeInheritedMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+
+        /// <summary>
+        /// Return all the non-private Memberships of all the supertypes of this Type, excluding any supertypes
+        /// that are this Type or are in the given set of excludedTypes. If excludeImplied = true, then also
+        /// transitively exclude any supertypes from implied Specializations.
+        /// </summary>
+        /// <param name="excludedNamespaces">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludedTypes">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership InheritableMemberships(INamespace excludedNamespaces, IType excludedTypes, bool excludeImplied) => this.ComputeInheritableMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+
+        /// <summary>
+        /// Return the public, protected and inherited Memberships of this Type. When computing imported
+        /// Memberships, exclude the given set of excludedNamespaces. When computing inherited Memberships,
+        /// exclude Types in the given set of excludedTypes. If excludeImplied = true, then also exclude any
+        /// supertypes from implied Specializations.
+        /// </summary>
+        /// <param name="excludedNamespaces">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludedTypes">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership NonPrivateMemberships(INamespace excludedNamespaces, IType excludedTypes, bool excludeImplied) => this.ComputeNonPrivateMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+
+        /// <summary>
+        /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
+        /// which either of the following two conditions holds:                            <ol>                 
+        ///           <li>The memberElement of the Membership is included in redefined Features of another
+        /// Membership in memberships.</li>                            <li>One of the redefined Features of the
+        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>                     
+        ///       </ol>                            For this purpose, the redefined Features of a Membership
+        /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
+        /// redefined by the memberElement.
+        /// </summary>
+        /// <param name="memberships">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        IMembership RemoveRedefinedFeatures(IMembership memberships) => this.ComputeRemoveRedefinedFeaturesOperation(memberships);
+
+        /// <summary>
+        /// If the memberElement of the given membership is a Feature, then return all Features directly or
+        /// indirectly redefined by the memberElement.
+        /// </summary>
+        /// <param name="membership">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature AllRedefinedFeaturesOf(IMembership membership) => this.ComputeAllRedefinedFeaturesOfOperation(membership);
+
+        /// <summary>
+        /// If the given feature is a feature of this Type, then return its direction relative to this Type,
+        /// taking conjugation into account.
+        /// </summary>
+        /// <param name="feature">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected FeatureDirectionKind
+        /// </returns>
+        FeatureDirectionKind DirectionOf(IFeature feature) => this.ComputeDirectionOfOperation(feature);
+
+        /// <summary>
+        /// Return the direction of the given feature relative to this Type, excluding a given set of Types from
+        /// the search of supertypes of this Type.
+        /// </summary>
+        /// <param name="feature">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected FeatureDirectionKind
+        /// </returns>
+        FeatureDirectionKind DirectionOfExcluding(IFeature feature, IType excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
+
+        /// <summary>
+        /// If this Type is conjugated, then return just the originalType of the Conjugation. Otherwise, return
+        /// the general Types from all ownedSpecializations of this type, if excludeImplied = false, or all
+        /// non-implied ownedSpecializations, if excludeImplied = true.
+        /// </summary>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        IType Supertypes(bool excludeImplied) => this.ComputeSupertypesOperation(excludeImplied);
+
+        /// <summary>
+        /// Return this Type and all Types that are directly or transitively supertypes of this Type (as
+        /// determined by the supertypes operation with excludeImplied = false).
+        /// </summary>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        IType AllSupertypes() => this.ComputeAllSupertypesOperation();
+
+        /// <summary>
+        /// Check whether this Type is a direct or indirect specialization of the given supertype.
+        /// </summary>
+        /// <param name="supertype">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool Specializes(IType supertype) => this.ComputeSpecializesOperation(supertype);
+
+        /// <summary>
+        /// Check whether this Type is a direct or indirect specialization of the named library Type.
+        /// libraryTypeName must conform to the syntax of a KerML qualified name and must resolve to a Type in
+        /// global scope.
+        /// </summary>
+        /// <param name="libraryTypeName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool SpecializesFromLibrary(string libraryTypeName) => this.ComputeSpecializesFromLibraryOperation(libraryTypeName);
+
+        /// <summary>
+        /// By default, this Type is compatible with an otherType if it directly or indirectly specializes the
+        /// otherType.
+        /// </summary>
+        /// <param name="otherType">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsCompatibleWith(IType otherType) => this.ComputeIsCompatibleWithOperation(otherType);
+
+        /// <summary>
+        /// Return the owned or inherited Multiplicities for this Type<./code>.
+        /// </summary>
+        /// <returns>
+        /// The expected IMultiplicity
+        /// </returns>
+        IMultiplicity Multiplicities() => this.ComputeMultiplicitiesOperation();
     }
 }
 

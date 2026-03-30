@@ -262,6 +262,208 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IType> type { get; }
 
+        /// <summary>
+        /// Return the directionOf this Feature relative to the given type.
+        /// </summary>
+        /// <param name="type">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected FeatureDirectionKind
+        /// </returns>
+        FeatureDirectionKind DirectionFor(IType type) => this.ComputeDirectionForOperation(type);
+
+        /// <summary>
+        /// If a Feature has no declaredShortName or declaredName, then its effective shortName is given by the
+        /// effective shortName of the Feature returned by the namingFeature() operation, if any.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        new string EffectiveShortName() => this.ComputeRedefinedEffectiveShortNameOperation();
+
+        /// <summary>
+        /// If a Feature has no declaredName or declaredShortName                            , then its
+        /// effective name is given by the effective name of the Feature returned by the namingFeature()
+        /// operation, if any.
+        /// </summary>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        new string EffectiveName() => this.ComputeRedefinedEffectiveNameOperation();
+
+        /// <summary>
+        /// By default, the naming Feature of a Feature is given by its first redefinedFeature of its first
+        /// ownedRedefinition, if any.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature NamingFeature() => this.ComputeNamingFeatureOperation();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        new IType Supertypes(bool excludeImplied) => this.ComputeRedefinedSupertypesOperation(excludeImplied);
+
+        /// <summary>
+        /// Check whether this Feature directly redefines the given redefinedFeature.
+        /// </summary>
+        /// <param name="redefinedFeature">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool Redefines(IFeature redefinedFeature) => this.ComputeRedefinesOperation(redefinedFeature);
+
+        /// <summary>
+        /// Check whether this Feature directly redefines the named library Feature. libraryFeatureName must
+        /// conform to the syntax of a KerML qualified name and must resolve to a Feature in global scope.
+        /// </summary>
+        /// <param name="libraryFeatureName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool RedefinesFromLibrary(string libraryFeatureName) => this.ComputeRedefinesFromLibraryOperation(libraryFeatureName);
+
+        /// <summary>
+        /// Check whether this Feature directly or indirectly specializes a Feature whose last two
+        /// chainingFeatures are the given Features first and second.
+        /// </summary>
+        /// <param name="first">
+        /// No documentation provided
+        /// </param>
+        /// <param name="second">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool SubsetsChain(IFeature first, IFeature second) => this.ComputeSubsetsChainOperation(first, second);
+
+        /// <summary>
+        /// A Feature is compatible with an otherType if it either directly or indirectly specializes the
+        /// otherType or if the otherType is also a Feature and all of the following are true.                  
+        ///          <ol>                            <li>Neither this Feature or the otherType have any
+        /// ownedFeatures.</li>                            <li>This Feature directly or indirectly redefines a
+        /// Feature that is also directly or indirectly redefined by the otherType.</li>                        
+        /// <li>This Feature can access the otherType.                            </li></ol>
+        /// </summary>
+        /// <param name="otherType">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool IsCompatibleWith(IType otherType) => this.ComputeRedefinedIsCompatibleWithOperation(otherType);
+
+        /// <summary>
+        /// Return the Features used to determine the types of this Feature (other than this Feature itself). If
+        /// this Feature is not conjugated, then the typingFeatures consist of all subsetted Features, except
+        /// from CrossSubsetting, and the last chainingFeature (if any). If this Feature is conjugated, then the
+        /// typingFeatures are only its originalType (if the originalType is a Feature).                        
+        ///    <strong>Note.</strong> CrossSubsetting is excluded from the determination of the type of a
+        /// Feature in order to avoid circularity in the construction of implied CrossSubsetting relationships.
+        /// The validateFeatureCrossFeatureType requires that the crossFeature of a Feature have the same type
+        /// as the Feature.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature TypingFeatures() => this.ComputeTypingFeaturesOperation();
+
+        /// <summary>
+        /// If isCartesianProduct is true, then return the list of Types whose Cartesian product can be
+        /// represented by this Feature. (If isCartesianProduct is not true, the operation will still return a
+        /// valid value, it will just not represent anything useful.)
+        /// </summary>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        IType AsCartesianProduct() => this.ComputeAsCartesianProductOperation();
+
+        /// <summary>
+        /// Check whether this Feature can be used to represent a Cartesian product of Types.
+        /// </summary>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsCartesianProduct() => this.ComputeIsCartesianProductOperation();
+
+        /// <summary>
+        /// Return whether this Feature is an owned cross Feature of an end Feature.
+        /// </summary>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsOwnedCrossFeature() => this.ComputeIsOwnedCrossFeatureOperation();
+
+        /// <summary>
+        /// If this Feature is an end Feature of its owningType, then return the first ownedMember of the
+        /// Feature that is a Feature, but not a Multiplicity or a MetadataFeature, and whose owningMembership
+        /// is not a FeatureMembership. If this exists, it is the crossFeature of the end Feature.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature OwnedCrossFeature() => this.ComputeOwnedCrossFeatureOperation();
+
+        /// <summary>
+        /// Return this Feature and all the Features that are directly or indirectly Redefined by this Feature.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature AllRedefinedFeatures() => this.ComputeAllRedefinedFeaturesOperation();
+
+        /// <summary>
+        /// Return if the featuringTypes of this Feature are compatible with the given type. If type is null,
+        /// then check if this Feature is explicitly or implicitly featured by Base::Anything. If this Feature
+        /// has isVariable = true, then also consider it to be featured within its owningType. If this Feature
+        /// is a feature chain whose first chainingFeature has isVariable = true, then also consider it to be
+        /// featured within the owningType of its first chainingFeature.
+        /// </summary>
+        /// <param name="type">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsFeaturedWithin(IType type) => this.ComputeIsFeaturedWithinOperation(type);
+
+        /// <summary>
+        /// A Feature can access another feature if the other feature is featured within one of the direct or
+        /// indirect featuringTypes of this Feature.
+        /// </summary>
+        /// <param name="feature">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool CanAccess(IFeature feature) => this.ComputeCanAccessOperation(feature);
+
+        /// <summary>
+        /// Return whether the given type must be a featuringType of this Feature. If this Feature has
+        /// isVariable = false, then return true if the type is the owningType of the Feature. If isVariable =
+        /// true, then return true if the type is a Feature representing the snapshots of the owningType of this
+        /// Feature.
+        /// </summary>
+        /// <param name="type">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsFeaturingType(IType type) => this.ComputeIsFeaturingTypeOperation(type);
     }
 }
 

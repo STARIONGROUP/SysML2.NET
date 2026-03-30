@@ -35,6 +35,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -80,6 +81,48 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         List<IBehavior> actionDefinition { get; }
 
+        /// <summary>
+        /// Return the owned input parameters of this ActionUsage.
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature InputParameters() => this.ComputeInputParametersOperation();
+
+        /// <summary>
+        /// Return the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage has less
+        /// than i owned input parameters.
+        /// </summary>
+        /// <param name="i">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        IFeature InputParameter(int i) => this.ComputeInputParameterOperation(i);
+
+        /// <summary>
+        /// Return the i-th argument Expression of an ActionUsage, defined as the value Expression of the
+        /// FeatureValue of the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage
+        /// has less than i owned input parameters or the i-th owned input parameter has no FeatureValue.
+        /// </summary>
+        /// <param name="i">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IExpression
+        /// </returns>
+        IExpression Argument(int i) => this.ComputeArgumentOperation(i);
+
+        /// <summary>
+        /// Check if this ActionUsage is composite and has an owningType that is an ActionDefinition or
+        /// ActionUsage but is not the entryAction or exitAction of a StateDefinition or StateUsage. If so, then
+        /// it represents an Action that is a subaction of another Action.
+        /// </summary>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsSubactionUsage() => this.ComputeIsSubactionUsageOperation();
     }
 }
 

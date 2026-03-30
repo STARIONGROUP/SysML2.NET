@@ -59,23 +59,19 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// The <see cref="RenderingUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IRenderingUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class RenderingUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="renderingUsage">
+        /// <param name="renderingUsageSubject">
         /// The subject <see cref="IRenderingUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRenderingDefinition ComputeRenderingDefinition(this IRenderingUsage renderingUsage)
+        internal static IRenderingDefinition ComputeRenderingDefinition(this IRenderingUsage renderingUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

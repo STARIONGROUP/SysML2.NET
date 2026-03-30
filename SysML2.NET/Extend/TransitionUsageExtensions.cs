@@ -61,23 +61,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// The <see cref="TransitionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="ITransitionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class TransitionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionUsage">
+        /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IActionUsage> ComputeEffectAction(this ITransitionUsage transitionUsage)
+        internal static List<IActionUsage> ComputeEffectAction(this ITransitionUsage transitionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -85,14 +81,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionUsage">
+        /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeGuardExpression(this ITransitionUsage transitionUsage)
+        internal static List<IExpression> ComputeGuardExpression(this ITransitionUsage transitionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -100,14 +96,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionUsage">
+        /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeSource(this ITransitionUsage transitionUsage)
+        internal static IActionUsage ComputeSource(this ITransitionUsage transitionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -115,14 +111,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionUsage">
+        /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static ISuccession ComputeSuccession(this ITransitionUsage transitionUsage)
+        internal static ISuccession ComputeSuccession(this ITransitionUsage transitionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -130,14 +126,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionUsage">
+        /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IActionUsage ComputeTarget(this ITransitionUsage transitionUsage)
+        internal static IActionUsage ComputeTarget(this ITransitionUsage transitionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -145,17 +141,48 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="transitionUsage">
+        /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAcceptActionUsage> ComputeTriggerAction(this ITransitionUsage transitionUsage)
+        internal static List<IAcceptActionUsage> ComputeTriggerAction(this ITransitionUsage transitionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return the payloadParameter of the triggerAction of this TransitionUsage, if it has one.
+        /// </summary>
+        /// <param name="transitionUsageSubject">
+        /// The subject <see cref="ITransitionUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IReferenceUsage
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IReferenceUsage ComputeTriggerPayloadParameterOperation(this ITransitionUsage transitionUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Return the Feature to be used as the source of the succession of this TransitionUsage, which is the
+        /// first member of the TransitionUsage that is a Feature, that is owned by the TransitionUsage via a
+        /// Membership that is not a FeatureMembership, and whose featureTarget is an ActionUsage.
+        /// </summary>
+        /// <param name="transitionUsageSubject">
+        /// The subject <see cref="ITransitionUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeSourceFeatureOperation(this ITransitionUsage transitionUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

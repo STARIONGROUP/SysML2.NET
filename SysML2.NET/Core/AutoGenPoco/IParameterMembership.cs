@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -52,6 +53,13 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         IFeature ownedMemberParameter { get; }
 
+        /// <summary>
+        /// Return the required value of the direction of the ownedMemberParameter. By default, this is in.
+        /// </summary>
+        /// <returns>
+        /// The expected FeatureDirectionKind
+        /// </returns>
+        FeatureDirectionKind ParameterDirection() => this.ComputeParameterDirectionOperation();
     }
 }
 

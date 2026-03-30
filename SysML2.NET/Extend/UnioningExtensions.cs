@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// The <see cref="UnioningExtensions"/> class provides extensions methods for
     /// the <see cref="IUnioning"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class UnioningExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="unioning">
+        /// <param name="unioningSubject">
         /// The subject <see cref="IUnioning"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeTypeUnioned(this IUnioning unioning)
+        internal static IType ComputeTypeUnioned(this IUnioning unioningSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

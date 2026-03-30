@@ -30,6 +30,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -59,26 +60,92 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="ActionUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IActionUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ActionUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="actionUsage">
+        /// <param name="actionUsageSubject">
         /// The subject <see cref="IActionUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IBehavior> ComputeActionDefinition(this IActionUsage actionUsage)
+        internal static List<IBehavior> ComputeActionDefinition(this IActionUsage actionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return the owned input parameters of this ActionUsage.
+        /// </summary>
+        /// <param name="actionUsageSubject">
+        /// The subject <see cref="IActionUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeInputParametersOperation(this IActionUsage actionUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Return the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage has less
+        /// than i owned input parameters.
+        /// </summary>
+        /// <param name="actionUsageSubject">
+        /// The subject <see cref="IActionUsage"/>
+        /// </param>
+        /// <param name="i">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IFeature ComputeInputParameterOperation(this IActionUsage actionUsageSubject, int i)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Return the i-th argument Expression of an ActionUsage, defined as the value Expression of the
+        /// FeatureValue of the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage
+        /// has less than i owned input parameters or the i-th owned input parameter has no FeatureValue.
+        /// </summary>
+        /// <param name="actionUsageSubject">
+        /// The subject <see cref="IActionUsage"/>
+        /// </param>
+        /// <param name="i">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IExpression
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IExpression ComputeArgumentOperation(this IActionUsage actionUsageSubject, int i)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
+
+        /// <summary>
+        /// Check if this ActionUsage is composite and has an owningType that is an ActionDefinition or
+        /// ActionUsage but is not the entryAction or exitAction of a StateDefinition or StateUsage. If so, then
+        /// it represents an Action that is a subaction of another Action.
+        /// </summary>
+        /// <param name="actionUsageSubject">
+        /// The subject <see cref="IActionUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIsSubactionUsageOperation(this IActionUsage actionUsageSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

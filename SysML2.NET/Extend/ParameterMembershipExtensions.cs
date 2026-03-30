@@ -23,6 +23,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -34,26 +35,36 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     /// The <see cref="ParameterMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IParameterMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ParameterMembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="parameterMembership">
+        /// <param name="parameterMembershipSubject">
         /// The subject <see cref="IParameterMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeOwnedMemberParameter(this IParameterMembership parameterMembership)
+        internal static IFeature ComputeOwnedMemberParameter(this IParameterMembership parameterMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Return the required value of the direction of the ownedMemberParameter. By default, this is in.
+        /// </summary>
+        /// <param name="parameterMembershipSubject">
+        /// The subject <see cref="IParameterMembership"/>
+        /// </param>
+        /// <returns>
+        /// The expected FeatureDirectionKind
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static FeatureDirectionKind ComputeParameterDirectionOperation(this IParameterMembership parameterMembershipSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

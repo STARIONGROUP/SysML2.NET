@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// The <see cref="ViewUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IViewUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ViewUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewUsage">
+        /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IElement> ComputeExposedElement(this IViewUsage viewUsage)
+        internal static List<IElement> ComputeExposedElement(this IViewUsage viewUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewUsage">
+        /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewUsage viewUsage)
+        internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewUsage viewUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -99,14 +95,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewUsage">
+        /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeViewCondition(this IViewUsage viewUsage)
+        internal static List<IExpression> ComputeViewCondition(this IViewUsage viewUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -114,14 +110,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewUsage">
+        /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsage)
+        internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -129,17 +125,34 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewUsage">
+        /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRenderingUsage ComputeViewRendering(this IViewUsage viewUsage)
+        internal static IRenderingUsage ComputeViewRendering(this IViewUsage viewUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Determine whether the given element meets all the owned and inherited viewConditions.
+        /// </summary>
+        /// <param name="viewUsageSubject">
+        /// The subject <see cref="IViewUsage"/>
+        /// </param>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static bool ComputeIncludeAsExposedOperation(this IViewUsage viewUsageSubject, IElement element)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

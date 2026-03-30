@@ -81,6 +81,16 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
         IFunction calculationDefinition { get; }
 
+        /// <summary>
+        /// A CalculationUsage is not model-level evaluable.
+        /// </summary>
+        /// <param name="visited">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
     }
 }
 

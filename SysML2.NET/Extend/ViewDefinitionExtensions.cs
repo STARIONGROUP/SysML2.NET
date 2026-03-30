@@ -56,23 +56,19 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// The <see cref="ViewDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IViewDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ViewDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewDefinition">
+        /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewDefinition viewDefinition)
+        internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewDefinition viewDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -80,14 +76,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewDefinition">
+        /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IViewUsage> ComputeView(this IViewDefinition viewDefinition)
+        internal static List<IViewUsage> ComputeView(this IViewDefinition viewDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -95,14 +91,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewDefinition">
+        /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IExpression> ComputeViewCondition(this IViewDefinition viewDefinition)
+        internal static List<IExpression> ComputeViewCondition(this IViewDefinition viewDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -110,14 +106,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="viewDefinition">
+        /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRenderingUsage ComputeViewRendering(this IViewDefinition viewDefinition)
+        internal static IRenderingUsage ComputeViewRendering(this IViewDefinition viewDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

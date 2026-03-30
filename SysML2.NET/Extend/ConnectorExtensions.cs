@@ -35,23 +35,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
     /// The <see cref="ConnectorExtensions"/> class provides extensions methods for
     /// the <see cref="IConnector"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ConnectorExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="connector">
+        /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IAssociation> ComputeAssociation(this IConnector connector)
+        internal static List<IAssociation> ComputeAssociation(this IConnector connectorSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -59,14 +55,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="connector">
+        /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFeature> ComputeConnectorEnd(this IConnector connector)
+        internal static List<IFeature> ComputeConnectorEnd(this IConnector connectorSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -74,14 +70,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="connector">
+        /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeDefaultFeaturingType(this IConnector connector)
+        internal static IType ComputeDefaultFeaturingType(this IConnector connectorSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -89,14 +85,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="connector">
+        /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFeature> ComputeRelatedFeature(this IConnector connector)
+        internal static List<IFeature> ComputeRelatedFeature(this IConnector connectorSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -104,14 +100,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="connector">
+        /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeSourceFeature(this IConnector connector)
+        internal static IFeature ComputeSourceFeature(this IConnector connectorSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -119,14 +115,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="connector">
+        /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IFeature> ComputeTargetFeature(this IConnector connector)
+        internal static List<IFeature> ComputeTargetFeature(this IConnector connectorSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

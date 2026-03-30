@@ -37,14 +37,14 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="subclassification">
+        /// <param name="subclassificationSubject">
         /// The subject <see cref="ISubclassification"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IClassifier ComputeOwningClassifier(this ISubclassification subclassification)
+        internal static IClassifier ComputeOwningClassifier(this ISubclassification subclassificationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

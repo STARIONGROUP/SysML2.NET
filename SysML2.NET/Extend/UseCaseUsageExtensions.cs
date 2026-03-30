@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     /// The <see cref="UseCaseUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IUseCaseUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class UseCaseUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="useCaseUsage">
+        /// <param name="useCaseUsageSubject">
         /// The subject <see cref="IUseCaseUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IUseCaseUsage> ComputeIncludedUseCase(this IUseCaseUsage useCaseUsage)
+        internal static List<IUseCaseUsage> ComputeIncludedUseCase(this IUseCaseUsage useCaseUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="useCaseUsage">
+        /// <param name="useCaseUsageSubject">
         /// The subject <see cref="IUseCaseUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IUseCaseDefinition ComputeUseCaseDefinition(this IUseCaseUsage useCaseUsage)
+        internal static IUseCaseDefinition ComputeUseCaseDefinition(this IUseCaseUsage useCaseUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

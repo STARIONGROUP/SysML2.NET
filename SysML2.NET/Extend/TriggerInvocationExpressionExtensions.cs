@@ -38,11 +38,23 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="TriggerInvocationExpressionExtensions"/> class provides extensions methods for
     /// the <see cref="ITriggerInvocationExpression"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class TriggerInvocationExpressionExtensions
     {
+        /// <summary>
+        /// Return one of the Functions TriggerWhen, TriggerAt or TriggerAfter, from the Kernel Semantic Library
+        /// Triggers package, depending on whether the kind of this TriggerInvocationExpression is when, at or
+        /// after, respectively.
+        /// </summary>
+        /// <param name="triggerInvocationExpressionSubject">
+        /// The subject <see cref="ITriggerInvocationExpression"/>
+        /// </param>
+        /// <returns>
+        /// The expected IType
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IType ComputeRedefinedInstantiatedTypeOperation(this ITriggerInvocationExpression triggerInvocationExpressionSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

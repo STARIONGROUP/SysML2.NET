@@ -56,23 +56,19 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// The <see cref="ActionDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IActionDefinition"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ActionDefinitionExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="actionDefinition">
+        /// <param name="actionDefinitionSubject">
         /// The subject <see cref="IActionDefinition"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IActionUsage> ComputeAction(this IActionDefinition actionDefinition)
+        internal static List<IActionUsage> ComputeAction(this IActionDefinition actionDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

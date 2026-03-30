@@ -36,23 +36,19 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// The <see cref="FramedConcernMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IFramedConcernMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class FramedConcernMembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="framedConcernMembership">
+        /// <param name="framedConcernMembershipSubject">
         /// The subject <see cref="IFramedConcernMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IConcernUsage ComputeOwnedConcern(this IFramedConcernMembership framedConcernMembership)
+        internal static IConcernUsage ComputeOwnedConcern(this IFramedConcernMembership framedConcernMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -60,14 +56,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="framedConcernMembership">
+        /// <param name="framedConcernMembershipSubject">
         /// The subject <see cref="IFramedConcernMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IConcernUsage ComputeReferencedConcern(this IFramedConcernMembership framedConcernMembership)
+        internal static IConcernUsage ComputeReferencedConcern(this IFramedConcernMembership framedConcernMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

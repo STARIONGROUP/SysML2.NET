@@ -37,19 +37,34 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="{{String.LowerCaseFirstLetter ../this.Name}}">
+        /// <param name="{{String.LowerCaseFirstLetter ../this.Name}}Subject">
         /// The subject <see cref="I{{../this.Name}}"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static {{ Property.WriteTypeForExtendClass property }} Compute{{String.CapitalizeFirstLetter property.Name}}(this I{{../this.Name}} {{String.LowerCaseFirstLetter ../this.Name}})
+        internal static {{ Property.WriteTypeForExtendClass property }} Compute{{String.CapitalizeFirstLetter property.Name}}(this I{{../this.Name}} {{String.LowerCaseFirstLetter ../this.Name}}Subject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
         {{/if}}
+        {{/each}}
+        {{#each (this.OwnedOperation) as | operation | }}
+            {{ #Documentation operation }}
+            /// <param name="{{String.LowerCaseFirstLetter ../this.Name}}Subject">
+            /// The subject <see cref="I{{../this.Name}}"/>
+            /// </param>
+            {{ #ParameterDocumentation operation }}
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            {{ #Operation.WriteForPOCOExtend operation }}
+            {
+                throw new NotSupportedException("Create a GitHub issue when this method is required");
+            }
+            {{#unless @last}}
+        
+            {{/unless}}
         {{/each}}
     }
 }

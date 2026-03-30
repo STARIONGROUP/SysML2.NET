@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// The <see cref="DifferencingExtensions"/> class provides extensions methods for
     /// the <see cref="IDifferencing"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class DifferencingExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="differencing">
+        /// <param name="differencingSubject">
         /// The subject <see cref="IDifferencing"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeTypeDifferenced(this IDifferencing differencing)
+        internal static IType ComputeTypeDifferenced(this IDifferencing differencingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

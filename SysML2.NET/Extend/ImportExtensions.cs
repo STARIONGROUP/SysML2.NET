@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// The <see cref="ImportExtensions"/> class provides extensions methods for
     /// the <see cref="IImport"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ImportExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="import">
+        /// <param name="importSubject">
         /// The subject <see cref="IImport"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeImportedElement(this IImport import)
+        internal static IElement ComputeImportedElement(this IImport importSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -55,17 +51,35 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="import">
+        /// <param name="importSubject">
         /// The subject <see cref="IImport"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static INamespace ComputeImportOwningNamespace(this IImport import)
+        internal static INamespace ComputeImportOwningNamespace(this IImport importSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// Returns Memberships that are to become importedMemberships of the importOwningNamespace. (The
+        /// excluded parameter is used to handle the possibility of circular Import Relationships.)
+        /// </summary>
+        /// <param name="importSubject">
+        /// The subject <see cref="IImport"/>
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static IMembership ComputeImportedMembershipsOperation(this IImport importSubject, INamespace excluded)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

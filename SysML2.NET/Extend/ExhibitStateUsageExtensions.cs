@@ -59,23 +59,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// The <see cref="ExhibitStateUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IExhibitStateUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class ExhibitStateUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="exhibitStateUsage">
+        /// <param name="exhibitStateUsageSubject">
         /// The subject <see cref="IExhibitStateUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IStateUsage ComputeExhibitedState(this IExhibitStateUsage exhibitStateUsage)
+        internal static IStateUsage ComputeExhibitedState(this IExhibitStateUsage exhibitStateUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

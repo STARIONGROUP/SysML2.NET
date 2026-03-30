@@ -60,23 +60,19 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// The <see cref="RequirementUsageExtensions"/> class provides extensions methods for
     /// the <see cref="IRequirementUsage"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class RequirementUsageExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeActorParameter(this IRequirementUsage requirementUsage)
+        internal static List<IPartUsage> ComputeActorParameter(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -84,14 +80,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementUsage requirementUsage)
+        internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -99,14 +95,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementUsage requirementUsage)
+        internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -114,14 +110,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementUsage requirementUsage)
+        internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -129,14 +125,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsage)
+        internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -144,14 +140,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementUsage requirementUsage)
+        internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -159,14 +155,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IUsage ComputeSubjectParameter(this IRequirementUsage requirementUsage)
+        internal static IUsage ComputeSubjectParameter(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -174,14 +170,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="requirementUsage">
+        /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<string> ComputeText(this IRequirementUsage requirementUsage)
+        internal static List<string> ComputeText(this IRequirementUsage requirementUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

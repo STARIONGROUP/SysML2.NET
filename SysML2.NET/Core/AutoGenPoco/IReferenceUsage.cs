@@ -76,6 +76,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         new bool isReference { get; }
 
+        /// <summary>
+        /// If this ReferenceUsage is the payload parameter of a TransitionUsage, then its naming Feature is the
+        /// payloadParameter of the triggerAction of that TransitionUsage (if any).
+        /// </summary>
+        /// <returns>
+        /// The expected IFeature
+        /// </returns>
+        new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
     }
 }
 

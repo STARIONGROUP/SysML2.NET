@@ -50,6 +50,18 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         INamespace ImportedNamespace { get; set; }
 
+        /// <summary>
+        /// Returns at least the visible Memberships of the importedNamespace. If isRecursive = true, then
+        /// Memberships are also recursively imported from any ownedMembers of the importedNamespace that are
+        /// themselves Namespaces.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected IMembership
+        /// </returns>
+        new IMembership ImportedMemberships(INamespace excluded) => this.ComputeRedefinedImportedMembershipsOperation(excluded);
     }
 }
 

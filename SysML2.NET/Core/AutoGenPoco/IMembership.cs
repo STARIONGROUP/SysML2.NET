@@ -88,6 +88,20 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_42975_43193", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "public")]
         VisibilityKind Visibility { get; set; }
 
+        /// <summary>
+        /// Whether this Membership is distinguishable from a given other Membership. By default, this is true
+        /// if this Membership has no memberShortName or memberName; or each of the memberShortName and
+        /// memberName are different than both of those of the other Membership; or neither of the metaclasses
+        /// of the memberElement of this Membership and the memberElement of the other Membership conform to the
+        /// other. But this may be overridden in specializations of Membership.
+        /// </summary>
+        /// <param name="other">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected bool
+        /// </returns>
+        bool IsDistinguishableFrom(IMembership other) => this.ComputeIsDistinguishableFromOperation(other);
     }
 }
 

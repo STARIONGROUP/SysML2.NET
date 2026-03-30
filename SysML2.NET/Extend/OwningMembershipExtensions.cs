@@ -31,23 +31,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// The <see cref="OwningMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IOwningMembership"/> interface
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Major Code Smell",
-        "S1192:Define a constant instead of using this literal",
-        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class OwningMembershipExtensions
     {
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembership)
+        internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -55,14 +51,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembership)
+        internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -70,14 +66,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeOwnedMemberName(this IOwningMembership owningMembership)
+        internal static string ComputeOwnedMemberName(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -85,17 +81,33 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="owningMembership">
+        /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembership)
+        internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
+        /// <summary>
+        /// If the ownedMemberElement of this OwningMembership has a non-null qualifiedName, then return the
+        /// string constructed by appending to that qualifiedName the string "/owningMembership". Otherwise,
+        /// return the path of the OwningMembership as specified for a Relationship in general.
+        /// </summary>
+        /// <param name="owningMembershipSubject">
+        /// The subject <see cref="IOwningMembership"/>
+        /// </param>
+        /// <returns>
+        /// The expected string
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal static string ComputeRedefinedPathOperation(this IOwningMembership owningMembershipSubject)
+        {
+            throw new NotSupportedException("Create a GitHub issue when this method is required");
+        }
     }
 }

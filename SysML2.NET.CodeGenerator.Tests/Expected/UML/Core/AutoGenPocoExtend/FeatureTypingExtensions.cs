@@ -37,14 +37,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <param name="featureTyping">
+        /// <param name="featureTypingSubject">
         /// The subject <see cref="IFeatureTyping"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeOwningFeature(this IFeatureTyping featureTyping)
+        internal static IFeature ComputeOwningFeature(this IFeatureTyping featureTypingSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
