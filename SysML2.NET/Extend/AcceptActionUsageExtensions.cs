@@ -114,7 +114,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsTriggerActionOperation(this IAcceptActionUsage acceptActionUsageSubject)

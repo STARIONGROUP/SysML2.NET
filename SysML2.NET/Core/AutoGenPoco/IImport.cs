@@ -89,9 +89,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        IMembership ImportedMemberships(INamespace excluded) => this.ComputeImportedMembershipsOperation(excluded);
+        List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeImportedMembershipsOperation(excluded);
     }
 }
 

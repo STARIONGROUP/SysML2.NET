@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// any).
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         IFeature SourceTargetFeature() => this.ComputeSourceTargetFeatureOperation();
     }

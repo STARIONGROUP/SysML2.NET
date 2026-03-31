@@ -26,7 +26,6 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Threading.Tasks;
 
     using SysML2.NET.CodeGenerator.Extensions;
-    using SysML2.NET.CodeGenerator.HandleBarHelpers;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;

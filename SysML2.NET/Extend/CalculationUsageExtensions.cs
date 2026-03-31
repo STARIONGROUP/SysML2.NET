@@ -87,10 +87,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ICalculationUsage calculationUsageSubject, IFeature visited)
+        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ICalculationUsage calculationUsageSubject, List<IFeature> visited)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

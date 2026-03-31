@@ -85,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool HasBounds(int lower, string upper) => this.ComputeHasBoundsOperation(lower, upper);
 
@@ -97,7 +97,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string ValueOf(IExpression bound) => this.ComputeValueOfOperation(bound);
     }

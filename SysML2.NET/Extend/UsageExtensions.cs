@@ -606,7 +606,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IUsage usageSubject)
@@ -622,7 +622,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// The subject <see cref="IUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeReferencedFeatureTargetOperation(this IUsage usageSubject)

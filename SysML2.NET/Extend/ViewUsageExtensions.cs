@@ -147,7 +147,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIncludeAsExposedOperation(this IViewUsage viewUsageSubject, IElement element)

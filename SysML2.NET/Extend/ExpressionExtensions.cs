@@ -99,10 +99,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeModelLevelEvaluableOperation(this IExpression expressionSubject, IFeature visited)
+        internal static bool ComputeModelLevelEvaluableOperation(this IExpression expressionSubject, List<IFeature> visited)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -120,10 +120,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IElement
+        /// The expected collection of <see cref="IElement" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeEvaluateOperation(this IExpression expressionSubject, IElement target)
+        internal static List<IElement> ComputeEvaluateOperation(this IExpression expressionSubject, IElement target)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -139,7 +139,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeCheckConditionOperation(this IExpression expressionSubject, IElement target)

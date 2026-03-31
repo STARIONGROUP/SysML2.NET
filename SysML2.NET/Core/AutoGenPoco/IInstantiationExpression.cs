@@ -71,7 +71,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// OperatorExpression.
         /// </summary>
         /// <returns>
-        /// The expected IType
+        /// The expected <see cref="IType" />
         /// </returns>
         IType InstantiatedType() => this.ComputeInstantiatedTypeOperation();
     }

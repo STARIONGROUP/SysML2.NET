@@ -55,9 +55,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
-        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+        new bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
     }
 }
 

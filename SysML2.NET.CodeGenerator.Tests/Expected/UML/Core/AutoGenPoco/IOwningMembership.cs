@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// return the path of the OwningMembership as specified for a Relationship in general.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         new string Path() => this.ComputeRedefinedPathOperation();
     }

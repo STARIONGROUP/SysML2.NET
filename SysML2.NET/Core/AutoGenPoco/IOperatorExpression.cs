@@ -58,7 +58,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// packages BaseFunctions, DataFunctions, or ControlFunctions from the Kernel Function Library.
         /// </summary>
         /// <returns>
-        /// The expected IType
+        /// The expected <see cref="IType" />
         /// </returns>
         new IType InstantiatedType() => this.ComputeRedefinedInstantiatedTypeOperation();
     }

@@ -285,7 +285,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind ComputeDirectionForOperation(this IFeature featureSubject, IType type)
@@ -301,7 +301,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedEffectiveShortNameOperation(this IFeature featureSubject)
@@ -318,7 +318,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedEffectiveNameOperation(this IFeature featureSubject)
@@ -334,7 +334,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeNamingFeatureOperation(this IFeature featureSubject)
@@ -351,10 +351,10 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected collection of <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeRedefinedSupertypesOperation(this IFeature featureSubject, bool excludeImplied)
+        internal static List<IType> ComputeRedefinedSupertypesOperation(this IFeature featureSubject, bool excludeImplied)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -369,7 +369,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeRedefinesOperation(this IFeature featureSubject, IFeature redefinedFeature)
@@ -388,7 +388,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeRedefinesFromLibraryOperation(this IFeature featureSubject, string libraryFeatureName)
@@ -410,7 +410,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeSubsetsChainOperation(this IFeature featureSubject, IFeature first, IFeature second)
@@ -433,7 +433,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeRedefinedIsCompatibleWithOperation(this IFeature featureSubject, IType otherType)
@@ -455,10 +455,10 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeTypingFeaturesOperation(this IFeature featureSubject)
+        internal static List<IFeature> ComputeTypingFeaturesOperation(this IFeature featureSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -472,10 +472,10 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected collection of <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeAsCartesianProductOperation(this IFeature featureSubject)
+        internal static List<IType> ComputeAsCartesianProductOperation(this IFeature featureSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -487,7 +487,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsCartesianProductOperation(this IFeature featureSubject)
@@ -502,7 +502,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsOwnedCrossFeatureOperation(this IFeature featureSubject)
@@ -519,7 +519,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeOwnedCrossFeatureOperation(this IFeature featureSubject)
@@ -534,10 +534,10 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The subject <see cref="IFeature"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeAllRedefinedFeaturesOperation(this IFeature featureSubject)
+        internal static List<IFeature> ComputeAllRedefinedFeaturesOperation(this IFeature featureSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -556,7 +556,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsFeaturedWithinOperation(this IFeature featureSubject, IType type)
@@ -575,7 +575,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeCanAccessOperation(this IFeature featureSubject, IFeature feature)
@@ -596,7 +596,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsFeaturingTypeOperation(this IFeature featureSubject, IType type)

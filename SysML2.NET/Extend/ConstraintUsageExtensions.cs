@@ -86,7 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// The subject <see cref="IConstraintUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IConstraintUsage constraintUsageSubject)
@@ -104,10 +104,10 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IConstraintUsage constraintUsageSubject, IFeature visited)
+        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IConstraintUsage constraintUsageSubject, List<IFeature> visited)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

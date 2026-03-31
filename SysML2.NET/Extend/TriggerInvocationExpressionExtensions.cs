@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The subject <see cref="ITriggerInvocationExpression"/>
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeRedefinedInstantiatedTypeOperation(this ITriggerInvocationExpression triggerInvocationExpressionSubject)

@@ -346,7 +346,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// ownedReferenceSubsetting.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
 
@@ -355,7 +355,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// ownedReferenceSubsetting.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         IFeature ReferencedFeatureTarget() => this.ComputeReferencedFeatureTargetOperation();
     }

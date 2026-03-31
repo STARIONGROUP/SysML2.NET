@@ -63,10 +63,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IElement
+        /// The expected collection of <see cref="IElement" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeEvaluateFeatureOperation(this IMetadataFeature metadataFeatureSubject, IFeature baseFeature)
+        internal static List<IElement> ComputeEvaluateFeatureOperation(this IMetadataFeature metadataFeatureSubject, IFeature baseFeature)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsSemanticOperation(this IMetadataFeature metadataFeatureSubject)
@@ -94,7 +94,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsSyntacticOperation(this IMetadataFeature metadataFeatureSubject)
@@ -110,7 +110,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
         /// <returns>
-        /// The expected IElement
+        /// The expected <see cref="IElement" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IElement ComputeSyntaxElementOperation(this IMetadataFeature metadataFeatureSubject)

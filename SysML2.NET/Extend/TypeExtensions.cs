@@ -381,10 +381,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeRedefinedVisibleMembershipsOperation(this IType typeSubject, INamespace excluded, bool isRecursive, bool includeAll)
+        internal static List<IMembership> ComputeRedefinedVisibleMembershipsOperation(this IType typeSubject, List<INamespace> excluded, bool isRecursive, bool includeAll)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -407,10 +407,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeInheritedMembershipsOperation(this IType typeSubject, INamespace excludedNamespaces, IType excludedTypes, bool excludeImplied)
+        internal static List<IMembership> ComputeInheritedMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -433,10 +433,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeInheritableMembershipsOperation(this IType typeSubject, INamespace excludedNamespaces, IType excludedTypes, bool excludeImplied)
+        internal static List<IMembership> ComputeInheritableMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -460,10 +460,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeNonPrivateMembershipsOperation(this IType typeSubject, INamespace excludedNamespaces, IType excludedTypes, bool excludeImplied)
+        internal static List<IMembership> ComputeNonPrivateMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -485,10 +485,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeRemoveRedefinedFeaturesOperation(this IType typeSubject, IMembership memberships)
+        internal static List<IMembership> ComputeRemoveRedefinedFeaturesOperation(this IType typeSubject, List<IMembership> memberships)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -504,10 +504,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeAllRedefinedFeaturesOfOperation(this IType typeSubject, IMembership membership)
+        internal static List<IFeature> ComputeAllRedefinedFeaturesOfOperation(this IType typeSubject, IMembership membership)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -523,7 +523,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind ComputeDirectionOfOperation(this IType typeSubject, IFeature feature)
@@ -545,10 +545,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static FeatureDirectionKind ComputeDirectionOfExcludingOperation(this IType typeSubject, IFeature feature, IType excluded)
+        internal static FeatureDirectionKind ComputeDirectionOfExcludingOperation(this IType typeSubject, IFeature feature, List<IType> excluded)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -565,10 +565,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected collection of <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeSupertypesOperation(this IType typeSubject, bool excludeImplied)
+        internal static List<IType> ComputeSupertypesOperation(this IType typeSubject, bool excludeImplied)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -581,10 +581,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// The subject <see cref="IType"/>
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected collection of <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IType ComputeAllSupertypesOperation(this IType typeSubject)
+        internal static List<IType> ComputeAllSupertypesOperation(this IType typeSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -599,7 +599,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeSpecializesOperation(this IType typeSubject, IType supertype)
@@ -619,7 +619,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeSpecializesFromLibraryOperation(this IType typeSubject, string libraryTypeName)
@@ -638,7 +638,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsCompatibleWithOperation(this IType typeSubject, IType otherType)
@@ -653,10 +653,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// The subject <see cref="IType"/>
         /// </param>
         /// <returns>
-        /// The expected IMultiplicity
+        /// The expected collection of <see cref="IMultiplicity" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMultiplicity ComputeMultiplicitiesOperation(this IType typeSubject)
+        internal static List<IMultiplicity> ComputeMultiplicitiesOperation(this IType typeSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

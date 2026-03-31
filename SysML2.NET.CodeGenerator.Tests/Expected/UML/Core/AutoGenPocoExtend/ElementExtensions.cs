@@ -207,7 +207,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeEscapedNameOperation(this IElement elementSubject)
@@ -223,7 +223,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeEffectiveShortNameOperation(this IElement elementSubject)
@@ -238,7 +238,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeEffectiveNameOperation(this IElement elementSubject)
@@ -253,7 +253,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
-        /// The expected INamespace
+        /// The expected <see cref="INamespace" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeLibraryNamespaceOperation(this IElement elementSubject)
@@ -274,7 +274,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IElement"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputePathOperation(this IElement elementSubject)

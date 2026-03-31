@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The subject <see cref="IInstantiationExpression"/>
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeInstantiatedTypeOperation(this IInstantiationExpression instantiationExpressionSubject)

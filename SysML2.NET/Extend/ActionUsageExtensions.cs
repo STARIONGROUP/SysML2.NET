@@ -84,10 +84,10 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The subject <see cref="IActionUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IFeature ComputeInputParametersOperation(this IActionUsage actionUsageSubject)
+        internal static List<IFeature> ComputeInputParametersOperation(this IActionUsage actionUsageSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -103,7 +103,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeInputParameterOperation(this IActionUsage actionUsageSubject, int i)
@@ -123,7 +123,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IExpression
+        /// The expected <see cref="IExpression" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeArgumentOperation(this IActionUsage actionUsageSubject, int i)
@@ -140,7 +140,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The subject <see cref="IActionUsage"/>
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsSubactionUsageOperation(this IActionUsage actionUsageSubject)

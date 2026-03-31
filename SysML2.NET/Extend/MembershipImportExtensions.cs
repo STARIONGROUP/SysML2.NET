@@ -45,10 +45,10 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeRedefinedImportedMembershipsOperation(this IMembershipImport membershipImportSubject, INamespace excluded)
+        internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IMembershipImport membershipImportSubject, List<INamespace> excluded)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

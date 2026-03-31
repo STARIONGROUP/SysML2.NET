@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool MultiplicityHasBounds(IMultiplicity mult, int lower, string upper) => this.ComputeMultiplicityHasBoundsOperation(mult, lower, upper);
     }

@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// The subject <see cref="IReturnParameterMembership"/>
         /// </param>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind ComputeRedefinedParameterDirectionOperation(this IReturnParameterMembership returnParameterMembershipSubject)

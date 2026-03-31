@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IRelationship"/>
         /// </param>
         /// <returns>
-        /// The expected INamespace
+        /// The expected <see cref="INamespace" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this IRelationship relationshipSubject)
@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The subject <see cref="IRelationship"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedPathOperation(this IRelationship relationshipSubject)

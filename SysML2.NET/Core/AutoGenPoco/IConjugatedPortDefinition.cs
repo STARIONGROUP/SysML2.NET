@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// prepended.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         new string EffectiveName() => this.ComputeRedefinedEffectiveNameOperation();
     }

@@ -87,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// ownedReferenceSubsetting.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
 
@@ -98,9 +98,9 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
-        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+        new bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
     }
 }
 

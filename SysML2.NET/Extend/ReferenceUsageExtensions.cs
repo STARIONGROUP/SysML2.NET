@@ -81,7 +81,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// The subject <see cref="IReferenceUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IReferenceUsage referenceUsageSubject)

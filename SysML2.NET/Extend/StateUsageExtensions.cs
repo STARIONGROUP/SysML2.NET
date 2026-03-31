@@ -134,7 +134,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsSubstateUsageOperation(this IStateUsage stateUsageSubject, bool isParallel)

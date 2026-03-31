@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// The libraryNamespace for a LibraryPackage is itself.
         /// </summary>
         /// <returns>
-        /// The expected INamespace
+        /// The expected <see cref="INamespace" />
         /// </returns>
         new INamespace LibraryNamespace() => this.ComputeRedefinedLibraryNamespaceOperation();
     }

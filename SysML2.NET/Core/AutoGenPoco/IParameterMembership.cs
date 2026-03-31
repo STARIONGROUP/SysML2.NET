@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Return the required value of the direction of the ownedMemberParameter. By default, this is in.
         /// </summary>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         FeatureDirectionKind ParameterDirection() => this.ComputeParameterDirectionOperation();
     }

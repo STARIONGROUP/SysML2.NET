@@ -97,7 +97,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// library element.
         /// </summary>
         /// <returns>
-        /// The expected INamespace
+        /// The expected <see cref="INamespace" />
         /// </returns>
         new INamespace LibraryNamespace() => this.ComputeRedefinedLibraryNamespaceOperation();
 
@@ -108,7 +108,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// general.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         new string Path() => this.ComputeRedefinedPathOperation();
     }
