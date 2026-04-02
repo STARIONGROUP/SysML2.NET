@@ -116,7 +116,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IncludeAsExposed(IElement element) => this.ComputeIncludeAsExposedOperation(element);
     }

@@ -122,7 +122,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsSubstateUsage(bool isParallel) => this.ComputeIsSubstateUsageOperation(isParallel);
     }

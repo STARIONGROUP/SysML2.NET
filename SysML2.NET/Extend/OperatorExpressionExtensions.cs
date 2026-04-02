@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The subject <see cref="IOperatorExpression"/>
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected <see cref="IType" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeRedefinedInstantiatedTypeOperation(this IOperatorExpression operatorExpressionSubject)

@@ -160,7 +160,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IReferenceUsage
+        /// The expected <see cref="IReferenceUsage" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IReferenceUsage ComputeTriggerPayloadParameterOperation(this ITransitionUsage transitionUsageSubject)
@@ -177,7 +177,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeSourceFeatureOperation(this ITransitionUsage transitionUsageSubject)

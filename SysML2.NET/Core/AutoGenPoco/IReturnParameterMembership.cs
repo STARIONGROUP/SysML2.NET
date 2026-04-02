@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// operation that cannot be further redefined.)
         /// </summary>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         new FeatureDirectionKind ParameterDirection() => this.ComputeRedefinedParameterDirectionOperation();
     }

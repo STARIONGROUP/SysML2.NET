@@ -104,9 +104,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected collection of <see cref="string" />
         /// </returns>
-        string NamesOf(IElement element) => this.ComputeNamesOfOperation(element);
+        List<string> NamesOf(IElement element) => this.ComputeNamesOfOperation(element);
 
         /// <summary>
         /// Returns this visibility of mem relative to this Namespace. If mem is an importedMembership, this is
@@ -116,7 +116,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected VisibilityKind
+        /// The expected <see cref="VisibilityKind" />
         /// </returns>
         VisibilityKind VisibilityOf(IMembership mem) => this.ComputeVisibilityOfOperation(mem);
 
@@ -138,9 +138,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        IMembership VisibleMemberships(INamespace excluded, bool isRecursive, bool includeAll) => this.ComputeVisibleMembershipsOperation(excluded, isRecursive, includeAll);
+        List<IMembership> VisibleMemberships(List<INamespace> excluded, bool isRecursive, bool includeAll) => this.ComputeVisibleMembershipsOperation(excluded, isRecursive, includeAll);
 
         /// <summary>
         /// Derive the imported Memberships of this Namespace as the importedMembership of all ownedImports,
@@ -151,9 +151,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        IMembership ImportedMemberships(INamespace excluded) => this.ComputeImportedMembershipsOperation(excluded);
+        List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeImportedMembershipsOperation(excluded);
 
         /// <summary>
         /// If visibility is not null, return the Memberships of this Namespace with the given visibility,
@@ -169,9 +169,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        IMembership MembershipsOfVisibility(VisibilityKind visibility, INamespace excluded) => this.ComputeMembershipsOfVisibilityOperation(visibility, excluded);
+        List<IMembership> MembershipsOfVisibility(VisibilityKind visibility, List<INamespace> excluded) => this.ComputeMembershipsOfVisibilityOperation(visibility, excluded);
 
         /// <summary>
         /// Resolve the given qualified name to the named Membership (if any), starting with this Namespace as
@@ -183,7 +183,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         IMembership Resolve(string qualifiedName) => this.ComputeResolveOperation(qualifiedName);
 
@@ -196,7 +196,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         IMembership ResolveGlobal(string qualifiedName) => this.ComputeResolveGlobalOperation(qualifiedName);
 
@@ -209,7 +209,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         IMembership ResolveLocal(string name) => this.ComputeResolveLocalOperation(name);
 
@@ -220,7 +220,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         IMembership ResolveVisible(string name) => this.ComputeResolveVisibleOperation(name);
 
@@ -233,7 +233,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string QualificationOf(string qualifiedName) => this.ComputeQualificationOfOperation(qualifiedName);
 
@@ -246,7 +246,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string UnqualifiedNameOf(string qualifiedName) => this.ComputeUnqualifiedNameOfOperation(qualifiedName);
     }

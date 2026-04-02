@@ -85,9 +85,9 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// Return the owned input parameters of this ActionUsage.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        IFeature InputParameters() => this.ComputeInputParametersOperation();
+        List<IFeature> InputParameters() => this.ComputeInputParametersOperation();
 
         /// <summary>
         /// Return the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage has less
@@ -97,7 +97,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         IFeature InputParameter(int i) => this.ComputeInputParameterOperation(i);
 
@@ -110,7 +110,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IExpression
+        /// The expected <see cref="IExpression" />
         /// </returns>
         IExpression Argument(int i) => this.ComputeArgumentOperation(i);
 
@@ -120,7 +120,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// it represents an Action that is a subaction of another Action.
         /// </summary>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsSubactionUsage() => this.ComputeIsSubactionUsageOperation();
     }

@@ -191,7 +191,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// notation (i.e., surrounded by single quote characters and with special characters escaped).
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string EscapedName() => this.ComputeEscapedNameOperation();
 
@@ -200,7 +200,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// declaredShortName.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string EffectiveShortName() => this.ComputeEffectiveShortNameOperation();
 
@@ -208,7 +208,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// Return an effective name for this Element. By default this is the same as its declaredName.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string EffectiveName() => this.ComputeEffectiveNameOperation();
 
@@ -216,7 +216,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// By default, return the library Namespace of the owningRelationship of this Element, if it has one.
         /// </summary>
         /// <returns>
-        /// The expected INamespace
+        /// The expected <see cref="INamespace" />
         /// </returns>
         INamespace LibraryNamespace() => this.ComputeLibraryNamespaceOperation();
 
@@ -230,7 +230,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// to use owningRelatedElement when appropriate.)
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         string Path() => this.ComputePathOperation();
     }

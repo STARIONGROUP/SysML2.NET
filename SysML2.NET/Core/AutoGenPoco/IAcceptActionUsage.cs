@@ -98,7 +98,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// Check if this AcceptActionUsage is the triggerAction of a TransitionUsage.
         /// </summary>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsTriggerAction() => this.ComputeIsTriggerActionOperation();
     }

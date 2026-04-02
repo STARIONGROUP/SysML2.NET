@@ -85,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The subject <see cref="IPerformActionUsage"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IPerformActionUsage performActionUsageSubject)

@@ -269,7 +269,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected FeatureDirectionKind
+        /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         FeatureDirectionKind DirectionFor(IType type) => this.ComputeDirectionForOperation(type);
 
@@ -278,7 +278,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// effective shortName of the Feature returned by the namingFeature() operation, if any.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         new string EffectiveShortName() => this.ComputeRedefinedEffectiveShortNameOperation();
 
@@ -288,7 +288,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// operation, if any.
         /// </summary>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         new string EffectiveName() => this.ComputeRedefinedEffectiveNameOperation();
 
@@ -297,7 +297,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// ownedRedefinition, if any.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         IFeature NamingFeature() => this.ComputeNamingFeatureOperation();
 
@@ -307,9 +307,9 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IType
+        /// The expected collection of <see cref="IType" />
         /// </returns>
-        new IType Supertypes(bool excludeImplied) => this.ComputeRedefinedSupertypesOperation(excludeImplied);
+        new List<IType> Supertypes(bool excludeImplied) => this.ComputeRedefinedSupertypesOperation(excludeImplied);
 
         /// <summary>
         /// Check whether this Feature directly redefines the given redefinedFeature.
@@ -318,7 +318,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool Redefines(IFeature redefinedFeature) => this.ComputeRedefinesOperation(redefinedFeature);
 
@@ -330,7 +330,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool RedefinesFromLibrary(string libraryFeatureName) => this.ComputeRedefinesFromLibraryOperation(libraryFeatureName);
 
@@ -345,7 +345,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool SubsetsChain(IFeature first, IFeature second) => this.ComputeSubsetsChainOperation(first, second);
 
@@ -361,7 +361,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         new bool IsCompatibleWith(IType otherType) => this.ComputeRedefinedIsCompatibleWithOperation(otherType);
 
@@ -376,9 +376,9 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// as the Feature.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        IFeature TypingFeatures() => this.ComputeTypingFeaturesOperation();
+        List<IFeature> TypingFeatures() => this.ComputeTypingFeaturesOperation();
 
         /// <summary>
         /// If isCartesianProduct is true, then return the list of Types whose Cartesian product can be
@@ -386,15 +386,15 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// valid value, it will just not represent anything useful.)
         /// </summary>
         /// <returns>
-        /// The expected IType
+        /// The expected collection of <see cref="IType" />
         /// </returns>
-        IType AsCartesianProduct() => this.ComputeAsCartesianProductOperation();
+        List<IType> AsCartesianProduct() => this.ComputeAsCartesianProductOperation();
 
         /// <summary>
         /// Check whether this Feature can be used to represent a Cartesian product of Types.
         /// </summary>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsCartesianProduct() => this.ComputeIsCartesianProductOperation();
 
@@ -402,7 +402,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Return whether this Feature is an owned cross Feature of an end Feature.
         /// </summary>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsOwnedCrossFeature() => this.ComputeIsOwnedCrossFeatureOperation();
 
@@ -412,7 +412,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// is not a FeatureMembership. If this exists, it is the crossFeature of the end Feature.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         IFeature OwnedCrossFeature() => this.ComputeOwnedCrossFeatureOperation();
 
@@ -420,9 +420,9 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Return this Feature and all the Features that are directly or indirectly Redefined by this Feature.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        IFeature AllRedefinedFeatures() => this.ComputeAllRedefinedFeaturesOperation();
+        List<IFeature> AllRedefinedFeatures() => this.ComputeAllRedefinedFeaturesOperation();
 
         /// <summary>
         /// Return if the featuringTypes of this Feature are compatible with the given type. If type is null,
@@ -435,7 +435,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsFeaturedWithin(IType type) => this.ComputeIsFeaturedWithinOperation(type);
 
@@ -447,7 +447,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool CanAccess(IFeature feature) => this.ComputeCanAccessOperation(feature);
 
@@ -461,7 +461,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsFeaturingType(IType type) => this.ComputeIsFeaturingTypeOperation(type);
     }

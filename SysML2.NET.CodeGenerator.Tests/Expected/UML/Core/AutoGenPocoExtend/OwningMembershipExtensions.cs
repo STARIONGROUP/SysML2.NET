@@ -102,7 +102,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedPathOperation(this IOwningMembership owningMembershipSubject)

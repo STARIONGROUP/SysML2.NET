@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeMultiplicityHasBoundsOperation(this IControlNode controlNodeSubject, IMultiplicity mult, int lower, string upper)

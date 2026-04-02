@@ -95,7 +95,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// The subject <see cref="IConjugatedPortDefinition"/>
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedEffectiveNameOperation(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)

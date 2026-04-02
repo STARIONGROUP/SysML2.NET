@@ -59,10 +59,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeRedefinedImportedMembershipsOperation(this IPackage packageSubject, INamespace excluded)
+        internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IPackage packageSubject, List<INamespace> excluded)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIncludeAsMemberOperation(this IPackage packageSubject, IElement element)

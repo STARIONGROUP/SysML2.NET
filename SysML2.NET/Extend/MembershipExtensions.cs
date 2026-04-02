@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsDistinguishableFromOperation(this IMembership membershipSubject, IMembership other)

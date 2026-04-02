@@ -63,7 +63,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.QueryIsEnumerable())
                 {
-                    if (property.QueryIsReferenceProperty())
+                    if (property.QueryIsReferenceType())
                     {
                         sb.Append($"List<Guid>");
                         sb.Append(' ');
@@ -76,7 +76,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (property.QueryIsReferenceProperty())
+                    if (property.QueryIsReferenceType())
                     {
                         sb.Append($"Guid");
                         sb.Append(' ');
@@ -132,7 +132,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.QueryIsEnumerable())
                 {
-                    if (property.QueryIsReferenceProperty())
+                    if (property.QueryIsReferenceType())
                     {
                         sb.Append($"List<Guid>");
                         sb.Append(' ');
@@ -145,7 +145,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (property.QueryIsReferenceProperty())
+                    if (property.QueryIsReferenceType())
                     {
                         sb.Append($"Guid");
                         sb.Append(' ');

@@ -52,9 +52,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
-        new bool ModelLevelEvaluable(IFeature visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+        new bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
 
         /// <summary>
         /// The model-level value of a LiteralExpression is itself.
@@ -63,9 +63,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IElement
+        /// The expected collection of <see cref="IElement" />
         /// </returns>
-        new IElement Evaluate(IElement target) => this.ComputeRedefinedEvaluateOperation(target);
+        new List<IElement> Evaluate(IElement target) => this.ComputeRedefinedEvaluateOperation(target);
     }
 }
 

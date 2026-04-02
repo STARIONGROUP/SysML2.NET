@@ -128,7 +128,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// Return the payloadParameter of the triggerAction of this TransitionUsage, if it has one.
         /// </summary>
         /// <returns>
-        /// The expected IReferenceUsage
+        /// The expected <see cref="IReferenceUsage" />
         /// </returns>
         IReferenceUsage TriggerPayloadParameter() => this.ComputeTriggerPayloadParameterOperation();
 
@@ -138,7 +138,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// Membership that is not a FeatureMembership, and whose featureTarget is an ActionUsage.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         IFeature SourceFeature() => this.ComputeSourceFeatureOperation();
     }

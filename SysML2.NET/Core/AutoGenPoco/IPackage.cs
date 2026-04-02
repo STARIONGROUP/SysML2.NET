@@ -58,9 +58,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        new IMembership ImportedMemberships(INamespace excluded) => this.ComputeRedefinedImportedMembershipsOperation(excluded);
+        new List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeRedefinedImportedMembershipsOperation(excluded);
 
         /// <summary>
         /// Determine whether the given element meets all the filterConditions.
@@ -69,7 +69,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IncludeAsMember(IElement element) => this.ComputeIncludeAsMemberOperation(element);
     }

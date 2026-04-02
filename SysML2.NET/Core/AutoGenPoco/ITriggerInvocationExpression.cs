@@ -61,7 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// after, respectively.
         /// </summary>
         /// <returns>
-        /// The expected IType
+        /// The expected <see cref="IType" />
         /// </returns>
         new IType InstantiatedType() => this.ComputeRedefinedInstantiatedTypeOperation();
     }

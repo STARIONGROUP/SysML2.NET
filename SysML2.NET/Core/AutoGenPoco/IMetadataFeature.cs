@@ -61,15 +61,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IElement
+        /// The expected collection of <see cref="IElement" />
         /// </returns>
-        IElement EvaluateFeature(IFeature baseFeature) => this.ComputeEvaluateFeatureOperation(baseFeature);
+        List<IElement> EvaluateFeature(IFeature baseFeature) => this.ComputeEvaluateFeatureOperation(baseFeature);
 
         /// <summary>
         /// Check if this MetadataFeature has a metaclass which is a kind of SemanticMetadata.
         /// </summary>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsSemantic() => this.ComputeIsSemanticOperation();
 
@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// the reflective abstract syntax model).
         /// </summary>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         bool IsSyntactic() => this.ComputeIsSyntacticOperation();
 
@@ -87,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// Element instance from the MOF abstract syntax representation of the model.
         /// </summary>
         /// <returns>
-        /// The expected IElement
+        /// The expected <see cref="IElement" />
         /// </returns>
         IElement SyntaxElement() => this.ComputeSyntaxElementOperation();
     }

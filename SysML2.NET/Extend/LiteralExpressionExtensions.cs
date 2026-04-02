@@ -48,10 +48,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected bool
+        /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ILiteralExpression literalExpressionSubject, IFeature visited)
+        internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ILiteralExpression literalExpressionSubject, List<IFeature> visited)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -66,10 +66,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IElement
+        /// The expected collection of <see cref="IElement" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IElement ComputeRedefinedEvaluateOperation(this ILiteralExpression literalExpressionSubject, IElement target)
+        internal static List<IElement> ComputeRedefinedEvaluateOperation(this ILiteralExpression literalExpressionSubject, IElement target)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

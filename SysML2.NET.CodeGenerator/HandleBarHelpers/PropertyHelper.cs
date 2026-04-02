@@ -309,7 +309,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) && !property.QueryIsReferenceProperty())
+                    if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) && !property.QueryIsReferenceType())
                     {
                         sb.Append($"{typeName}? ");
                     }
@@ -387,7 +387,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) && !property.QueryIsReferenceProperty())
+                    if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) && !property.QueryIsReferenceType())
                     {
                         sb.Append($"{typeName}? ");
                     }
@@ -593,7 +593,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         sb.AppendLine($"writer.Write(dto.{StringExtensions.CapitalizeFirstLetter(property.Name)});");
                     }
                 }
-                else if (property.QueryIsReferenceProperty())
+                else if (property.QueryIsReferenceType())
                 {
                     if (property.QueryIsEnumerable())
                     {
@@ -738,7 +738,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
                 }
-                else if (property.QueryIsReferenceProperty())
+                else if (property.QueryIsReferenceType())
                 {
                     if (property.QueryIsEnumerable())
                     {
@@ -1103,7 +1103,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("The #Property.QueryIsEnumerableAndReferenceProperty argument supposed to be an IProperty");
                 }
                 
-                return property.QueryIsEnumerable() && property.QueryIsReferenceProperty();
+                return property.QueryIsEnumerable() && property.QueryIsReferenceType();
             });
 
             handlebars.RegisterHelper("Property.IsTypeAbstract", (_, arguments) =>
@@ -1156,7 +1156,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition)
-                ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : {(redefinedProperty.QueryIsReferenceProperty() ? "Guid.Empty" : "default")};"
+                ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : {(redefinedProperty.QueryIsReferenceType() ? "Guid.Empty" : "default")};"
                 : $"{redefinitionPropertyName};";
         }
 
@@ -1188,7 +1188,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (redefinedProperty.QueryIsEnumerable() && !redefinition.QueryIsEnumerable())
             {
-                if (redefinedProperty.QueryIsReferenceProperty())
+                if (redefinedProperty.QueryIsReferenceType())
                 {
                     return $"{redefinitionPropertyName} != null ? [{redefinitionPropertyName}] : [];";
                 }
@@ -1203,7 +1203,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     : $"[{redefinitionPropertyName}];";
             }
 
-            return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition) && !redefinedProperty.QueryIsReferenceProperty()
+            return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition) && !redefinedProperty.QueryIsReferenceType()
                 ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : default;"
                 : $"{redefinitionPropertyName};";
         }
@@ -1273,7 +1273,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 redefinitionPropertyName = $"this.{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
             }
 
-            var redefinitionPropertyTypeName = redefinition.QueryIsReferenceProperty() ? $"I{redefinition.Type.Name}" : redefinition.QueryCSharpTypeName();
+            var redefinitionPropertyTypeName = redefinition.QueryIsReferenceType() ? $"I{redefinition.Type.Name}" : redefinition.QueryCSharpTypeName();
             
             if (redefinedProperty.QueryIsEnumerable() && redefinition.QueryIsEnumerable())
             {

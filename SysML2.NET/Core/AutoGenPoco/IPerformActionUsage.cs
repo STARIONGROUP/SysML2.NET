@@ -85,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// the same as the usual default for a Usage.
         /// </summary>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
     }

@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// The subject <see cref="ILibraryPackage"/>
         /// </param>
         /// <returns>
-        /// The expected INamespace
+        /// The expected <see cref="INamespace" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this ILibraryPackage libraryPackageSubject)

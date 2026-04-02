@@ -114,7 +114,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     var allProperties = @class.QueryAllProperties();
 
-                    foreach (var prop in allProperties.Where(x => x.QueryIsReferenceProperty()))
+                    foreach (var prop in allProperties.Where(x => x.QueryIsReferenceType()))
                     {
                         uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
                     }

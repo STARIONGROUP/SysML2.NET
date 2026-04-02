@@ -61,7 +61,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The subject <see cref="IFeatureChainExpression"/>
         /// </param>
         /// <returns>
-        /// The expected IFeature
+        /// The expected <see cref="IFeature" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeSourceTargetFeatureOperation(this IFeatureChainExpression featureChainExpressionSubject)

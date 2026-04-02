@@ -133,10 +133,10 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected collection of <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static string ComputeNamesOfOperation(this INamespace namespaceSubject, IElement element)
+        internal static List<string> ComputeNamesOfOperation(this INamespace namespaceSubject, IElement element)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -152,7 +152,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected VisibilityKind
+        /// The expected <see cref="VisibilityKind" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static VisibilityKind ComputeVisibilityOfOperation(this INamespace namespaceSubject, IMembership mem)
@@ -181,10 +181,10 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeVisibleMembershipsOperation(this INamespace namespaceSubject, INamespace excluded, bool isRecursive, bool includeAll)
+        internal static List<IMembership> ComputeVisibleMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded, bool isRecursive, bool includeAll)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -201,10 +201,10 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeImportedMembershipsOperation(this INamespace namespaceSubject, INamespace excluded)
+        internal static List<IMembership> ComputeImportedMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -226,10 +226,10 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static IMembership ComputeMembershipsOfVisibilityOperation(this INamespace namespaceSubject, VisibilityKind visibility, INamespace excluded)
+        internal static List<IMembership> ComputeMembershipsOfVisibilityOperation(this INamespace namespaceSubject, VisibilityKind visibility, List<INamespace> excluded)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
@@ -247,7 +247,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IMembership ComputeResolveOperation(this INamespace namespaceSubject, string qualifiedName)
@@ -267,7 +267,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IMembership ComputeResolveGlobalOperation(this INamespace namespaceSubject, string qualifiedName)
@@ -287,7 +287,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IMembership ComputeResolveLocalOperation(this INamespace namespaceSubject, string name)
@@ -305,7 +305,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected IMembership
+        /// The expected <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IMembership ComputeResolveVisibleOperation(this INamespace namespaceSubject, string name)
@@ -325,7 +325,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeQualificationOfOperation(this INamespace namespaceSubject, string qualifiedName)
@@ -345,7 +345,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// No documentation provided
         /// </param>
         /// <returns>
-        /// The expected string
+        /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeUnqualifiedNameOfOperation(this INamespace namespaceSubject, string qualifiedName)
