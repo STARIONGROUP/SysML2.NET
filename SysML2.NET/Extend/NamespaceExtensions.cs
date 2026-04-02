@@ -229,7 +229,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static List<IMembership> ComputeMembershipsOfVisibilityOperation(this INamespace namespaceSubject, VisibilityKind visibility, List<INamespace> excluded)
+        internal static List<IMembership> ComputeMembershipsOfVisibilityOperation(this INamespace namespaceSubject, VisibilityKind? visibility, List<INamespace> excluded)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }

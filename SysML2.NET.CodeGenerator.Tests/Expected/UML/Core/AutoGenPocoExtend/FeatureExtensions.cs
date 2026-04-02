@@ -288,7 +288,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        internal static FeatureDirectionKind ComputeDirectionForOperation(this IFeature featureSubject, IType type)
+        internal static FeatureDirectionKind? ComputeDirectionForOperation(this IFeature featureSubject, IType type)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
