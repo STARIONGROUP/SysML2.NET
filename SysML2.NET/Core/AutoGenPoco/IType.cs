@@ -359,7 +359,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        FeatureDirectionKind DirectionOf(IFeature feature) => this.ComputeDirectionOfOperation(feature);
+        FeatureDirectionKind? DirectionOf(IFeature feature) => this.ComputeDirectionOfOperation(feature);
 
         /// <summary>
         /// Return the direction of the given feature relative to this Type, excluding a given set of Types from
@@ -374,7 +374,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        FeatureDirectionKind DirectionOfExcluding(IFeature feature, List<IType> excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
+        FeatureDirectionKind? DirectionOfExcluding(IFeature feature, List<IType> excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
 
         /// <summary>
         /// If this Type is conjugated, then return just the originalType of the Conjugation. Otherwise, return

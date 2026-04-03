@@ -271,7 +271,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        FeatureDirectionKind DirectionFor(IType type) => this.ComputeDirectionForOperation(type);
+        FeatureDirectionKind? DirectionFor(IType type) => this.ComputeDirectionForOperation(type);
 
         /// <summary>
         /// If a Feature has no declaredShortName or declaredName, then its effective shortName is given by the
