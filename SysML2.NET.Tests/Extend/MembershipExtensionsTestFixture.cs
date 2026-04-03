@@ -38,7 +38,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeMembershipOwningNamespace_ThrowsNotSupportedException()
         {
-            Assert.That(() => ((IMembership)null).ComputeMembershipOwningNamespace(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IMembership)null).ComputeMembershipOwningNamespace(), Throws.TypeOf<ArgumentNullException>());
         }
     }
 }

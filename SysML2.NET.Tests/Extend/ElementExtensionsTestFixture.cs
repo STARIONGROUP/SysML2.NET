@@ -21,10 +21,10 @@
 namespace SysML2.NET.Tests.Extend
 {
     using System;
-    using System.Linq;
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -43,7 +43,7 @@ namespace SysML2.NET.Tests.Extend
             var documentation = new Documentation();
             var annotation = new Annotation();
             
-            Assert.That(() => element.ComputeDocumentation(), Has.Count.EqualTo(0));
+            Assert.That(element.ComputeDocumentation, Has.Count.EqualTo(0));
 
             element.AssignOwnership(annotation, documentation);
 
@@ -61,16 +61,16 @@ namespace SysML2.NET.Tests.Extend
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => element.ComputeIsLibraryElement(), Is.False);
-                Assert.That(() => documentation.ComputeIsLibraryElement(), Is.False);
+                Assert.That(element.ComputeIsLibraryElement, Is.False);
+                Assert.That(documentation.ComputeIsLibraryElement, Is.False);
             }
 
             element.AssignOwnership(annotation, documentation);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() =>element.ComputeIsLibraryElement(), Is.False);
-                Assert.That(() => documentation.ComputeIsLibraryElement(), Throws.TypeOf<NotSupportedException>());
+                Assert.That(element.ComputeIsLibraryElement, Is.False);
+                Assert.That(documentation.ComputeIsLibraryElement, Throws.TypeOf<NotSupportedException>());
             }
         }
         
@@ -81,10 +81,10 @@ namespace SysML2.NET.Tests.Extend
             
             var element = new Definition();
 
-            Assert.That(() => element.ComputeName(), Is.Null);
+            Assert.That(element.ComputeName, Is.Null);
             
             element.DeclaredName = "definitionName";
-            Assert.That(() => element.ComputeName(), Is.EqualTo("definitionName"));
+            Assert.That(element.ComputeName, Is.EqualTo("definitionName"));
         }
         
         [Test]
@@ -96,10 +96,10 @@ namespace SysML2.NET.Tests.Extend
             var documentation = new Documentation();
             var annotation = new Annotation();
             element.AssignOwnership(annotation, documentation);
-            Assert.That(() => element.ComputeOwnedAnnotation(), Has.Count.EqualTo(0));
+            Assert.That(element.ComputeOwnedAnnotation, Has.Count.EqualTo(0));
             
             annotation.AnnotatedElement =  element;
-            Assert.That(() => element.ComputeOwnedAnnotation(), Is.EquivalentTo([annotation]));
+            Assert.That(element.ComputeOwnedAnnotation, Is.EquivalentTo([annotation]));
         }
         
         [Test]
@@ -110,10 +110,10 @@ namespace SysML2.NET.Tests.Extend
             var element = new Definition();
             var documentation = new Documentation();
             var annotation = new Annotation();
-            Assert.That(() => element.ComputeOwnedElement(), Has.Count.EqualTo(0));
+            Assert.That(element.ComputeOwnedElement, Has.Count.EqualTo(0));
             
             element.AssignOwnership(annotation, documentation);
-            Assert.That(() => element.ComputeDocumentation(), Is.EquivalentTo([documentation]));
+            Assert.That(element.ComputeDocumentation, Is.EquivalentTo([documentation]));
         }
         
         [Test]
@@ -127,16 +127,16 @@ namespace SysML2.NET.Tests.Extend
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => element.ComputeOwner(), Is.Null);
-                Assert.That(() => documentation.ComputeOwner(), Is.Null);
+                Assert.That(element.ComputeOwner, Is.Null);
+                Assert.That(documentation.ComputeOwner, Is.Null);
             }
             
             element.AssignOwnership(annotation, documentation);
             
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => element.ComputeOwner(), Is.Null);
-                Assert.That(() => documentation.ComputeOwner(), Is.EqualTo(element));
+                Assert.That(element.ComputeOwner, Is.Null);
+                Assert.That(documentation.ComputeOwner, Is.EqualTo(element));
             }        
         }
         
@@ -149,21 +149,21 @@ namespace SysML2.NET.Tests.Extend
             var documentation = new Documentation();
             var annotation = new Annotation();
             
-            Assert.That(() => documentation.ComputeOwningMembership(), Is.Null);
+            Assert.That(documentation.ComputeOwningMembership, Is.Null);
             
             element.AssignOwnership(annotation, documentation);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => documentation.ComputeOwningMembership(), Is.Null);
-                Assert.That(() => element.ComputeOwningMembership(), Is.Null);
+                Assert.That(documentation.ComputeOwningMembership, Is.Null);
+                Assert.That(element.ComputeOwningMembership, Is.Null);
             }
 
             var membership = new OwningMembership();
             var namespaceElement = new Namespace();
             
             namespaceElement.AssignOwnership(membership, element);
-            Assert.That(() => element.ComputeOwningMembership(), Is.EqualTo(membership));
+            Assert.That(element.ComputeOwningMembership, Is.EqualTo(membership));
         }
         
         [Test]
@@ -176,12 +176,12 @@ namespace SysML2.NET.Tests.Extend
             var annotation = new Annotation();
             element.AssignOwnership(annotation, documentation);
             
-            Assert.That(() => documentation.ComputeOwningNamespace(), Is.Null);
+            Assert.That(documentation.ComputeOwningNamespace, Is.Null);
             var membership = new OwningMembership();
             var namespaceElement = new Namespace();
             
             namespaceElement.AssignOwnership(membership, element);
-            Assert.That(() => element.ComputeOwningNamespace(), Is.EqualTo(namespaceElement));
+            Assert.That(element.ComputeOwningNamespace, Is.EqualTo(namespaceElement));
         }
         
         [Test]
@@ -191,15 +191,43 @@ namespace SysML2.NET.Tests.Extend
             
             var element = new Definition();
 
-            Assert.That(() => element.ComputeQualifiedName(), Is.Null);
+            Assert.That(element.ComputeQualifiedName, Is.Null);
             
             var membership = new OwningMembership();
+            var secondMembership = new OwningMembership();
+
             var namespaceElement = new Namespace();
             
             namespaceElement.AssignOwnership(membership, element);
             element.DeclaredName = "name";
+            
+            Assert.That(element.ComputeQualifiedName, Is.EqualTo("name"));
+            
+            var secondElement = new Definition()
+            {
+                DeclaredName = "name"
+            };
+            
+            namespaceElement.AssignOwnership(secondMembership, secondElement);
+            
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(element.ComputeQualifiedName, Is.EqualTo("name"));
+                Assert.That(secondElement.ComputeQualifiedName, Is.Null);
+            }
 
-            Assert.That(() => element.ComputeQualifiedName(), Is.EqualTo("name"));
+            var packageOwner = new Package()
+            {
+                DeclaredName = "owner"
+            };
+
+            var packageMembership = new OwningMembership();
+            packageOwner.AssignOwnership(packageMembership, namespaceElement);
+            
+            Assert.That(element.ComputeQualifiedName, Is.Null);
+
+            namespaceElement.DeclaredName = "namespace";
+            Assert.That(element.ComputeQualifiedName, Is.EqualTo("namespace::name"));
         }
         
         [Test]
@@ -209,10 +237,10 @@ namespace SysML2.NET.Tests.Extend
             
             var element = new Definition();
 
-            Assert.That(() =>  element.ComputeShortName(), Is.Null);
+            Assert.That(element.ComputeShortName, Is.Null);
 
             element.DeclaredShortName = "shortName";
-            Assert.That(() =>  element.ComputeShortName(), Is.EqualTo("shortName"));
+            Assert.That(element.ComputeShortName, Is.EqualTo("shortName"));
         }
         
         [Test]
@@ -224,11 +252,61 @@ namespace SysML2.NET.Tests.Extend
             var textualRepresentation = new TextualRepresentation();
             var annotation = new Annotation();
             
-            Assert.That(() => element.ComputeTextualRepresentation(), Has.Count.EqualTo(0));
+            Assert.That(element.ComputeTextualRepresentation, Has.Count.EqualTo(0));
 
             element.AssignOwnership(annotation, textualRepresentation);
 
             Assert.That(element.ComputeTextualRepresentation(), Is.EquivalentTo([textualRepresentation]));
+        }
+
+        [Test]
+        public void VerifyComputePathOperation()
+        {
+            Assert.That(() => ((IElement)null).ComputePathOperation(), Throws.TypeOf<ArgumentNullException>());
+            
+            var element = new Definition();
+
+            Assert.That(element.ComputePathOperation, Is.Empty);
+            element.DeclaredName = "name";
+
+            Assert.That(element.ComputePathOperation, Is.Empty);
+            
+            var membership = new OwningMembership();
+            var secondMembership = new OwningMembership();
+            var namespaceElement = new Namespace();
+            
+            namespaceElement.AssignOwnership(membership, element);
+            
+            Assert.That(element.ComputePathOperation, Is.EqualTo("name"));
+
+            var secondElement = new Definition()
+            {
+                DeclaredName = "name"
+            };
+            
+            namespaceElement.AssignOwnership(secondMembership, secondElement);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(element.ComputePathOperation, Is.EqualTo("name"));
+                Assert.That(secondElement.ComputePathOperation, Throws.TypeOf<NotSupportedException>());
+            }
+        }
+
+        [Test]
+        public void VerifyComputeEscapedNameOperation()
+        {
+            Assert.That(() => ((IElement)null).ComputeEscapedNameOperation(), Throws.TypeOf<ArgumentNullException>());
+
+            var element = new Definition()
+            {
+                DeclaredName = "basic"
+            };
+
+            Assert.That(element.ComputeEscapedNameOperation, Is.EqualTo("basic"));
+
+            element.DeclaredName = "non basic";
+            Assert.That(element.ComputeEscapedNameOperation, Is.EqualTo("\'non basic\'"));
         }
     }
 }

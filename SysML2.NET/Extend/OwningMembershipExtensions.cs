@@ -43,10 +43,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
-            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.OwnedRelatedElement.SingleOrDefault();
+            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.OwnedRelatedElement.Single();
         }
 
         /// <summary>
@@ -73,10 +72,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeOwnedMemberName(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.name;
         }
 
         /// <summary>

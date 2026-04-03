@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedMemberElement_ThrowsNotSupportedException()
         {
-            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElement(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElement(), Throws.TypeOf<ArgumentNullException>());
         }
         
         [Test]
@@ -44,7 +44,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedMemberName_ThrowsNotSupportedException()
         {
-            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberName(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberName(), Throws.TypeOf<ArgumentNullException>());
         }
         
         [Test]

@@ -336,7 +336,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
             var ownedRelatedElementsIndex =  elementSubject.OwningRelationship.OwnedRelatedElement.ToList().IndexOf(elementSubject) +1;
             var parentPath = elementSubject.OwningRelationship.Path();
             
-            return string.IsNullOrWhiteSpace(parentPath) ? $"/{ownedRelatedElementsIndex}": $"{parentPath}/{ownedRelatedElementsIndex}";
+            return $"{parentPath}/{ownedRelatedElementsIndex}";
         }
     }
 }

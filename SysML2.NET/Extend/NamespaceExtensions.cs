@@ -21,6 +21,7 @@
 namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
     using System;
+    using System.Collections.Frozen;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -46,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeImportedMembership(this INamespace namespaceSubject)
         {
-            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : namespaceSubject.ImportedMemberships((INamespace)null);
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : namespaceSubject.ImportedMemberships([]);
         }
 
         /// <summary>
@@ -88,10 +89,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IImport> ComputeOwnedImport(this INamespace namespaceSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.OwnedRelationship.OfType<IImport>()];
         }
 
         /// <summary>
@@ -204,10 +204,30 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeImportedMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            var importedMemberships = namespaceSubject.ownedImport.Where(x => !excluded.Contains(x.importOwningNamespace))
+                .SelectMany(x => x.ImportedMemberships(excluded))
+                .Distinct()
+                .ToList();
+            
+            var ownedMembershipNames = namespaceSubject.ownedMembership
+                .Select(m => m.MemberName)
+                .Where(name => name != null)
+                .ToHashSet(StringComparer.Ordinal);
+            
+            var importedMembershipsNameFrequency = importedMemberships
+                .GroupBy(x => x.MemberName, StringComparer.Ordinal)
+                .ToFrozenDictionary(g => g.Key, g => g.Count(),  StringComparer.Ordinal);
+
+            var nonCollidingImportedMemberships = importedMemberships.Where(x =>
+            {
+                var name = x.MemberName;
+
+                return !string.IsNullOrWhiteSpace(name) && !ownedMembershipNames.Contains(name) && (!importedMembershipsNameFrequency.TryGetValue(name, out var frequency) || frequency <= 1);
+            }).ToList();
+            
+            return nonCollidingImportedMemberships;
         }
 
         /// <summary>
