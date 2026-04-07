@@ -25,6 +25,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Comparer;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -213,18 +214,17 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
             
             var ownedMembershipNames = namespaceSubject.ownedMembership
                 .Select(m => m.MemberName)
-                .Where(name => name != null)
-                .ToHashSet(StringComparer.Ordinal);
+                .ToHashSet(NullSafeStringComparer.Instance);
             
             var importedMembershipsNameFrequency = importedMemberships
-                .GroupBy(x => x.MemberName, StringComparer.Ordinal)
-                .ToFrozenDictionary(g => g.Key, g => g.Count(),  StringComparer.Ordinal);
+                .GroupBy(x => x.MemberName, NullSafeStringComparer.Instance)
+                .ToFrozenDictionary(g => g.Key, g => g.Count(), NullSafeStringComparer.Instance);
 
             var nonCollidingImportedMemberships = importedMemberships.Where(x =>
             {
                 var name = x.MemberName;
 
-                return !string.IsNullOrWhiteSpace(name) && !ownedMembershipNames.Contains(name) && (!importedMembershipsNameFrequency.TryGetValue(name, out var frequency) || frequency <= 1);
+                return !ownedMembershipNames.Contains(name) && (!importedMembershipsNameFrequency.TryGetValue(name, out var frequency) || frequency <= 1);
             }).ToList();
             
             return nonCollidingImportedMemberships;

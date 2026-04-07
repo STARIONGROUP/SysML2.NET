@@ -35,7 +35,7 @@ namespace SysML2.NET.Extensions
         /// </summary>
         /// <param name="name">The name to verifies</param>
         /// <returns><c>true</c> if the name is a basic name, <c>false</c> otherwise</returns>
-        public static bool QueryIsBasicName(this string name)
+        public static bool QueryIsValidBasicName(this string name)
         {
             return Regex.IsMatch(name, "^[a-zA-Z_][a-zA-Z0-9_]*$") && !Keywords.ReservedKeywords.Contains(name);
         }

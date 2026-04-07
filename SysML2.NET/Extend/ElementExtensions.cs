@@ -253,7 +253,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
                 return null;
             }
 
-            return targetName.QueryIsBasicName() ? targetName : targetName.ToUnrestrictedName();
+            return targetName.QueryIsValidBasicName() ? targetName : targetName.ToUnrestrictedName();
         }
 
         /// <summary>
