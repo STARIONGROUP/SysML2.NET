@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(owningMembershipSubject));
             }
 
-            return owningMembershipSubject.OwnedRelatedElement.Count != 1 ? throw new SysMl2ModelException($"{nameof(owningMembershipSubject)} must have exactly one related element") : owningMembershipSubject.OwnedRelatedElement.Single();
+            return owningMembershipSubject.OwnedRelatedElement.Count != 1 ? throw new IncompleteModelException($"{nameof(owningMembershipSubject)} must have exactly one related element") : owningMembershipSubject.OwnedRelatedElement.Single();
         }
 
         /// <summary>
