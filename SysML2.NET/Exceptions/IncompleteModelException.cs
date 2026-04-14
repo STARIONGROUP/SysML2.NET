@@ -23,7 +23,7 @@ namespace SysML2.NET.Exceptions
     using System;
 
     /// <summary>
-    /// The <see cref="ModelException"/> provide custom exception that should be used when a SysML 2 is incomplete and is not compliant with defined multiplicity
+    /// The <see cref="IncompleteModelException"/> provide custom exception that should be used when a SysML 2 is incomplete and is not compliant with defined multiplicity
     /// </summary>
     public class IncompleteModelException: Exception
     {

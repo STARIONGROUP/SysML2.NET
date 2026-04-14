@@ -202,7 +202,6 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeShortName(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveShortName();
