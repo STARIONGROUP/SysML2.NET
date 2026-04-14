@@ -22,10 +22,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="OwningMembershipExtensions"/> class provides extensions methods for
@@ -42,10 +44,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (owningMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(owningMembershipSubject));
+            }
+
+            return owningMembershipSubject.OwnedRelatedElement.Count != 1 ? throw new IncompleteModelException($"{nameof(owningMembershipSubject)} must have exactly one related element") : owningMembershipSubject.OwnedRelatedElement.Single();
         }
 
         /// <summary>
@@ -72,10 +78,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeOwnedMemberName(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.name;
         }
 
         /// <summary>
