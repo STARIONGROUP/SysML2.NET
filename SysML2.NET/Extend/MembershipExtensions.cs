@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeMembershipOwningNamespace(this IMembership membershipSubject)
         {
-            return membershipSubject == null ? throw new ArgumentNullException() : membershipSubject.OwningRelatedElement as INamespace;
+            return membershipSubject == null ? throw new ArgumentNullException(nameof(membershipSubject)) : membershipSubject.OwningRelatedElement as INamespace;
         }
 
         /// <summary>
