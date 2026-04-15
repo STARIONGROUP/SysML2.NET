@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -41,10 +42,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IElement> ComputeRelatedElement(this IRelationship relationshipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return relationshipSubject == null ? throw new ArgumentNullException(nameof(relationshipSubject)) : [..relationshipSubject.Source, ..relationshipSubject.Target];
         }
 
         /// <summary>
@@ -57,10 +57,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this IRelationship relationshipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (relationshipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(relationshipSubject));
+            }
+
+            return relationshipSubject.OwningRelatedElement?.LibraryNamespace() ?? relationshipSubject.OwningRelationship?.LibraryNamespace();
         }
 
         /// <summary>
@@ -75,10 +79,20 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedPathOperation(this IRelationship relationshipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (relationshipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(relationshipSubject));
+            }
+
+            if (relationshipSubject.OwningRelationship == null && relationshipSubject.OwningRelatedElement != null)
+            {
+                var index = ((IContainedElement)relationshipSubject.OwningRelatedElement).OwnedRelationship.IndexOf(relationshipSubject) + 1;
+                return $"{relationshipSubject.OwningRelatedElement.Path()}/{index}";
+            }
+
+            return relationshipSubject.ComputePathOperation();
         }
     }
 }
