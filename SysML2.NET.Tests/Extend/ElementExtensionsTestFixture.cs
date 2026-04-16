@@ -70,7 +70,7 @@ namespace SysML2.NET.Tests.Extend
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(element.ComputeIsLibraryElement, Is.False);
-                Assert.That(documentation.ComputeIsLibraryElement, Throws.TypeOf<NotSupportedException>());
+                Assert.That(documentation.ComputeIsLibraryElement, Is.False);
             }
         }
         
@@ -289,7 +289,17 @@ namespace SysML2.NET.Tests.Extend
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(element.ComputePathOperation, Is.EqualTo("name"));
-                Assert.That(secondElement.ComputePathOperation, Throws.TypeOf<NotSupportedException>());
+                Assert.That(secondElement.ComputePathOperation, Is.EqualTo("/2/1"));
+            }
+            
+            namespaceElement.DeclaredName = "namespace";
+            membership.DeclaredName = "firstMember";
+            secondMembership.DeclaredName = "secondMember";
+            
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(element.ComputePathOperation, Is.EqualTo("name"));
+                Assert.That(secondElement.ComputePathOperation, Is.EqualTo("/2/1"));
             }
         }
 
