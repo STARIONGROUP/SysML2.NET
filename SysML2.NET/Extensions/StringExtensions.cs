@@ -92,24 +92,24 @@ namespace SysML2.NET.Extensions
             var lastSeparatorIndex = -1;
             var inQuote = false;
 
-            for (var i = 0; i < qualifiedName.Length; i++)
+            for (var charIndex = 0; charIndex < qualifiedName.Length; charIndex++)
             {
-                var c = qualifiedName[i];
+                var currentChar = qualifiedName[charIndex];
 
-                switch (c)
+                switch (currentChar)
                 {
-                    case '\\' when inQuote && i + 1 < qualifiedName.Length:
-                        i++;
+                    case '\\' when inQuote && charIndex + 1 < qualifiedName.Length:
+                        charIndex++;
                         continue;
                     case '\'':
                         inQuote = !inQuote;
                         continue;
                 }
 
-                if (!inQuote && c == ':' && i + 1 < qualifiedName.Length && qualifiedName[i + 1] == ':')
+                if (!inQuote && currentChar == ':' && charIndex + 1 < qualifiedName.Length && qualifiedName[charIndex + 1] == ':')
                 {
-                    lastSeparatorIndex = i;
-                    i++;
+                    lastSeparatorIndex = charIndex;
+                    charIndex++;
                 }
             }
 

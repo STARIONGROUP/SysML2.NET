@@ -148,11 +148,11 @@ namespace SysML2.NET.Tests.Extend
             var membership = new Membership { MemberName = "elementName", MemberShortName = "en", MemberElement = element };
             namespaceElement.AssignOwnership(membership, element);
 
-            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(new[] { "en", "elementName" }));
+            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["en", "elementName"]));
 
             membership.MemberShortName = null;
 
-            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(new[] { "elementName" }));
+            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["elementName"]));
         }
 
         [Test]
