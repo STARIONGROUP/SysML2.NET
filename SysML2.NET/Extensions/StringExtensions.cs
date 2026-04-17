@@ -138,13 +138,13 @@ namespace SysML2.NET.Extensions
 
             var sb = new StringBuilder(inner.Length);
 
-            for (var i = 0; i < inner.Length; i++)
+            for (var innerCharIndex = 0; innerCharIndex < inner.Length; innerCharIndex++)
             {
-                if (inner[i] == '\\' && i + 1 < inner.Length)
+                if (inner[innerCharIndex] == '\\' && innerCharIndex + 1 < inner.Length)
                 {
-                    i++;
+                    innerCharIndex++;
 
-                    switch (inner[i])
+                    switch (inner[innerCharIndex])
                     {
                         case '\'': sb.Append('\''); break;
                         case '"': sb.Append('"'); break;
@@ -153,12 +153,12 @@ namespace SysML2.NET.Extensions
                         case 't': sb.Append('\t'); break;
                         case 'n': sb.Append('\n'); break;
                         case '\\': sb.Append('\\'); break;
-                        default: sb.Append(inner[i]); break;
+                        default: sb.Append(inner[innerCharIndex]); break;
                     }
                 }
                 else
                 {
-                    sb.Append(inner[i]);
+                    sb.Append(inner[innerCharIndex]);
                 }
             }
 
