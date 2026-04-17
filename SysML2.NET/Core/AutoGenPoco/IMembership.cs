@@ -101,7 +101,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IsDistinguishableFrom(IMembership other) => this.ComputeIsDistinguishableFromOperation(other);
+        bool IsDistinguishableFrom(IMembership other);
     }
 }
 

@@ -62,7 +62,31 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
                 }
 
-                var parameters = @class.OwnedOperation.SelectMany(x => x.OwnedParameter);
+                var orderedNamespaces = uniqueNamespaces.Order().ToList();
+
+                foreach (var orderedNamespace in orderedNamespaces)
+                {
+                    writer.WriteSafeString($"using SysML2.NET.Core.{orderedNamespace} ;{Environment.NewLine}");
+                }
+            });
+            
+            handlebars.RegisterHelper("Class.WriteEnumerationNameSpacesWithOperation", (writer, context, _) =>
+            {
+                if (context.Value is not IClass @class)
+                {
+                    throw new ArgumentException("supposed to be IClass");
+                }
+
+                var uniqueNamespaces = new HashSet<string>();
+
+                var allProperties = @class.QueryAllProperties();
+
+                foreach (var prop in allProperties.Where(x => x.QueryIsEnum()))
+                {
+                    uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
+                }
+
+                var parameters = @class.QueryAllOperations().SelectMany(x => x.OwnedParameter);
 
                 foreach (var enumeration in parameters.Where(x => x.Type is IEnumeration).Select(x => x.Type as IEnumeration))
                 {
@@ -133,7 +157,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
                     
-                    foreach (var operation in @class.OwnedOperation)
+                    foreach (var operation in @class.QueryAllOperations())
                     {
                         foreach (var parameterType in operation.OwnedParameter.Where(x => x.Type is IClass).Select(x => x.Type as IClass))
                         {

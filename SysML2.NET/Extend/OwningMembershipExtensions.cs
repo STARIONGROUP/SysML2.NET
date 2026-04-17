@@ -92,10 +92,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.shortName;
         }
 
         /// <summary>

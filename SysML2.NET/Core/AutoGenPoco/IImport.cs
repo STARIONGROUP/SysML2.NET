@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeImportedMembershipsOperation(excluded);
+        List<IMembership> ImportedMemberships(List<INamespace> excluded);
     }
 }
 

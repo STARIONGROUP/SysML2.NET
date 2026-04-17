@@ -289,7 +289,7 @@ namespace SysML2.NET.Tests.Extend
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(element.ComputePathOperation, Is.EqualTo("name"));
-                Assert.That(secondElement.ComputePathOperation, Is.EqualTo("/2/1"));
+                Assert.That(secondElement.ComputePathOperation, Throws.TypeOf<NotSupportedException>());
             }
             
             namespaceElement.DeclaredName = "namespace";
@@ -299,7 +299,7 @@ namespace SysML2.NET.Tests.Extend
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(element.ComputePathOperation, Is.EqualTo("name"));
-                Assert.That(secondElement.ComputePathOperation, Is.EqualTo("/2/1"));
+                Assert.That(secondElement.ComputePathOperation, Throws.TypeOf<NotSupportedException>());
             }
         }
 
@@ -317,6 +317,30 @@ namespace SysML2.NET.Tests.Extend
 
             element.DeclaredName = "non basic";
             Assert.That(element.ComputeEscapedNameOperation, Is.EqualTo("\'non basic\'"));
+        }
+
+        [Test]
+        public void VerifyValidateIsImpliedIncluded()
+        {
+            Assert.That(() => ((IElement)null).ValidateIsImpliedIncluded(), Throws.TypeOf<ArgumentNullException>());
+
+            var element = new Definition();
+
+            Assert.That(element.ValidateIsImpliedIncluded, Is.True);
+
+            var annotation = new Annotation();
+            var documentation = new Documentation();
+            element.AssignOwnership(annotation, documentation);
+
+            Assert.That(element.ValidateIsImpliedIncluded, Is.True);
+
+            annotation.IsImplied = true;
+
+            Assert.That(element.ValidateIsImpliedIncluded, Is.False);
+
+            element.IsImpliedIncluded = true;
+
+            Assert.That(element.ValidateIsImpliedIncluded, Is.True);
         }
     }
 }

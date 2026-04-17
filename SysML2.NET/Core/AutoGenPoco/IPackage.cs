@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -60,7 +61,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        new List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeRedefinedImportedMembershipsOperation(excluded);
+        new List<IMembership> ImportedMemberships(List<INamespace> excluded);
 
         /// <summary>
         /// Determine whether the given element meets all the filterConditions.
@@ -71,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IncludeAsMember(IElement element) => this.ComputeIncludeAsMemberOperation(element);
+        bool IncludeAsMember(IElement element);
     }
 }
 

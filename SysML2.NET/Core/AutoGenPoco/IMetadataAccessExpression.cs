@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -65,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        new bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+        new bool ModelLevelEvaluable(List<IFeature> visited);
 
         /// <summary>
         /// Return the ownedElements of the referencedElement that are MetadataFeatures and have the
@@ -80,7 +81,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
-        new List<IElement> Evaluate(IElement target) => this.ComputeRedefinedEvaluateOperation(target);
+        new List<IElement> Evaluate(IElement target);
 
         /// <summary>
         /// Return a MetadataFeature whose annotatedElement is the referencedElement, whose metaclass is the
@@ -90,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="IMetadataFeature" />
         /// </returns>
-        IMetadataFeature MetaclassFeature() => this.ComputeMetaclassFeatureOperation();
+        IMetadataFeature MetaclassFeature();
     }
 }
 

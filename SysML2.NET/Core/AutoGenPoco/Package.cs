@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -292,6 +293,231 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Implements(implementation: "IElement.TextualRepresentation")]
         public List<ITextualRepresentation> textualRepresentation => this.ComputeTextualRepresentation();
 
+
+        /// <summary>
+        /// Return an effective name for this Element. By default this is the same as its declaredName.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EffectiveName() => this.ComputeEffectiveNameOperation();
+
+        /// <summary>
+        /// Return an effective shortName for this Element. By default this is the same as its
+        /// declaredShortName.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EffectiveShortName() => this.ComputeEffectiveShortNameOperation();
+
+        /// <summary>
+        /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
+        /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
+        /// otherwise, represented as a restricted name according to the lexical structure of the KerML textual
+        /// notation (i.e., surrounded by single quote characters and with special characters escaped).
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EscapedName() => this.ComputeEscapedNameOperation();
+
+        /// <summary>
+        /// Exclude Elements that do not meet all the filterConditions.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeRedefinedImportedMembershipsOperation(excluded);
+
+        /// <summary>
+        /// Derive the imported Memberships of this Namespace as the importedMembership of all ownedImports,
+        /// excluding those Imports whose importOwningNamespace is in the excluded set, and excluding
+        /// Memberships that have distinguisibility collisions with each other or with any ownedMembership.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        List<IMembership> INamespace.ImportedMemberships(List<INamespace> excluded) => this.ImportedMemberships(excluded);
+
+        /// <summary>
+        /// Determine whether the given element meets all the filterConditions.
+        /// </summary>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="bool" />
+        /// </returns>
+        public bool IncludeAsMember(IElement element) => this.ComputeIncludeAsMemberOperation(element);
+
+        /// <summary>
+        /// By default, return the library Namespace of the owningRelationship of this Element, if it has one.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="INamespace" />
+        /// </returns>
+        public INamespace LibraryNamespace() => this.ComputeLibraryNamespaceOperation();
+
+        /// <summary>
+        /// If visibility is not null, return the Memberships of this Namespace with the given visibility,
+        /// including ownedMemberships with the given visibility and Memberships imported with the given
+        /// visibility. If visibility is null, return all ownedMemberships and imported Memberships regardless
+        /// of visibility. When computing imported Memberships, ignore this Namespace and any Namespaces in the
+        /// given excluded set.
+        /// </summary>
+        /// <param name="visibility">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> MembershipsOfVisibility(VisibilityKind? visibility, List<INamespace> excluded) => this.ComputeMembershipsOfVisibilityOperation(visibility, excluded);
+
+        /// <summary>
+        /// Return the names of the given element as it is known in this Namespace.
+        /// </summary>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="string" />
+        /// </returns>
+        public List<string> NamesOf(IElement element) => this.ComputeNamesOfOperation(element);
+
+        /// <summary>
+        /// Return a unique description of the location of this Element in the containment structure rooted in a
+        /// root Namespace. If the Element has a non-null qualifiedName, then return that. Otherwise, if it has
+        /// an owningRelationship, then return the string constructed by appending to the path of it's
+        /// owningRelationship the character / followed by the string representation of its position in the list
+        /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
+        /// empty string.                            (Note that this operation is overridden for Relationships
+        /// to use owningRelatedElement when appropriate.)
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string Path() => this.ComputePathOperation();
+
+        /// <summary>
+        /// Return a string with valid KerML syntax representing the qualification part of a given
+        /// qualifiedName, that is, a qualified name with all the segment names of the given name except the
+        /// last. If the given qualifiedName has only one segment, then return null.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string QualificationOf(string qualifiedName) => this.ComputeQualificationOfOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve the given qualified name to the named Membership (if any), starting with this Namespace as
+        /// the local scope. The qualified name string must conform to the concrete syntax of the KerML textual
+        /// notation. According to the KerML name resolution rules every qualified name will resolve to either a
+        /// single Membership, or to none.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership Resolve(string qualifiedName) => this.ComputeResolveOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve the given qualified name to the named Membership (if any) in the effective global Namespace
+        /// that is the outermost naming scope. The qualified name string must conform to the concrete syntax of
+        /// the KerML textual notation.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership ResolveGlobal(string qualifiedName) => this.ComputeResolveGlobalOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve a simple name starting with this Namespace as the local scope, and continuing with
+        /// containing outer scopes as necessary. However, if this Namespace is a root Namespace, then the
+        /// resolution is done directly in global scope.
+        /// </summary>
+        /// <param name="name">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership ResolveLocal(string name) => this.ComputeResolveLocalOperation(name);
+
+        /// <summary>
+        /// Resolve a simple name from the visible Memberships of this Namespace.
+        /// </summary>
+        /// <param name="name">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership ResolveVisible(string name) => this.ComputeResolveVisibleOperation(name);
+
+        /// <summary>
+        /// Return the simple name that is the last segment name of the given qualifiedName. If this segment
+        /// name has the form of a KerML unrestricted name, then "unescape" it by removing the surrounding
+        /// single quotes and replacing all escape sequences with the specified character.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string UnqualifiedNameOf(string qualifiedName) => this.ComputeUnqualifiedNameOfOperation(qualifiedName);
+
+        /// <summary>
+        /// Returns this visibility of mem relative to this Namespace. If mem is an importedMembership, this is
+        /// the visibility of its Import. Otherwise it is the visibility of the Membership itself.
+        /// </summary>
+        /// <param name="mem">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="VisibilityKind" />
+        /// </returns>
+        public VisibilityKind VisibilityOf(IMembership mem) => this.ComputeVisibilityOfOperation(mem);
+
+        /// <summary>
+        /// If includeAll = true, then return all the Memberships of this Namespace. Otherwise, return only the
+        /// publicly visible Memberships of this Namespace, including ownedMemberships that have a visibility of
+        /// public and Memberships imported with a visibility of public. If isRecursive = true, also recursively
+        /// include all visible Memberships of any public owned Namespaces, or, if IncludeAll = true, all
+        /// Memberships of all owned Namespaces. When computing imported Memberships, ignore this Namespace and
+        /// any Namespaces in the given excluded set.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <param name="isRecursive">
+        /// No documentation provided
+        /// </param>
+        /// <param name="includeAll">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> VisibleMemberships(List<INamespace> excluded, bool isRecursive, bool includeAll) => this.ComputeVisibleMembershipsOperation(excluded, isRecursive, includeAll);
     }
 }
 

@@ -57,10 +57,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeImportOwningNamespace(this IImport importSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return importSubject == null ? throw new ArgumentNullException(nameof(importSubject)) : importSubject.OwningRelatedElement as INamespace;
         }
 
         /// <summary>
@@ -76,10 +75,16 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        /// <remarks>
+        /// This method is no longer called at runtime. The POCO classes (<see cref="NamespaceImport"/>,
+        /// <see cref="MembershipImport"/>) now provide explicit interface implementations of
+        /// <see cref="IImport.ImportedMemberships"/> that dispatch directly to their respective
+        /// <c>ComputeRedefinedImportedMembershipsOperation</c> extension methods.
+        /// </remarks>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeImportedMembershipsOperation(this IImport importSubject, List<INamespace> excluded)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            throw new NotSupportedException("This method should not be called. Import subtypes handle dispatch via explicit interface implementations.");
         }
     }
 }

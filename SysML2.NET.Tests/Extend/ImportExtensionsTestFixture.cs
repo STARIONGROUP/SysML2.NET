@@ -36,9 +36,9 @@ namespace SysML2.NET.Tests.Extend
         }
         
         [Test]
-        public void ComputeImportOwningNamespace_ThrowsNotSupportedException()
+        public void ComputeImportOwningNamespace_ThrowsArgumentNullException()
         {
-            Assert.That(() => ((IImport)null).ComputeImportOwningNamespace(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IImport)null).ComputeImportOwningNamespace(), Throws.TypeOf<ArgumentNullException>());
         }
     }
 }

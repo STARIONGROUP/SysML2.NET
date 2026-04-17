@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -130,7 +131,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="IReferenceUsage" />
         /// </returns>
-        IReferenceUsage TriggerPayloadParameter() => this.ComputeTriggerPayloadParameterOperation();
+        IReferenceUsage TriggerPayloadParameter();
 
         /// <summary>
         /// Return the Feature to be used as the source of the succession of this TransitionUsage, which is the
@@ -140,7 +141,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        IFeature SourceFeature() => this.ComputeSourceFeatureOperation();
+        IFeature SourceFeature();
     }
 }
 

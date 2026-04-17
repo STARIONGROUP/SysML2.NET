@@ -428,6 +428,101 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Implements(implementation: "IMembership.Visibility")]
         public VisibilityKind Visibility { get; set; } = VisibilityKind.Public;
 
+
+        /// <summary>
+        /// Return an effective name for this Element. By default this is the same as its declaredName.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EffectiveName() => this.ComputeEffectiveNameOperation();
+
+        /// <summary>
+        /// Return an effective shortName for this Element. By default this is the same as its
+        /// declaredShortName.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EffectiveShortName() => this.ComputeEffectiveShortNameOperation();
+
+        /// <summary>
+        /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
+        /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
+        /// otherwise, represented as a restricted name according to the lexical structure of the KerML textual
+        /// notation (i.e., surrounded by single quote characters and with special characters escaped).
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EscapedName() => this.ComputeEscapedNameOperation();
+
+        /// <summary>
+        /// Whether this Membership is distinguishable from a given other Membership. By default, this is true
+        /// if this Membership has no memberShortName or memberName; or each of the memberShortName and
+        /// memberName are different than both of those of the other Membership; or neither of the metaclasses
+        /// of the memberElement of this Membership and the memberElement of the other Membership conform to the
+        /// other. But this may be overridden in specializations of Membership.
+        /// </summary>
+        /// <param name="other">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="bool" />
+        /// </returns>
+        public bool IsDistinguishableFrom(IMembership other) => this.ComputeIsDistinguishableFromOperation(other);
+
+        /// <summary>
+        /// Return whether this Relationship has either an owningRelatedElement or owningRelationship that is a
+        /// library element.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="INamespace" />
+        /// </returns>
+        public INamespace LibraryNamespace() => this.ComputeRedefinedLibraryNamespaceOperation();
+
+        /// <summary>
+        /// By default, return the library Namespace of the owningRelationship of this Element, if it has one.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="INamespace" />
+        /// </returns>
+        INamespace IElement.LibraryNamespace() => this.LibraryNamespace();
+
+        /// <summary>
+        /// If the ownedMemberElement of this OwningMembership has a non-null qualifiedName, then return the
+        /// string constructed by appending to that qualifiedName the string "/owningMembership". Otherwise,
+        /// return the path of the OwningMembership as specified for a Relationship in general.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string Path() => this.ComputeRedefinedPathOperation();
+
+        /// <summary>
+        /// If the owningRelationship of the Relationship is null but its owningRelatedElement is non-null,
+        /// construct the path using the position of the Relationship in the list of ownedRelationships of its
+        /// owningRelatedElement. Otherwise, return the path of the Relationship as specified for an Element in
+        /// general.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        string IRelationship.Path() => this.Path();
+
+        /// <summary>
+        /// Return a unique description of the location of this Element in the containment structure rooted in a
+        /// root Namespace. If the Element has a non-null qualifiedName, then return that. Otherwise, if it has
+        /// an owningRelationship, then return the string constructed by appending to the path of it's
+        /// owningRelationship the character / followed by the string representation of its position in the list
+        /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
+        /// empty string.                            (Note that this operation is overridden for Relationships
+        /// to use owningRelatedElement when appropriate.)
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        string IElement.Path() => this.Path();
     }
 }
 

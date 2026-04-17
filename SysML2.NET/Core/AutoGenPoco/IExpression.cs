@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -88,7 +89,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeModelLevelEvaluableOperation(visited);
+        bool ModelLevelEvaluable(List<IFeature> visited);
 
         /// <summary>
         /// If this Expression isModelLevelEvaluable, then evaluate it using the target as the context Element
@@ -102,7 +103,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
-        List<IElement> Evaluate(IElement target) => this.ComputeEvaluateOperation(target);
+        List<IElement> Evaluate(IElement target);
 
         /// <summary>
         /// Model-level evaluate this Expression with the given target. If the result is a LiteralBoolean,
@@ -114,7 +115,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool CheckCondition(IElement target) => this.ComputeCheckConditionOperation(target);
+        bool CheckCondition(IElement target);
     }
 }
 

@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -89,7 +90,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        new IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
+        new IFeature NamingFeature();
 
         /// <summary>
         /// A ConstraintUsage is not model-level evaluable.
@@ -100,7 +101,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        new bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+        new bool ModelLevelEvaluable(List<IFeature> visited);
     }
 }
 

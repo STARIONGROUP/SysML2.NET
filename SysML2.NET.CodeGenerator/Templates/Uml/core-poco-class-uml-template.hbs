@@ -29,7 +29,7 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
     using System.Collections.Generic;
     using System.Linq;
 
-    {{ #Class.WriteEnumerationNameSpaces this}}
+    {{ #Class.WriteEnumerationNameSpacesWithOperation this}}
     {{ #Class.WriteNameSpaces this POCO}}
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
@@ -65,6 +65,15 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         {{ #Decorator.WriteImplementsAttribute property }}
         {{ #Property.WriteForPOCOClass property ../ }}
         
+        {{/each}}
+
+        {{#each (Class.QueryAllOperations this) as | operation | }}
+            {{ #Documentation operation }}
+            {{ #ParameterDocumentation operation }}
+            {{ #Operation.WriteForPOCOClass operation ../}}
+            {{#unless @last}}
+        
+            {{/unless}}
         {{/each}}
     }
 }

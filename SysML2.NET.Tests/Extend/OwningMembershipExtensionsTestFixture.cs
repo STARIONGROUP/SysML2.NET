@@ -48,9 +48,9 @@ namespace SysML2.NET.Tests.Extend
         }
         
         [Test]
-        public void ComputeOwnedMemberShortName_ThrowsNotSupportedException()
+        public void ComputeOwnedMemberShortName_ThrowsArgumentNullException()
         {
-            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberShortName(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberShortName(), Throws.TypeOf<ArgumentNullException>());
         }
     }
 }

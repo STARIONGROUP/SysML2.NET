@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -259,7 +260,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        new List<IMembership> VisibleMemberships(List<INamespace> excluded, bool isRecursive, bool includeAll) => this.ComputeRedefinedVisibleMembershipsOperation(excluded, isRecursive, includeAll);
+        new List<IMembership> VisibleMemberships(List<INamespace> excluded, bool isRecursive, bool includeAll);
 
         /// <summary>
         /// Return the Memberships inheritable from supertypes of this Type with redefined Features removed.
@@ -278,7 +279,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        List<IMembership> InheritedMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied) => this.ComputeInheritedMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+        List<IMembership> InheritedMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied);
 
         /// <summary>
         /// Return all the non-private Memberships of all the supertypes of this Type, excluding any supertypes
@@ -297,7 +298,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        List<IMembership> InheritableMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied) => this.ComputeInheritableMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+        List<IMembership> InheritableMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied);
 
         /// <summary>
         /// Return the public, protected and inherited Memberships of this Type. When computing imported
@@ -317,7 +318,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        List<IMembership> NonPrivateMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied) => this.ComputeNonPrivateMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+        List<IMembership> NonPrivateMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied);
 
         /// <summary>
         /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
@@ -335,7 +336,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        List<IMembership> RemoveRedefinedFeatures(List<IMembership> memberships) => this.ComputeRemoveRedefinedFeaturesOperation(memberships);
+        List<IMembership> RemoveRedefinedFeatures(List<IMembership> memberships);
 
         /// <summary>
         /// If the memberElement of the given membership is a Feature, then return all Features directly or
@@ -347,7 +348,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        List<IFeature> AllRedefinedFeaturesOf(IMembership membership) => this.ComputeAllRedefinedFeaturesOfOperation(membership);
+        List<IFeature> AllRedefinedFeaturesOf(IMembership membership);
 
         /// <summary>
         /// If the given feature is a feature of this Type, then return its direction relative to this Type,
@@ -359,7 +360,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        FeatureDirectionKind? DirectionOf(IFeature feature) => this.ComputeDirectionOfOperation(feature);
+        FeatureDirectionKind? DirectionOf(IFeature feature);
 
         /// <summary>
         /// Return the direction of the given feature relative to this Type, excluding a given set of Types from
@@ -374,7 +375,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        FeatureDirectionKind? DirectionOfExcluding(IFeature feature, List<IType> excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
+        FeatureDirectionKind? DirectionOfExcluding(IFeature feature, List<IType> excluded);
 
         /// <summary>
         /// If this Type is conjugated, then return just the originalType of the Conjugation. Otherwise, return
@@ -387,7 +388,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
-        List<IType> Supertypes(bool excludeImplied) => this.ComputeSupertypesOperation(excludeImplied);
+        List<IType> Supertypes(bool excludeImplied);
 
         /// <summary>
         /// Return this Type and all Types that are directly or transitively supertypes of this Type (as
@@ -396,7 +397,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
-        List<IType> AllSupertypes() => this.ComputeAllSupertypesOperation();
+        List<IType> AllSupertypes();
 
         /// <summary>
         /// Check whether this Type is a direct or indirect specialization of the given supertype.
@@ -407,7 +408,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool Specializes(IType supertype) => this.ComputeSpecializesOperation(supertype);
+        bool Specializes(IType supertype);
 
         /// <summary>
         /// Check whether this Type is a direct or indirect specialization of the named library Type.
@@ -420,7 +421,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool SpecializesFromLibrary(string libraryTypeName) => this.ComputeSpecializesFromLibraryOperation(libraryTypeName);
+        bool SpecializesFromLibrary(string libraryTypeName);
 
         /// <summary>
         /// By default, this Type is compatible with an otherType if it directly or indirectly specializes the
@@ -432,7 +433,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IsCompatibleWith(IType otherType) => this.ComputeIsCompatibleWithOperation(otherType);
+        bool IsCompatibleWith(IType otherType);
 
         /// <summary>
         /// Return the owned or inherited Multiplicities for this Type<./code>.
@@ -440,7 +441,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMultiplicity" />
         /// </returns>
-        List<IMultiplicity> Multiplicities() => this.ComputeMultiplicitiesOperation();
+        List<IMultiplicity> Multiplicities();
     }
 }
 

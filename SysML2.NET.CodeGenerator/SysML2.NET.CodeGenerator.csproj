@@ -20,8 +20,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="5.3.0" />
-    <PackageReference Include="uml4net.HandleBars" Version="8.0.1" />
-    <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.0.1" />
+    <PackageReference Include="uml4net.HandleBars" Version="8.1.0" />
+    <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.1.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
