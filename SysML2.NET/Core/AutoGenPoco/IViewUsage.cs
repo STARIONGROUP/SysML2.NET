@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -118,7 +119,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IncludeAsExposed(IElement element) => this.ComputeIncludeAsExposedOperation(element);
+        bool IncludeAsExposed(IElement element);
     }
 }
 

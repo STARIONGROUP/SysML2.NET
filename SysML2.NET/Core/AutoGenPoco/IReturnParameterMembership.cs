@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        new FeatureDirectionKind ParameterDirection() => this.ComputeRedefinedParameterDirectionOperation();
+        new FeatureDirectionKind ParameterDirection();
     }
 }
 

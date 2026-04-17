@@ -79,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        new string Path() => this.ComputeRedefinedPathOperation();
+        new string Path();
     }
 }
 

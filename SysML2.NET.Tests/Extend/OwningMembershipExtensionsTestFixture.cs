@@ -30,7 +30,7 @@ namespace SysML2.NET.Tests.Extend
     public class OwningMembershipExtensionsTestFixture
     {
         [Test]
-        public void ComputeOwnedMemberElement_ThrowsNotSupportedException()
+        public void ComputeOwnedMemberElement_ThrowsArgumentNullException()
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElement(), Throws.TypeOf<ArgumentNullException>());
         }
@@ -42,15 +42,15 @@ namespace SysML2.NET.Tests.Extend
         }
         
         [Test]
-        public void ComputeOwnedMemberName_ThrowsNotSupportedException()
+        public void ComputeOwnedMemberName_ThrowsArgumentNullException()
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberName(), Throws.TypeOf<ArgumentNullException>());
         }
         
         [Test]
-        public void ComputeOwnedMemberShortName_ThrowsNotSupportedException()
+        public void ComputeOwnedMemberShortName_ThrowsArgumentNullException()
         {
-            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberShortName(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberShortName(), Throws.TypeOf<ArgumentNullException>());
         }
     }
 }

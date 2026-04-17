@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -57,7 +58,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        new bool ModelLevelEvaluable(List<IFeature> visited) => this.ComputeRedefinedModelLevelEvaluableOperation(visited);
+        new bool ModelLevelEvaluable(List<IFeature> visited);
     }
 }
 

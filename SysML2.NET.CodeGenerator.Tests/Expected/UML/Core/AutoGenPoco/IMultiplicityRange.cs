@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
@@ -87,7 +88,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool HasBounds(int lower, string upper) => this.ComputeHasBoundsOperation(lower, upper);
+        bool HasBounds(int lower, string upper);
 
         /// <summary>
         /// Evaluate the given bound Expression (at model level) and return the result represented as a MOF
@@ -99,7 +100,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        string ValueOf(IExpression bound) => this.ComputeValueOfOperation(bound);
+        string ValueOf(IExpression bound);
     }
 }
 

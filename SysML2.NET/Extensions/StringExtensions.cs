@@ -76,5 +76,104 @@ namespace SysML2.NET.Extensions
             stringBuilder.Append("'");
             return stringBuilder.ToString();
         }
+        
+        /// <summary>
+        /// Finds the index of the last <c>::</c> separator in a qualified name that is not inside
+        /// an unrestricted name (single-quoted segment).
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// The qualified name string
+        /// </param>
+        /// <returns>
+        /// The index of the last <c>::</c> separator, or -1 if the name has only one segment
+        /// </returns>
+        public static int FindLastQualifiedNameSeparatorIndex(this string qualifiedName)
+        {
+            var lastSeparatorIndex = -1;
+            var inQuote = false;
+
+            var charIndex = 0;
+
+            while (charIndex < qualifiedName.Length)
+            {
+                var currentChar = qualifiedName[charIndex];
+
+                switch (currentChar)
+                {
+                    case '\\' when inQuote && charIndex + 1 < qualifiedName.Length:
+                        charIndex += 2;
+                        continue;
+                    case '\'':
+                        inQuote = !inQuote;
+                        charIndex++;
+                        continue;
+                }
+
+                if (!inQuote && currentChar == ':' && charIndex + 1 < qualifiedName.Length && qualifiedName[charIndex + 1] == ':')
+                {
+                    lastSeparatorIndex = charIndex;
+                    charIndex += 2;
+                }
+                else
+                {
+                    charIndex++;
+                }
+            }
+
+            return lastSeparatorIndex;
+        }
+
+        /// <summary>
+        /// If the given name segment is an unrestricted name (surrounded by single quotes),
+        /// unescape it by removing the quotes and replacing escape sequences. Otherwise,
+        /// return the name as-is.
+        /// </summary>
+        /// <param name="nameSegment">
+        /// A single name segment from a qualified name
+        /// </param>
+        /// <returns>
+        /// The unescaped name
+        /// </returns>
+        public static string UnescapeUnrestrictedName(this string nameSegment)
+        {
+            if (nameSegment.Length < 2 || nameSegment[0] != '\'' || nameSegment[^1] != '\'')
+            {
+                return nameSegment;
+            }
+
+            var inner = nameSegment.Substring(1, nameSegment.Length - 2);
+
+            var sb = new StringBuilder(inner.Length);
+
+            var innerCharIndex = 0;
+
+            while (innerCharIndex < inner.Length)
+            {
+                if (inner[innerCharIndex] == '\\' && innerCharIndex + 1 < inner.Length)
+                {
+                    innerCharIndex++;
+
+                    switch (inner[innerCharIndex])
+                    {
+                        case '\'': sb.Append('\''); break;
+                        case '"': sb.Append('"'); break;
+                        case 'b': sb.Append('\b'); break;
+                        case 'f': sb.Append('\f'); break;
+                        case 't': sb.Append('\t'); break;
+                        case 'n': sb.Append('\n'); break;
+                        case '\\': sb.Append('\\'); break;
+                        default: sb.Append(inner[innerCharIndex]); break;
+                    }
+                }
+                else
+                {
+                    sb.Append(inner[innerCharIndex]);
+                }
+
+                innerCharIndex++;
+            }
+
+            return sb.ToString();
+        }
     }
 }

@@ -41,7 +41,7 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 Most code in this repo is **auto-generated** — files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.
 
 The pipeline:
-1. **Input**: `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` (UML XMI metamodel files)
+1. **Input**: `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` — these two UML-based XMI files define the KerML and SysML v2 specification respectively. They are the **single source of truth** for all generated DTOs, POCOs, serializers, extension methods, and other auto-generated code. All OCL constraints (derivation rules, validation invariants, and operation body conditions) for each metaclass are also defined within these XMI files.
 2. **Generator**: `SysML2.NET.CodeGenerator` reads these via `uml4net.xmi`, uses Handlebars templates (`Templates/Uml/*.hbs`) to generate code
 3. **Output**: `AutoGen*` directories across multiple projects
 
@@ -114,3 +114,7 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 
 - Prefer comparing 'Count' to 0 rather than using 'Any()', both for clarity and for performance
 - Use 'StringBuilder.Append(char)' instead of 'StringBuilder.Append(string)' when the input is a constant unit string
+- Prefer 'string.IsNullOrWhiteSpace' over 'string.IsNullOrEmpty' when checking the non-nullable value of a string
+- Prefer switch expressions/statements over if-else chains when applicable
+- Prefer indexer syntax (e.g., 'list[^1]') and range syntax (e.g., 'array[1..^1]') over LINQ methods (e.g., 'list.Last()', 'list.Skip(1).Take(n)') when applicable
+- Use meaningful variable names instead of single-letter names in any context (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c', 'element' instead of 'e')

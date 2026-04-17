@@ -29,12 +29,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -124,7 +126,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IsSubstateUsage(bool isParallel) => this.ComputeIsSubstateUsageOperation(isParallel);
+        bool IsSubstateUsage(bool isParallel);
     }
 }
 

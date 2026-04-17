@@ -99,7 +99,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
-        new INamespace LibraryNamespace() => this.ComputeRedefinedLibraryNamespaceOperation();
+        new INamespace LibraryNamespace();
 
         /// <summary>
         /// If the owningRelationship of the Relationship is null but its owningRelatedElement is non-null,
@@ -110,7 +110,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        new string Path() => this.ComputeRedefinedPathOperation();
+        new string Path();
     }
 }
 

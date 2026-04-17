@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -87,7 +88,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        List<IFeature> InputParameters() => this.ComputeInputParametersOperation();
+        List<IFeature> InputParameters();
 
         /// <summary>
         /// Return the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage has less
@@ -99,7 +100,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        IFeature InputParameter(int i) => this.ComputeInputParameterOperation(i);
+        IFeature InputParameter(int i);
 
         /// <summary>
         /// Return the i-th argument Expression of an ActionUsage, defined as the value Expression of the
@@ -112,7 +113,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IExpression" />
         /// </returns>
-        IExpression Argument(int i) => this.ComputeArgumentOperation(i);
+        IExpression Argument(int i);
 
         /// <summary>
         /// Check if this ActionUsage is composite and has an owningType that is an ActionDefinition or
@@ -122,7 +123,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IsSubactionUsage() => this.ComputeIsSubactionUsageOperation();
+        bool IsSubactionUsage();
     }
 }
 

@@ -29,6 +29,8 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -807,6 +809,407 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Implements(implementation: "IDefinition.VariantMembership")]
         public List<IVariantMembership> variantMembership => this.ComputeVariantMembership();
 
+
+        /// <summary>
+        /// If the memberElement of the given membership is a Feature, then return all Features directly or
+        /// indirectly redefined by the memberElement.
+        /// </summary>
+        /// <param name="membership">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IFeature" />
+        /// </returns>
+        public List<IFeature> AllRedefinedFeaturesOf(IMembership membership) => this.ComputeAllRedefinedFeaturesOfOperation(membership);
+
+        /// <summary>
+        /// Return this Type and all Types that are directly or transitively supertypes of this Type (as
+        /// determined by the supertypes operation with excludeImplied = false).
+        /// </summary>
+        /// <returns>
+        /// The expected collection of <see cref="IType" />
+        /// </returns>
+        public List<IType> AllSupertypes() => this.ComputeAllSupertypesOperation();
+
+        /// <summary>
+        /// If the given feature is a feature of this Type, then return its direction relative to this Type,
+        /// taking conjugation into account.
+        /// </summary>
+        /// <param name="feature">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="FeatureDirectionKind" />
+        /// </returns>
+        public FeatureDirectionKind? DirectionOf(IFeature feature) => this.ComputeDirectionOfOperation(feature);
+
+        /// <summary>
+        /// Return the direction of the given feature relative to this Type, excluding a given set of Types from
+        /// the search of supertypes of this Type.
+        /// </summary>
+        /// <param name="feature">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="FeatureDirectionKind" />
+        /// </returns>
+        public FeatureDirectionKind? DirectionOfExcluding(IFeature feature, List<IType> excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
+
+        /// <summary>
+        /// Return an effective name for this Element. By default this is the same as its declaredName.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EffectiveName() => this.ComputeEffectiveNameOperation();
+
+        /// <summary>
+        /// Return an effective shortName for this Element. By default this is the same as its
+        /// declaredShortName.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EffectiveShortName() => this.ComputeEffectiveShortNameOperation();
+
+        /// <summary>
+        /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
+        /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
+        /// otherwise, represented as a restricted name according to the lexical structure of the KerML textual
+        /// notation (i.e., surrounded by single quote characters and with special characters escaped).
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string EscapedName() => this.ComputeEscapedNameOperation();
+
+        /// <summary>
+        /// Derive the imported Memberships of this Namespace as the importedMembership of all ownedImports,
+        /// excluding those Imports whose importOwningNamespace is in the excluded set, and excluding
+        /// Memberships that have distinguisibility collisions with each other or with any ownedMembership.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> ImportedMemberships(List<INamespace> excluded) => this.ComputeImportedMembershipsOperation(excluded);
+
+        /// <summary>
+        /// Return all the non-private Memberships of all the supertypes of this Type, excluding any supertypes
+        /// that are this Type or are in the given set of excludedTypes. If excludeImplied = true, then also
+        /// transitively exclude any supertypes from implied Specializations.
+        /// </summary>
+        /// <param name="excludedNamespaces">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludedTypes">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> InheritableMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied) => this.ComputeInheritableMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+
+        /// <summary>
+        /// Return the Memberships inheritable from supertypes of this Type with redefined Features removed.
+        /// When computing inheritable Memberships, exclude Imports of excludedNamespaces, Specializations of
+        /// excludedTypes, and, if excludeImplied = true, all implied Specializations.
+        /// </summary>
+        /// <param name="excludedNamespaces">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludedTypes">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> InheritedMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied) => this.ComputeInheritedMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+
+        /// <summary>
+        /// By default, this Type is compatible with an otherType if it directly or indirectly specializes the
+        /// otherType.
+        /// </summary>
+        /// <param name="otherType">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="bool" />
+        /// </returns>
+        public bool IsCompatibleWith(IType otherType) => this.ComputeIsCompatibleWithOperation(otherType);
+
+        /// <summary>
+        /// By default, return the library Namespace of the owningRelationship of this Element, if it has one.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="INamespace" />
+        /// </returns>
+        public INamespace LibraryNamespace() => this.ComputeLibraryNamespaceOperation();
+
+        /// <summary>
+        /// If visibility is not null, return the Memberships of this Namespace with the given visibility,
+        /// including ownedMemberships with the given visibility and Memberships imported with the given
+        /// visibility. If visibility is null, return all ownedMemberships and imported Memberships regardless
+        /// of visibility. When computing imported Memberships, ignore this Namespace and any Namespaces in the
+        /// given excluded set.
+        /// </summary>
+        /// <param name="visibility">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> MembershipsOfVisibility(VisibilityKind? visibility, List<INamespace> excluded) => this.ComputeMembershipsOfVisibilityOperation(visibility, excluded);
+
+        /// <summary>
+        /// Return the owned or inherited Multiplicities for this Type<./code>.
+        /// </summary>
+        /// <returns>
+        /// The expected collection of <see cref="IMultiplicity" />
+        /// </returns>
+        public List<IMultiplicity> Multiplicities() => this.ComputeMultiplicitiesOperation();
+
+        /// <summary>
+        /// Return the names of the given element as it is known in this Namespace.
+        /// </summary>
+        /// <param name="element">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="string" />
+        /// </returns>
+        public List<string> NamesOf(IElement element) => this.ComputeNamesOfOperation(element);
+
+        /// <summary>
+        /// Return the public, protected and inherited Memberships of this Type. When computing imported
+        /// Memberships, exclude the given set of excludedNamespaces. When computing inherited Memberships,
+        /// exclude Types in the given set of excludedTypes. If excludeImplied = true, then also exclude any
+        /// supertypes from implied Specializations.
+        /// </summary>
+        /// <param name="excludedNamespaces">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludedTypes">
+        /// No documentation provided
+        /// </param>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> NonPrivateMemberships(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied) => this.ComputeNonPrivateMembershipsOperation(excludedNamespaces, excludedTypes, excludeImplied);
+
+        /// <summary>
+        /// Return a unique description of the location of this Element in the containment structure rooted in a
+        /// root Namespace. If the Element has a non-null qualifiedName, then return that. Otherwise, if it has
+        /// an owningRelationship, then return the string constructed by appending to the path of it's
+        /// owningRelationship the character / followed by the string representation of its position in the list
+        /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
+        /// empty string.                            (Note that this operation is overridden for Relationships
+        /// to use owningRelatedElement when appropriate.)
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string Path() => this.ComputePathOperation();
+
+        /// <summary>
+        /// Return a string with valid KerML syntax representing the qualification part of a given
+        /// qualifiedName, that is, a qualified name with all the segment names of the given name except the
+        /// last. If the given qualifiedName has only one segment, then return null.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string QualificationOf(string qualifiedName) => this.ComputeQualificationOfOperation(qualifiedName);
+
+        /// <summary>
+        /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
+        /// which either of the following two conditions holds:                            <ol>                 
+        ///           <li>The memberElement of the Membership is included in redefined Features of another
+        /// Membership in memberships.</li>                            <li>One of the redefined Features of the
+        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>                     
+        ///       </ol>                            For this purpose, the redefined Features of a Membership
+        /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
+        /// redefined by the memberElement.
+        /// </summary>
+        /// <param name="memberships">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> RemoveRedefinedFeatures(List<IMembership> memberships) => this.ComputeRemoveRedefinedFeaturesOperation(memberships);
+
+        /// <summary>
+        /// Resolve the given qualified name to the named Membership (if any), starting with this Namespace as
+        /// the local scope. The qualified name string must conform to the concrete syntax of the KerML textual
+        /// notation. According to the KerML name resolution rules every qualified name will resolve to either a
+        /// single Membership, or to none.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership Resolve(string qualifiedName) => this.ComputeResolveOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve the given qualified name to the named Membership (if any) in the effective global Namespace
+        /// that is the outermost naming scope. The qualified name string must conform to the concrete syntax of
+        /// the KerML textual notation.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership ResolveGlobal(string qualifiedName) => this.ComputeResolveGlobalOperation(qualifiedName);
+
+        /// <summary>
+        /// Resolve a simple name starting with this Namespace as the local scope, and continuing with
+        /// containing outer scopes as necessary. However, if this Namespace is a root Namespace, then the
+        /// resolution is done directly in global scope.
+        /// </summary>
+        /// <param name="name">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership ResolveLocal(string name) => this.ComputeResolveLocalOperation(name);
+
+        /// <summary>
+        /// Resolve a simple name from the visible Memberships of this Namespace.
+        /// </summary>
+        /// <param name="name">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IMembership" />
+        /// </returns>
+        public IMembership ResolveVisible(string name) => this.ComputeResolveVisibleOperation(name);
+
+        /// <summary>
+        /// Check whether this Type is a direct or indirect specialization of the given supertype.
+        /// </summary>
+        /// <param name="supertype">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="bool" />
+        /// </returns>
+        public bool Specializes(IType supertype) => this.ComputeSpecializesOperation(supertype);
+
+        /// <summary>
+        /// Check whether this Type is a direct or indirect specialization of the named library Type.
+        /// libraryTypeName must conform to the syntax of a KerML qualified name and must resolve to a Type in
+        /// global scope.
+        /// </summary>
+        /// <param name="libraryTypeName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="bool" />
+        /// </returns>
+        public bool SpecializesFromLibrary(string libraryTypeName) => this.ComputeSpecializesFromLibraryOperation(libraryTypeName);
+
+        /// <summary>
+        /// If this Type is conjugated, then return just the originalType of the Conjugation. Otherwise, return
+        /// the general Types from all ownedSpecializations of this type, if excludeImplied = false, or all
+        /// non-implied ownedSpecializations, if excludeImplied = true.
+        /// </summary>
+        /// <param name="excludeImplied">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IType" />
+        /// </returns>
+        public List<IType> Supertypes(bool excludeImplied) => this.ComputeSupertypesOperation(excludeImplied);
+
+        /// <summary>
+        /// Return the simple name that is the last segment name of the given qualifiedName. If this segment
+        /// name has the form of a KerML unrestricted name, then "unescape" it by removing the surrounding
+        /// single quotes and replacing all escape sequences with the specified character.
+        /// </summary>
+        /// <param name="qualifiedName">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="string" />
+        /// </returns>
+        public string UnqualifiedNameOf(string qualifiedName) => this.ComputeUnqualifiedNameOfOperation(qualifiedName);
+
+        /// <summary>
+        /// Returns this visibility of mem relative to this Namespace. If mem is an importedMembership, this is
+        /// the visibility of its Import. Otherwise it is the visibility of the Membership itself.
+        /// </summary>
+        /// <param name="mem">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="VisibilityKind" />
+        /// </returns>
+        public VisibilityKind VisibilityOf(IMembership mem) => this.ComputeVisibilityOfOperation(mem);
+
+        /// <summary>
+        /// The visible Memberships of a Type include inheritedMemberships.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <param name="isRecursive">
+        /// No documentation provided
+        /// </param>
+        /// <param name="includeAll">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        public List<IMembership> VisibleMemberships(List<INamespace> excluded, bool isRecursive, bool includeAll) => this.ComputeRedefinedVisibleMembershipsOperation(excluded, isRecursive, includeAll);
+
+        /// <summary>
+        /// If includeAll = true, then return all the Memberships of this Namespace. Otherwise, return only the
+        /// publicly visible Memberships of this Namespace, including ownedMemberships that have a visibility of
+        /// public and Memberships imported with a visibility of public. If isRecursive = true, also recursively
+        /// include all visible Memberships of any public owned Namespaces, or, if IncludeAll = true, all
+        /// Memberships of all owned Namespaces. When computing imported Memberships, ignore this Namespace and
+        /// any Namespaces in the given excluded set.
+        /// </summary>
+        /// <param name="excluded">
+        /// No documentation provided
+        /// </param>
+        /// <param name="isRecursive">
+        /// No documentation provided
+        /// </param>
+        /// <param name="includeAll">
+        /// No documentation provided
+        /// </param>
+        /// <returns>
+        /// The expected collection of <see cref="IMembership" />
+        /// </returns>
+        List<IMembership> INamespace.VisibleMemberships(List<INamespace> excluded, bool isRecursive, bool includeAll) => this.VisibleMemberships(excluded, isRecursive, includeAll);
     }
 }
 

@@ -29,6 +29,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -63,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
-        List<IElement> EvaluateFeature(IFeature baseFeature) => this.ComputeEvaluateFeatureOperation(baseFeature);
+        List<IElement> EvaluateFeature(IFeature baseFeature);
 
         /// <summary>
         /// Check if this MetadataFeature has a metaclass which is a kind of SemanticMetadata.
@@ -71,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IsSemantic() => this.ComputeIsSemanticOperation();
+        bool IsSemantic();
 
         /// <summary>
         /// Check if this MetadataFeature has a metaclass that is a kind of KerML::Element (that is, it is from
@@ -80,7 +81,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        bool IsSyntactic() => this.ComputeIsSyntacticOperation();
+        bool IsSyntactic();
 
         /// <summary>
         /// If this MetadataFeature reflectively represents a model element, then return the corresponding
@@ -89,7 +90,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected <see cref="IElement" />
         /// </returns>
-        IElement SyntaxElement() => this.ComputeSyntaxElementOperation();
+        IElement SyntaxElement();
     }
 }
 

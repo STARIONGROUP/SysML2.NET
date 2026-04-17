@@ -169,7 +169,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
 
             if (elementSubject.name != null)
             {
-                var membersWithTheName = elementSubject.owningNamespace.member.Where(x => x.name == elementSubject.name).ToList();
+                var membersWithTheName = elementSubject.owningNamespace.ownedMember.Where(x => x.name == elementSubject.name).ToList();
 
                 if (membersWithTheName.IndexOf(elementSubject) != 0)
                 {
@@ -220,7 +220,29 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<ITextualRepresentation>()];
         }
-        
+
+        /// <summary>
+        /// Validates the constraint that if an Element has any ownedRelationships for which isImplied = true,
+        /// then the Element must also have isImpliedIncluded = true.
+        /// </summary>
+        /// <param name="elementSubject">
+        /// The subject <see cref="IElement"/>
+        /// </param>
+        /// <returns>
+        /// true if the constraint is satisfied; false otherwise
+        /// </returns>
+        internal static bool ValidateIsImpliedIncluded(this IElement elementSubject)
+        {
+            if (elementSubject == null)
+            {
+                throw new ArgumentNullException(nameof(elementSubject));
+            }
+
+            return elementSubject.OwnedRelationship.Count == 0
+                || !elementSubject.OwnedRelationship.Any(r => r.IsImplied)
+                || elementSubject.IsImpliedIncluded;
+        }
+
         /// <summary>
         /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If
         /// the returned value is non-null, it is returned as-is if it has the form of a basic name, or,
