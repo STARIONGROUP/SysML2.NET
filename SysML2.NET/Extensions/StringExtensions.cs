@@ -92,23 +92,30 @@ namespace SysML2.NET.Extensions
             var lastSeparatorIndex = -1;
             var inQuote = false;
 
-            for (var charIndex = 0; charIndex < qualifiedName.Length; charIndex++)
+            var charIndex = 0;
+
+            while (charIndex < qualifiedName.Length)
             {
                 var currentChar = qualifiedName[charIndex];
 
                 switch (currentChar)
                 {
                     case '\\' when inQuote && charIndex + 1 < qualifiedName.Length:
-                        charIndex++;
+                        charIndex += 2;
                         continue;
                     case '\'':
                         inQuote = !inQuote;
+                        charIndex++;
                         continue;
                 }
 
                 if (!inQuote && currentChar == ':' && charIndex + 1 < qualifiedName.Length && qualifiedName[charIndex + 1] == ':')
                 {
                     lastSeparatorIndex = charIndex;
+                    charIndex += 2;
+                }
+                else
+                {
                     charIndex++;
                 }
             }
@@ -138,7 +145,9 @@ namespace SysML2.NET.Extensions
 
             var sb = new StringBuilder(inner.Length);
 
-            for (var innerCharIndex = 0; innerCharIndex < inner.Length; innerCharIndex++)
+            var innerCharIndex = 0;
+
+            while (innerCharIndex < inner.Length)
             {
                 if (inner[innerCharIndex] == '\\' && innerCharIndex + 1 < inner.Length)
                 {
@@ -160,6 +169,8 @@ namespace SysML2.NET.Extensions
                 {
                     sb.Append(inner[innerCharIndex]);
                 }
+
+                innerCharIndex++;
             }
 
             return sb.ToString();

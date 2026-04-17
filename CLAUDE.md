@@ -117,4 +117,4 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 - Prefer 'string.IsNullOrWhiteSpace' over 'string.IsNullOrEmpty' when checking the non-nullable value of a string
 - Prefer switch expressions/statements over if-else chains when applicable
 - Prefer indexer syntax (e.g., 'list[^1]') and range syntax (e.g., 'array[1..^1]') over LINQ methods (e.g., 'list.Last()', 'list.Skip(1).Take(n)') when applicable
-- Use meaningful loop variable names instead of single-letter names (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c')
+- Use meaningful variable names instead of single-letter names in any context (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c', 'element' instead of 'e')
