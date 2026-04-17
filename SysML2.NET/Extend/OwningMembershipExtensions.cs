@@ -22,7 +22,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -51,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(owningMembershipSubject));
             }
 
-            return owningMembershipSubject.OwnedRelatedElement.Count != 1 ? throw new IncompleteModelException($"{nameof(owningMembershipSubject)} must have exactly one related element") : owningMembershipSubject.OwnedRelatedElement.Single();
+            return owningMembershipSubject.OwnedRelatedElement.Count != 1 ? throw new IncompleteModelException($"{nameof(owningMembershipSubject)} must have exactly one related element") : owningMembershipSubject.OwnedRelatedElement[0];
         }
 
         /// <summary>

@@ -21,7 +21,6 @@
 namespace SysML2.NET.Core.POCO.Root.Namespaces
 {
     using System;
-    using System.Collections.Frozen;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -77,7 +76,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </returns>
         internal static List<IMembership> ComputeMembership(this INamespace namespaceSubject)
         {
-            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.ownedMembership.Union(namespaceSubject.importedMembership)];
+            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.ownedMembership.Union(namespaceSubject.ImportedMemberships([]))];
         }
 
         /// <summary>
@@ -192,11 +191,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(mem));
             }
 
-            var import = namespaceSubject.ownedImport.FirstOrDefault(x => x.ImportedMemberships([]).Contains(mem));
-
-            if (import != null)
+            foreach (var ownedImport in namespaceSubject.ownedImport)
             {
-                return import.Visibility;
+                var membershipsFromImport = ownedImport.ImportedMemberships([]);
+
+                if (membershipsFromImport.Contains(mem))
+                {
+                    return ownedImport.Visibility;
+                }
             }
 
             return namespaceSubject.membership.Contains(mem) ? mem.Visibility : VisibilityKind.Private;
@@ -291,18 +293,57 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 .ToList();
 
             var ownedMembershipNames = namespaceSubject.ownedMembership
-                .Select(m => m.MemberName)
+                .Select(membership => membership.MemberName)
                 .ToHashSet(NullSafeStringComparer.Instance);
 
-            var importedMembershipsNameFrequency = importedMemberships
-                .GroupBy(x => x.MemberName, NullSafeStringComparer.Instance)
-                .ToFrozenDictionary(g => g.Key, g => g.Count(), NullSafeStringComparer.Instance);
+            var ownedMembershipShortNames = namespaceSubject.ownedMembership
+                .Select(membership => membership.MemberShortName)
+                .ToHashSet(NullSafeStringComparer.Instance);
 
-            var nonCollidingImportedMemberships = importedMemberships.Where(x =>
+            var importedNameFrequency = new Dictionary<string, int>(importedMemberships.Count);
+            var importedShortNameFrequency = new Dictionary<string, int>(importedMemberships.Count);
+            var importedNullNameCount = 0;
+            var importedNullShortNameCount = 0;
+
+            foreach (var membership in importedMemberships)
             {
-                var name = x.MemberName;
+                var memberName = membership.MemberName;
 
-                return !ownedMembershipNames.Contains(name) && (!importedMembershipsNameFrequency.TryGetValue(name, out var frequency) || frequency <= 1);
+                if (memberName != null)
+                {
+                    importedNameFrequency[memberName] = importedNameFrequency.TryGetValue(memberName, out var nameCount) ? nameCount + 1 : 1;
+                }
+                else
+                {
+                    importedNullNameCount++;
+                }
+
+                var memberShortName = membership.MemberShortName;
+
+                if (memberShortName != null)
+                {
+                    importedShortNameFrequency[memberShortName] = importedShortNameFrequency.TryGetValue(memberShortName, out var shortNameCount) ? shortNameCount + 1 : 1;
+                }
+                else
+                {
+                    importedNullShortNameCount++;
+                }
+            }
+
+            var nonCollidingImportedMemberships = importedMemberships.Where(membership =>
+            {
+                var memberName = membership.MemberName;
+                var memberShortName = membership.MemberShortName;
+
+                var nameCollidesWithOwned = ownedMembershipNames.Contains(memberName) || ownedMembershipShortNames.Contains(memberShortName);
+
+                var nameCollidesWithImported =
+                    (memberName != null && importedNameFrequency.TryGetValue(memberName, out var nameFrequency) && nameFrequency > 1)
+                    || (memberName == null && importedNullNameCount > 1)
+                    || (memberShortName != null && importedShortNameFrequency.TryGetValue(memberShortName, out var shortNameFrequency) && shortNameFrequency > 1)
+                    || (memberShortName == null && importedNullShortNameCount > 1);
+
+                return !nameCollidesWithOwned && !nameCollidesWithImported;
             }).ToList();
 
             return nonCollidingImportedMemberships;
