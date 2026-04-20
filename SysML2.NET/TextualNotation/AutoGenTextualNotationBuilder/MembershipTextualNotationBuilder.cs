@@ -28,6 +28,7 @@ namespace SysML2.NET.TextualNotation
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="MembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> element
@@ -39,8 +40,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>MemberPrefix:Membership=(visibility=VisibilityIndicator)?</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursor"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMemberPrefix(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildMemberPrefix(IMembership poco, ICursorCache cursor, StringBuilder stringBuilder)
         {
 
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
@@ -57,8 +59,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>AliasMember:Membership=MemberPrefix'alias'('&lt;'memberShortName=NAME'&gt;')?(memberName=NAME)?'for'memberElement=[QualifiedName]RelationshipBody</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursor"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAliasMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildAliasMember(IMembership poco, ICursorCache cursor, StringBuilder stringBuilder)
         {
             BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("alias ");

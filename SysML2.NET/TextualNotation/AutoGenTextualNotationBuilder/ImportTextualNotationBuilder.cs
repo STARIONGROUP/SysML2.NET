@@ -28,6 +28,7 @@ namespace SysML2.NET.TextualNotation
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="ImportTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IImport" /> element
@@ -59,8 +60,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>Import=visibility=VisibilityIndicator'import'(isImportAll?='all')?ImportDeclarationRelationshipBody</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IImport" /> from which the rule should be build</param>
+        /// <param name="cursor"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildImport(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, StringBuilder stringBuilder)
+        public static void BuildImport(IImport poco, ICursorCache cursor, StringBuilder stringBuilder)
         {
             stringBuilder.Append(poco.Visibility.ToString().ToLower());
             stringBuilder.Append("import ");

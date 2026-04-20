@@ -29,6 +29,7 @@ namespace SysML2.NET.TextualNotation
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="OwningMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> element
@@ -63,30 +64,24 @@ namespace SysML2.NET.TextualNotation
         /// <para>PackageMember:OwningMembership=MemberPrefix(ownedRelatedElement+=DefinitionElement|ownedRelatedElement=UsageElement)</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
+        public static void BuildPackageMember(IOwningMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
-            using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            using var iterator = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.OwnedRelatedElement, typeof(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage), typeof(SysML2.NET.Core.POCO.Root.Elements.IElement)).GetEnumerator();
-            iterator.MoveNext();
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
 
-            if (iterator.Current != null)
+            var cursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+
+            switch (cursor.Current)
             {
-                switch (iterator.Current)
-                {
-                    case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage usage:
-                        UsageTextualNotationBuilder.BuildUsageElement(usage, stringBuilder);
-                        break;
-                    case { } element:
-                        ElementTextualNotationBuilder.BuildDefinitionElement(element, stringBuilder);
-                        break;
-                }
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage usage:
+                    UsageTextualNotationBuilder.BuildUsageElement(usage, cursorCache, stringBuilder);
+                    break;
+                case { } element:
+                    ElementTextualNotationBuilder.BuildDefinitionElement(element, cursorCache, stringBuilder);
+                    cursor.Move();
+                    break;            
             }
-
-            stringBuilder.Append(' ');
-
         }
 
         /// <summary>

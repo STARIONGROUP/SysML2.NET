@@ -27,6 +27,7 @@ namespace SysML2.NET.TextualNotation
     using System.Linq;
     using System.Text;
 
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -39,8 +40,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>ElementFilterMember:ElementFilterMembership=MemberPrefix'filter'ownedRelatedElement+=OwnedExpression';'</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership" /> from which the rule should be build</param>
+        /// <param name="cursor"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildElementFilterMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, StringBuilder stringBuilder)
+        public static void BuildElementFilterMember(IElementFilterMembership poco, ICursorCache cursor, StringBuilder stringBuilder)
         {
             using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);

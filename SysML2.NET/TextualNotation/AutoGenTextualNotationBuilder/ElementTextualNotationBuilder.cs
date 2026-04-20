@@ -66,8 +66,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionElement:Element=Package|LibraryPackage|AnnotatingElement|Dependency|AttributeDefinition|EnumerationDefinition|OccurrenceDefinition|IndividualDefinition|ItemDefinition|PartDefinition|ConnectionDefinition|FlowDefinition|InterfaceDefinition|PortDefinition|ActionDefinition|CalculationDefinition|StateDefinition|ConstraintDefinition|RequirementDefinition|ConcernDefinition|CaseDefinition|AnalysisCaseDefinition|VerificationCaseDefinition|UseCaseDefinition|ViewDefinition|ViewpointDefinition|RenderingDefinition|MetadataDefinition|ExtendedDefinition</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
+        /// <param name="cursor"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, StringBuilder stringBuilder)
+        public static void BuildDefinitionElement(IElement poco, ICursorCache cursor, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }

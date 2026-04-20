@@ -105,10 +105,10 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             if (property.QueryIsEnumerable())
             {
-                return $"{variableName}.MoveNext()";
+                return $"{variableName}.Current != null";
             }
 
-            if (property.QueryIsReferenceProperty())
+            if (property.QueryIsReferenceType())
             {
                 return $"{variableName}.{propertyName} != null";
             }

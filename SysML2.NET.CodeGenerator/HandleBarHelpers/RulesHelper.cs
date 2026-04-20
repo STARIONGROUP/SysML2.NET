@@ -103,13 +103,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="isPartOfMultipleAlternative">Asserts that the current <see cref="AssignmentElement"/> is part of a multiple alternative process</param>
         private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext, bool isPartOfMultipleAlternative = false)
         {
-            ruleGenerationContext.DefinedIterators ??= [];
+            ruleGenerationContext.DefinedCursors ??= [];
             
             if (alternatives.Count == 1)
             {
                 var alternative = alternatives.ElementAt(0);
                 var elements = alternative.Elements;
-                DeclareAllRequiredIterators(writer, umlClass, alternative, ruleGenerationContext);
+                DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
                 
                 if (ruleGenerationContext.CallerRule is { IsOptional: true, IsCollection: false })
                 {
@@ -130,8 +130,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             if (property.QueryIsEnumerable())
                             {
                                 var assigment = elements.OfType<AssignmentElement>().First(x => x.Property == targetPropertyName);
-                                var iterator = ruleGenerationContext.DefinedIterators.FirstOrDefault(x => x.ApplicableRuleElements.Contains(assigment));
-                                ifStatementContent.Add(iterator == null ? $"BuildGroupConditionFor{assigment.TextualNotationRule.RuleName}(poco)" : property.QueryIfStatementContentForNonEmpty(iterator.IteratorVariableName));
+                                var iterator = ruleGenerationContext.DefinedCursors.FirstOrDefault(x => x.ApplicableRuleElements.Contains(assigment));
+                                ifStatementContent.Add(iterator == null ? $"BuildGroupConditionFor{assigment.TextualNotationRule.RuleName}(poco)" : property.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName));
                             }
                             else
                             {
@@ -196,7 +196,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             foreach (var alternative in alternatives)
                             {
-                                DeclareAllRequiredIterators(writer, umlClass, alternative, ruleGenerationContext);
+                                DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
                             }
 
                             for (var alternativeIndex = 0; alternativeIndex < alternatives.Count; alternativeIndex++)
@@ -220,11 +220,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                         if (targetProperty.QueryIsEnumerable())
                                         {
-                                            DeclareAllRequiredIterators(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext);
+                                            DeclareAllRequiredCursors(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext);
 
-                                            var iterator = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                                            var iterator = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
 
-                                            writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty(iterator.IteratorVariableName)}){Environment.NewLine}");
+                                            writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName)}){Environment.NewLine}");
                                             writer.WriteSafeString($"{{{Environment.NewLine}");
                                         }
                                         else
@@ -367,17 +367,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (ruleGenerationContext.CallerRule is AssignmentElement assignmentElement)
                     {
-                        if (assignmentElement.TextualNotationRule.IsDispatcherRule)
-                        {
-                            variableName = $"elementFor{assignmentElement.Property.CapitalizeFirstLetter()}";
-                            writer.WriteSafeString($"var elementFor{assignmentElement.Property.CapitalizeFirstLetter()} = {ruleGenerationContext.CurrentVariableName}.{assignmentElement.Property.CapitalizeFirstLetter()}[elementIndex];{Environment.NewLine}");
-                        }
-                        else
-                        {
-                            var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
-                            variableName = $"{iteratorToUse.IteratorVariableName}.Current";
-                            writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}{Environment.NewLine}");    
-                        }
+                        var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                        variableName = $"{cursorToUse.CursorVariableName}.Current";
                     }
 
                     writer.WriteSafeString($"switch({variableName}){Environment.NewLine}");
@@ -386,7 +377,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     foreach (var orderedNonTerminalElement in mappedNonTerminalElements)
                     {
                         var previousVariableName = ruleGenerationContext.CurrentVariableName;
-                        
+
                         if (orderedNonTerminalElement.UmlClass == ruleGenerationContext.NamedElementToGenerate)
                         {
                             writer.WriteSafeString($"default:{Environment.NewLine}");
@@ -406,6 +397,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     writer.WriteSafeString($"}}{Environment.NewLine}");
 
+                    if (ruleGenerationContext.CallerRule is AssignmentElement assignmentElementForMove)
+                    {
+                        var cursorForMove = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElementForMove));
+                        writer.WriteSafeString($"{cursorForMove.CursorVariableName}.Move();{Environment.NewLine}");
+                    }
+
                     break;
                 }
                 case AssignmentElement:
@@ -416,11 +413,39 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         var targetProperty = umlClass.QueryAllProperties().Single(x => string.Equals(x.Name, propertiesTarget[0]));
 
-                        var orderElementsByInheritance = OrderElementsByInheritance(assignmentElements.Select(x => x.Value).OfType<NonTerminalElement>().ToList(), umlClass.Cache, ruleGenerationContext);
-                        
                         if (assignmentElements.All(x => x.Operator == "+=") && assignmentElements.All(x => x.Value is NonTerminalElement))
                         {
-                            writer.WriteSafeString($"switch(elementIn{targetProperty.Name.CapitalizeFirstLetter()}){Environment.NewLine}");
+                            // Dispatcher rule: multiple alternatives all += to same property
+                            // Use cursor-based switch on cursor.Current type
+                            var orderElementsByInheritance = OrderElementsByInheritance(assignmentElements.Select(x => x.Value).OfType<NonTerminalElement>().ToList(), umlClass.Cache, ruleGenerationContext);
+
+                            // Declare cursor for this property via cursorCache
+                            var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
+                            var existingCursor = ruleGenerationContext.DefinedCursors.FirstOrDefault(x => x.IsCursorValidForProperty(targetProperty));
+
+                            if (existingCursor == null)
+                            {
+                                writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
+                                var cursorDef = new CursorDefinition { DefinedForProperty = targetProperty };
+
+                                foreach (var assignmentElement in assignmentElements)
+                                {
+                                    cursorDef.ApplicableRuleElements.Add(assignmentElement);
+                                }
+
+                                ruleGenerationContext.DefinedCursors.Add(cursorDef);
+                            }
+                            else
+                            {
+                                cursorVarName = existingCursor.CursorVariableName;
+
+                                foreach (var assignmentElement in assignmentElements)
+                                {
+                                    existingCursor.ApplicableRuleElements.Add(assignmentElement);
+                                }
+                            }
+
+                            writer.WriteSafeString($"switch({cursorVarName}.Current){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
 
                             foreach (var orderedElement in orderElementsByInheritance)
@@ -428,53 +453,74 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 var numberOfElementOfSameType = orderElementsByInheritance.Count(x => x.UmlClass == orderedElement.UmlClass);
 
                                 if (numberOfElementOfSameType == 1)
-                                { 
-                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface:orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
+                                {
+                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface: orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
                                 }
                                 else
                                 {
-                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface:orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()} when {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}.IsValidFor{orderedElement.RuleElement.Name}():{Environment.NewLine}");
+                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface: orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()} when {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}.IsValidFor{orderedElement.RuleElement.Name}():{Environment.NewLine}");
                                 }
 
                                 var previousVariableName = ruleGenerationContext.CurrentVariableName;
                                 ruleGenerationContext.CurrentVariableName = orderedElement.UmlClass.Name.LowerCaseFirstLetter();
-                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement,  ruleGenerationContext);
+                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, ruleGenerationContext);
                                 ruleGenerationContext.CurrentVariableName = previousVariableName;
-                                writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
+                                writer.WriteSafeString($"{Environment.NewLine}{cursorVarName}.Move();{Environment.NewLine}");
+                                writer.WriteSafeString($"break;{Environment.NewLine}");
                             }
-                        
+
                             writer.WriteSafeString($"}}{Environment.NewLine}");
                         }
                         else
                         {
-                            var typeFiltering = string.Join(", ", orderElementsByInheritance.Select(x => $"typeof({x.UmlClass.QueryFullyQualifiedTypeName(targetInterface: x.UmlClass.IsAbstract)})"));
-                            writer.WriteSafeString($"using var iterator = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}, {typeFiltering}).GetEnumerator();{Environment.NewLine}");
-                            writer.WriteSafeString($"iterator.MoveNext();{Environment.NewLine}{Environment.NewLine}");
-                            writer.WriteSafeString("if(iterator.Current != null)");
+                            // Mixed operator alternatives on same property - use cursor-based switch
+                            var orderElementsByInheritance = OrderElementsByInheritance(assignmentElements.Select(x => x.Value).OfType<NonTerminalElement>().ToList(), umlClass.Cache, ruleGenerationContext);
+
+                            var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
+                            var existingCursor = ruleGenerationContext.DefinedCursors.FirstOrDefault(x => x.IsCursorValidForProperty(targetProperty));
+
+                            if (existingCursor == null)
+                            {
+                                writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
+                                var cursorDef = new CursorDefinition { DefinedForProperty = targetProperty };
+
+                                foreach (var assignmentElement in assignmentElements)
+                                {
+                                    cursorDef.ApplicableRuleElements.Add(assignmentElement);
+                                }
+
+                                ruleGenerationContext.DefinedCursors.Add(cursorDef);
+                            }
+                            else
+                            {
+                                cursorVarName = existingCursor.CursorVariableName;
+                            }
+
+                            writer.WriteSafeString($"if({cursorVarName}.Current != null){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
-                            
-                            writer.WriteSafeString($"switch(iterator.Current){Environment.NewLine}");
+                            writer.WriteSafeString($"switch({cursorVarName}.Current){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
 
                             foreach (var orderedElement in orderElementsByInheritance)
                             {
                                 if (orderedElement.UmlClass.Name == "Element")
                                 {
-                                    writer.WriteSafeString($"case {{ }} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");                                    
+                                    writer.WriteSafeString($"case {{ }} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
                                 }
                                 else
                                 {
-                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface:orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
+                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface: orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
                                 }
 
                                 var previousVariableName = ruleGenerationContext.CurrentVariableName;
                                 ruleGenerationContext.CurrentVariableName = orderedElement.UmlClass.Name.LowerCaseFirstLetter();
-                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement,   ruleGenerationContext);
+                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, ruleGenerationContext);
                                 ruleGenerationContext.CurrentVariableName = previousVariableName;
                                 writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
                             }
-                            
+
                             writer.WriteSafeString($"}}{Environment.NewLine}");
+                            writer.WriteSafeString($"{cursorVarName}.Move();{Environment.NewLine}");
                             writer.WriteSafeString($"}}{Environment.NewLine}");
                         }
                     }
@@ -482,7 +528,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         foreach (var alternative in alternatives)
                         {
-                            DeclareAllRequiredIterators(writer, umlClass, alternative, ruleGenerationContext);
+                            DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
                         }
 
                         var properties = umlClass.QueryAllProperties();
@@ -497,11 +543,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             var assignment = assignmentElements[alternativeIndex];
                             var targetProperty = properties.Single(x => string.Equals(x.Name, assignment.Property));
 
-                            var iterator = ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.ApplicableRuleElements.Contains(assignment));
+                            var iterator = ruleGenerationContext.DefinedCursors.SingleOrDefault(x => x.ApplicableRuleElements.Contains(assignment));
 
                             if (assignment.Operator != "+=")
                             {
-                                writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty(iterator?.IteratorVariableName ?? "poco")}){Environment.NewLine}"); 
+                                writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty(iterator?.CursorVariableName ?? "poco")}){Environment.NewLine}");
                             }
 
                             writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -561,25 +607,25 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Declares all required iterator for all <see cref="RuleElement"/> present inside an <see cref="Alternatives"/>
+        /// Declares all required cursors for all <see cref="RuleElement"/> present inside an <see cref="Alternatives"/>
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="alternatives">The <see cref="Alternatives"/> to process</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
-        private static void DeclareAllRequiredIterators(EncodedTextWriter writer, IClass umlClass, Alternatives alternatives, RuleGenerationContext ruleGenerationContext)
+        private static void DeclareAllRequiredCursors(EncodedTextWriter writer, IClass umlClass, Alternatives alternatives, RuleGenerationContext ruleGenerationContext)
         {
             foreach (var ruleElement in alternatives.Elements)
             {
                 switch (ruleElement)
                 {
                     case AssignmentElement assignmentElement:
-                        DeclareIteratorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
+                        DeclareCursorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
                         break;
                     case GroupElement groupElement:
                         foreach (var groupElementAlternative in groupElement.Alternatives)
                         {
-                            DeclareAllRequiredIterators(writer, umlClass, groupElementAlternative, ruleGenerationContext);
+                            DeclareAllRequiredCursors(writer, umlClass, groupElementAlternative, ruleGenerationContext);
                         }
                         
                         break;
@@ -634,12 +680,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (assignmentRule is AssignmentElement assignmentElement)
                         {
-                            var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
-                            writer.WriteSafeString($"{Environment.NewLine}while({iteratorToUse.IteratorVariableName}.MoveNext()){Environment.NewLine}");
+                            var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                            writer.WriteSafeString($"{Environment.NewLine}while({cursorToUse.CursorVariableName}.Current != null){Environment.NewLine}");
                         }
 
                         writer.WriteSafeString($"{{{Environment.NewLine}");
                         ProcessAlternatives(writer, umlClass, groupElement.Alternatives, ruleGenerationContext);
+
+                        if (assignmentRule is AssignmentElement assignmentElementForMove)
+                        {
+                            var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElementForMove));
+                            writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
+                        }
+
                         writer.WriteSafeString($"{Environment.NewLine}}}");
                     }
                     else if (groupElement.IsCollection)
@@ -701,38 +754,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
                     {
-                        string usedVariable;
-                        
-                        if (assignmentElement.TextualNotationRule.IsDispatcherRule)
-                        {
-                            usedVariable = $"elementFor{assignmentElement.Property.CapitalizeFirstLetter()}";
-                            
-                            var collectionName = ruleGenerationContext.CurrentVariableName.EndsWith(assignmentElement.Property, StringComparison.InvariantCultureIgnoreCase) 
-                                ? ruleGenerationContext.CurrentVariableName
-                                : $"{ruleGenerationContext.CurrentVariableName}.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}";
-                            
-                            if (ruleGenerationContext.CallerRule is not NonTerminalElement { IsCollection: false })
-                            {
-                                writer.WriteSafeString($"if(elementIndex < {collectionName}.Count){Environment.NewLine}");
-                                writer.WriteSafeString($"{{{Environment.NewLine}");
-                                writer.WriteSafeString($"var {usedVariable} = {collectionName}[elementIndex];{Environment.NewLine}");
-                            }
-                            else
-                            {
-                                writer.WriteSafeString($"var {usedVariable} = {collectionName}[0];{Environment.NewLine}");
-                            }
-                        }
-                        else
-                        {
-                            var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
-                                
-                            if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsCollection: true } && assignmentElement.Container is not GroupElement { IsOptional: true })
-                            {
-                                writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}");
-                            }
-                            
-                            usedVariable = $"{iteratorToUse.IteratorVariableName}.Current";
-                        }
+                        var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                        var usedVariable = $"{cursorToUse.CursorVariableName}.Current";
 
                         var previousVariableName = ruleGenerationContext.CurrentVariableName;
                         ruleGenerationContext.CurrentVariableName = usedVariable;
@@ -742,31 +765,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ruleGenerationContext.CurrentVariableName = previousVariableName;
                         ruleGenerationContext.CallerRule = previousCaller;
 
-                        if (assignmentElement.TextualNotationRule.IsDispatcherRule && ruleGenerationContext.CallerRule is not NonTerminalElement { IsCollection: false })
+                        if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsCollection: true } && assignmentElement.Container is not GroupElement { IsOptional: true })
                         {
-                            writer.WriteSafeString("}");                                
+                            writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
                         }
                     }
-                    else if(assignmentElement.Value is GroupElement groupElement)
+                    else if (assignmentElement.Value is GroupElement groupElement)
                     {
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = assignmentElement;
                         ProcessAlternatives(writer, umlClass, groupElement.Alternatives, ruleGenerationContext);
                         ruleGenerationContext.CallerRule = previousCaller;
                     }
-                    else if(assignmentElement.Value is ValueLiteralElement valueLiteralElement && valueLiteralElement.QueryIsQualifiedName())
+                    else if (assignmentElement.Value is ValueLiteralElement valueLiteralElement && valueLiteralElement.QueryIsQualifiedName())
                     {
-                        var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                        var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
 
-                        if (assignmentElement.Container is not GroupElement { IsCollection: true } && assignmentElement.Container is not GroupElement { IsOptional: true })
-                        {
-                            writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}");
-                        }
-                                
-                        writer.WriteSafeString($"{Environment.NewLine}if({iteratorToUse.IteratorVariableName}.Current != null){Environment.NewLine}");
+                        writer.WriteSafeString($"{Environment.NewLine}if({cursorToUse.CursorVariableName}.Current != null){Environment.NewLine}");
                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                        writer.WriteSafeString($"stringBuilder.Append({iteratorToUse.IteratorVariableName}.Current.qualifiedName);{Environment.NewLine}");
-                        writer.WriteSafeString("}");                                
+                        writer.WriteSafeString($"stringBuilder.Append({cursorToUse.CursorVariableName}.Current.qualifiedName);{Environment.NewLine}");
+                        writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
+                        writer.WriteSafeString("}");
                     }
                     else
                     {
@@ -785,7 +804,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         var targetPropertyName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
-                                
+
                         if (targetProperty.QueryIsString())
                         {
                             writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});");
@@ -815,7 +834,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString().ToLower());");
                         }
-                        else if(targetProperty.QueryIsReferenceProperty())
+                        else if (targetProperty.QueryIsReferenceType())
                         {
                             switch (assignmentElement.Value)
                             {
@@ -843,7 +862,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                         writer.WriteSafeString("stringBuilder.Append(' ');");
                                         writer.WriteSafeString($"{Environment.NewLine}}}");
                                     }
-                                    
+
                                     break;
                                 default:
                                     writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of reference element not supported yet for this case\");");
@@ -859,7 +878,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, stringBuilder);");
+                writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, cursorCache, stringBuilder);");
             }
         }
 
@@ -1020,202 +1039,83 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Declares an iterator to perform iteration over a collection, if required to declare it
+        /// Declares a cursor to perform iteration over a collection, if required to declare it.
+        /// Uses <c>cursorCache.GetOrCreateCursor</c> to share cursor state across method calls.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="assignmentElement">The <see cref="AssignmentElement"/> to process</param>
-        /// <param name="ruleGenerationContext"></param>
-        private static void DeclareIteratorIfRequired(EncodedTextWriter writer, IClass umlClass, AssignmentElement assignmentElement, RuleGenerationContext ruleGenerationContext)
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        private static void DeclareCursorIfRequired(EncodedTextWriter writer, IClass umlClass, AssignmentElement assignmentElement, RuleGenerationContext ruleGenerationContext)
         {
             var allProperties = umlClass.QueryAllProperties();
-            var targetProperty =  allProperties.SingleOrDefault(x => string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
-            
-            if (targetProperty == null || !targetProperty.QueryIsEnumerable() || assignmentElement.TextualNotationRule.IsDispatcherRule)
+            var targetProperty = allProperties.SingleOrDefault(x => string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
+
+            if (targetProperty == null || !targetProperty.QueryIsEnumerable())
             {
+                return;
+            }
+
+            // Check if a cursor already exists for this property
+            if (ruleGenerationContext.DefinedCursors.SingleOrDefault(x => x.IsCursorValidForProperty(targetProperty) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedCursor)
+            {
+                alreadyDefinedCursor.ApplicableRuleElements.Add(assignmentElement);
                 return;
             }
 
             switch (assignmentElement.Value)
             {
-                case NonTerminalElement nonTerminalElement:
+                case NonTerminalElement:
+                case ValueLiteralElement:
+                case GroupElement:
                 {
-                    var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
-
-                    if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedIterator)
-                    {
-                        alreadyDefinedIterator.ApplicableRuleElements.Add(assignmentElement);
-                        return;
-                    }
-
-                    var iteratorToUse = new IteratorDefinition
+                    var cursorToUse = new CursorDefinition
                     {
                         DefinedForProperty = targetProperty
                     };
 
-                    iteratorToUse.ApplicableRuleElements.Add(assignmentElement);
+                    cursorToUse.ApplicableRuleElements.Add(assignmentElement);
 
-                    string typeTarget;
-
-                    if (referencedRule == null)
-                    {
-                        typeTarget = umlClass.Name;
-                    }
-                    else
-                    {
-                        typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
-                    }
-
-                    if (typeTarget != targetProperty.Type.Name)
-                    {
-                        var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
-                        iteratorToUse.ConstrainedType = targetType;
-
-                        writer.WriteSafeString(targetType != null   
-                            ? $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.OfType<{targetType.QueryFullyQualifiedTypeName(targetInterface: false)}>().GetEnumerator();"
-                            : $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
-                    }
-                    else
-                    {
-                        writer.WriteSafeString($"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
-                    }
-
+                    var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+                    writer.WriteSafeString($"var {cursorToUse.CursorVariableName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});");
                     writer.WriteSafeString(Environment.NewLine);
-                    ruleGenerationContext.DefinedIterators.Add(iteratorToUse);
+                    ruleGenerationContext.DefinedCursors.Add(cursorToUse);
                     break;
                 }
-                case ValueLiteralElement:
-                    if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, null) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } existingValueLiteralIterator)
-                    {
-                        existingValueLiteralIterator.ApplicableRuleElements.Add(assignmentElement);
-                        return;
-                    }
-
-                    var valueLiteralIterator = new IteratorDefinition
-                    {
-                        DefinedForProperty = targetProperty
-                    };
-
-                    valueLiteralIterator.ApplicableRuleElements.Add(assignmentElement);
-                    writer.WriteSafeString($"using var {valueLiteralIterator.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
-                    writer.WriteSafeString(Environment.NewLine);
-                    ruleGenerationContext.DefinedIterators.Add(valueLiteralIterator);
-                    
-                    break;
                 case AssignmentElement containedAssignment:
-                    DeclareIteratorIfRequired(writer, umlClass, containedAssignment, ruleGenerationContext);
-                    break;
-                case GroupElement groupElement:
-                    var nonTerminalRules = groupElement.Alternatives.SelectMany(x => x.Elements).OfType<NonTerminalElement>().ToList();
-                    
-                    if (ruleGenerationContext.DefinedIterators.Any(x => x.ApplicableRuleElements.Contains(assignmentElement)))
-                    {
-                        return;
-                    }
-
-                    var referencedTypes = new HashSet<INamedElement>();
-
-                    foreach (var nonTerminalElement in nonTerminalRules)
-                    {
-                        var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
-
-                        if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule)) is { } alreadyDefined)
-                        {
-                            alreadyDefined.ApplicableRuleElements.Add(assignmentElement);
-                            return;
-                        }
-
-                        string typeTarget;
-
-                        if (referencedRule == null)
-                        {
-                            typeTarget = umlClass.Name;
-                        }
-                        else
-                        {
-                            typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
-                        }
-                        
-                        referencedTypes.Add(umlClass.Cache.Values.OfType<INamedElement>().Single(x => x.Name == typeTarget));
-                    }
-                    
-                    var iteratorToUseForGroup = new IteratorDefinition
-                    {
-                        DefinedForProperty = targetProperty
-                    };
-
-                    var typesFilter = string.Join(", ", referencedTypes.Select(x => $"typeof({x.QueryFullyQualifiedTypeName(targetInterface: false)})"));
-                    writer.WriteSafeString($"using var {iteratorToUseForGroup.IteratorVariableName} = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}, {typesFilter}).GetEnumerator();{Environment.NewLine}");
-                    
-                    iteratorToUseForGroup.ApplicableRuleElements.Add(assignmentElement);
-                    ruleGenerationContext.DefinedIterators.Add(iteratorToUseForGroup);
+                    DeclareCursorIfRequired(writer, umlClass, containedAssignment, ruleGenerationContext);
                     break;
             }
         }
 
         /// <summary>
-        /// Keeps tracks of defined iterator for enumerable <see cref="IProperty"/>
+        /// Keeps tracks of defined cursor for enumerable <see cref="IProperty"/>
         /// </summary>
-        private class IteratorDefinition
+        private class CursorDefinition
         {
             /// <summary>
-            /// Gets or sets the <see cref="IProperty"/> that have to have an iterator defined
+            /// Gets or sets the <see cref="IProperty"/> that have to have a cursor defined
             /// </summary>
             public IProperty DefinedForProperty { get; init; }
 
             /// <summary>
-            /// Gets or sets the <see cref="INamedElement"/> that should be 
+            /// Gets the name of the variable defined for the cursor
             /// </summary>
-            public INamedElement ConstrainedType { get; set; }
+            public string CursorVariableName => $"{this.DefinedForProperty.Name.LowerCaseFirstLetter()}Cursor";
 
             /// <summary>
-            /// Gets the name of the variable defined for the iterator
-            /// </summary>
-            public string IteratorVariableName => this.ComputeIteratorName();
-
-            /// <summary>
-            /// Provides a collection of <see cref="AssignmentElement"/> that will use the defined iterator
+            /// Provides a collection of <see cref="AssignmentElement"/> that will use the defined cursor
             /// </summary>
             public HashSet<AssignmentElement> ApplicableRuleElements { get; } = [];
 
             /// <summary>
-            /// Compute the name of the iterator variable
-            /// </summary>
-            /// <returns>The computed name</returns>
-            private string ComputeIteratorName()
-            {
-                var name = this.DefinedForProperty.Name.LowerCaseFirstLetter();
-
-                if (this.ConstrainedType != null)
-                {
-                    name += $"Of{this.ConstrainedType.Name.CapitalizeFirstLetter()}";
-                }
-                
-                name += "Iterator";
-                return name;
-            }
-
-            /// <summary>
-            /// Asserts that the current <see cref="IteratorDefinition"/> is valid for an <see cref="IProperty"/> for a specific <see cref="TextualNotationRule"/>
+            /// Asserts that the current <see cref="CursorDefinition"/> is valid for an <see cref="IProperty"/>
             /// </summary>
             /// <param name="property">The specific <see cref="IProperty"/></param>
-            /// <param name="targetRule">The specific <see cref="TextualNotationRule"/> that should constraint a collection type</param>
-            /// <returns>True if the <see cref="IteratorDefinition"/> is valid for the provided parameters</returns>
-            public bool IsIteratorValidForProperty(IProperty property, TextualNotationRule targetRule)
+            /// <returns>True if the <see cref="CursorDefinition"/> is valid for the provided property</returns>
+            public bool IsCursorValidForProperty(IProperty property)
             {
-                if (property != this.DefinedForProperty)
-                {
-                    return false;
-                }
-
-                if (targetRule == null)
-                {
-                    return this.ConstrainedType == null;
-                }
-
-                var typeTarget = targetRule.TargetElementName ?? targetRule.RuleName;
-                
-                return string.Equals(this.ConstrainedType?.Name, typeTarget, StringComparison.InvariantCultureIgnoreCase);
+                return property == this.DefinedForProperty;
             }
         }
 
@@ -1225,9 +1125,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         private class RuleGenerationContext
         {
             /// <summary>
-            /// Gets or sets the collection of <see cref="IteratorDefinition" />
+            /// Gets or sets the collection of <see cref="CursorDefinition" />
             /// </summary>
-            public List<IteratorDefinition> DefinedIterators { get; set; }
+            public List<CursorDefinition> DefinedCursors { get; set; }
 
             /// <summary>
             /// Gets the collection of all available <see cref="TextualNotationRule"/>

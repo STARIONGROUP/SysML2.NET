@@ -29,6 +29,7 @@ namespace SysML2.NET.TextualNotation
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
 
     /// <summary>
     /// The <see cref="UsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> element
@@ -40,8 +41,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>UsageElement:Usage=NonOccurrenceUsageElement|OccurrenceUsageElement</para>    
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursor"></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUsageElement(IUsage poco, ICursorCache cursor, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
