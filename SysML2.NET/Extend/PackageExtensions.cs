@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -37,16 +38,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>OCL2: filterCondition = ownedMembership-> selectByKind(ElementFilterMembership).condition </remarks>
         /// <param name="packageSubject">
         /// The subject <see cref="IPackage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IExpression> ComputeFilterCondition(this IPackage packageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return packageSubject == null ? throw new ArgumentNullException(nameof(packageSubject)) : [..packageSubject.ownedMembership.OfType<IElementFilterMembership>().Select(x => x.condition)];
         }
 
         /// <summary>
@@ -61,10 +62,23 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IPackage packageSubject, List<INamespace> excluded)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (packageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(packageSubject));
+            }
+
+            var importedMembership= packageSubject.ComputeImportedMembershipsOperation(excluded);
+            var filters = packageSubject.ComputeFilterCondition();
+
+            if (filters.Count == 0)
+            {
+                return importedMembership;
+            }
+
+            var validImportedMembership = importedMembership.Where(membership => filters.All(x => x.CheckCondition(membership))).ToList();
+            return validImportedMembership;
         }
 
         /// <summary>
@@ -79,10 +93,20 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIncludeAsMemberOperation(this IPackage packageSubject, IElement element)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (packageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(packageSubject));
+            }
+
+            if (element == null)
+            {
+                return false;
+            }
+
+            var filters = packageSubject.ComputeFilterCondition();
+            return filters.Count == 0 || filters.All(x => x.CheckCondition(element));
         }
     }
 }

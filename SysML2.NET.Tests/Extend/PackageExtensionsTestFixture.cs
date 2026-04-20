@@ -23,16 +23,76 @@ namespace SysML2.NET.Tests.Extend
     using System;
     
     using NUnit.Framework;
-    
+
+    using SysML2.NET.Core.POCO.Kernel.Associations;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Packages;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Extensions;
+
+    using Type = SysML2.NET.Core.POCO.Core.Types.Type;
 
     [TestFixture]
     public class PackageExtensionsTestFixture
     {
         [Test]
-        public void ComputeFilterCondition_ThrowsNotSupportedException()
+        public void VerifyComputeFilterCondition()
         {
-            Assert.That(() => ((IPackage)null).ComputeFilterCondition(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IPackage)null).ComputeFilterCondition(), Throws.TypeOf<ArgumentNullException>());
+
+            var package = new Package();
+
+            Assert.That(package.ComputeFilterCondition(), Is.Empty);
+            var membership = new ElementFilterMembership();
+            var expression = new BooleanExpression();
+
+            var annotation = new Annotation();
+            var comment = new Comment();
+            
+            package.AssignOwnership(membership, expression);
+            package.AssignOwnership(annotation, comment);
+            
+            Assert.That(package.ComputeFilterCondition, Throws.InstanceOf<NotSupportedException>());
+        }
+
+        [Test]
+        public void VerifyComputeRedefinedImportedMembershipsOperation()
+        {
+            Assert.That(() => ((IPackage)null).ComputeRedefinedImportedMembershipsOperation([]), Throws.TypeOf<ArgumentNullException>());
+
+            var package = new Package();
+
+            Assert.That(package.ComputeRedefinedImportedMembershipsOperation([]), Is.Empty);
+
+            var importMember = new MembershipImport();
+            var type = new Type();
+            
+            package.AssignOwnership(importMember, type);
+            Assert.That(()=> package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
+            
+            var membership = new ElementFilterMembership();
+            var expression = new BooleanExpression();
+            package.AssignOwnership(membership, expression);
+            Assert.That(()=> package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
+        }
+
+        [Test]
+        public void VerifyComputeIncludeAsMemberOperation()
+        {
+            Assert.That(() => ((IPackage)null).ComputeIncludeAsMemberOperation(null), Throws.TypeOf<ArgumentNullException>());
+
+            var package = new Package();
+            Assert.That(package.ComputeIncludeAsMemberOperation(null), Is.False);
+
+            var element = new Type();
+            Assert.That(package.ComputeIncludeAsMemberOperation(element), Is.True);
+            var membership = new ElementFilterMembership();
+            var expression = new BooleanExpression();
+            
+            package.AssignOwnership(membership, expression);
+            
+            Assert.That(() => package.ComputeIncludeAsMemberOperation(element), Throws.TypeOf<NotSupportedException>());
         }
     }
 }
