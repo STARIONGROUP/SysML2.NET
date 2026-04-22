@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOwnedSubsettingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.SubsettedFeature) && poco.SubsettedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedSubsettedFeatureAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedSubsettedFeatureAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.SubsettedFeature != null)
+            {
+                stringBuilder.Append(poco.SubsettedFeature.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>

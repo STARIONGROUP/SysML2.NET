@@ -56,7 +56,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSpecificType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildSpecificTypeHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.Specific) && poco.Specific is SysML2.NET.Core.POCO.Core.Features.IFeature chainedSpecificAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedSpecificAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.Specific != null)
+            {
+                stringBuilder.Append(poco.Specific.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>
@@ -68,7 +77,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildGeneralType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildGeneralTypeHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.General) && poco.General is SysML2.NET.Core.POCO.Core.Features.IFeature chainedGeneralAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedGeneralAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.General != null)
+            {
+                stringBuilder.Append(poco.General.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>

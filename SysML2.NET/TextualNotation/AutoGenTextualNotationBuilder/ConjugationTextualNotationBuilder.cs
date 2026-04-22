@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOwnedConjugationHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.OriginalType) && poco.OriginalType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedOriginalTypeAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedOriginalTypeAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.OriginalType != null)
+            {
+                stringBuilder.Append(poco.OriginalType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>
@@ -64,10 +73,28 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("conjugate ");
-            BuildConjugationHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.ConjugatedType) && poco.ConjugatedType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedConjugatedTypeAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedConjugatedTypeAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.ConjugatedType != null)
+            {
+                stringBuilder.Append(poco.ConjugatedType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append(' ');
             stringBuilder.Append(" ~");
-            BuildConjugationHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.OriginalType) && poco.OriginalType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedOriginalTypeAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedOriginalTypeAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.OriginalType != null)
+            {
+                stringBuilder.Append(poco.OriginalType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 

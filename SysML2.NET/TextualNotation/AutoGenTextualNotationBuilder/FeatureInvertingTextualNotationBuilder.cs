@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOwnedFeatureInvertingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.InvertingFeature) && poco.InvertingFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedInvertingFeatureAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedInvertingFeatureAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.InvertingFeature != null)
+            {
+                stringBuilder.Append(poco.InvertingFeature.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>
@@ -69,10 +78,28 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("inverse ");
-            BuildFeatureInvertingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.FeatureInverted) && poco.FeatureInverted is SysML2.NET.Core.POCO.Core.Features.IFeature chainedFeatureInvertedAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedFeatureInvertedAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.FeatureInverted != null)
+            {
+                stringBuilder.Append(poco.FeatureInverted.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append(' ');
             stringBuilder.Append("of ");
-            BuildFeatureInvertingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.InvertingFeature) && poco.InvertingFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedInvertingFeatureAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedInvertingFeatureAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.InvertingFeature != null)
+            {
+                stringBuilder.Append(poco.InvertingFeature.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 

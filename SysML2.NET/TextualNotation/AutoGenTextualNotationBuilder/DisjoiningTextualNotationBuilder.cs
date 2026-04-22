@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOwnedDisjoiningHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.DisjoiningType) && poco.DisjoiningType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedDisjoiningTypeAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedDisjoiningTypeAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.DisjoiningType != null)
+            {
+                stringBuilder.Append(poco.DisjoiningType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>
@@ -64,10 +73,28 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("disjoint ");
-            BuildDisjoiningHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.TypeDisjoined) && poco.TypeDisjoined is SysML2.NET.Core.POCO.Core.Features.IFeature chainedTypeDisjoinedAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedTypeDisjoinedAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.TypeDisjoined != null)
+            {
+                stringBuilder.Append(poco.TypeDisjoined.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append(' ');
             stringBuilder.Append("from ");
-            BuildDisjoiningHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.DisjoiningType) && poco.DisjoiningType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedDisjoiningTypeAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedDisjoiningTypeAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.DisjoiningType != null)
+            {
+                stringBuilder.Append(poco.DisjoiningType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 

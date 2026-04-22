@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedReferenceSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOwnedReferenceSubsettingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.ReferencedFeature) && poco.ReferencedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedReferencedFeatureAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedReferencedFeatureAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.ReferencedFeature != null)
+            {
+                stringBuilder.Append(poco.ReferencedFeature.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>
@@ -55,7 +64,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowEndSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildFlowEndSubsettingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.ReferencedFeature) && poco.ReferencedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedReferencedFeatureAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureChainPrefix(chainedReferencedFeatureAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.ReferencedFeature != null)
+            {
+                stringBuilder.Append(poco.ReferencedFeature.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
     }
 }

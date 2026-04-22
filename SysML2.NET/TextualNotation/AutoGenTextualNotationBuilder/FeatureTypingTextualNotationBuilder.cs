@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOwnedFeatureTypingHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelatedElement.Contains(poco.Type) && poco.Type is SysML2.NET.Core.POCO.Core.Features.IFeature chainedTypeAsFeature)
+            {
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedTypeAsFeature, cursorCache, stringBuilder);
+            }
+            else if (poco.Type != null)
+            {
+                stringBuilder.Append(poco.Type.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+
         }
 
         /// <summary>

@@ -437,6 +437,83 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         return;
                     }
 
+                    // Detect pattern: property=[QualifiedName] | property=NonTerminal{containment+=property}
+                    // e.g., type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}
+                    // Runtime: if the referenced value is owned → call the chain builder, else → output qualifiedName
+                    if (alternatives.Count == 2)
+                    {
+                        var qualifiedNameAlt = alternatives.FirstOrDefault(alt =>
+                            alt.Elements.Count == 1
+                            && alt.Elements[0] is AssignmentElement { Value: ValueLiteralElement qualifiedNameLiteral }
+                            && qualifiedNameLiteral.QueryIsQualifiedName());
+
+                        var chainAlt = alternatives.FirstOrDefault(alt =>
+                            alt.Elements.Count >= 2
+                            && alt.Elements[0] is AssignmentElement { Value: NonTerminalElement }
+                            && alt.Elements.OfType<NonParsingAssignmentElement>().Any());
+
+                        if (qualifiedNameAlt != null && chainAlt != null)
+                        {
+                            var qualifiedNameAssignment = (AssignmentElement)qualifiedNameAlt.Elements[0];
+                            var chainAssignment = (AssignmentElement)chainAlt.Elements[0];
+                            var chainNonTerminal = (NonTerminalElement)chainAssignment.Value;
+                            var containmentAssignment = chainAlt.Elements.OfType<NonParsingAssignmentElement>().First();
+
+                            var propertyName = qualifiedNameAssignment.Property;
+                            var allProperties = umlClass.QueryAllProperties();
+                            var targetProperty = allProperties.SingleOrDefault(x =>
+                                string.Equals(x.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+                            var containmentProperty = allProperties.SingleOrDefault(x =>
+                                string.Equals(x.Name, containmentAssignment.PropertyName, StringComparison.OrdinalIgnoreCase));
+
+                            if (targetProperty != null && containmentProperty != null)
+                            {
+                                var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
+                                var resolvedPropertyName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+                                var resolvedContainmentName = containmentProperty.QueryPropertyNameBasedOnUmlProperties();
+
+                                // Resolve the chain NonTerminal's target type
+                                var referencedRule = ruleGenerationContext.AllRules
+                                    .SingleOrDefault(x => x.RuleName == chainNonTerminal.Name);
+                                var typeTarget = referencedRule != null
+                                    ? (referencedRule.TargetElementName ?? referencedRule.RuleName)
+                                    : umlClass.Name;
+
+                                var chainTargetClass = umlClass.Cache.Values.OfType<INamedElement>()
+                                    .SingleOrDefault(x => x.Name == typeTarget) as IClass;
+
+                                if (chainTargetClass != null)
+                                {
+                                    var chainTypeName = chainTargetClass.QueryFullyQualifiedTypeName();
+                                    var chainVarName = $"chained{resolvedPropertyName}As{chainTargetClass.Name}";
+
+                                    string builderCallString;
+
+                                    if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
+                                    {
+                                        builderCallString = $"Build{chainNonTerminal.Name}({chainVarName}, cursorCache, stringBuilder);";
+                                    }
+                                    else
+                                    {
+                                        builderCallString = $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, cursorCache, stringBuilder);";
+                                    }
+
+                                    writer.WriteSafeString($"if ({variableName}.{resolvedContainmentName}.Contains({variableName}.{resolvedPropertyName}) && {variableName}.{resolvedPropertyName} is {chainTypeName} {chainVarName}){Environment.NewLine}");
+                                    writer.WriteSafeString($"{{{Environment.NewLine}");
+                                    writer.WriteSafeString($"{builderCallString}{Environment.NewLine}");
+                                    writer.WriteSafeString($"}}{Environment.NewLine}");
+                                    writer.WriteSafeString($"else if ({variableName}.{resolvedPropertyName} != null){Environment.NewLine}");
+                                    writer.WriteSafeString($"{{{Environment.NewLine}");
+                                    writer.WriteSafeString($"stringBuilder.Append({variableName}.{resolvedPropertyName}.qualifiedName);{Environment.NewLine}");
+                                    writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+                                    writer.WriteSafeString($"}}{Environment.NewLine}");
+
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
                     // Multi-element alternatives (e.g., ';' | '{' NamespaceBodyElement* '}')
                     // Detect pattern: first alternative is terminal-only, second has collection assignment
                     var firstAlt = alternatives.ElementAt(0);
