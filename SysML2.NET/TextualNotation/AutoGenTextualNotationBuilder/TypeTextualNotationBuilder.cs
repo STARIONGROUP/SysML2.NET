@@ -172,7 +172,21 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCalculationBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildCalculationBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                if (ownedRelationshipCursor.Current != null)
+                {
+                    BuildCalculationBodyPart(poco, cursorCache, stringBuilder);
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
@@ -185,9 +199,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildCalculationBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
                 BuildCalculationBodyItem(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
 
@@ -217,14 +232,16 @@ namespace SysML2.NET.TextualNotation
         public static void BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            switch (ownedRelationshipCursor.Current)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership returnParameterMembership)
             {
-                case SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership returnParameterMembership:
-                    ReturnParameterMembershipTextualNotationBuilder.BuildReturnParameterMember(returnParameterMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Core.Types.IType type:
-                    BuildActionBodyItem(type, cursorCache, stringBuilder); break;
-
+                ReturnParameterMembershipTextualNotationBuilder.BuildReturnParameterMember(returnParameterMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
+            else
+            {
+                BuildActionBodyItem(poco, cursorCache, stringBuilder);
+            }
+
         }
 
         /// <summary>
@@ -264,24 +281,41 @@ namespace SysML2.NET.TextualNotation
         public static void BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            switch (ownedRelationshipCursor.Current)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership subjectMembership)
             {
-                case SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership subjectMembership:
-                    SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership framedConcernMembership:
-                    FramedConcernMembershipTextualNotationBuilder.BuildFramedConcernMember(framedConcernMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership requirementVerificationMembership:
-                    RequirementVerificationMembershipTextualNotationBuilder.BuildRequirementVerificationMember(requirementVerificationMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership actorMembership:
-                    ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.IStakeholderMembership stakeholderMembership:
-                    StakeholderMembershipTextualNotationBuilder.BuildStakeholderMember(stakeholderMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership requirementConstraintMembership:
-                    RequirementConstraintMembershipTextualNotationBuilder.BuildRequirementConstraintMember(requirementConstraintMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Core.Types.IType type:
-                    BuildDefinitionBodyItem(type, cursorCache, stringBuilder); break;
-
+                SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership framedConcernMembership)
+            {
+                FramedConcernMembershipTextualNotationBuilder.BuildFramedConcernMember(framedConcernMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership requirementVerificationMembership)
+            {
+                RequirementVerificationMembershipTextualNotationBuilder.BuildRequirementVerificationMember(requirementVerificationMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership actorMembership)
+            {
+                ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IStakeholderMembership stakeholderMembership)
+            {
+                StakeholderMembershipTextualNotationBuilder.BuildStakeholderMember(stakeholderMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership requirementConstraintMembership)
+            {
+                RequirementConstraintMembershipTextualNotationBuilder.BuildRequirementConstraintMember(requirementConstraintMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else
+            {
+                BuildDefinitionBodyItem(poco, cursorCache, stringBuilder);
+            }
+
         }
 
         /// <summary>
@@ -304,6 +338,7 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildCaseBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
                 }
 
 
@@ -336,18 +371,26 @@ namespace SysML2.NET.TextualNotation
         public static void BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            switch (ownedRelationshipCursor.Current)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership subjectMembership)
             {
-                case SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership subjectMembership:
-                    SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership actorMembership:
-                    ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership objectiveMembership:
-                    ObjectiveMembershipTextualNotationBuilder.BuildObjectiveMember(objectiveMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Core.Types.IType type:
-                    BuildActionBodyItem(type, cursorCache, stringBuilder); break;
-
+                SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership actorMembership)
+            {
+                ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership objectiveMembership)
+            {
+                ObjectiveMembershipTextualNotationBuilder.BuildObjectiveMember(objectiveMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else
+            {
+                BuildActionBodyItem(poco, cursorCache, stringBuilder);
+            }
+
         }
 
         /// <summary>
@@ -367,7 +410,26 @@ namespace SysML2.NET.TextualNotation
             {
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 stringBuilder.AppendLine("{");
-                // Have to handle group collection
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    switch (ownedRelationshipCursor.Current)
+                    {
+                        case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership featureMembership:
+                            FeatureMembershipTextualNotationBuilder.BuildMetadataBodyUsageMember(featureMembership, cursorCache, stringBuilder);
+                            break;
+                        case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
+                            OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, cursorCache, stringBuilder);
+                            break;
+                        case SysML2.NET.Core.POCO.Root.Namespaces.IMembership membership:
+                            MembershipTextualNotationBuilder.BuildAliasMember(membership, cursorCache, stringBuilder);
+                            break;
+                        case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
+                            ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                            break;
+                    }
+                    ownedRelationshipCursor.Move();
+                }
+
                 stringBuilder.AppendLine("}");
             }
 
@@ -441,11 +503,12 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            // Have to handle group collection
+            BuildTypeDeclarationHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
             while (ownedRelationshipCursor.Current != null)
             {
                 BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
 
@@ -777,7 +840,21 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFunctionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildFunctionBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                if (ownedRelationshipCursor.Current != null)
+                {
+                    BuildFunctionBodyPart(poco, cursorCache, stringBuilder);
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
@@ -790,7 +867,17 @@ namespace SysML2.NET.TextualNotation
         public static void BuildFunctionBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            // Have to handle group collection
+            while (ownedRelationshipCursor.Current != null)
+            {
+                switch (ownedRelationshipCursor.Current)
+                {
+                    case SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership returnParameterMembership:
+                        ReturnParameterMembershipTextualNotationBuilder.BuildReturnFeatureMember(returnParameterMembership, cursorCache, stringBuilder);
+                        break;
+                }
+                ownedRelationshipCursor.Move();
+            }
+
 
             if (ownedRelationshipCursor.Current != null)
             {

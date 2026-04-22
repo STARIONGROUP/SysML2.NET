@@ -101,9 +101,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildMetadataUsage(SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
             stringBuilder.Append(" @ ");

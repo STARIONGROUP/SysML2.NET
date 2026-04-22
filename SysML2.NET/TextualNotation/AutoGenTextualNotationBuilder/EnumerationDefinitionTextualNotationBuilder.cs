@@ -51,7 +51,20 @@ namespace SysML2.NET.TextualNotation
             {
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 stringBuilder.AppendLine("{");
-                // Have to handle group collection
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    switch (ownedRelationshipCursor.Current)
+                    {
+                        case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership variantMembership:
+                            VariantMembershipTextualNotationBuilder.BuildEnumerationUsageMember(variantMembership, cursorCache, stringBuilder);
+                            break;
+                        case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
+                            OwningMembershipTextualNotationBuilder.BuildAnnotatingMember(owningMembership, cursorCache, stringBuilder);
+                            break;
+                    }
+                    ownedRelationshipCursor.Move();
+                }
+
                 stringBuilder.AppendLine("}");
             }
 
@@ -67,9 +80,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildEnumerationDefinition(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
             stringBuilder.Append("enum ");

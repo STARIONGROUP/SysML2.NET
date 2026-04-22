@@ -71,16 +71,21 @@ namespace SysML2.NET.TextualNotation
         public static void BuildViewDefinitionBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            switch (ownedRelationshipCursor.Current)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership viewRenderingMembership)
             {
-                case SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership viewRenderingMembership:
-                    ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembership:
-                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, cursorCache, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Core.Types.IType type:
-                    TypeTextualNotationBuilder.BuildDefinitionBodyItem(type, cursorCache, stringBuilder); break;
-
+                ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembership)
+            {
+                ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else
+            {
+                TypeTextualNotationBuilder.BuildDefinitionBodyItem(poco, cursorCache, stringBuilder);
+            }
+
         }
 
         /// <summary>

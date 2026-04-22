@@ -80,6 +80,7 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current != null)
             {
                 BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
 
@@ -122,9 +123,10 @@ namespace SysML2.NET.TextualNotation
             }
 
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
             stringBuilder.Append("def ");

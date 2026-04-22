@@ -45,9 +45,10 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("actor ");
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
             UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
@@ -65,9 +66,10 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("stakeholder ");
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
 
             UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);

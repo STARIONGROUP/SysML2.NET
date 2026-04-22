@@ -66,6 +66,7 @@ namespace SysML2.NET.TextualNotation
                         break;
                 }
 
+                ownedRelationshipCursor.Move();
             }
 
 

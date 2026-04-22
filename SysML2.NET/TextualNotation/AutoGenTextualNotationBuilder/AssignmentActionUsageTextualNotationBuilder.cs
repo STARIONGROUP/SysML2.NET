@@ -81,6 +81,7 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     TypeTextualNotationBuilder.BuildActionBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
                 }
 
                 stringBuilder.AppendLine("}");
