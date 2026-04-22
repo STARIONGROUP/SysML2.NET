@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,56 +36,62 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ViewBody
-        /// <para>ViewBody:ViewUsage=';'|'{'ViewBodyItem*'}'</para>    
+        /// <para>ViewBody:ViewUsage=';'|'{'ViewBodyItem*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewBody(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
+        public static void BuildViewBody(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildViewBodyHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ViewBodyItem
-        /// <para>ViewBodyItem:ViewUsage=DefinitionBodyItem|ownedRelationship+=ElementFilterMember|ownedRelationship+=ViewRenderingMember|ownedRelationship+=Expose</para>    
+        /// <para>ViewBodyItem:ViewUsage=DefinitionBodyItem|ownedRelationship+=ElementFilterMember|ownedRelationship+=ViewRenderingMember|ownedRelationship+=Expose</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildViewBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildViewBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            var elementsElement = poco.OwnedRelationship[elementIndex];
-
-            switch (elementsElement)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            switch (ownedRelationshipCursor.Current)
             {
-                case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
-                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder); break;
-                case SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembership:
-                    ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership viewRenderingMembership:
+                    ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, cursorCache, stringBuilder); break;
+                case SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembership:
+                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, cursorCache, stringBuilder); break;
                 case SysML2.NET.Core.POCO.Systems.Views.IExpose expose:
-                    ExposeTextualNotationBuilder.BuildExpose(expose, stringBuilder); break;
+                    ExposeTextualNotationBuilder.BuildExpose(expose, cursorCache, stringBuilder); break;
                 case SysML2.NET.Core.POCO.Core.Types.IType type:
-                    elementIndex = TypeTextualNotationBuilder.BuildDefinitionBodyItem(type, elementIndex, stringBuilder);
-                    break;
+                    TypeTextualNotationBuilder.BuildDefinitionBodyItem(type, cursorCache, stringBuilder); break;
 
             }
-            return elementIndex;
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ViewUsage
-        /// <para>ViewUsage=OccurrenceUsagePrefix'view'UsageDeclaration?ValuePart?ViewBody</para>    
+        /// <para>ViewUsage=OccurrenceUsagePrefix'view'UsageDeclaration?ValuePart?ViewBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewUsage(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
+        public static void BuildViewUsage(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("view ");
-            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
-            BuildViewBody(poco, stringBuilder);
+
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+            {
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+            }
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+            }
+            BuildViewBody(poco, cursorCache, stringBuilder);
 
         }
     }

@@ -36,29 +36,35 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule LibraryPackage
-        /// <para>LibraryPackage=(isStandard?='standard')'library'(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>    
+        /// <para>LibraryPackage=(isStandard?='standard')'library'(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, StringBuilder stringBuilder)
+        public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append(" standard ");
 
             stringBuilder.Append(' ');
             stringBuilder.Append("library ");
 
-            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
-            PackageTextualNotationBuilder.BuildPackageDeclaration(poco, stringBuilder);
-            PackageTextualNotationBuilder.BuildPackageBody(poco, stringBuilder);
+            PackageTextualNotationBuilder.BuildPackageDeclaration(poco, cursorCache, stringBuilder);
+            PackageTextualNotationBuilder.BuildPackageBody(poco, cursorCache, stringBuilder);
 
         }
     }

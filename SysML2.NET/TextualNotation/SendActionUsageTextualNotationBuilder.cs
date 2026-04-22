@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="SendActionUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,35 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Systems.Actions;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="SendActionUsageTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="SendActionUsageTextualNotationBuilder" />
     /// </summary>
     public static partial class SendActionUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the TransitionSendActionUsage rule
+        /// Builds the Textual Notation string for the rule SendNode
         /// </summary>
-        /// <param name="poco">The <see cref="ISendActionUsage"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForTransitionSendActionUsage(ISendActionUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSendNodeHandCoded(ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return poco.OwnedRelationship.Count != 0;
+            throw new System.NotSupportedException("BuildSendNodeHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule SenderReceiverPart
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSenderReceiverPartHandCoded(ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildSenderReceiverPartHandCoded requires manual implementation");
         }
     }
 }

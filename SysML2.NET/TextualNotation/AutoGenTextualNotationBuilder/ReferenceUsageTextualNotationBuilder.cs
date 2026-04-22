@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,69 +36,84 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedCrossFeature
-        /// <para>OwnedCrossFeature:ReferenceUsage=BasicUsagePrefixUsageDeclaration</para>    
+        /// <para>OwnedCrossFeature:ReferenceUsage=BasicUsagePrefixUsageDeclaration</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedCrossFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildOwnedCrossFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, stringBuilder);
-            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule DefaultReferenceUsage
-        /// <para>DefaultReferenceUsage:ReferenceUsage=RefPrefixUsage</para>    
+        /// <para>DefaultReferenceUsage:ReferenceUsage=RefPrefixUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefaultReferenceUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildDefaultReferenceUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildRefPrefix(poco, stringBuilder);
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildRefPrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule VariantReference
-        /// <para>VariantReference:ReferenceUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecialization*UsageBody</para>    
+        /// <para>VariantReference:ReferenceUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecialization*UsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildVariantReference(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildVariantReference(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                }
             }
-            // Handle collection Non Terminal 
-            BuildFeatureSpecializationInternal(poco, stringBuilder); FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, stringBuilder);
-            UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
+            ownedRelationshipCursor.Move();
+
+            while (ownedRelationshipCursor.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+            }
+
+            UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SourceEnd
-        /// <para>SourceEnd:ReferenceUsage=(ownedRelationship+=OwnedMultiplicity)?</para>    
+        /// <para>SourceEnd:ReferenceUsage=(ownedRelationship+=OwnedMultiplicity)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSourceEnd(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildSourceEnd(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
-                stringBuilder.Append(' ');
             }
 
 
@@ -107,21 +121,25 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ConnectorEnd
-        /// <para>ConnectorEnd:ReferenceUsage=(ownedRelationship+=OwnedCrossMultiplicityMember)?(declaredName=NAMEREFERENCES)?ownedRelationship+=OwnedReferenceSubsetting</para>    
+        /// <para>ConnectorEnd:ReferenceUsage=(ownedRelationship+=OwnedCrossMultiplicityMember)?(declaredName=NAMEREFERENCES)?ownedRelationship+=OwnedReferenceSubsetting</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConnectorEnd(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildConnectorEnd(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(' ');
             }
@@ -134,102 +152,115 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
 
-            if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FlowFeature
-        /// <para>FlowFeature:ReferenceUsage=ownedRelationship+=FlowFeatureRedefinition</para>    
+        /// <para>FlowFeature:ReferenceUsage=ownedRelationship+=FlowFeatureRedefinition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildFlowFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildFlowFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
                 {
-                    RedefinitionTextualNotationBuilder.BuildFlowFeatureRedefinition(elementAsRedefinition, stringBuilder);
+                    RedefinitionTextualNotationBuilder.BuildFlowFeatureRedefinition(elementAsRedefinition, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule PayloadParameter
-        /// <para>PayloadParameter:ReferenceUsage=PayloadFeature|IdentificationPayloadFeatureSpecializationPart?TriggerValuePart</para>    
+        /// <para>PayloadParameter:ReferenceUsage=PayloadFeature|IdentificationPayloadFeatureSpecializationPart?TriggerValuePart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPayloadParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildPayloadParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildPayloadParameterHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule NodeParameter
-        /// <para>NodeParameter:ReferenceUsage=ownedRelationship+=FeatureBinding</para>    
+        /// <para>NodeParameter:ReferenceUsage=ownedRelationship+=FeatureBinding</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildNodeParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildNodeParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
-                    FeatureValueTextualNotationBuilder.BuildFeatureBinding(elementAsFeatureValue, 0, stringBuilder);
+                    FeatureValueTextualNotationBuilder.BuildFeatureBinding(elementAsFeatureValue, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EmptyUsage
-        /// <para>EmptyUsage:ReferenceUsage={}</para>    
+        /// <para>EmptyUsage:ReferenceUsage={}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEmptyUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildEmptyUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule AssignmentTargetParameter
-        /// <para>AssignmentTargetParameter:ReferenceUsage=(ownedRelationship+=AssignmentTargetBinding'.')?</para>    
+        /// <para>AssignmentTargetParameter:ReferenceUsage=(ownedRelationship+=AssignmentTargetBinding'.')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAssignmentTargetParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildAssignmentTargetParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfFeatureValueIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfFeatureValueIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(ownedRelationshipOfFeatureValueIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
+                    {
+                        FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(elementAsFeatureValue, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(".");
-                stringBuilder.Append(' ');
             }
 
 
@@ -237,103 +268,132 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ForVariableDeclaration
-        /// <para>ForVariableDeclaration:ReferenceUsage=UsageDeclaration</para>    
+        /// <para>ForVariableDeclaration:ReferenceUsage=UsageDeclaration</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildForVariableDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildForVariableDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EmptyFeature
-        /// <para>EmptyFeature:ReferenceUsage={}</para>    
+        /// <para>EmptyFeature:ReferenceUsage={}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEmptyFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildEmptyFeature(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SubjectUsage
-        /// <para>SubjectUsage:ReferenceUsage='subject'UsageExtensionKeyword*Usage</para>    
+        /// <para>SubjectUsage:ReferenceUsage='subject'UsageExtensionKeyword*Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubjectUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildSubjectUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("subject ");
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
             }
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SatisfactionParameter
-        /// <para>SatisfactionParameter:ReferenceUsage=ownedRelationship+=SatisfactionFeatureValue</para>    
+        /// <para>SatisfactionParameter:ReferenceUsage=ownedRelationship+=SatisfactionFeatureValue</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildSatisfactionParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildSatisfactionParameter(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
-                    FeatureValueTextualNotationBuilder.BuildSatisfactionFeatureValue(elementAsFeatureValue, 0, stringBuilder);
+                    FeatureValueTextualNotationBuilder.BuildSatisfactionFeatureValue(elementAsFeatureValue, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MetadataBodyUsage
-        /// <para>MetadataBodyUsage:ReferenceUsage='ref'?(':&gt;&gt;'|'redefines')?ownedRelationship+=OwnedRedefinitionFeatureSpecializationPart?ValuePart?MetadataBody</para>    
+        /// <para>MetadataBodyUsage:ReferenceUsage='ref'?(':&gt;&gt;'|'redefines')?ownedRelationship+=OwnedRedefinitionFeatureSpecializationPart?ValuePart?MetadataBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBodyUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildMetadataBodyUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("ref ");
             stringBuilder.Append(" :>> ");
-            ownedRelationshipOfRedefinitionIterator.MoveNext();
 
-            if (ownedRelationshipOfRedefinitionIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
+                {
+                    RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(elementAsRedefinition, cursorCache, stringBuilder);
+                }
             }
-            FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
-            TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
+            ownedRelationshipCursor.Move();
+
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+            }
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+            }
+            TypeTextualNotationBuilder.BuildMetadataBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ReferenceUsage
-        /// <para>ReferenceUsage=(EndUsagePrefix|RefPrefix)'ref'Usage</para>    
+        /// <para>ReferenceUsage=(EndUsagePrefix|RefPrefix)'ref'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildReferenceUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildReferenceUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageRefPrefix when pocoUsageRefPrefix.IsDerived:
+                    UsageTextualNotationBuilder.BuildRefPrefix(pocoUsageRefPrefix, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsage:
+                    UsageTextualNotationBuilder.BuildEndUsagePrefix(pocoUsage, cursorCache, stringBuilder);
+                    break;
+            }
+
             stringBuilder.Append(' ');
             stringBuilder.Append("ref ");
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
     }

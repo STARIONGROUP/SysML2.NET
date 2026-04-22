@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="PerformActionUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,24 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Systems.Actions;
 
     /// <summary>
-    /// Hand-coded part of <see cref="PerformActionUsageTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="PerformActionUsageTextualNotationBuilder" />
     /// </summary>
     public static partial class PerformActionUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the TransitionPerformActionUsage rule
+        /// Builds the Textual Notation string for the rule PerformActionUsageDeclaration
         /// </summary>
-        /// <param name="poco">The <see cref="IPerformActionUsage"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForTransitionPerformActionUsage(IPerformActionUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildPerformActionUsageDeclarationHandCoded(IPerformActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return poco.OwnedRelationship.Count != 0;
+            throw new System.NotSupportedException("BuildPerformActionUsageDeclarationHandCoded requires manual implementation");
         }
     }
 }

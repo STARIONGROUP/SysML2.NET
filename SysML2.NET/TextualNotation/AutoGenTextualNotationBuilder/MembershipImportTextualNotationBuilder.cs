@@ -36,11 +36,12 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule MembershipImport
-        /// <para>MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')?</para>    
+        /// <para>MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMembershipImport(SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport poco, StringBuilder stringBuilder)
+        public static void BuildMembershipImport(SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.ImportedMembership != null)
@@ -53,7 +54,6 @@ namespace SysML2.NET.TextualNotation
             {
                 stringBuilder.Append(":: ");
                 stringBuilder.Append(" ** ");
-                stringBuilder.Append(' ');
             }
 
 

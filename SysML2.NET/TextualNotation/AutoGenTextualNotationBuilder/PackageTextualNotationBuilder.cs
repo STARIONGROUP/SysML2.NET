@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,81 +36,92 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule PackageDeclaration
-        /// <para>PackageDeclaration:Package='package'Identification</para>    
+        /// <para>PackageDeclaration:Package='package'Identification</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageDeclaration(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        public static void BuildPackageDeclaration(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("package ");
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule PackageBody
-        /// <para>PackageBody:Package=';'|'{'PackageBodyElement*'}'</para>    
+        /// <para>PackageBody:Package=';'|'{'PackageBodyElement*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageBody(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        public static void BuildPackageBody(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildPackageBodyHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule PackageBodyElement
-        /// <para>PackageBodyElement:Package=ownedRelationship+=PackageMember|ownedRelationship+=ElementFilterMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
+        /// <para>PackageBodyElement:Package=ownedRelationship+=PackageMember|ownedRelationship+=ElementFilterMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            switch (elementInOwnedRelationship)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            switch (ownedRelationshipCursor.Current)
             {
-                case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
-                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembership:
+                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
                     break;
-                case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership:
-                    OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, stringBuilder);
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
+                    OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
                     break;
-                case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
-                    MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                case SysML2.NET.Core.POCO.Root.Namespaces.IMembership membership:
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
-                    ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                    ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
                     break;
             }
 
-            return elementIndex;
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FilterPackage
-        /// <para>FilterPackage:Package=ownedRelationship+=FilterPackageImport(ownedRelationship+=FilterPackageMember)+</para>    
+        /// <para>FilterPackage:Package=ownedRelationship+=FilterPackageImport(ownedRelationship+=FilterPackageMember)+</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFilterPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        public static void BuildFilterPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfPackageIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Packages.Package>().GetEnumerator();
-            using var ownedRelationshipOfElementFilterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership>().GetEnumerator();
-            ownedRelationshipOfPackageIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfPackageIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                BuildFilterPackageImport(ownedRelationshipOfPackageIterator.Current, stringBuilder);
+                BuildFilterPackageImport(poco, cursorCache, stringBuilder);
             }
+            ownedRelationshipCursor.Move();
 
-            while (ownedRelationshipOfElementFilterMembershipIterator.MoveNext())
+
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfElementFilterMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(ownedRelationshipOfElementFilterMembershipIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementAsElementFilterMembership)
+                    {
+                        ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(elementAsElementFilterMembership, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
             stringBuilder.Append(' ');
@@ -120,25 +130,31 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Package
-        /// <para>Package=(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>    
+        /// <para>Package=(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        public static void BuildPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
-            BuildPackageDeclaration(poco, stringBuilder);
-            BuildPackageBody(poco, stringBuilder);
+            BuildPackageDeclaration(poco, cursorCache, stringBuilder);
+            BuildPackageBody(poco, cursorCache, stringBuilder);
 
         }
     }

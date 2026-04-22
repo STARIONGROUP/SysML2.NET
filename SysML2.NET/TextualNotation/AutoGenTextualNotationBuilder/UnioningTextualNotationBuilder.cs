@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,14 +36,14 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule Unioning
-        /// <para>Unioning=unioningType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain</para>    
+        /// <para>Unioning=unioningType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IUnioning" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildUnioning(SysML2.NET.Core.POCO.Core.Types.IUnioning poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildUnioning(SysML2.NET.Core.POCO.Core.Types.IUnioning poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             if (poco.UnioningType != null)
             {
                 stringBuilder.Append(poco.UnioningType.qualifiedName);
@@ -52,18 +51,17 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
-                if (elementIndex < poco.OwnedRelatedElement.Count)
-                {
-                    var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
 
-                    if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                if (ownedRelatedElementCursor.Current != null)
+                {
+
+                    if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                     {
-                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
+                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, cursorCache, stringBuilder);
                     }
                 }
             }
 
-            return elementIndex;
         }
     }
 }

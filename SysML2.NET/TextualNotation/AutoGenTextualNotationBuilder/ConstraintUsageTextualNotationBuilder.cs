@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,43 +36,47 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ConstraintUsageDeclaration
-        /// <para>ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?</para>    
+        /// <para>ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConstraintUsageDeclaration(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
+        public static void BuildConstraintUsageDeclaration(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+            }
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule RequirementConstraintUsage
-        /// <para>RequirementConstraintUsage:ConstraintUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?RequirementBody|(UsageExtensionKeyword*'constraint'|UsageExtensionKeyword+)ConstraintUsageDeclarationCalculationBody</para>    
+        /// <para>RequirementConstraintUsage:ConstraintUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?RequirementBody|(UsageExtensionKeyword*'constraint'|UsageExtensionKeyword+)ConstraintUsageDeclarationCalculationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildRequirementConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildRequirementConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            return elementIndex;
+            BuildRequirementConstraintUsageHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ConstraintUsage
-        /// <para>ConstraintUsage=OccurrenceUsagePrefix'constraint'ConstraintUsageDeclarationCalculationBody</para>    
+        /// <para>ConstraintUsage=OccurrenceUsagePrefix'constraint'ConstraintUsageDeclarationCalculationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
+        public static void BuildConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("constraint ");
-            BuildConstraintUsageDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
+            BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, cursorCache, stringBuilder);
 
         }
     }

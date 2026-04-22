@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,25 +36,26 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ConjugatedPortDefinition
-        /// <para>ConjugatedPortDefinition=ownedRelationship+=PortConjugation</para>    
+        /// <para>ConjugatedPortDefinition=ownedRelationship+=PortConjugation</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildConjugatedPortDefinition(SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildConjugatedPortDefinition(SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Systems.Ports.IPortConjugation elementAsPortConjugation)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Ports.IPortConjugation elementAsPortConjugation)
                 {
-                    PortConjugationTextualNotationBuilder.BuildPortConjugation(elementAsPortConjugation, stringBuilder);
+                    PortConjugationTextualNotationBuilder.BuildPortConjugation(elementAsPortConjugation, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
     }
 }

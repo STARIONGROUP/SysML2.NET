@@ -36,28 +36,30 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule StateDefBody
-        /// <para>StateDefBody:StateDefinition=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>    
+        /// <para>StateDefBody:StateDefinition=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateDefBody(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, StringBuilder stringBuilder)
+        public static void BuildStateDefBody(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildStateDefBodyHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule StateDefinition
-        /// <para>StateDefinition=OccurrenceDefinitionPrefix'state''def'DefinitionDeclarationStateDefBody</para>    
+        /// <para>StateDefinition=OccurrenceDefinitionPrefix'state''def'DefinitionDeclarationStateDefBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateDefinition(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, StringBuilder stringBuilder)
+        public static void BuildStateDefinition(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("state ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            BuildStateDefBody(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
+            BuildStateDefBody(poco, cursorCache, stringBuilder);
 
         }
     }

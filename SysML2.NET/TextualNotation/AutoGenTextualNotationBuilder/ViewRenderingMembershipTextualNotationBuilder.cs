@@ -36,21 +36,27 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ViewRenderingMember
-        /// <para>ViewRenderingMember:ViewRenderingMembership=MemberPrefix'render'ownedRelatedElement+=ViewRenderingUsage</para>    
+        /// <para>ViewRenderingMember:ViewRenderingMembership=MemberPrefix'render'ownedRelatedElement+=ViewRenderingUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewRenderingMember(SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership poco, StringBuilder stringBuilder)
+        public static void BuildViewRenderingMember(SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfRenderingUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Views.RenderingUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("render ");
-            ownedRelatedElementOfRenderingUsageIterator.MoveNext();
 
-            if (ownedRelatedElementOfRenderingUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(ownedRelatedElementOfRenderingUsageIterator.Current, 0, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage elementAsRenderingUsage)
+                {
+                    RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(elementAsRenderingUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

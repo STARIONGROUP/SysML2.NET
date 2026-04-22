@@ -36,39 +36,48 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule Comment
-        /// <para>Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT</para>    
+        /// <para>Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IComment" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, StringBuilder stringBuilder)
+        public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (BuildGroupConditionForComment(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("comment ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
 
-                if (ownedRelationshipOfAnnotationIterator.MoveNext())
+                if (ownedRelationshipCursor.Current != null)
                 {
                     stringBuilder.Append("about ");
 
-                    if (ownedRelationshipOfAnnotationIterator.Current != null)
+                    if (ownedRelationshipCursor.Current != null)
                     {
-                        AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
-                    }
 
-                    while (ownedRelationshipOfAnnotationIterator.MoveNext())
-                    {
-                        stringBuilder.Append(",");
-
-                        if (ownedRelationshipOfAnnotationIterator.Current != null)
+                        if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
                         {
-                            AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                            AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
                         }
+                    }
+
+                    while (ownedRelationshipCursor.Current != null)
+                    {
+                        stringBuilder.Append(", ");
+
+                        if (ownedRelationshipCursor.Current != null)
+                        {
+
+                            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
+                            {
+                                AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                            }
+                        }
+                        ownedRelationshipCursor.Move();
 
                     }
-                    stringBuilder.Append(' ');
                 }
 
                 stringBuilder.Append(' ');

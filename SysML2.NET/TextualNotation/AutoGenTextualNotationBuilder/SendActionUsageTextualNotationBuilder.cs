@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,89 +36,108 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule SendNode
-        /// <para>SendNode:SendActionUsage=OccurrenceUsagePrefixActionUsageDeclaration?'send'(ownedRelationship+=NodeParameterMemberSenderReceiverPart?|ownedRelationship+=EmptyParameterMemberSenderReceiverPart)?ActionBody</para>    
+        /// <para>SendNode:SendActionUsage=OccurrenceUsagePrefixActionUsageDeclaration?'send'(ownedRelationship+=NodeParameterMemberSenderReceiverPart?|ownedRelationship+=EmptyParameterMemberSenderReceiverPart)?ActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSendNode(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildSendNode(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, cursorCache, stringBuilder);
+            }
             stringBuilder.Append("send ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
+            BuildSendNodeHandCoded(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SendNodeDeclaration
-        /// <para>SendNodeDeclaration:SendActionUsage=ActionNodeUsageDeclaration?'send'ownedRelationship+=NodeParameterMemberSenderReceiverPart?</para>    
+        /// <para>SendNodeDeclaration:SendActionUsage=ActionNodeUsageDeclaration?'send'ownedRelationship+=NodeParameterMemberSenderReceiverPart?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSendNodeDeclaration(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildSendNodeDeclaration(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, stringBuilder);
-            stringBuilder.Append("send ");
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
+                ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, cursorCache, stringBuilder);
             }
-            BuildSenderReceiverPart(poco, 0, stringBuilder);
+            stringBuilder.Append("send ");
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                BuildSenderReceiverPart(poco, cursorCache, stringBuilder);
+            }
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SenderReceiverPart
-        /// <para>SenderReceiverPart:SendActionUsage='via'ownedRelationship+=NodeParameterMember('to'ownedRelationship+=NodeParameterMember)?|ownedRelationship+=EmptyParameterMember'to'ownedRelationship+=NodeParameterMember</para>    
+        /// <para>SenderReceiverPart:SendActionUsage='via'ownedRelationship+=NodeParameterMember('to'ownedRelationship+=NodeParameterMember)?|ownedRelationship+=EmptyParameterMember'to'ownedRelationship+=NodeParameterMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildSenderReceiverPart(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildSenderReceiverPart(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            return elementIndex;
+            BuildSenderReceiverPartHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule StateSendActionUsage
-        /// <para>StateSendActionUsage:SendActionUsage=SendNodeDeclarationActionBody</para>    
+        /// <para>StateSendActionUsage:SendActionUsage=SendNodeDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildStateSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildSendNodeDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
+            BuildSendNodeDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule TransitionSendActionUsage
-        /// <para>TransitionSendActionUsage:SendActionUsage=SendNodeDeclaration('{'ActionBodyItem*'}')?</para>    
+        /// <para>TransitionSendActionUsage:SendActionUsage=SendNodeDeclaration('{'ActionBodyItem*'}')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildTransitionSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildSendNodeDeclaration(poco, stringBuilder);
+            BuildSendNodeDeclaration(poco, cursorCache, stringBuilder);
 
-            if (BuildGroupConditionForTransitionSendActionUsage(poco))
+            if (poco.OwnedRelationship.Count != 0 || poco.importedMembership.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
-                stringBuilder.Append("{");
-                // Handle collection Non Terminal 
-                for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
                 {
-                    ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+                    TypeTextualNotationBuilder.BuildActionBodyItem(poco, cursorCache, stringBuilder);
                 }
-                stringBuilder.Append("}");
-                stringBuilder.Append(' ');
+
+                stringBuilder.AppendLine("}");
             }
 
 

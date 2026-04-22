@@ -36,51 +36,56 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ActorUsage
-        /// <para>ActorUsage:PartUsage='actor'UsageExtensionKeyword*Usage</para>    
+        /// <para>ActorUsage:PartUsage='actor'UsageExtensionKeyword*Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActorUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
+        public static void BuildActorUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("actor ");
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
             }
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule StakeholderUsage
-        /// <para>StakeholderUsage:PartUsage='stakeholder'UsageExtensionKeyword*Usage</para>    
+        /// <para>StakeholderUsage:PartUsage='stakeholder'UsageExtensionKeyword*Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStakeholderUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
+        public static void BuildStakeholderUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("stakeholder ");
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
             }
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule PartUsage
-        /// <para>PartUsage=OccurrenceUsagePrefix'part'Usage</para>    
+        /// <para>PartUsage=OccurrenceUsagePrefix'part'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPartUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
+        public static void BuildPartUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("part ");
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
     }

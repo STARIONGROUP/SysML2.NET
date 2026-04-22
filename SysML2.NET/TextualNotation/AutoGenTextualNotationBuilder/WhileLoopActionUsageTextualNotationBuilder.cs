@@ -36,33 +36,42 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule WhileLoopNode
-        /// <para>WhileLoopNode:WhileLoopActionUsage=ActionNodePrefix('while'ownedRelationship+=ExpressionParameterMember|'loop'ownedRelationship+=EmptyParameterMember)ownedRelationship+=ActionBodyParameterMember('until'ownedRelationship+=ExpressionParameterMember';')?</para>    
+        /// <para>WhileLoopNode:WhileLoopActionUsage=ActionNodePrefix('while'ownedRelationship+=ExpressionParameterMember|'loop'ownedRelationship+=EmptyParameterMember)ownedRelationship+=ActionBodyParameterMember('until'ownedRelationship+=ExpressionParameterMember';')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildWhileLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildWhileLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, cursorCache, stringBuilder);
+            BuildWhileLoopNodeHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
-            }
 
-            if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            if (ownedRelationshipCursor.Current != null)
             {
                 stringBuilder.Append("until ");
 
-                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                    {
+                        ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    }
                 }
-                stringBuilder.Append(";");
-                stringBuilder.Append(' ');
+                stringBuilder.AppendLine(";");
             }
 
 

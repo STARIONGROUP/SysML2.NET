@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="SubsettingTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,24 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Core.Features;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="SubsettingTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="SubsettingTextualNotationBuilder" />
     /// </summary>
     public static partial class SubsettingTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the Subsetting rule
+        /// Builds the Textual Notation string for the rule OwnedSubsetting
         /// </summary>
-        /// <param name="poco">The <see cref="ISubsetting"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForSubsetting(ISubsetting poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedSubsettingHandCoded(ISubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
+            throw new System.NotSupportedException("BuildOwnedSubsettingHandCoded requires manual implementation");
         }
     }
 }

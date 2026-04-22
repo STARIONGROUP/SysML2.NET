@@ -36,13 +36,14 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule MembershipExpose
-        /// <para>MembershipExpose=MembershipImport</para>    
+        /// <para>MembershipExpose=MembershipImport</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMembershipExpose(SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose poco, StringBuilder stringBuilder)
+        public static void BuildMembershipExpose(SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            MembershipImportTextualNotationBuilder.BuildMembershipImport(poco, stringBuilder);
+            MembershipImportTextualNotationBuilder.BuildMembershipImport(poco, cursorCache, stringBuilder);
 
         }
     }

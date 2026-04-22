@@ -36,33 +36,43 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule IfNode
-        /// <para>IfNode:IfActionUsage=ActionNodePrefix'if'ownedRelationship+=ExpressionParameterMemberownedRelationship+=ActionBodyParameterMember('else'ownedRelationship+=(ActionBodyParameterMember|IfNodeParameterMember))?</para>    
+        /// <para>IfNode:IfActionUsage=ActionNodePrefix'if'ownedRelationship+=ExpressionParameterMemberownedRelationship+=ActionBodyParameterMember('else'ownedRelationship+=(ActionBodyParameterMember|IfNodeParameterMember))?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIfNode(SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildIfNode(SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("if ");
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
-            }
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            if (ownedRelationshipCursor.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
-            }
 
-            if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            if (ownedRelationshipCursor.Current != null)
             {
                 stringBuilder.Append("else ");
-                throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
-                stringBuilder.Append(' ');
+                BuildIfNodeHandCoded(poco, cursorCache, stringBuilder);
             }
 
 

@@ -36,38 +36,40 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedConjugation
-        /// <para>OwnedConjugation:Conjugation=originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType}</para>    
+        /// <para>OwnedConjugation:Conjugation=originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, StringBuilder stringBuilder)
+        public static void BuildOwnedConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedConjugationHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Conjugation
-        /// <para>Conjugation=('conjugation'Identification)?'conjugate'(conjugatedType=[QualifiedName]|conjugatedType=FeatureChain{ownedRelatedElement+=conjugatedType})CONJUGATES(originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType})RelationshipBody</para>    
+        /// <para>Conjugation=('conjugation'Identification)?'conjugate'(conjugatedType=[QualifiedName]|conjugatedType=FeatureChain{ownedRelatedElement+=conjugatedType})CONJUGATES(originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType})RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, StringBuilder stringBuilder)
+        public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
-            if (BuildGroupConditionForConjugation(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("conjugation ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("conjugate ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildConjugationHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            stringBuilder.Append(" ~ ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" ~");
+            BuildConjugationHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

@@ -36,16 +36,17 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule RenderingDefinition
-        /// <para>RenderingDefinition=OccurrenceDefinitionPrefix'rendering''def'Definition</para>    
+        /// <para>RenderingDefinition=OccurrenceDefinitionPrefix'rendering''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRenderingDefinition(SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition poco, StringBuilder stringBuilder)
+        public static void BuildRenderingDefinition(SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("rendering ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
 
         }
     }

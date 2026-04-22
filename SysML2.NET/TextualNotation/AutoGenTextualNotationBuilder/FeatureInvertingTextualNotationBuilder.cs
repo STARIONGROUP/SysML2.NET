@@ -36,39 +36,45 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedFeatureInverting
-        /// <para>OwnedFeatureInverting:FeatureInverting=invertingFeature=[QualifiedName]|invertingFeature=OwnedFeatureChain{ownedRelatedElement+=invertingFeature}</para>    
+        /// <para>OwnedFeatureInverting:FeatureInverting=invertingFeature=[QualifiedName]|invertingFeature=OwnedFeatureChain{ownedRelatedElement+=invertingFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureInverting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, StringBuilder stringBuilder)
+        public static void BuildOwnedFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedFeatureInvertingHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureInverting
-        /// <para>FeatureInverting=('inverting'Identification?)?'inverse'(featureInverted=[QualifiedName]|featureInverted=OwnedFeatureChain{ownedRelatedElement+=featureInverted})'of'(invertingFeature=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain{ownedRelatedElement+=invertingFeature})RelationshipBody</para>    
+        /// <para>FeatureInverting=('inverting'Identification?)?'inverse'(featureInverted=[QualifiedName]|featureInverted=OwnedFeatureChain{ownedRelatedElement+=featureInverted})'of'(invertingFeature=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain{ownedRelatedElement+=invertingFeature})RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureInverting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, StringBuilder stringBuilder)
+        public static void BuildFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (BuildGroupConditionForFeatureInverting(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("inverting ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+
+                if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
+                {
+                    ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("inverse ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildFeatureInvertingHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
             stringBuilder.Append("of ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildFeatureInvertingHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

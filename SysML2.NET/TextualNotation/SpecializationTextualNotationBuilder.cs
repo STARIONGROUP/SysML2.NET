@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="SpecializationTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,35 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="SpecializationTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="SpecializationTextualNotationBuilder" />
     /// </summary>
     public static partial class SpecializationTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the Specialization rule
+        /// Builds the Textual Notation string for the rule GeneralType
         /// </summary>
-        /// <param name="poco">The <see cref="ISpecialization"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForSpecialization(ISpecialization poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildGeneralTypeHandCoded(ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
+            throw new System.NotSupportedException("BuildGeneralTypeHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule SpecificType
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSpecificTypeHandCoded(ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildSpecificTypeHandCoded requires manual implementation");
         }
     }
 }

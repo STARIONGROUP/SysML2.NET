@@ -36,31 +36,40 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule FlowEnd
-        /// <para>FlowEnd=(ownedRelationship+=FlowEndSubsetting)?ownedRelationship+=FlowFeatureMember</para>    
+        /// <para>FlowEnd=(ownedRelationship+=FlowEndSubsetting)?ownedRelationship+=FlowFeatureMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, StringBuilder stringBuilder)
+        public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfReferenceSubsettingIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                    {
+                        ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(' ');
             }
 
-            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(ownedRelationshipOfFeatureMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(elementAsFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
 
         }
     }

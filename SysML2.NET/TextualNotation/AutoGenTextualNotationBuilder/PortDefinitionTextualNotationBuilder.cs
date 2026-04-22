@@ -36,23 +36,29 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule PortDefinition
-        /// <para>PortDefinition=DefinitionPrefix'port''def'DefinitionownedRelationship+=ConjugatedPortDefinitionMember{conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition=this}</para>    
+        /// <para>PortDefinition=DefinitionPrefix'port''def'DefinitionownedRelationship+=ConjugatedPortDefinitionMember{conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition=this}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPortDefinition(SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition poco, StringBuilder stringBuilder)
+        public static void BuildPortDefinition(SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("port ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
-            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
 
-            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             // NonParsing Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this => Does not have to be process
 
         }

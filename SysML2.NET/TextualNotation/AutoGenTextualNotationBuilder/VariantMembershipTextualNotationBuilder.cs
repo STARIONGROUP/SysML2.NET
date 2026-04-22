@@ -36,38 +36,45 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule VariantUsageMember
-        /// <para>VariantUsageMember:VariantMembership=MemberPrefix'variant'ownedVariantUsage=VariantUsageElement</para>    
+        /// <para>VariantUsageMember:VariantMembership=MemberPrefix'variant'ownedVariantUsage=VariantUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildVariantUsageMember(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership poco, StringBuilder stringBuilder)
+        public static void BuildVariantUsageMember(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("variant ");
 
             if (poco.ownedVariantUsage != null)
             {
-                UsageTextualNotationBuilder.BuildVariantUsageElement(poco.ownedVariantUsage, stringBuilder);
+                UsageTextualNotationBuilder.BuildVariantUsageElement(poco.ownedVariantUsage, cursorCache, stringBuilder);
             }
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EnumerationUsageMember
-        /// <para>EnumerationUsageMember:VariantMembership=MemberPrefixownedRelatedElement+=EnumeratedValue</para>    
+        /// <para>EnumerationUsageMember:VariantMembership=MemberPrefixownedRelatedElement+=EnumeratedValue</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumerationUsageMember(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership poco, StringBuilder stringBuilder)
+        public static void BuildEnumerationUsageMember(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfEnumerationUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Enumerations.EnumerationUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            ownedRelatedElementOfEnumerationUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
 
-            if (ownedRelatedElementOfEnumerationUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                EnumerationUsageTextualNotationBuilder.BuildEnumeratedValue(ownedRelatedElementOfEnumerationUsageIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage elementAsEnumerationUsage)
+                {
+                    EnumerationUsageTextualNotationBuilder.BuildEnumeratedValue(elementAsEnumerationUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

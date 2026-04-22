@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,44 +36,51 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule SubjectMember
-        /// <para>SubjectMember:SubjectMembership=MemberPrefixownedRelatedElement+=SubjectUsage</para>    
+        /// <para>SubjectMember:SubjectMembership=MemberPrefixownedRelatedElement+=SubjectUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, StringBuilder stringBuilder)
+        public static void BuildSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
 
-            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                ReferenceUsageTextualNotationBuilder.BuildSubjectUsage(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+                {
+                    ReferenceUsageTextualNotationBuilder.BuildSubjectUsage(elementAsReferenceUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SatisfactionSubjectMember
-        /// <para>SatisfactionSubjectMember:SubjectMembership=ownedRelatedElement+=SatisfactionParameter</para>    
+        /// <para>SatisfactionSubjectMember:SubjectMembership=ownedRelatedElement+=SatisfactionParameter</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildSatisfactionSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildSatisfactionSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelatedElement.Count)
-            {
-                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
                 {
-                    ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(elementAsReferenceUsage, 0, stringBuilder);
+                    ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(elementAsReferenceUsage, cursorCache, stringBuilder);
                 }
             }
+            ownedRelatedElementCursor.Move();
 
-            return elementIndex;
+
         }
     }
 }

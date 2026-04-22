@@ -36,11 +36,12 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule MetadataDefinition
-        /// <para>MetadataDefinition=(isAbstract?='abstract')?DefinitionExtensionKeyword*'metadata''def'Definition</para>    
+        /// <para>MetadataDefinition=(isAbstract?='abstract')?DefinitionExtensionKeyword*'metadata''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataDefinition(SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition poco, StringBuilder stringBuilder)
+        public static void BuildMetadataDefinition(SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.IsAbstract)
@@ -49,14 +50,15 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
             }
+
             stringBuilder.Append("metadata ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
 
         }
     }

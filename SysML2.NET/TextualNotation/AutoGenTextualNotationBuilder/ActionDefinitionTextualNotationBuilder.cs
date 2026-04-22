@@ -36,17 +36,18 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ActionDefinition
-        /// <para>ActionDefinition=OccurrenceDefinitionPrefix'action''def'DefinitionDeclarationActionBody</para>    
+        /// <para>ActionDefinition=OccurrenceDefinitionPrefix'action''def'DefinitionDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionDefinition(SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition poco, StringBuilder stringBuilder)
+        public static void BuildActionDefinition(SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("action ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
 
         }
     }

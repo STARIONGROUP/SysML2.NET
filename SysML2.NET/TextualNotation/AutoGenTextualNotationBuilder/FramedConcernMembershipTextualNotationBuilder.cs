@@ -36,21 +36,31 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule FramedConcernMember
-        /// <para>FramedConcernMember:FramedConcernMembership=MemberPrefix?'frame'ownedRelatedElement+=FramedConcernUsage</para>    
+        /// <para>FramedConcernMember:FramedConcernMembership=MemberPrefix?'frame'ownedRelatedElement+=FramedConcernUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFramedConcernMember(SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership poco, StringBuilder stringBuilder)
+        public static void BuildFramedConcernMember(SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfConcernUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            stringBuilder.Append("frame ");
-            ownedRelatedElementOfConcernUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementOfConcernUsageIterator.Current != null)
+            if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(ownedRelatedElementOfConcernUsageIterator.Current, 0, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             }
+            stringBuilder.Append("frame ");
+
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage elementAsConcernUsage)
+                {
+                    ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(elementAsConcernUsage, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

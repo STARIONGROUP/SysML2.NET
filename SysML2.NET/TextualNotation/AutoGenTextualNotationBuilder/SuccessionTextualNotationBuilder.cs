@@ -36,64 +36,82 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule TransitionSuccession
-        /// <para>TransitionSuccession:Succession=ownedRelationship+=EmptyEndMemberownedRelationship+=ConnectorEndMember</para>    
+        /// <para>TransitionSuccession:Succession=ownedRelationship+=EmptyEndMemberownedRelationship+=ConnectorEndMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, StringBuilder stringBuilder)
+        public static void BuildTransitionSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
-            }
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
-            {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SuccessionDeclaration
-        /// <para>SuccessionDeclaration:Succession=FeatureDeclaration('first'ownedRelationship+=ConnectorEndMember'then'ownedRelationship+=ConnectorEndMember)?|(s.isSufficient?='all')?('first'?ownedRelationship+=ConnectorEndMember'then'ownedRelationship+=ConnectorEndMember)?</para>    
+        /// <para>SuccessionDeclaration:Succession=FeatureDeclaration('first'ownedRelationship+=ConnectorEndMember'then'ownedRelationship+=ConnectorEndMember)?|(s.isSufficient?='all')?('first'?ownedRelationship+=ConnectorEndMember'then'ownedRelationship+=ConnectorEndMember)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSuccessionDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, StringBuilder stringBuilder)
+        public static void BuildSuccessionDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildSuccessionDeclarationHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Succession
-        /// <para>Succession=FeaturePrefix'succession'SuccessionDeclarationTypeBody</para>    
+        /// <para>Succession=FeaturePrefix'succession'SuccessionDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, StringBuilder stringBuilder)
+        public static void BuildSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
 
-            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
 
             stringBuilder.Append("succession ");
-            BuildSuccessionDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+            BuildSuccessionDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
 
         }
     }

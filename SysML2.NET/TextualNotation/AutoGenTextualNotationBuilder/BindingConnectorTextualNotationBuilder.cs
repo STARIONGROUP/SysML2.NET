@@ -36,40 +36,47 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule BindingConnectorDeclaration
-        /// <para>BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?</para>    
+        /// <para>BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBindingConnectorDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, StringBuilder stringBuilder)
+        public static void BuildBindingConnectorDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildBindingConnectorDeclarationHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule BindingConnector
-        /// <para>BindingConnector=FeaturePrefix'binding'BindingConnectorDeclarationTypeBody</para>    
+        /// <para>BindingConnector=FeaturePrefix'binding'BindingConnectorDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBindingConnector(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, StringBuilder stringBuilder)
+        public static void BuildBindingConnector(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
 
-            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
 
             stringBuilder.Append("binding ");
-            BuildBindingConnectorDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+            BuildBindingConnectorDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
 
         }
     }

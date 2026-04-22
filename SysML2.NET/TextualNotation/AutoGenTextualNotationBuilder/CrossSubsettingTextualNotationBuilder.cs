@@ -36,13 +36,14 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedCrossSubsetting
-        /// <para>OwnedCrossSubsetting:CrossSubsetting=crossedFeature=[QualifiedName]|crossedFeature=OwnedFeatureChain{ownedRelatedElement+=crossedFeature}</para>    
+        /// <para>OwnedCrossSubsetting:CrossSubsetting=crossedFeature=[QualifiedName]|crossedFeature=OwnedFeatureChain{ownedRelatedElement+=crossedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedCrossSubsetting(SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting poco, StringBuilder stringBuilder)
+        public static void BuildOwnedCrossSubsetting(SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedCrossSubsettingHandCoded(poco, cursorCache, stringBuilder);
         }
     }
 }

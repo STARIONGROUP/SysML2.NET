@@ -36,16 +36,17 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ConnectionDefinition
-        /// <para>ConnectionDefinition=OccurrenceDefinitionPrefix'connection''def'Definition</para>    
+        /// <para>ConnectionDefinition=OccurrenceDefinitionPrefix'connection''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConnectionDefinition(SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition poco, StringBuilder stringBuilder)
+        public static void BuildConnectionDefinition(SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("connection ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
 
         }
     }

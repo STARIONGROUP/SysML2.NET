@@ -36,16 +36,17 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule AllocationDefinition
-        /// <para>AllocationDefinition=OccurrenceDefinitionPrefix'allocation''def'Definition</para>    
+        /// <para>AllocationDefinition=OccurrenceDefinitionPrefix'allocation''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Allocations.IAllocationDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAllocationDefinition(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationDefinition poco, StringBuilder stringBuilder)
+        public static void BuildAllocationDefinition(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("allocation ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
 
         }
     }

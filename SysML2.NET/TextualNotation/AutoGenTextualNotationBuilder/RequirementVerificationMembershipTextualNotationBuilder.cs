@@ -36,22 +36,28 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule RequirementVerificationMember
-        /// <para>RequirementVerificationMember:RequirementVerificationMembership=MemberPrefix'verify'{kind='requirement'}ownedRelatedElement+=RequirementVerificationUsage</para>    
+        /// <para>RequirementVerificationMember:RequirementVerificationMembership=MemberPrefix'verify'{kind='requirement'}ownedRelatedElement+=RequirementVerificationUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementVerificationMember(SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership poco, StringBuilder stringBuilder)
+        public static void BuildRequirementVerificationMember(SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfRequirementUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("verify ");
             // NonParsing Assignment Element : kind = 'requirement' => Does not have to be process
-            ownedRelatedElementOfRequirementUsageIterator.MoveNext();
 
-            if (ownedRelatedElementOfRequirementUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(ownedRelatedElementOfRequirementUsageIterator.Current, 0, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage elementAsRequirementUsage)
+                {
+                    RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(elementAsRequirementUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

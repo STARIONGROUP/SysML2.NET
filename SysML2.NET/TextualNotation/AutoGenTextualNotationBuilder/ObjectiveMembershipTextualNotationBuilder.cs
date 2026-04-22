@@ -36,21 +36,27 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ObjectiveMember
-        /// <para>ObjectiveMember:ObjectiveMembership=MemberPrefix'objective'ownedRelatedElement+=ObjectiveRequirementUsage</para>    
+        /// <para>ObjectiveMember:ObjectiveMembership=MemberPrefix'objective'ownedRelatedElement+=ObjectiveRequirementUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildObjectiveMember(SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership poco, StringBuilder stringBuilder)
+        public static void BuildObjectiveMember(SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfRequirementUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("objective ");
-            ownedRelatedElementOfRequirementUsageIterator.MoveNext();
 
-            if (ownedRelatedElementOfRequirementUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                RequirementUsageTextualNotationBuilder.BuildObjectiveRequirementUsage(ownedRelatedElementOfRequirementUsageIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage elementAsRequirementUsage)
+                {
+                    RequirementUsageTextualNotationBuilder.BuildObjectiveRequirementUsage(elementAsRequirementUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

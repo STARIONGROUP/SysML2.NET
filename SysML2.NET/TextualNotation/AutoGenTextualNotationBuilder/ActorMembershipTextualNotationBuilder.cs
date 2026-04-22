@@ -36,20 +36,26 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ActorMember
-        /// <para>ActorMember:ActorMembership=MemberPrefixownedRelatedElement+=ActorUsage</para>    
+        /// <para>ActorMember:ActorMembership=MemberPrefixownedRelatedElement+=ActorUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActorMember(SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership poco, StringBuilder stringBuilder)
+        public static void BuildActorMember(SysML2.NET.Core.POCO.Systems.Requirements.IActorMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfPartUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Parts.PartUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            ownedRelatedElementOfPartUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
 
-            if (ownedRelatedElementOfPartUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                PartUsageTextualNotationBuilder.BuildActorUsage(ownedRelatedElementOfPartUsageIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Parts.IPartUsage elementAsPartUsage)
+                {
+                    PartUsageTextualNotationBuilder.BuildActorUsage(elementAsPartUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

@@ -36,76 +36,97 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedMultiplicityRange
-        /// <para>OwnedMultiplicityRange:MultiplicityRange=MultiplicityBounds</para>    
+        /// <para>OwnedMultiplicityRange:MultiplicityRange=MultiplicityBounds</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
+        public static void BuildOwnedMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildMultiplicityBounds(poco, stringBuilder);
+            BuildMultiplicityBounds(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MultiplicityBounds
-        /// <para>MultiplicityBounds:MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'</para>    
+        /// <para>MultiplicityBounds:MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMultiplicityBounds(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
+        public static void BuildMultiplicityBounds(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("[");
 
-            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
 
-            ownedRelationshipOfOwningMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append("]");
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MultiplicityRange
-        /// <para>MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'</para>    
+        /// <para>MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
+        public static void BuildMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("[");
 
-            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
 
-            ownedRelationshipOfOwningMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append("]");
 
         }

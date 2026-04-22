@@ -36,16 +36,17 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ViewpointUsage
-        /// <para>ViewpointUsage=OccurrenceUsagePrefix'viewpoint'ConstraintUsageDeclarationRequirementBody</para>    
+        /// <para>ViewpointUsage=OccurrenceUsagePrefix'viewpoint'ConstraintUsageDeclarationRequirementBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewpointUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewpointUsage(SysML2.NET.Core.POCO.Systems.Views.IViewpointUsage poco, StringBuilder stringBuilder)
+        public static void BuildViewpointUsage(SysML2.NET.Core.POCO.Systems.Views.IViewpointUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("viewpoint ");
-            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
+            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, cursorCache, stringBuilder);
 
         }
     }

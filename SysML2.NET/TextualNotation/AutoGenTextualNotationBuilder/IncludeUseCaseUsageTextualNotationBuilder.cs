@@ -36,19 +36,24 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule IncludeUseCaseUsage
-        /// <para>IncludeUseCaseUsage=OccurrenceUsagePrefix'include'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'use''case'UsageDeclaration)ValuePart?CaseBody</para>    
+        /// <para>IncludeUseCaseUsage=OccurrenceUsagePrefix'include'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'use''case'UsageDeclaration)ValuePart?CaseBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIncludeUseCaseUsage(SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage poco, StringBuilder stringBuilder)
+        public static void BuildIncludeUseCaseUsage(SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("include ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildIncludeUseCaseUsageHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
-            TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+            }
+            TypeTextualNotationBuilder.BuildCaseBody(poco, cursorCache, stringBuilder);
 
         }
     }

@@ -24,12 +24,10 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
 
     /// <summary>
     /// The <see cref="UsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> element
@@ -38,23 +36,33 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule UsageElement
-        /// <para>UsageElement:Usage=NonOccurrenceUsageElement|OccurrenceUsageElement</para>    
+        /// <para>UsageElement:Usage=NonOccurrenceUsageElement|OccurrenceUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
-        /// <param name="cursor"></param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsageElement(IUsage poco, ICursorCache cursor, StringBuilder stringBuilder)
+        public static void BuildUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageNonOccurrenceUsageElement when pocoUsageNonOccurrenceUsageElement.IsEnd:
+                    BuildNonOccurrenceUsageElement(pocoUsageNonOccurrenceUsageElement, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildOccurrenceUsageElement(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule RefPrefix
-        /// <para>RefPrefix:Usage=(direction=FeatureDirection)?(isDerived?='derived')?(isAbstract?='abstract'|isVariation?='variation')?(isConstant?='constant')?</para>    
+        /// <para>RefPrefix:Usage=(direction=FeatureDirection)?(isDerived?='derived')?(isAbstract?='abstract'|isVariation?='variation')?(isConstant?='constant')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRefPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildRefPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.Direction.HasValue)
@@ -83,7 +91,6 @@ namespace SysML2.NET.TextualNotation
             if (poco.IsConstant)
             {
                 stringBuilder.Append(" constant ");
-                stringBuilder.Append(' ');
             }
 
 
@@ -91,18 +98,18 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule BasicUsagePrefix
-        /// <para>BasicUsagePrefix:Usage=RefPrefix(isReference?='ref')?</para>    
+        /// <para>BasicUsagePrefix:Usage=RefPrefix(isReference?='ref')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBasicUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildBasicUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildRefPrefix(poco, stringBuilder);
+            BuildRefPrefix(poco, cursorCache, stringBuilder);
 
             if (poco.isReference)
             {
                 stringBuilder.Append(" ref ");
-                stringBuilder.Append(' ');
             }
 
 
@@ -110,26 +117,30 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EndUsagePrefix
-        /// <para>EndUsagePrefix:Usage=isEnd?='end'(ownedRelationship+=OwnedCrossFeatureMember)?</para>    
+        /// <para>EndUsagePrefix:Usage=isEnd?='end'(ownedRelationship+=OwnedCrossFeatureMember)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEndUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildEndUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (poco.IsEnd)
             {
                 stringBuilder.Append(" end ");
             }
 
-            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
-                stringBuilder.Append(' ');
             }
 
 
@@ -137,183 +148,235 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule UsageExtensionKeyword
-        /// <para>UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember</para>    
+        /// <para>UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildUsageExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildUsageExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule UnextendedUsagePrefix
-        /// <para>UnextendedUsagePrefix:Usage=EndUsagePrefix|BasicUsagePrefix</para>    
+        /// <para>UnextendedUsagePrefix:Usage=EndUsagePrefix|BasicUsagePrefix</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUnextendedUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUnextendedUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageBasicUsagePrefix when pocoUsageBasicUsagePrefix.IsDerived:
+                    BuildBasicUsagePrefix(pocoUsageBasicUsagePrefix, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildEndUsagePrefix(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule UsagePrefix
-        /// <para>UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword*</para>    
+        /// <para>UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildUnextendedUsagePrefix(poco, stringBuilder);
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            BuildUnextendedUsagePrefix(poco, cursorCache, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
             }
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule UsageDeclaration
-        /// <para>UsageDeclaration:Usage=IdentificationFeatureSpecializationPart?</para>    
+        /// <para>UsageDeclaration:Usage=IdentificationFeatureSpecializationPart?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsageDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUsageDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+            }
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule UsageCompletion
-        /// <para>UsageCompletion:Usage=ValuePart?UsageBody</para>    
+        /// <para>UsageCompletion:Usage=ValuePart?UsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsageCompletion(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUsageCompletion(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
-            BuildUsageBody(poco, stringBuilder);
+
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+            }
+            BuildUsageBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule UsageBody
-        /// <para>UsageBody:Usage=DefinitionBody</para>    
+        /// <para>UsageBody:Usage=DefinitionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsageBody(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUsageBody(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule NonOccurrenceUsageElement
-        /// <para>NonOccurrenceUsageElement:Usage=DefaultReferenceUsage|ReferenceUsage|AttributeUsage|EnumerationUsage|BindingConnectorAsUsage|SuccessionAsUsage|ExtendedUsage</para>    
+        /// <para>NonOccurrenceUsageElement:Usage=DefaultReferenceUsage|ReferenceUsage|AttributeUsage|EnumerationUsage|BindingConnectorAsUsage|SuccessionAsUsage|ExtendedUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNonOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildNonOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage pocoBindingConnectorAsUsage:
+                    BindingConnectorAsUsageTextualNotationBuilder.BuildBindingConnectorAsUsage(pocoBindingConnectorAsUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage pocoSuccessionAsUsage:
+                    SuccessionAsUsageTextualNotationBuilder.BuildSuccessionAsUsage(pocoSuccessionAsUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage pocoEnumerationUsage:
+                    EnumerationUsageTextualNotationBuilder.BuildEnumerationUsage(pocoEnumerationUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageReferenceUsage when pocoReferenceUsageReferenceUsage.IsEnd:
+                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsageReferenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsage:
+                    ReferenceUsageTextualNotationBuilder.BuildDefaultReferenceUsage(pocoReferenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
+                    AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildExtendedUsage(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule OccurrenceUsageElement
-        /// <para>OccurrenceUsageElement:Usage=StructureUsageElement|BehaviorUsageElement</para>    
+        /// <para>OccurrenceUsageElement:Usage=StructureUsageElement|BehaviorUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            BuildOccurrenceUsageElementHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule StructureUsageElement
-        /// <para>StructureUsageElement:Usage=OccurrenceUsage|IndividualUsage|PortionUsage|EventOccurrenceUsage|ItemUsage|PartUsage|ViewUsage|RenderingUsage|PortUsage|ConnectionUsage|InterfaceUsage|AllocationUsage|Message|FlowUsage|SuccessionFlowUsage</para>    
+        /// <para>StructureUsageElement:Usage=OccurrenceUsage|IndividualUsage|PortionUsage|EventOccurrenceUsage|ItemUsage|PartUsage|ViewUsage|RenderingUsage|PortUsage|ConnectionUsage|InterfaceUsage|AllocationUsage|Message|FlowUsage|SuccessionFlowUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStructureUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildStructureUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            BuildStructureUsageElementHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule BehaviorUsageElement
-        /// <para>BehaviorUsageElement:Usage=ActionUsage|CalculationUsage|StateUsage|ConstraintUsage|RequirementUsage|ConcernUsage|CaseUsage|AnalysisCaseUsage|VerificationCaseUsage|UseCaseUsage|ViewpointUsage|PerformActionUsage|ExhibitStateUsage|IncludeUseCaseUsage|AssertConstraintUsage|SatisfyRequirementUsage</para>    
+        /// <para>BehaviorUsageElement:Usage=ActionUsage|CalculationUsage|StateUsage|ConstraintUsage|RequirementUsage|ConcernUsage|CaseUsage|AnalysisCaseUsage|VerificationCaseUsage|UseCaseUsage|ViewpointUsage|PerformActionUsage|ExhibitStateUsage|IncludeUseCaseUsage|AssertConstraintUsage|SatisfyRequirementUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBehaviorUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildBehaviorUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage pocoCalculationUsage:
-                    CalculationUsageTextualNotationBuilder.BuildCalculationUsage(pocoCalculationUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage pocoIncludeUseCaseUsage:
+                    IncludeUseCaseUsageTextualNotationBuilder.BuildIncludeUseCaseUsage(pocoIncludeUseCaseUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.States.StateUsage pocoStateUsage:
-                    StateUsageTextualNotationBuilder.BuildStateUsage(pocoStateUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Requirements.ISatisfyRequirementUsage pocoSatisfyRequirementUsage:
+                    SatisfyRequirementUsageTextualNotationBuilder.BuildSatisfyRequirementUsage(pocoSatisfyRequirementUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Actions.ActionUsage pocoActionUsage:
-                    ActionUsageTextualNotationBuilder.BuildActionUsage(pocoActionUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage pocoConcernUsage:
+                    ConcernUsageTextualNotationBuilder.BuildConcernUsage(pocoConcernUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage pocoConcernUsage:
-                    ConcernUsageTextualNotationBuilder.BuildConcernUsage(pocoConcernUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.AnalysisCases.IAnalysisCaseUsage pocoAnalysisCaseUsage:
+                    AnalysisCaseUsageTextualNotationBuilder.BuildAnalysisCaseUsage(pocoAnalysisCaseUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage pocoRequirementUsage:
-                    RequirementUsageTextualNotationBuilder.BuildRequirementUsage(pocoRequirementUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.VerificationCases.IVerificationCaseUsage pocoVerificationCaseUsage:
+                    VerificationCaseUsageTextualNotationBuilder.BuildVerificationCaseUsage(pocoVerificationCaseUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage pocoConstraintUsage:
-                    ConstraintUsageTextualNotationBuilder.BuildConstraintUsage(pocoConstraintUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.UseCases.IUseCaseUsage pocoUseCaseUsage:
+                    UseCaseUsageTextualNotationBuilder.BuildUseCaseUsage(pocoUseCaseUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage pocoAnalysisCaseUsage:
-                    AnalysisCaseUsageTextualNotationBuilder.BuildAnalysisCaseUsage(pocoAnalysisCaseUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Views.IViewpointUsage pocoViewpointUsage:
+                    ViewpointUsageTextualNotationBuilder.BuildViewpointUsage(pocoViewpointUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.VerificationCases.VerificationCaseUsage pocoVerificationCaseUsage:
-                    VerificationCaseUsageTextualNotationBuilder.BuildVerificationCaseUsage(pocoVerificationCaseUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage pocoExhibitStateUsage:
+                    ExhibitStateUsageTextualNotationBuilder.BuildExhibitStateUsage(pocoExhibitStateUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.UseCases.UseCaseUsage pocoUseCaseUsage:
-                    UseCaseUsageTextualNotationBuilder.BuildUseCaseUsage(pocoUseCaseUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage pocoAssertConstraintUsage:
+                    AssertConstraintUsageTextualNotationBuilder.BuildAssertConstraintUsage(pocoAssertConstraintUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Cases.CaseUsage pocoCaseUsage:
-                    CaseUsageTextualNotationBuilder.BuildCaseUsage(pocoCaseUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage pocoRequirementUsage:
+                    RequirementUsageTextualNotationBuilder.BuildRequirementUsage(pocoRequirementUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Views.ViewpointUsage pocoViewpointUsage:
-                    ViewpointUsageTextualNotationBuilder.BuildViewpointUsage(pocoViewpointUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage pocoCaseUsage:
+                    CaseUsageTextualNotationBuilder.BuildCaseUsage(pocoCaseUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage pocoExhibitStateUsage:
-                    ExhibitStateUsageTextualNotationBuilder.BuildExhibitStateUsage(pocoExhibitStateUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage pocoCalculationUsage:
+                    CalculationUsageTextualNotationBuilder.BuildCalculationUsage(pocoCalculationUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.UseCases.IncludeUseCaseUsage pocoIncludeUseCaseUsage:
-                    IncludeUseCaseUsageTextualNotationBuilder.BuildIncludeUseCaseUsage(pocoIncludeUseCaseUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage pocoConstraintUsage:
+                    ConstraintUsageTextualNotationBuilder.BuildConstraintUsage(pocoConstraintUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Actions.PerformActionUsage pocoPerformActionUsage:
-                    PerformActionUsageTextualNotationBuilder.BuildPerformActionUsage(pocoPerformActionUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage pocoPerformActionUsage:
+                    PerformActionUsageTextualNotationBuilder.BuildPerformActionUsage(pocoPerformActionUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Requirements.SatisfyRequirementUsage pocoSatisfyRequirementUsage:
-                    SatisfyRequirementUsageTextualNotationBuilder.BuildSatisfyRequirementUsage(pocoSatisfyRequirementUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.States.IStateUsage pocoStateUsage:
+                    StateUsageTextualNotationBuilder.BuildStateUsage(pocoStateUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage pocoAssertConstraintUsage:
-                    AssertConstraintUsageTextualNotationBuilder.BuildAssertConstraintUsage(pocoAssertConstraintUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Actions.IActionUsage pocoActionUsage:
+                    ActionUsageTextualNotationBuilder.BuildActionUsage(pocoActionUsage, cursorCache, stringBuilder);
                     break;
             }
 
@@ -321,39 +384,41 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule VariantUsageElement
-        /// <para>VariantUsageElement:Usage=VariantReference|ReferenceUsage|AttributeUsage|BindingConnectorAsUsage|SuccessionAsUsage|OccurrenceUsage|IndividualUsage|PortionUsage|EventOccurrenceUsage|ItemUsage|PartUsage|ViewUsage|RenderingUsage|PortUsage|ConnectionUsage|InterfaceUsage|AllocationUsage|Message|FlowUsage|SuccessionFlowUsage|BehaviorUsageElement</para>    
+        /// <para>VariantUsageElement:Usage=VariantReference|ReferenceUsage|AttributeUsage|BindingConnectorAsUsage|SuccessionAsUsage|OccurrenceUsage|IndividualUsage|PortionUsage|EventOccurrenceUsage|ItemUsage|PartUsage|ViewUsage|RenderingUsage|PortUsage|ConnectionUsage|InterfaceUsage|AllocationUsage|Message|FlowUsage|SuccessionFlowUsage|BehaviorUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildVariantUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildVariantUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            BuildVariantUsageElementHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule InterfaceNonOccurrenceUsageElement
-        /// <para>InterfaceNonOccurrenceUsageElement:Usage=ReferenceUsage|AttributeUsage|EnumerationUsage|BindingConnectorAsUsage|SuccessionAsUsage</para>    
+        /// <para>InterfaceNonOccurrenceUsageElement:Usage=ReferenceUsage|AttributeUsage|EnumerationUsage|BindingConnectorAsUsage|SuccessionAsUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceNonOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildInterfaceNonOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage pocoReferenceUsage:
-                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage pocoBindingConnectorAsUsage:
+                    BindingConnectorAsUsageTextualNotationBuilder.BuildBindingConnectorAsUsage(pocoBindingConnectorAsUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Enumerations.EnumerationUsage pocoEnumerationUsage:
-                    EnumerationUsageTextualNotationBuilder.BuildEnumerationUsage(pocoEnumerationUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage pocoSuccessionAsUsage:
+                    SuccessionAsUsageTextualNotationBuilder.BuildSuccessionAsUsage(pocoSuccessionAsUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Attributes.AttributeUsage pocoAttributeUsage:
-                    AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage pocoEnumerationUsage:
+                    EnumerationUsageTextualNotationBuilder.BuildEnumerationUsage(pocoEnumerationUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage pocoBindingConnectorAsUsage:
-                    BindingConnectorAsUsageTextualNotationBuilder.BuildBindingConnectorAsUsage(pocoBindingConnectorAsUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsage:
+                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsage, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Connections.SuccessionAsUsage pocoSuccessionAsUsage:
-                    SuccessionAsUsageTextualNotationBuilder.BuildSuccessionAsUsage(pocoSuccessionAsUsage, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
+                    AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, cursorCache, stringBuilder);
                     break;
             }
 
@@ -361,57 +426,62 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule InterfaceOccurrenceUsageElement
-        /// <para>InterfaceOccurrenceUsageElement:Usage=DefaultInterfaceEnd|StructureUsageElement|BehaviorUsageElement</para>    
+        /// <para>InterfaceOccurrenceUsageElement:Usage=DefaultInterfaceEnd|StructureUsageElement|BehaviorUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildInterfaceOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            BuildInterfaceOccurrenceUsageElementHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ActionTargetSuccession
-        /// <para>ActionTargetSuccession:Usage=(TargetSuccession|GuardedTargetSuccession|DefaultTargetSuccession)UsageBody</para>    
+        /// <para>ActionTargetSuccession:Usage=(TargetSuccession|GuardedTargetSuccession|DefaultTargetSuccession)UsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionTargetSuccession(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildActionTargetSuccession(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            BuildActionTargetSuccessionHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            BuildUsageBody(poco, stringBuilder);
+            BuildUsageBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ExtendedUsage
-        /// <para>ExtendedUsage:Usage=UnextendedUsagePrefixUsageExtensionKeyword+Usage</para>    
+        /// <para>ExtendedUsage:Usage=UnextendedUsagePrefixUsageExtensionKeyword+Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExtendedUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildExtendedUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildUnextendedUsagePrefix(poco, stringBuilder);
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            BuildUnextendedUsagePrefix(poco, cursorCache, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = BuildUsageExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
             }
-            BuildUsage(poco, stringBuilder);
+
+            BuildUsage(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Usage
-        /// <para>Usage=UsageDeclarationUsageCompletion</para>    
+        /// <para>Usage=UsageDeclarationUsageCompletion</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
+        public static void BuildUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildUsageDeclaration(poco, stringBuilder);
-            BuildUsageCompletion(poco, stringBuilder);
+            BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+            BuildUsageCompletion(poco, cursorCache, stringBuilder);
 
         }
     }

@@ -36,27 +36,37 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureChainExpression
-        /// <para>FeatureChainExpression=ownedRelationship+=NonFeatureChainPrimaryArgumentMember'.'ownedRelationship+=FeatureChainMember</para>    
+        /// <para>FeatureChainExpression=ownedRelationship+=NonFeatureChainPrimaryArgumentMember'.'ownedRelationship+=FeatureChainMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureChainExpression" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureChainExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureChainExpression poco, StringBuilder stringBuilder)
+        public static void BuildFeatureChainExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureChainExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append(".");
-            ownedRelationshipOfMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
+                {
+                    MembershipTextualNotationBuilder.BuildFeatureChainMember(elementAsMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
 
         }
     }

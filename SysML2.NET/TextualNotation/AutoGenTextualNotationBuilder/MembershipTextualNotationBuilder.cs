@@ -28,7 +28,6 @@ namespace SysML2.NET.TextualNotation
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="MembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> element
@@ -37,18 +36,17 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule MemberPrefix
-        /// <para>MemberPrefix:Membership=(visibility=VisibilityIndicator)?</para>    
+        /// <para>MemberPrefix:Membership=(visibility=VisibilityIndicator)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
-        /// <param name="cursor"></param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMemberPrefix(IMembership poco, ICursorCache cursor, StringBuilder stringBuilder)
+        public static void BuildMemberPrefix(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
                 stringBuilder.Append(poco.Visibility.ToString().ToLower());
-                stringBuilder.Append(' ');
             }
 
 
@@ -56,14 +54,14 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule AliasMember
-        /// <para>AliasMember:Membership=MemberPrefix'alias'('&lt;'memberShortName=NAME'&gt;')?(memberName=NAME)?'for'memberElement=[QualifiedName]RelationshipBody</para>    
+        /// <para>AliasMember:Membership=MemberPrefix'alias'('&lt;'memberShortName=NAME'&gt;')?(memberName=NAME)?'for'memberElement=[QualifiedName]RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
-        /// <param name="cursor"></param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAliasMember(IMembership poco, ICursorCache cursor, StringBuilder stringBuilder)
+        public static void BuildAliasMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildMemberPrefix(poco, stringBuilder);
+            BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("alias ");
 
             if (!string.IsNullOrWhiteSpace(poco.MemberShortName))
@@ -88,17 +86,18 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(poco.MemberElement.qualifiedName);
                 stringBuilder.Append(' ');
             }
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureChainMember
-        /// <para>FeatureChainMember:Membership=memberElement=[QualifiedName]|OwnedFeatureChainMember</para>    
+        /// <para>FeatureChainMember:Membership=memberElement=[QualifiedName]|OwnedFeatureChainMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.MemberElement != null)
@@ -108,23 +107,30 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
-                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[0];
+                var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                if (ownedRelatedElementCursor.Current != null)
                 {
-                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
+
+                    if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                    {
+                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelatedElementCursor.Move();
+
 
             }
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureReferenceMember
-        /// <para>FeatureReferenceMember:Membership=memberElement=FeatureReference</para>    
+        /// <para>FeatureReferenceMember:Membership=memberElement=FeatureReference</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildFeatureReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.MemberElement != null)
@@ -138,11 +144,12 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ElementReferenceMember
-        /// <para>ElementReferenceMember:Membership=memberElement=[QualifiedName]</para>    
+        /// <para>ElementReferenceMember:Membership=memberElement=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildElementReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildElementReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.MemberElement != null)
@@ -155,11 +162,12 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule InstantiatedTypeMember
-        /// <para>InstantiatedTypeMember:Membership=memberElement=InstantiatedTypeReference|OwnedFeatureChainMember</para>    
+        /// <para>InstantiatedTypeMember:Membership=memberElement=InstantiatedTypeReference|OwnedFeatureChainMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInstantiatedTypeMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildInstantiatedTypeMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.MemberElement != null)
@@ -170,37 +178,44 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
-                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[0];
+                var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                if (ownedRelatedElementCursor.Current != null)
                 {
-                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, stringBuilder);
+
+                    if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                    {
+                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelatedElementCursor.Move();
+
 
             }
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MetadataBodyElement
-        /// <para>MetadataBodyElement:Membership=NonFeatureMember|MetadataBodyFeatureMember|AliasMember|Import</para>    
+        /// <para>MetadataBodyElement:Membership=NonFeatureMember|MetadataBodyFeatureMember|AliasMember|Import</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        public static void BuildMetadataBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Types.FeatureMembership pocoFeatureMembership:
-                    FeatureMembershipTextualNotationBuilder.BuildMetadataBodyFeatureMember(pocoFeatureMembership, stringBuilder);
+                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembership:
+                    FeatureMembershipTextualNotationBuilder.BuildMetadataBodyFeatureMember(pocoFeatureMembership, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership pocoOwningMembership:
-                    OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(pocoOwningMembership, stringBuilder);
-                    break;
-                default:
-                    BuildAliasMember(poco, stringBuilder);
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership pocoOwningMembership:
+                    OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(pocoOwningMembership, cursorCache, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IImport pocoImport:
-                    ImportTextualNotationBuilder.BuildImport(pocoImport, stringBuilder);
+                    ImportTextualNotationBuilder.BuildImport(pocoImport, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildAliasMember(poco, cursorCache, stringBuilder);
                     break;
             }
 

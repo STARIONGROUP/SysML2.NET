@@ -36,11 +36,12 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureDirection
-        /// <para>FeatureDirection:FeatureDirectionKind='in'|'out'|'inout'</para>    
+        /// <para>FeatureDirection:FeatureDirectionKind='in'|'out'|'inout'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.Core.Types.FeatureDirectionKind" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureDirection(SysML2.NET.Core.Core.Types.FeatureDirectionKind poco, StringBuilder stringBuilder)
+        public static void BuildFeatureDirection(SysML2.NET.Core.Core.Types.FeatureDirectionKind poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
         }

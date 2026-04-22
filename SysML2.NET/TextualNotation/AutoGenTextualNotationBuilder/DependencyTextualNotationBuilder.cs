@@ -36,71 +36,81 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule Dependency
-        /// <para>Dependency=(ownedRelationship+=PrefixMetadataAnnotation)*'dependency'DependencyDeclarationRelationshipBody</para>    
+        /// <para>Dependency=(ownedRelationship+=PrefixMetadataAnnotation)*'dependency'DependencyDeclarationRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Dependencies.IDependency" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, StringBuilder stringBuilder)
+        public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            while (ownedRelationshipOfAnnotationIterator.MoveNext())
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfAnnotationIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
+                    {
+                        AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
             stringBuilder.Append("dependency ");
-            using var clientIterator = poco.Client.GetEnumerator();
-            using var supplierIterator = poco.Supplier.GetEnumerator();
+            var clientCursor = cursorCache.GetOrCreateCursor(poco.Id, "client", poco.Client);
+            var supplierCursor = cursorCache.GetOrCreateCursor(poco.Id, "supplier", poco.Supplier);
 
-            if (BuildGroupConditionForDependencyDeclaration(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append("from ");
                 stringBuilder.Append(' ');
             }
 
-            clientIterator.MoveNext();
 
-            if (clientIterator.Current != null)
+            if (clientCursor.Current != null)
             {
-                stringBuilder.Append(clientIterator.Current.qualifiedName);
+                stringBuilder.Append(clientCursor.Current.qualifiedName);
+                clientCursor.Move();
             }
 
-            while (clientIterator.MoveNext())
+            while (clientCursor.Current != null)
             {
-                stringBuilder.Append(",");
+                stringBuilder.Append(", ");
 
-                if (clientIterator.Current != null)
+                if (clientCursor.Current != null)
                 {
-                    stringBuilder.Append(clientIterator.Current.qualifiedName);
+                    stringBuilder.Append(clientCursor.Current.qualifiedName);
+                    clientCursor.Move();
                 }
+                clientCursor.Move();
 
             }
             stringBuilder.Append("to ");
-            supplierIterator.MoveNext();
 
-            if (supplierIterator.Current != null)
+            if (supplierCursor.Current != null)
             {
-                stringBuilder.Append(supplierIterator.Current.qualifiedName);
+                stringBuilder.Append(supplierCursor.Current.qualifiedName);
+                supplierCursor.Move();
             }
 
-            while (supplierIterator.MoveNext())
+            while (supplierCursor.Current != null)
             {
-                stringBuilder.Append(",");
+                stringBuilder.Append(", ");
 
-                if (supplierIterator.Current != null)
+                if (supplierCursor.Current != null)
                 {
-                    stringBuilder.Append(supplierIterator.Current.qualifiedName);
+                    stringBuilder.Append(supplierCursor.Current.qualifiedName);
+                    supplierCursor.Move();
                 }
+                supplierCursor.Move();
 
             }
 
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

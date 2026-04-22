@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,41 +36,43 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule MessageEvent
-        /// <para>MessageEvent:EventOccurrenceUsage=ownedRelationship+=OwnedReferenceSubsetting</para>    
+        /// <para>MessageEvent:EventOccurrenceUsage=ownedRelationship+=OwnedReferenceSubsetting</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildMessageEvent(SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildMessageEvent(SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
                 {
-                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, stringBuilder);
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EventOccurrenceUsage
-        /// <para>EventOccurrenceUsage=OccurrenceUsagePrefix'event'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'occurrence'UsageDeclaration?)UsageCompletion</para>    
+        /// <para>EventOccurrenceUsage=OccurrenceUsagePrefix'event'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'occurrence'UsageDeclaration?)UsageCompletion</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEventOccurrenceUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage poco, StringBuilder stringBuilder)
+        public static void BuildEventOccurrenceUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("event ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildEventOccurrenceUsageHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            UsageTextualNotationBuilder.BuildUsageCompletion(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageCompletion(poco, cursorCache, stringBuilder);
 
         }
     }

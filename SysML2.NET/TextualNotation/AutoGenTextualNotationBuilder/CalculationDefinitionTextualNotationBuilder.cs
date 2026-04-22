@@ -36,17 +36,18 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule CalculationDefinition
-        /// <para>CalculationDefinition=OccurrenceDefinitionPrefix'calc''def'DefinitionDeclarationCalculationBody</para>    
+        /// <para>CalculationDefinition=OccurrenceDefinitionPrefix'calc''def'DefinitionDeclarationCalculationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCalculationDefinition(SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition poco, StringBuilder stringBuilder)
+        public static void BuildCalculationDefinition(SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("calc ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, cursorCache, stringBuilder);
 
         }
     }

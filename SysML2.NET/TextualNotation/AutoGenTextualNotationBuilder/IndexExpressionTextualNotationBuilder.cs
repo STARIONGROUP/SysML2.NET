@@ -36,28 +36,38 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule IndexExpression
-        /// <para>IndexExpression=ownedRelationship+=PrimaryArgumentMember'#''('ownedRelationship+=SequenceExpressionListMember')'</para>    
+        /// <para>IndexExpression=ownedRelationship+=PrimaryArgumentMember'#''('ownedRelationship+=SequenceExpressionListMember')'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIndexExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression poco, StringBuilder stringBuilder)
+        public static void BuildIndexExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append("#");
             stringBuilder.Append("(");
-            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                FeatureMembershipTextualNotationBuilder.BuildSequenceExpressionListMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildSequenceExpressionListMember(elementAsFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append(")");
 
         }

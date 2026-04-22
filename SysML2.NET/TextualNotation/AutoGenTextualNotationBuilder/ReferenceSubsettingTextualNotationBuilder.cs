@@ -36,24 +36,26 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedReferenceSubsetting
-        /// <para>OwnedReferenceSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=OwnedFeatureChain{ownedRelatedElement+=referenceFeature}</para>    
+        /// <para>OwnedReferenceSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=OwnedFeatureChain{ownedRelatedElement+=referenceFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedReferenceSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, StringBuilder stringBuilder)
+        public static void BuildOwnedReferenceSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedReferenceSubsettingHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FlowEndSubsetting
-        /// <para>FlowEndSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=FeatureChainPrefix{ownedRelatedElement+=referencedFeature}</para>    
+        /// <para>FlowEndSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=FeatureChainPrefix{ownedRelatedElement+=referencedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowEndSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, StringBuilder stringBuilder)
+        public static void BuildFlowEndSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildFlowEndSubsettingHandCoded(poco, cursorCache, stringBuilder);
         }
     }
 }

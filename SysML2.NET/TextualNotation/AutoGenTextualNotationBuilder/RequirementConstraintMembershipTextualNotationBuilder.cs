@@ -36,33 +36,44 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule RequirementConstraintMember
-        /// <para>RequirementConstraintMember:RequirementConstraintMembership=MemberPrefix?RequirementKindownedRelatedElement+=RequirementConstraintUsage</para>    
+        /// <para>RequirementConstraintMember:RequirementConstraintMembership=MemberPrefix?RequirementKindownedRelatedElement+=RequirementConstraintUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementConstraintMember(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, StringBuilder stringBuilder)
+        public static void BuildRequirementConstraintMember(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfConstraintUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            BuildRequirementKind(poco, stringBuilder);
-            ownedRelatedElementOfConstraintUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementOfConstraintUsageIterator.Current != null)
+            if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(ownedRelatedElementOfConstraintUsageIterator.Current, 0, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             }
+            BuildRequirementKind(poco, cursorCache, stringBuilder);
+
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage elementAsConstraintUsage)
+                {
+                    ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(elementAsConstraintUsage, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelatedElementCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule RequirementKind
-        /// <para>RequirementKind:RequirementConstraintMembership='assume'{kind='assumption'}|'require'{kind='requirement'}</para>    
+        /// <para>RequirementKind:RequirementConstraintMembership='assume'{kind='assumption'}|'require'{kind='requirement'}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementKind(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, StringBuilder stringBuilder)
+        public static void BuildRequirementKind(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildRequirementKindHandCoded(poco, cursorCache, stringBuilder);
         }
     }
 }

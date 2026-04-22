@@ -32,9 +32,10 @@ namespace SysML2.NET.TextualNotation
         /// <summary>
         /// Build the non-existing InvocationTypeMember rule
         /// </summary>
-        /// <param name="invocationExpression">The <see cref="InvocationExpression"/></param>
+        /// <param name="poco">The <see cref="IInvocationExpression"/> from which the rule should be built</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/></param>
-        private static void BuildInvocationTypeMember(InvocationExpression invocationExpression, StringBuilder stringBuilder)
+        private static void BuildInvocationTypeMember(IInvocationExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
         }
     }

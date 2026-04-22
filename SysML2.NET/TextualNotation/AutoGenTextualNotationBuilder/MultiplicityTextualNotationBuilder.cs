@@ -36,45 +36,48 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule EmptyMultiplicity
-        /// <para>EmptyMultiplicity:Multiplicity={}</para>    
+        /// <para>EmptyMultiplicity:Multiplicity={}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEmptyMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
+        public static void BuildEmptyMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MultiplicitySubset
-        /// <para>MultiplicitySubset:Multiplicity='multiplicity'IdentificationSubsetsTypeBody</para>    
+        /// <para>MultiplicitySubset:Multiplicity='multiplicity'IdentificationSubsetsTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMultiplicitySubset(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
+        public static void BuildMultiplicitySubset(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("multiplicity ");
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            FeatureTextualNotationBuilder.BuildSubsets(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+            FeatureTextualNotationBuilder.BuildSubsets(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Multiplicity
-        /// <para>Multiplicity=MultiplicitySubset|MultiplicityRange</para>    
+        /// <para>Multiplicity=MultiplicitySubset|MultiplicityRange</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
+        public static void BuildMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange pocoMultiplicityRange:
-                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(pocoMultiplicityRange, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange pocoMultiplicityRange:
+                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(pocoMultiplicityRange, cursorCache, stringBuilder);
                     break;
                 default:
-                    BuildMultiplicitySubset(poco, stringBuilder);
+                    BuildMultiplicitySubset(poco, cursorCache, stringBuilder);
                     break;
             }
 

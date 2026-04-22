@@ -36,17 +36,18 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule CaseDefinition
-        /// <para>CaseDefinition=OccurrenceDefinitionPrefix'case''def'DefinitionDeclarationCaseBody</para>    
+        /// <para>CaseDefinition=OccurrenceDefinitionPrefix'case''def'DefinitionDeclarationCaseBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Cases.ICaseDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCaseDefinition(SysML2.NET.Core.POCO.Systems.Cases.ICaseDefinition poco, StringBuilder stringBuilder)
+        public static void BuildCaseDefinition(SysML2.NET.Core.POCO.Systems.Cases.ICaseDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("case ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildCaseBody(poco, cursorCache, stringBuilder);
 
         }
     }

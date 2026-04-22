@@ -36,29 +36,40 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule SubclassificationPart
-        /// <para>SubclassificationPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)*</para>    
+        /// <para>SubclassificationPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubclassificationPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
+        public static void BuildSubclassificationPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append(" :> ");
-            ownedRelationshipOfSubclassificationIterator.MoveNext();
 
-            if (ownedRelationshipOfSubclassificationIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
-            }
 
-            while (ownedRelationshipOfSubclassificationIterator.MoveNext())
-            {
-                stringBuilder.Append(",");
-
-                if (ownedRelationshipOfSubclassificationIterator.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification elementAsSubclassification)
                 {
-                    SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+                    SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(elementAsSubclassification, cursorCache, stringBuilder);
                 }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            while (ownedRelationshipCursor.Current != null)
+            {
+                stringBuilder.Append(", ");
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification elementAsSubclassification)
+                    {
+                        SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(elementAsSubclassification, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
 
             }
 
@@ -66,13 +77,14 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ClassifierDeclaration
-        /// <para>ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*</para>    
+        /// <para>ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildClassifierDeclaration(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
+        public static void BuildClassifierDeclaration(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (poco.IsSufficient)
             {
@@ -80,58 +92,76 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
 
-            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(' ');
             }
 
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Types.Type pocoType:
-                    TypeTextualNotationBuilder.BuildConjugationPart(pocoType, stringBuilder);
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
+                    TypeTextualNotationBuilder.BuildConjugationPart(pocoType, cursorCache, stringBuilder);
                     break;
                 default:
-                    BuildSuperclassingPart(poco, stringBuilder);
+                    BuildSuperclassingPart(poco, cursorCache, stringBuilder);
                     break;
             }
 
-            // Handle collection Non Terminal 
-            BuildTypeRelationshipPartInternal(poco, stringBuilder); TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, stringBuilder);
+            while (ownedRelationshipCursor.Current != null)
+            {
+                TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);
+            }
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SuperclassingPart
-        /// <para>SuperclassingPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)*</para>    
+        /// <para>SuperclassingPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSuperclassingPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
+        public static void BuildSuperclassingPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append(" :> ");
-            ownedRelationshipOfSubclassificationIterator.MoveNext();
 
-            if (ownedRelationshipOfSubclassificationIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
-            }
 
-            while (ownedRelationshipOfSubclassificationIterator.MoveNext())
-            {
-                stringBuilder.Append(",");
-
-                if (ownedRelationshipOfSubclassificationIterator.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification elementAsSubclassification)
                 {
-                    SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+                    SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(elementAsSubclassification, cursorCache, stringBuilder);
                 }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            while (ownedRelationshipCursor.Current != null)
+            {
+                stringBuilder.Append(", ");
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification elementAsSubclassification)
+                    {
+                        SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(elementAsSubclassification, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
 
             }
 
@@ -139,16 +169,17 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Classifier
-        /// <para>Classifier=TypePrefix'classifier'ClassifierDeclarationTypeBody</para>    
+        /// <para>Classifier=TypePrefix'classifier'ClassifierDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildClassifier(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
+        public static void BuildClassifier(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("classifier ");
-            BuildClassifierDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+            BuildClassifierDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
 
         }
     }

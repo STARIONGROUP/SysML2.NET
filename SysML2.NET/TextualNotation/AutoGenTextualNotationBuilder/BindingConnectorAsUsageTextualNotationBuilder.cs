@@ -36,37 +36,48 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule BindingConnectorAsUsage
-        /// <para>BindingConnectorAsUsage=UsagePrefix('binding'UsageDeclaration)?'bind'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMemberUsageBody</para>    
+        /// <para>BindingConnectorAsUsage=UsagePrefix('binding'UsageDeclaration)?'bind'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMemberUsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, StringBuilder stringBuilder)
+        public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
-            UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            UsageTextualNotationBuilder.BuildUsagePrefix(poco, cursorCache, stringBuilder);
 
-            if (BuildGroupConditionForBindingConnectorAsUsage(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.OwnedRelatedElement.Count != 0 || poco.IsOrdered)
             {
                 stringBuilder.Append("binding ");
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("bind ");
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append("=");
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
             }
-            UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
+            ownedRelationshipCursor.Move();
+
+            UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);
 
         }
     }

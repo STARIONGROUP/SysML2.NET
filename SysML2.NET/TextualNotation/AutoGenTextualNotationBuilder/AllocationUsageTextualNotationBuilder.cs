@@ -36,26 +36,28 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule AllocationUsageDeclaration
-        /// <para>AllocationUsageDeclaration:AllocationUsage='allocation'UsageDeclaration('allocate'ConnectorPart)?|'allocate'ConnectorPart</para>    
+        /// <para>AllocationUsageDeclaration:AllocationUsage='allocation'UsageDeclaration('allocate'ConnectorPart)?|'allocate'ConnectorPart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAllocationUsageDeclaration(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, StringBuilder stringBuilder)
+        public static void BuildAllocationUsageDeclaration(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildAllocationUsageDeclarationHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule AllocationUsage
-        /// <para>AllocationUsage=OccurrenceUsagePrefixAllocationUsageDeclarationUsageBody</para>    
+        /// <para>AllocationUsage=OccurrenceUsagePrefixAllocationUsageDeclarationUsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAllocationUsage(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, StringBuilder stringBuilder)
+        public static void BuildAllocationUsage(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            BuildAllocationUsageDeclaration(poco, stringBuilder);
-            UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            BuildAllocationUsageDeclaration(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);
 
         }
     }

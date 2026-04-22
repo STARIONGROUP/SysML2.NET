@@ -36,38 +36,40 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedDisjoining
-        /// <para>OwnedDisjoining:Disjoining=disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType}</para>    
+        /// <para>OwnedDisjoining:Disjoining=disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, StringBuilder stringBuilder)
+        public static void BuildOwnedDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedDisjoiningHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Disjoining
-        /// <para>Disjoining=('disjoining'Identification)?'disjoint'(typeDisjoined=[QualifiedName]|typeDisjoined=FeatureChain{ownedRelatedElement+=typeDisjoined})'from'(disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType})RelationshipBody</para>    
+        /// <para>Disjoining=('disjoining'Identification)?'disjoint'(typeDisjoined=[QualifiedName]|typeDisjoined=FeatureChain{ownedRelatedElement+=typeDisjoined})'from'(disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType})RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, StringBuilder stringBuilder)
+        public static void BuildDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
-            if (BuildGroupConditionForDisjoining(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("disjoining ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("disjoint ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildDisjoiningHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
             stringBuilder.Append("from ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildDisjoiningHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

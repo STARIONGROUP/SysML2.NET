@@ -36,20 +36,26 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule StakeholderMember
-        /// <para>StakeholderMember:StakeholderMembership=MemberPrefixownedRelatedElement+=StakeholderUsage</para>    
+        /// <para>StakeholderMember:StakeholderMembership=MemberPrefixownedRelatedElement+=StakeholderUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IStakeholderMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStakeholderMember(SysML2.NET.Core.POCO.Systems.Requirements.IStakeholderMembership poco, StringBuilder stringBuilder)
+        public static void BuildStakeholderMember(SysML2.NET.Core.POCO.Systems.Requirements.IStakeholderMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfPartUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Parts.PartUsage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            ownedRelatedElementOfPartUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
 
-            if (ownedRelatedElementOfPartUsageIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                PartUsageTextualNotationBuilder.BuildStakeholderUsage(ownedRelatedElementOfPartUsageIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Parts.IPartUsage elementAsPartUsage)
+                {
+                    PartUsageTextualNotationBuilder.BuildStakeholderUsage(elementAsPartUsage, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

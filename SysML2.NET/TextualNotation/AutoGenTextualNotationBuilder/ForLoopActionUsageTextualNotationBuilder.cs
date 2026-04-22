@@ -36,35 +36,50 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ForLoopNode
-        /// <para>ForLoopNode:ForLoopActionUsage=ActionNodePrefix'for'ownedRelationship+=ForVariableDeclarationMember'in'ownedRelationship+=NodeParameterMemberownedRelationship+=ActionBodyParameterMember</para>    
+        /// <para>ForLoopNode:ForLoopActionUsage=ActionNodePrefix'for'ownedRelationship+=ForVariableDeclarationMember'in'ownedRelationship+=NodeParameterMemberownedRelationship+=ActionBodyParameterMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IForLoopActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildForLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IForLoopActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildForLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IForLoopActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
-            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
-            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("for ");
-            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(ownedRelationshipOfFeatureMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(elementAsFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append("in ");
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
-            }
-            ownedRelationshipOfParameterMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
-            {
-                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, 0, stringBuilder);
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
 
         }
     }

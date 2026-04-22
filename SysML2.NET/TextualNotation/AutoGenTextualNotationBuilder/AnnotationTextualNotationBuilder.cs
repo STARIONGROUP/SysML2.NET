@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,45 +36,53 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedAnnotation
-        /// <para>OwnedAnnotation:Annotation=ownedRelatedElement+=AnnotatingElement</para>    
+        /// <para>OwnedAnnotation:Annotation=ownedRelatedElement+=AnnotatingElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildOwnedAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildOwnedAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelatedElement.Count)
-            {
-                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement elementAsAnnotatingElement)
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement elementAsAnnotatingElement)
                 {
-                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(elementAsAnnotatingElement, stringBuilder);
+                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(elementAsAnnotatingElement, cursorCache, stringBuilder);
                 }
             }
+            ownedRelatedElementCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule PrefixMetadataAnnotation
-        /// <para>PrefixMetadataAnnotation:Annotation='#'annotatingElement=PrefixMetadataUsage{ownedRelatedElement+=annotatingElement}</para>    
+        /// <para>PrefixMetadataAnnotation:Annotation='#'annotatingElement=PrefixMetadataUsage{ownedRelatedElement+=annotatingElement}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPrefixMetadataAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
+        public static void BuildPrefixMetadataAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("#");
 
             if (poco.annotatingElement != null)
             {
-                var elementForOwnedRelationship = poco.annotatingElement.OwnedRelationship[0];
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
+                    {
+                        FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
+
 
             }
             // NonParsing Assignment Element : ownedRelatedElement += annotatingElement => Does not have to be process
@@ -84,11 +91,12 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Annotation
-        /// <para>Annotation=annotatedElement=[QualifiedName]</para>    
+        /// <para>Annotation=annotatedElement=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
+        public static void BuildAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.AnnotatedElement != null)

@@ -33,8 +33,9 @@ namespace SysML2.NET.TextualNotation
         /// Build the originalPortDefinition=~[QualifiedName] rule part
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping" /> from which the rule should be build</param>
+        /// <param name="cursorCache"> The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildOriginalPortDefinition(IConjugatedPortTyping poco, StringBuilder stringBuilder)
+        private static void BuildOriginalPortDefinition(IConjugatedPortTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
         }
     }

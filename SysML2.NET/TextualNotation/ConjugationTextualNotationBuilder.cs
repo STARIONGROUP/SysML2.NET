@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="ConjugationTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,35 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="ConjugationTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="ConjugationTextualNotationBuilder" />
     /// </summary>
     public static partial class ConjugationTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the Conjugation rule
+        /// Builds the Textual Notation string for the rule Conjugation
         /// </summary>
-        /// <param name="poco">The <see cref="IConjugation"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForConjugation(IConjugation poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildConjugationHandCoded(IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
+            throw new System.NotSupportedException("BuildConjugationHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule OwnedConjugation
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedConjugationHandCoded(IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildOwnedConjugationHandCoded requires manual implementation");
         }
     }
 }

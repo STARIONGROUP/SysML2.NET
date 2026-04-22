@@ -27,7 +27,6 @@ namespace SysML2.NET.TextualNotation
     using System.Linq;
     using System.Text;
 
-    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -37,42 +36,53 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ElementFilterMember
-        /// <para>ElementFilterMember:ElementFilterMembership=MemberPrefix'filter'ownedRelatedElement+=OwnedExpression';'</para>    
+        /// <para>ElementFilterMember:ElementFilterMembership=MemberPrefix'filter'ownedRelatedElement+=OwnedExpression';'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership" /> from which the rule should be build</param>
-        /// <param name="cursor"></param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildElementFilterMember(IElementFilterMembership poco, ICursorCache cursor, StringBuilder stringBuilder)
+        public static void BuildElementFilterMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("filter ");
-            ownedRelatedElementOfExpressionIterator.MoveNext();
 
-            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
+                {
+                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, cursorCache, stringBuilder);
+                }
             }
-            stringBuilder.Append(";");
+            ownedRelatedElementCursor.Move();
+
+            stringBuilder.AppendLine(";");
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FilterPackageMember
-        /// <para>FilterPackageMember:ElementFilterMembership='['ownedRelatedElement+=OwnedExpression']'</para>    
+        /// <para>FilterPackageMember:ElementFilterMembership='['ownedRelatedElement+=OwnedExpression']'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFilterPackageMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, StringBuilder stringBuilder)
+        public static void BuildFilterPackageMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("[");
-            ownedRelatedElementOfExpressionIterator.MoveNext();
 
-            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
+                {
+                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
             stringBuilder.Append("]");
 
         }

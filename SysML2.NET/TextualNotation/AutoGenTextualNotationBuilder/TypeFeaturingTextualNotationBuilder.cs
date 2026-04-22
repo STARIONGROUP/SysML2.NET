@@ -36,11 +36,12 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedTypeFeaturing
-        /// <para>OwnedTypeFeaturing:TypeFeaturing=featuringType=[QualifiedName]</para>    
+        /// <para>OwnedTypeFeaturing:TypeFeaturing=featuringType=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
+        public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.FeaturingType != null)
@@ -53,17 +54,18 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule TypeFeaturing
-        /// <para>TypeFeaturing='featuring'(Identification'of')?featureOfType=[QualifiedName]'by'featuringType=[QualifiedName]RelationshipBody</para>    
+        /// <para>TypeFeaturing='featuring'(Identification'of')?featureOfType=[QualifiedName]'by'featuringType=[QualifiedName]RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
+        public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("featuring ");
 
-            if (BuildGroupConditionForTypeFeaturing(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append("of ");
                 stringBuilder.Append(' ');
             }
@@ -81,7 +83,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(poco.FeaturingType.qualifiedName);
                 stringBuilder.Append(' ');
             }
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

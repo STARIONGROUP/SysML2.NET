@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureInvertingTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,23 +20,35 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Buffers;
+    using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="FeatureInvertingTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="FeatureInvertingTextualNotationBuilder" />
     /// </summary>
     public static partial class FeatureInvertingTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the FeatureInverting rule
+        /// Builds the Textual Notation string for the rule FeatureInverting
         /// </summary>
-        /// <param name="poco">The <see cref="IFeatureInverting"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForFeatureInverting(IFeatureInverting poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureInverting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildFeatureInvertingHandCoded(IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
+            throw new System.NotSupportedException("BuildFeatureInvertingHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule OwnedFeatureInverting
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureInverting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedFeatureInvertingHandCoded(IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildOwnedFeatureInvertingHandCoded requires manual implementation");
         }
     }
 }

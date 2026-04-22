@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="DisjoiningTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,35 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="DisjoiningTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="DisjoiningTextualNotationBuilder" />
     /// </summary>
     public static partial class DisjoiningTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the Disjoining rule
+        /// Builds the Textual Notation string for the rule Disjoining
         /// </summary>
-        /// <param name="poco">The <see cref="IDisjoining"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForDisjoining(IDisjoining poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildDisjoiningHandCoded(IDisjoining poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
+            throw new System.NotSupportedException("BuildDisjoiningHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule OwnedDisjoining
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedDisjoiningHandCoded(IDisjoining poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildOwnedDisjoiningHandCoded requires manual implementation");
         }
     }
 }

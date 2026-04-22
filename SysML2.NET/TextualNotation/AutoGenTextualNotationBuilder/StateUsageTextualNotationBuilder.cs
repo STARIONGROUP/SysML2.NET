@@ -36,27 +36,29 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule StateUsageBody
-        /// <para>StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>    
+        /// <para>StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateUsageBody(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, StringBuilder stringBuilder)
+        public static void BuildStateUsageBody(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildStateUsageBodyHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule StateUsage
-        /// <para>StateUsage=OccurrenceUsagePrefix'state'ActionUsageDeclarationStateUsageBody</para>    
+        /// <para>StateUsage=OccurrenceUsagePrefix'state'ActionUsageDeclarationStateUsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateUsage(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, StringBuilder stringBuilder)
+        public static void BuildStateUsage(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("state ");
-            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
-            BuildStateUsageBody(poco, stringBuilder);
+            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, cursorCache, stringBuilder);
+            BuildStateUsageBody(poco, cursorCache, stringBuilder);
 
         }
     }

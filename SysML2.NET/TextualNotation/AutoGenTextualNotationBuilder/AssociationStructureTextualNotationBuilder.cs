@@ -36,17 +36,18 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule AssociationStructure
-        /// <para>AssociationStructure=TypePrefix'assoc''struct'ClassifierDeclarationTypeBody</para>    
+        /// <para>AssociationStructure=TypePrefix'assoc''struct'ClassifierDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAssociationStructure(SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure poco, StringBuilder stringBuilder)
+        public static void BuildAssociationStructure(SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("assoc ");
             stringBuilder.Append("struct ");
-            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
 
         }
     }

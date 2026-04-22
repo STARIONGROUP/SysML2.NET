@@ -36,20 +36,30 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ResultExpressionMember
-        /// <para>ResultExpressionMember:ResultExpressionMembership=MemberPrefix?ownedRelatedElement+=OwnedExpression</para>    
+        /// <para>ResultExpressionMember:ResultExpressionMembership=MemberPrefix?ownedRelatedElement+=OwnedExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildResultExpressionMember(SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership poco, StringBuilder stringBuilder)
+        public static void BuildResultExpressionMember(SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            ownedRelatedElementOfExpressionIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             }
+
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
+                {
+                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelatedElementCursor.Move();
+
 
         }
     }

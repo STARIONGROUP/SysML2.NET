@@ -36,32 +36,46 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule EnumerationBody
-        /// <para>EnumerationBody:EnumerationDefinition=';'|'{'(ownedRelationship+=AnnotatingMember|ownedRelationship+=EnumerationUsageMember)*'}'</para>    
+        /// <para>EnumerationBody:EnumerationDefinition=';'|'{'(ownedRelationship+=AnnotatingMember|ownedRelationship+=EnumerationUsageMember)*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumerationBody(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, StringBuilder stringBuilder)
+        public static void BuildEnumerationBody(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                stringBuilder.AppendLine("{");
+                // Have to handle group collection
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EnumerationDefinition
-        /// <para>EnumerationDefinition=DefinitionExtensionKeyword*'enum''def'DefinitionDeclarationEnumerationBody</para>    
+        /// <para>EnumerationDefinition=DefinitionExtensionKeyword*'enum''def'DefinitionDeclarationEnumerationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumerationDefinition(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, StringBuilder stringBuilder)
+        public static void BuildEnumerationDefinition(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
             }
+
             stringBuilder.Append("enum ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            BuildEnumerationBody(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
+            BuildEnumerationBody(poco, cursorCache, stringBuilder);
 
         }
     }

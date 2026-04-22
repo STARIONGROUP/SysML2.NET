@@ -36,14 +36,15 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule AssertConstraintUsage
-        /// <para>AssertConstraintUsage=OccurrenceUsagePrefix'assert'(isNegated?='not')?(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'constraint'ConstraintUsageDeclaration)CalculationBody</para>    
+        /// <para>AssertConstraintUsage=OccurrenceUsagePrefix'assert'(isNegated?='not')?(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'constraint'ConstraintUsageDeclaration)CalculationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAssertConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage poco, StringBuilder stringBuilder)
+        public static void BuildAssertConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("assert ");
 
             if (poco.IsNegated)
@@ -52,9 +53,9 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildAssertConstraintUsageHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, cursorCache, stringBuilder);
 
         }
     }

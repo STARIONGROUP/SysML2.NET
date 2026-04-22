@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,101 +36,122 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule PrefixMetadataFeature
-        /// <para>PrefixMetadataFeature:MetadataFeature=ownedRelationship+=OwnedFeatureTyping</para>    
+        /// <para>PrefixMetadataFeature:MetadataFeature=ownedRelationship+=OwnedFeatureTyping</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildPrefixMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildPrefixMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
-                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, stringBuilder);
+                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MetadataFeatureDeclaration
-        /// <para>MetadataFeatureDeclaration:MetadataFeature=(Identification(':'|'typed''by'))?ownedRelationship+=OwnedFeatureTyping</para>    
+        /// <para>MetadataFeatureDeclaration:MetadataFeature=(Identification(':'|'typed''by'))?ownedRelationship+=OwnedFeatureTyping</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataFeatureDeclaration(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
+        public static void BuildMetadataFeatureDeclaration(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (BuildGroupConditionForMetadataFeatureDeclaration(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                BuildMetadataFeatureDeclarationHandCoded(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
                 stringBuilder.Append(' ');
             }
 
-            ownedRelationshipOfFeatureTypingIterator.MoveNext();
 
-            if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
+                {
+                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MetadataFeature
-        /// <para>MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody</para>    
+        /// <para>MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
+        public static void BuildMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            while (ownedRelationshipCursor.Current != null)
             {
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
+                ownedRelationshipCursor.Move();
 
             }
             stringBuilder.Append(" @ ");
             stringBuilder.Append(' ');
-            BuildMetadataFeatureDeclaration(poco, stringBuilder);
+            BuildMetadataFeatureDeclaration(poco, cursorCache, stringBuilder);
 
-            if (ownedRelationshipOfAnnotationIterator.MoveNext())
+            if (ownedRelationshipCursor.Current != null)
             {
                 stringBuilder.Append("about ");
 
-                if (ownedRelationshipOfAnnotationIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
+                    {
+                        AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                    }
                 }
 
-                while (ownedRelationshipOfAnnotationIterator.MoveNext())
+                while (ownedRelationshipCursor.Current != null)
                 {
-                    stringBuilder.Append(",");
+                    stringBuilder.Append(", ");
 
-                    if (ownedRelationshipOfAnnotationIterator.Current != null)
+                    if (ownedRelationshipCursor.Current != null)
                     {
-                        AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                        if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
+                        {
+                            AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                        }
                     }
+                    ownedRelationshipCursor.Move();
 
                 }
                 stringBuilder.Append(' ');
             }
 
-            TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildMetadataBody(poco, cursorCache, stringBuilder);
 
         }
     }

@@ -36,11 +36,12 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule LiteralInteger
-        /// <para>LiteralInteger=value=DECIMAL_VALUE</para>    
+        /// <para>LiteralInteger=value=DECIMAL_VALUE</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildLiteralInteger(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger poco, StringBuilder stringBuilder)
+        public static void BuildLiteralInteger(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append(poco.Value.ToString());
 

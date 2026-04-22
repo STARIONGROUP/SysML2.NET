@@ -36,36 +36,38 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedSubsetting
-        /// <para>OwnedSubsetting:Subsetting=subsettedFeature=[QualifiedName]|subsettedFeature=OwnedFeatureChain{ownedRelatedElement+=subsettedFeature}</para>    
+        /// <para>OwnedSubsetting:Subsetting=subsettedFeature=[QualifiedName]|subsettedFeature=OwnedFeatureChain{ownedRelatedElement+=subsettedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, StringBuilder stringBuilder)
+        public static void BuildOwnedSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedSubsettingHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Subsetting
-        /// <para>Subsetting=('specialization'Identification)?'subset'SpecificTypeSUBSETSGeneralTypeRelationshipBody</para>    
+        /// <para>Subsetting=('specialization'Identification)?'subset'SpecificTypeSUBSETSGeneralTypeRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, StringBuilder stringBuilder)
+        public static void BuildSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
-            if (BuildGroupConditionForSubsetting(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("subset ");
-            SpecializationTextualNotationBuilder.BuildSpecificType(poco, 0, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildSpecificType(poco, cursorCache, stringBuilder);
             stringBuilder.Append(" :> ");
-            SpecializationTextualNotationBuilder.BuildGeneralType(poco, 0, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildGeneralType(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

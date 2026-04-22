@@ -36,17 +36,18 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule InterfaceDefinition
-        /// <para>InterfaceDefinition=OccurrenceDefinitionPrefix'interface''def'DefinitionDeclarationInterfaceBody</para>    
+        /// <para>InterfaceDefinition=OccurrenceDefinitionPrefix'interface''def'DefinitionDeclarationInterfaceBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceDefinition(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition poco, StringBuilder stringBuilder)
+        public static void BuildInterfaceDefinition(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("interface ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildInterfaceBody(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildInterfaceBody(poco, cursorCache, stringBuilder);
 
         }
     }

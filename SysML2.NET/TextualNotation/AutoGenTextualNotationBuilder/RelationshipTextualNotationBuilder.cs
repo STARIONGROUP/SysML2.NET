@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,50 +36,51 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule RelationshipBody
-        /// <para>RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'</para>    
+        /// <para>RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRelationshipBody(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, StringBuilder stringBuilder)
+        public static void BuildRelationshipBody(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                stringBuilder.AppendLine("{");
+
+                while (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current != null)
+                    {
+
+                        if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
+                        {
+                            AnnotationTextualNotationBuilder.BuildOwnedAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                        }
+                    }
+                    ownedRelationshipCursor.Move();
+
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule RelationshipOwnedElement
-        /// <para>RelationshipOwnedElement:Relationship=ownedRelatedElement+=OwnedRelatedElement|ownedRelationship+=OwnedAnnotation</para>    
+        /// <para>RelationshipOwnedElement:Relationship=ownedRelatedElement+=OwnedRelatedElement|ownedRelationship+=OwnedAnnotation</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildRelationshipOwnedElement(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildRelationshipOwnedElement(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            {
-                if (elementIndex < poco.OwnedRelatedElement.Count)
-                {
-                    var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
-
-                    if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Root.Elements.IElement elementAsElement)
-                    {
-                        ElementTextualNotationBuilder.BuildOwnedRelatedElement(elementAsElement, stringBuilder);
-                    }
-                }
-            }
-else
-            {
-                if (elementIndex < poco.OwnedRelationship.Count)
-                {
-                    var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
-
-                    if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
-                    {
-                        AnnotationTextualNotationBuilder.BuildOwnedAnnotation(elementAsAnnotation, 0, stringBuilder);
-                    }
-                }
-            }
-
-            return elementIndex;
+            BuildRelationshipOwnedElementHandCoded(poco, cursorCache, stringBuilder);
         }
     }
 }

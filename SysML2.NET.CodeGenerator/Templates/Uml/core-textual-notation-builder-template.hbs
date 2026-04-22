@@ -40,6 +40,7 @@ namespace SysML2.NET.TextualNotation
             /// <para>{{Rule.RawRule}}</para>
             /// </summary>
             /// <param name="poco">The <see cref="{{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }}" /> from which the rule should be build</param>
+            /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
             /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
             public static void Build{{rule.RuleName}}({{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }} poco, ICursorCache cursorCache, StringBuilder stringBuilder)
             {

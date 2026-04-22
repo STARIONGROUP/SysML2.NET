@@ -36,83 +36,112 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule InterfaceUsageDeclaration
-        /// <para>InterfaceUsageDeclaration:InterfaceUsage=UsageDeclarationValuePart?('connect'InterfacePart)?|InterfacePart</para>    
+        /// <para>InterfaceUsageDeclaration:InterfaceUsage=UsageDeclarationValuePart?('connect'InterfacePart)?|InterfacePart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceUsageDeclaration(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, StringBuilder stringBuilder)
+        public static void BuildInterfaceUsageDeclaration(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildInterfaceUsageDeclarationHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule InterfacePart
-        /// <para>InterfacePart:InterfaceUsage=BinaryInterfacePart|NaryInterfacePart</para>    
+        /// <para>InterfacePart:InterfaceUsage=BinaryInterfacePart|NaryInterfacePart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, StringBuilder stringBuilder)
+        public static void BuildInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
+            BuildInterfacePartHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule BinaryInterfacePart
-        /// <para>BinaryInterfacePart:InterfaceUsage=ownedRelationship+=InterfaceEndMember'to'ownedRelationship+=InterfaceEndMember</para>    
+        /// <para>BinaryInterfacePart:InterfaceUsage=ownedRelationship+=InterfaceEndMember'to'ownedRelationship+=InterfaceEndMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBinaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, StringBuilder stringBuilder)
+        public static void BuildBinaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
             stringBuilder.Append("to ");
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule NaryInterfacePart
-        /// <para>NaryInterfacePart:InterfaceUsage='('ownedRelationship+=InterfaceEndMember','ownedRelationship+=InterfaceEndMember(','ownedRelationship+=InterfaceEndMember)*')'</para>    
+        /// <para>NaryInterfacePart:InterfaceUsage='('ownedRelationship+=InterfaceEndMember','ownedRelationship+=InterfaceEndMember(','ownedRelationship+=InterfaceEndMember)*')'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, StringBuilder stringBuilder)
+        public static void BuildNaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("(");
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
-            }
-            stringBuilder.Append(",");
-            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
-            {
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
-            }
-
-            while (ownedRelationshipOfEndFeatureMembershipIterator.MoveNext())
-            {
-                stringBuilder.Append(",");
-
-                if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, 0, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
                 }
+            }
+            ownedRelationshipCursor.Move();
+
+            stringBuilder.Append(", ");
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
+
+            while (ownedRelationshipCursor.Current != null)
+            {
+                stringBuilder.Append(", ");
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
+                    {
+                        EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
 
             }
             stringBuilder.Append(")");
@@ -121,16 +150,17 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule InterfaceUsage
-        /// <para>InterfaceUsage=OccurrenceUsagePrefix'interface'InterfaceUsageDeclarationInterfaceBody</para>    
+        /// <para>InterfaceUsage=OccurrenceUsagePrefix'interface'InterfaceUsageDeclarationInterfaceBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceUsage(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, StringBuilder stringBuilder)
+        public static void BuildInterfaceUsage(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("interface ");
-            BuildInterfaceUsageDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildInterfaceBody(poco, stringBuilder);
+            BuildInterfaceUsageDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildInterfaceBody(poco, cursorCache, stringBuilder);
 
         }
     }

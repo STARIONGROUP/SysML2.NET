@@ -36,16 +36,17 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule Interaction
-        /// <para>Interaction=TypePrefix'interaction'ClassifierDeclarationTypeBody</para>    
+        /// <para>Interaction=TypePrefix'interaction'ClassifierDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInteraction(SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction poco, StringBuilder stringBuilder)
+        public static void BuildInteraction(SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("interaction ");
-            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
 
         }
     }

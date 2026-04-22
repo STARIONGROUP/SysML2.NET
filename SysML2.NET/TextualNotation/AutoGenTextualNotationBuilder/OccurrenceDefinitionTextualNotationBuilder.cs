@@ -36,13 +36,14 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OccurrenceDefinitionPrefix
-        /// <para>OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*</para>    
+        /// <para>OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
+        public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (poco.IsAbstract)
             {
                 stringBuilder.Append(" abstract ");
@@ -53,34 +54,39 @@ namespace SysML2.NET.TextualNotation
             }
 
 
-            if (poco.IsIndividual && ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            if (poco.IsIndividual && ownedRelationshipCursor.Current != null)
             {
                 stringBuilder.Append(" individual ");
 
-                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(' ');
             }
 
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
             }
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule IndividualDefinition
-        /// <para>IndividualDefinition:OccurrenceDefinition=BasicDefinitionPrefix?isIndividual?='individual'DefinitionExtensionKeyword*'def'DefinitionownedRelationship+=EmptyMultiplicityMember</para>    
+        /// <para>IndividualDefinition:OccurrenceDefinition=BasicDefinitionPrefix?isIndividual?='individual'DefinitionExtensionKeyword*'def'DefinitionownedRelationship+=EmptyMultiplicityMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
+        public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (poco.IsAbstract)
             {
                 stringBuilder.Append(" abstract ");
@@ -94,34 +100,40 @@ namespace SysML2.NET.TextualNotation
             {
                 stringBuilder.Append(" individual ");
             }
-            // Handle collection Non Terminal 
-            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+            while (ownedRelationshipCursor.Current != null)
             {
-                ownedRelationshipIndex = DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, ownedRelationshipIndex, stringBuilder);
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
             }
-            stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
-            ownedRelationshipOfOwningMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            stringBuilder.Append("def ");
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
+
+            if (ownedRelationshipCursor.Current != null)
             {
-                OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, 0, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule OccurrenceDefinition
-        /// <para>OccurrenceDefinition=OccurrenceDefinitionPrefix'occurrence''def'Definition</para>    
+        /// <para>OccurrenceDefinition=OccurrenceDefinitionPrefix'occurrence''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
+        public static void BuildOccurrenceDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
+            BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("occurrence ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
 
         }
     }

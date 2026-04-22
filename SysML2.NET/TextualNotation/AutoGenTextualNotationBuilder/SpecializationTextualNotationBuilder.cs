@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,65 +36,63 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedSpecialization
-        /// <para>OwnedSpecialization:Specialization=GeneralType</para>    
+        /// <para>OwnedSpecialization:Specialization=GeneralType</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
+        public static void BuildOwnedSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildGeneralType(poco, 0, stringBuilder);
+            BuildGeneralType(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule SpecificType
-        /// <para>SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}</para>    
+        /// <para>SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildSpecificType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildSpecificType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            return elementIndex;
+            BuildSpecificTypeHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule GeneralType
-        /// <para>GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}</para>    
+        /// <para>GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildGeneralType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildGeneralType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            return elementIndex;
+            BuildGeneralTypeHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Specialization
-        /// <para>Specialization=('specialization'Identification)?'subtype'SpecificTypeSPECIALIZESGeneralTypeRelationshipBody</para>    
+        /// <para>Specialization=('specialization'Identification)?'subtype'SpecificTypeSPECIALIZESGeneralTypeRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
+        public static void BuildSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
-            if (BuildGroupConditionForSpecialization(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("subtype ");
-            BuildSpecificType(poco, 0, stringBuilder);
+            BuildSpecificType(poco, cursorCache, stringBuilder);
             stringBuilder.Append(" :> ");
-            BuildGeneralType(poco, 0, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            BuildGeneralType(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

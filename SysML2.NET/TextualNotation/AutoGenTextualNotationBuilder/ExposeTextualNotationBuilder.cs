@@ -36,25 +36,26 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule Expose
-        /// <para>Expose='expose'(MembershipExpose|NamespaceExpose)RelationshipBody</para>    
+        /// <para>Expose='expose'(MembershipExpose|NamespaceExpose)RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IExpose" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpose(SysML2.NET.Core.POCO.Systems.Views.IExpose poco, StringBuilder stringBuilder)
+        public static void BuildExpose(SysML2.NET.Core.POCO.Systems.Views.IExpose poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("expose ");
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.Views.MembershipExpose pocoMembershipExpose:
-                    MembershipExposeTextualNotationBuilder.BuildMembershipExpose(pocoMembershipExpose, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose pocoMembershipExpose:
+                    MembershipExposeTextualNotationBuilder.BuildMembershipExpose(pocoMembershipExpose, cursorCache, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Views.NamespaceExpose pocoNamespaceExpose:
-                    NamespaceExposeTextualNotationBuilder.BuildNamespaceExpose(pocoNamespaceExpose, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Views.INamespaceExpose pocoNamespaceExpose:
+                    NamespaceExposeTextualNotationBuilder.BuildNamespaceExpose(pocoNamespaceExpose, cursorCache, stringBuilder);
                     break;
             }
 
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

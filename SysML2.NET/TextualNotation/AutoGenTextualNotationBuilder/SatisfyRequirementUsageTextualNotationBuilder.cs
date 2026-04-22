@@ -36,36 +36,44 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule SatisfyRequirementUsage
-        /// <para>SatisfyRequirementUsage=OccurrenceUsagePrefix'assert'(isNegated?='not')'satisfy'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'requirement'UsageDeclaration)ValuePart?('by'ownedRelationship+=SatisfactionSubjectMember)?RequirementBody</para>    
+        /// <para>SatisfyRequirementUsage=OccurrenceUsagePrefix'assert'(isNegated?='not')'satisfy'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'requirement'UsageDeclaration)ValuePart?('by'ownedRelationship+=SatisfactionSubjectMember)?RequirementBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISatisfyRequirementUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSatisfyRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.ISatisfyRequirementUsage poco, StringBuilder stringBuilder)
+        public static void BuildSatisfyRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.ISatisfyRequirementUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            using var ownedRelationshipOfSubjectMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership>().GetEnumerator();
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("assert ");
             stringBuilder.Append(" not ");
 
             stringBuilder.Append(' ');
             stringBuilder.Append("satisfy ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildSatisfyRequirementUsageHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            FeatureTextualNotationBuilder.BuildValuePart(poco, 0, stringBuilder);
 
-            if (ownedRelationshipOfSubjectMembershipIterator.MoveNext())
+            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            {
+                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+            }
+
+            if (ownedRelationshipCursor.Current != null)
             {
                 stringBuilder.Append("by ");
 
-                if (ownedRelationshipOfSubjectMembershipIterator.Current != null)
+                if (ownedRelationshipCursor.Current != null)
                 {
-                    SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(ownedRelationshipOfSubjectMembershipIterator.Current, 0, stringBuilder);
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership elementAsSubjectMembership)
+                    {
+                        SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(elementAsSubjectMembership, cursorCache, stringBuilder);
+                    }
                 }
                 stringBuilder.Append(' ');
             }
 
-            TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, cursorCache, stringBuilder);
 
         }
     }

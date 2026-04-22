@@ -36,22 +36,24 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedFeatureTyping
-        /// <para>OwnedFeatureTyping:FeatureTyping=type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}</para>    
+        /// <para>OwnedFeatureTyping:FeatureTyping=type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
+        public static void BuildOwnedFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            BuildOwnedFeatureTypingHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ReferenceTyping
-        /// <para>ReferenceTyping:FeatureTyping=type=[QualifiedName]</para>    
+        /// <para>ReferenceTyping:FeatureTyping=type=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildReferenceTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
+        public static void BuildReferenceTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.Type != null)
@@ -64,19 +66,20 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureTyping
-        /// <para>FeatureTyping=OwnedFeatureTyping|ConjugatedPortTyping</para>    
+        /// <para>FeatureTyping=OwnedFeatureTyping|ConjugatedPortTyping</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
+        public static void BuildFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping pocoConjugatedPortTyping:
-                    ConjugatedPortTypingTextualNotationBuilder.BuildConjugatedPortTyping(pocoConjugatedPortTyping, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping pocoConjugatedPortTyping:
+                    ConjugatedPortTypingTextualNotationBuilder.BuildConjugatedPortTyping(pocoConjugatedPortTyping, cursorCache, stringBuilder);
                     break;
                 default:
-                    BuildOwnedFeatureTyping(poco, stringBuilder);
+                    BuildOwnedFeatureTyping(poco, cursorCache, stringBuilder);
                     break;
             }
 

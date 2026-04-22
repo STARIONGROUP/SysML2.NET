@@ -32,10 +32,22 @@ namespace SysML2.NET.TextualNotation
         /// <summary>
         /// Build the non-existing Filter Package import rule
         /// </summary>
-        /// <param name="package">The package</param>
+        /// <param name="poco">The <see cref="IPackage"/> from which the rule should be built</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/></param>
-        private static void BuildFilterPackageImport(Package package, StringBuilder stringBuilder)
+        private static void BuildFilterPackageImport(IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PackageBody
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildPackageBodyHandCoded(IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildPackageBodyHandCoded requires manual implementation");
         }
     }
 }

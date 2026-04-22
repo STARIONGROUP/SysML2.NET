@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="RedefinitionTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -20,21 +20,24 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Core.Features;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="RedefinitionTextualNotationBuilder"/>
+    /// Hand-coded part of the <see cref="RedefinitionTextualNotationBuilder" />
     /// </summary>
     public static partial class RedefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the conditional part for the Redefinition rule
+        /// Builds the Textual Notation string for the rule OwnedRedefinition
         /// </summary>
-        /// <param name="poco">The <see cref="IRedefinition"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForRedefinition(IRedefinition poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedRedefinitionHandCoded(IRedefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
+            throw new System.NotSupportedException("BuildOwnedRedefinitionHandCoded requires manual implementation");
         }
     }
 }

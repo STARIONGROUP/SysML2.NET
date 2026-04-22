@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,119 +36,133 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule SatisfactionReferenceExpression
-        /// <para>SatisfactionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureChainMember</para>    
+        /// <para>SatisfactionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureChainMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildSatisfactionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildSatisfactionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
                 {
-                    MembershipTextualNotationBuilder.BuildFeatureChainMember(elementAsMembership, stringBuilder);
+                    MembershipTextualNotationBuilder.BuildFeatureChainMember(elementAsMembership, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedExpressionReference
-        /// <para>OwnedExpressionReference:FeatureReferenceExpression=ownedRelationship+=OwnedExpressionMember</para>    
+        /// <para>OwnedExpressionReference:FeatureReferenceExpression=ownedRelationship+=OwnedExpressionMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildOwnedExpressionReference(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildOwnedExpressionReference(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(elementAsFeatureMembership, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(elementAsFeatureMembership, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FunctionReferenceExpression
-        /// <para>FunctionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FunctionReferenceMember</para>    
+        /// <para>FunctionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FunctionReferenceMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildFunctionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildFunctionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(elementAsFeatureMembership, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(elementAsFeatureMembership, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule FeatureReferenceExpression
-        /// <para>FeatureReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureReferenceMemberownedRelationship+=EmptyResultMember</para>    
+        /// <para>FeatureReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureReferenceMemberownedRelationship+=EmptyResultMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        public static void BuildFeatureReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
-            using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
-            ownedRelationshipOfMembershipIterator.MoveNext();
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipOfMembershipIterator.Current != null)
+            if (ownedRelationshipCursor.Current != null)
             {
-                MembershipTextualNotationBuilder.BuildFeatureReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
-            }
-            ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
 
-            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
-            {
-                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, 0, stringBuilder);
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
+                {
+                    MembershipTextualNotationBuilder.BuildFeatureReferenceMember(elementAsMembership, cursorCache, stringBuilder);
+                }
             }
+            ownedRelationshipCursor.Move();
+
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
+                {
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule BodyExpression
-        /// <para>BodyExpression:FeatureReferenceExpression=ownedRelationship+=ExpressionBodyMember</para>    
+        /// <para>BodyExpression:FeatureReferenceExpression=ownedRelationship+=ExpressionBodyMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildBodyExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildBodyExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelationship.Count)
-            {
-                var elementForOwnedRelationship = poco.OwnedRelationship[elementIndex];
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (elementForOwnedRelationship is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(elementAsFeatureMembership, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(elementAsFeatureMembership, cursorCache, stringBuilder);
                 }
             }
+            ownedRelationshipCursor.Move();
 
-            return elementIndex;
+
         }
     }
 }

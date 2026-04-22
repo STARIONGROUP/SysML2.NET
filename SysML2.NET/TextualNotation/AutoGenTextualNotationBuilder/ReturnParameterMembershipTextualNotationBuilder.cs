@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,88 +36,106 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ReturnParameterMember
-        /// <para>ReturnParameterMember:ReturnParameterMembership=MemberPrefix?'return'ownedRelatedElement+=UsageElement</para>    
+        /// <para>ReturnParameterMember:ReturnParameterMembership=MemberPrefix?'return'ownedRelatedElement+=UsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildReturnParameterMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, StringBuilder stringBuilder)
+        public static void BuildReturnParameterMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            stringBuilder.Append("return ");
-            ownedRelatedElementOfUsageIterator.MoveNext();
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementOfUsageIterator.Current != null)
+            if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                UsageTextualNotationBuilder.BuildUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             }
+            stringBuilder.Append("return ");
+
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
+                {
+                    UsageTextualNotationBuilder.BuildUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelatedElementCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ReturnFeatureMember
-        /// <para>ReturnFeatureMember:ReturnParameterMembership=MemberPrefix'return'ownedRelatedElement+=FeatureElement</para>    
+        /// <para>ReturnFeatureMember:ReturnParameterMembership=MemberPrefix'return'ownedRelatedElement+=FeatureElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildReturnFeatureMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, StringBuilder stringBuilder)
+        public static void BuildReturnFeatureMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("return ");
-            ownedRelatedElementOfFeatureIterator.MoveNext();
 
-            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            if (ownedRelatedElementCursor.Current != null)
             {
-                FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureElement(elementAsFeature, cursorCache, stringBuilder);
+                }
             }
+            ownedRelatedElementCursor.Move();
+
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EmptyResultMember
-        /// <para>EmptyResultMember:ReturnParameterMembership=ownedRelatedElement+=EmptyFeature</para>    
+        /// <para>EmptyResultMember:ReturnParameterMembership=ownedRelatedElement+=EmptyFeature</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildEmptyResultMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildEmptyResultMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelatedElement.Count)
-            {
-                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
                 {
-                    ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(elementAsReferenceUsage, stringBuilder);
+                    ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(elementAsReferenceUsage, cursorCache, stringBuilder);
                 }
             }
+            ownedRelatedElementCursor.Move();
 
-            return elementIndex;
+
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule ConstructorResultMember
-        /// <para>ConstructorResultMember:ReturnParameterMembership=ownedRelatedElement+=ConstructorResult</para>    
+        /// <para>ConstructorResultMember:ReturnParameterMembership=ownedRelatedElement+=ConstructorResult</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildConstructorResultMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildConstructorResultMember(SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (elementIndex < poco.OwnedRelatedElement.Count)
-            {
-                var elementForOwnedRelatedElement = poco.OwnedRelatedElement[elementIndex];
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (elementForOwnedRelatedElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+            if (ownedRelatedElementCursor.Current != null)
+            {
+
+                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                 {
-                    FeatureTextualNotationBuilder.BuildConstructorResult(elementAsFeature, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildConstructorResult(elementAsFeature, cursorCache, stringBuilder);
                 }
             }
+            ownedRelatedElementCursor.Move();
 
-            return elementIndex;
+
         }
     }
 }

@@ -104,7 +104,7 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         }
 
         /// <summary>
-        /// Gets the <see cref="AssignmentElement"/> that requires a dispatcher 
+        /// Gets the <see cref="AssignmentElement"/> that requires a dispatcher
         /// </summary>
         /// <returns>The <see cref="AssignmentElement"/></returns>
         public AssignmentElement GetAssignmentElementNeedingDispatcher()
@@ -120,6 +120,156 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
             }
 
             return this.Alternatives.SelectMany(x => x.Elements).OfType<AssignmentElement>().FirstOrDefault(x => x.Operator == "+=");
+        }
+
+        /// <summary>
+        /// Recursively resolves the collection property names (properties used with the <c>+=</c> operator)
+        /// that this rule and any referenced NonTerminal rules ultimately consume.
+        /// </summary>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>A distinct set of collection property names (e.g., <c>{"ownedRelationship"}</c>)</returns>
+        public IReadOnlyCollection<string> QueryCollectionPropertyNames(IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var result = new HashSet<string>();
+            var visited = new HashSet<string>();
+            CollectCollectionPropertyNames(this, allRules, result, visited);
+            return result;
+        }
+
+        /// <summary>
+        /// Recursively collects collection property names from a rule and its referenced NonTerminal rules
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectCollectionPropertyNames(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            if (!visited.Add(rule.RuleName))
+            {
+                return;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectCollectionPropertyNamesFromElements(alternative.Elements, allRules, result, visited);
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects collection property names from a list of <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="elements">The elements to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectCollectionPropertyNamesFromElements(IEnumerable<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement { Operator: "+=" } assignmentElement:
+                        result.Add(assignmentElement.Property);
+                        break;
+                    case NonTerminalElement nonTerminalElement:
+                        var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+                        if (referencedRule != null)
+                        {
+                            CollectCollectionPropertyNames(referencedRule, allRules, result, visited);
+                        }
+
+                        break;
+                    case GroupElement groupElement:
+                        foreach (var groupAlternative in groupElement.Alternatives)
+                        {
+                            CollectCollectionPropertyNamesFromElements(groupAlternative.Elements, allRules, result, visited);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recursively resolves all property names (both scalar <c>=</c> and collection <c>+=</c> assignments)
+        /// that this rule and any referenced NonTerminal rules consume.
+        /// </summary>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>A distinct set of property names referenced by this rule tree</returns>
+        public IReadOnlyCollection<string> QueryAllReferencedPropertyNames(IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var result = new HashSet<string>();
+            var visited = new HashSet<string>();
+            CollectAllReferencedPropertyNames(this, allRules, result, visited);
+            return result;
+        }
+
+        /// <summary>
+        /// Recursively collects all property names from a rule and its referenced NonTerminal rules
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectAllReferencedPropertyNames(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            if (!visited.Add(rule.RuleName))
+            {
+                return;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectAllReferencedPropertyNamesFromElements(alternative.Elements, allRules, result, visited);
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects all property names from a list of <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="elements">The elements to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectAllReferencedPropertyNamesFromElements(IEnumerable<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement assignmentElement:
+                        result.Add(assignmentElement.Property);
+
+                        if (assignmentElement.Value is NonTerminalElement valueNonTerminal)
+                        {
+                            var valueRule = allRules.SingleOrDefault(x => x.RuleName == valueNonTerminal.Name);
+
+                            if (valueRule != null)
+                            {
+                                CollectAllReferencedPropertyNames(valueRule, allRules, result, visited);
+                            }
+                        }
+
+                        break;
+                    case NonTerminalElement nonTerminalElement:
+                        var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+
+                        if (referencedRule != null)
+                        {
+                            CollectAllReferencedPropertyNames(referencedRule, allRules, result, visited);
+                        }
+
+                        break;
+                    case GroupElement groupElement:
+                        foreach (var groupAlternative in groupElement.Alternatives)
+                        {
+                            CollectAllReferencedPropertyNamesFromElements(groupAlternative.Elements, allRules, result, visited);
+                        }
+
+                        break;
+                }
+            }
         }
     }
 }

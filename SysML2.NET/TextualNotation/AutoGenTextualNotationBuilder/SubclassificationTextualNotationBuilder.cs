@@ -36,11 +36,12 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OwnedSubclassification
-        /// <para>OwnedSubclassification:Subclassification=superClassifier=[QualifiedName]</para>    
+        /// <para>OwnedSubclassification:Subclassification=superClassifier=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
+        public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
             if (poco.Superclassifier != null)
@@ -53,17 +54,18 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule Subclassification
-        /// <para>Subclassification=('specialization'Identification)?'subclassifier'subclassifier=[QualifiedName]SPECIALIZESsuperclassifier=[QualifiedName]RelationshipBody</para>    
+        /// <para>Subclassification=('specialization'Identification)?'subclassifier'subclassifier=[QualifiedName]SPECIALIZESsuperclassifier=[QualifiedName]RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
+        public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
 
-            if (BuildGroupConditionForSubclassification(poco))
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
@@ -81,7 +83,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(poco.Superclassifier.qualifiedName);
                 stringBuilder.Append(' ');
             }
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }
     }

@@ -36,13 +36,14 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule NamespaceExpose
-        /// <para>NamespaceExpose=NamespaceImport</para>    
+        /// <para>NamespaceExpose=NamespaceImport</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.INamespaceExpose" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNamespaceExpose(SysML2.NET.Core.POCO.Systems.Views.INamespaceExpose poco, StringBuilder stringBuilder)
+        public static void BuildNamespaceExpose(SysML2.NET.Core.POCO.Systems.Views.INamespaceExpose poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            NamespaceImportTextualNotationBuilder.BuildNamespaceImport(poco, stringBuilder);
+            NamespaceImportTextualNotationBuilder.BuildNamespaceImport(poco, cursorCache, stringBuilder);
 
         }
     }

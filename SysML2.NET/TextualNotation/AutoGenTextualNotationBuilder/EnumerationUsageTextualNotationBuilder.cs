@@ -36,28 +36,30 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule EnumeratedValue
-        /// <para>EnumeratedValue:EnumerationUsage='enum'?Usage</para>    
+        /// <para>EnumeratedValue:EnumerationUsage='enum'?Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumeratedValue(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage poco, StringBuilder stringBuilder)
+        public static void BuildEnumeratedValue(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("enum ");
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EnumerationUsage
-        /// <para>EnumerationUsage:EnumerationUsage=UsagePrefix'enum'Usage</para>    
+        /// <para>EnumerationUsage:EnumerationUsage=UsagePrefix'enum'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumerationUsage(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage poco, StringBuilder stringBuilder)
+        public static void BuildEnumerationUsage(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("enum ");
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
     }

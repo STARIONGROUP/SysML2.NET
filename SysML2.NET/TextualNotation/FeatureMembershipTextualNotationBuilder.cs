@@ -22,6 +22,7 @@ namespace SysML2.NET.TextualNotation
 {
     using System.Text;
 
+    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
@@ -33,9 +34,43 @@ namespace SysML2.NET.TextualNotation
         /// Build the memberFeature=[QualifiedName] of the rule
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMemberFeature(IFeatureMembership poco, StringBuilder stringBuilder)
+        private static void BuildMemberFeature(IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ActionBehaviorMember
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildActionBehaviorMemberHandCoded(IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildActionBehaviorMemberHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule EntryTransitionMember
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildEntryTransitionMemberHandCoded(IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildEntryTransitionMemberHandCoded requires manual implementation");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule SequenceExpressionList
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSequenceExpressionListHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("BuildSequenceExpressionListHandCoded requires manual implementation");
         }
     }
 }

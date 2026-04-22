@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,29 +36,28 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule ViewRenderingUsage
-        /// <para>ViewRenderingUsage:RenderingUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?UsageBody|(UsageExtensionKeyword*'rendering'|UsageExtensionKeyword+)Usage</para>    
+        /// <para>ViewRenderingUsage:RenderingUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?UsageBody|(UsageExtensionKeyword*'rendering'|UsageExtensionKeyword+)Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildViewRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildViewRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            return elementIndex;
+            BuildViewRenderingUsageHandCoded(poco, cursorCache, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule RenderingUsage
-        /// <para>RenderingUsage=OccurrenceUsagePrefix'rendering'Usage</para>    
+        /// <para>RenderingUsage=OccurrenceUsagePrefix'rendering'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, StringBuilder stringBuilder)
+        public static void BuildRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("rendering ");
-            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
 
         }
     }

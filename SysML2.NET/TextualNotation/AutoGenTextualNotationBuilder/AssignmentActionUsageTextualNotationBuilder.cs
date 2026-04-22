@@ -36,51 +36,54 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule AssignmentNode
-        /// <para>AssignmentNode:AssignmentActionUsage=OccurrenceUsagePrefixAssignmentNodeDeclarationActionBody</para>    
+        /// <para>AssignmentNode:AssignmentActionUsage=OccurrenceUsagePrefixAssignmentNodeDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAssignmentNode(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildAssignmentNode(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule StateAssignmentActionUsage
-        /// <para>StateAssignmentActionUsage:AssignmentActionUsage=AssignmentNodeDeclarationActionBody</para>    
+        /// <para>StateAssignmentActionUsage:AssignmentActionUsage=AssignmentNodeDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildStateAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
+            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
 
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule TransitionAssignmentActionUsage
-        /// <para>TransitionAssignmentActionUsage:AssignmentActionUsage=AssignmentNodeDeclaration('{'ActionBodyItem*'}')?</para>    
+        /// <para>TransitionAssignmentActionUsage:AssignmentActionUsage=AssignmentNodeDeclaration('{'ActionBodyItem*'}')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
+        public static void BuildTransitionAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
+            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, cursorCache, stringBuilder);
 
-            if (BuildGroupConditionForTransitionAssignmentActionUsage(poco))
+            if (poco.OwnedRelationship.Count != 0 || poco.importedMembership.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
-                stringBuilder.Append("{");
-                // Handle collection Non Terminal 
-                for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < poco.OwnedRelationship.Count; ownedRelationshipIndex++)
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
                 {
-                    ownedRelationshipIndex = TypeTextualNotationBuilder.BuildActionBodyItem(poco, ownedRelationshipIndex, stringBuilder);
+                    TypeTextualNotationBuilder.BuildActionBodyItem(poco, cursorCache, stringBuilder);
                 }
-                stringBuilder.Append("}");
-                stringBuilder.Append(' ');
+
+                stringBuilder.AppendLine("}");
             }
 
 

@@ -24,7 +24,6 @@
 
 namespace SysML2.NET.TextualNotation
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -37,16 +36,14 @@ namespace SysML2.NET.TextualNotation
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule TriggerExpression
-        /// <para>TriggerExpression:TriggerInvocationExpression=kind=('at'|'after')ownedRelationship+=ArgumentMember|kind='when'ownedRelationship+=ArgumentExpressionMember</para>    
+        /// <para>TriggerExpression:TriggerInvocationExpression=kind=('at'|'after')ownedRelationship+=ArgumentMember|kind='when'ownedRelationship+=ArgumentExpressionMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression" /> from which the rule should be build</param>
-        /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the <paramref name="elements" /> collection</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
-        public static int BuildTriggerExpression(SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression poco, int elementIndex, StringBuilder stringBuilder)
+        public static void BuildTriggerExpression(SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            return elementIndex;
+            BuildTriggerExpressionHandCoded(poco, cursorCache, stringBuilder);
         }
     }
 }
