@@ -94,7 +94,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceBody(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildNamespaceBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildNamespaceBodyElement(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>

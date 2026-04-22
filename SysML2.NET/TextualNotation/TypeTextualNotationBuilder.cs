@@ -173,17 +173,6 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule ActionBody
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildActionBodyHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildActionBodyHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule ActionBodyItem
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
@@ -203,17 +192,6 @@ namespace SysML2.NET.TextualNotation
         private static void BuildCalculationBodyHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("BuildCalculationBodyHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule DefinitionBody
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildDefinitionBodyHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildDefinitionBodyHandCoded requires manual implementation");
         }
 
         /// <summary>
@@ -239,17 +217,6 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule InterfaceBody
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildInterfaceBodyHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildInterfaceBodyHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule InterfaceBodyItem
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
@@ -261,17 +228,6 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule RequirementBody
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildRequirementBodyHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildRequirementBodyHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule StateBodyItem
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
@@ -280,17 +236,6 @@ namespace SysML2.NET.TextualNotation
         private static void BuildStateBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("BuildStateBodyItemHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule TypeBody
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildTypeBodyHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildTypeBodyHandCoded requires manual implementation");
         }
 
         /// <summary>

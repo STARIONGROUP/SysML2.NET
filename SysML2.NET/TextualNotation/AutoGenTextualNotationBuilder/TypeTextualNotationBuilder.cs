@@ -43,7 +43,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDefinitionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildDefinitionBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildDefinitionBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
@@ -67,7 +82,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildInterfaceBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildInterfaceBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
@@ -91,7 +121,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildActionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildActionBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildActionBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
@@ -191,7 +236,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRequirementBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildRequirementBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildRequirementBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>
@@ -643,7 +703,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeBody(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildTypeBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildTypeBodyElement(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>

@@ -43,7 +43,29 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStateUsageBody(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildStateUsageBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+
+                if (poco.IsParallel)
+                {
+                    stringBuilder.Append(" parallel ");
+                    stringBuilder.Append(' ');
+                }
+
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    TypeTextualNotationBuilder.BuildStateBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>

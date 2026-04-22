@@ -43,7 +43,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildViewDefinitionBody(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildViewDefinitionBodyHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.Count == 0)
+            {
+                stringBuilder.AppendLine(";");
+            }
+            else
+            {
+                stringBuilder.AppendLine("{");
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                while (ownedRelationshipCursor.Current != null)
+                {
+                    BuildViewDefinitionBodyItem(poco, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                stringBuilder.AppendLine("}");
+            }
+
         }
 
         /// <summary>

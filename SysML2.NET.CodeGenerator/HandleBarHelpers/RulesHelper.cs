@@ -563,8 +563,107 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else
                         {
-                            var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                            writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                            // Check for collection NonTerminal elements (e.g., ';' | '{' Items* '}')
+                            // The body items are expressed as a standalone NonTerminal with IsCollection, not as AssignmentElements
+                            var collectionNonTerminals = secondAlt.Elements.OfType<NonTerminalElement>().Where(x => x.IsCollection).ToList();
+
+                            if (collectionNonTerminals.Count > 0)
+                            {
+                                // Resolve the collection property through the NonTerminal's rule tree
+                                var nonTerminalRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == collectionNonTerminals[0].Name);
+
+                                if (nonTerminalRule != null)
+                                {
+                                    var collectionPropertyNames = nonTerminalRule.QueryCollectionPropertyNames(ruleGenerationContext.AllRules);
+
+                                    if (collectionPropertyNames.Count > 0)
+                                    {
+                                        var collectionPropertyName = collectionPropertyNames.First();
+                                        var targetProperty = umlClass.QueryAllProperties().SingleOrDefault(x => string.Equals(x.Name, collectionPropertyName, StringComparison.OrdinalIgnoreCase));
+                                        var terminalValue = ((TerminalElement)firstAlt.Elements[0]).Value;
+
+                                        if (targetProperty != null)
+                                        {
+                                            var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+
+                                            writer.WriteSafeString($"if(poco.{propertyAccessName}.Count == 0){Environment.NewLine}");
+                                            writer.WriteSafeString($"{{{Environment.NewLine}");
+                                            writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
+                                            writer.WriteSafeString($"}}{Environment.NewLine}");
+                                            writer.WriteSafeString($"else{Environment.NewLine}");
+                                            writer.WriteSafeString($"{{{Environment.NewLine}");
+
+                                            // Process non-collection elements (terminals like '{', '}' and optional assignments like isParallel?='parallel')
+                                            // but handle the collection NonTerminal explicitly with cursor + Move()
+                                            foreach (var element in secondAlt.Elements)
+                                            {
+                                                if (element is NonTerminalElement { IsCollection: true })
+                                                {
+                                                    // Generate explicit cursor-based loop with per-item builder call and Move()
+                                                    var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
+                                                    writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
+
+                                                    // Resolve the builder call for the per-item NonTerminal
+                                                    var collectionNonTerminal = (NonTerminalElement)element;
+                                                    var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == collectionNonTerminal.Name);
+                                                    var typeTarget = referencedRule != null
+                                                        ? (referencedRule.TargetElementName ?? referencedRule.RuleName)
+                                                        : umlClass.Name;
+
+                                                    var perItemCall = ResolveBuilderCall(umlClass, collectionNonTerminal, typeTarget, ruleGenerationContext);
+
+                                                    writer.WriteSafeString($"while ({cursorVarName}.Current != null){Environment.NewLine}");
+                                                    writer.WriteSafeString($"{{{Environment.NewLine}");
+
+                                                    if (perItemCall != null)
+                                                    {
+                                                        writer.WriteSafeString(perItemCall);
+                                                    }
+                                                    else
+                                                    {
+                                                        // Type incompatible: inline the referenced rule's alternatives
+                                                        var previousCaller = ruleGenerationContext.CallerRule;
+                                                        var previousName = ruleGenerationContext.CurrentVariableName;
+                                                        ruleGenerationContext.CallerRule = collectionNonTerminal;
+                                                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                                                        ruleGenerationContext.CallerRule = previousCaller;
+                                                        ruleGenerationContext.CurrentVariableName = previousName;
+                                                    }
+
+                                                    writer.WriteSafeString($"{Environment.NewLine}{cursorVarName}.Move();{Environment.NewLine}");
+                                                    writer.WriteSafeString($"}}{Environment.NewLine}");
+                                                }
+                                                else
+                                                {
+                                                    ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
+                                                }
+                                            }
+
+                                            writer.WriteSafeString($"}}{Environment.NewLine}");
+                                        }
+                                        else
+                                        {
+                                            var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
+                                            writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
+                                        writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                                    }
+                                }
+                                else
+                                {
+                                    var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
+                                    writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                                }
+                            }
+                            else
+                            {
+                                var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
+                                writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                            }
                         }
                     }
                     else
