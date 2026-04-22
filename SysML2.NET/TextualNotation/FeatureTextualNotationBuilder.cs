@@ -68,9 +68,28 @@ namespace SysML2.NET.TextualNotation
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <remarks>FeatureIdentification:Feature='&lt;'declaredShortName=NAME'&gt;'(declaredName=NAME)?|declaredName=NAME</remarks>
         private static void BuildFeatureIdentificationHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildFeatureIdentificationHandCoded requires manual implementation");
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
+            {
+                stringBuilder.Append('<');
+                stringBuilder.Append(poco.DeclaredShortName);
+                stringBuilder.Append('>');
+
+                if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
+                {
+                    stringBuilder.Append(' ');
+                    stringBuilder.Append(poco.DeclaredName);
+                }
+
+                stringBuilder.Append(' ');
+            }
+            else if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
+            {
+                stringBuilder.Append(poco.DeclaredName);
+                stringBuilder.Append(' ');
+            }
         }
 
         /// <summary>
