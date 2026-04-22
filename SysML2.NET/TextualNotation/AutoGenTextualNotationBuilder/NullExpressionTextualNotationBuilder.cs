@@ -43,7 +43,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNullExpression(SysML2.NET.Core.POCO.Kernel.Expressions.INullExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildNullExpressionHandCoded(poco, cursorCache, stringBuilder);
+            stringBuilder.Append("null ");
         }
     }
 }

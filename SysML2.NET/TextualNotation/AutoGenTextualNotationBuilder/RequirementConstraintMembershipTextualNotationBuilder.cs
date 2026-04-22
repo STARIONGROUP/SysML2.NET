@@ -73,7 +73,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRequirementKind(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildRequirementKindHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco.Kind)
+            {
+                case SysML2.NET.Core.Systems.Requirements.RequirementConstraintKind.Assumption:
+                    stringBuilder.Append("assume ");
+                    break;
+                case SysML2.NET.Core.Systems.Requirements.RequirementConstraintKind.Requirement:
+                    stringBuilder.Append("require ");
+                    break;
+            }
+
         }
     }
 }

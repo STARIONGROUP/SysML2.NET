@@ -72,7 +72,7 @@ namespace SysML2.NET.TextualNotation
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
-                BuildMetadataUsageDeclarationHandCoded(poco, cursorCache, stringBuilder);
+                stringBuilder.Append(":");
                 stringBuilder.Append(' ');
                 stringBuilder.Append(' ');
             }

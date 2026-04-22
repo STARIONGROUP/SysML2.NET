@@ -374,6 +374,69 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
+                    // When all alternatives consist exclusively of terminal elements (and optionally non-parsing assignments), handle via code-gen
+                    if (alternatives.All(alt => alt.Elements.Count > 0 && alt.Elements.All(element => element is TerminalElement or NonParsingAssignmentElement)))
+                    {
+                        var nonParsingAssignments = alternatives
+                            .SelectMany(alt => alt.Elements.OfType<NonParsingAssignmentElement>())
+                            .ToList();
+
+                        if (nonParsingAssignments.Count == 0)
+                        {
+                            // Pure terminal alternatives — emit the first alternative
+                            var firstAlternative = alternatives.ElementAt(0);
+
+                            foreach (var terminalOnly in firstAlternative.Elements.Cast<TerminalElement>())
+                            {
+                                WriteTerminalAppend(writer, terminalOnly.Value);
+                            }
+                        }
+                        else
+                        {
+                            // Terminal + non-parsing assignment alternatives — generate a switch on the assigned property
+                            var assignmentPropertyName = nonParsingAssignments[0].PropertyName;
+                            var targetProperty = umlClass.QueryAllProperties().SingleOrDefault(x => string.Equals(x.Name, assignmentPropertyName, StringComparison.OrdinalIgnoreCase));
+
+                            if (targetProperty != null)
+                            {
+                                var targetPropertyName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+
+                                writer.WriteSafeString($"switch ({ruleGenerationContext.CurrentVariableName ?? "poco"}.{targetPropertyName}){Environment.NewLine}");
+                                writer.WriteSafeString($"{{{Environment.NewLine}");
+
+                                foreach (var alternative in alternatives)
+                                {
+                                    var nonParsingAssignment = alternative.Elements.OfType<NonParsingAssignmentElement>().Single();
+                                    var terminals = alternative.Elements.OfType<TerminalElement>().ToList();
+                                    var enumValueName = nonParsingAssignment.Value.Trim('\'').CapitalizeFirstLetter();
+
+                                    writer.WriteSafeString($"case {targetProperty.Type.QueryFullyQualifiedTypeName()}.{enumValueName}:{Environment.NewLine}");
+
+                                    foreach (var terminal in terminals)
+                                    {
+                                        WriteTerminalAppend(writer, terminal.Value);
+                                    }
+
+                                    writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
+                                }
+
+                                writer.WriteSafeString($"}}{Environment.NewLine}");
+                            }
+                            else
+                            {
+                                // Fallback: emit first alternative terminals
+                                var firstAlternative = alternatives.ElementAt(0);
+
+                                foreach (var terminalOnly in firstAlternative.Elements.OfType<TerminalElement>())
+                                {
+                                    WriteTerminalAppend(writer, terminalOnly.Value);
+                                }
+                            }
+                        }
+
+                        return;
+                    }
+
                     // Multi-element alternatives (e.g., ';' | '{' NamespaceBodyElement* '}')
                     // Detect pattern: first alternative is terminal-only, second has collection assignment
                     var firstAlt = alternatives.ElementAt(0);
