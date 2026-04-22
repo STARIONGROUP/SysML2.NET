@@ -266,7 +266,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildActionBehaviorMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildActionBehaviorMemberHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembershipBehaviorUsageMember when pocoFeatureMembershipBehaviorUsageMember.IsValidForBehaviorUsageMember():
+                    BuildBehaviorUsageMember(pocoFeatureMembershipBehaviorUsageMember, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildActionNodeMember(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

@@ -41,17 +41,6 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule ConnectorDeclaration
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IConnector" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildConnectorDeclarationHandCoded(IConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildConnectorDeclarationHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule Connector
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IConnector" /> from which the rule should be build</param>

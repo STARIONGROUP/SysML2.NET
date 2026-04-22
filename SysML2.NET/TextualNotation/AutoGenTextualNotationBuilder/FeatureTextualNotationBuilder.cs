@@ -79,7 +79,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureSpecialization(SysML2.NET.Core.POCO.Core.Features.IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildFeatureSpecializationHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureTypings when pocoFeatureTypings.IsValidForTypings():
+                    BuildTypings(pocoFeatureTypings, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureSubsettings when pocoFeatureSubsettings.IsValidForSubsettings():
+                    BuildSubsettings(pocoFeatureSubsettings, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureReferences when pocoFeatureReferences.IsValidForReferences():
+                    BuildReferences(pocoFeatureReferences, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureCrosses when pocoFeatureCrosses.IsValidForCrosses():
+                    BuildCrosses(pocoFeatureCrosses, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildRedefinitions(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -668,7 +686,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureRelationshipPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildFeatureRelationshipPartHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureChainingPart when pocoFeatureChainingPart.IsValidForChainingPart():
+                    BuildChainingPart(pocoFeatureChainingPart, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureInvertingPart when pocoFeatureInvertingPart.IsValidForInvertingPart():
+                    BuildInvertingPart(pocoFeatureInvertingPart, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
+                    TypeTextualNotationBuilder.BuildTypeRelationshipPart(pocoType, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildTypeFeaturingPart(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -993,7 +1026,16 @@ namespace SysML2.NET.TextualNotation
         public static void BuildArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append("(");
-            BuildArgumentListHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeaturePositionalArgumentList when pocoFeaturePositionalArgumentList.IsValidForPositionalArgumentList():
+                    BuildPositionalArgumentList(pocoFeaturePositionalArgumentList, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildNamedArgumentList(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
             stringBuilder.Append(")");
 
         }

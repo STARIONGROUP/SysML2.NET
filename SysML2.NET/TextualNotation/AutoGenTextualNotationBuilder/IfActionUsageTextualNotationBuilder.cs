@@ -72,7 +72,17 @@ namespace SysML2.NET.TextualNotation
             if (ownedRelationshipCursor.Current != null)
             {
                 stringBuilder.Append("else ");
-                BuildIfNodeHandCoded(poco, cursorCache, stringBuilder);
+                switch (ownedRelationshipCursor.Current)
+                {
+                    case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembershipActionBodyParameterMember when pocoParameterMembershipActionBodyParameterMember.IsValidForActionBodyParameterMember():
+                        ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(pocoParameterMembershipActionBodyParameterMember, cursorCache, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembership:
+                        ParameterMembershipTextualNotationBuilder.BuildIfNodeParameterMember(pocoParameterMembership, cursorCache, stringBuilder);
+                        break;
+                }
+                ownedRelationshipCursor.Move();
+
             }
 
 

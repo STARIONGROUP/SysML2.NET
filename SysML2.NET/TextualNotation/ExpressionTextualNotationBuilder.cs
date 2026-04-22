@@ -30,17 +30,6 @@ namespace SysML2.NET.TextualNotation
     public static partial class ExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the Textual Notation string for the rule BaseExpression
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildBaseExpressionHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildBaseExpressionHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule FeaturePrefix
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
@@ -49,28 +38,6 @@ namespace SysML2.NET.TextualNotation
         private static void BuildFeaturePrefixHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("BuildFeaturePrefixHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule NonFeatureChainPrimaryExpression
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildNonFeatureChainPrimaryExpressionHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildNonFeatureChainPrimaryExpressionHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule OwnedExpression
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildOwnedExpressionHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildOwnedExpressionHandCoded requires manual implementation");
         }
 
         /// <summary>

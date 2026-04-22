@@ -43,7 +43,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConnectorDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.IConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildConnectorDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnectorBinaryConnectorDeclaration when pocoConnectorBinaryConnectorDeclaration.IsValidForBinaryConnectorDeclaration():
+                    BuildBinaryConnectorDeclaration(pocoConnectorBinaryConnectorDeclaration, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildNaryConnectorDeclaration(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

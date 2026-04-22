@@ -173,18 +173,10 @@ namespace SysML2.NET.TextualNotation
             switch (ownedRelatedElementCursor.Current)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression pocoLiteralExpression:
-
-                    if (pocoLiteralExpression is SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression elementAsLiteralExpression)
-                    {
-                        LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(elementAsLiteralExpression, cursorCache, stringBuilder);
-                    }
+                    LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(pocoLiteralExpression, cursorCache, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression pocoFeatureReferenceExpression:
-
-                    if (pocoFeatureReferenceExpression is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
-                    {
-                        FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(elementAsFeatureReferenceExpression, cursorCache, stringBuilder);
-                    }
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(pocoFeatureReferenceExpression, cursorCache, stringBuilder);
                     break;
             }
             ownedRelatedElementCursor.Move();
@@ -346,7 +338,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildNamespaceMemberHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership pocoOwningMembershipNonFeatureMember when pocoOwningMembershipNonFeatureMember.IsValidForNonFeatureMember():
+                    BuildNonFeatureMember(pocoOwningMembershipNonFeatureMember, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildNamespaceFeatureMember(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

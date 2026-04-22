@@ -304,7 +304,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildOccurrenceUsageElementHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement():
+                    BuildStructureUsageElement(pocoUsageStructureUsageElement, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildBehaviorUsageElement(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -316,7 +325,55 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStructureUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildStructureUsageElementHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Flows.ISuccessionFlowUsage pocoSuccessionFlowUsage:
+                    SuccessionFlowUsageTextualNotationBuilder.BuildSuccessionFlowUsage(pocoSuccessionFlowUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage pocoInterfaceUsage:
+                    InterfaceUsageTextualNotationBuilder.BuildInterfaceUsage(pocoInterfaceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage pocoAllocationUsage:
+                    AllocationUsageTextualNotationBuilder.BuildAllocationUsage(pocoAllocationUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsageMessage when pocoFlowUsageMessage.IsValidForMessage():
+                    FlowUsageTextualNotationBuilder.BuildMessage(pocoFlowUsageMessage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsage:
+                    FlowUsageTextualNotationBuilder.BuildFlowUsage(pocoFlowUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage pocoConnectionUsage:
+                    ConnectionUsageTextualNotationBuilder.BuildConnectionUsage(pocoConnectionUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Views.IViewUsage pocoViewUsage:
+                    ViewUsageTextualNotationBuilder.BuildViewUsage(pocoViewUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage pocoRenderingUsage:
+                    RenderingUsageTextualNotationBuilder.BuildRenderingUsage(pocoRenderingUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Parts.IPartUsage pocoPartUsage:
+                    PartUsageTextualNotationBuilder.BuildPartUsage(pocoPartUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage pocoEventOccurrenceUsage:
+                    EventOccurrenceUsageTextualNotationBuilder.BuildEventOccurrenceUsage(pocoEventOccurrenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Items.IItemUsage pocoItemUsage:
+                    ItemUsageTextualNotationBuilder.BuildItemUsage(pocoItemUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
+                    PortUsageTextualNotationBuilder.BuildPortUsage(pocoPortUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage():
+                    OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage():
+                    OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
+                    OccurrenceUsageTextualNotationBuilder.BuildPortionUsage(pocoOccurrenceUsage, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -391,7 +448,73 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildVariantUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildVariantUsageElementHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Flows.ISuccessionFlowUsage pocoSuccessionFlowUsage:
+                    SuccessionFlowUsageTextualNotationBuilder.BuildSuccessionFlowUsage(pocoSuccessionFlowUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage pocoInterfaceUsage:
+                    InterfaceUsageTextualNotationBuilder.BuildInterfaceUsage(pocoInterfaceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage pocoAllocationUsage:
+                    AllocationUsageTextualNotationBuilder.BuildAllocationUsage(pocoAllocationUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsageFlowUsage when pocoFlowUsageFlowUsage.IsValidForFlowUsage():
+                    FlowUsageTextualNotationBuilder.BuildFlowUsage(pocoFlowUsageFlowUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsage:
+                    FlowUsageTextualNotationBuilder.BuildMessage(pocoFlowUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage pocoConnectionUsage:
+                    ConnectionUsageTextualNotationBuilder.BuildConnectionUsage(pocoConnectionUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage pocoBindingConnectorAsUsage:
+                    BindingConnectorAsUsageTextualNotationBuilder.BuildBindingConnectorAsUsage(pocoBindingConnectorAsUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage pocoSuccessionAsUsage:
+                    SuccessionAsUsageTextualNotationBuilder.BuildSuccessionAsUsage(pocoSuccessionAsUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Views.IViewUsage pocoViewUsage:
+                    ViewUsageTextualNotationBuilder.BuildViewUsage(pocoViewUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage pocoRenderingUsage:
+                    RenderingUsageTextualNotationBuilder.BuildRenderingUsage(pocoRenderingUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Parts.IPartUsage pocoPartUsage:
+                    PartUsageTextualNotationBuilder.BuildPartUsage(pocoPartUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage pocoEventOccurrenceUsage:
+                    EventOccurrenceUsageTextualNotationBuilder.BuildEventOccurrenceUsage(pocoEventOccurrenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Items.IItemUsage pocoItemUsage:
+                    ItemUsageTextualNotationBuilder.BuildItemUsage(pocoItemUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
+                    PortUsageTextualNotationBuilder.BuildPortUsage(pocoPortUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageReferenceUsage when pocoReferenceUsageReferenceUsage.IsEnd:
+                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsageReferenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsage:
+                    ReferenceUsageTextualNotationBuilder.BuildVariantReference(pocoReferenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
+                    AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage():
+                    OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage():
+                    OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
+                    OccurrenceUsageTextualNotationBuilder.BuildPortionUsage(pocoOccurrenceUsage, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildBehaviorUsageElement(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -433,7 +556,19 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildInterfaceOccurrenceUsageElementHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
+                    PortUsageTextualNotationBuilder.BuildDefaultInterfaceEnd(pocoPortUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement():
+                    BuildStructureUsageElement(pocoUsageStructureUsageElement, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildBehaviorUsageElement(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -445,7 +580,19 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildActionTargetSuccession(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildActionTargetSuccessionHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage pocoSuccessionAsUsage:
+                    SuccessionAsUsageTextualNotationBuilder.BuildTargetSuccession(pocoSuccessionAsUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.States.ITransitionUsage pocoTransitionUsageGuardedTargetSuccession when pocoTransitionUsageGuardedTargetSuccession.IsValidForGuardedTargetSuccession():
+                    TransitionUsageTextualNotationBuilder.BuildGuardedTargetSuccession(pocoTransitionUsageGuardedTargetSuccession, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.States.ITransitionUsage pocoTransitionUsage:
+                    TransitionUsageTextualNotationBuilder.BuildDefaultTargetSuccession(pocoTransitionUsage, cursorCache, stringBuilder);
+                    break;
+            }
+
             stringBuilder.Append(' ');
             BuildUsageBody(poco, cursorCache, stringBuilder);
 

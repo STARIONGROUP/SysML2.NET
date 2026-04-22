@@ -55,7 +55,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildInterfacePartHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage pocoInterfaceUsageBinaryInterfacePart when pocoInterfaceUsageBinaryInterfacePart.IsValidForBinaryInterfacePart():
+                    BuildBinaryInterfacePart(pocoInterfaceUsageBinaryInterfacePart, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildNaryInterfacePart(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

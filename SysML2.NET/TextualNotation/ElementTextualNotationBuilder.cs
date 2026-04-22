@@ -29,15 +29,5 @@ namespace SysML2.NET.TextualNotation
     /// </summary>
     public static partial class ElementTextualNotationBuilder
     {
-        /// <summary>
-        /// Builds the Textual Notation string for the rule DefinitionElement
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildDefinitionElementHandCoded(IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildDefinitionElementHandCoded requires manual implementation");
-        }
     }
 }

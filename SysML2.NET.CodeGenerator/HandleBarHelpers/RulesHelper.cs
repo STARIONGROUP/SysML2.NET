@@ -808,9 +808,23 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (hasUnresolvableDuplicates)
                     {
-                        var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                        writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
-                        break;
+                        // For unresolvable duplicate groups, use IsValidFor{RuleName}() as when guards
+                        foreach (var duplicateGroup in duplicateClasses)
+                        {
+                            var unguardedElements = duplicateGroup.Value
+                                .Where(element => !whenGuards.ContainsKey(element.RuleElement))
+                                .ToList();
+
+                            if (unguardedElements.Count > 1)
+                            {
+                                // Add IsValidFor guards to all but the last unguarded element (fallback)
+                                for (var elementIndex = 0; elementIndex < unguardedElements.Count - 1; elementIndex++)
+                                {
+                                    var element = unguardedElements[elementIndex];
+                                    whenGuards[element.RuleElement] = $"{{0}}.IsValidFor{element.RuleElement.Name}()";
+                                }
+                            }
+                        }
                     }
 
                     // Rebuild the overall ordered list respecting the reordered duplicate groups
@@ -835,6 +849,26 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     mappedNonTerminalElements = reorderedElements;
 
+                    // Re-sort to ensure proper switch ordering: more specific types first,
+                    // default case last. This prevents a superclass case (e.g., IType) from
+                    // catching everything before guarded subclass cases (e.g., IFeature when ...).
+                    var defaultElement = mappedNonTerminalElements
+                        .LastOrDefault(x => x.UmlClass == ruleGenerationContext.NamedElementToGenerate && !whenGuards.ContainsKey(x.RuleElement));
+
+                    mappedNonTerminalElements.Sort((a, b) =>
+                    {
+                        var aIsDefault = defaultElement.RuleElement != null && a.RuleElement == defaultElement.RuleElement;
+                        var bIsDefault = defaultElement.RuleElement != null && b.RuleElement == defaultElement.RuleElement;
+
+                        if (aIsDefault && !bIsDefault) return 1;
+                        if (bIsDefault && !aIsDefault) return -1;
+
+                        var depthA = a.UmlClass.QueryAllGeneralClassifiers().Count();
+                        var depthB = b.UmlClass.QueryAllGeneralClassifiers().Count();
+
+                        return depthB.CompareTo(depthA);
+                    });
+
                     var variableName = "poco";
 
                     if (ruleGenerationContext.CallerRule is AssignmentElement assignmentElement)
@@ -846,9 +880,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"switch({variableName}){Environment.NewLine}");
                     writer.WriteSafeString("{");
 
-                    // Determine the last element that would be a default case (only one default allowed)
-                    var defaultElement = mappedNonTerminalElements
-                        .LastOrDefault(x => x.UmlClass == ruleGenerationContext.NamedElementToGenerate && !whenGuards.ContainsKey(x.RuleElement));
+                    // defaultElement was already determined above during the re-sort
 
                     foreach (var orderedNonTerminalElement in mappedNonTerminalElements)
                     {
@@ -875,8 +907,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             ruleGenerationContext.CurrentVariableName = caseVarName;
                         }
 
+                        var previousCaller = ruleGenerationContext.CallerRule;
+                        ruleGenerationContext.CallerRule = orderedNonTerminalElement.RuleElement;
+
                         ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, ruleGenerationContext);
 
+                        ruleGenerationContext.CallerRule = previousCaller;
                         ruleGenerationContext.CurrentVariableName = previousVariableName;
                         writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
                     }

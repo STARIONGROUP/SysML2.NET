@@ -526,7 +526,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeRelationshipPart(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildTypeRelationshipPartHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeDisjoiningPart when pocoTypeDisjoiningPart.IsValidForDisjoiningPart():
+                    BuildDisjoiningPart(pocoTypeDisjoiningPart, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeUnioningPart when pocoTypeUnioningPart.IsValidForUnioningPart():
+                    BuildUnioningPart(pocoTypeUnioningPart, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeIntersectingPart when pocoTypeIntersectingPart.IsValidForIntersectingPart():
+                    BuildIntersectingPart(pocoTypeIntersectingPart, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildDifferencingPart(poco, cursorCache, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

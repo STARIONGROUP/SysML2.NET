@@ -30,17 +30,6 @@ namespace SysML2.NET.TextualNotation
     public static partial class FeatureTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the Textual Notation string for the rule ArgumentList
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildArgumentListHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildArgumentListHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule BasicFeaturePrefix
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
@@ -82,28 +71,6 @@ namespace SysML2.NET.TextualNotation
         private static void BuildFeatureIdentificationHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("BuildFeatureIdentificationHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule FeatureRelationshipPart
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildFeatureRelationshipPartHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildFeatureRelationshipPartHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule FeatureSpecialization
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildFeatureSpecializationHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildFeatureSpecializationHandCoded requires manual implementation");
         }
 
         /// <summary>
