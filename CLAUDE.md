@@ -35,6 +35,7 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 
 - favour duplicated code in codegeneration to have staticaly defined methods that provide performance over reflection based code.
 - code generation is done by processing the UML model and creating handlebars templates
+- **When working on the grammar/textual notation code generator** (`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and related grammar processing): read `SysML2.NET.CodeGenerator/GRAMMAR.md` for the KEBNF grammar model, cursor/builder conventions, and code-gen patterns already handled.
 
 ### Code Generation Pipeline
 
