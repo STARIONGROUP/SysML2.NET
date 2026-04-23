@@ -72,7 +72,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current != null)
             {
                 DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
 
@@ -104,7 +103,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
             stringBuilder.Append("def ");

@@ -121,7 +121,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current != null)
             {
                 TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
 

@@ -631,16 +631,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                             writer.WriteSafeString($"{{{Environment.NewLine}");
 
                                             // Process non-collection elements (terminals like '{', '}' and optional assignments like isParallel?='parallel')
-                                            // but handle the collection NonTerminal explicitly with cursor + Move()
+                                            // and handle the collection NonTerminal via cursor-based dispatch (builder internally advances)
                                             foreach (var element in secondAlt.Elements)
                                             {
                                                 if (element is NonTerminalElement { IsCollection: true })
                                                 {
-                                                    // Generate explicit cursor-based loop with per-item builder call and Move()
                                                     var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
                                                     writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
 
-                                                    // Resolve the builder call for the per-item NonTerminal
                                                     var collectionNonTerminal = (NonTerminalElement)element;
                                                     var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == collectionNonTerminal.Name);
                                                     var typeTarget = referencedRule != null
@@ -654,11 +652,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                                     if (perItemCall != null)
                                                     {
+                                                        // Dispatcher builder internally advances the cursor — no outer Move()
                                                         writer.WriteSafeString(perItemCall);
                                                     }
                                                     else
                                                     {
-                                                        // Type incompatible: inline the referenced rule's alternatives
                                                         var previousCaller = ruleGenerationContext.CallerRule;
                                                         var previousName = ruleGenerationContext.CurrentVariableName;
                                                         ruleGenerationContext.CallerRule = collectionNonTerminal;
@@ -667,8 +665,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                                         ruleGenerationContext.CurrentVariableName = previousName;
                                                     }
 
-                                                    writer.WriteSafeString($"{Environment.NewLine}{cursorVarName}.Move();{Environment.NewLine}");
-                                                    writer.WriteSafeString($"}}{Environment.NewLine}");
+                                                    writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                                                 }
                                                 else
                                                 {
@@ -1119,6 +1116,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 writer.WriteSafeString($"break;{Environment.NewLine}");
                             }
 
+                            // Safety default: always advance the cursor even when no case matches.
+                            // This prevents infinite loops when the dispatcher is called from a while loop.
+                            writer.WriteSafeString($"default:{Environment.NewLine}");
+                            writer.WriteSafeString($"{cursorVarName}.Move();{Environment.NewLine}");
+                            writer.WriteSafeString($"break;{Environment.NewLine}");
                             writer.WriteSafeString($"}}{Environment.NewLine}");
                         }
                         else
@@ -1858,16 +1860,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (perItemCall != null)
                         {
-                            // Emit while loop calling the per-item builder method with explicit Move()
+                            // The per-item call is a dispatcher builder (e.g., BuildNamespaceBodyElement(poco, ...))
+                            // that internally advances the cursor in its switch cases. No outer Move() to avoid double advance.
                             writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
                             writer.WriteSafeString(perItemCall);
-                            writer.WriteSafeString($"{Environment.NewLine}{cursorVariableName}.Move();{Environment.NewLine}");
-                            writer.WriteSafeString($"}}{Environment.NewLine}");
+                            writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                         }
                         else
                         {
-                            // Type incompatible: inline the referenced rule's alternatives inside the while loop
+                            // Type incompatible: inline the referenced rule's alternatives inside the while loop.
+                            // The inlined alternatives handle cursor advancement (via += dispatch Move()).
                             writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
 
@@ -1880,8 +1883,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             ruleGenerationContext.CallerRule = previousCaller;
                             ruleGenerationContext.CurrentVariableName = previousName;
 
-                            writer.WriteSafeString($"{Environment.NewLine}{cursorVariableName}.Move();{Environment.NewLine}");
-                            writer.WriteSafeString($"}}{Environment.NewLine}");
+                            writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                         }
 
                         return;

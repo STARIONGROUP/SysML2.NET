@@ -205,7 +205,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current != null)
             {
                 BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
 
@@ -613,7 +612,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
             BuildUsage(poco, cursorCache, stringBuilder);

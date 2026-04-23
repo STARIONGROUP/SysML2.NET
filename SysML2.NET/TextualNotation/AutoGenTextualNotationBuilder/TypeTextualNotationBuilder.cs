@@ -54,7 +54,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildDefinitionBodyItem(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -93,7 +92,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildInterfaceBodyItem(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -132,7 +130,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildActionBodyItem(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -202,7 +199,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
                 BuildCalculationBodyItem(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
 
@@ -264,7 +260,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildRequirementBodyItem(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -338,7 +333,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildCaseBodyItem(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
 
 
@@ -508,7 +502,6 @@ namespace SysML2.NET.TextualNotation
             while (ownedRelationshipCursor.Current != null)
             {
                 BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);
-                ownedRelationshipCursor.Move();
             }
 
 
@@ -792,7 +785,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildTypeBodyElement(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -825,6 +817,9 @@ namespace SysML2.NET.TextualNotation
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
                     ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+                default:
                     ownedRelationshipCursor.Move();
                     break;
             }

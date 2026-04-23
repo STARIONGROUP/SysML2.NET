@@ -54,7 +54,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildViewBodyItem(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }

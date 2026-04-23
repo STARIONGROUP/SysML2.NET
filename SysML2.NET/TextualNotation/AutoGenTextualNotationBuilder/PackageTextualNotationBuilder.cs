@@ -68,7 +68,6 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildPackageBodyElement(poco, cursorCache, stringBuilder);
-                    ownedRelationshipCursor.Move();
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -101,6 +100,9 @@ namespace SysML2.NET.TextualNotation
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
                     ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+                default:
                     ownedRelationshipCursor.Move();
                     break;
             }

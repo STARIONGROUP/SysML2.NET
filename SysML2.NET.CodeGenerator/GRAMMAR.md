@@ -42,7 +42,27 @@ Cursors iterate over collection properties (typically `ownedRelationship`). Key 
 - `cursorCache.GetOrCreateCursor(pocoId, propertyName, collection)` — same `(pocoId, propertyName)` returns the same cursor instance. Cursors are **shared** across builder methods.
 - `cursor.Current` — current element (null when exhausted)
 - `cursor.Move()` — advances to next element
-- **Critical:** A collection builder must call `Move()` after processing each item, or be called inside a `while` loop that advances externally
+
+### The Golden Rule: `Move()` ↔ `+=`
+
+**`cursor.Move()` must be emitted exactly once per `+=` assignment processed, and nowhere else.**
+
+The `+=` grammar operator means "consume one element from the collection" — so every `+=` processing advances the cursor by one. No other grammar construct advances it:
+
+| Grammar construct | Advances cursor? |
+|---|---|
+| `prop+=X` (collection assignment) | **Yes — emit `Move()` after processing** |
+| `prop=X` (scalar assignment) | No |
+| `prop?='keyword'` (boolean assignment) | No |
+| `'terminal'` | No |
+| `RuleName` (plain NonTerminal reference) | No (the referenced rule may internally `+=`) |
+| `RuleName*` / `RuleName+` (collection NonTerminal) | No (each iteration's inner `+=` advances) |
+| `(...)` / `(...)?` / `(...)*` (groups) | No (inner `+=` advances) |
+| `[QualifiedName]` / `NAME` (value literals) | No |
+
+When a generated switch dispatches on `cursor.Current` for multiple `+=` alternatives, it **also** emits `default: cursor.Move(); break;` as a safety net — if an unexpected type appears in the cursor, the method still advances so callers in a `while` loop don't spin forever.
+
+**Consequence:** `while (cursor.Current != null) { BuildDispatcher(poco); }` loops don't need an explicit outer `Move()` — the dispatcher's internal `+=` handling (or safety default) advances the cursor.
 
 ## Key Methods in `RulesHelper.cs`
 
