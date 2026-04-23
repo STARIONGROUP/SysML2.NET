@@ -20,6 +20,10 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Collections.Frozen;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -261,43 +265,101 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
+        /// Keywords of the <c>ConditionalBinaryOperator</c> lexical rule
+        /// (<c>ConditionalBinaryOperator = '??' | 'or' | 'and' | 'implies'</c>). Matches the
+        /// operators consumed by <c>ConditionalBinaryOperatorExpression</c>.
+        /// </summary>
+        private static readonly FrozenSet<string> ConditionalBinaryOperators =
+            new HashSet<string> { "??", "or", "and", "implies" }.ToFrozenSet();
+
+        /// <summary>
+        /// Keywords of the <c>BinaryOperator</c> lexical rule. Matches the operators consumed by
+        /// <c>BinaryOperatorExpression</c>.
+        /// </summary>
+        private static readonly FrozenSet<string> BinaryOperators =
+            new HashSet<string>
+            {
+                "|", "&", "xor", "..",
+                "==", "!=", "===", "!==",
+                "<", ">", "<=", ">=",
+                "+", "-", "*", "/",
+                "%", "^", "**"
+            }.ToFrozenSet();
+
+        /// <summary>
+        /// Keywords of the <c>UnaryOperator</c> lexical rule
+        /// (<c>UnaryOperator = '+' | '-' | '~' | 'not'</c>). Matches the operators consumed by
+        /// <c>UnaryOperatorExpression</c>.
+        /// </summary>
+        private static readonly FrozenSet<string> UnaryOperators =
+            new HashSet<string> { "+", "-", "~", "not" }.ToFrozenSet();
+
+        /// <summary>
         /// Asserts that the <see cref="IOperatorExpression"/> is valid for the ConditionalExpression rule
+        /// <para><c>ConditionalExpression : OperatorExpression = operator='if' …</c></para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
-        /// <returns>True if the expression matches the ConditionalExpression rule</returns>
+        /// <returns>True if the expression's <c>Operator</c> is <c>"if"</c></returns>
         public static bool IsValidForConditionalExpression(this IOperatorExpression operatorExpression)
         {
-            throw new System.NotSupportedException("IsValidForConditionalExpression requires manual implementation");
+            return operatorExpression?.Operator == "if";
         }
 
         /// <summary>
         /// Asserts that the <see cref="IOperatorExpression"/> is valid for the ConditionalBinaryOperatorExpression rule
+        /// <para><c>operator = ConditionalBinaryOperator</c> where <c>ConditionalBinaryOperator = '??' | 'or' | 'and' | 'implies'</c></para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
-        /// <returns>True if the expression matches the ConditionalBinaryOperatorExpression rule</returns>
+        /// <returns>True if the expression's <c>Operator</c> is one of the conditional binary operators</returns>
         public static bool IsValidForConditionalBinaryOperatorExpression(this IOperatorExpression operatorExpression)
         {
-            throw new System.NotSupportedException("IsValidForConditionalBinaryOperatorExpression requires manual implementation");
+            return operatorExpression?.Operator is not null && ConditionalBinaryOperators.Contains(operatorExpression.Operator);
         }
 
         /// <summary>
         /// Asserts that the <see cref="IOperatorExpression"/> is valid for the BinaryOperatorExpression rule
+        /// <para><c>BinaryOperatorExpression : OperatorExpression = ownedRelationship += ArgumentMember operator = BinaryOperator ownedRelationship += ArgumentMember ownedRelationship += EmptyResultMember</c></para>
+        /// <para>Operator match alone is not sufficient — <c>+</c> and <c>-</c> also appear in <c>UnaryOperator</c>.
+        /// The rule emits two <c>ArgumentMember</c> entries (vs. one for unary), so the guard additionally
+        /// requires the expression to own at least two <see cref="IParameterMembership"/> arguments.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
         /// <returns>True if the expression matches the BinaryOperatorExpression rule</returns>
         public static bool IsValidForBinaryOperatorExpression(this IOperatorExpression operatorExpression)
         {
-            throw new System.NotSupportedException("IsValidForBinaryOperatorExpression requires manual implementation");
+            if (operatorExpression?.Operator is null || !BinaryOperators.Contains(operatorExpression.Operator))
+            {
+                return false;
+            }
+
+            // Count ArgumentMember entries only — exclude ReturnParameterMembership (the EmptyResultMember),
+            // which is itself an IParameterMembership in the metamodel and would otherwise inflate the count.
+            return operatorExpression.OwnedRelationship
+                .OfType<IParameterMembership>()
+                .Count(membership => membership is not IReturnParameterMembership) >= 2;
         }
 
         /// <summary>
         /// Asserts that the <see cref="IOperatorExpression"/> is valid for the UnaryOperatorExpression rule
+        /// <para><c>UnaryOperatorExpression : OperatorExpression = operator = UnaryOperator ownedRelationship += ArgumentMember ownedRelationship += EmptyResultMember</c></para>
+        /// <para>Operator match alone is not sufficient — <c>+</c> and <c>-</c> also appear in <c>BinaryOperator</c>.
+        /// The rule emits exactly one <c>ArgumentMember</c>, so the guard additionally requires the expression
+        /// to own a single <see cref="IParameterMembership"/> argument.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
         /// <returns>True if the expression matches the UnaryOperatorExpression rule</returns>
         public static bool IsValidForUnaryOperatorExpression(this IOperatorExpression operatorExpression)
         {
-            throw new System.NotSupportedException("IsValidForUnaryOperatorExpression requires manual implementation");
+            if (operatorExpression?.Operator is null || !UnaryOperators.Contains(operatorExpression.Operator))
+            {
+                return false;
+            }
+
+            // Count ArgumentMember entries only — exclude ReturnParameterMembership (the EmptyResultMember),
+            // which is itself an IParameterMembership in the metamodel.
+            return operatorExpression.OwnedRelationship
+                .OfType<IParameterMembership>()
+                .Count(membership => membership is not IReturnParameterMembership) == 1;
         }
 
         /// <summary>
@@ -401,13 +463,14 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the EntryActionMember rule (StateBodyItem)
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the EntryActionMember rule (StateBodyItem).
+        /// <para><c>EntryActionMember : StateSubactionMembership = MemberPrefix kind = 'entry' …</c></para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
-        /// <returns>True if the membership matches the EntryActionMember rule</returns>
+        /// <returns>True if the membership is a <see cref="IStateSubactionMembership"/> with <c>Kind == Entry</c></returns>
         public static bool IsValidForEntryActionMember(this IFeatureMembership featureMembership)
         {
-            throw new System.NotSupportedException("IsValidForEntryActionMember requires manual implementation");
+            return featureMembership is IStateSubactionMembership { Kind: SysML2.NET.Core.Systems.States.StateSubactionKind.Entry };
         }
 
         /// <summary>
@@ -421,23 +484,25 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the DoActionMember rule (StateBodyItem)
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the DoActionMember rule (StateBodyItem).
+        /// <para><c>DoActionMember : StateSubactionMembership = MemberPrefix kind = 'do' …</c></para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
-        /// <returns>True if the membership matches the DoActionMember rule</returns>
+        /// <returns>True if the membership is a <see cref="IStateSubactionMembership"/> with <c>Kind == Do</c></returns>
         public static bool IsValidForDoActionMember(this IFeatureMembership featureMembership)
         {
-            throw new System.NotSupportedException("IsValidForDoActionMember requires manual implementation");
+            return featureMembership is IStateSubactionMembership { Kind: SysML2.NET.Core.Systems.States.StateSubactionKind.Do };
         }
 
         /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ExitActionMember rule (StateBodyItem)
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ExitActionMember rule (StateBodyItem).
+        /// <para><c>ExitActionMember : StateSubactionMembership = MemberPrefix kind = 'exit' …</c></para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
-        /// <returns>True if the membership matches the ExitActionMember rule</returns>
+        /// <returns>True if the membership is a <see cref="IStateSubactionMembership"/> with <c>Kind == Exit</c></returns>
         public static bool IsValidForExitActionMember(this IFeatureMembership featureMembership)
         {
-            throw new System.NotSupportedException("IsValidForExitActionMember requires manual implementation");
+            return featureMembership is IStateSubactionMembership { Kind: SysML2.NET.Core.Systems.States.StateSubactionKind.Exit };
         }
 
         /// <summary>
