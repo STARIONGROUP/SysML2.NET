@@ -44,15 +44,11 @@ namespace SysML2.NET.TextualNotation
         public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            if (poco.IsAbstract)
-            {
-                stringBuilder.Append(" abstract ");
-            }
-            else if (poco.IsVariation)
-            {
-                stringBuilder.Append(" variation ");
-            }
 
+            if (poco.IsAbstract || poco.IsVariation)
+            {
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
+            }
 
             if (poco.IsIndividual && ownedRelationshipCursor.Current != null)
             {
@@ -87,15 +83,11 @@ namespace SysML2.NET.TextualNotation
         public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            if (poco.IsAbstract)
-            {
-                stringBuilder.Append(" abstract ");
-            }
-            else if (poco.IsVariation)
-            {
-                stringBuilder.Append(" variation ");
-            }
 
+            if (poco.IsAbstract || poco.IsVariation)
+            {
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
+            }
             if (poco.IsIndividual)
             {
                 stringBuilder.Append(" individual ");

@@ -71,19 +71,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.annotatingElement != null)
             {
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (poco.annotatingElement is SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage elementAsMetadataUsage)
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
-                    {
-                        FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, cursorCache, stringBuilder);
-                    }
+                    MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(elementAsMetadataUsage, cursorCache, stringBuilder);
                 }
-                ownedRelationshipCursor.Move();
-
-
             }
             // NonParsing Assignment Element : ownedRelatedElement += annotatingElement => Does not have to be process
 

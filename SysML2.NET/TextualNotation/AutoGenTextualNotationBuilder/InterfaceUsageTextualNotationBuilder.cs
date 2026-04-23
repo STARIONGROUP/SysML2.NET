@@ -138,7 +138,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership)
             {
                 stringBuilder.Append(", ");
 

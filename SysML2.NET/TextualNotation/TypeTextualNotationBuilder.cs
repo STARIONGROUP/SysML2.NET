@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Types;
@@ -33,12 +34,132 @@ namespace SysML2.NET.TextualNotation
     public static partial class TypeTextualNotationBuilder
     {
         /// <summary>
-        /// Build the complex DefinitionBodyItem:Type=ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=OccurrenceUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import rule
+        /// Builds the Textual Notation string for the rule ActionBodyItem
+        /// <remarks>ActionBodyItem:Type=NonBehaviorBodyItem|ownedRelationship+=InitialNodeMember(ownedRelationship+=ActionTargetSuccessionMember)*|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=ActionBehaviorMember(ownedRelationship+=ActionTargetSuccessionMember)*|ownedRelationship+=GuardedSuccessionMember</remarks>
         /// </summary>
-        /// <param name="poco">The <see cref="IType" /></param>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /></param>
-        internal static void BuildDefinitionBodyItemInternal(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildActionBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            while (ownedRelationshipCursor.Current != null)
+            {
+                switch (ownedRelationshipCursor.Current)
+                {
+                    // Action-specific cases
+                    case IFeatureMembership featureMembershipForInitialNode when featureMembershipForInitialNode.IsValidForInitialNodeMember():
+                    {
+                        FeatureMembershipTextualNotationBuilder.BuildInitialNodeMember(featureMembershipForInitialNode, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+
+                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember())
+                        {
+                            FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, cursorCache, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                        }
+
+                        break;
+                    }
+
+                    case FeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember():
+                    {
+                        var nextElement = ownedRelationshipCursor.GetNext(1);
+
+                        if (nextElement is IFeatureMembership nextForActionBehavior && nextForActionBehavior.IsValidForActionBehaviorMember())
+                        {
+                            FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, cursorCache, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                            FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember((IFeatureMembership)ownedRelationshipCursor.Current, cursorCache, stringBuilder);
+                            ownedRelationshipCursor.Move();
+
+                            while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember())
+                            {
+                                FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, cursorCache, stringBuilder);
+                                ownedRelationshipCursor.Move();
+                            }
+                        }
+                        else if (nextElement is FeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember())
+                        {
+                            FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, cursorCache, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                            FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, cursorCache, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                        }
+                        else
+                        {
+                            ownedRelationshipCursor.Move();
+                        }
+
+                        break;
+                    }
+
+                    case IFeatureMembership featureMembershipForActionBehavior when featureMembershipForActionBehavior.IsValidForActionBehaviorMember():
+                    {
+                        FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember(featureMembershipForActionBehavior, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+
+                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember())
+                        {
+                            FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, cursorCache, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                        }
+
+                        break;
+                    }
+
+                    case IFeatureMembership featureMembershipForGuarded when featureMembershipForGuarded.IsValidForGuardedSuccessionMember():
+                        FeatureMembershipTextualNotationBuilder.BuildGuardedSuccessionMember(featureMembershipForGuarded, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    // NonBehaviorBodyItem cases
+                    case IImport import:
+                        ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IVariantMembership variantMembership:
+                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case FeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember():
+                        FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case FeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember():
+                        FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IOwningMembership owningMembership:
+                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IMembership membership:
+                        MembershipTextualNotationBuilder.BuildAliasMember(membership, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    default:
+                        ownedRelationshipCursor.Move();
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule DefinitionBodyItem
+        /// <remarks>DefinitionBodyItem:Type=ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=OccurrenceUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</remarks>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildDefinitionBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -103,12 +224,83 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Build the logic for the NonBehaviorBodyItem =ownedRelationship+=Import|ownedRelationship+=AliasMember|ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=StructureUsageMember rule
+        /// Builds the Textual Notation string for the rule TypeDeclaration
+        /// <remarks>TypeDeclaration:Type=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SpecializationPart|ConjugationPart)+TypeRelationshipPart*</remarks>
         /// </summary>
-        /// <param name="poco">The <see cref="IType" /></param>
+        /// <param name="poco">The <see cref="IType" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /></param>
-        internal static void BuildNonBehaviorBodyItemInternal(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildTypeDeclarationHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            if (poco.IsSufficient)
+            {
+                stringBuilder.Append("all ");
+            }
+
+            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            // Optional OwnedMultiplicity: single += consumption if the current ownedRelationship element
+            // is an OwningMembership containing an IMultiplicity (OwnedMultiplicity:OwningMembership).
+            if (ownedRelationshipCursor.Current is IOwningMembership multiplicityMember
+                && multiplicityMember.OwnedRelatedElement.OfType<IMultiplicity>().Any())
+            {
+                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+
+            // (SpecializationPart | ConjugationPart)+ — delegate to the existing Part builders.
+            // OwnedSpecialization:Specialization and OwnedConjugation:Conjugation — cursor elements ARE
+            // ISpecialization / IConjugation directly (not wrapped in IOwningMembership).
+            // The Part builders now include a type-guarded trailing while loop, so interleaved
+            // Specializations/Conjugations are safely handled by the outer while here.
+            while (ownedRelationshipCursor.Current is ISpecialization || ownedRelationshipCursor.Current is IConjugation)
+            {
+                if (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    BuildSpecializationPart(poco, cursorCache, stringBuilder);
+                }
+                else
+                {
+                    BuildConjugationPart(poco, cursorCache, stringBuilder);
+                }
+            }
+
+            // TypeRelationshipPart* — zero or more. Dispatch directly on concrete cursor types because
+            // BuildTypeRelationshipPart uses IsValidFor* guards that currently throw NotSupportedException.
+            while (ownedRelationshipCursor.Current is IDisjoining
+                   || ownedRelationshipCursor.Current is IUnioning
+                   || ownedRelationshipCursor.Current is IIntersecting
+                   || ownedRelationshipCursor.Current is IDifferencing)
+            {
+                if (ownedRelationshipCursor.Current is IDisjoining)
+                {
+                    BuildDisjoiningPart(poco, cursorCache, stringBuilder);
+                }
+                else if (ownedRelationshipCursor.Current is IUnioning)
+                {
+                    BuildUnioningPart(poco, cursorCache, stringBuilder);
+                }
+                else if (ownedRelationshipCursor.Current is IIntersecting)
+                {
+                    BuildIntersectingPart(poco, cursorCache, stringBuilder);
+                }
+                else
+                {
+                    BuildDifferencingPart(poco, cursorCache, stringBuilder);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule InterfaceBodyItem
+        /// <remarks>InterfaceBodyItem:Type=ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=InterfaceNonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=InterfaceOccurrenceUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</remarks>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildInterfaceBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -116,11 +308,6 @@ namespace SysML2.NET.TextualNotation
             {
                 switch (ownedRelationshipCursor.Current)
                 {
-                    case IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
                     case IVariantMembership variantMembership:
                         VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, cursorCache, stringBuilder);
                         ownedRelationshipCursor.Move();
@@ -130,11 +317,11 @@ namespace SysML2.NET.TextualNotation
                     {
                         var nextElement = ownedRelationshipCursor.GetNext(1);
 
-                        if (nextElement is FeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForStructureUsageMember())
+                        if (nextElement is FeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember())
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, cursorCache, stringBuilder);
                             ownedRelationshipCursor.Move();
-                            FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, cursorCache, stringBuilder);
+                            FeatureMembershipTextualNotationBuilder.BuildInterfaceOccurrenceUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, cursorCache, stringBuilder);
                             ownedRelationshipCursor.Move();
                         }
                         else
@@ -145,13 +332,13 @@ namespace SysML2.NET.TextualNotation
                         break;
                     }
 
-                    case FeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember():
-                        FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, cursorCache, stringBuilder);
+                    case FeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember():
+                        FeatureMembershipTextualNotationBuilder.BuildInterfaceOccurrenceUsageMember(featureMembershipForOccurrence, cursorCache, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
                     case FeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember():
-                        FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, cursorCache, stringBuilder);
+                        FeatureMembershipTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageMember(featureMembershipForNonOccurrence, cursorCache, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
@@ -165,6 +352,11 @@ namespace SysML2.NET.TextualNotation
                         ownedRelationshipCursor.Move();
                         break;
 
+                    case IImport import:
+                        ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
                     default:
                         ownedRelationshipCursor.Move();
                         break;
@@ -173,52 +365,8 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule ActionBodyItem
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildActionBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildActionBodyItemHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule DefinitionBodyItem
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildDefinitionBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildDefinitionBodyItemHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule TypeDeclaration
-        /// <remarks>TypeDeclaration:Type=Identification?ownedRelationship+=OwnedSubclassification</remarks>
-        /// </summary>
-        /// <param name="poco">The <see cref="IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildTypeDeclarationHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildTypeDeclarationHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the rule InterfaceBodyItem
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildInterfaceBodyItemHandCoded(IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildInterfaceBodyItemHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule StateBodyItem
+        /// <remarks>StateBodyItem:Type=NonBehaviorBodyItem|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=BehaviorUsageMember(ownedRelationship+=TargetTransitionUsageMember)*|ownedRelationship+=TransitionUsageMember|ownedRelationship+=EntryActionMember(ownedRelationship+=EntryTransitionMember)*|ownedRelationship+=DoActionMember|ownedRelationship+=ExitActionMember</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>

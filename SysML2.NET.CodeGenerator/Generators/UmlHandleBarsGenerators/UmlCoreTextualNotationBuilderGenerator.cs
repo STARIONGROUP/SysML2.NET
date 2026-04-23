@@ -21,6 +21,7 @@
 namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -46,12 +47,18 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// Gets the name of template for builder classes
         /// </summary>
         private const string BuilderTemplateName = "core-textual-notation-builder-template";
-        
+
         /// <summary>
         /// Gets the name of template for builder facade class
         /// </summary>
         private const string BuilderFacadeTemplateName = "core-textual-notation-builder-facade-template";
-        
+
+        /// <summary>
+        /// Gets the name of template for the shared builder class that hosts no-target rules
+        /// without a matching UML class (e.g. <c>FeaturePrefix</c>).
+        /// </summary>
+        private const string SharedBuilderTemplateName = "core-textual-notation-shared-builder-template";
+
         /// <summary>
         /// Register the custom helpers
         /// </summary>
@@ -69,6 +76,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             this.RegisterTemplate(BuilderTemplateName);
             this.RegisterTemplate(BuilderFacadeTemplateName);
+            this.RegisterTemplate(SharedBuilderTemplateName);
         }
 
         /// <summary>
@@ -105,6 +113,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public async Task GenerateAsync(XmiReaderResult xmiReaderResult, TextualNotationSpecification textualNotationSpecification, DirectoryInfo outputDirectory)
         {
             await this.GenerateBuilderClasses(xmiReaderResult, textualNotationSpecification, outputDirectory);
+            await this.GenerateSharedBuilder(xmiReaderResult, textualNotationSpecification, outputDirectory);
            // await this.GenerateBuilderFacade(xmiReaderResult, outputDirectory);
         }
 
@@ -176,7 +185,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             foreach (var rulesPerType in rulesGroupedByType)
             {
                 var targetClassContext = namedElements.Single(x => x.Name == rulesPerType.Key);
-                
+
                 var generatedBuilder = template(new {Context = targetClassContext, Rules = rulesPerType.Value, AllRules = textualNotationSpecification.Rules});
                 generatedBuilder = this.CodeCleanup(generatedBuilder);
 
@@ -184,6 +193,83 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
                 await WriteAsync(generatedBuilder, outputDirectory, fileName);
             }
+        }
+
+        /// <summary>
+        /// Generates the shared builder class for grammar rules that declare no target type and
+        /// do not share a name with any UML class (e.g. <c>FeaturePrefix</c>). Each such rule is
+        /// emitted as a single static method whose POCO parameter is the narrowest UML class that
+        /// owns every property the rule assigns.
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult"/> that contains the UML model to generate from</param>
+        /// <param name="textualNotationSpecification">The <see cref="TextualNotationSpecification"/> that contains specific grammar rules to produce textual notation</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo"/></param>
+        /// <exception cref="ArgumentNullException">If one of the given parameters is null</exception>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        private Task GenerateSharedBuilder(XmiReaderResult xmiReaderResult, TextualNotationSpecification textualNotationSpecification, DirectoryInfo outputDirectory)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(textualNotationSpecification);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+
+            return this.GenerateSharedBuilderInternal(xmiReaderResult, textualNotationSpecification, outputDirectory);
+        }
+
+        /// <summary>
+        /// Internal implementation of <see cref="GenerateSharedBuilder"/>.
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult"/> that contains the UML model to generate from</param>
+        /// <param name="textualNotationSpecification">The <see cref="TextualNotationSpecification"/> that contains specific grammar rules to produce textual notation</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo"/></param>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        private async Task GenerateSharedBuilderInternal(XmiReaderResult xmiReaderResult, TextualNotationSpecification textualNotationSpecification, DirectoryInfo outputDirectory)
+        {
+            var template = this.Templates[SharedBuilderTemplateName];
+
+            var namedElements = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<INamedElement>())
+                .ToList();
+
+            var cacheSource = namedElements.OfType<IClass>().FirstOrDefault();
+
+            if (cacheSource == null)
+            {
+                return;
+            }
+
+            var sharedRules = textualNotationSpecification.Rules
+                .Where(rule => RulesHelper.IsSharedNoTargetRule(rule, cacheSource))
+                .OrderBy(rule => rule.RuleName, StringComparer.Ordinal)
+                .ToList();
+
+            if (sharedRules.Count == 0)
+            {
+                return;
+            }
+
+            var entries = new List<object>();
+
+            foreach (var rule in sharedRules)
+            {
+                var effectiveTarget = RulesHelper.ResolveNoTargetRuleEffectiveTarget(rule, textualNotationSpecification.Rules, cacheSource);
+
+                if (effectiveTarget == null)
+                {
+                    continue;
+                }
+
+                entries.Add(new { Rule = rule, TargetClass = (INamedElement)effectiveTarget });
+            }
+
+            if (entries.Count == 0)
+            {
+                return;
+            }
+
+            var generatedBuilder = template(new { Entries = entries, AllRules = textualNotationSpecification.Rules });
+            generatedBuilder = this.CodeCleanup(generatedBuilder);
+
+            await WriteAsync(generatedBuilder, outputDirectory, $"{RulesHelper.SharedBuilderClassName}.cs");
         }
 
         /// <summary>

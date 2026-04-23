@@ -229,6 +229,9 @@
     <None Update="Templates\Uml\core-textual-notation-builder-facade-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-textual-notation-shared-builder-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />

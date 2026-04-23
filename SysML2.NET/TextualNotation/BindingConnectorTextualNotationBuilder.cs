@@ -40,15 +40,5 @@ namespace SysML2.NET.TextualNotation
             throw new System.NotSupportedException("BuildBindingConnectorDeclarationHandCoded requires manual implementation");
         }
 
-        /// <summary>
-        /// Builds the Textual Notation string for the rule FeaturePrefix
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildFeaturePrefixHandCoded(IBindingConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildFeaturePrefixHandCoded requires manual implementation");
-        }
     }
 }

@@ -67,15 +67,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (poco.IsAbstract)
-            {
-                stringBuilder.Append(" abstract ");
-            }
-            else if (poco.IsVariation)
-            {
-                stringBuilder.Append(" variation ");
-            }
 
+            if (poco.IsAbstract || poco.IsVariation)
+            {
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
+            }
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current != null)
             {
@@ -112,15 +108,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExtendedDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            if (poco.IsAbstract)
-            {
-                stringBuilder.Append(" abstract ");
-            }
-            else if (poco.IsVariation)
-            {
-                stringBuilder.Append(" variation ");
-            }
 
+            if (poco.IsAbstract || poco.IsVariation)
+            {
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
+            }
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {

@@ -123,7 +123,7 @@ namespace SysML2.NET.TextualNotation
                     }
                 }
 
-                while (ownedRelationshipCursor.Current != null)
+                while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
                 {
                     stringBuilder.Append(", ");
 

@@ -57,7 +57,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification)
             {
                 stringBuilder.Append(", ");
 
@@ -149,7 +149,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification)
             {
                 stringBuilder.Append(", ");
 

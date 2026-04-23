@@ -183,19 +183,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.value != null)
             {
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (poco.value is SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression elementAsMetadataAccessExpression)
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
-                    {
-                        MembershipTextualNotationBuilder.BuildElementReferenceMember(elementAsMembership, cursorCache, stringBuilder);
-                    }
+                    MetadataAccessExpressionTextualNotationBuilder.BuildMetadataReference(elementAsMetadataAccessExpression, cursorCache, stringBuilder);
                 }
-                ownedRelationshipCursor.Move();
-
-
             }
 
         }
@@ -246,19 +238,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.value != null)
             {
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (poco.value is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
-                    {
-                        FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(elementAsFeatureMembership, cursorCache, stringBuilder);
-                    }
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildBodyExpression(elementAsFeatureReferenceExpression, cursorCache, stringBuilder);
                 }
-                ownedRelationshipCursor.Move();
-
-
             }
 
         }
@@ -275,19 +259,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.value != null)
             {
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (poco.value is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
-                    {
-                        FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(elementAsFeatureMembership, cursorCache, stringBuilder);
-                    }
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildFunctionReferenceExpression(elementAsFeatureReferenceExpression, cursorCache, stringBuilder);
                 }
-                ownedRelationshipCursor.Move();
-
-
             }
 
         }

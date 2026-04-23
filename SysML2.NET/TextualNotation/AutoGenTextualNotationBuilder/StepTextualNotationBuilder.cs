@@ -43,25 +43,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStep(SysML2.NET.Core.POCO.Kernel.Behaviors.IStep poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
-            stringBuilder.Append(' ');
-
-            while (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                    {
-                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
-                    }
-                }
-                ownedRelationshipCursor.Move();
-
-            }
-
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("step ");
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
 

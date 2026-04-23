@@ -132,7 +132,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership)
             {
                 stringBuilder.Append(", ");
 
@@ -160,25 +160,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConnector(SysML2.NET.Core.POCO.Kernel.Connectors.IConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
-            stringBuilder.Append(' ');
-
-            while (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                    {
-                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
-                    }
-                }
-                ownedRelationshipCursor.Move();
-
-            }
-
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("connector ");
             BuildConnectorHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');

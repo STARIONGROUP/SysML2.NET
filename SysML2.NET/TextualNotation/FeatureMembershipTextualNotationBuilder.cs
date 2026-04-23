@@ -42,24 +42,30 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule EntryTransitionMember
+        /// <remarks>EntryTransitionMember:FeatureMembership=MemberPrefix(ownedRelatedElement+=GuardedTargetSuccession|'then'ownedRelatedElement+=TargetSuccession)';'</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildEntryTransitionMemberHandCoded(IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildEntryTransitionMemberHandCoded requires manual implementation");
+            // Dispatch on cursor element type:
+            //   - ITransitionUsage → GuardedTargetSuccession (no 'then' keyword)
+            //   - ISuccessionAsUsage → TargetSuccession (emit 'then' first)
+            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+
+            if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionUsage guardedTarget)
+            {
+                TransitionUsageTextualNotationBuilder.BuildGuardedTargetSuccession(guardedTarget, cursorCache, stringBuilder);
+                ownedRelatedElementCursor.Move();
+            }
+            else if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage targetSuccession)
+            {
+                stringBuilder.Append("then ");
+                SuccessionAsUsageTextualNotationBuilder.BuildTargetSuccession(targetSuccession, cursorCache, stringBuilder);
+                ownedRelatedElementCursor.Move();
+            }
         }
 
-        /// <summary>
-        /// Builds the Textual Notation string for the rule SequenceExpressionList
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSequenceExpressionListHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildSequenceExpressionListHandCoded requires manual implementation");
-        }
     }
 }

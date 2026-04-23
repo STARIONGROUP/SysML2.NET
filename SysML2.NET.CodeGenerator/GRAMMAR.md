@@ -2,6 +2,36 @@
 
 This file provides essential context for working on the SysML2 textual notation code generator (`RulesHelper.cs` and related files). Read this when modifying grammar processing or the `TextualNotationBuilder` generation pipeline.
 
+> **⚠ Reviewer agent is mandatory for every change.** Before committing any modification to `SysML2.NET/TextualNotation/*.cs` or to `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`, invoke the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) to verify grammar correctness. See CLAUDE.md "Textual notation reviewer is MANDATORY" for details.
+
+## EBNF / KEBNF Notation Legend
+
+SysML2 grammar rules (in `Grammar/Resources/*.kebnf` and the `<para>…</para>` XML docs of generated `Build{Rule}` methods) follow this notation:
+
+| Construct | Notation | Meaning |
+|---|---|---|
+| Lexical element | `LEXICAL` (uppercase) | Lexer token |
+| Terminal element | `'terminal'` (single-quoted) | Literal keyword or punctuation |
+| Non-terminal element | `NonterminalElement` (PascalCase) | Reference to another rule |
+| Sequential elements | `Element1 Element2` | Both appear in order |
+| Alternative elements | `Element1 \| Element2` | Exactly one of them |
+| Optional elements | `Element ?` | **Zero or one** occurrence |
+| Repeated elements | `Element *` | **Zero or more** occurrences |
+| Repeated elements | `Element +` | **One or more** occurrences (minimum 1, not zero) |
+| Grouping | `( Elements... )` | Parentheses scope a quantifier or alternation |
+
+**Quantifier pitfall when hand-coding:** `+` guarantees at least one occurrence. For `(A | B)+`, alternatives may interleave — a loop is required that re-tests the cursor after each iteration until neither alternative matches.
+
+### KEBNF Extensions (SysML2-specific)
+
+| Construct | Notation | Meaning |
+|---|---|---|
+| Scalar assignment | `prop = X` | Assign the parsed value of `X` to the property `prop` |
+| Collection assignment | `prop += X` | Append one parsed `X` to the collection `prop` |
+| Boolean assignment | `prop ?= 'keyword'` | Set `prop = true` when the terminal is present |
+| Non-parsing assignment | `{ prop = 'val' }` | Implicit side-effect in parse direction; in unparse direction it emits no output |
+| QualifiedName value literal | `prop = [QualifiedName]` | Cross-reference by qualified name |
+
 ## Pipeline Overview
 
 ```

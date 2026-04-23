@@ -43,25 +43,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBooleanExpression(SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
-            stringBuilder.Append(' ');
-
-            while (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                    {
-                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
-                    }
-                }
-                ownedRelationshipCursor.Move();
-
-            }
-
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("bool ");
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
 

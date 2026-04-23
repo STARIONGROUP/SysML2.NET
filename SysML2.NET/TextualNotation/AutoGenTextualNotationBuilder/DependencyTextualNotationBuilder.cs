@@ -45,7 +45,7 @@ namespace SysML2.NET.TextualNotation
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -60,56 +60,7 @@ namespace SysML2.NET.TextualNotation
 
             }
             stringBuilder.Append("dependency ");
-            var clientCursor = cursorCache.GetOrCreateCursor(poco.Id, "client", poco.Client);
-            var supplierCursor = cursorCache.GetOrCreateCursor(poco.Id, "supplier", poco.Supplier);
-
-            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
-            {
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
-                stringBuilder.Append("from ");
-                stringBuilder.Append(' ');
-            }
-
-
-            if (clientCursor.Current != null)
-            {
-                stringBuilder.Append(clientCursor.Current.qualifiedName);
-                clientCursor.Move();
-            }
-
-            while (clientCursor.Current != null)
-            {
-                stringBuilder.Append(", ");
-
-                if (clientCursor.Current != null)
-                {
-                    stringBuilder.Append(clientCursor.Current.qualifiedName);
-                    clientCursor.Move();
-                }
-                clientCursor.Move();
-
-            }
-            stringBuilder.Append("to ");
-
-            if (supplierCursor.Current != null)
-            {
-                stringBuilder.Append(supplierCursor.Current.qualifiedName);
-                supplierCursor.Move();
-            }
-
-            while (supplierCursor.Current != null)
-            {
-                stringBuilder.Append(", ");
-
-                if (supplierCursor.Current != null)
-                {
-                    stringBuilder.Append(supplierCursor.Current.qualifiedName);
-                    supplierCursor.Move();
-                }
-                supplierCursor.Move();
-
-            }
-
+            SharedTextualNotationBuilder.BuildDependencyDeclaration(poco, cursorCache, stringBuilder);
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
 
         }

@@ -49,7 +49,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append(' ');
             stringBuilder.Append("library ");
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)

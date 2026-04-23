@@ -112,7 +112,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             BuildTypedBy(poco, cursorCache, stringBuilder);
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping)
             {
                 stringBuilder.Append(", ");
 
@@ -167,7 +167,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             BuildSubsets(poco, cursorCache, stringBuilder);
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.ISubsetting)
             {
                 stringBuilder.Append(", ");
 
@@ -272,7 +272,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             BuildRedefines(poco, cursorCache, stringBuilder);
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition)
             {
                 stringBuilder.Append(", ");
 
@@ -337,7 +337,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
             {
                 stringBuilder.Append(".");
 
@@ -427,7 +427,7 @@ namespace SysML2.NET.TextualNotation
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -786,7 +786,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedTypeFeaturingCursor.Current != null)
+            while (ownedTypeFeaturingCursor.Current != null && ownedTypeFeaturingCursor.Current is SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing)
             {
                 stringBuilder.Append(", ");
 
@@ -826,7 +826,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
             {
                 stringBuilder.Append(".");
 
@@ -1062,7 +1062,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
             {
                 stringBuilder.Append(", ");
 
@@ -1102,7 +1102,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)
             {
                 stringBuilder.Append(", ");
 

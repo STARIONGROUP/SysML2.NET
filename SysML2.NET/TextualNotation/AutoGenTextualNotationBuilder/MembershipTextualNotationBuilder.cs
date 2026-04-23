@@ -135,9 +135,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.MemberElement != null)
             {
-                stringBuilder.Append(poco.MemberElement.qualifiedName);
-                stringBuilder.Append(' ');
 
+                if (poco.MemberElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureReference(elementAsFeature, cursorCache, stringBuilder);
+                }
             }
 
         }
@@ -172,9 +174,11 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.MemberElement != null)
             {
-                stringBuilder.Append(poco.MemberElement.qualifiedName);
-                stringBuilder.Append(' ');
 
+                if (poco.MemberElement is SysML2.NET.Core.POCO.Core.Types.IType elementAsType)
+                {
+                    TypeTextualNotationBuilder.BuildInstantiatedTypeReference(elementAsType, cursorCache, stringBuilder);
+                }
             }
             else
             {

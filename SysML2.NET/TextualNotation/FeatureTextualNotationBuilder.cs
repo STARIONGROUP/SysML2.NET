@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
@@ -35,9 +36,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <remarks>Trailing alternative of BasicFeaturePrefix: (isVariable?='var'|isConstant?='const'{isVariable=true})?. Note: 'const' implies isVariable=true, so check isConstant first.</remarks>
         private static void BuildBasicFeaturePrefixHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildBasicFeaturePrefixHandCoded requires manual implementation");
+            if (poco.IsConstant)
+            {
+                stringBuilder.Append(" const ");
+            }
+            else if (poco.IsVariable)
+            {
+                stringBuilder.Append(" var ");
+            }
         }
 
         /// <summary>
@@ -105,13 +114,34 @@ namespace SysML2.NET.TextualNotation
 
         /// <summary>
         /// Builds the Textual Notation string for the rule MultiplicityPart
+        /// <remarks>MultiplicityPart:Feature=ownedRelationship+=OwnedMultiplicity|(ownedRelationship+=OwnedMultiplicity)?(isOrdered?='ordered'({isUnique=false}'nonunique')?|{isUnique=false}'nonunique'(isOrdered?='ordered')?)</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildMultiplicityPartHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildMultiplicityPartHandCoded requires manual implementation");
+            // Emit the OwnedMultiplicity if present (cursor advances on += processing)
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership multiplicityMember
+                && multiplicityMember.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.IMultiplicity>().Any())
+            {
+                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+
+            // Emit the ordered/nonunique modifiers based on the Feature's flags.
+            // IsUnique defaults to true; 'nonunique' is emitted when IsUnique == false.
+            if (poco.IsOrdered)
+            {
+                stringBuilder.Append("ordered ");
+            }
+
+            if (!poco.IsUnique)
+            {
+                stringBuilder.Append("nonunique ");
+            }
         }
 
         /// <summary>

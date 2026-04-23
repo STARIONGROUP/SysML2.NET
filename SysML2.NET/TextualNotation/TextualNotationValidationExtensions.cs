@@ -26,6 +26,7 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Systems.Connections;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Flows;
@@ -337,6 +338,119 @@ namespace SysML2.NET.TextualNotation
         public static bool IsValidForFeatureReferenceExpression(this IFeatureReferenceExpression featureReferenceExpression)
         {
             throw new System.NotSupportedException("IsValidForFeatureReferenceExpression requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the InitialNodeMember rule (ActionBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the InitialNodeMember rule</returns>
+        public static bool IsValidForInitialNodeMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForInitialNodeMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ActionTargetSuccessionMember rule (ActionBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the ActionTargetSuccessionMember rule</returns>
+        public static bool IsValidForActionTargetSuccessionMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForActionTargetSuccessionMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ActionBehaviorMember rule (ActionBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the ActionBehaviorMember rule</returns>
+        public static bool IsValidForActionBehaviorMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForActionBehaviorMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the GuardedSuccessionMember rule (ActionBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the GuardedSuccessionMember rule</returns>
+        public static bool IsValidForGuardedSuccessionMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForGuardedSuccessionMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the TransitionUsageMember rule (StateBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the TransitionUsageMember rule</returns>
+        public static bool IsValidForTransitionUsageMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForTransitionUsageMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the TargetTransitionUsageMember rule (StateBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the TargetTransitionUsageMember rule</returns>
+        public static bool IsValidForTargetTransitionUsageMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForTargetTransitionUsageMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the EntryActionMember rule (StateBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the EntryActionMember rule</returns>
+        public static bool IsValidForEntryActionMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForEntryActionMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the EntryTransitionMember rule (StateBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the EntryTransitionMember rule</returns>
+        public static bool IsValidForEntryTransitionMemberRule(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForEntryTransitionMemberRule requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the DoActionMember rule (StateBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the DoActionMember rule</returns>
+        public static bool IsValidForDoActionMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForDoActionMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ExitActionMember rule (StateBodyItem)
+        /// </summary>
+        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <returns>True if the membership matches the ExitActionMember rule</returns>
+        public static bool IsValidForExitActionMember(this IFeatureMembership featureMembership)
+        {
+            throw new System.NotSupportedException("IsValidForExitActionMember requires manual implementation");
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IElement"/> matches the lexical <c>BASIC_NAME</c> rule
+        /// (i.e. the name would be expressed as a <c>BASIC_NAME</c> rather than an
+        /// <c>UNRESTRICTED_NAME</c>). Used to dispatch inside the generated <c>NAME</c>
+        /// switch inlined by <c>QualifiedName</c>.
+        /// </summary>
+        /// <param name="element">The <see cref="IElement"/></param>
+        /// <returns>True if the element's name conforms to the BASIC_NAME rule</returns>
+        public static bool IsValidForBASIC_NAME(this IElement element)
+        {
+            throw new System.NotSupportedException("IsValidForBASIC_NAME requires manual implementation");
         }
     }
 }

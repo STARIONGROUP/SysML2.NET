@@ -58,8 +58,7 @@ namespace SysML2.NET.TextualNotation
                     LiteralInfinityTextualNotationBuilder.BuildLiteralInfinity(pocoLiteralInfinity, cursorCache, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Elements.IElement pocoElement:
-                    BuildValue(poco, cursorCache, stringBuilder);
-
+                    SharedTextualNotationBuilder.BuildLiteralReal((SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue)pocoElement, cursorCache, stringBuilder);
                     break;
             }
 

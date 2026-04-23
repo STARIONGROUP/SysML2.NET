@@ -447,7 +447,7 @@ namespace SysML2.NET.TextualNotation
             }
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -530,7 +530,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.ISpecialization)
             {
                 stringBuilder.Append(", ");
 
@@ -624,7 +624,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDisjoining)
             {
                 stringBuilder.Append(", ");
 
@@ -665,7 +665,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IUnioning)
             {
                 stringBuilder.Append(", ");
 
@@ -706,7 +706,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IIntersecting)
             {
                 stringBuilder.Append(", ");
 
@@ -747,7 +747,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDifferencing)
             {
                 stringBuilder.Append(", ");
 

@@ -37,6 +37,18 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 - code generation is done by processing the UML model and creating handlebars templates
 - **When working on the grammar/textual notation code generator** (`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and related grammar processing): read `SysML2.NET.CodeGenerator/GRAMMAR.md` for the KEBNF grammar model, cursor/builder conventions, and code-gen patterns already handled.
 
+### Textual notation reviewer is MANDATORY
+
+**Every code change under `SysML2.NET/TextualNotation/` (hand-coded partial classes, IsValidFor extensions, validation extensions) or to `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` (and any Handlebars template that emits textual notation code) MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing.**
+
+The agent is defined at `.claude/agents/textual-notation-reviewer.md`. Invoke it with the rule's KEBNF grammar (from the `<para>` XML doc) and the files to review. It enforces:
+- the `Move()` ↔ `+=` Golden Rule (cursor advances only on `+=` consumption)
+- EBNF quantifier semantics (`?` = 0..1, `*` = 0+, `+` = 1+)
+- correct runtime type discriminators (e.g., `ISpecialization` IS the cursor element, not wrapped in `IOwningMembership`)
+- absence of greedy-builder pitfalls that silently drop interleaved elements
+
+Reason this is mandatory: a single reviewer pass on `BuildTypeDeclarationHandCoded` caught 3 real grammar-correctness bugs (wrong discriminator, silent element drop, missing `*` loop) that would have shipped broken textual notation without failing any existing test.
+
 ### Code Generation Pipeline
 
 Most code in this repo is **auto-generated** — files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.
