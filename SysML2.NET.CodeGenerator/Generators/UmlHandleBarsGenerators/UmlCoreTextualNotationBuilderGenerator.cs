@@ -272,6 +272,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             await WriteAsync(generatedBuilder, outputDirectory, $"{RulesHelper.SharedBuilderClassName}.cs");
         }
 
+
         /// <summary>
         /// Generates the Textual Notation builder facade
         /// </summary>

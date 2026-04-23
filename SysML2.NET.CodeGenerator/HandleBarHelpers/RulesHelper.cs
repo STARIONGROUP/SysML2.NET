@@ -2440,7 +2440,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            if (IsLexicalRuleName(rule.RuleName))
+            if (rule.RuleName.IsAllUpperSnake())
             {
                 return false;
             }
@@ -2506,43 +2506,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Determines whether a rule name follows the SysML grammar convention for lexical tokens
-        /// (<c>ALL_CAPS</c> with optional underscores and digits, at least one letter). These rules
-        /// describe lexer-level patterns (e.g. <c>STRING_VALUE</c>, <c>COMMENT_TEXT</c>, <c>NAME</c>)
-        /// and are not meaningful to the unparser.
-        /// </summary>
-        /// <param name="ruleName">The rule name to test</param>
-        /// <returns><c>true</c> when the name is purely uppercase letters, digits, and underscores, with at least one letter</returns>
-        private static bool IsLexicalRuleName(string ruleName)
-        {
-            if (string.IsNullOrEmpty(ruleName))
-            {
-                return false;
-            }
-
-            var hasLetter = false;
-
-            foreach (var character in ruleName)
-            {
-                if (char.IsLetter(character))
-                {
-                    hasLetter = true;
-
-                    if (!char.IsUpper(character))
-                    {
-                        return false;
-                    }
-                }
-                else if (character != '_' && !char.IsDigit(character))
-                {
-                    return false;
-                }
-            }
-
-            return hasLetter;
         }
 
         /// <summary>

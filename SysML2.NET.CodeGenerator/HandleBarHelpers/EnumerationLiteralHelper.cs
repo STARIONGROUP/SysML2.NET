@@ -51,7 +51,7 @@ namespace SysML2.NET.CodeGenerator.UmlHandleBarHelpers
 
                 var enumerationLiteral = arguments.Single() as EnumerationLiteral;
 
-                var name = StringExtensions.CapitalizeFirstLetter(enumerationLiteral.Name);
+                var name = enumerationLiteral.Name.CapitalizeFirstLetter();
 
                 if (ReservedCSharpNameMapper.QueryIsReserved(name))
                 {

@@ -72,7 +72,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             ArgumentNullException.ThrowIfNull(property);
 
-            return property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
+            return property.IsDerived || property.IsDerivedUnion ? property.Name.LowerCaseFirstLetter() : property.Name.CapitalizeFirstLetter();
         }
 
         /// <summary>
