@@ -20,8 +20,11 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.States;
 
     /// <summary>
@@ -30,14 +33,38 @@ namespace SysML2.NET.TextualNotation
     public static partial class ExhibitStateUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the Textual Notation string for the rule ExhibitStateUsage
+        /// Builds the Textual Notation string for the <c>(…)</c> alternation inside the
+        /// <c>ExhibitStateUsage</c> rule.
+        /// <para><c>ExhibitStateUsage = OccurrenceUsagePrefix 'exhibit'
+        /// ( ownedRelationship += OwnedReferenceSubsetting FeatureSpecializationPart?
+        /// | 'state' UsageDeclaration )
+        /// ValuePart? StateUsageBody</c></para>
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="poco">The <see cref="IExhibitStateUsage"/> being serialised</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache"/> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
         private static void BuildExhibitStateUsageHandCoded(IExhibitStateUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildExhibitStateUsageHandCoded requires manual implementation");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (poco.OwnedRelationship.OfType<IReferenceSubsetting>().Any())
+            {
+                if (ownedRelationshipCursor.Current is IReferenceSubsetting referenceSubsetting)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(referenceSubsetting, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+
+                if (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                }
+            }
+            else
+            {
+                stringBuilder.Append("state ");
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+            }
         }
     }
 }

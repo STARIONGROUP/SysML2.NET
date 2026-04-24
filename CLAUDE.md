@@ -132,3 +132,4 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 - Prefer indexer syntax (e.g., 'list[^1]') and range syntax (e.g., 'array[1..^1]') over LINQ methods (e.g., 'list.Last()', 'list.Skip(1).Take(n)') when applicable
 - Use meaningful variable names instead of single-letter names in any context (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c', 'element' instead of 'e')
 - Use 'NotSupportedException' (not 'NotImplementedException') for placeholder/stub methods that require manual implementation
+- Prefer C# property patterns ('x is IType { Prop: value }') over declared-variable-plus-predicate form ('x is IType name && name.Prop == value') when the narrowed variable is only consulted once; the property-pattern form is more concise and intent-revealing

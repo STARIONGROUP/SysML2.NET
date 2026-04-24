@@ -20,8 +20,11 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.Constraints;
 
     /// <summary>
@@ -30,14 +33,42 @@ namespace SysML2.NET.TextualNotation
     public static partial class AssertConstraintUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the Textual Notation string for the rule AssertConstraintUsage
+        /// Builds the Textual Notation string for the <c>(…)</c> alternation inside the
+        /// <c>AssertConstraintUsage</c> rule.
+        /// <para><c>AssertConstraintUsage = OccurrenceUsagePrefix 'assert' (isNegated ?= 'not')?
+        /// ( ownedRelationship += OwnedReferenceSubsetting FeatureSpecializationPart?
+        /// | 'constraint' ConstraintUsageDeclaration )
+        /// CalculationBody</c></para>
+        /// <para>Alt 1 consumes one <see cref="IReferenceSubsetting"/> from the shared ownedRelationship
+        /// cursor, then optionally emits one <c>FeatureSpecialization</c> if any further
+        /// <see cref="ISpecialization"/> follows the cursor. Alt 2 emits the <c>'constraint'</c>
+        /// keyword and the inline <c>ConstraintUsageDeclaration</c>.</para>
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="poco">The <see cref="IAssertConstraintUsage"/> being serialised</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache"/> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
         private static void BuildAssertConstraintUsageHandCoded(IAssertConstraintUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildAssertConstraintUsageHandCoded requires manual implementation");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (poco.OwnedRelationship.OfType<IReferenceSubsetting>().Any())
+            {
+                if (ownedRelationshipCursor.Current is IReferenceSubsetting referenceSubsetting)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(referenceSubsetting, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+
+                if (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                }
+            }
+            else
+            {
+                stringBuilder.Append("constraint ");
+                ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
+            }
         }
     }
 }
