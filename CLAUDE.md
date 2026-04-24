@@ -39,15 +39,25 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 
 ### Textual notation reviewer is MANDATORY
 
-**Every code change under `SysML2.NET/TextualNotation/` (hand-coded partial classes, IsValidFor extensions, validation extensions) or to `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` (and any Handlebars template that emits textual notation code) MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing.**
+**Every code change touching any of the following paths MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing:**
 
-The agent is defined at `.claude/agents/textual-notation-reviewer.md`. Invoke it with the rule's KEBNF grammar (from the `<para>` XML doc) and the files to review. It enforces:
-- the `Move()` ↔ `+=` Golden Rule (cursor advances only on `+=` consumption)
-- EBNF quantifier semantics (`?` = 0..1, `*` = 0+, `+` = 1+)
-- correct runtime type discriminators (e.g., `ISpecialization` IS the cursor element, not wrapped in `IOwningMembership`)
+- Every file under `SysML2.NET/TextualNotation/` — both hand-coded partials (`*.cs`), the generated `AutoGenTextualNotationBuilder/*.cs`, `IsValidFor` guard extensions (`TextualNotationValidationExtensions.cs`), and any membership / string / cursor helpers that sit beside them.
+- Every file under `SysML2.NET/LexicalRules/` — both hand-coded members and the generated `AutoGenLexicalRules/*.cs` (`Keywords`, `SymbolicKeywordKind`, `SymbolicKeywordKindExtensions`).
+- `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and any Handlebars template under `SysML2.NET.CodeGenerator/Templates/Uml/` that emits textual-notation or lexical-rules code.
+
+**The KEBNF grammar context applies to ALL of these locations** — not just the generator. When implementing or reviewing hand-coded methods in `SysML2.NET/TextualNotation/`, the author and the reviewer must re-ground in:
+- `SysML2.NET.CodeGenerator/GRAMMAR.md` — the cursor / builder conventions and patterns
+- `Resources/SysML-textual-bnf.kebnf` and `Resources/KerML-textual-bnf.kebnf` — the grammar source of truth
+- The rule's `<para>{…}</para>` XML doc on the generated sibling method (if the method is a HandCoded companion)
+
+The agent is defined at `.claude/agents/textual-notation-reviewer.md`. Invoke it with the rule(s) being implemented, the KEBNF text, and the file paths to review. It enforces:
+- the `Move()` ↔ `+=` Golden Rule (cursor advances only on `+=` consumption; direct `cursor.Move()` calls are forbidden after any callee that already advances the cursor internally)
+- EBNF quantifier semantics (`?` = 0..1 → single `if`; `*` = 0+ → `while` loop; `+` = 1+ → emit-once then loop)
+- correct runtime type discriminators (e.g. `ISpecialization` IS the cursor element, not wrapped in `IOwningMembership`)
 - absence of greedy-builder pitfalls that silently drop interleaved elements
+- consistency between the hand-coded method and the grammar rule it implements (name, target type, element order, alternatives)
 
-Reason this is mandatory: a single reviewer pass on `BuildTypeDeclarationHandCoded` caught 3 real grammar-correctness bugs (wrong discriminator, silent element drop, missing `*` loop) that would have shipped broken textual notation without failing any existing test.
+Reason this is mandatory: reviewer passes have caught real grammar-correctness bugs (wrong discriminator, silent element drop, missing `*` loop, spurious double-`Move()` in `FeatureSpecialization*` loops) that would have shipped broken textual notation without failing any existing test.
 
 ### Code Generation Pipeline
 
