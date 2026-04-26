@@ -70,6 +70,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
@@ -112,6 +114,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }

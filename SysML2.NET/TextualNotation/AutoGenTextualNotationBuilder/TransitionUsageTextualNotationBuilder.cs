@@ -243,6 +243,8 @@ namespace SysML2.NET.TextualNotation
                         ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
 
                 if (ownedRelationshipCursor.Current != null)
                 {
@@ -252,6 +254,8 @@ namespace SysML2.NET.TextualNotation
                         TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(elementAsTransitionFeatureMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 
@@ -267,6 +271,8 @@ namespace SysML2.NET.TextualNotation
                         TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 
@@ -282,6 +288,8 @@ namespace SysML2.NET.TextualNotation
                         TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(elementAsTransitionFeatureMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

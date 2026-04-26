@@ -793,10 +793,414 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
+                        if (TryHandleOperatorLiteralAlternation(writer, umlClass, alternatives, ruleGenerationContext))
+                        {
+                            return;
+                        }
+
+                        if (TryHandleEmptyVsNonEmptyMembership(writer, umlClass, alternatives, ruleGenerationContext))
+                        {
+                            return;
+                        }
+
                         var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
                         writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Pattern B — detects and emits an alternation where each alternative starts with
+        /// <c>operator = X</c> and <c>X</c> is either a literal terminal or a non-terminal whose
+        /// RHS is a pure literal alternation (e.g. <c>ClassificationTestOperator = 'istype'|'hastype'|'@'</c>,
+        /// <c>CastOperator = 'as'</c>, <c>MetaCastOperator = 'meta'</c>). Emits a <c>switch</c> on
+        /// <c>poco.Operator</c> with one <c>case</c> per literal, processing each alternative's tail
+        /// elements (the trailing <c>ownedRelationship+=...</c> assignment, etc.) inside the matching branch.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass"/></param>
+        /// <param name="alternatives">The collection of alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
+        private static bool TryHandleOperatorLiteralAlternation(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            if (alternatives.Count < 2)
+            {
+                return false;
+            }
+
+            var operatorBranches = new List<(Alternatives Alternative, List<string> Literals)>();
+
+            foreach (var alternative in alternatives)
+            {
+                if (alternative.Elements.Count == 0
+                    || alternative.Elements[0] is not AssignmentElement { Property: "operator", Operator: "=" } operatorAssignment)
+                {
+                    return false;
+                }
+
+                var literals = ExtractLiteralAlternation(operatorAssignment.Value, ruleGenerationContext.AllRules);
+
+                if (literals == null || literals.Count == 0)
+                {
+                    return false;
+                }
+
+                // Each alternative's trailing elements (after the operator= assignment) must be cleanly processable
+                // by the existing emitter — otherwise the inlined body would reference unresolved properties or
+                // builders. Skip Pattern B in that case so the caller falls back to Build{Rule}HandCoded.
+                if (!AreAlternativeTailElementsProcessable(alternative.Elements, umlClass, ruleGenerationContext))
+                {
+                    return false;
+                }
+
+                operatorBranches.Add((alternative, literals));
+            }
+
+            // All alternatives match — declare any cursors needed by the per-branch tails, then emit the switch.
+            foreach (var alternative in alternatives)
+            {
+                DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+            }
+
+            var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
+            writer.WriteSafeString($"switch ({variableName}.Operator){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+
+            foreach (var (alternative, literals) in operatorBranches)
+            {
+                foreach (var literal in literals)
+                {
+                    writer.WriteSafeString($"case \"{literal}\":{Environment.NewLine}");
+                }
+
+                writer.WriteSafeString($"stringBuilder.Append({variableName}.Operator);{Environment.NewLine}");
+                writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+
+                var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
+                var previousIndex = ruleGenerationContext.CurrentElementIndex;
+                ruleGenerationContext.CurrentSiblingElements = alternative.Elements;
+
+                for (var elementIndex = 1; elementIndex < alternative.Elements.Count; elementIndex++)
+                {
+                    ruleGenerationContext.CurrentElementIndex = elementIndex;
+                    ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
+                }
+
+                ruleGenerationContext.CurrentSiblingElements = previousSiblings;
+                ruleGenerationContext.CurrentElementIndex = previousIndex;
+
+                writer.WriteSafeString($"break;{Environment.NewLine}");
+            }
+
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+            return true;
+        }
+
+        /// <summary>
+        /// Pattern A — detects and emits an alternation in which both alternatives consume a single
+        /// element from the same cursor property via <c>+=</c>, where one referenced rule wraps an
+        /// <c>EmptyUsage</c> (canonical form: <c>Empty*Member : … = ownedRelatedElement += EmptyXxx</c>)
+        /// and the other wraps a real element. The two alternatives are otherwise identical at the
+        /// .NET cursor type level (e.g. both produce an <c>IParameterMembership</c>), so they cannot
+        /// be discriminated by type alone — the discriminator is whether the membership's
+        /// <c>OwnedRelatedElement</c> collection is empty.
+        /// <para>
+        /// Conservative scope: each alternative's elements must be only <see cref="TerminalElement"/>s
+        /// plus exactly one <see cref="AssignmentElement"/> with operator <c>+=</c>. Alternatives with
+        /// nested groups, multiple <c>+=</c>, or any other element shape are not handled — the caller
+        /// then falls back to <c>Build{Rule}HandCoded</c>.
+        /// </para>
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass"/></param>
+        /// <param name="alternatives">The collection of alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
+        private static bool TryHandleEmptyVsNonEmptyMembership(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            if (alternatives.Count != 2)
+            {
+                return false;
+            }
+
+            var branches = new List<(Alternatives Alternative, AssignmentElement Assignment, NonTerminalElement NonTerminal, bool IsEmpty)>();
+            string sharedProperty = null;
+
+            foreach (var alternative in alternatives)
+            {
+                // Only TerminalElements and AssignmentElements are allowed in each alternative
+                if (alternative.Elements.Any(element => element is not TerminalElement && element is not AssignmentElement))
+                {
+                    return false;
+                }
+
+                var collectionAssignments = alternative.Elements
+                    .OfType<AssignmentElement>()
+                    .Where(assignment => assignment.Operator == "+=")
+                    .ToList();
+
+                if (collectionAssignments.Count != 1)
+                {
+                    return false;
+                }
+
+                // No `=`, `?=`, or other assignment shapes are allowed beyond the one `+=`
+                if (alternative.Elements.OfType<AssignmentElement>().Count() != 1)
+                {
+                    return false;
+                }
+
+                var assignment = collectionAssignments[0];
+
+                if (assignment.Value is not NonTerminalElement nonTerminal)
+                {
+                    return false;
+                }
+
+                if (sharedProperty == null)
+                {
+                    sharedProperty = assignment.Property;
+                }
+                else if (sharedProperty != assignment.Property)
+                {
+                    return false;
+                }
+
+                var isEmpty = IsEmptyMembershipRule(nonTerminal.Name, ruleGenerationContext.AllRules);
+                branches.Add((alternative, assignment, nonTerminal, isEmpty));
+            }
+
+            // Exactly one branch must be the Empty membership; the other must be non-Empty.
+            if (branches.Count(b => b.IsEmpty) != 1 || branches.Count(b => !b.IsEmpty) != 1)
+            {
+                return false;
+            }
+
+            var emptyBranch = branches.Single(b => b.IsEmpty);
+            var nonEmptyBranch = branches.Single(b => !b.IsEmpty);
+
+            // Both alternatives must resolve to the same .NET cursor type
+            // (e.g. both EmptyParameterMember and ExpressionParameterMember target ParameterMembership).
+            var emptyTarget = ResolveRuleTargetClass(emptyBranch.NonTerminal, umlClass.Cache, ruleGenerationContext.AllRules);
+            var nonEmptyTarget = ResolveRuleTargetClass(nonEmptyBranch.NonTerminal, umlClass.Cache, ruleGenerationContext.AllRules);
+
+            if (emptyTarget == null || nonEmptyTarget == null || emptyTarget != nonEmptyTarget)
+            {
+                return false;
+            }
+
+            // The membership type must expose an `OwnedRelatedElement` collection — every Membership
+            // class in the SysML2 model does (it inherits from Relationship), but we sanity-check here
+            // so that emitting the property pattern won't produce an unresolved member reference.
+            var hasOwnedRelatedElement = emptyTarget.QueryAllProperties()
+                .Any(property => string.Equals(property.Name, "ownedRelatedElement", StringComparison.OrdinalIgnoreCase));
+
+            if (!hasOwnedRelatedElement)
+            {
+                return false;
+            }
+
+            // Declare cursors for both alternatives (idempotent — cursor is shared by property).
+            foreach (var alternative in alternatives)
+            {
+                DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+            }
+
+            var cursor = ruleGenerationContext.DefinedCursors.FirstOrDefault(c => c.ApplicableRuleElements.Contains(emptyBranch.Assignment));
+
+            if (cursor == null)
+            {
+                return false;
+            }
+
+            var typeName = emptyTarget.QueryFullyQualifiedTypeName();
+            var cursorVarName = cursor.CursorVariableName;
+
+            writer.WriteSafeString($"if ({cursorVarName}.Current is {typeName} {{ OwnedRelatedElement.Count: 0 }}){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            EmitAlternativeBody(writer, umlClass, emptyBranch.Alternative, ruleGenerationContext);
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+            writer.WriteSafeString($"else if ({cursorVarName}.Current is {typeName}){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            EmitAlternativeBody(writer, umlClass, nonEmptyBranch.Alternative, ruleGenerationContext);
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Emits the body of a single alternative — terminals plus the one <c>+=</c> assignment —
+        /// reusing the existing <see cref="ProcessRuleElement"/> infrastructure. The caller is
+        /// responsible for any surrounding discriminator <c>if</c>/<c>else</c> guard.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass"/></param>
+        /// <param name="alternative">The <see cref="Alternatives"/> whose elements are emitted</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        private static void EmitAlternativeBody(EncodedTextWriter writer, IClass umlClass, Alternatives alternative, RuleGenerationContext ruleGenerationContext)
+        {
+            var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
+            var previousIndex = ruleGenerationContext.CurrentElementIndex;
+            ruleGenerationContext.CurrentSiblingElements = alternative.Elements;
+
+            for (var elementIndex = 0; elementIndex < alternative.Elements.Count; elementIndex++)
+            {
+                ruleGenerationContext.CurrentElementIndex = elementIndex;
+                ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
+            }
+
+            ruleGenerationContext.CurrentSiblingElements = previousSiblings;
+            ruleGenerationContext.CurrentElementIndex = previousIndex;
+        }
+
+        /// <summary>
+        /// Determines whether a grammar rule represents an "empty membership" — one whose body
+        /// dispatches to a single <c>Empty*</c>-named non-terminal that wraps an <see cref="EmptyUsage"/>.
+        /// The naming convention (e.g. <c>EmptyParameterMember</c>, <c>EmptyResultMember</c>,
+        /// <c>EmptyFeatureMember</c>) is a stable contract in both KEBNF files; the implementation
+        /// also verifies the structural shape so that an accidentally-named rule in the future
+        /// would not be mis-classified.
+        /// </summary>
+        /// <param name="ruleName">The non-terminal name to test</param>
+        /// <param name="allRules">All available rules, used to look up <paramref name="ruleName"/></param>
+        /// <returns><c>true</c> if the rule conforms to the empty-membership shape</returns>
+        private static bool IsEmptyMembershipRule(string ruleName, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            if (string.IsNullOrEmpty(ruleName) || !ruleName.StartsWith("Empty", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var rule = allRules.SingleOrDefault(x => x.RuleName == ruleName);
+
+            if (rule == null)
+            {
+                return false;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                foreach (var element in alternative.Elements)
+                {
+                    if (element is AssignmentElement { Value: NonTerminalElement valueNonTerminal }
+                        && valueNonTerminal.Name.StartsWith("Empty", StringComparison.Ordinal))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Resolves the UML <see cref="IClass"/> targeted by a non-terminal rule reference, using
+        /// the <c>TargetElementName</c> declared by the rule (or the rule's own name as a fallback).
+        /// Returns <c>null</c> when the target class is not present in the cache.
+        /// </summary>
+        /// <param name="nonTerminal">The <see cref="NonTerminalElement"/> whose target class is sought</param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/> used to look up the class</param>
+        /// <param name="allRules">All available rules</param>
+        /// <returns>The resolved <see cref="IClass"/>, or <c>null</c> if not found</returns>
+        private static IClass ResolveRuleTargetClass(NonTerminalElement nonTerminal, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var rule = allRules.SingleOrDefault(x => x.RuleName == nonTerminal.Name);
+            var typeTarget = rule != null
+                ? (rule.TargetElementName ?? rule.RuleName)
+                : nonTerminal.Name;
+
+            return cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget) as IClass;
+        }
+
+        /// <summary>
+        /// Validates that every <c>+=NonTerminal</c> assignment in an alternative's tail (i.e. all elements
+        /// after the leading <c>operator = X</c> assignment) resolves to a target class that exists in the
+        /// UML cache. If any tail assignment references a rule whose target class is missing
+        /// (for example <c>TypeResultMember : ResultParameterMembership = …</c> when no
+        /// <c>ResultParameterMembership</c> class exists), the standard emitter would inline the rule's
+        /// body without a proper cursor cast, producing uncompilable references to non-existent properties
+        /// or builders. In that case the caller should skip the matching pattern and fall back to
+        /// <c>Build{Rule}HandCoded</c>.
+        /// </summary>
+        /// <param name="elements">The elements of an alternative — the leading operator assignment is skipped</param>
+        /// <param name="umlClass">The current <see cref="IClass"/></param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <returns><c>true</c> if every trailing <c>+=NonTerminal</c> can be processed safely</returns>
+        private static bool AreAlternativeTailElementsProcessable(IReadOnlyList<RuleElement> elements, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            for (var elementIndex = 1; elementIndex < elements.Count; elementIndex++)
+            {
+                if (elements[elementIndex] is not AssignmentElement { Operator: "+=", Value: NonTerminalElement nonTerminal })
+                {
+                    continue;
+                }
+
+                var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminal.Name);
+                var typeTarget = referencedRule != null
+                    ? (referencedRule.TargetElementName ?? referencedRule.RuleName)
+                    : nonTerminal.Name;
+
+                if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
+                {
+                    continue;
+                }
+
+                var targetClassExists = umlClass.Cache.Values.OfType<INamedElement>().Any(x => x.Name == typeTarget);
+
+                if (!targetClassExists)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Extracts the set of literal terminal values that a grammar value may take, used by
+        /// <see cref="TryHandleOperatorLiteralAlternation"/> to recognise the right-hand side of an
+        /// <c>operator = X</c> assignment as a closed set of literals.
+        /// </summary>
+        /// <param name="value">The right-hand-side <see cref="RuleElement"/> of the assignment</param>
+        /// <param name="allRules">All available rules, used to resolve <see cref="NonTerminalElement"/> references</param>
+        /// <returns>
+        /// A list of literal strings (without surrounding quotes) when the value is a terminal,
+        /// a non-quoted value literal, or a non-terminal whose RHS is a pure literal alternation;
+        /// <c>null</c> otherwise.
+        /// </returns>
+        private static List<string> ExtractLiteralAlternation(RuleElement value, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            switch (value)
+            {
+                case TerminalElement terminal:
+                    return [terminal.Value];
+
+                case NonTerminalElement nonTerminal:
+                    var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminal.Name);
+
+                    if (referencedRule == null)
+                    {
+                        return null;
+                    }
+
+                    var literals = new List<string>();
+
+                    foreach (var ruleAlternative in referencedRule.Alternatives)
+                    {
+                        if (ruleAlternative.Elements.Count != 1 || ruleAlternative.Elements[0] is not TerminalElement nestedTerminal)
+                        {
+                            return null;
+                        }
+
+                        literals.Add(nestedTerminal.Value);
+                    }
+
+                    return literals.Count == 0 ? null : literals;
+
+                default:
+                    return null;
             }
         }
 
@@ -1577,7 +1981,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ruleGenerationContext.CurrentVariableName = previousVariableName;
                         ruleGenerationContext.CallerRule = previousCaller;
 
-                        if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsCollection: true } && assignmentElement.Container is not GroupElement { IsOptional: true })
+                        // Golden Rule: Move() ↔ +=. Suppress only for collection groups (the loop emits its own Move).
+                        // For optional groups, the surrounding optional handler already wraps the body in
+                        // `if (cursor.Current is X) { … }`, so emitting Move() here keeps the advance inside that
+                        // guard — it only fires when the element was actually consumed.
+                        if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsCollection: true })
                         {
                             writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
                         }

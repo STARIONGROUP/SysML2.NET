@@ -62,6 +62,8 @@ namespace SysML2.NET.TextualNotation
                             AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
                         }
                     }
+                    ownedRelationshipCursor.Move();
+
 
                     while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
                     {

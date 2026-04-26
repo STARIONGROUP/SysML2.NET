@@ -45,7 +45,37 @@ namespace SysML2.NET.TextualNotation
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, cursorCache, stringBuilder);
-            BuildWhileLoopNodeHandCoded(poco, cursorCache, stringBuilder);
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership { OwnedRelatedElement.Count: 0 })
+            {
+                stringBuilder.Append("loop ");
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                    {
+                        ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
+
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
+            {
+                stringBuilder.Append("while ");
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                    {
+                        ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
+
+            }
+
             stringBuilder.Append(' ');
 
             if (ownedRelationshipCursor.Current != null)
@@ -71,6 +101,8 @@ namespace SysML2.NET.TextualNotation
                         ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.AppendLine(";");
             }
 

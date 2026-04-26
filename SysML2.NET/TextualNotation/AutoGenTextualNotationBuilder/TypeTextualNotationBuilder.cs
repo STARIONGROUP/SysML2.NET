@@ -213,6 +213,8 @@ namespace SysML2.NET.TextualNotation
                         ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
             }
 
 
@@ -347,6 +349,8 @@ namespace SysML2.NET.TextualNotation
                             ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership, cursorCache, stringBuilder);
                         }
                     }
+                    ownedRelationshipCursor.Move();
+
                     stringBuilder.Append(' ');
                 }
 
@@ -494,6 +498,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 
@@ -885,6 +891,8 @@ namespace SysML2.NET.TextualNotation
                         ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
             }
 
 

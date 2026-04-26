@@ -73,6 +73,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

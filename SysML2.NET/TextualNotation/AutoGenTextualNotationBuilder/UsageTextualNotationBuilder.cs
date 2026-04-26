@@ -141,6 +141,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
             }
 
 

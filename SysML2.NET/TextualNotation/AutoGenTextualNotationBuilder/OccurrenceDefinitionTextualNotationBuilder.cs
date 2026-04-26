@@ -62,6 +62,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

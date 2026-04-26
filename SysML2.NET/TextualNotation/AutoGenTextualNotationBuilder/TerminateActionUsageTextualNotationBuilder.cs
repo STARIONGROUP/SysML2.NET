@@ -63,6 +63,8 @@ namespace SysML2.NET.TextualNotation
                         ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

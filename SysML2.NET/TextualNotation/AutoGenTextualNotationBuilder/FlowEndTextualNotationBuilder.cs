@@ -56,6 +56,8 @@ namespace SysML2.NET.TextualNotation
                         ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

@@ -70,6 +70,8 @@ namespace SysML2.NET.TextualNotation
                         SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(elementAsSubjectMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

@@ -246,6 +246,8 @@ namespace SysML2.NET.TextualNotation
                         ParameterMembershipTextualNotationBuilder.BuildArgumentMember(elementAsParameterMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 

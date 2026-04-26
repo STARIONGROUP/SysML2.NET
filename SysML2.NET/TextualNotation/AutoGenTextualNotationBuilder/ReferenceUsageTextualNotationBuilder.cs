@@ -114,6 +114,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
             }
 
 
@@ -141,6 +143,8 @@ namespace SysML2.NET.TextualNotation
                         OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(' ');
             }
 
@@ -260,6 +264,8 @@ namespace SysML2.NET.TextualNotation
                         FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(elementAsFeatureValue, cursorCache, stringBuilder);
                     }
                 }
+                ownedRelationshipCursor.Move();
+
                 stringBuilder.Append(".");
             }
 
