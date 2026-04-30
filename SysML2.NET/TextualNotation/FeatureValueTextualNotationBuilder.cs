@@ -61,13 +61,8 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append("= ");
             }
 
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-
-            if (ownedRelatedElementCursor.Current is IExpression expression)
-            {
-                ExpressionTextualNotationBuilder.BuildOwnedExpression(expression, cursorCache, stringBuilder);
-                ownedRelatedElementCursor.Move();
-            }
+            // OwnedExpression consumption is handled by the auto-gen caller (BuildFeatureValue),
+            // which checks ownedRelatedElementCursor.Current and calls BuildOwnedExpression + Move().
         }
     }
 }

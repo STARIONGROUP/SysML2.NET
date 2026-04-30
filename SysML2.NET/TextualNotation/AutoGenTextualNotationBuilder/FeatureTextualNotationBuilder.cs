@@ -660,7 +660,6 @@ namespace SysML2.NET.TextualNotation
 
             BuildFeatureDeclarationHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
-            BuildFeatureDeclarationHandCoded(poco, cursorCache, stringBuilder);
 
 
         }

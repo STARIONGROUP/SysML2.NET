@@ -53,7 +53,31 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            BuildAssertConstraintUsageHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting>().Any())
+            {
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                    {
+                        ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
+
+
+                if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                }
+            }
+            else
+            {
+                stringBuilder.Append("constraint ");
+                ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
+            }
+
             stringBuilder.Append(' ');
             TypeTextualNotationBuilder.BuildCalculationBody(poco, cursorCache, stringBuilder);
 

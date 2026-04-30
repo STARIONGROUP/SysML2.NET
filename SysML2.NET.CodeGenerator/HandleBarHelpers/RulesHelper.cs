@@ -405,7 +405,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         else
                         {
                             var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                            writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+
+                            if (ruleGenerationContext.EmittedHandCodedCalls.Add(handCodedRuleName))
+                            {
+                                writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                            }
                         }
                     }
                 }
@@ -803,8 +807,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             return;
                         }
 
+                        if (TryHandlePocoTypeDispatchWithCompoundAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+                        {
+                            return;
+                        }
+
+                        if (TryHandleReferenceOrInline(writer, umlClass, alternatives, ruleGenerationContext))
+                        {
+                            return;
+                        }
+
                         var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                        writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+
+                        if (ruleGenerationContext.EmittedHandCodedCalls.Add(handCodedRuleName))
+                        {
+                            writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                        }
                     }
                 }
             }
@@ -991,16 +1009,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            // The membership type must expose an `OwnedRelatedElement` collection — every Membership
-            // class in the SysML2 model does (it inherits from Relationship), but we sanity-check here
-            // so that emitting the property pattern won't produce an unresolved member reference.
-            var hasOwnedRelatedElement = emptyTarget.QueryAllProperties()
-                .Any(property => string.Equals(property.Name, "ownedRelatedElement", StringComparison.OrdinalIgnoreCase));
+            // Derive the discriminator property from the empty-membership rule's body.
+            // The empty rule wraps its element via a specific property (e.g. `ownedRelatedElement += EmptyUsage`).
+            // At runtime, that property having Count == 0 distinguishes the empty membership from a non-empty one.
+            var emptyRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == emptyBranch.NonTerminal.Name);
+            var emptyRuleAssignment = emptyRule?.Alternatives
+                .SelectMany(alternative => alternative.Elements)
+                .OfType<AssignmentElement>()
+                .FirstOrDefault(assignment => assignment.Operator == "+=");
 
-            if (!hasOwnedRelatedElement)
+            if (emptyRuleAssignment == null)
             {
                 return false;
             }
+
+            var discriminatorProperty = emptyTarget.QueryAllProperties()
+                .SingleOrDefault(property => string.Equals(property.Name, emptyRuleAssignment.Property, StringComparison.OrdinalIgnoreCase));
+
+            if (discriminatorProperty == null)
+            {
+                return false;
+            }
+
+            var discriminatorPropertyName = discriminatorProperty.QueryPropertyNameBasedOnUmlProperties();
 
             // Declare cursors for both alternatives (idempotent — cursor is shared by property).
             foreach (var alternative in alternatives)
@@ -1018,7 +1049,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var typeName = emptyTarget.QueryFullyQualifiedTypeName();
             var cursorVarName = cursor.CursorVariableName;
 
-            writer.WriteSafeString($"if ({cursorVarName}.Current is {typeName} {{ OwnedRelatedElement.Count: 0 }}){Environment.NewLine}");
+            writer.WriteSafeString($"if ({cursorVarName}.Current is {typeName} {{ {discriminatorPropertyName}.Count: 0 }}){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
             EmitAlternativeBody(writer, umlClass, emptyBranch.Alternative, ruleGenerationContext);
             writer.WriteSafeString($"}}{Environment.NewLine}");
@@ -1028,6 +1059,296 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
             return true;
+        }
+
+        /// <summary>
+        /// Pattern C — detects and emits a poco-runtime-type dispatch where each alternative is
+        /// either a bare <see cref="NonTerminalElement"/> or a compound <c>NonTerminal Terminal+</c>
+        /// (NonTerminal followed by trailing <see cref="TerminalElement"/>s only). Each NonTerminal
+        /// must target a UML <see cref="IClass"/> that is the rule's declaring class or one of its
+        /// subclasses; dispatch happens via a <c>switch (poco)</c> on the runtime .NET type.
+        /// <para>
+        /// This generalises the existing pure-NonTerminal poco-type dispatch in
+        /// <see cref="ProcessUnitypedAlternativesWithOneElement"/> by allowing each alternative to
+        /// emit additional trailing terminals after the inner sub-rule call. Example:
+        /// <c>StateActionUsage : ActionUsage = EmptyActionUsage ';' | StatePerformActionUsage | …</c>
+        /// where the first alternative is compound (<c>NonTerminal ';'</c>).
+        /// </para>
+        /// <para>
+        /// Conservative scope: alternatives may not contain <see cref="AssignmentElement"/>,
+        /// <see cref="GroupElement"/>, <see cref="NonParsingAssignmentElement"/>, or
+        /// <see cref="ValueLiteralElement"/>; only the leading NonTerminal + trailing Terminals.
+        /// Target classes must be distinct across alternatives so the dispatch is unambiguous.
+        /// </para>
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass"/></param>
+        /// <param name="alternatives">The collection of alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
+        private static bool TryHandlePocoTypeDispatchWithCompoundAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            if (alternatives.Count < 2)
+            {
+                return false;
+            }
+
+            // At least one alternative must be compound (>1 element). For pure-bare-NonTerminal
+            // rules the existing ProcessUnitypedAlternativesWithOneElement path handles dispatch.
+            if (alternatives.All(alternative => alternative.Elements.Count == 1))
+            {
+                return false;
+            }
+
+            // Validate shape and collect (NonTerminal, target IClass, trailing terminals) per alternative.
+            var branches = new List<(Alternatives Alternative, NonTerminalElement NonTerminal, IClass TargetClass)>();
+
+            foreach (var alternative in alternatives)
+            {
+                if (alternative.Elements.Count == 0
+                    || alternative.Elements[0] is not NonTerminalElement leadingNonTerminal)
+                {
+                    return false;
+                }
+
+                for (var elementIndex = 1; elementIndex < alternative.Elements.Count; elementIndex++)
+                {
+                    if (alternative.Elements[elementIndex] is not TerminalElement trailingTerminal)
+                    {
+                        return false;
+                    }
+
+                    // Optional terminals (e.g. `','?`) cannot be unparsed without rule-specific
+                    // domain knowledge: in the unparse direction we have no record of whether the
+                    // terminal was present in the original input. Skip the pattern and let the
+                    // rule fall back to HandCoded. Example: `OwnedExpression ','?` in
+                    // `SequenceExpressionList` — the existing HandCoded body chooses not to emit
+                    // the trailing comma at all.
+                    if (trailingTerminal.IsOptional)
+                    {
+                        return false;
+                    }
+                }
+
+                var targetClass = ResolveRuleTargetClass(leadingNonTerminal, umlClass.Cache, ruleGenerationContext.AllRules);
+
+                if (targetClass == null)
+                {
+                    return false;
+                }
+
+                // Target class must be the rule's declaring class or one of its subclasses
+                // (i.e. the dispatch is downward from poco's static type).
+                if (targetClass != umlClass && !targetClass.QueryAllGeneralClassifiers().Contains(umlClass))
+                {
+                    return false;
+                }
+
+                branches.Add((alternative, leadingNonTerminal, targetClass));
+            }
+
+            // Distinct target classes required; otherwise the switch cases would conflict.
+            if (branches.Select(branch => branch.TargetClass).Distinct().Count() != branches.Count)
+            {
+                return false;
+            }
+
+            // Order: most-specific subclasses first; the alternative whose target is the rule's own
+            // declaring class is the default fallback.
+            var defaultBranch = branches.FirstOrDefault(branch => branch.TargetClass == umlClass);
+            var orderedBranches = branches
+                .Where(branch => branch.TargetClass != umlClass)
+                .OrderByDescending(branch => branch.TargetClass.QueryAllGeneralClassifiers().Count())
+                .ToList();
+
+            writer.WriteSafeString($"switch (poco){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+
+            foreach (var (alternative, leadingNonTerminal, targetClass) in orderedBranches)
+            {
+                var caseVarName = $"poco{targetClass.Name}";
+                writer.WriteSafeString($"case {targetClass.QueryFullyQualifiedTypeName()} {caseVarName}:{Environment.NewLine}");
+                EmitCompoundPocoTypeBranch(writer, umlClass, leadingNonTerminal, alternative, targetClass, caseVarName, ruleGenerationContext);
+                writer.WriteSafeString($"break;{Environment.NewLine}");
+            }
+
+            if (defaultBranch.NonTerminal != null)
+            {
+                writer.WriteSafeString($"default:{Environment.NewLine}");
+                EmitCompoundPocoTypeBranch(writer, umlClass, defaultBranch.NonTerminal, defaultBranch.Alternative, defaultBranch.TargetClass, "poco", ruleGenerationContext);
+                writer.WriteSafeString($"break;{Environment.NewLine}");
+            }
+
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+            return true;
+        }
+
+        /// <summary>
+        /// Pattern D — detects and emits the "reference-or-inline" two-alternative shape commonly used
+        /// across SysML2 usage rules (AssertConstraint, SatisfyRequirement, IncludeUseCase, ExhibitState,
+        /// EventOccurrence, PerformActionUsageDeclaration). Alt 1 references an existing element via
+        /// <c>ownedRelationship += OwnedReferenceSubsetting</c> followed by <c>FeatureSpecializationPart?</c>;
+        /// Alt 2 introduces an inline declaration via one or more leading keyword terminals followed by
+        /// the inline declaration sub-rule.
+        /// <para>Discriminator at runtime: <c>poco.OwnedRelationship.OfType&lt;IReferenceSubsetting&gt;().Any()</c>.
+        /// True → emit Alt 1 (reference + optional specialization); false → emit Alt 2
+        /// (keyword(s) + declaration).</para>
+        /// <para>Each branch reuses <see cref="EmitAlternativeBody"/> which delegates to
+        /// <see cref="ProcessRuleElement"/>, so the literal grammar elements drive the emission. The
+        /// runtime discriminator type (<c>IReferenceSubsetting</c>) is resolved from the rule's grammar
+        /// rather than hardcoded, so the pattern remains correct for any future rule of the same shape.</para>
+        /// <para>Conservative scope: alternatives may not contain <see cref="GroupElement"/>s,
+        /// <see cref="NonParsingAssignmentElement"/>s, or <see cref="ValueLiteralElement"/>s; Alt 1 must
+        /// start with the reference-subsetting <c>+=</c> assignment; Alt 2 must be terminals followed by a
+        /// single non-terminal. The 4 "with-extension-keyword" rules (RequirementVerificationUsage,
+        /// RequirementConstraintUsage, FramedConcernUsage, ViewRenderingUsage) have a different shape and
+        /// are intentionally not handled here.</para>
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass"/></param>
+        /// <param name="alternatives">The collection of alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
+        private static bool TryHandleReferenceOrInline(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            if (alternatives.Count != 2)
+            {
+                return false;
+            }
+
+            var altList = alternatives.ToList();
+            var alt1 = altList[0];
+            var alt2 = altList[1];
+
+            // Alt 1: first element must be a `+= NonTerminal` assignment whose target class is resolvable,
+            //        and any subsequent elements must be NonTerminals only (e.g. FeatureSpecializationPart?).
+            if (alt1.Elements.Count == 0
+                || alt1.Elements[0] is not AssignmentElement { Operator: "+=", Value: NonTerminalElement firstNonTerminal } firstAssignment)
+            {
+                return false;
+            }
+
+            var referenceTargetClass = ResolveRuleTargetClass(firstNonTerminal, umlClass.Cache, ruleGenerationContext.AllRules);
+
+            if (referenceTargetClass == null)
+            {
+                return false;
+            }
+
+            // Resolve the collection property that Alt 1's += targets, so we can emit a model-agnostic
+            // `poco.{Property}.OfType<{TargetType}>().Any()` discriminator without hardcoding names.
+            var collectionProperty = umlClass.QueryAllProperties()
+                .SingleOrDefault(property => string.Equals(property.Name, firstAssignment.Property, StringComparison.OrdinalIgnoreCase));
+
+            if (collectionProperty == null || !collectionProperty.QueryIsEnumerable())
+            {
+                return false;
+            }
+
+            for (var elementIndex = 1; elementIndex < alt1.Elements.Count; elementIndex++)
+            {
+                if (alt1.Elements[elementIndex] is not NonTerminalElement)
+                {
+                    return false;
+                }
+            }
+
+            // Alt 2: zero or more leading TerminalElements (no optional terminals) followed by exactly one NonTerminalElement.
+            if (alt2.Elements.Count == 0)
+            {
+                return false;
+            }
+
+            var alt2NonTerminalIndex = -1;
+
+            for (var elementIndex = 0; elementIndex < alt2.Elements.Count; elementIndex++)
+            {
+                var element = alt2.Elements[elementIndex];
+
+                switch (element)
+                {
+                    case TerminalElement terminalElement:
+                        if (terminalElement.IsOptional)
+                        {
+                            return false;
+                        }
+
+                        if (alt2NonTerminalIndex >= 0)
+                        {
+                            return false;
+                        }
+
+                        break;
+                    case NonTerminalElement:
+                        if (alt2NonTerminalIndex >= 0)
+                        {
+                            return false;
+                        }
+
+                        alt2NonTerminalIndex = elementIndex;
+                        break;
+                    default:
+                        return false;
+                }
+            }
+
+            if (alt2NonTerminalIndex < 0)
+            {
+                return false;
+            }
+
+            DeclareAllRequiredCursors(writer, umlClass, alt1, ruleGenerationContext);
+
+            var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
+            var collectionPropertyAccessor = collectionProperty.QueryPropertyNameBasedOnUmlProperties();
+            var referenceTypeName = referenceTargetClass.QueryFullyQualifiedTypeName();
+
+            writer.WriteSafeString($"if ({variableName}.{collectionPropertyAccessor}.OfType<{referenceTypeName}>().Any()){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            EmitAlternativeBody(writer, umlClass, alt1, ruleGenerationContext);
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+            writer.WriteSafeString($"else{Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            EmitAlternativeBody(writer, umlClass, alt2, ruleGenerationContext);
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Emits the body of a single Pattern C branch: a call to the leading NonTerminal's builder
+        /// followed by any trailing terminal literals from the alternative.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass"/> (rule's declaring class)</param>
+        /// <param name="leadingNonTerminal">The first element of the alternative — the sub-rule reference</param>
+        /// <param name="alternative">The full alternative (used for trailing terminal access)</param>
+        /// <param name="targetClass">The resolved target <see cref="IClass"/> for the leading non-terminal</param>
+        /// <param name="variableName">The C# variable carrying the cast value (or <c>"poco"</c> for the default branch)</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        private static void EmitCompoundPocoTypeBranch(EncodedTextWriter writer, IClass umlClass, NonTerminalElement leadingNonTerminal, Alternatives alternative, IClass targetClass, string variableName, RuleGenerationContext ruleGenerationContext)
+        {
+            string builderCall;
+
+            if (targetClass == umlClass)
+            {
+                builderCall = $"Build{leadingNonTerminal.Name}({variableName}, cursorCache, stringBuilder);";
+            }
+            else
+            {
+                builderCall = $"{targetClass.Name}TextualNotationBuilder.Build{leadingNonTerminal.Name}({variableName}, cursorCache, stringBuilder);";
+            }
+
+            writer.WriteSafeString($"{builderCall}{Environment.NewLine}");
+
+            for (var elementIndex = 1; elementIndex < alternative.Elements.Count; elementIndex++)
+            {
+                if (alternative.Elements[elementIndex] is TerminalElement trailingTerminal)
+                {
+                    WriteTerminalAppend(writer, trailingTerminal.Value);
+                    writer.WriteSafeString(Environment.NewLine);
+                }
+            }
         }
 
         /// <summary>
@@ -2338,9 +2659,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
             }
 
-            // Fallback for unresolvable cases — delegate to handcoded method
+            // Fallback for unresolvable cases — delegate to handcoded method.
+            // Skip if a HandCoded call for the same rule was already emitted (avoids double-call
+            // when both a group and a trailing collection non-terminal fall back to HandCoded).
             var handCodedRuleName = nonTerminalElement.TextualNotationRule?.RuleName ?? nonTerminalElement.Name;
-            writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);{Environment.NewLine}");
+
+            if (ruleGenerationContext.EmittedHandCodedCalls.Add(handCodedRuleName))
+            {
+                writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);{Environment.NewLine}");
+            }
         }
 
         /// <summary>
@@ -3051,6 +3378,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 return this.CurrentSiblingElements[nextIndex] is TerminalElement { Value: "{" or "}" or ";" };
             }
+
+            /// <summary>
+            /// Gets the set of HandCoded method names that have already been emitted during the
+            /// current rule's code generation. Used to suppress duplicate HandCoded fallback calls
+            /// when multiple unresolvable grammar segments of the same rule each fall back to
+            /// <c>Build{Rule}HandCoded</c> (e.g., a group and a trailing collection non-terminal).
+            /// </summary>
+            public HashSet<string> EmittedHandCodedCalls { get; } = [];
 
             /// <summary>
             /// Determines whether the current element is the last in the sibling list,

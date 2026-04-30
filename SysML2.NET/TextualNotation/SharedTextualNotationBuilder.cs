@@ -20,100 +20,161 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
 
     /// <summary>
     /// Hand-coded part of the <see cref="SharedTextualNotationBuilder" />.
-    /// Hosts the <c>Build{Rule}HandCoded</c> stubs for shared no-target rules (and lexical
-    /// sub-rules they transitively inline) whose body cannot be fully generated and requires
-    /// a manual implementation.
+    /// Hosts the <c>Build{Rule}HandCoded</c> methods for shared no-target rules whose body
+    /// cannot be fully generated and requires a manual implementation.
     /// </summary>
     public static partial class SharedTextualNotationBuilder
     {
         /// <summary>
-        /// Builds the Textual Notation string for the lexical rule BASIC_INITIAL_CHARACTER.
-        /// Inlined into shared rules that reference <c>NAME</c> (e.g. <c>QualifiedName</c>).
-        /// </summary>
-        /// <param name="poco">The <see cref="IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildBASIC_INITIAL_CHARACTERHandCoded(IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildBASIC_INITIAL_CHARACTERHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the lexical rule BASIC_NAME.
-        /// Inlined into shared rules that reference <c>NAME</c> (e.g. <c>QualifiedName</c>).
-        /// </summary>
-        /// <param name="poco">The <see cref="IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildBASIC_NAMEHandCoded(IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildBASIC_NAMEHandCoded requires manual implementation");
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule FeaturePrefix.
+        /// <para><c>FeaturePrefix = ( EndFeaturePrefix (ownedRelationship += OwnedCrossFeatureMember)?
+        /// | BasicFeaturePrefix ) (ownedRelationship += PrefixMetadataMember)*</c></para>
+        /// <para>The AutoGen caller processes the trailing <c>(ownedRelationship += PrefixMetadataMember)*</c>
+        /// loop; this HandCoded method handles the inner alternation between <c>EndFeaturePrefix</c>
+        /// (dispatching to <see cref="FeatureTextualNotationBuilder.BuildEndFeaturePrefix"/>, then
+        /// optionally consuming the cross-feature member from the cursor) and <c>BasicFeaturePrefix</c>
+        /// (dispatching to <see cref="FeatureTextualNotationBuilder.BuildBasicFeaturePrefix"/>).</para>
         /// </summary>
         /// <param name="poco">The <see cref="IFeature" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildFeaturePrefixHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildFeaturePrefixHandCoded requires manual implementation");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (poco.IsEnd)
+            {
+                FeatureTextualNotationBuilder.BuildEndFeaturePrefix(poco, cursorCache, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is IOwningMembership owningMembership
+                    && owningMembership.OwnedRelatedElement.OfType<IFeature>().Any()
+                    && !owningMembership.OwnedRelatedElement.OfType<IMetadataUsage>().Any())
+                {
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(owningMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+            }
+            else
+            {
+                FeatureTextualNotationBuilder.BuildBasicFeaturePrefix(poco, cursorCache, stringBuilder);
+            }
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule NonBehaviorBodyItem.
+        /// <para><c>NonBehaviorBodyItem =
+        /// ownedRelationship += Import
+        /// | ownedRelationship += AliasMember
+        /// | ownedRelationship += DefinitionMember
+        /// | ownedRelationship += VariantUsageMember
+        /// | ownedRelationship += NonOccurrenceUsageMember
+        /// | ( ownedRelationship += SourceSuccessionMember )?
+        ///   ownedRelationship += StructureUsageMember</c></para>
+        /// <para>Cursor-element dispatcher: inspects <c>cursor.Current</c>'s runtime type and delegates
+        /// to the corresponding membership builder. The last alternative has an optional
+        /// <c>SourceSuccessionMember</c> prefix before the <c>StructureUsageMember</c>.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IElement" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildNonBehaviorBodyItemHandCoded(IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildNonBehaviorBodyItemHandCoded requires manual implementation");
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (ownedRelationshipCursor.Current is IImport import)
+            {
+                ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is IFeatureMembership featureMembership)
+            {
+                if (featureMembership.IsValidForSourceSuccessionMember())
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+
+                if (ownedRelationshipCursor.Current is IFeatureMembership structureMembership
+                    && structureMembership.IsValidForStructureUsageMember())
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(structureMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                else if (ownedRelationshipCursor.Current is IVariantMembership variantMembership)
+                {
+                    VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                else if (ownedRelationshipCursor.Current is IFeatureMembership nonOccurrenceMembership
+                         && nonOccurrenceMembership.IsValidForNonOccurrenceUsageMember())
+                {
+                    FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(nonOccurrenceMembership, cursorCache, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+                else if (ownedRelationshipCursor.Current is IOwningMembership owningMembership)
+                {
+                    if (owningMembership.IsValidForNonFeatureMember())
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, cursorCache, stringBuilder);
+                    }
+                    else
+                    {
+                        MembershipTextualNotationBuilder.BuildAliasMember(owningMembership, cursorCache, stringBuilder);
+                    }
+
+                    ownedRelationshipCursor.Move();
+                }
+            }
+            else if (ownedRelationshipCursor.Current is IOwningMembership owningMembership)
+            {
+                if (owningMembership.IsValidForNonFeatureMember())
+                {
+                    OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, cursorCache, stringBuilder);
+                }
+                else
+                {
+                    MembershipTextualNotationBuilder.BuildAliasMember(owningMembership, cursorCache, stringBuilder);
+                }
+
+                ownedRelationshipCursor.Move();
+            }
+            else if (ownedRelationshipCursor.Current is IMembership membership)
+            {
+                // AliasMember : Membership — plain Membership that is neither OwningMembership nor FeatureMembership
+                MembershipTextualNotationBuilder.BuildAliasMember(membership, cursorCache, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the rule RealValue (the value of a
         /// <c>LiteralReal</c>), which the grammar expresses as an <see cref="IExpression" />.
+        /// <para>In the unparse direction, the real numeric value is stored as a property on the
+        /// <see cref="IExpression" /> POCO; this method simply emits it as a string.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IExpression" /> that holds the real value expression</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildRealValueHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildRealValueHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the lexical rule UNRESTRICTED_NAME.
-        /// Inlined into shared rules that reference <c>NAME</c> (e.g. <c>QualifiedName</c>).
-        /// </summary>
-        /// <param name="poco">The <see cref="IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildUNRESTRICTED_NAMEHandCoded(IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
-        {
-            throw new System.NotSupportedException("BuildUNRESTRICTED_NAMEHandCoded requires manual implementation");
-        }
-
-        /// <summary>
-        /// Evaluates the condition under which the optional <c>$::</c> prefix of a
-        /// <c>QualifiedName</c> must be emitted. The generated <c>BuildQualifiedName</c>
-        /// guards the prefix with this predicate.
-        /// </summary>
-        /// <param name="poco">The <see cref="IElement" /> being serialised</param>
-        /// <returns>True when the <c>$::</c> prefix should be emitted</returns>
-        private static bool BuildGroupConditionForQualifiedName(IElement poco)
-        {
-            throw new System.NotSupportedException("BuildGroupConditionForQualifiedName requires manual implementation");
+            if (poco is ILiteralRational literalRational)
+            {
+                stringBuilder.Append(literalRational.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            }
         }
     }
 }

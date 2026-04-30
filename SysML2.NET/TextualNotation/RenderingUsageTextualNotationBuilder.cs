@@ -60,7 +60,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
                 }
 
                 UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);

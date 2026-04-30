@@ -70,7 +70,35 @@ namespace SysML2.NET.TextualNotation
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("event ");
-            BuildEventOccurrenceUsageHandCoded(poco, cursorCache, stringBuilder);
+            if (poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting>().Any())
+            {
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                    {
+                        ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
+
+
+                if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                }
+            }
+            else
+            {
+                stringBuilder.Append("occurrence ");
+
+                if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+                {
+                    UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+                }
+            }
+
             stringBuilder.Append(' ');
             UsageTextualNotationBuilder.BuildUsageCompletion(poco, cursorCache, stringBuilder);
 

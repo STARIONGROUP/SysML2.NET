@@ -64,7 +64,7 @@ namespace SysML2.NET.TextualNotation
                     ownedRelationshipCursor.Move();
                 }
                 
-                if (ownedRelationshipCursor.Current is ISpecialization)
+                while (ownedRelationshipCursor.Current is ISpecialization)
                 {
                     FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
                 }

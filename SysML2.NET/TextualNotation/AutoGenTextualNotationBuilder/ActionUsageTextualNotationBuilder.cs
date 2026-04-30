@@ -222,7 +222,26 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStateActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            BuildStateActionUsageHandCoded(poco, cursorCache, stringBuilder);
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage pocoPerformActionUsage:
+                    PerformActionUsageTextualNotationBuilder.BuildStatePerformActionUsage(pocoPerformActionUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage pocoAcceptActionUsage:
+                    AcceptActionUsageTextualNotationBuilder.BuildStateAcceptActionUsage(pocoAcceptActionUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage pocoSendActionUsage:
+                    SendActionUsageTextualNotationBuilder.BuildStateSendActionUsage(pocoSendActionUsage, cursorCache, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage pocoAssignmentActionUsage:
+                    AssignmentActionUsageTextualNotationBuilder.BuildStateAssignmentActionUsage(pocoAssignmentActionUsage, cursorCache, stringBuilder);
+                    break;
+                default:
+                    BuildEmptyActionUsage(poco, cursorCache, stringBuilder);
+                    stringBuilder.AppendLine(";");
+                    break;
+            }
+
         }
 
         /// <summary>

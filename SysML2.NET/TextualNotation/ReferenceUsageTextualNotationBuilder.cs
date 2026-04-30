@@ -20,8 +20,12 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
 
     /// <summary>
@@ -35,9 +39,38 @@ namespace SysML2.NET.TextualNotation
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
         /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <remarks>
+        /// PayloadParameter : ReferenceUsage =
+        ///     PayloadFeature
+        ///   | Identification PayloadFeatureSpecializationPart? TriggerValuePart
+        ///
+        /// Alt 2 applies when the reference usage has identification AND a trigger-style
+        /// feature value. Otherwise, delegate to PayloadFeature (Alt 1).
+        /// </remarks>
         private static void BuildPayloadParameterHandCoded(IReferenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("BuildPayloadParameterHandCoded requires manual implementation");
+            var hasIdentification = !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName);
+            var hasTriggerValue = poco.OwnedRelationship.OfType<IFeatureValue>().Any();
+
+            if (hasIdentification && hasTriggerValue)
+            {
+                // Alt 2: Identification PayloadFeatureSpecializationPart? TriggerValuePart
+                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+
+                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+                if (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    FeatureTextualNotationBuilder.BuildPayloadFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                }
+
+                FeatureTextualNotationBuilder.BuildTriggerValuePart(poco, cursorCache, stringBuilder);
+            }
+            else
+            {
+                // Alt 1: PayloadFeature
+                FeatureTextualNotationBuilder.BuildPayloadFeature(poco, cursorCache, stringBuilder);
+            }
         }
     }
 }
