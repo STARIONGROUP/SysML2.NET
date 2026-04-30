@@ -612,6 +612,7 @@ namespace SysML2.NET.TextualNotation
             {
                 stringBuilder.Append(poco.Direction.ToString().ToLower());
                 stringBuilder.Append(' ');
+                stringBuilder.Append(' ');
             }
 
 

@@ -47,6 +47,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
                 stringBuilder.Append(poco.Visibility.ToString().ToLower());
+                stringBuilder.Append(' ');
             }
 
 

@@ -190,7 +190,7 @@ namespace SysML2.NET.TextualNotation
         {
             if (string.IsNullOrWhiteSpace(body))
             {
-                stringBuilder.Append("/* */");
+                stringBuilder.AppendLine("/* */");
                 return;
             }
 
@@ -200,20 +200,21 @@ namespace SysML2.NET.TextualNotation
             {
                 stringBuilder.Append("/* ");
                 stringBuilder.Append(lines[0].TrimEnd('\r'));
-                stringBuilder.Append(" */");
+                stringBuilder.AppendLine(" */");
                 return;
             }
 
             stringBuilder.AppendLine("/*");
 
-            foreach (var rawLine in lines)
+            foreach (var rawLine in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
             {
                 var line = rawLine.TrimEnd('\r');
                 stringBuilder.Append(" * ");
                 stringBuilder.AppendLine(line);
             }
 
-            stringBuilder.Append(" */");
+            stringBuilder.AppendLine(" */");
+            stringBuilder.AppendLine();
         }
     }
 }

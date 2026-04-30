@@ -50,9 +50,10 @@ namespace SysML2.NET.TextualNotation
             else
             {
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
 
-                while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
+                while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation annotationGuard && annotationGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement>().Any())
                 {
 
                     if (ownedRelationshipCursor.Current != null)

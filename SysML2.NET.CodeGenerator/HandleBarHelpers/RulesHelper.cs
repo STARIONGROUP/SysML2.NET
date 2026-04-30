@@ -2152,18 +2152,40 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == valueNonTerminal.Name);
                                 var typeTarget = referencedRule != null ? (referencedRule.TargetElementName ?? referencedRule.RuleName) : null;
 
+
                                 if (typeTarget != null)
                                 {
                                     var targetClass = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget) as IClass;
 
                                     if (targetClass != null)
                                     {
-                                        groupTypeGuard = $" && {cursorToUse.CursorVariableName}.Current is {targetClass.QueryFullyQualifiedTypeName()}";
+                                        // Try content-aware guard: when the outer assignment targets one composite
+                                        // property (e.g., ownedRelationship), look at the referenced rule for assignments
+                                        // on the complementary property (e.g., ownedRelatedElement) to validate content.
+
+                                        var contentGuard = ResolveContentTypeGuard(cursorToUse.CursorVariableName, referencedRule, assignmentElement.Property, umlClass, ruleGenerationContext);
+
+                                        if (!string.IsNullOrWhiteSpace(contentGuard))
+                                        {
+                                            groupTypeGuard = $"__FULL_GUARD__{contentGuard}";
+                                        }
+                                        else
+                                        {
+                                            groupTypeGuard = $" && {cursorToUse.CursorVariableName}.Current is {targetClass.QueryFullyQualifiedTypeName()}";
+                                        }
                                     }
                                 }
                             }
 
-                            writer.WriteSafeString($"{Environment.NewLine}while({cursorToUse.CursorVariableName}.Current != null{groupTypeGuard}){Environment.NewLine}");
+                            if (groupTypeGuard.StartsWith("__FULL_GUARD__"))
+                            {
+                                var fullGuard = groupTypeGuard.Substring("__FULL_GUARD__".Length);
+                                writer.WriteSafeString($"{Environment.NewLine}while({fullGuard}){Environment.NewLine}");
+                            }
+                            else
+                            {
+                                writer.WriteSafeString($"{Environment.NewLine}while({cursorToUse.CursorVariableName}.Current != null{groupTypeGuard}){Environment.NewLine}");
+                            }
                         }
 
                         writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -2409,7 +2431,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else if (targetProperty.QueryIsEnum())
                         {
-                            writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString().ToLower());");
+                            writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString().ToLower());{Environment.NewLine}");
+                            writer.WriteSafeString("stringBuilder.Append(' ');");
                         }
                         else if (targetProperty.QueryIsReferenceType())
                         {
@@ -2703,7 +2726,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (assignmentTargetTypes?.Count == 1)
                             {
-                                whileCondition = $"{cursorVariableName}.Current != null && {cursorVariableName}.Current is {assignmentTargetTypes[0]}";
+                                // When the target type is a broad base type (e.g., IOwningMembership),
+                                // also resolve the inner content type from the rule's ownedRelatedElement
+                                // assignments. This prevents consuming elements that match the outer type
+                                // but don't contain the expected content (e.g., a PackageMember is an
+                                // IOwningMembership but doesn't contain a MetadataUsage).
+                                var contentTypeGuard = ResolveContentTypeGuard(cursorVariableName, referencedRule, propertyName, umlClass, ruleGenerationContext);
+
+                                if (!string.IsNullOrWhiteSpace(contentTypeGuard))
+                                {
+                                    whileCondition = contentTypeGuard;
+                                }
+                                else
+                                {
+                                    whileCondition = $"{cursorVariableName}.Current != null && {cursorVariableName}.Current is {assignmentTargetTypes[0]}";
+                                }
                             }
                             else
                             {
@@ -2753,6 +2790,99 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);{Environment.NewLine}");
             }
+        }
+
+        /// <summary>
+        /// Resolves a content-aware type guard for a collection while loop. When the outer
+        /// assignment targets one composite property (e.g., <c>ownedRelationship</c>), this method
+        /// looks at the referenced rule's assignments on the complementary composite property
+        /// (e.g., <c>ownedRelatedElement</c>) to determine the expected inner content type.
+        /// This generates a compound condition that validates both the outer type AND the inner
+        /// content, preventing consumption of elements that match the outer type but contain
+        /// different content (e.g., a PackageMember is an IOwningMembership but doesn't contain
+        /// a MetadataUsage).
+        /// </summary>
+        /// <param name="cursorVariableName">The cursor variable name</param>
+        /// <param name="referencedRule">The grammar rule being referenced in the collection</param>
+        /// <param name="outerPropertyName">The property name of the outer assignment (e.g., "ownedRelationship")</param>
+        /// <param name="umlClass">The UML class providing the type cache</param>
+        /// <param name="ruleGenerationContext">The current generation context</param>
+        /// <returns>A compound while condition string, or null if no content guard can be resolved</returns>
+        private static string ResolveContentTypeGuard(string cursorVariableName, TextualNotationRule referencedRule, string outerPropertyName, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            if (referencedRule == null)
+            {
+                return null;
+            }
+
+            // Resolve the outer target type (the rule's own target, e.g., OwningMembership)
+            var outerTargetName = referencedRule.TargetElementName ?? referencedRule.RuleName;
+            var outerTargetClass = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == outerTargetName) as IClass;
+
+
+
+            if (outerTargetClass == null)
+            {
+                return null;
+            }
+
+            // Discover composite aggregation properties from the outer target class AND its
+            // full inheritance hierarchy. Properties like ownedRelatedElement are defined on
+            // base types (e.g., Relationship) and may not appear on the direct class.
+            var allClassesInHierarchy = new List<IClass> { outerTargetClass };
+            allClassesInHierarchy.AddRange(outerTargetClass.QueryAllGeneralClassifiers().OfType<IClass>());
+
+            var compositeProperties = allClassesInHierarchy
+                .SelectMany(c => c.OwnedAttribute)
+                .Where(p => p.IsComposite && !p.IsDerived)
+                .ToList();
+
+
+
+            var complementaryProperty = compositeProperties
+                .FirstOrDefault(p => !string.Equals(p.Name, outerPropertyName, StringComparison.OrdinalIgnoreCase));
+
+
+
+            if (complementaryProperty == null)
+            {
+                return null;
+            }
+
+            // Look at the referenced rule's body for += assignments on the complementary property
+            var contentAssignment = referencedRule.Alternatives
+                .SelectMany(alt => alt.Elements)
+                .OfType<AssignmentElement>()
+                .FirstOrDefault(a => (a.Operator == "+=" || a.Operator == "=")
+                                     && string.Equals(a.Property, complementaryProperty.Name, StringComparison.OrdinalIgnoreCase)
+                                     && a.Value is NonTerminalElement);
+
+
+            if (contentAssignment == null)
+            {
+                return null;
+            }
+
+            // Resolve the content type by following the assignment's value rule
+            var contentNonTerminal = (NonTerminalElement)contentAssignment.Value;
+            var contentRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == contentNonTerminal.Name);
+            var contentTargetName = contentRule != null
+                ? (contentRule.TargetElementName ?? contentRule.RuleName)
+                : contentNonTerminal.Name;
+
+            var contentTargetClass = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == contentTargetName) as IClass;
+
+            if (contentTargetClass == null)
+            {
+                return null;
+            }
+
+            var outerTypeName = outerTargetClass.QueryFullyQualifiedTypeName();
+            var contentTypeName = contentTargetClass.QueryFullyQualifiedTypeName();
+            var complementaryAccessor = complementaryProperty.QueryPropertyNameBasedOnUmlProperties();
+            var guardVarName = $"{outerTargetClass.Name.LowerCaseFirstLetter()}Guard";
+
+            return $"{cursorVariableName}.Current is {outerTypeName} {guardVarName} && {guardVarName}.{complementaryAccessor}.OfType<{contentTypeName}>().Any()";
         }
 
         /// <summary>
@@ -2977,6 +3107,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (NewLineTerminals.Contains(terminalValue))
             {
+                if (terminalValue == "{")
+                {
+                    writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+                }
+
                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");");
                 return;
             }

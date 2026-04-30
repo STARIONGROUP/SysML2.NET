@@ -46,6 +46,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
+            stringBuilder.Append(' ');
 
             if (ownedRelatedElementCursor.Current != null)
             {
@@ -72,6 +73,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
+            stringBuilder.Append(' ');
 
             if (ownedRelatedElementCursor.Current != null)
             {
@@ -98,6 +100,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
+            stringBuilder.Append(' ');
 
             if (ownedRelatedElementCursor.Current != null)
             {

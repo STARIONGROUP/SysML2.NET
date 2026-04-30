@@ -65,6 +65,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildImport(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             stringBuilder.Append(poco.Visibility.ToString().ToLower());
+            stringBuilder.Append(' ');
             stringBuilder.Append("import ");
 
             if (poco.IsImportAll)

@@ -56,6 +56,7 @@ namespace SysML2.NET.TextualNotation
                     stringBuilder.Append(' ');
                 }
 
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)

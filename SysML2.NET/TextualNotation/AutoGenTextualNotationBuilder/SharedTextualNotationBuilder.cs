@@ -131,7 +131,7 @@ namespace SysML2.NET.TextualNotation
             BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
             stringBuilder.Append(' ');
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
 
                 if (ownedRelationshipCursor.Current != null)

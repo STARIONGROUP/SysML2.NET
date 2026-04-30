@@ -55,6 +55,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.PortionKind.HasValue)
             {
                 stringBuilder.Append(poco.PortionKind.ToString().ToLower());
+                stringBuilder.Append(' ');
                 // NonParsing Assignment Element : isPortion = true => Does not have to be process
                 stringBuilder.Append(' ');
             }
@@ -110,6 +111,7 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append(poco.PortionKind.ToString().ToLower());
+            stringBuilder.Append(' ');
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
@@ -142,6 +144,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.PortionKind.HasValue)
             {
                 stringBuilder.Append(poco.PortionKind.ToString().ToLower());
+                stringBuilder.Append(' ');
                 // NonParsing Assignment Element : isPortion = true => Does not have to be process
                 stringBuilder.Append(' ');
             }

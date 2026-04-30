@@ -49,6 +49,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
@@ -87,6 +88,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
@@ -125,6 +127,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
@@ -175,6 +178,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 if (ownedRelationshipCursor.Current != null)
@@ -257,6 +261,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
@@ -331,6 +336,7 @@ namespace SysML2.NET.TextualNotation
             else
             {
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 while (ownedRelationshipCursor.Current != null)
                 {
@@ -407,6 +413,7 @@ namespace SysML2.NET.TextualNotation
             else
             {
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 while (ownedRelationshipCursor.Current != null)
                 {
@@ -451,7 +458,7 @@ namespace SysML2.NET.TextualNotation
             }
 
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -671,7 +678,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IUnioning)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IUnioning unioningGuard && unioningGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any())
             {
                 stringBuilder.Append(", ");
 
@@ -712,7 +719,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IIntersecting)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IIntersecting intersectingGuard && intersectingGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any())
             {
                 stringBuilder.Append(", ");
 
@@ -753,7 +760,7 @@ namespace SysML2.NET.TextualNotation
             ownedRelationshipCursor.Move();
 
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDifferencing)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDifferencing differencingGuard && differencingGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any())
             {
                 stringBuilder.Append(", ");
 
@@ -786,6 +793,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
@@ -847,6 +855,7 @@ namespace SysML2.NET.TextualNotation
             }
             else
             {
+                stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 if (ownedRelationshipCursor.Current != null)

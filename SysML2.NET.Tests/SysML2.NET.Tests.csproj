@@ -37,6 +37,16 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+        <ProjectReference Include="..\SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj" />
     </ItemGroup>
-    
+
+    <ItemGroup>
+        <Content Include="..\SysML2.NET.Serializer.Xmi.Tests\Resources\**\*.sysmlx" Link="Resources\%(RecursiveDir)%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\SysML2.NET.Serializer.Xmi.Tests\Resources\**\*.kermlx" Link="Resources\%(RecursiveDir)%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>

@@ -226,6 +226,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExpressionBody(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
+            stringBuilder.Append(' ');
             stringBuilder.AppendLine("{");
             TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, cursorCache, stringBuilder);
             stringBuilder.AppendLine("}");
