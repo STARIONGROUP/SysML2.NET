@@ -140,7 +140,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildTypedBy(SysML2.NET.Core.POCO.Core.Features.IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            stringBuilder.Append(":");
+            stringBuilder.Append(": ");
 
             if (ownedRelationshipCursor.Current != null)
             {
@@ -1033,7 +1033,7 @@ namespace SysML2.NET.TextualNotation
                     break;
             }
 
-            stringBuilder.Append(")");
+            stringBuilder.Append(") ");
 
         }
 
@@ -1138,7 +1138,7 @@ namespace SysML2.NET.TextualNotation
             }
             ownedRelationshipCursor.Move();
 
-            stringBuilder.Append("=");
+            stringBuilder.Append("= ");
 
             if (ownedRelationshipCursor.Current != null)
             {

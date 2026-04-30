@@ -73,7 +73,7 @@ namespace SysML2.NET.TextualNotation
                 SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
             }
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
                 BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
             }

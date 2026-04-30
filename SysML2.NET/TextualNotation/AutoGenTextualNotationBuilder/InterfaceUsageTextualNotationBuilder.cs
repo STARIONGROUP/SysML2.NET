@@ -153,7 +153,7 @@ namespace SysML2.NET.TextualNotation
                 ownedRelationshipCursor.Move();
 
             }
-            stringBuilder.Append(")");
+            stringBuilder.Append(") ");
 
         }
 

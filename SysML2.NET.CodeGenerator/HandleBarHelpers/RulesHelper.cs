@@ -579,7 +579,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (targetProperty != null)
                             {
-                                writer.WriteSafeString($"if(poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.Count == 0){Environment.NewLine}");
+                                // Use cursor state for ';' vs '{' decision. By the time the body
+                                // is reached, previous methods (prefix, declaration) have already
+                                // consumed typing, multiplicity, etc. from the shared cursor.
+                                // GetOrCreateCursor returns the same cursor at its current position.
+                                // Use cursor state for ';' vs '{' decision. Previous methods
+                                // (prefix, declaration) have consumed typing/multiplicity from
+                                // the shared cursor via GetOrCreateCursor. If cursor.Current is
+                                // null, no body members remain → emit ';'.
+                                var bodyPropertyAccess = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+                                writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{bodyPropertyAccess}).Current == null){Environment.NewLine}");
+
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
                                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
@@ -627,7 +637,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                         {
                                             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-                                            writer.WriteSafeString($"if(poco.{propertyAccessName}.Count == 0){Environment.NewLine}");
+                                            writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+
                                             writer.WriteSafeString($"{{{Environment.NewLine}");
                                             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
                                             writer.WriteSafeString($"}}{Environment.NewLine}");
@@ -721,7 +732,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                             {
                                                 var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-                                                writer.WriteSafeString($"if(poco.{propertyAccessName}.Count == 0){Environment.NewLine}");
+                                                writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+
                                                 writer.WriteSafeString($"{{{Environment.NewLine}");
                                                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
                                                 writer.WriteSafeString($"}}{Environment.NewLine}");
@@ -2846,6 +2858,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (complementaryProperty == null)
             {
+                // No complementary composite property exists on this class (e.g., Usage is not
+                // a Relationship). Follow the rule's same-property assignment one level deeper:
+                // if the rule has ownedRelationship += PrefixMetadataMember, recurse into
+                // PrefixMetadataMember which IS a Relationship and has ownedRelatedElement.
+                var samePropertyAssignment = referencedRule.Alternatives
+                    .SelectMany(alt => alt.Elements)
+                    .OfType<AssignmentElement>()
+                    .FirstOrDefault(a => (a.Operator == "+=" || a.Operator == "=")
+                                         && string.Equals(a.Property, outerPropertyName, StringComparison.OrdinalIgnoreCase)
+                                         && a.Value is NonTerminalElement);
+
+                if (samePropertyAssignment?.Value is NonTerminalElement innerNonTerminal)
+                {
+                    var innerRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == innerNonTerminal.Name);
+
+                    if (innerRule != null)
+                    {
+                        return ResolveContentTypeGuard(cursorVariableName, innerRule, outerPropertyName, umlClass, ruleGenerationContext);
+                    }
+                }
+
                 return null;
             }
 
@@ -3088,7 +3121,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// Terminals after which no trailing space should be emitted,
         /// because the next element is directly adjacent (e.g., content inside angle brackets, closing angle bracket, or the <c>~</c> prefix operator).
         /// </summary>
-        private static readonly HashSet<string> NoTrailingSpaceTerminals = ["<", ">", "~"];
+        private static readonly HashSet<string> NoTrailingSpaceTerminals = ["<", ">", "~", "[", "(", "#", ".", "'", "*"];
 
         /// <summary>
         /// Writes the <c>stringBuilder.Append</c> or <c>stringBuilder.AppendLine</c> call for a terminal value,
@@ -3128,7 +3161,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return;
             }
 
-            writer.WriteSafeString($"stringBuilder.Append(\"{terminalValue}\");");
+            writer.WriteSafeString($"stringBuilder.Append(\"{terminalValue} \");");
         }
 
         /// <summary>

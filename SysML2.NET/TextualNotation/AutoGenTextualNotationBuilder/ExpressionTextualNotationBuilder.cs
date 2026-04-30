@@ -141,7 +141,7 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("(");
             BuildSequenceExpressionList(poco, cursorCache, stringBuilder);
-            stringBuilder.Append(")");
+            stringBuilder.Append(") ");
 
         }
 
