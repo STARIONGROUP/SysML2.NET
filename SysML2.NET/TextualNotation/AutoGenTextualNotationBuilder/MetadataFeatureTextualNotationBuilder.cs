@@ -74,7 +74,6 @@ namespace SysML2.NET.TextualNotation
                 ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
                 stringBuilder.Append(":");
                 stringBuilder.Append(' ');
-                stringBuilder.Append(' ');
             }
 
 

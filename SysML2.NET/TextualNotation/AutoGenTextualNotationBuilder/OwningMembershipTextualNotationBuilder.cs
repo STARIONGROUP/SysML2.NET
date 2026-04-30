@@ -83,7 +83,6 @@ namespace SysML2.NET.TextualNotation
                 ownedRelatedElementCursor.Move();
             }
 
-            stringBuilder.Append(' ');
 
         }
 

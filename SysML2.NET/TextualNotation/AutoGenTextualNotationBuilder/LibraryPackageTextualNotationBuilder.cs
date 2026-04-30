@@ -44,7 +44,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            stringBuilder.Append(" standard ");
+            if (poco.IsStandard)
+            {
+                stringBuilder.Append(" standard ");
+            }
 
             stringBuilder.Append(' ');
             stringBuilder.Append("library ");

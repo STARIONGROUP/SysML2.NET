@@ -1727,6 +1727,34 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         variableName = $"{cursorToUse.CursorVariableName}.Current";
                     }
 
+                    // Detect degenerate switch: if the first non-default case type is a supertype
+                    // of the generating class, it will always match, making subsequent cases unreachable.
+                    // This happens when alternatives like (SuperclassingPart | ConjugationPart) both
+                    // target ancestor types of the POCO — the discriminator should be cursor-based,
+                    // not POCO-type-based. Fall back to HandCoded in this case.
+                    var generatingClass = ruleGenerationContext.NamedElementToGenerate as IClass;
+
+                    if (variableName == "poco" && generatingClass != null)
+                    {
+                        var firstNonDefault = mappedNonTerminalElements.FirstOrDefault(x =>
+                            defaultElement.RuleElement == null || x.RuleElement != defaultElement.RuleElement);
+
+                        if (firstNonDefault.UmlClass != null
+                            && firstNonDefault.UmlClass != generatingClass
+                            && generatingClass.QueryAllGeneralClassifiers().Contains(firstNonDefault.UmlClass)
+                            && !whenGuards.Any())
+                        {
+                            var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule?.RuleName ?? "Unknown";
+
+                            if (ruleGenerationContext.EmittedHandCodedCalls.Add(handCodedRuleName))
+                            {
+                                writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+                            }
+
+                            break;
+                        }
+                    }
+
                     writer.WriteSafeString($"switch({variableName}){Environment.NewLine}");
                     writer.WriteSafeString("{");
 
@@ -2236,7 +2264,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ProcessAlternatives(writer, umlClass, groupElement.Alternatives, ruleGenerationContext);
                     }
 
-                    if (!groupElement.IsOptional && !ruleGenerationContext.IsNextElementNewLineTerminal())
+                    if (!groupElement.IsOptional && !ruleGenerationContext.IsNextElementNewLineTerminal() && !ruleGenerationContext.IsLastElement())
                     {
                         writer.WriteSafeString($"{Environment.NewLine}stringBuilder.Append(' ');");
                     }
@@ -2355,7 +2383,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             if (assignmentElement.Value is TerminalElement terminalElement)
                             {
-                                if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement)
+                                if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement {IsOptional:true})
                                 {
                                     writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
                                     writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -2621,10 +2649,60 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         // e.g., CalculationBodyItem* ResultExpressionMember → while (current is not IResultExpressionMembership)
                         var whileTypeExclusion = ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
 
-                        // Build the full while condition: merged pattern to avoid "merge into pattern" warnings
-                        var whileCondition = string.IsNullOrWhiteSpace(whileTypeExclusion)
-                            ? $"{cursorVariableName}.Current != null"
-                            : whileTypeExclusion;
+                        // Build the full while condition: merged pattern to avoid "merge into pattern" warnings.
+                        // When no sibling-based type exclusion is available, use a positive type guard
+                        // based on the collection item's assignment target type to prevent consuming
+                        // elements belonging to subsequent grammar segments (unbounded cursor drain).
+                        string whileCondition;
+
+                        if (!string.IsNullOrWhiteSpace(whileTypeExclusion))
+                        {
+                            whileCondition = whileTypeExclusion;
+                        }
+                        else
+                        {
+                            // Try to resolve a positive type guard from the referenced rule's assignment targets.
+                            // Only apply the guard when ALL alternatives are pure += assignments (no bare
+                            // NonTerminal or Group elements that could match different cursor types).
+                            var allElements = referencedRule?.Alternatives.SelectMany(alt => alt.Elements).ToList();
+                            var hasNonAssignmentElements = allElements?.Any(element =>
+                                element is NonTerminalElement or GroupElement) == true;
+
+                            List<string> assignmentTargetTypes = null;
+
+                            if (!hasNonAssignmentElements)
+                            {
+                                assignmentTargetTypes = allElements?
+                                    .OfType<AssignmentElement>()
+                                    .Where(assignmentElement => assignmentElement.Operator == "+=" && assignmentElement.Value is NonTerminalElement)
+                                    .Select(assignmentElement =>
+                                    {
+                                        var valueNonTerminal = (NonTerminalElement)assignmentElement.Value;
+                                        var refRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == valueNonTerminal.Name);
+                                        var targetName = refRule != null ? (refRule.TargetElementName ?? refRule.RuleName) : null;
+
+                                        if (targetName != null)
+                                        {
+                                            var targetClass = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == targetName) as IClass;
+                                            return targetClass?.QueryFullyQualifiedTypeName();
+                                        }
+
+                                        return null;
+                                    })
+                                    .Where(typeName => typeName != null)
+                                    .Distinct()
+                                    .ToList();
+                            }
+
+                            if (assignmentTargetTypes?.Count == 1)
+                            {
+                                whileCondition = $"{cursorVariableName}.Current != null && {cursorVariableName}.Current is {assignmentTargetTypes[0]}";
+                            }
+                            else
+                            {
+                                whileCondition = $"{cursorVariableName}.Current != null";
+                            }
+                        }
 
                         if (perItemCall != null)
                         {

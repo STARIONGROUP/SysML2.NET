@@ -352,7 +352,6 @@ namespace SysML2.NET.TextualNotation
                 ownedRelationshipCursor.Move();
 
             }
-            stringBuilder.Append(' ');
 
         }
 
@@ -730,7 +729,6 @@ namespace SysML2.NET.TextualNotation
             {
                 BuildFeatureChain(poco, cursorCache, stringBuilder);
             }
-            stringBuilder.Append(' ');
 
         }
 
@@ -840,7 +838,6 @@ namespace SysML2.NET.TextualNotation
                 ownedRelationshipCursor.Move();
 
             }
-            stringBuilder.Append(' ');
 
         }
 

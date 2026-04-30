@@ -110,16 +110,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            switch (poco)
-            {
-                case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
-                    TypeTextualNotationBuilder.BuildConjugationPart(pocoType, cursorCache, stringBuilder);
-                    break;
-                default:
-                    BuildSuperclassingPart(poco, cursorCache, stringBuilder);
-                    break;
-            }
-
+            BuildClassifierDeclarationHandCoded(poco, cursorCache, stringBuilder);
             while (ownedRelationshipCursor.Current != null)
             {
                 TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);

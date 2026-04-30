@@ -46,7 +46,10 @@ namespace SysML2.NET.TextualNotation
             var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
             stringBuilder.Append("assert ");
-            stringBuilder.Append(" not ");
+            if (poco.IsNegated)
+            {
+                stringBuilder.Append(" not ");
+            }
 
             stringBuilder.Append(' ');
             stringBuilder.Append("satisfy ");
