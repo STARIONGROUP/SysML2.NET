@@ -93,7 +93,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            stringBuilder.Append(poco.Body);
+            SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.Body);
 
         }
     }

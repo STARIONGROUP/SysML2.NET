@@ -2377,7 +2377,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (targetProperty.QueryIsString())
                         {
-                            writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});");
+                            if (assignmentElement.Value is NonTerminalElement { Name: "REGULAR_COMMENT" })
+                            {
+                                writer.WriteSafeString($"SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.{targetPropertyName});");
+                            }
+                            else
+                            {
+                                writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});");
+                            }
                         }
                         else if (targetProperty.QueryIsBool())
                         {

@@ -176,5 +176,44 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(literalRational.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
             }
         }
+
+        /// <summary>
+        /// Appends a body text formatted as a REGULAR_COMMENT (<c>/* ... */</c>).
+        /// <para>The grammar defines <c>REGULAR_COMMENT = '/*' COMMENT_TEXT '*/'</c>.
+        /// During parsing, the <c>/*</c> and <c>*/</c> delimiters are stripped and each
+        /// line's leading <c> * </c> prefix is removed. This method reverses that
+        /// transformation for serialization.</para>
+        /// </summary>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> to append to</param>
+        /// <param name="body">The body text to format as a REGULAR_COMMENT</param>
+        internal static void AppendRegularComment(StringBuilder stringBuilder, string body)
+        {
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                stringBuilder.Append("/* */");
+                return;
+            }
+
+            var lines = body.Split('\n');
+
+            if (lines.Length == 1)
+            {
+                stringBuilder.Append("/* ");
+                stringBuilder.Append(lines[0].TrimEnd('\r'));
+                stringBuilder.Append(" */");
+                return;
+            }
+
+            stringBuilder.AppendLine("/*");
+
+            foreach (var rawLine in lines)
+            {
+                var line = rawLine.TrimEnd('\r');
+                stringBuilder.Append(" * ");
+                stringBuilder.AppendLine(line);
+            }
+
+            stringBuilder.Append(" */");
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("language ");
             stringBuilder.Append(poco.Language);
-            stringBuilder.Append(poco.Body);
+            SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.Body);
 
         }
     }
