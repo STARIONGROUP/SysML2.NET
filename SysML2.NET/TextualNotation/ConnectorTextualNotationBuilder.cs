@@ -36,7 +36,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule BinaryConnectorDeclaration
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IConnector" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// BinaryConnectorDeclaration : Connector =
@@ -46,9 +46,9 @@ namespace SysML2.NET.TextualNotation
         /// Auto-gen emits the two ConnectorEndMember + 'to' AFTER this method.
         /// This method handles only the optional preamble: FeatureDeclaration? + 'from' or 'all' + 'from'?.
         /// </remarks>
-        private static void BuildBinaryConnectorDeclarationHandCoded(IConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildBinaryConnectorDeclarationHandCoded(IConnector poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName)
@@ -57,7 +57,7 @@ namespace SysML2.NET.TextualNotation
 
             if (hasDeclaration)
             {
-                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
                 stringBuilder.Append("from ");
             }
             else if (poco.IsSufficient)
@@ -71,7 +71,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule Connector
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IConnector" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// Connector = FeaturePrefix 'connector' ( FeatureDeclaration? ValuePart? | ConnectorDeclaration ) TypeBody
@@ -79,18 +79,18 @@ namespace SysML2.NET.TextualNotation
         /// Auto-gen emits FeaturePrefix + 'connector ' before and TypeBody after this method.
         /// This method handles: ( FeatureDeclaration? ValuePart? | ConnectorDeclaration )
         /// </remarks>
-        private static void BuildConnectorHandCoded(IConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildConnectorHandCoded(IConnector poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelationship.OfType<IEndFeatureMembership>().Any())
             {
                 // ConnectorDeclaration — dispatches to BinaryConnectorDeclaration or NaryConnectorDeclaration
-                BuildConnectorDeclaration(poco, cursorCache, stringBuilder);
+                BuildConnectorDeclaration(poco, writerContext, stringBuilder);
             }
             else
             {
                 // FeatureDeclaration? ValuePart?
-                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }
         }
     }

@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>ConnectorPart:ConnectionUsage=BinaryConnectorPart|NaryConnectorPart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage pocoConnectionUsageBinaryConnectorPart when pocoConnectionUsageBinaryConnectorPart.IsValidForBinaryConnectorPart():
-                    BuildBinaryConnectorPart(pocoConnectionUsageBinaryConnectorPart, cursorCache, stringBuilder);
+                    BuildBinaryConnectorPart(pocoConnectionUsageBinaryConnectorPart, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildNaryConnectorPart(poco, cursorCache, stringBuilder);
+                    BuildNaryConnectorPart(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -60,18 +60,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>BinaryConnectorPart:ConnectionUsage=ownedRelationship+=ConnectorEndMember'to'ownedRelationship+=ConnectorEndMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBinaryConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBinaryConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -83,7 +83,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -96,11 +96,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>NaryConnectorPart:ConnectionUsage='('ownedRelationship+=ConnectorEndMember','ownedRelationship+=ConnectorEndMember(','ownedRelationship+=ConnectorEndMember)*')'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNaryConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNaryConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("(");
 
             if (ownedRelationshipCursor.Current != null)
@@ -108,7 +108,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -120,7 +120,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -135,7 +135,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                     {
-                        EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                        EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
@@ -150,14 +150,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>ConnectionUsage=OccurrenceUsagePrefix('connection'UsageDeclarationValuePart?('connect'ConnectorPart)?|'connect'ConnectorPart)UsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConnectionUsage(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildConnectionUsage(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
-            BuildConnectionUsageHandCoded(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
+            BuildConnectionUsageHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.Append(' ');
-            UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageBody(poco, writerContext, stringBuilder);
 
         }
     }

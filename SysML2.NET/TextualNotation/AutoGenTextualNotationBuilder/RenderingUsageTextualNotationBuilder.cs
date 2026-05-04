@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>ViewRenderingUsage:RenderingUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?UsageBody|(UsageExtensionKeyword*'rendering'|UsageExtensionKeyword+)Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildViewRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildViewRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildViewRenderingUsageHandCoded(poco, cursorCache, stringBuilder);
+            BuildViewRenderingUsageHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -51,13 +51,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>RenderingUsage=OccurrenceUsagePrefix'rendering'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("rendering ");
-            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, writerContext, stringBuilder);
 
         }
     }

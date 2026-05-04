@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>BindingConnectorAsUsage=UsagePrefix('binding'UsageDeclaration)?'bind'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMemberUsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            UsageTextualNotationBuilder.BuildUsagePrefix(poco, cursorCache, stringBuilder);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            UsageTextualNotationBuilder.BuildUsagePrefix(poco, writerContext, stringBuilder);
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.OwnedRelatedElement.Count != 0 || poco.IsOrdered)
             {
                 stringBuilder.Append("binding ");
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
@@ -60,7 +60,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -72,12 +72,12 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
 
-            UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageBody(poco, writerContext, stringBuilder);
 
         }
     }

@@ -39,15 +39,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>ResultExpressionMember:ResultExpressionMembership=MemberPrefix?ownedRelatedElement+=OwnedExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildResultExpressionMember(SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildResultExpressionMember(SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             }
 
             if (ownedRelatedElementCursor.Current != null)
@@ -55,7 +55,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
                 {
-                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, cursorCache, stringBuilder);
+                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();

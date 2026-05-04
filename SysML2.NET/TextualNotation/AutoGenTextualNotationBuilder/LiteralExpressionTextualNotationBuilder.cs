@@ -39,26 +39,26 @@ namespace SysML2.NET.TextualNotation
         /// <para>LiteralExpression=LiteralBoolean|LiteralString|LiteralInteger|LiteralReal|LiteralInfinity</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildLiteralExpression(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildLiteralExpression(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralBoolean pocoLiteralBoolean:
-                    LiteralBooleanTextualNotationBuilder.BuildLiteralBoolean(pocoLiteralBoolean, cursorCache, stringBuilder);
+                    LiteralBooleanTextualNotationBuilder.BuildLiteralBoolean(pocoLiteralBoolean, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralString pocoLiteralString:
-                    LiteralStringTextualNotationBuilder.BuildLiteralString(pocoLiteralString, cursorCache, stringBuilder);
+                    LiteralStringTextualNotationBuilder.BuildLiteralString(pocoLiteralString, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger pocoLiteralInteger:
-                    LiteralIntegerTextualNotationBuilder.BuildLiteralInteger(pocoLiteralInteger, cursorCache, stringBuilder);
+                    LiteralIntegerTextualNotationBuilder.BuildLiteralInteger(pocoLiteralInteger, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInfinity pocoLiteralInfinity:
-                    LiteralInfinityTextualNotationBuilder.BuildLiteralInfinity(pocoLiteralInfinity, cursorCache, stringBuilder);
+                    LiteralInfinityTextualNotationBuilder.BuildLiteralInfinity(pocoLiteralInfinity, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Elements.IElement pocoElement:
-                    SharedTextualNotationBuilder.BuildLiteralReal((SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue)pocoElement, cursorCache, stringBuilder);
+                    SharedTextualNotationBuilder.BuildLiteralReal((SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue)pocoElement, writerContext, stringBuilder);
                     break;
             }
 

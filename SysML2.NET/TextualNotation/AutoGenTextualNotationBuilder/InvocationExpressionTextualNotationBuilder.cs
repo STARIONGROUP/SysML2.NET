@@ -39,18 +39,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>FunctionOperationExpression:InvocationExpression=ownedRelationship+=PrimaryArgumentMember'-&gt;'ownedRelationship+=InvocationTypeMember(ownedRelationship+=BodyArgumentMember|ownedRelationship+=FunctionReferenceArgumentMember|ArgumentList)ownedRelationship+=EmptyResultMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionOperationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFunctionOperationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -59,7 +59,7 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipCursor.Current != null)
             {
-                BuildInvocationTypeMember(poco, cursorCache, stringBuilder);
+                BuildInvocationTypeMember(poco, writerContext, stringBuilder);
             }
             ownedRelationshipCursor.Move();
 
@@ -71,7 +71,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildBodyArgumentMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildBodyArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
                     }
                 }
             }
@@ -83,13 +83,13 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildFunctionReferenceArgumentMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildFunctionReferenceArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
                     }
                 }
             }
             else
             {
-                FeatureTextualNotationBuilder.BuildArgumentList(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildArgumentList(poco, writerContext, stringBuilder);
             }
             stringBuilder.Append(' ');
 
@@ -98,7 +98,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
                 {
-                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, cursorCache, stringBuilder);
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -111,30 +111,30 @@ namespace SysML2.NET.TextualNotation
         /// <para>InvocationExpression:InvocationExpression=ownedRelationship+=InstantiatedTypeMemberArgumentListownedRelationship+=EmptyResultMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInvocationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInvocationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
                 {
-                    MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(elementAsMembership, cursorCache, stringBuilder);
+                    MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(elementAsMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
 
-            FeatureTextualNotationBuilder.BuildArgumentList(poco, cursorCache, stringBuilder);
+            FeatureTextualNotationBuilder.BuildArgumentList(poco, writerContext, stringBuilder);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
                 {
-                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, cursorCache, stringBuilder);
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();

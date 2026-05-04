@@ -39,24 +39,24 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementConstraintMember:RequirementConstraintMembership=MemberPrefix?RequirementKindownedRelatedElement+=RequirementConstraintUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementConstraintMember(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRequirementConstraintMember(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             }
-            BuildRequirementKind(poco, cursorCache, stringBuilder);
+            BuildRequirementKind(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage elementAsConstraintUsage)
                 {
-                    ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(elementAsConstraintUsage, cursorCache, stringBuilder);
+                    ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(elementAsConstraintUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -69,9 +69,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementKind:RequirementConstraintMembership='assume'{kind='assumption'}|'require'{kind='requirement'}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementKind(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRequirementKind(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco.Kind)
             {

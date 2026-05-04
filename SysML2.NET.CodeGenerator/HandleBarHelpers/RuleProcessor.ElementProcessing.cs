@@ -153,7 +153,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 if (existingGroupCursor == null)
                                 {
                                     var groupPropertyAccessName = groupTargetProperty.QueryPropertyNameBasedOnUmlProperties();
-                                    writer.WriteSafeString($"var {groupCursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{groupTargetProperty.Name}\", poco.{groupPropertyAccessName});{Environment.NewLine}");
+                                    writer.WriteSafeString($"var {groupCursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{groupTargetProperty.Name}\", poco.{groupPropertyAccessName});{Environment.NewLine}");
                                     var groupCursorDef = new CursorDefinition { DefinedForProperty = groupTargetProperty };
 
                                     foreach (var groupAssignment in groupAssignments)
@@ -227,7 +227,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 case ValueLiteralElement valueLiteralElement:
                     if (valueLiteralElement.QueryIsQualifiedName())
                     {
-                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{ruleGenerationContext.CurrentVariableName});{Environment.NewLine}");
+                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{ruleGenerationContext.CurrentVariableName}, writerContext);{Environment.NewLine}");
 
                         if (!ruleGenerationContext.IsNextElementNewLineTerminal())
                         {
@@ -274,11 +274,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ruleGenerationContext.CurrentVariableName = usedVariable;
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = assignmentElement;
+
+                        var isInsideOptionalGroup = assignmentElement.Container is GroupElement { IsOptional: true, IsCollection: false };
+
+                        if (isInsideOptionalGroup)
+                        {
+                            ruleGenerationContext.PendingCursorMove = $"{Environment.NewLine}{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}";
+                        }
+
                         this.ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, ruleGenerationContext);
                         ruleGenerationContext.CurrentVariableName = previousVariableName;
                         ruleGenerationContext.CallerRule = previousCaller;
 
-                        if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsCollection: true })
+                        if (!isPartOfMultipleAlternative
+                            && assignmentElement.Container is not GroupElement { IsCollection: true }
+                            && !isInsideOptionalGroup)
                         {
                             writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
                         }
@@ -296,7 +306,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         writer.WriteSafeString($"{Environment.NewLine}if({cursorToUse.CursorVariableName}.Current != null){Environment.NewLine}");
                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{cursorToUse.CursorVariableName}.Current);{Environment.NewLine}");
+                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{cursorToUse.CursorVariableName}.Current, writerContext);{Environment.NewLine}");
                         writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
                         writer.WriteSafeString("}");
                     }
@@ -373,7 +383,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 case ValueLiteralElement valueLiteralElement when valueLiteralElement.QueryIsQualifiedName():
                                     if (isPartOfMultipleAlternative)
                                     {
-                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName});{Environment.NewLine}");
+                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName}, writerContext);{Environment.NewLine}");
 
                                         if (!ruleGenerationContext.IsNextElementNewLineTerminal())
                                         {
@@ -384,7 +394,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     {
                                         writer.WriteSafeString($"{Environment.NewLine}if (poco.{targetPropertyName} != null){Environment.NewLine}");
                                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName});{Environment.NewLine}");
+                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName}, writerContext);{Environment.NewLine}");
 
                                         if (!ruleGenerationContext.IsNextElementNewLineTerminal())
                                         {
@@ -410,7 +420,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, cursorCache, stringBuilder);");
+                writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, writerContext, stringBuilder);");
             }
         }
 
@@ -485,11 +495,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         var emittedCondition = this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, targetClass, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
 
-                        writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);");
+                        writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);");
 
                         if (emittedCondition)
                         {
                             writer.WriteSafeString($"{Environment.NewLine}}}");
+                        }
+
+                        if (!string.IsNullOrEmpty(ruleGenerationContext.PendingCursorMove))
+                        {
+                            writer.WriteSafeString(ruleGenerationContext.PendingCursorMove);
+                            ruleGenerationContext.PendingCursorMove = null;
                         }
 
                         if (emitCast)
@@ -532,12 +548,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var emittedSameClassCondition = this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, umlClass, ruleGenerationContext, variableToUse);
 
-                writer.WriteSafeString($"Build{nonTerminalElement.Name}({variableToUse}, cursorCache, stringBuilder);");
+                writer.WriteSafeString($"Build{nonTerminalElement.Name}({variableToUse}, writerContext, stringBuilder);");
 
                 if (emittedSameClassCondition)
                 {
                     writer.WriteSafeString($"{Environment.NewLine}}}");
                 }
+            }
+
+            if (!string.IsNullOrEmpty(ruleGenerationContext.PendingCursorMove))
+            {
+                writer.WriteSafeString(ruleGenerationContext.PendingCursorMove);
+                ruleGenerationContext.PendingCursorMove = null;
             }
 
             if (emitPropertyNullGuard)
@@ -583,7 +605,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     cursorToUse.ApplicableRuleElements.Add(assignmentElement);
 
                     var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
-                    writer.WriteSafeString($"var {cursorToUse.CursorVariableName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});");
+                    writer.WriteSafeString($"var {cursorToUse.CursorVariableName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});");
                     writer.WriteSafeString(Environment.NewLine);
                     ruleGenerationContext.DefinedCursors.Add(cursorToUse);
                     break;
@@ -620,7 +642,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var emittedCondition = effectiveTarget != null
                                    && this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, effectiveTarget, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
 
-            writer.WriteSafeString($"{RulesHelper.SharedBuilderClassName}.Build{nonTerminalElement.Name}({variableExpression}, cursorCache, stringBuilder);");
+            writer.WriteSafeString($"{RulesHelper.SharedBuilderClassName}.Build{nonTerminalElement.Name}({variableExpression}, writerContext, stringBuilder);");
 
             if (emittedCondition)
             {

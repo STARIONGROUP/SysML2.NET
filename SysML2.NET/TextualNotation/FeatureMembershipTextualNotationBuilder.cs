@@ -34,9 +34,9 @@ namespace SysML2.NET.TextualNotation
         /// Build the memberFeature=[QualifiedName] of the rule
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMemberFeature(IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildMemberFeature(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
         }
 
@@ -45,24 +45,24 @@ namespace SysML2.NET.TextualNotation
         /// <remarks>EntryTransitionMember:FeatureMembership=MemberPrefix(ownedRelatedElement+=GuardedTargetSuccession|'then'ownedRelatedElement+=TargetSuccession)';'</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildEntryTransitionMemberHandCoded(IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildEntryTransitionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             // Dispatch on cursor element type:
             //   - ITransitionUsage → GuardedTargetSuccession (no 'then' keyword)
             //   - ISuccessionAsUsage → TargetSuccession (emit 'then' first)
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionUsage guardedTarget)
             {
-                TransitionUsageTextualNotationBuilder.BuildGuardedTargetSuccession(guardedTarget, cursorCache, stringBuilder);
+                TransitionUsageTextualNotationBuilder.BuildGuardedTargetSuccession(guardedTarget, writerContext, stringBuilder);
                 ownedRelatedElementCursor.Move();
             }
             else if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage targetSuccession)
             {
                 stringBuilder.Append("then ");
-                SuccessionAsUsageTextualNotationBuilder.BuildTargetSuccession(targetSuccession, cursorCache, stringBuilder);
+                SuccessionAsUsageTextualNotationBuilder.BuildTargetSuccession(targetSuccession, writerContext, stringBuilder);
                 ownedRelatedElementCursor.Move();
             }
         }

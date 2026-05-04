@@ -768,7 +768,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (existingCursor == null)
                             {
-                                writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
+                                writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
                                 var cursorDef = new CursorDefinition { DefinedForProperty = targetProperty };
 
                                 foreach (var assignmentElement in assignmentElements)
@@ -826,7 +826,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (existingCursor == null)
                             {
-                                writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
+                                writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
                                 var cursorDef = new CursorDefinition { DefinedForProperty = targetProperty };
 
                                 foreach (var assignmentElement in assignmentElements)
@@ -920,11 +920,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (targetClass == umlClass)
             {
-                builderCall = $"Build{leadingNonTerminal.Name}({variableName}, cursorCache, stringBuilder);";
+                builderCall = $"Build{leadingNonTerminal.Name}({variableName}, writerContext, stringBuilder);";
             }
             else
             {
-                builderCall = $"{targetClass.Name}TextualNotationBuilder.Build{leadingNonTerminal.Name}({variableName}, cursorCache, stringBuilder);";
+                builderCall = $"{targetClass.Name}TextualNotationBuilder.Build{leadingNonTerminal.Name}({variableName}, writerContext, stringBuilder);";
             }
 
             writer.WriteSafeString($"{builderCall}{Environment.NewLine}");

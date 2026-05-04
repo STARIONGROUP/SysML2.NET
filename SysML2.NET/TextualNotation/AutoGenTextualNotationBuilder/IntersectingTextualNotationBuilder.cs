@@ -39,14 +39,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>Intersecting=intersectingType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IIntersecting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIntersecting(SysML2.NET.Core.POCO.Core.Types.IIntersecting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildIntersecting(SysML2.NET.Core.POCO.Core.Types.IIntersecting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             if (poco.IntersectingType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.IntersectingType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.IntersectingType, writerContext);
                 stringBuilder.Append(' ');
             }
             else
@@ -57,7 +57,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                     {
-                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, cursorCache, stringBuilder);
+                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
                     }
                 }
             }

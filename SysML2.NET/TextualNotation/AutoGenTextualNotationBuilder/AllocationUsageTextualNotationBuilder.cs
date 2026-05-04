@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>AllocationUsageDeclaration:AllocationUsage='allocation'UsageDeclaration('allocate'ConnectorPart)?|'allocate'ConnectorPart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAllocationUsageDeclaration(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAllocationUsageDeclaration(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildAllocationUsageDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            BuildAllocationUsageDeclarationHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -51,13 +51,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>AllocationUsage=OccurrenceUsagePrefixAllocationUsageDeclarationUsageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAllocationUsage(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAllocationUsage(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
-            BuildAllocationUsageDeclaration(poco, cursorCache, stringBuilder);
-            UsageTextualNotationBuilder.BuildUsageBody(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
+            BuildAllocationUsageDeclaration(poco, writerContext, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageBody(poco, writerContext, stringBuilder);
 
         }
     }

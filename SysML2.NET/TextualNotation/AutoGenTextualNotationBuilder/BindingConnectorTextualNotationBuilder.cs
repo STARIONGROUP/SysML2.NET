@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBindingConnectorDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBindingConnectorDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildBindingConnectorDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            BuildBindingConnectorDeclarationHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -51,14 +51,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>BindingConnector=FeaturePrefix'binding'BindingConnectorDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBindingConnector(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBindingConnector(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("binding ");
-            BuildBindingConnectorDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
+            BuildBindingConnectorDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, writerContext, stringBuilder);
 
         }
     }

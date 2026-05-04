@@ -116,7 +116,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Emits a <c>Build{ruleName}HandCoded(variable, cursorCache, stringBuilder);</c> fallback call.
+        /// Emits a <c>Build{ruleName}HandCoded(variable, writerContext, stringBuilder);</c> fallback call.
         /// When <paramref name="deduplicate" /> is <c>true</c>, the call is only emitted if it has not
         /// already been emitted for the same rule name in the current generation scope.
         /// </summary>
@@ -134,7 +134,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return;
             }
 
-            writer.WriteSafeString($"Build{ruleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
+            writer.WriteSafeString($"Build{ruleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, writerContext, stringBuilder);");
         }
 
         /// <summary>
@@ -415,7 +415,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (existingCursor == null)
             {
-                writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
+                writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
                 var cursorDef = new CursorDefinition { DefinedForProperty = targetProperty };
 
                 foreach (var assignmentElement in assignmentElements)
@@ -678,11 +678,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
             {
-                builderCallString = $"Build{chainNonTerminal.Name}({chainVarName}, cursorCache, stringBuilder);";
+                builderCallString = $"Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
             }
             else
             {
-                builderCallString = $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, cursorCache, stringBuilder);";
+                builderCallString = $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
             }
 
             writer.WriteSafeString($"if ({variableName}.{resolvedContainmentName}.Contains({variableName}.{resolvedPropertyName}) && {variableName}.{resolvedPropertyName} is {chainTypeName} {chainVarName}){Environment.NewLine}");
@@ -691,7 +691,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"}}{Environment.NewLine}");
             writer.WriteSafeString($"else if ({variableName}.{resolvedPropertyName} != null){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName});{Environment.NewLine}");
+            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext);{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
@@ -760,7 +760,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (targetProperty != null)
             {
                 var bodyPropertyAccess = targetProperty.QueryPropertyNameBasedOnUmlProperties();
-                writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{bodyPropertyAccess}).Current == null){Environment.NewLine}");
+                writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{bodyPropertyAccess}).Current == null){Environment.NewLine}");
 
                 writer.WriteSafeString($"{{{Environment.NewLine}");
                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -821,7 +821,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-            writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+            writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -834,7 +834,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (element is NonTerminalElement { IsCollection: true })
                 {
                     var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
-                    writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
+                    writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
 
                     var collectionNonTerminal = (NonTerminalElement)element;
                     var referencedRule = ruleGenerationContext.FindRule(collectionNonTerminal.Name);
@@ -910,7 +910,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-            writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+            writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -923,7 +923,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (element is NonTerminalElement { IsCollection: false } singleNonTerminal)
                 {
                     var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
-                    writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
+                    writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
 
                     var referencedRule = ruleGenerationContext.FindRule(singleNonTerminal.Name);
 

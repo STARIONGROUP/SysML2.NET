@@ -66,7 +66,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             var cursorDefinition = new CursorDefinition { DefinedForProperty = targetProperty };
                             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
-                            writer.WriteSafeString($"var {cursorDefinition.CursorVariableName} = cursorCache.GetOrCreateCursor({ruleGenerationContext.CurrentVariableName}.Id, \"{targetProperty.Name}\", {ruleGenerationContext.CurrentVariableName}.{propertyAccessName});{Environment.NewLine}");
+                            writer.WriteSafeString($"var {cursorDefinition.CursorVariableName} = writerContext.CursorCache.GetOrCreateCursor({ruleGenerationContext.CurrentVariableName}.Id, \"{targetProperty.Name}\", {ruleGenerationContext.CurrentVariableName}.{propertyAccessName});{Environment.NewLine}");
                             ruleGenerationContext.DefinedCursors.Add(cursorDefinition);
                             cursorVariableName = cursorDefinition.CursorVariableName;
                         }
@@ -350,7 +350,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
             {
-                return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+                return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);";
             }
 
             var targetType = RuleQueryUtilities.FindNamedElement(umlClass.Cache, typeTarget);
@@ -359,13 +359,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 if (umlClass.QueryAllGeneralClassifiers().Contains(targetClass))
                 {
-                    return $"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+                    return $"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);";
                 }
 
                 return null;
             }
 
-            return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+            return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);";
         }
 
         /// <summary>

@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>EnumerationBody:EnumerationDefinition=';'|'{'(ownedRelationship+=AnnotatingMember|ownedRelationship+=EnumerationUsageMember)*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumerationBody(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildEnumerationBody(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            if (cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
                 stringBuilder.AppendLine(";");
             }
             else
             {
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 while (ownedRelationshipCursor.Current != null)
@@ -57,10 +57,10 @@ namespace SysML2.NET.TextualNotation
                     switch (ownedRelationshipCursor.Current)
                     {
                         case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership variantMembership:
-                            VariantMembershipTextualNotationBuilder.BuildEnumerationUsageMember(variantMembership, cursorCache, stringBuilder);
+                            VariantMembershipTextualNotationBuilder.BuildEnumerationUsageMember(variantMembership, writerContext, stringBuilder);
                             break;
                         case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
-                            OwningMembershipTextualNotationBuilder.BuildAnnotatingMember(owningMembership, cursorCache, stringBuilder);
+                            OwningMembershipTextualNotationBuilder.BuildAnnotatingMember(owningMembership, writerContext, stringBuilder);
                             break;
                     }
                     ownedRelationshipCursor.Move();
@@ -76,20 +76,20 @@ namespace SysML2.NET.TextualNotation
         /// <para>EnumerationDefinition=DefinitionExtensionKeyword*'enum''def'DefinitionDeclarationEnumerationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEnumerationDefinition(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildEnumerationDefinition(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
             stringBuilder.Append("enum ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
-            BuildEnumerationBody(poco, cursorCache, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, writerContext, stringBuilder);
+            BuildEnumerationBody(poco, writerContext, stringBuilder);
 
         }
     }

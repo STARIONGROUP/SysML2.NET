@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>TriggerActionMember:TransitionFeatureMembership='accept'{kind='trigger'}ownedRelatedElement+=TriggerAction</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTriggerActionMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTriggerActionMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("accept ");
             // NonParsing Assignment Element : kind = 'trigger' => Does not have to be process
 
@@ -52,7 +52,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage elementAsAcceptActionUsage)
                 {
-                    AcceptActionUsageTextualNotationBuilder.BuildTriggerAction(elementAsAcceptActionUsage, cursorCache, stringBuilder);
+                    AcceptActionUsageTextualNotationBuilder.BuildTriggerAction(elementAsAcceptActionUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -65,11 +65,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>GuardExpressionMember:TransitionFeatureMembership='if'{kind='guard'}ownedRelatedElement+=OwnedExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildGuardExpressionMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildGuardExpressionMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("if ");
             // NonParsing Assignment Element : kind = 'guard' => Does not have to be process
 
@@ -78,7 +78,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
                 {
-                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, cursorCache, stringBuilder);
+                    ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -91,11 +91,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>EffectBehaviorMember:TransitionFeatureMembership='do'{kind='effect'}ownedRelatedElement+=EffectBehaviorUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEffectBehaviorMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildEffectBehaviorMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("do ");
             // NonParsing Assignment Element : kind = 'effect' => Does not have to be process
 
@@ -104,7 +104,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Actions.IActionUsage elementAsActionUsage)
                 {
-                    ActionUsageTextualNotationBuilder.BuildEffectBehaviorUsage(elementAsActionUsage, cursorCache, stringBuilder);
+                    ActionUsageTextualNotationBuilder.BuildEffectBehaviorUsage(elementAsActionUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();

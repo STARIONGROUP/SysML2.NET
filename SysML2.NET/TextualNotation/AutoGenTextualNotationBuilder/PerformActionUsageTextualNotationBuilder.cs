@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>PerformActionUsageDeclaration:PerformActionUsage=(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'action'UsageDeclaration)ValuePart?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPerformActionUsageDeclaration(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPerformActionUsageDeclaration(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting>().Any())
             {
 
@@ -52,7 +52,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
                     {
-                        ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                        ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
@@ -60,20 +60,20 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
                 {
-                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, writerContext, stringBuilder);
                 }
             }
             else
             {
                 stringBuilder.Append("action ");
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
             }
 
             stringBuilder.Append(' ');
 
             if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }
 
         }
@@ -83,12 +83,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>StatePerformActionUsage:PerformActionUsage=PerformActionUsageDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStatePerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildStatePerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildPerformActionUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
+            BuildPerformActionUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
         }
 
@@ -97,20 +97,20 @@ namespace SysML2.NET.TextualNotation
         /// <para>TransitionPerformActionUsage:PerformActionUsage=PerformActionUsageDeclaration('{'ActionBodyItem*'}')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionPerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTransitionPerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildPerformActionUsageDeclaration(poco, cursorCache, stringBuilder);
+            BuildPerformActionUsageDeclaration(poco, writerContext, stringBuilder);
 
             if (poco.OwnedRelationship.Count != 0 || poco.importedMembership.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
-                    TypeTextualNotationBuilder.BuildActionBodyItem(poco, cursorCache, stringBuilder);
+                    TypeTextualNotationBuilder.BuildActionBodyItem(poco, writerContext, stringBuilder);
                 }
 
                 stringBuilder.AppendLine("}");
@@ -124,14 +124,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>PerformActionUsage=OccurrenceUsagePrefix'perform'PerformActionUsageDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("perform ");
-            BuildPerformActionUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
+            BuildPerformActionUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
         }
     }

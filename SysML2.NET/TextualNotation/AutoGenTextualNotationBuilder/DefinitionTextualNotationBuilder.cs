@@ -39,18 +39,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDefinitionExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                 {
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -63,19 +63,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.IsAbstract || poco.IsVariation)
             {
-                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, writerContext, stringBuilder);
             }
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
-                BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
 
@@ -86,15 +86,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionDeclaration:Definition=IdentificationSubclassificationPart?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDefinitionDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
             if (poco.OwnedRelationship.Count != 0)
             {
-                ClassifierTextualNotationBuilder.BuildSubclassificationPart(poco, cursorCache, stringBuilder);
+                ClassifierTextualNotationBuilder.BuildSubclassificationPart(poco, writerContext, stringBuilder);
             }
 
         }
@@ -104,23 +104,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>ExtendedDefinition:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword+'def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExtendedDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildExtendedDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.IsAbstract || poco.IsVariation)
             {
-                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, cursorCache, stringBuilder);
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, writerContext, stringBuilder);
             }
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
             stringBuilder.Append("def ");
-            BuildDefinition(poco, cursorCache, stringBuilder);
+            BuildDefinition(poco, writerContext, stringBuilder);
 
         }
 
@@ -129,12 +129,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>Definition=DefinitionDeclarationDefinitionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildDefinitionBody(poco, cursorCache, stringBuilder);
+            BuildDefinitionDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, writerContext, stringBuilder);
 
         }
     }

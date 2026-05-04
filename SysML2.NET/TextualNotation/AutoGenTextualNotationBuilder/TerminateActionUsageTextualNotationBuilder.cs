@@ -39,16 +39,16 @@ namespace SysML2.NET.TextualNotation
         /// <para>TerminateNode:TerminateActionUsage=OccurrenceUsagePrefixActionNodeUsageDeclaration?'terminate'(ownedRelationship+=NodeParameterMember)?ActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ITerminateActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTerminateNode(SysML2.NET.Core.POCO.Systems.Actions.ITerminateActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTerminateNode(SysML2.NET.Core.POCO.Systems.Actions.ITerminateActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
             {
-                ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, cursorCache, stringBuilder);
+                ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, writerContext, stringBuilder);
             }
             stringBuilder.Append("terminate ");
 
@@ -60,15 +60,15 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+
                     }
                 }
-                ownedRelationshipCursor.Move();
-
                 stringBuilder.Append(' ');
             }
 
-            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
         }
     }

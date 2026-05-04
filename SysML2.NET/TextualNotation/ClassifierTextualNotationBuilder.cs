@@ -41,7 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <c>IConjugation</c> → ConjugationPart.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IClassifier" /> from which the rule should be built</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// ClassifierDeclaration : Classifier =
@@ -51,27 +51,27 @@ namespace SysML2.NET.TextualNotation
         /// The auto-gen handles isSufficient, Identification, and OwnedMultiplicity.
         /// This HandCoded method handles: (SuperclassingPart | ConjugationPart)+ TypeRelationshipPart*
         /// </remarks>
-        private static void BuildClassifierDeclarationHandCoded(IClassifier poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildClassifierDeclarationHandCoded(IClassifier poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             // (SuperclassingPart | ConjugationPart)+ — dispatch on cursor element type
             while (ownedRelationshipCursor.Current is ISubclassification or IConjugation)
             {
                 if (ownedRelationshipCursor.Current is ISubclassification)
                 {
-                    BuildSuperclassingPart(poco, cursorCache, stringBuilder);
+                    BuildSuperclassingPart(poco, writerContext, stringBuilder);
                 }
                 else
                 {
-                    TypeTextualNotationBuilder.BuildConjugationPart(poco, cursorCache, stringBuilder);
+                    TypeTextualNotationBuilder.BuildConjugationPart(poco, writerContext, stringBuilder);
                 }
             }
 
             // TypeRelationshipPart* — zero or more
             while (ownedRelationshipCursor.Current is IDisjoining or IUnioning or IIntersecting or IDifferencing)
             {
-                TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);
+                TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, writerContext, stringBuilder);
             }
         }
     }

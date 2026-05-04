@@ -39,14 +39,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedTypeFeaturing:TypeFeaturing=featuringType=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.FeaturingType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -57,15 +57,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>TypeFeaturing='featuring'(Identification'of')?featureOfType=[QualifiedName]'by'featuringType=[QualifiedName]RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("featuring ");
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append("of ");
                 stringBuilder.Append(' ');
             }
@@ -73,17 +73,17 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.FeatureOfType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureOfType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureOfType, writerContext);
                 stringBuilder.Append(' ');
             }
             stringBuilder.Append("by ");
 
             if (poco.FeaturingType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType, writerContext);
                 stringBuilder.Append(' ');
             }
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

@@ -45,18 +45,18 @@ namespace SysML2.NET.TextualNotation
         /// so a single call suffices for both operator branches.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IOperatorExpression" /> being serialised</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildClassificationExpressionHandCoded(IOperatorExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildClassificationExpressionHandCoded(IOperatorExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             stringBuilder.Append(poco.Operator);
             stringBuilder.Append(' ');
 
             if (ownedRelationshipCursor.Current is IParameterMembership parameterMembership)
             {
-                ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(parameterMembership, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(parameterMembership, writerContext, stringBuilder);
             }
 
             ownedRelationshipCursor.Move();
@@ -74,18 +74,18 @@ namespace SysML2.NET.TextualNotation
         /// handles both branches.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IOperatorExpression" /> being serialised</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMetaclassificationExpressionHandCoded(IOperatorExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildMetaclassificationExpressionHandCoded(IOperatorExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             stringBuilder.Append(poco.Operator);
             stringBuilder.Append(' ');
 
             if (ownedRelationshipCursor.Current is IParameterMembership parameterMembership)
             {
-                ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(parameterMembership, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(parameterMembership, writerContext, stringBuilder);
             }
 
             ownedRelationshipCursor.Move();

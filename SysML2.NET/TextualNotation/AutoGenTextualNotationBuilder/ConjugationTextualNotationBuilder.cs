@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedConjugation:Conjugation=originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.OriginalType) && poco.OriginalType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedOriginalTypeAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildFeatureChain(chainedOriginalTypeAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedOriginalTypeAsFeature, writerContext, stringBuilder);
             }
             else if (poco.OriginalType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.OriginalType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.OriginalType, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -60,26 +60,26 @@ namespace SysML2.NET.TextualNotation
         /// <para>Conjugation=('conjugation'Identification)?'conjugate'(conjugatedType=[QualifiedName]|conjugatedType=FeatureChain{ownedRelatedElement+=conjugatedType})CONJUGATES(originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType})RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("conjugation ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("conjugate ");
             if (poco.OwnedRelatedElement.Contains(poco.ConjugatedType) && poco.ConjugatedType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedConjugatedTypeAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildFeatureChain(chainedConjugatedTypeAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedConjugatedTypeAsFeature, writerContext, stringBuilder);
             }
             else if (poco.ConjugatedType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ConjugatedType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ConjugatedType, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -87,16 +87,16 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append(" ~");
             if (poco.OwnedRelatedElement.Contains(poco.OriginalType) && poco.OriginalType is SysML2.NET.Core.POCO.Core.Features.IFeature chainedOriginalTypeAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildFeatureChain(chainedOriginalTypeAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFeatureChain(chainedOriginalTypeAsFeature, writerContext, stringBuilder);
             }
             else if (poco.OriginalType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.OriginalType);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.OriginalType, writerContext);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

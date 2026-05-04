@@ -39,18 +39,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedAnnotation:Annotation=ownedRelatedElement+=AnnotatingElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement elementAsAnnotatingElement)
                 {
-                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(elementAsAnnotatingElement, cursorCache, stringBuilder);
+                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(elementAsAnnotatingElement, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -63,9 +63,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>PrefixMetadataAnnotation:Annotation='#'annotatingElement=PrefixMetadataUsage{ownedRelatedElement+=annotatingElement}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPrefixMetadataAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPrefixMetadataAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("#");
 
@@ -74,7 +74,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.annotatingElement is SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage elementAsMetadataUsage)
                 {
-                    MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(elementAsMetadataUsage, cursorCache, stringBuilder);
+                    MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(elementAsMetadataUsage, writerContext, stringBuilder);
                 }
             }
             // NonParsing Assignment Element : ownedRelatedElement += annotatingElement => Does not have to be process
@@ -86,14 +86,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>Annotation=annotatedElement=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.AnnotatedElement != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.AnnotatedElement);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.AnnotatedElement, writerContext);
                 stringBuilder.Append(' ');
             }
 

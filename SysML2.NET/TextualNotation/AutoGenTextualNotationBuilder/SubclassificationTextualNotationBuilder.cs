@@ -39,14 +39,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedSubclassification:Subclassification=superClassifier=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.Superclassifier != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -57,15 +57,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>Subclassification=('specialization'Identification)?'subclassifier'subclassifier=[QualifiedName]SPECIALIZESsuperclassifier=[QualifiedName]RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
@@ -73,17 +73,17 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.Subclassifier != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Subclassifier);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Subclassifier, writerContext);
                 stringBuilder.Append(' ');
             }
             stringBuilder.Append(" :> ");
 
             if (poco.Superclassifier != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier, writerContext);
                 stringBuilder.Append(' ');
             }
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

@@ -42,9 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>BasicDefinitionPrefix=isAbstract?='abstract'|isVariation?='variation'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBasicDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBasicDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.IsAbstract)
             {
@@ -62,16 +62,16 @@ namespace SysML2.NET.TextualNotation
         /// <para>DependencyDeclaration=(Identification'from')?client+=[QualifiedName](','client+=[QualifiedName])*'to'supplier+=[QualifiedName](','supplier+=[QualifiedName])*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Dependencies.IDependency" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDependencyDeclaration(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDependencyDeclaration(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var clientCursor = cursorCache.GetOrCreateCursor(poco.Id, "client", poco.Client);
-            var supplierCursor = cursorCache.GetOrCreateCursor(poco.Id, "supplier", poco.Supplier);
+            var clientCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "client", poco.Client);
+            var supplierCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "supplier", poco.Supplier);
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append("from ");
                 stringBuilder.Append(' ');
             }
@@ -79,7 +79,7 @@ namespace SysML2.NET.TextualNotation
 
             if (clientCursor.Current != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current, writerContext);
                 clientCursor.Move();
             }
 
@@ -89,7 +89,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (clientCursor.Current != null)
                 {
-                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current, writerContext);
                     clientCursor.Move();
                 }
                 clientCursor.Move();
@@ -99,7 +99,7 @@ namespace SysML2.NET.TextualNotation
 
             if (supplierCursor.Current != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current, writerContext);
                 supplierCursor.Move();
             }
 
@@ -109,7 +109,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (supplierCursor.Current != null)
                 {
-                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current, writerContext);
                     supplierCursor.Move();
                 }
                 supplierCursor.Move();
@@ -123,12 +123,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeaturePrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFeaturePrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            BuildFeaturePrefixHandCoded(poco, cursorCache, stringBuilder);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            BuildFeaturePrefixHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.Append(' ');
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
@@ -139,7 +139,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                     {
-                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
@@ -153,14 +153,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>LiteralReal=value=RealValue</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildLiteralReal(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildLiteralReal(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.value != null)
             {
-                BuildRealValueHandCoded(poco.value, cursorCache, stringBuilder);
+                BuildRealValueHandCoded(poco.value, writerContext, stringBuilder);
             }
 
         }
@@ -170,11 +170,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>NonBehaviorBodyItem=ownedRelationship+=Import|ownedRelationship+=AliasMember|ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=StructureUsageMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNonBehaviorBodyItem(SysML2.NET.Core.POCO.Root.Elements.IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNonBehaviorBodyItem(SysML2.NET.Core.POCO.Root.Elements.IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildNonBehaviorBodyItemHandCoded(poco, cursorCache, stringBuilder);
+            BuildNonBehaviorBodyItemHandCoded(poco, writerContext, stringBuilder);
         }
     }
 }

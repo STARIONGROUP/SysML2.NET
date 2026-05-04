@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>StateDefBody:StateDefinition=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateDefBody(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildStateDefBody(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            if (cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
                 stringBuilder.AppendLine(";");
             }
@@ -58,10 +58,10 @@ namespace SysML2.NET.TextualNotation
 
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
-                    TypeTextualNotationBuilder.BuildStateBodyItem(poco, cursorCache, stringBuilder);
+                    TypeTextualNotationBuilder.BuildStateBodyItem(poco, writerContext, stringBuilder);
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -73,15 +73,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>StateDefinition=OccurrenceDefinitionPrefix'state''def'DefinitionDeclarationStateDefBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateDefinition(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildStateDefinition(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, cursorCache, stringBuilder);
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("state ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, cursorCache, stringBuilder);
-            BuildStateDefBody(poco, cursorCache, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, writerContext, stringBuilder);
+            BuildStateDefBody(poco, writerContext, stringBuilder);
 
         }
     }

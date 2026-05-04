@@ -39,13 +39,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>AcceptNode:AcceptActionUsage=OccurrenceUsagePrefixAcceptNodeDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAcceptNode(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAcceptNode(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
-            BuildAcceptNodeDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
+            BuildAcceptNodeDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
         }
 
@@ -54,17 +54,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>AcceptNodeDeclaration:AcceptActionUsage=ActionNodeUsageDeclaration?'accept'AcceptParameterPart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAcceptNodeDeclaration(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAcceptNodeDeclaration(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
             {
-                ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, cursorCache, stringBuilder);
+                ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, writerContext, stringBuilder);
             }
             stringBuilder.Append("accept ");
-            BuildAcceptParameterPart(poco, cursorCache, stringBuilder);
+            BuildAcceptParameterPart(poco, writerContext, stringBuilder);
 
         }
 
@@ -73,18 +73,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>AcceptParameterPart:AcceptActionUsage=ownedRelationship+=PayloadParameterMember('via'ownedRelationship+=NodeParameterMember)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAcceptParameterPart(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAcceptParameterPart(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -99,11 +99,11 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+
                     }
                 }
-                ownedRelationshipCursor.Move();
-
             }
 
 
@@ -114,12 +114,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>StateAcceptActionUsage:AcceptActionUsage=AcceptNodeDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateAcceptActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildStateAcceptActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildAcceptNodeDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
+            BuildAcceptNodeDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
         }
 
@@ -128,11 +128,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>TriggerAction:AcceptActionUsage=AcceptParameterPart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTriggerAction(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTriggerAction(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildAcceptParameterPart(poco, cursorCache, stringBuilder);
+            BuildAcceptParameterPart(poco, writerContext, stringBuilder);
 
         }
 
@@ -141,20 +141,20 @@ namespace SysML2.NET.TextualNotation
         /// <para>TransitionAcceptActionUsage:AcceptActionUsage=AcceptNodeDeclaration('{'ActionBodyItem*'}')?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionAcceptActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTransitionAcceptActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildAcceptNodeDeclaration(poco, cursorCache, stringBuilder);
+            BuildAcceptNodeDeclaration(poco, writerContext, stringBuilder);
 
             if (poco.OwnedRelationship.Count != 0 || poco.importedMembership.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
-                    TypeTextualNotationBuilder.BuildActionBodyItem(poco, cursorCache, stringBuilder);
+                    TypeTextualNotationBuilder.BuildActionBodyItem(poco, writerContext, stringBuilder);
                 }
 
                 stringBuilder.AppendLine("}");

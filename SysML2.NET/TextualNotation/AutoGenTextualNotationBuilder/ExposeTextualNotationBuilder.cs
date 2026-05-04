@@ -39,23 +39,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>Expose='expose'(MembershipExpose|NamespaceExpose)RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IExpose" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpose(SysML2.NET.Core.POCO.Systems.Views.IExpose poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildExpose(SysML2.NET.Core.POCO.Systems.Views.IExpose poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("expose ");
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose pocoMembershipExpose:
-                    MembershipExposeTextualNotationBuilder.BuildMembershipExpose(pocoMembershipExpose, cursorCache, stringBuilder);
+                    MembershipExposeTextualNotationBuilder.BuildMembershipExpose(pocoMembershipExpose, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Views.INamespaceExpose pocoNamespaceExpose:
-                    NamespaceExposeTextualNotationBuilder.BuildNamespaceExpose(pocoNamespaceExpose, cursorCache, stringBuilder);
+                    NamespaceExposeTextualNotationBuilder.BuildNamespaceExpose(pocoNamespaceExpose, writerContext, stringBuilder);
                     break;
             }
 
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

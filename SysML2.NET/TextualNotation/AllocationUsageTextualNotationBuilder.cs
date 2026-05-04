@@ -36,7 +36,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule AllocationUsageDeclaration
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// AllocationUsageDeclaration : AllocationUsage =
@@ -45,9 +45,9 @@ namespace SysML2.NET.TextualNotation
         ///
         /// Auto-gen delegates entirely to this method.
         /// </remarks>
-        private static void BuildAllocationUsageDeclarationHandCoded(IAllocationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildAllocationUsageDeclarationHandCoded(IAllocationUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName)
@@ -58,19 +58,19 @@ namespace SysML2.NET.TextualNotation
             {
                 // Alt 1: 'allocation' UsageDeclaration ('allocate' ConnectorPart)?
                 stringBuilder.Append("allocation ");
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
 
                 if (poco.OwnedRelationship.OfType<IEndFeatureMembership>().Any())
                 {
                     stringBuilder.Append("allocate ");
-                    ConnectionUsageTextualNotationBuilder.BuildConnectorPart(poco, cursorCache, stringBuilder);
+                    ConnectionUsageTextualNotationBuilder.BuildConnectorPart(poco, writerContext, stringBuilder);
                 }
             }
             else
             {
                 // Alt 2: 'allocate' ConnectorPart
                 stringBuilder.Append("allocate ");
-                ConnectionUsageTextualNotationBuilder.BuildConnectorPart(poco, cursorCache, stringBuilder);
+                ConnectionUsageTextualNotationBuilder.BuildConnectorPart(poco, writerContext, stringBuilder);
             }
         }
     }

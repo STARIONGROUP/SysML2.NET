@@ -39,18 +39,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>TransitionSuccession:Succession=ownedRelationship+=EmptyEndMemberownedRelationship+=ConnectorEndMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTransitionSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -61,7 +61,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -74,11 +74,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>SuccessionDeclaration:Succession=FeatureDeclaration('first'ownedRelationship+=ConnectorEndMember'then'ownedRelationship+=ConnectorEndMember)?|(s.isSufficient?='all')?('first'?ownedRelationship+=ConnectorEndMember'then'ownedRelationship+=ConnectorEndMember)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSuccessionDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSuccessionDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildSuccessionDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            BuildSuccessionDeclarationHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -86,14 +86,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>Succession=FeaturePrefix'succession'SuccessionDeclarationTypeBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSuccession(SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("succession ");
-            BuildSuccessionDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildTypeBody(poco, cursorCache, stringBuilder);
+            BuildSuccessionDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildTypeBody(poco, writerContext, stringBuilder);
 
         }
     }

@@ -36,13 +36,13 @@ namespace SysML2.NET.TextualNotation
         /// <remarks>NamespaceImport=importedNamespace=[QualifiedName]'::''*'('::'isRecursive?='**')?|importedNamespace=FilterPackage{ownedRelatedElement+=importedNamespace}</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="INamespaceImport" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildNamespaceImportHandCoded(INamespaceImport poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildNamespaceImportHandCoded(INamespaceImport poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.ImportedNamespace) && poco.ImportedNamespace is IPackage filterPackage)
             {
-                PackageTextualNotationBuilder.BuildFilterPackage(filterPackage, cursorCache, stringBuilder);
+                PackageTextualNotationBuilder.BuildFilterPackage(filterPackage, writerContext, stringBuilder);
             }
             else if (poco.ImportedNamespace != null)
             {
