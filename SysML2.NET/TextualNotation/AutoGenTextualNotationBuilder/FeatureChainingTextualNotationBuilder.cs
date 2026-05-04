@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.ChainingFeature != null)
             {
-                stringBuilder.Append(poco.ChainingFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ChainingFeature);
                 stringBuilder.Append(' ');
             }
 

@@ -22,6 +22,7 @@ namespace SysML2.NET.Tests.TextualNotation
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
     using Microsoft.Extensions.Logging;
@@ -76,7 +77,7 @@ namespace SysML2.NET.Tests.TextualNotation
                 Assert.That(this.rootNamespace.Id, Is.EqualTo(Guid.Parse("88e753b3-e75d-525f-b9ad-d5e9095b98ec")));
             });
         }
-
+        
         [Test]
         public void Verify_that_textual_notation_is_produced_from_Quantities_root_namespace()
         {

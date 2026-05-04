@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
             var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             if (poco.DifferencingType != null)
             {
-                stringBuilder.Append(poco.DifferencingType.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.DifferencingType);
                 stringBuilder.Append(' ');
             }
             else

@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.FeaturingType != null)
             {
-                stringBuilder.Append(poco.FeaturingType.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType);
                 stringBuilder.Append(' ');
             }
 
@@ -73,14 +73,14 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.FeatureOfType != null)
             {
-                stringBuilder.Append(poco.FeatureOfType.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureOfType);
                 stringBuilder.Append(' ');
             }
             stringBuilder.Append("by ");
 
             if (poco.FeaturingType != null)
             {
-                stringBuilder.Append(poco.FeaturingType.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType);
                 stringBuilder.Append(' ');
             }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);

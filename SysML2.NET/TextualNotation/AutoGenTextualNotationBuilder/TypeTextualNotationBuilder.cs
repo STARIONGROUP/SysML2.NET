@@ -916,7 +916,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInstantiatedTypeReference(SysML2.NET.Core.POCO.Core.Types.IType poco, ICursorCache cursorCache, StringBuilder stringBuilder)
         {
-            stringBuilder.Append(poco.qualifiedName);
+            SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco);
             stringBuilder.Append(' ');
 
         }

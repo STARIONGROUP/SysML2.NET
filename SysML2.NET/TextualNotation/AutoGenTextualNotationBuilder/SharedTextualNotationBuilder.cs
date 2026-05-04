@@ -79,7 +79,7 @@ namespace SysML2.NET.TextualNotation
 
             if (clientCursor.Current != null)
             {
-                stringBuilder.Append(clientCursor.Current.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current);
                 clientCursor.Move();
             }
 
@@ -89,7 +89,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (clientCursor.Current != null)
                 {
-                    stringBuilder.Append(clientCursor.Current.qualifiedName);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current);
                     clientCursor.Move();
                 }
                 clientCursor.Move();
@@ -99,7 +99,7 @@ namespace SysML2.NET.TextualNotation
 
             if (supplierCursor.Current != null)
             {
-                stringBuilder.Append(supplierCursor.Current.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current);
                 supplierCursor.Move();
             }
 
@@ -109,7 +109,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (supplierCursor.Current != null)
                 {
-                    stringBuilder.Append(supplierCursor.Current.qualifiedName);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current);
                     supplierCursor.Move();
                 }
                 supplierCursor.Move();

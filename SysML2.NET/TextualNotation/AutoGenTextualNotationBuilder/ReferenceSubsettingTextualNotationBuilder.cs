@@ -49,7 +49,7 @@ namespace SysML2.NET.TextualNotation
             }
             else if (poco.ReferencedFeature != null)
             {
-                stringBuilder.Append(poco.ReferencedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ReferencedFeature);
                 stringBuilder.Append(' ');
             }
 
@@ -70,7 +70,7 @@ namespace SysML2.NET.TextualNotation
             }
             else if (poco.ReferencedFeature != null)
             {
-                stringBuilder.Append(poco.ReferencedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ReferencedFeature);
                 stringBuilder.Append(' ');
             }
 

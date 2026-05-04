@@ -216,5 +216,24 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.AppendLine(" */");
             stringBuilder.AppendLine();
         }
+
+        /// <summary>
+        /// Appends the Qualified Name of the <see cref="IElement"/> for the textual notation, inline with the section 8.2.3.5 of the KerML
+        /// Specification
+        /// </summary>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="poco">The <see cref="IElement"/> that needs to have its qualifiedName append</param>
+        internal static void AppendQualifiedName(StringBuilder stringBuilder, IElement poco)
+        {
+            switch (poco)
+            {
+                case IMembership membership:
+                    stringBuilder.Append(membership.MemberElement.qualifiedName);
+                    break;
+                default:
+                    stringBuilder.Append(poco.qualifiedName);
+                    break;
+            }
+        }
     }
 }

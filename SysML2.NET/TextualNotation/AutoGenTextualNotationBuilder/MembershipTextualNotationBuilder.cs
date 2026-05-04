@@ -84,7 +84,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.MemberElement != null)
             {
-                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement);
                 stringBuilder.Append(' ');
             }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
@@ -103,7 +103,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.MemberElement != null)
             {
-                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement);
                 stringBuilder.Append(' ');
             }
             else
@@ -157,7 +157,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.MemberElement != null)
             {
-                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement);
                 stringBuilder.Append(' ');
             }
 

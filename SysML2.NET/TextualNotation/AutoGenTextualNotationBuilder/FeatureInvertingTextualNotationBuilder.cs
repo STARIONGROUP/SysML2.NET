@@ -49,7 +49,7 @@ namespace SysML2.NET.TextualNotation
             }
             else if (poco.InvertingFeature != null)
             {
-                stringBuilder.Append(poco.InvertingFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature);
                 stringBuilder.Append(' ');
             }
 
@@ -84,7 +84,7 @@ namespace SysML2.NET.TextualNotation
             }
             else if (poco.FeatureInverted != null)
             {
-                stringBuilder.Append(poco.FeatureInverted.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureInverted);
                 stringBuilder.Append(' ');
             }
 
@@ -96,7 +96,7 @@ namespace SysML2.NET.TextualNotation
             }
             else if (poco.InvertingFeature != null)
             {
-                stringBuilder.Append(poco.InvertingFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature);
                 stringBuilder.Append(' ');
             }
 

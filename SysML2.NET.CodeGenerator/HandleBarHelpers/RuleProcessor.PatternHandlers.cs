@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.PatternHandlers.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -58,14 +58,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return false;
                 }
 
-                var literals = ExtractLiteralAlternation(operatorAssignment.Value, ruleGenerationContext.AllRules);
+                var literals = this.ExtractLiteralAlternation(operatorAssignment.Value, ruleGenerationContext.AllRules);
 
                 if (literals == null || literals.Count == 0)
                 {
                     return false;
                 }
 
-                if (!AreAlternativeTailElementsProcessable(alternative.Elements, umlClass, ruleGenerationContext))
+                if (!this.AreAlternativeTailElementsProcessable(alternative.Elements, umlClass, ruleGenerationContext))
                 {
                     return false;
                 }
@@ -75,7 +75,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             foreach (var alternative in alternatives)
             {
-                DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+                this.DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
             }
 
             var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
@@ -99,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 for (var elementIndex = 1; elementIndex < alternative.Elements.Count; elementIndex++)
                 {
                     ruleGenerationContext.CurrentElementIndex = elementIndex;
-                    ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
+                    this.ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
                 }
 
                 ruleGenerationContext.CurrentSiblingElements = previousSiblings;
@@ -207,7 +207,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             foreach (var alternative in alternatives)
             {
-                DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+                this.DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
             }
 
             var cursor = ruleGenerationContext.DefinedCursors.FirstOrDefault(c => c.ApplicableRuleElements.Contains(emptyBranch.Assignment));
@@ -222,11 +222,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             writer.WriteSafeString($"if ({cursorVarName}.Current is {typeName} {{ {discriminatorPropertyName}.Count: 0 }}){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            EmitAlternativeBody(writer, umlClass, emptyBranch.Alternative, ruleGenerationContext);
+            this.EmitAlternativeBody(writer, umlClass, emptyBranch.Alternative, ruleGenerationContext);
             writer.WriteSafeString($"}}{Environment.NewLine}");
             writer.WriteSafeString($"else if ({cursorVarName}.Current is {typeName}){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            EmitAlternativeBody(writer, umlClass, nonEmptyBranch.Alternative, ruleGenerationContext);
+            this.EmitAlternativeBody(writer, umlClass, nonEmptyBranch.Alternative, ruleGenerationContext);
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
             return true;
@@ -304,14 +304,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 var caseVarName = $"poco{targetClass.Name}";
                 writer.WriteSafeString($"case {targetClass.QueryFullyQualifiedTypeName()} {caseVarName}:{Environment.NewLine}");
-                EmitCompoundPocoTypeBranch(writer, umlClass, leadingNonTerminal, alternative, targetClass, caseVarName, ruleGenerationContext);
+                this.EmitCompoundPocoTypeBranch(writer, umlClass, leadingNonTerminal, alternative, targetClass, caseVarName, ruleGenerationContext);
                 writer.WriteSafeString($"break;{Environment.NewLine}");
             }
 
             if (defaultBranch.NonTerminal != null)
             {
                 writer.WriteSafeString($"default:{Environment.NewLine}");
-                EmitCompoundPocoTypeBranch(writer, umlClass, defaultBranch.NonTerminal, defaultBranch.Alternative, defaultBranch.TargetClass, "poco", ruleGenerationContext);
+                this.EmitCompoundPocoTypeBranch(writer, umlClass, defaultBranch.NonTerminal, defaultBranch.Alternative, defaultBranch.TargetClass, "poco", ruleGenerationContext);
                 writer.WriteSafeString($"break;{Environment.NewLine}");
             }
 
@@ -405,7 +405,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            DeclareAllRequiredCursors(writer, umlClass, alt1, ruleGenerationContext);
+            this.DeclareAllRequiredCursors(writer, umlClass, alt1, ruleGenerationContext);
 
             var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
             var collectionPropertyAccessor = collectionProperty.QueryPropertyNameBasedOnUmlProperties();
@@ -413,11 +413,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             writer.WriteSafeString($"if ({variableName}.{collectionPropertyAccessor}.OfType<{referenceTypeName}>().Any()){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            EmitAlternativeBody(writer, umlClass, alt1, ruleGenerationContext);
+            this.EmitAlternativeBody(writer, umlClass, alt1, ruleGenerationContext);
             writer.WriteSafeString($"}}{Environment.NewLine}");
             writer.WriteSafeString($"else{Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            EmitAlternativeBody(writer, umlClass, alt2, ruleGenerationContext);
+            this.EmitAlternativeBody(writer, umlClass, alt2, ruleGenerationContext);
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
             return true;
@@ -500,7 +500,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         private void ProcessMultiCollectionAssignment(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
             var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
         }
 
         /// <summary>
@@ -698,7 +698,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule?.RuleName ?? "Unknown";
 
-                            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, deduplicate: true);
+                            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
 
                             break;
                         }
@@ -734,7 +734,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = orderedNonTerminalElement.RuleElement;
 
-                        ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, ruleGenerationContext);
+                        this.ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, ruleGenerationContext);
 
                         ruleGenerationContext.CallerRule = previousCaller;
                         ruleGenerationContext.CurrentVariableName = previousVariableName;
@@ -806,7 +806,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                 var previousVariableName = ruleGenerationContext.CurrentVariableName;
                                 ruleGenerationContext.CurrentVariableName = orderedElement.UmlClass.Name.LowerCaseFirstLetter();
-                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, ruleGenerationContext);
+                                this.ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, ruleGenerationContext);
                                 ruleGenerationContext.CurrentVariableName = previousVariableName;
                                 writer.WriteSafeString($"{Environment.NewLine}{cursorVarName}.Move();{Environment.NewLine}");
                                 writer.WriteSafeString($"break;{Environment.NewLine}");
@@ -859,7 +859,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                 var previousVariableName = ruleGenerationContext.CurrentVariableName;
                                 ruleGenerationContext.CurrentVariableName = orderedElement.UmlClass.Name.LowerCaseFirstLetter();
-                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, ruleGenerationContext);
+                                this.ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, ruleGenerationContext);
                                 ruleGenerationContext.CurrentVariableName = previousVariableName;
                                 writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
                             }
@@ -873,7 +873,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         foreach (var alternative in alternatives)
                         {
-                            DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+                            this.DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
                         }
 
                         var properties = umlClass.QueryAllProperties();
@@ -896,7 +896,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
 
                             writer.WriteSafeString($"{{{Environment.NewLine}");
-                            ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignment, true);
+                            this.ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignment, true);
                             writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                         }
                     }
@@ -905,7 +905,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 default:
                 {
                     var defaultHandCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                    EmitHandCodedFallback(writer, defaultHandCodedRuleName, ruleGenerationContext);
+                    this.EmitHandCodedFallback(writer, defaultHandCodedRuleName, ruleGenerationContext);
                     break;
                 }
             }
