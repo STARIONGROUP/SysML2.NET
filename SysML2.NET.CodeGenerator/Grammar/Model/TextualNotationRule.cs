@@ -37,6 +37,12 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         /// Gets or set the name of the KerML Element that the rule target
         /// </summary>
         public string TargetElementName { get; set; }
+
+        /// <summary>
+        /// Gets the effective target name for this rule: <see cref="TargetElementName" /> when
+        /// explicitly declared, or <see cref="RuleName" /> as a fallback.
+        /// </summary>
+        public string EffectiveTarget => this.TargetElementName ?? this.RuleName;
         
         /// <summary>
         /// Gets or set an optional <see cref="RuleParameter"/> 

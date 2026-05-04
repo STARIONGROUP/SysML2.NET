@@ -1,20 +1,20 @@
-﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="RulesHelper.Utilities.cs" company="Starion Group S.A.">
-// 
+// -------------------------------------------------------------------------------------------------
+// <copyright file="RuleQueryUtilities.cs" company="Starion Group S.A.">
+//
 //   Copyright 2022-2026 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -32,9 +32,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using uml4net.StructuredClassifiers;
 
     /// <summary>
-    /// Utility query methods for rule inspection and element analysis
+    /// Static utility query methods for rule inspection and element analysis
     /// </summary>
-    public static partial class RulesHelper
+    internal static class RuleQueryUtilities
     {
         /// <summary>
         /// Determines whether a grammar rule represents an empty membership shape.
@@ -42,7 +42,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="ruleName">The non-terminal name to test</param>
         /// <param name="allRules">All available rules for lookup</param>
         /// <returns>True if the rule conforms to the empty-membership shape</returns>
-        private static bool IsEmptyMembershipRule(string ruleName, IReadOnlyList<TextualNotationRule> allRules)
+        internal static bool IsEmptyMembershipRule(string ruleName, IReadOnlyList<TextualNotationRule> allRules)
         {
             if (string.IsNullOrEmpty(ruleName) || !ruleName.StartsWith("Empty", StringComparison.Ordinal))
             {
@@ -72,46 +72,52 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Resolves the UML <see cref="IClass" /> targeted by a non-terminal rule reference, using
-        /// the <c>TargetElementName</c> declared by the rule (or the rule's own name as a fallback).
-        /// Returns <c>null</c> when the target class is not present in the cache.
+        /// Resolves the UML <see cref="IClass" /> targeted by a non-terminal rule reference.
         /// </summary>
         /// <param name="nonTerminal">The <see cref="NonTerminalElement" /> whose target class is sought</param>
         /// <param name="cache">The <see cref="IXmiElementCache" /> used to look up the class</param>
         /// <param name="allRules">All available rules</param>
         /// <returns>The resolved <see cref="IClass" />, or <c>null</c> if not found</returns>
-        private static IClass ResolveRuleTargetClass(NonTerminalElement nonTerminal, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
+        internal static IClass ResolveRuleTargetClass(NonTerminalElement nonTerminal, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
         {
             var rule = allRules.SingleOrDefault(x => x.RuleName == nonTerminal.Name);
 
             var typeTarget = rule != null
-                ? rule.TargetElementName ?? rule.RuleName
+                ? rule.EffectiveTarget
                 : nonTerminal.Name;
 
-            return cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget) as IClass;
+            return FindClass(cache, typeTarget);
         }
 
         /// <summary>
-        /// Validates that every <c>+=NonTerminal</c> assignment in an alternative's tail (i.e. all elements
-        /// after the leading <c>operator = X</c> assignment) resolves to a target class that exists in the
-        /// UML cache. If any tail assignment references a rule whose target class is missing
-        /// (for example <c>TypeResultMember : ResultParameterMembership = …</c> when no
-        /// <c>ResultParameterMembership</c> class exists), the standard emitter would inline the rule's
-        /// body without a proper cursor cast, producing uncompilable references to non-existent properties
-        /// or builders. In that case the caller should skip the matching pattern and fall back to
-        /// <c>Build{Rule}HandCoded</c>.
+        /// Looks up a UML <see cref="IClass" /> by name from the XMI element cache.
         /// </summary>
-        /// <param name="elements">The elements of an alternative — the leading operator assignment is skipped</param>
-        /// <param name="umlClass">The current <see cref="IClass" /></param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        /// <returns><c>true</c> if every trailing <c>+=NonTerminal</c> can be processed safely</returns>
+        /// <param name="cache">The <see cref="IXmiElementCache" /> to search</param>
+        /// <param name="typeName">The UML class name to find</param>
+        /// <returns>The matching <see cref="IClass" />, or <c>null</c> if not found</returns>
+        internal static IClass FindClass(IXmiElementCache cache, string typeName)
+        {
+            return cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeName) as IClass;
+        }
+
+        /// <summary>
+        /// Looks up a UML <see cref="INamedElement" /> by name from the XMI element cache.
+        /// </summary>
+        /// <param name="cache">The <see cref="IXmiElementCache" /> to search</param>
+        /// <param name="typeName">The element name to find</param>
+        /// <returns>The matching <see cref="INamedElement" />, or <c>null</c> if not found</returns>
+        internal static INamedElement FindNamedElement(IXmiElementCache cache, string typeName)
+        {
+            return cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeName);
+        }
+
         /// <summary>
         /// Extracts all boolean property names assigned via the conditional operator from a grammar rule.
         /// </summary>
         /// <param name="rule">The <see cref="TextualNotationRule" /> to inspect</param>
         /// <param name="allRules">All available rules for recursive lookup</param>
         /// <returns>A list of boolean property names</returns>
-        private static List<string> QueryBooleanAssignmentProperties(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules)
+        internal static List<string> QueryBooleanAssignmentProperties(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules)
         {
             var result = new List<string>();
             CollectBooleanAssignmentProperties(rule.Alternatives.SelectMany(x => x.Elements).ToList(), allRules, result, new HashSet<string>());
@@ -125,7 +131,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="allRules">All available rules for resolving NonTerminal references</param>
         /// <param name="result">The accumulated list of boolean property names</param>
         /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
-        private static void CollectBooleanAssignmentProperties(IReadOnlyList<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, List<string> result, HashSet<string> visited)
+        internal static void CollectBooleanAssignmentProperties(IReadOnlyList<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, List<string> result, HashSet<string> visited)
         {
             foreach (var element in elements)
             {
@@ -163,7 +169,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>
         /// The collection of ordered <see cref="NonTerminalElement" /> with the associated <see cref="IClass" />
         /// </returns>
-        private static List<(NonTerminalElement RuleElement, IClass UmlClass)> OrderElementsByInheritance(List<NonTerminalElement> nonTerminalElements, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
+        internal static List<(NonTerminalElement RuleElement, IClass UmlClass)> OrderElementsByInheritance(List<NonTerminalElement> nonTerminalElements, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
         {
             var mapping = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
             var elementClass = cache.Values.Single(x => x is IClass { Name: "Element" });
@@ -171,7 +177,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             foreach (var nonTerminalElement in nonTerminalElements)
             {
                 var referencedRule = ruleGenerationContext.AllRules.Single(x => x.RuleName == nonTerminalElement.Name);
-                var referencedClassName = referencedRule.TargetElementName ?? referencedRule.RuleName;
+                var referencedClassName = referencedRule.EffectiveTarget;
                 var referencedClass = (IClass)(cache.Values.SingleOrDefault(x => x is IClass umlClass && umlClass.Name == referencedClassName) ?? elementClass);
                 mapping.Add((nonTerminalElement, referencedClass));
             }
@@ -202,8 +208,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 // Sort by inheritance depth (more specific types first).
-                // Any subclass has strictly more ancestors than its superclass,
-                // so depth-based ordering is transitive and correct for switch case ordering.
                 var depthA = a.UmlClass.QueryAllGeneralClassifiers().Count();
                 var depthB = b.UmlClass.QueryAllGeneralClassifiers().Count();
 

@@ -1,20 +1,20 @@
-﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="RulesHelper.CollectionProcessing.cs" company="Starion Group S.A.">
-// 
+// -------------------------------------------------------------------------------------------------
+// <copyright file="RuleProcessor.CollectionProcessing.cs" company="Starion Group S.A.">
+//
 //   Copyright 2022-2026 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -34,23 +34,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using uml4net.StructuredClassifiers;
 
     /// <summary>
-    /// Collection loop emission and type-guard condition resolution
+    /// Collection loop emission, type resolution, and optional condition logic
     /// </summary>
-    public static partial class RulesHelper
+    internal sealed partial class RuleProcessor
     {
         /// <summary>
-        /// Emits a while loop for a collection non-terminal, resolving type-guarded conditions
-        /// and dispatching to per-item builder calls or inlined alternatives.
+        /// Emits a while loop for a collection non-terminal.
         /// </summary>
-        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
-        /// <param name="umlClass">The related <see cref="IClass" /></param>
-        /// <param name="nonTerminalElement">The collection <see cref="NonTerminalElement" /></param>
-        /// <param name="referencedRule">The resolved grammar rule, or null</param>
-        /// <param name="typeTarget">The resolved target type name</param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        private static void EmitCollectionNonTerminalLoop(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, string typeTarget, RuleGenerationContext ruleGenerationContext)
+        private void EmitCollectionNonTerminalLoop(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, string typeTarget, RuleGenerationContext ruleGenerationContext)
         {
-            // Resolve which collection property this NonTerminal ultimately consumes
             if (referencedRule != null)
             {
                 var collectionPropertyNames = referencedRule.QueryCollectionPropertyNames(ruleGenerationContext.AllRules);
@@ -63,7 +55,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (targetProperty != null && targetProperty.QueryIsEnumerable())
                     {
-                        // Ensure cursor is declared
                         var existingCursor = ruleGenerationContext.DefinedCursors.SingleOrDefault(x => x.IsCursorValidForProperty(targetProperty));
                         string cursorVariableName;
 
@@ -80,18 +71,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             cursorVariableName = cursorDefinition.CursorVariableName;
                         }
 
-                        // Resolve the correct builder class name for the per-item call
                         var perItemCall = ResolveBuilderCall(umlClass, nonTerminalElement, typeTarget, ruleGenerationContext);
 
-                        // When a collection NonTerminal is followed by another element sharing the same cursor,
-                        // the while condition must exclude the next sibling's type to avoid consuming its elements.
-                        // e.g., CalculationBodyItem* ResultExpressionMember → while (current is not IResultExpressionMembership)
                         var whileTypeExclusion = ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
 
-                        // Build the full while condition: merged pattern to avoid "merge into pattern" warnings.
-                        // When no sibling-based type exclusion is available, use a positive type guard
-                        // based on the collection item's assignment target type to prevent consuming
-                        // elements belonging to subsequent grammar segments (unbounded cursor drain).
                         string whileCondition;
 
                         if (!string.IsNullOrWhiteSpace(whileTypeExclusion))
@@ -100,9 +83,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else
                         {
-                            // Try to resolve a positive type guard from the referenced rule's assignment targets.
-                            // Only apply the guard when ALL alternatives are pure += assignments (no bare
-                            // NonTerminal or Group elements that could match different cursor types).
                             var allElements = referencedRule?.Alternatives.SelectMany(alt => alt.Elements).ToList();
 
                             var hasNonAssignmentElements = allElements?.Any(element =>
@@ -118,12 +98,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     .Select(assignmentElement =>
                                     {
                                         var valueNonTerminal = (NonTerminalElement)assignmentElement.Value;
-                                        var refRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == valueNonTerminal.Name);
-                                        var targetName = refRule != null ? refRule.TargetElementName ?? refRule.RuleName : null;
+                                        var refRule = ruleGenerationContext.FindRule(valueNonTerminal.Name);
+                                        var targetName = refRule != null ? refRule.EffectiveTarget : null;
 
                                         if (targetName != null)
                                         {
-                                            var targetClass = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == targetName) as IClass;
+                                            var targetClass = RuleQueryUtilities.FindClass(umlClass.Cache, targetName);
                                             return targetClass?.QueryFullyQualifiedTypeName();
                                         }
 
@@ -136,11 +116,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (assignmentTargetTypes?.Count == 1)
                             {
-                                // When the target type is a broad base type (e.g., IOwningMembership),
-                                // also resolve the inner content type from the rule's ownedRelatedElement
-                                // assignments. This prevents consuming elements that match the outer type
-                                // but don't contain the expected content (e.g., a PackageMember is an
-                                // IOwningMembership but doesn't contain a MetadataUsage).
                                 var contentTypeGuard = ResolveContentTypeGuard(cursorVariableName, referencedRule, propertyName, umlClass, ruleGenerationContext);
 
                                 if (!string.IsNullOrWhiteSpace(contentTypeGuard))
@@ -160,8 +135,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (perItemCall != null)
                         {
-                            // The per-item call is a dispatcher builder (e.g., BuildNamespaceBodyElement(poco, ...))
-                            // that internally advances the cursor in its switch cases. No outer Move() to avoid double advance.
                             writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
                             writer.WriteSafeString(perItemCall);
@@ -169,8 +142,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else
                         {
-                            // Type incompatible: inline the referenced rule's alternatives inside the while loop.
-                            // The inlined alternatives handle cursor advancement (via += dispatch Move()).
                             writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
 
@@ -191,42 +162,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
             }
 
-            // Fallback for unresolvable cases — delegate to handcoded method.
-            // Skip if a HandCoded call for the same rule was already emitted (avoids double-call
-            // when both a group and a trailing collection non-terminal fall back to HandCoded).
             var handCodedRuleName = nonTerminalElement.TextualNotationRule?.RuleName ?? nonTerminalElement.Name;
 
-            if (ruleGenerationContext.EmittedHandCodedCalls.Add(handCodedRuleName))
-            {
-                writer.WriteSafeString($"Build{handCodedRuleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);{Environment.NewLine}");
-            }
+            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, deduplicate: true);
+            writer.WriteSafeString(Environment.NewLine);
         }
 
         /// <summary>
-        /// Resolves a content-aware type guard for a collection while loop. When the outer
-        /// assignment targets one composite property (e.g., <c>ownedRelationship</c>), this method
-        /// looks at the referenced rule's assignments on the complementary composite property
-        /// (e.g., <c>ownedRelatedElement</c>) to determine the expected inner content type.
-        /// This generates a compound condition that validates both the outer type AND the inner
-        /// content, preventing consumption of elements that match the outer type but contain
-        /// different content (e.g., a PackageMember is an IOwningMembership but doesn't contain
-        /// a MetadataUsage).
+        /// Resolves the type condition for a collection while loop.
         /// </summary>
-        /// <param name="cursorVariableName">The cursor variable name</param>
-        /// <param name="referencedRule">The grammar rule being referenced in the collection</param>
-        /// <param name="outerPropertyName">The property name of the outer assignment (e.g., "ownedRelationship")</param>
-        /// <param name="umlClass">The UML class providing the type cache</param>
-        /// <param name="ruleGenerationContext">The current generation context</param>
-        /// <returns>A compound while condition string, or null if no content guard can be resolved</returns>
-        /// <summary>
-        /// Resolves the type condition for a collection while loop using positive or negative type matching.
-        /// </summary>
-        /// <param name="cursorVariableName">The cursor variable name</param>
-        /// <param name="umlClass">The related <see cref="IClass" /></param>
-        /// <param name="collectionRule">The grammar rule for the collection non-terminal</param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        /// <returns>A type condition clause string, or empty if no condition is needed</returns>
-        private static string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, RuleGenerationContext ruleGenerationContext)
+        private string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, RuleGenerationContext ruleGenerationContext)
         {
             var siblings = ruleGenerationContext.CurrentSiblingElements;
             var currentIndex = ruleGenerationContext.CurrentElementIndex;
@@ -236,8 +181,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return "";
             }
 
-            // Primary approach: positive condition from the collection item's += assignment target type.
-            // Only applicable when ALL alternatives are += assignments (no mixed NonTerminal alternatives).
             if (collectionRule != null)
             {
                 var allElements = collectionRule.Alternatives.SelectMany(alternative => alternative.Elements).ToList();
@@ -253,9 +196,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (assignmentNonTerminals.Count > 0 && hasOnlyAssignments)
                 {
-                    // Use the first assignment's target type as the positive condition
-                    var itemRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == assignmentNonTerminals[0].Name);
-                    var itemTypeTarget = itemRule != null ? itemRule.TargetElementName ?? itemRule.RuleName : null;
+                    var itemRule = ruleGenerationContext.FindRule(assignmentNonTerminals[0].Name);
+                    var itemTypeTarget = itemRule != null ? itemRule.EffectiveTarget : null;
 
                     if (itemTypeTarget != null)
                     {
@@ -270,7 +212,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
             }
 
-            // Fallback: negative exclusion based on the next sibling's target type
             var nextSibling = siblings[currentIndex + 1];
             NonTerminalElement nextNonTerminal = null;
 
@@ -298,8 +239,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return "";
             }
 
-            var nextRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nextNonTerminal.Name);
-            var nextTypeTarget = nextRule != null ? nextRule.TargetElementName ?? nextRule.RuleName : null;
+            var nextRule = ruleGenerationContext.FindRule(nextNonTerminal.Name);
+            var nextTypeTarget = nextRule != null ? nextRule.EffectiveTarget : null;
 
             if (nextTypeTarget == null)
             {
@@ -315,6 +256,182 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             return $"{cursorVariableName}.Current is not null and not {nextTargetClass.QueryFullyQualifiedTypeName()}";
+        }
+
+        /// <summary>
+        /// Resolves a content-aware type guard for collection while loops.
+        /// </summary>
+        private string ResolveContentTypeGuard(string cursorVariableName, TextualNotationRule referencedRule, string outerPropertyName, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            if (referencedRule == null)
+            {
+                return null;
+            }
+
+            var outerTargetName = referencedRule.EffectiveTarget;
+            var outerTargetClass = RuleQueryUtilities.FindClass(umlClass.Cache, outerTargetName);
+
+            if (outerTargetClass == null)
+            {
+                return null;
+            }
+
+            var allClassesInHierarchy = new List<IClass> { outerTargetClass };
+            allClassesInHierarchy.AddRange(outerTargetClass.QueryAllGeneralClassifiers().OfType<IClass>());
+
+            var compositeProperties = allClassesInHierarchy
+                .SelectMany(c => c.OwnedAttribute)
+                .Where(p => p.IsComposite && !p.IsDerived)
+                .ToList();
+
+            var complementaryProperty = compositeProperties
+                .FirstOrDefault(p => !string.Equals(p.Name, outerPropertyName, StringComparison.OrdinalIgnoreCase));
+
+            if (complementaryProperty == null)
+            {
+                var samePropertyAssignment = referencedRule.Alternatives
+                    .SelectMany(alt => alt.Elements)
+                    .OfType<AssignmentElement>()
+                    .FirstOrDefault(a => (a.Operator == "+=" || a.Operator == "=")
+                                         && string.Equals(a.Property, outerPropertyName, StringComparison.OrdinalIgnoreCase)
+                                         && a.Value is NonTerminalElement);
+
+                if (samePropertyAssignment?.Value is NonTerminalElement innerNonTerminal)
+                {
+                    var innerRule = ruleGenerationContext.FindRule(innerNonTerminal.Name);
+
+                    if (innerRule != null)
+                    {
+                        return ResolveContentTypeGuard(cursorVariableName, innerRule, outerPropertyName, umlClass, ruleGenerationContext);
+                    }
+                }
+
+                return null;
+            }
+
+            var contentAssignment = referencedRule.Alternatives
+                .SelectMany(alt => alt.Elements)
+                .OfType<AssignmentElement>()
+                .FirstOrDefault(a => (a.Operator == "+=" || a.Operator == "=")
+                                     && string.Equals(a.Property, complementaryProperty.Name, StringComparison.OrdinalIgnoreCase)
+                                     && a.Value is NonTerminalElement);
+
+            if (contentAssignment == null)
+            {
+                return null;
+            }
+
+            var contentNonTerminal = (NonTerminalElement)contentAssignment.Value;
+            var contentRule = ruleGenerationContext.FindRule(contentNonTerminal.Name);
+
+            var contentTargetName = contentRule != null
+                ? contentRule.EffectiveTarget
+                : contentNonTerminal.Name;
+
+            var contentTargetClass = RuleQueryUtilities.FindClass(umlClass.Cache, contentTargetName);
+
+            if (contentTargetClass == null)
+            {
+                return null;
+            }
+
+            var outerTypeName = outerTargetClass.QueryFullyQualifiedTypeName();
+            var contentTypeName = contentTargetClass.QueryFullyQualifiedTypeName();
+            var complementaryAccessor = complementaryProperty.QueryPropertyNameBasedOnUmlProperties();
+            var guardVarName = $"{outerTargetClass.Name.LowerCaseFirstLetter()}Guard";
+
+            return $"{cursorVariableName}.Current is {outerTypeName} {guardVarName} && {guardVarName}.{complementaryAccessor}.OfType<{contentTypeName}>().Any()";
+        }
+
+        /// <summary>
+        /// Resolves the builder method call string for a non-terminal element.
+        /// </summary>
+        private string ResolveBuilderCall(IClass umlClass, NonTerminalElement nonTerminalElement, string typeTarget, RuleGenerationContext ruleGenerationContext)
+        {
+            if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
+            {
+                return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+            }
+
+            var targetType = RuleQueryUtilities.FindNamedElement(umlClass.Cache, typeTarget);
+
+            if (targetType is IClass targetClass)
+            {
+                if (umlClass.QueryAllGeneralClassifiers().Contains(targetClass))
+                {
+                    return $"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+                }
+
+                return null;
+            }
+
+            return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+        }
+
+        /// <summary>
+        /// Generates an inline condition expression for an optional non-terminal reference.
+        /// </summary>
+        private string GenerateInlineOptionalCondition(TextualNotationRule referencedRule, IClass targetClass, IReadOnlyList<TextualNotationRule> allRules, string variableName)
+        {
+            var propertyNames = referencedRule.QueryAllReferencedPropertyNames(allRules);
+
+            if (propertyNames.Count == 0)
+            {
+                return null;
+            }
+
+            var allProperties = targetClass.QueryAllProperties();
+            var conditionParts = new List<string>();
+
+            foreach (var propertyName in propertyNames)
+            {
+                var property = allProperties.FirstOrDefault(x => string.Equals(x.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+
+                if (property == null)
+                {
+                    continue;
+                }
+
+                var umlPropertyName = property.QueryPropertyNameBasedOnUmlProperties();
+
+                if (property.QueryIsEnumerable())
+                {
+                    conditionParts.Add($"{variableName}.{umlPropertyName}.Count != 0");
+                }
+                else
+                {
+                    conditionParts.Add(property.QueryIfStatementContentForNonEmpty(variableName));
+                }
+            }
+
+            return conditionParts.Count != 0 ? string.Join(" || ", conditionParts) : null;
+        }
+
+        /// <summary>
+        /// Emits an optional condition wrapping block for an optional NonTerminal element.
+        /// </summary>
+        private bool TryEmitOptionalCondition(EncodedTextWriter writer, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext, string variableName)
+        {
+            if (!nonTerminalElement.IsOptional || nonTerminalElement.IsCollection)
+            {
+                return false;
+            }
+
+            if (referencedRule == null)
+            {
+                return false;
+            }
+
+            var condition = GenerateInlineOptionalCondition(referencedRule, targetClass, ruleGenerationContext.AllRules, variableName);
+
+            if (condition == null)
+            {
+                return false;
+            }
+
+            writer.WriteSafeString($"{Environment.NewLine}if ({condition}){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            return true;
         }
     }
 }

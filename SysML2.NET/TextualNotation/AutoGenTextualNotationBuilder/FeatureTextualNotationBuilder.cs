@@ -662,6 +662,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append(' ');
 
 
+
         }
 
         /// <summary>
