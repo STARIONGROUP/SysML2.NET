@@ -107,6 +107,7 @@ namespace SysML2.NET.Tests.TextualNotation
                 Assert.That(textualNotation, Does.Contain("library"));
                 Assert.That(textualNotation, Does.Contain("package"));
                 Assert.That(textualNotation, Does.Contain("Quantities"));
+                Assert.That(textualNotation, Does.Contain("private import ScalarValues::NumericalValue"));
             });
         }
     }
