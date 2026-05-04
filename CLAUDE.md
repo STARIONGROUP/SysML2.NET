@@ -77,6 +77,18 @@ Generator classes in `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerator
 - Extension methods (Extend) → `SysML2.NET/Extend/`
 - DAL factories → `SysML2.NET.Dal/Core/`
 
+### Formal specification references
+
+The XMI files (`Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml`) define the **structure** of the metamodel and the OCL constraints. The KEBNF files (`Resources/SysML-textual-bnf.kebnf`, `Resources/KerML-textual-bnf.kebnf`) define the **concrete textual syntax**. Neither narrates the *semantics* or *intent* of a metaclass, the rationale behind an OCL constraint, the contract of the REST API, or the idiomatic use of a notation construct. For that, this repo carries the formal OMG specification texts (PDF→text) under `Resources/specification/`. Treat them as cross-references — not as a generation input.
+
+- `Resources/specification/1-Kernel_Modeling_Language.pdf.txt` — *Kernel Modeling Language (KerML) Version 1.0* (OMG formal/2026-03-01). Consult when working with metaclasses in the `Root.*`, `Core.*`, and `Kernel.*` namespaces (under `SysML2.NET/Core/AutoGenDto/` and `AutoGenPoco/`), when an OCL constraint is unclear, or when reasoning about element/relationship/feature/classification semantics that the XMI does not spell out.
+- `Resources/specification/2a-OMG_Systems_Modeling_Language.pdf.txt` — *OMG Systems Modeling Language (SysML) Version 2.0, Part 1: Language Specification* (OMG formal/2026-03-02). Consult when working with the systems-engineering-specific metaclasses in `Systems.*` namespaces — Parts, Ports, Connections, Interfaces, Actions, States, Interactions, Requirements, Constraints, Use Cases, Analysis/Verification Cases, Views, Metadata — and to ground the Definition/Usage pattern.
+- `Resources/specification/3-Systems_Modeling_API_and_Services.pdf.txt` — *Systems Modeling API and Services Version 1.0* (OMG formal/2026-03-04). Consult when working in `SysML2.NET.REST/`, `SysML2.NET/PIM/`, `SysML2.NET.Serializer.Dictionary/`, or `SysML2.NET/ModelInterchange/`. Defines the Platform-Independent Model (ProjectService, ElementNavigationService, ProjectDataVersioningService, QueryService, ExternalRelationshipService, ProjectUsageService) and the REST/HTTP and OSLC PSMs.
+- `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt` — SST tutorial, Release 2026-03. Informative companion to the KEBNF grammar; consult for canonical examples and idioms when implementing or reviewing rules under `SysML2.NET/TextualNotation/` and `SysML2.NET/LexicalRules/`.
+- `Resources/specification/Intro to the SysML v2 Language-Graphical Notation.pdf.txt` — SST tutorial, Release 2026-03. Consult when working on `SysML2.NET.Viewer/` (Blazor) for the visual-rendering conventions of each metaclass family.
+
+These text files are large (PDF-converted, up to 1.3 MB) and the conversion is not always clean. Read them with `Read` `offset`/`limit` and use `Grep` to jump to chapter/section anchors (e.g. `^7\.\d+`, `Clause 8\.`, or a metaclass name) rather than loading whole files into context.
+
 ### Project Dependency Graph
 
 ```
