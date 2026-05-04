@@ -1,0 +1,122 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="PortUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.TextualNotation
+{
+    using System.Linq;
+    using System.Text;
+
+    using SysML2.NET.Core.POCO.Root.Elements;
+
+    /// <summary>
+    /// The <see cref="PortUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> element
+    /// </summary>
+    public static partial class PortUsageTextualNotationBuilder
+    {
+        /// <summary>
+        /// Builds the Textual Notation string for the rule DefaultInterfaceEnd
+        /// <para>DefaultInterfaceEnd:PortUsage=isEnd?='end'Usage</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDefaultInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            if (poco.IsEnd)
+            {
+                stringBuilder.Append(" end ");
+            }
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule InterfaceEnd
+        /// <para>InterfaceEnd:PortUsage=(ownedRelationship+=OwnedCrossMultiplicityMember)?(declaredName=NAMEREFERENCES)?ownedRelationship+=OwnedReferenceSubsetting</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
+                    {
+                        OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                    }
+                }
+                ownedRelationshipCursor.Move();
+
+                stringBuilder.Append(' ');
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
+            {
+                stringBuilder.Append(poco.DeclaredName);
+                stringBuilder.Append(" ::> ");
+                stringBuilder.Append(' ');
+            }
+
+
+            if (ownedRelationshipCursor.Current != null)
+            {
+
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                }
+            }
+            ownedRelationshipCursor.Move();
+
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PortUsage
+        /// <para>PortUsage=OccurrenceUsagePrefix'port'Usage</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> from which the rule should be build</param>
+        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPortUsage(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        {
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            stringBuilder.Append("port ");
+            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -35,6 +35,29 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 
 - favour duplicated code in codegeneration to have staticaly defined methods that provide performance over reflection based code.
 - code generation is done by processing the UML model and creating handlebars templates
+- **When working on the grammar/textual notation code generator** (`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and related grammar processing): read `SysML2.NET.CodeGenerator/GRAMMAR.md` for the KEBNF grammar model, cursor/builder conventions, and code-gen patterns already handled.
+
+### Textual notation reviewer is MANDATORY
+
+**Every code change touching any of the following paths MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing:**
+
+- Every file under `SysML2.NET/TextualNotation/` — both hand-coded partials (`*.cs`), the generated `AutoGenTextualNotationBuilder/*.cs`, `IsValidFor` guard extensions (`TextualNotationValidationExtensions.cs`), and any membership / string / cursor helpers that sit beside them.
+- Every file under `SysML2.NET/LexicalRules/` — both hand-coded members and the generated `AutoGenLexicalRules/*.cs` (`Keywords`, `SymbolicKeywordKind`, `SymbolicKeywordKindExtensions`).
+- `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and any Handlebars template under `SysML2.NET.CodeGenerator/Templates/Uml/` that emits textual-notation or lexical-rules code.
+
+**The KEBNF grammar context applies to ALL of these locations** — not just the generator. When implementing or reviewing hand-coded methods in `SysML2.NET/TextualNotation/`, the author and the reviewer must re-ground in:
+- `SysML2.NET.CodeGenerator/GRAMMAR.md` — the cursor / builder conventions and patterns
+- `Resources/SysML-textual-bnf.kebnf` and `Resources/KerML-textual-bnf.kebnf` — the grammar source of truth
+- The rule's `<para>{…}</para>` XML doc on the generated sibling method (if the method is a HandCoded companion)
+
+The agent is defined at `.claude/agents/textual-notation-reviewer.md`. Invoke it with the rule(s) being implemented, the KEBNF text, and the file paths to review. It enforces:
+- the `Move()` ↔ `+=` Golden Rule (cursor advances only on `+=` consumption; direct `cursor.Move()` calls are forbidden after any callee that already advances the cursor internally)
+- EBNF quantifier semantics (`?` = 0..1 → single `if`; `*` = 0+ → `while` loop; `+` = 1+ → emit-once then loop)
+- correct runtime type discriminators (e.g. `ISpecialization` IS the cursor element, not wrapped in `IOwningMembership`)
+- absence of greedy-builder pitfalls that silently drop interleaved elements
+- consistency between the hand-coded method and the grammar rule it implements (name, target type, element order, alternatives)
+
+Reason this is mandatory: reviewer passes have caught real grammar-correctness bugs (wrong discriminator, silent element drop, missing `*` loop, spurious double-`Move()` in `FeatureSpecialization*` loops) that would have shipped broken textual notation without failing any existing test.
 
 ### Code Generation Pipeline
 
@@ -118,3 +141,5 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 - Prefer switch expressions/statements over if-else chains when applicable
 - Prefer indexer syntax (e.g., 'list[^1]') and range syntax (e.g., 'array[1..^1]') over LINQ methods (e.g., 'list.Last()', 'list.Skip(1).Take(n)') when applicable
 - Use meaningful variable names instead of single-letter names in any context (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c', 'element' instead of 'e')
+- Use 'NotSupportedException' (not 'NotImplementedException') for placeholder/stub methods that require manual implementation
+- Prefer C# property patterns ('x is IType { Prop: value }') over declared-variable-plus-predicate form ('x is IType name && name.Prop == value') when the narrowed variable is only consulted once; the property-pattern form is more concise and intent-revealing

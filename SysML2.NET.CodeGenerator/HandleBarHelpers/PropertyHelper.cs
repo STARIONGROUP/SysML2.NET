@@ -103,11 +103,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                 }
 
-                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var propertyName = property.Name.CapitalizeFirstLetter();
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
+                    propertyName = propertyName.LowerCaseFirstLetter();
                 }
 
                 sb.Append(propertyName);
@@ -136,7 +136,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var classContext = (parameters[1] as IClass)!;
 
                 var sb = new StringBuilder();
-                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var propertyName = property.Name.CapitalizeFirstLetter();
                 var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var redefiningProperty);
 
                 if (!isRedefinedPropertyInContext)
@@ -186,7 +186,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
+                    propertyName = propertyName.LowerCaseFirstLetter();
                 }
 
                 if (isRedefinedPropertyInContext)
@@ -269,7 +269,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else if (property.QueryIsEnumPropertyWithDefaultValue())
                     {
-                        sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
+                        sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
                     }
                 }
 
@@ -319,11 +319,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                 }
 
-                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var propertyName = property.Name.CapitalizeFirstLetter();
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
+                    propertyName = propertyName.LowerCaseFirstLetter();
                 }
 
                 sb.Append(propertyName);
@@ -361,7 +361,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var redefiningProperty);
                 var typeName = property.QueryCSharpTypeName();
 
-                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var propertyName = property.Name.CapitalizeFirstLetter();
 
                 if (!isRedefinedPropertyInContext)
                 {
@@ -399,7 +399,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
+                    propertyName = propertyName.LowerCaseFirstLetter();
                 }
 
                 if (isRedefinedPropertyInContext)
@@ -425,7 +425,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        sb.Append($"=> this.Compute{StringExtensions.CapitalizeFirstLetter(property.Name)}();");
+                        sb.Append($"=> this.Compute{property.Name.CapitalizeFirstLetter()}();");
                     }
                 }
                 else if (property.IsReadOnly)
@@ -497,7 +497,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else if (property.QueryIsEnumPropertyWithDefaultValue())
                     {
-                        sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
+                        sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
                     }
                 }
 
@@ -564,9 +564,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         if (property.QueryIsNullable())
                         {
-                            sb.AppendLine($"if (dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.HasValue)");
+                            sb.AppendLine($"if (dto.{property.Name.CapitalizeFirstLetter()}.HasValue)");
                             sb.AppendLine("{");
-                            sb.AppendLine($"    var {property.Name}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes(dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Value);");
+                            sb.AppendLine($"    var {property.Name}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes(dto.{property.Name.CapitalizeFirstLetter()}.Value);");
                             sb.AppendLine($"    writer.WriteString({property.Name}Bytes);");
                             sb.AppendLine("}");
                             sb.AppendLine("else");
@@ -576,50 +576,50 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else
                         {
-                            sb.AppendLine($"    var {property.Name}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes(dto.{StringExtensions.CapitalizeFirstLetter(property.Name)});");
+                            sb.AppendLine($"    var {property.Name}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes(dto.{property.Name.CapitalizeFirstLetter()});");
                             sb.AppendLine($"    writer.WriteString({property.Name}Bytes);");
                         }
                     }
                     else if (property.QueryIsEnumerable())
                     {
-                        sb.AppendLine($"writer.WriteArrayHeader(dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Count);");
-                        sb.AppendLine($"for (var i = 0; i < dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Count; i++)");
+                        sb.AppendLine($"writer.WriteArrayHeader(dto.{property.Name.CapitalizeFirstLetter()}.Count);");
+                        sb.AppendLine($"for (var i = 0; i < dto.{property.Name.CapitalizeFirstLetter()}.Count; i++)");
                         sb.AppendLine("{");
-                        sb.AppendLine($"writer.Write(dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}[i]);");
+                        sb.AppendLine($"writer.Write(dto.{property.Name.CapitalizeFirstLetter()}[i]);");
                         sb.AppendLine("}");
                     }
                     else
                     {
-                        sb.AppendLine($"writer.Write(dto.{StringExtensions.CapitalizeFirstLetter(property.Name)});");
+                        sb.AppendLine($"writer.Write(dto.{property.Name.CapitalizeFirstLetter()});");
                     }
                 }
                 else if (property.QueryIsReferenceType())
                 {
                     if (property.QueryIsEnumerable())
                     {
-                        sb.AppendLine($"var {StringExtensions.LowerCaseFirstLetter(property.Name)} = dto.{StringExtensions.CapitalizeFirstLetter(property.Name)};");
+                        sb.AppendLine($"var {property.Name.LowerCaseFirstLetter()} = dto.{property.Name.CapitalizeFirstLetter()};");
 
                         // when properties are not ordered, they are serialized ordered by GUID
                         if (!property.IsOrdered)
                         {
-                            sb.AppendLine($"if ({StringExtensions.LowerCaseFirstLetter(property.Name)}.Count > 1)");
+                            sb.AppendLine($"if ({property.Name.LowerCaseFirstLetter()}.Count > 1)");
                             sb.AppendLine("{");
-                            sb.AppendLine($"{StringExtensions.LowerCaseFirstLetter(property.Name)}.Sort(GuidComparer);");
+                            sb.AppendLine($"{property.Name.LowerCaseFirstLetter()}.Sort(GuidComparer);");
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
 
-                        sb.AppendLine($"writer.WriteArrayHeader({StringExtensions.LowerCaseFirstLetter(property.Name)}.Count);");
-                        sb.AppendLine($"for (var i = 0; i < {StringExtensions.LowerCaseFirstLetter(property.Name)}.Count; i++)");
+                        sb.AppendLine($"writer.WriteArrayHeader({property.Name.LowerCaseFirstLetter()}.Count);");
+                        sb.AppendLine($"for (var i = 0; i < {property.Name.LowerCaseFirstLetter()}.Count; i++)");
                         sb.AppendLine("{");
-                        sb.AppendLine($"WriteGuidBin16(ref writer, {StringExtensions.LowerCaseFirstLetter(property.Name)}[i]);");
+                        sb.AppendLine($"WriteGuidBin16(ref writer, {property.Name.LowerCaseFirstLetter()}[i]);");
                         sb.AppendLine("}");
                     }
                     else if (property.QueryIsNullable())
                     {
-                        sb.AppendLine($"if (dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.HasValue)");
+                        sb.AppendLine($"if (dto.{property.Name.CapitalizeFirstLetter()}.HasValue)");
                         sb.AppendLine("{");
-                        sb.AppendLine($"WriteGuidBin16(ref writer, dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Value);");
+                        sb.AppendLine($"WriteGuidBin16(ref writer, dto.{property.Name.CapitalizeFirstLetter()}.Value);");
                         sb.AppendLine("}");
                         sb.AppendLine("else");
                         sb.AppendLine("{");
@@ -628,7 +628,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        sb.AppendLine($"WriteGuidBin16(ref writer, dto.{StringExtensions.CapitalizeFirstLetter(property.Name)});");
+                        sb.AppendLine($"WriteGuidBin16(ref writer, dto.{property.Name.CapitalizeFirstLetter()});");
                     }
                 }
 
@@ -679,41 +679,41 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             sb.AppendLine($"if (!{property.Name}Sequence.HasValue)");
                             sb.AppendLine("{");
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = null;");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = null;");
                             sb.AppendLine("}");
                             sb.AppendLine("else");
                             sb.AppendLine("{");
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = {property.QueryTypeName()}Provider.Parse({property.Name}Sequence.Value);");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = {property.QueryTypeName()}Provider.Parse({property.Name}Sequence.Value);");
                             sb.AppendLine("}");
                         }
                         else
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = {property.QueryTypeName()}Provider.Parse({property.Name}Sequence.Value);");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = {property.QueryTypeName()}Provider.Parse({property.Name}Sequence.Value);");
                         }
                     }
                     else if (property.QueryIsEnumerable())
                     {
                         sb.AppendLine("valueLength = reader.ReadArrayHeader();");
-                        sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Capacity = valueLength;");
+                        sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Capacity = valueLength;");
                         sb.AppendLine("for (valueCounter = 0; valueCounter < valueLength; valueCounter++)");
                         sb.AppendLine("{");
 
                         if (property.QueryIsBool())
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Add(reader.ReadBoolean());");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadBoolean());");
                         }
                         else if (property.QueryCSharpTypeName() == "DateTime")
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Add(reader.ReadDateTime());");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadDateTime());");
                         }
                         else if (property.QueryIsString())
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Add(reader.ReadString());");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadString());");
                         }
                         else if (property.QueryIsNumeric())
                         {
 
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Add(reader.ReadInt32());");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadInt32());");
                         }
 
                         sb.Append("}");
@@ -722,19 +722,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         if (property.QueryIsBool())
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = reader.ReadBoolean();");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadBoolean();");
                         }
                         else if (property.QueryCSharpTypeName() == "DateTime")
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = reader.ReadDateTime();");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadDateTime();");
                         }
                         else if (property.QueryIsString())
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = reader.ReadString();");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadString();");
                         }
                         else if (property.QueryIsNumeric())
                         {
-                            sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = reader.ReadInt32();");
+                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadInt32();");
                         }
                     }
                 }
@@ -743,26 +743,26 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsEnumerable())
                     {
                         sb.AppendLine("valueLength = reader.ReadArrayHeader();");
-                        sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Capacity = valueLength;");
+                        sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Capacity = valueLength;");
                         sb.AppendLine("for (valueCounter = 0; valueCounter < valueLength; valueCounter++)");
                         sb.AppendLine("{");
-                        sb.AppendLine($"    dto.{StringExtensions.CapitalizeFirstLetter(property.Name)}.Add(ReadGuidBin16(ref reader));");
+                        sb.AppendLine($"    dto.{property.Name.CapitalizeFirstLetter()}.Add(ReadGuidBin16(ref reader));");
                         sb.AppendLine("}");
                     }
                     else if (property.QueryIsNullable())
                     {
                         sb.AppendLine("if (reader.TryReadNil())");
                         sb.AppendLine("{");
-                        sb.AppendLine($"    dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = null;");
+                        sb.AppendLine($"    dto.{property.Name.CapitalizeFirstLetter()} = null;");
                         sb.AppendLine("}");
                         sb.AppendLine("else");
                         sb.AppendLine("{");
-                        sb.AppendLine($"    dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = ReadGuidBin16(ref reader);");
+                        sb.AppendLine($"    dto.{property.Name.CapitalizeFirstLetter()} = ReadGuidBin16(ref reader);");
                         sb.AppendLine("}");
                     }
                     else
                     {
-                        sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = ReadGuidBin16(ref reader);");
+                        sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = ReadGuidBin16(ref reader);");
                     }
                 }
 
@@ -812,7 +812,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var classContext = (parameters[1] as IClass)!;
 
                 var sb = new StringBuilder();
-                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var propertyName = property.Name.CapitalizeFirstLetter();
                 var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var _);
 
                 if (isRedefinedPropertyInContext)
@@ -993,7 +993,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var variableName = arguments[2].ToString();
-                var propertyName = property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
+                var propertyName = property.IsDerived || property.IsDerivedUnion ? property.Name.LowerCaseFirstLetter() : property.Name.CapitalizeFirstLetter();
 
                 if (property.TryQueryRedefinedByProperty(generatedClass, out var redefinitionProperty) && redefinitionProperty.Name == property.Name)
                 {

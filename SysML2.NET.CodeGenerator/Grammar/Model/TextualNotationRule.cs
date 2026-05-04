@@ -1,0 +1,281 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="TextualNotationRule.cs" company="Starion Group S.A.">
+// 
+//   Copyright 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+// 
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.CodeGenerator.Grammar.Model
+{
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// Describe the content of a rule 
+    /// </summary>
+    public class TextualNotationRule
+    {
+        /// <summary>
+        /// Get or set rule's name
+        /// </summary>
+        public string RuleName { get; set; }
+
+        /// <summary>
+        /// Gets or set the name of the KerML Element that the rule target
+        /// </summary>
+        public string TargetElementName { get; set; }
+
+        /// <summary>
+        /// Gets the effective target name for this rule: <see cref="TargetElementName" /> when
+        /// explicitly declared, or <see cref="RuleName" /> as a fallback.
+        /// </summary>
+        public string EffectiveTarget => this.TargetElementName ?? this.RuleName;
+        
+        /// <summary>
+        /// Gets or set an optional <see cref="RuleParameter"/> 
+        /// </summary>
+        public RuleParameter Parameter { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the raw string that declares the rule
+        /// </summary>
+        public string RawRule { get; set; }
+
+        /// <summary>
+        /// Gets or the collection of <see cref="Alternatives"/> defined by the rule
+        /// </summary>
+        public List<Alternatives> Alternatives { get; } = [];
+        
+        /// <summary>
+        /// Asserts that the current Rule acts has a dispatcher or not. A dispatcher needs to have index access to access element into a collection.
+        /// </summary>
+        public bool IsDispatcherRule => this.ComputeIsDispatcherRule();
+
+        /// <summary>
+        /// Asserts that the rule described assignment of multiple collection
+        /// </summary>
+        public bool IsMultiCollectionAssignment => this.ComputeIsMultiCollectionAssigment();
+
+        /// <summary>
+        /// Gets names of property that a multicollection assignment defines
+        /// </summary>
+        /// <returns>The collection of property names</returns>
+        public IReadOnlyCollection<string> QueryMultiCollectionPropertiesName()
+        {
+            if (!this.IsMultiCollectionAssignment)
+            {
+                return Enumerable.Empty<string>().ToList();
+            }
+            
+            var assignments = this.Alternatives.SelectMany(x => x.Elements).OfType<AssignmentElement>();
+            return assignments.Where(x => x.Operator == "+=").DistinctBy(x => x.Property).Select(x => x.Property).ToList();
+        }
+
+        /// <summary>
+        /// Computes the value of the <see cref="IsMultiCollectionAssignment"/> 
+        /// </summary>
+        /// <returns>The result of the assertion computation</returns>
+        private bool ComputeIsMultiCollectionAssigment()
+        {
+            if (this.Alternatives.Count == 1)
+            {
+                return false;
+            }
+
+            var assignments = this.Alternatives.SelectMany(x => x.Elements).OfType<AssignmentElement>();
+            return assignments.Where(x => x.Operator == "+=").DistinctBy(x => x.Property).Count() > 1;
+        }
+
+        /// <summary>
+        /// Computes the assertion that the <see cref="TextualNotationRule"/> is a dispatcher or not
+        /// </summary>
+        /// <returns>The result of the assertion computation</returns>
+        private bool ComputeIsDispatcherRule()
+        {
+            return this.Alternatives.Count > 1 && this.Alternatives.Any(x => x.Elements.OfType<AssignmentElement>().Any(a => a.Operator == "+="))
+                   || this.Alternatives.Count == 1 && this.Alternatives[0].Elements.Count == 1 && this.Alternatives[0].Elements[0] is AssignmentElement { Operator: "+="};
+        }
+
+        /// <summary>
+        /// Gets the <see cref="AssignmentElement"/> that requires a dispatcher
+        /// </summary>
+        /// <returns>The <see cref="AssignmentElement"/></returns>
+        public AssignmentElement GetAssignmentElementNeedingDispatcher()
+        {
+            if (!this.IsDispatcherRule)
+            {
+                return null;
+            }
+
+            if (this.Alternatives.Count == 1)
+            {
+                return this.Alternatives[0].Elements[0] as AssignmentElement;
+            }
+
+            return this.Alternatives.SelectMany(x => x.Elements).OfType<AssignmentElement>().FirstOrDefault(x => x.Operator == "+=");
+        }
+
+        /// <summary>
+        /// Recursively resolves the collection property names (properties used with the <c>+=</c> operator)
+        /// that this rule and any referenced NonTerminal rules ultimately consume.
+        /// </summary>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>A distinct set of collection property names (e.g., <c>{"ownedRelationship"}</c>)</returns>
+        public IReadOnlyCollection<string> QueryCollectionPropertyNames(IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var result = new HashSet<string>();
+            var visited = new HashSet<string>();
+            CollectCollectionPropertyNames(this, allRules, result, visited);
+            return result;
+        }
+
+        /// <summary>
+        /// Recursively collects collection property names from a rule and its referenced NonTerminal rules
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectCollectionPropertyNames(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            if (!visited.Add(rule.RuleName))
+            {
+                return;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectCollectionPropertyNamesFromElements(alternative.Elements, allRules, result, visited);
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects collection property names from a list of <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="elements">The elements to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectCollectionPropertyNamesFromElements(IEnumerable<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement { Operator: "+=" } assignmentElement:
+                        result.Add(assignmentElement.Property);
+                        break;
+                    case NonTerminalElement nonTerminalElement:
+                        var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+                        if (referencedRule != null)
+                        {
+                            CollectCollectionPropertyNames(referencedRule, allRules, result, visited);
+                        }
+
+                        break;
+                    case GroupElement groupElement:
+                        foreach (var groupAlternative in groupElement.Alternatives)
+                        {
+                            CollectCollectionPropertyNamesFromElements(groupAlternative.Elements, allRules, result, visited);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recursively resolves all property names (both scalar <c>=</c> and collection <c>+=</c> assignments)
+        /// that this rule and any referenced NonTerminal rules consume.
+        /// </summary>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>A distinct set of property names referenced by this rule tree</returns>
+        public IReadOnlyCollection<string> QueryAllReferencedPropertyNames(IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var result = new HashSet<string>();
+            var visited = new HashSet<string>();
+            CollectAllReferencedPropertyNames(this, allRules, result, visited);
+            return result;
+        }
+
+        /// <summary>
+        /// Recursively collects all property names from a rule and its referenced NonTerminal rules
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectAllReferencedPropertyNames(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            if (!visited.Add(rule.RuleName))
+            {
+                return;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectAllReferencedPropertyNamesFromElements(alternative.Elements, allRules, result, visited);
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects all property names from a list of <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="elements">The elements to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated set of property names</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectAllReferencedPropertyNamesFromElements(IEnumerable<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> result, HashSet<string> visited)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement assignmentElement:
+                        result.Add(assignmentElement.Property);
+
+                        if (assignmentElement.Value is NonTerminalElement valueNonTerminal)
+                        {
+                            var valueRule = allRules.SingleOrDefault(x => x.RuleName == valueNonTerminal.Name);
+
+                            if (valueRule != null)
+                            {
+                                CollectAllReferencedPropertyNames(valueRule, allRules, result, visited);
+                            }
+                        }
+
+                        break;
+                    case NonTerminalElement nonTerminalElement:
+                        var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+
+                        if (referencedRule != null)
+                        {
+                            CollectAllReferencedPropertyNames(referencedRule, allRules, result, visited);
+                        }
+
+                        break;
+                    case GroupElement groupElement:
+                        foreach (var groupAlternative in groupElement.Alternatives)
+                        {
+                            CollectAllReferencedPropertyNamesFromElements(groupAlternative.Elements, allRules, result, visited);
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+}
