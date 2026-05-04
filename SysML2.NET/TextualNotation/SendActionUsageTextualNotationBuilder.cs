@@ -42,26 +42,26 @@ namespace SysML2.NET.TextualNotation
         /// otherwise → Alt 1 (NodeParameterMember + optional SenderReceiverPart).</para>
         /// </summary>
         /// <param name="poco">The <see cref="ISendActionUsage" /> being serialised</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSendNodeHandCoded(ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildSendNodeHandCoded(ISendActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is IParameterMembership { OwnedRelatedElement.Count: 0 } emptyMembership)
             {
-                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyMembership, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyMembership, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
-                BuildSenderReceiverPart(poco, cursorCache, stringBuilder);
+                BuildSenderReceiverPart(poco, writerContext, stringBuilder);
             }
             else if (ownedRelationshipCursor.Current is IParameterMembership nodeMembership)
             {
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(nodeMembership, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(nodeMembership, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 if (ownedRelationshipCursor.Current is IParameterMembership)
                 {
-                    BuildSenderReceiverPart(poco, cursorCache, stringBuilder);
+                    BuildSenderReceiverPart(poco, writerContext, stringBuilder);
                 }
             }
         }
@@ -78,23 +78,23 @@ namespace SysML2.NET.TextualNotation
         /// elements from the shared cursor.</para>
         /// </summary>
         /// <param name="poco">The <see cref="ISendActionUsage" /> being serialised</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSenderReceiverPartHandCoded(ISendActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildSenderReceiverPartHandCoded(ISendActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is IParameterMembership { OwnedRelatedElement.Count: 0 } emptyMembership)
             {
                 // Alt 2: EmptyParameterMember 'to' NodeParameterMember
-                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyMembership, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyMembership, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 stringBuilder.Append("to ");
 
                 if (ownedRelationshipCursor.Current is IParameterMembership toMembership)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(toMembership, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(toMembership, writerContext, stringBuilder);
                 }
 
                 ownedRelationshipCursor.Move();
@@ -103,13 +103,13 @@ namespace SysML2.NET.TextualNotation
             {
                 // Alt 1: 'via' NodeParameterMember ('to' NodeParameterMember)?
                 stringBuilder.Append("via ");
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(viaMembership, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(viaMembership, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 if (ownedRelationshipCursor.Current is IParameterMembership toMembership)
                 {
                     stringBuilder.Append("to ");
-                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(toMembership, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(toMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
             }

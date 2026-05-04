@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedFeatureTyping:FeatureTyping=type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.Type) && poco.Type is SysML2.NET.Core.POCO.Core.Features.IFeature chainedTypeAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedTypeAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedTypeAsFeature, writerContext, stringBuilder);
             }
             else if (poco.Type != null)
             {
-                stringBuilder.Append(poco.Type.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Type, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -60,14 +60,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>ReferenceTyping:FeatureTyping=type=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildReferenceTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildReferenceTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.Type != null)
             {
-                stringBuilder.Append(poco.Type.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Type, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -78,17 +78,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>FeatureTyping=OwnedFeatureTyping|ConjugatedPortTyping</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping pocoConjugatedPortTyping:
-                    ConjugatedPortTypingTextualNotationBuilder.BuildConjugatedPortTyping(pocoConjugatedPortTyping, cursorCache, stringBuilder);
+                    ConjugatedPortTypingTextualNotationBuilder.BuildConjugatedPortTyping(pocoConjugatedPortTyping, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildOwnedFeatureTyping(poco, cursorCache, stringBuilder);
+                    BuildOwnedFeatureTyping(poco, writerContext, stringBuilder);
                     break;
             }
 

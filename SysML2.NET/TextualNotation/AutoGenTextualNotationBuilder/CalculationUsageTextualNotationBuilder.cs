@@ -39,14 +39,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>CalculationUsage:CalculationUsage=OccurrenceUsagePrefix'calc'ActionUsageDeclarationCalculationBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCalculationUsage(SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildCalculationUsage(SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("calc ");
-            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildCalculationBody(poco, cursorCache, stringBuilder);
+            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, writerContext, stringBuilder);
 
         }
     }

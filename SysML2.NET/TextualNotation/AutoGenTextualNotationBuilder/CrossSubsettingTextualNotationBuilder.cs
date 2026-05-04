@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedCrossSubsetting:CrossSubsetting=crossedFeature=[QualifiedName]|crossedFeature=OwnedFeatureChain{ownedRelatedElement+=crossedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedCrossSubsetting(SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedCrossSubsetting(SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.CrossedFeature) && poco.CrossedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedCrossedFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedCrossedFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedCrossedFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.CrossedFeature != null)
             {
-                stringBuilder.Append(poco.CrossedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.CrossedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 

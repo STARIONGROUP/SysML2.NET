@@ -39,18 +39,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataReference:MetadataAccessExpression=ownedRelationship+=ElementReferenceMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataReference(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMetadataReference(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
                 {
-                    MembershipTextualNotationBuilder.BuildElementReferenceMember(elementAsMembership, cursorCache, stringBuilder);
+                    MembershipTextualNotationBuilder.BuildElementReferenceMember(elementAsMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -63,18 +63,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataAccessExpression=ownedRelationship+=ElementReferenceMember'.''metadata'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataAccessExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMetadataAccessExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
                 {
-                    MembershipTextualNotationBuilder.BuildElementReferenceMember(elementAsMembership, cursorCache, stringBuilder);
+                    MembershipTextualNotationBuilder.BuildElementReferenceMember(elementAsMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();

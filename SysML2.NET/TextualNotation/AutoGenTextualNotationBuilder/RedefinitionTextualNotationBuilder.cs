@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedRedefinition:Redefinition=redefinedFeature=[QualifiedName]|redefinedFeature=OwnedFeatureChain{ownedRelatedElement+=redefinedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.RedefinedFeature) && poco.RedefinedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedRedefinedFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedRedefinedFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedRedefinedFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.RedefinedFeature != null)
             {
-                stringBuilder.Append(poco.RedefinedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -60,14 +60,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowFeatureRedefinition:Redefinition=redefinedFeature=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowFeatureRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowFeatureRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.RedefinedFeature != null)
             {
-                stringBuilder.Append(poco.RedefinedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -78,14 +78,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>ParameterRedefinition:Redefinition=redefinedFeature=[QualifiedName]</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildParameterRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildParameterRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.RedefinedFeature != null)
             {
-                stringBuilder.Append(poco.RedefinedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -96,23 +96,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>Redefinition=('specialization'Identification)?'redefinition'SpecificTypeREDEFINESGeneralTypeRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("redefinition ");
-            SpecializationTextualNotationBuilder.BuildSpecificType(poco, cursorCache, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildSpecificType(poco, writerContext, stringBuilder);
             stringBuilder.Append(" :>> ");
-            SpecializationTextualNotationBuilder.BuildGeneralType(poco, cursorCache, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildGeneralType(poco, writerContext, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

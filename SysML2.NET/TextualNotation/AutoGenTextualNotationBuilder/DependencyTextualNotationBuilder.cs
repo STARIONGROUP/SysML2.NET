@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>Dependency=(ownedRelationship+=PrefixMetadataAnnotation)*'dependency'DependencyDeclarationRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Dependencies.IDependency" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
             {
@@ -53,15 +53,15 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
                     {
-                        AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                        AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(elementAsAnnotation, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
 
             }
             stringBuilder.Append("dependency ");
-            SharedTextualNotationBuilder.BuildDependencyDeclaration(poco, cursorCache, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            SharedTextualNotationBuilder.BuildDependencyDeclaration(poco, writerContext, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

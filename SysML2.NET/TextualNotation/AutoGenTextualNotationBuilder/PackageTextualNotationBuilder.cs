@@ -39,12 +39,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>PackageDeclaration:Package='package'Identification</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageDeclaration(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPackageDeclaration(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("package ");
-            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
         }
 
@@ -53,11 +53,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>PackageBody:Package=';'|'{'PackageBodyElement*'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageBody(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPackageBody(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            if (cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
                 stringBuilder.AppendLine(";");
             }
@@ -65,10 +65,10 @@ namespace SysML2.NET.TextualNotation
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
-                    BuildPackageBodyElement(poco, cursorCache, stringBuilder);
+                    BuildPackageBodyElement(poco, writerContext, stringBuilder);
                 }
                 stringBuilder.AppendLine("}");
             }
@@ -80,27 +80,27 @@ namespace SysML2.NET.TextualNotation
         /// <para>PackageBodyElement:Package=ownedRelationship+=PackageMember|ownedRelationship+=ElementFilterMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             switch (ownedRelationshipCursor.Current)
             {
                 case SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembership:
-                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, cursorCache, stringBuilder);
+                    ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
-                    OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, cursorCache, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IMembership membership:
-                    MembershipTextualNotationBuilder.BuildAliasMember(membership, cursorCache, stringBuilder);
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
-                    ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                    ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                     break;
                 default:
@@ -115,15 +115,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>FilterPackage:Package=ownedRelationship+=FilterPackageImport(ownedRelationship+=FilterPackageMember)+</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFilterPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFilterPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
-                BuildFilterPackageImport(poco, cursorCache, stringBuilder);
+                BuildFilterPackageImport(poco, writerContext, stringBuilder);
             }
             ownedRelationshipCursor.Move();
 
@@ -136,7 +136,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementAsElementFilterMembership)
                     {
-                        ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(elementAsElementFilterMembership, cursorCache, stringBuilder);
+                        ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(elementAsElementFilterMembership, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
@@ -150,11 +150,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>Package=(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
@@ -164,14 +164,14 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                     {
-                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
 
             }
-            BuildPackageDeclaration(poco, cursorCache, stringBuilder);
-            BuildPackageBody(poco, cursorCache, stringBuilder);
+            BuildPackageDeclaration(poco, writerContext, stringBuilder);
+            BuildPackageBody(poco, writerContext, stringBuilder);
 
         }
     }

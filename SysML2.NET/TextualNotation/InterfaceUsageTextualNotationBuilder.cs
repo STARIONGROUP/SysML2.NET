@@ -36,7 +36,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule InterfaceUsageDeclaration
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// InterfaceUsageDeclaration : InterfaceUsage =
@@ -45,9 +45,9 @@ namespace SysML2.NET.TextualNotation
         ///
         /// Auto-gen delegates entirely to this method.
         /// </remarks>
-        private static void BuildInterfaceUsageDeclarationHandCoded(IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildInterfaceUsageDeclarationHandCoded(IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName)
@@ -57,19 +57,19 @@ namespace SysML2.NET.TextualNotation
             if (hasDeclaration)
             {
                 // Alt 1: UsageDeclaration ValuePart? ('connect' InterfacePart)?
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
 
                 if (poco.OwnedRelationship.OfType<IEndFeatureMembership>().Any())
                 {
                     stringBuilder.Append("connect ");
-                    BuildInterfacePart(poco, cursorCache, stringBuilder);
+                    BuildInterfacePart(poco, writerContext, stringBuilder);
                 }
             }
             else
             {
                 // Alt 2: InterfacePart
-                BuildInterfacePart(poco, cursorCache, stringBuilder);
+                BuildInterfacePart(poco, writerContext, stringBuilder);
             }
         }
     }

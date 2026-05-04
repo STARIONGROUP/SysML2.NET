@@ -37,10 +37,10 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule BasicFeaturePrefix
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>Trailing alternative of BasicFeaturePrefix: (isVariable?='var'|isConstant?='const'{isVariable=true})?. Note: 'const' implies isVariable=true, so check isConstant first.</remarks>
-        private static void BuildBasicFeaturePrefixHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildBasicFeaturePrefixHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.IsConstant)
             {
@@ -56,7 +56,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule FeatureDeclaration
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// FeatureDeclaration : Feature =
@@ -68,32 +68,32 @@ namespace SysML2.NET.TextualNotation
         ///     FeatureRelationshipPart*
         ///
         /// </remarks>
-        private static void BuildFeatureDeclarationHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFeatureDeclarationHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasIdentification = !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName);
 
             if (hasIdentification)
             {
-                BuildFeatureIdentification(poco, cursorCache, stringBuilder);
+                BuildFeatureIdentification(poco, writerContext, stringBuilder);
 
                 if (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecializationPart(poco, writerContext, stringBuilder);
                 }
                 else if (ownedRelationshipCursor.Current is IConjugation)
                 {
-                    TypeTextualNotationBuilder.BuildConjugationPart(poco, cursorCache, stringBuilder);
+                    TypeTextualNotationBuilder.BuildConjugationPart(poco, writerContext, stringBuilder);
                 }
             }
             else if (ownedRelationshipCursor.Current is ISpecialization)
             {
-                BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                BuildFeatureSpecializationPart(poco, writerContext, stringBuilder);
             }
             else if (ownedRelationshipCursor.Current is IConjugation)
             {
-                TypeTextualNotationBuilder.BuildConjugationPart(poco, cursorCache, stringBuilder);
+                TypeTextualNotationBuilder.BuildConjugationPart(poco, writerContext, stringBuilder);
             }
 
             // FeatureRelationshipPart* — zero or more, dispatched by cursor type.
@@ -109,16 +109,16 @@ namespace SysML2.NET.TextualNotation
                 switch (ownedRelationshipCursor.Current)
                 {
                     case IFeatureChaining:
-                        BuildChainingPart(poco, cursorCache, stringBuilder);
+                        BuildChainingPart(poco, writerContext, stringBuilder);
                         break;
                     case IFeatureInverting:
-                        BuildInvertingPart(poco, cursorCache, stringBuilder);
+                        BuildInvertingPart(poco, writerContext, stringBuilder);
                         break;
                     case ITypeFeaturing:
-                        BuildTypeFeaturingPart(poco, cursorCache, stringBuilder);
+                        BuildTypeFeaturingPart(poco, writerContext, stringBuilder);
                         break;
                     default:
-                        TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, cursorCache, stringBuilder);
+                        TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, writerContext, stringBuilder);
                         break;
                 }
             }
@@ -128,7 +128,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule Feature
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// Feature =
@@ -144,7 +144,7 @@ namespace SysML2.NET.TextualNotation
         /// BuildFeatureDeclaration is then called to emit the identification, specialization,
         /// conjugation, and relationship parts.
         /// </remarks>
-        private static void BuildFeatureHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFeatureHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             // Alt 1 uses FeaturePrefix (which handles abstract/variation/readonly/derived/end
             // and PrefixMetadataMember*). It applies when the feature carries modifiers that
@@ -157,15 +157,15 @@ namespace SysML2.NET.TextualNotation
             if (!poco.IsEnd && (poco.IsAbstract || poco.IsDerived || hasPrefixMetadata))
             {
                 // Alt 1: FeaturePrefix ('feature' | ownedRelationship += PrefixMetadataMember) FeatureDeclaration?
-                SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
+                SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
 
-                var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
                 if (ownedRelationshipCursor.Current is IOwningMembership prefixMetadata
                     && prefixMetadata.OwnedRelatedElement.OfType<IMetadataUsage>().Any())
                 {
                     // PrefixMetadataMember alternative — consume a single metadata annotation
-                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(prefixMetadata, cursorCache, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(prefixMetadata, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
                 else
@@ -175,13 +175,13 @@ namespace SysML2.NET.TextualNotation
                 }
 
                 // FeatureDeclaration is optional in Alt 1
-                BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
+                BuildFeatureDeclaration(poco, writerContext, stringBuilder);
             }
             else
             {
                 // Alt 2: (EndFeaturePrefix | BasicFeaturePrefix) FeatureDeclaration
-                SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
-                BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
+                SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
+                BuildFeatureDeclaration(poco, writerContext, stringBuilder);
             }
         }
 
@@ -189,10 +189,10 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule FeatureIdentification
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>FeatureIdentification:Feature='&lt;'declaredShortName=NAME'&gt;'(declaredName=NAME)?|declaredName=NAME</remarks>
-        private static void BuildFeatureIdentificationHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFeatureIdentificationHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
             {
@@ -229,18 +229,18 @@ namespace SysML2.NET.TextualNotation
         /// is present — see the rule's own grammar in <c>BuildMultiplicityPartHandCoded</c>'s remarks.</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildFeatureSpecializationPartHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is ISpecialization)
             {
                 // Alt 1: FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
                 while (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
                 }
 
                 var multiplicityElementPresent = ownedRelationshipCursor.Current is IOwningMembership owningMembership
@@ -248,24 +248,24 @@ namespace SysML2.NET.TextualNotation
 
                 if (multiplicityElementPresent || poco.IsOrdered || !poco.IsUnique)
                 {
-                    BuildMultiplicityPart(poco, cursorCache, stringBuilder);
+                    BuildMultiplicityPart(poco, writerContext, stringBuilder);
                 }
 
                 // Trailing FeatureSpecialization* — runs regardless of whether MultiplicityPart fired,
                 // per the grammar's three-segment shape `FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*`.
                 while (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
                 }
             }
             else
             {
                 // Alt 2: MultiplicityPart FeatureSpecialization*
-                BuildMultiplicityPart(poco, cursorCache, stringBuilder);
+                BuildMultiplicityPart(poco, writerContext, stringBuilder);
 
                 while (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
                 }
             }
         }
@@ -275,17 +275,17 @@ namespace SysML2.NET.TextualNotation
         /// <remarks>MultiplicityPart:Feature=ownedRelationship+=OwnedMultiplicity|(ownedRelationship+=OwnedMultiplicity)?(isOrdered?='ordered'({isUnique=false}'nonunique')?|{isUnique=false}'nonunique'(isOrdered?='ordered')?)</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMultiplicityPartHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildMultiplicityPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             // Emit the OwnedMultiplicity if present (cursor advances on += processing)
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership multiplicityMember
                 && multiplicityMember.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.IMultiplicity>().Any())
             {
-                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, cursorCache, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
             }
 
@@ -306,7 +306,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule PayloadFeature
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// PayloadFeature : Feature =
@@ -314,9 +314,9 @@ namespace SysML2.NET.TextualNotation
         ///   | ownedRelationship += OwnedFeatureTyping ( ownedRelationship += OwnedMultiplicity )?
         ///   | ownedRelationship += OwnedMultiplicity ownedRelationship += OwnedFeatureTyping
         /// </remarks>
-        private static void BuildPayloadFeatureHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildPayloadFeatureHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasIdentification = !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName);
 
@@ -325,28 +325,28 @@ namespace SysML2.NET.TextualNotation
                 // Alt 1: Identification? PayloadFeatureSpecializationPart ValuePart?
                 if (hasIdentification)
                 {
-                    ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                    ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 }
 
                 if (ownedRelationshipCursor.Current is ISpecialization
                     || ownedRelationshipCursor.Current is IOwningMembership multiplicityCheck
                        && multiplicityCheck.OwnedRelatedElement.OfType<IMultiplicity>().Any())
                 {
-                    BuildPayloadFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                    BuildPayloadFeatureSpecializationPart(poco, writerContext, stringBuilder);
                 }
 
-                BuildValuePart(poco, cursorCache, stringBuilder);
+                BuildValuePart(poco, writerContext, stringBuilder);
             }
             else if (ownedRelationshipCursor.Current is IFeatureTyping featureTyping)
             {
                 // Alt 2: OwnedFeatureTyping (OwnedMultiplicity)?
-                FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(featureTyping, cursorCache, stringBuilder);
+                FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(featureTyping, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 if (ownedRelationshipCursor.Current is IOwningMembership owningMembership
                     && owningMembership.OwnedRelatedElement.OfType<IMultiplicity>().Any())
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(owningMembership, cursorCache, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(owningMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
             }
@@ -354,12 +354,12 @@ namespace SysML2.NET.TextualNotation
                      && multiplicityMember.OwnedRelatedElement.OfType<IMultiplicity>().Any())
             {
                 // Alt 3: OwnedMultiplicity OwnedFeatureTyping
-                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, cursorCache, stringBuilder);
+                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 if (ownedRelationshipCursor.Current is IFeatureTyping featureTypingAfterMult)
                 {
-                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(featureTypingAfterMult, cursorCache, stringBuilder);
+                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(featureTypingAfterMult, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
             }
@@ -369,7 +369,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule PayloadFeatureSpecializationPart
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// PayloadFeatureSpecializationPart : Feature =
@@ -380,16 +380,16 @@ namespace SysML2.NET.TextualNotation
         /// (Alt 2 uses '+' instead of '*') is a parse-time validation concern, not a
         /// serialization difference.
         /// </remarks>
-        private static void BuildPayloadFeatureSpecializationPartHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildPayloadFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is ISpecialization)
             {
                 // Alt 1: FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
                 while (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
                 }
 
                 var multiplicityElementPresent = ownedRelationshipCursor.Current is IOwningMembership owningMembership
@@ -397,22 +397,22 @@ namespace SysML2.NET.TextualNotation
 
                 if (multiplicityElementPresent || poco.IsOrdered || !poco.IsUnique)
                 {
-                    BuildMultiplicityPart(poco, cursorCache, stringBuilder);
+                    BuildMultiplicityPart(poco, writerContext, stringBuilder);
                 }
 
                 while (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
                 }
             }
             else
             {
                 // Alt 2: MultiplicityPart FeatureSpecialization+
-                BuildMultiplicityPart(poco, cursorCache, stringBuilder);
+                BuildMultiplicityPart(poco, writerContext, stringBuilder);
 
                 while (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    BuildFeatureSpecialization(poco, cursorCache, stringBuilder);
+                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
                 }
             }
         }

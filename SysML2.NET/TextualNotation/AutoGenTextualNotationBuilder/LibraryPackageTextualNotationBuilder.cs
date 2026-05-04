@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>LibraryPackage=(isStandard?='standard')'library'(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (poco.IsStandard)
             {
                 stringBuilder.Append(" standard ");
@@ -60,14 +60,14 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                     {
-                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, cursorCache, stringBuilder);
+                        OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
 
             }
-            PackageTextualNotationBuilder.BuildPackageDeclaration(poco, cursorCache, stringBuilder);
-            PackageTextualNotationBuilder.BuildPackageBody(poco, cursorCache, stringBuilder);
+            PackageTextualNotationBuilder.BuildPackageDeclaration(poco, writerContext, stringBuilder);
+            PackageTextualNotationBuilder.BuildPackageBody(poco, writerContext, stringBuilder);
 
         }
     }

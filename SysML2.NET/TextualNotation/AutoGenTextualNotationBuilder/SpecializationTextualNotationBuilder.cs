@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedSpecialization:Specialization=GeneralType</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildGeneralType(poco, cursorCache, stringBuilder);
+            BuildGeneralType(poco, writerContext, stringBuilder);
 
         }
 
@@ -52,17 +52,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSpecificType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSpecificType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.Specific) && poco.Specific is SysML2.NET.Core.POCO.Core.Features.IFeature chainedSpecificAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedSpecificAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedSpecificAsFeature, writerContext, stringBuilder);
             }
             else if (poco.Specific != null)
             {
-                stringBuilder.Append(poco.Specific.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Specific, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -73,17 +73,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildGeneralType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildGeneralType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.General) && poco.General is SysML2.NET.Core.POCO.Core.Features.IFeature chainedGeneralAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedGeneralAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedGeneralAsFeature, writerContext, stringBuilder);
             }
             else if (poco.General != null)
             {
-                stringBuilder.Append(poco.General.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.General, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -94,23 +94,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>Specialization=('specialization'Identification)?'subtype'SpecificTypeSPECIALIZESGeneralTypeRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("subtype ");
-            BuildSpecificType(poco, cursorCache, stringBuilder);
+            BuildSpecificType(poco, writerContext, stringBuilder);
             stringBuilder.Append(" :> ");
-            BuildGeneralType(poco, cursorCache, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            BuildGeneralType(poco, writerContext, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

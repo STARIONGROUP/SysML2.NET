@@ -39,19 +39,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>NonOccurrenceUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=NonOccurrenceUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildNonOccurrenceUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildNonOccurrenceUsageElement(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -64,19 +64,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>OccurrenceUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=OccurrenceUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildOccurrenceUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildOccurrenceUsageElement(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -89,19 +89,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>StructureUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=StructureUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStructureUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildStructureUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildStructureUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildStructureUsageElement(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -114,19 +114,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>BehaviorUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=BehaviorUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBehaviorUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBehaviorUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildBehaviorUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildBehaviorUsageElement(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -139,11 +139,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>SourceSuccessionMember:FeatureMembership='then'ownedRelatedElement+=SourceSuccession</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSourceSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSourceSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("then ");
 
             if (ownedRelatedElementCursor.Current != null)
@@ -151,7 +151,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage elementAsSuccessionAsUsage)
                 {
-                    SuccessionAsUsageTextualNotationBuilder.BuildSourceSuccession(elementAsSuccessionAsUsage, cursorCache, stringBuilder);
+                    SuccessionAsUsageTextualNotationBuilder.BuildSourceSuccession(elementAsSuccessionAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -164,19 +164,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfaceNonOccurrenceUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=InterfaceNonOccurrenceUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInterfaceNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageElement(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -189,19 +189,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfaceOccurrenceUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=InterfaceOccurrenceUsageElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInterfaceOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildInterfaceOccurrenceUsageElement(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildInterfaceOccurrenceUsageElement(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -214,18 +214,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowPayloadFeatureMember:FeatureMembership=ownedRelatedElement+=FlowPayloadFeature</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Interactions.IPayloadFeature elementAsPayloadFeature)
                 {
-                    PayloadFeatureTextualNotationBuilder.BuildFlowPayloadFeature(elementAsPayloadFeature, cursorCache, stringBuilder);
+                    PayloadFeatureTextualNotationBuilder.BuildFlowPayloadFeature(elementAsPayloadFeature, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -238,18 +238,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowFeatureMember:FeatureMembership=ownedRelatedElement+=FlowFeature</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
                 {
-                    ReferenceUsageTextualNotationBuilder.BuildFlowFeature(elementAsReferenceUsage, cursorCache, stringBuilder);
+                    ReferenceUsageTextualNotationBuilder.BuildFlowFeature(elementAsReferenceUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -262,17 +262,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>ActionBehaviorMember:FeatureMembership=BehaviorUsageMember|ActionNodeMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionBehaviorMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildActionBehaviorMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembershipBehaviorUsageMember when pocoFeatureMembershipBehaviorUsageMember.IsValidForBehaviorUsageMember():
-                    BuildBehaviorUsageMember(pocoFeatureMembershipBehaviorUsageMember, cursorCache, stringBuilder);
+                    BuildBehaviorUsageMember(pocoFeatureMembershipBehaviorUsageMember, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildActionNodeMember(poco, cursorCache, stringBuilder);
+                    BuildActionNodeMember(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -283,14 +283,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>InitialNodeMember:FeatureMembership=MemberPrefix'first'memberFeature=[QualifiedName]RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInitialNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInitialNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("first ");
-            BuildMemberFeature(poco, cursorCache, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            BuildMemberFeature(poco, writerContext, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
 
@@ -299,19 +299,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>ActionNodeMember:FeatureMembership=MemberPrefixownedRelatedElement+=ActionNode</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildActionNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Actions.IActionUsage elementAsActionUsage)
                 {
-                    ActionUsageTextualNotationBuilder.BuildActionNode(elementAsActionUsage, cursorCache, stringBuilder);
+                    ActionUsageTextualNotationBuilder.BuildActionNode(elementAsActionUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -324,19 +324,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>ActionTargetSuccessionMember:FeatureMembership=MemberPrefixownedRelatedElement+=ActionTargetSuccession</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionTargetSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildActionTargetSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildActionTargetSuccession(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildActionTargetSuccession(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -349,19 +349,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>GuardedSuccessionMember:FeatureMembership=MemberPrefixownedRelatedElement+=GuardedSuccession</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildGuardedSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildGuardedSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionUsage elementAsTransitionUsage)
                 {
-                    TransitionUsageTextualNotationBuilder.BuildGuardedSuccession(elementAsTransitionUsage, cursorCache, stringBuilder);
+                    TransitionUsageTextualNotationBuilder.BuildGuardedSuccession(elementAsTransitionUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -374,18 +374,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>ForVariableDeclarationMember:FeatureMembership=ownedRelatedElement+=UsageDeclaration</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildForVariableDeclarationMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildForVariableDeclarationMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage elementAsUsage)
                 {
-                    UsageTextualNotationBuilder.BuildUsageDeclaration(elementAsUsage, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildUsageDeclaration(elementAsUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -398,13 +398,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>EntryTransitionMember:FeatureMembership=MemberPrefix(ownedRelatedElement+=GuardedTargetSuccession|'then'ownedRelatedElement+=TargetSuccession)';'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEntryTransitionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildEntryTransitionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
-            BuildEntryTransitionMemberHandCoded(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
+            BuildEntryTransitionMemberHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.AppendLine(";");
 
         }
@@ -414,19 +414,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>TransitionUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=TransitionUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionUsage elementAsTransitionUsage)
                 {
-                    TransitionUsageTextualNotationBuilder.BuildTransitionUsage(elementAsTransitionUsage, cursorCache, stringBuilder);
+                    TransitionUsageTextualNotationBuilder.BuildTransitionUsage(elementAsTransitionUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -439,19 +439,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>TargetTransitionUsageMember:FeatureMembership=MemberPrefixownedRelatedElement+=TargetTransitionUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTargetTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTargetTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionUsage elementAsTransitionUsage)
                 {
-                    TransitionUsageTextualNotationBuilder.BuildTargetTransitionUsage(elementAsTransitionUsage, cursorCache, stringBuilder);
+                    TransitionUsageTextualNotationBuilder.BuildTargetTransitionUsage(elementAsTransitionUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -464,9 +464,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataBodyUsageMember:FeatureMembership=ownedMemberFeature=MetadataBodyUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBodyUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMetadataBodyUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.ownedMemberFeature != null)
@@ -474,7 +474,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
                 {
-                    ReferenceUsageTextualNotationBuilder.BuildMetadataBodyUsage(elementAsReferenceUsage, cursorCache, stringBuilder);
+                    ReferenceUsageTextualNotationBuilder.BuildMetadataBodyUsage(elementAsReferenceUsage, writerContext, stringBuilder);
                 }
             }
 
@@ -485,19 +485,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedFeatureMember:FeatureMembership=MemberPrefixownedRelatedElement+=FeatureElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                 {
-                    FeatureTextualNotationBuilder.BuildFeatureElement(elementAsFeature, cursorCache, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildFeatureElement(elementAsFeature, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -510,18 +510,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedExpressionReferenceMember:FeatureMembership=ownedRelationship+=OwnedExpressionReference</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
                 {
-                    FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(elementAsFeatureReferenceExpression, cursorCache, stringBuilder);
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(elementAsFeatureReferenceExpression, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -534,11 +534,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedExpressionMember:FeatureMembership=ownedFeatureMember=OwnedExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpressionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedExpressionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildOwnedFeatureMember(poco, cursorCache, stringBuilder);
+            BuildOwnedFeatureMember(poco, writerContext, stringBuilder);
 
         }
 
@@ -547,9 +547,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>SequenceExpressionListMember:FeatureMembership=ownedMemberFeature=SequenceExpressionList</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSequenceExpressionListMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSequenceExpressionListMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.ownedMemberFeature != null)
@@ -557,7 +557,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
                 {
-                    ExpressionTextualNotationBuilder.BuildSequenceExpressionList(elementAsExpression, cursorCache, stringBuilder);
+                    ExpressionTextualNotationBuilder.BuildSequenceExpressionList(elementAsExpression, writerContext, stringBuilder);
                 }
             }
 
@@ -568,9 +568,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>FunctionReferenceMember:FeatureMembership=ownedMemberFeature=FunctionReference</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFunctionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.ownedMemberFeature != null)
@@ -578,7 +578,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
                 {
-                    ExpressionTextualNotationBuilder.BuildFunctionReference(elementAsExpression, cursorCache, stringBuilder);
+                    ExpressionTextualNotationBuilder.BuildFunctionReference(elementAsExpression, writerContext, stringBuilder);
                 }
             }
 
@@ -589,14 +589,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>NamedArgumentMember:FeatureMembership=ownedMemberFeature=NamedArgument</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNamedArgumentMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNamedArgumentMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.ownedMemberFeature != null)
             {
-                FeatureTextualNotationBuilder.BuildNamedArgument(poco.ownedMemberFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildNamedArgument(poco.ownedMemberFeature, writerContext, stringBuilder);
             }
 
         }
@@ -606,9 +606,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>ExpressionBodyMember:FeatureMembership=ownedMemberFeature=ExpressionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpressionBodyMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildExpressionBodyMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.ownedMemberFeature != null)
@@ -616,7 +616,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
                 {
-                    ExpressionTextualNotationBuilder.BuildExpressionBody(elementAsExpression, cursorCache, stringBuilder);
+                    ExpressionTextualNotationBuilder.BuildExpressionBody(elementAsExpression, writerContext, stringBuilder);
                 }
             }
 
@@ -627,18 +627,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>PayloadFeatureMember:FeatureMembership=ownedRelatedElement=PayloadFeature</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current != null)
             {
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                 {
-                    FeatureTextualNotationBuilder.BuildPayloadFeature(elementAsFeature, cursorCache, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildPayloadFeature(elementAsFeature, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();
@@ -651,14 +651,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataBodyFeatureMember:FeatureMembership=ownedMemberFeature=MetadataBodyFeature</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.ownedMemberFeature != null)
             {
-                FeatureTextualNotationBuilder.BuildMetadataBodyFeature(poco.ownedMemberFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildMetadataBodyFeature(poco.ownedMemberFeature, writerContext, stringBuilder);
             }
 
         }

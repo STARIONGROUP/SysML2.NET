@@ -39,9 +39,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>Identification:Element=('&lt;'declaredShortName=NAME'&gt;')?(declaredName=NAME)?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIdentification(SysML2.NET.Core.POCO.Root.Elements.IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildIdentification(SysML2.NET.Core.POCO.Root.Elements.IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
@@ -66,98 +66,98 @@ namespace SysML2.NET.TextualNotation
         /// <para>DefinitionElement:Element=Package|LibraryPackage|AnnotatingElement|Dependency|AttributeDefinition|EnumerationDefinition|OccurrenceDefinition|IndividualDefinition|ItemDefinition|PartDefinition|ConnectionDefinition|FlowDefinition|InterfaceDefinition|PortDefinition|ActionDefinition|CalculationDefinition|StateDefinition|ConstraintDefinition|RequirementDefinition|ConcernDefinition|CaseDefinition|AnalysisCaseDefinition|VerificationCaseDefinition|UseCaseDefinition|ViewDefinition|ViewpointDefinition|RenderingDefinition|MetadataDefinition|ExtendedDefinition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDefinitionElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition pocoInterfaceDefinition:
-                    InterfaceDefinitionTextualNotationBuilder.BuildInterfaceDefinition(pocoInterfaceDefinition, cursorCache, stringBuilder);
+                    InterfaceDefinitionTextualNotationBuilder.BuildInterfaceDefinition(pocoInterfaceDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition pocoConnectionDefinition:
-                    ConnectionDefinitionTextualNotationBuilder.BuildConnectionDefinition(pocoConnectionDefinition, cursorCache, stringBuilder);
+                    ConnectionDefinitionTextualNotationBuilder.BuildConnectionDefinition(pocoConnectionDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Flows.IFlowDefinition pocoFlowDefinition:
-                    FlowDefinitionTextualNotationBuilder.BuildFlowDefinition(pocoFlowDefinition, cursorCache, stringBuilder);
+                    FlowDefinitionTextualNotationBuilder.BuildFlowDefinition(pocoFlowDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Requirements.IConcernDefinition pocoConcernDefinition:
-                    ConcernDefinitionTextualNotationBuilder.BuildConcernDefinition(pocoConcernDefinition, cursorCache, stringBuilder);
+                    ConcernDefinitionTextualNotationBuilder.BuildConcernDefinition(pocoConcernDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.AnalysisCases.IAnalysisCaseDefinition pocoAnalysisCaseDefinition:
-                    AnalysisCaseDefinitionTextualNotationBuilder.BuildAnalysisCaseDefinition(pocoAnalysisCaseDefinition, cursorCache, stringBuilder);
+                    AnalysisCaseDefinitionTextualNotationBuilder.BuildAnalysisCaseDefinition(pocoAnalysisCaseDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.VerificationCases.IVerificationCaseDefinition pocoVerificationCaseDefinition:
-                    VerificationCaseDefinitionTextualNotationBuilder.BuildVerificationCaseDefinition(pocoVerificationCaseDefinition, cursorCache, stringBuilder);
+                    VerificationCaseDefinitionTextualNotationBuilder.BuildVerificationCaseDefinition(pocoVerificationCaseDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.UseCases.IUseCaseDefinition pocoUseCaseDefinition:
-                    UseCaseDefinitionTextualNotationBuilder.BuildUseCaseDefinition(pocoUseCaseDefinition, cursorCache, stringBuilder);
+                    UseCaseDefinitionTextualNotationBuilder.BuildUseCaseDefinition(pocoUseCaseDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Views.IViewpointDefinition pocoViewpointDefinition:
-                    ViewpointDefinitionTextualNotationBuilder.BuildViewpointDefinition(pocoViewpointDefinition, cursorCache, stringBuilder);
+                    ViewpointDefinitionTextualNotationBuilder.BuildViewpointDefinition(pocoViewpointDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Requirements.IRequirementDefinition pocoRequirementDefinition:
-                    RequirementDefinitionTextualNotationBuilder.BuildRequirementDefinition(pocoRequirementDefinition, cursorCache, stringBuilder);
+                    RequirementDefinitionTextualNotationBuilder.BuildRequirementDefinition(pocoRequirementDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Cases.ICaseDefinition pocoCaseDefinition:
-                    CaseDefinitionTextualNotationBuilder.BuildCaseDefinition(pocoCaseDefinition, cursorCache, stringBuilder);
+                    CaseDefinitionTextualNotationBuilder.BuildCaseDefinition(pocoCaseDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition pocoRenderingDefinition:
-                    RenderingDefinitionTextualNotationBuilder.BuildRenderingDefinition(pocoRenderingDefinition, cursorCache, stringBuilder);
+                    RenderingDefinitionTextualNotationBuilder.BuildRenderingDefinition(pocoRenderingDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Views.IViewDefinition pocoViewDefinition:
-                    ViewDefinitionTextualNotationBuilder.BuildViewDefinition(pocoViewDefinition, cursorCache, stringBuilder);
+                    ViewDefinitionTextualNotationBuilder.BuildViewDefinition(pocoViewDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition pocoMetadataDefinition:
-                    MetadataDefinitionTextualNotationBuilder.BuildMetadataDefinition(pocoMetadataDefinition, cursorCache, stringBuilder);
+                    MetadataDefinitionTextualNotationBuilder.BuildMetadataDefinition(pocoMetadataDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition pocoCalculationDefinition:
-                    CalculationDefinitionTextualNotationBuilder.BuildCalculationDefinition(pocoCalculationDefinition, cursorCache, stringBuilder);
+                    CalculationDefinitionTextualNotationBuilder.BuildCalculationDefinition(pocoCalculationDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Constraints.IConstraintDefinition pocoConstraintDefinition:
-                    ConstraintDefinitionTextualNotationBuilder.BuildConstraintDefinition(pocoConstraintDefinition, cursorCache, stringBuilder);
+                    ConstraintDefinitionTextualNotationBuilder.BuildConstraintDefinition(pocoConstraintDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Parts.IPartDefinition pocoPartDefinition:
-                    PartDefinitionTextualNotationBuilder.BuildPartDefinition(pocoPartDefinition, cursorCache, stringBuilder);
+                    PartDefinitionTextualNotationBuilder.BuildPartDefinition(pocoPartDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.States.IStateDefinition pocoStateDefinition:
-                    StateDefinitionTextualNotationBuilder.BuildStateDefinition(pocoStateDefinition, cursorCache, stringBuilder);
+                    StateDefinitionTextualNotationBuilder.BuildStateDefinition(pocoStateDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Items.IItemDefinition pocoItemDefinition:
-                    ItemDefinitionTextualNotationBuilder.BuildItemDefinition(pocoItemDefinition, cursorCache, stringBuilder);
+                    ItemDefinitionTextualNotationBuilder.BuildItemDefinition(pocoItemDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition pocoPortDefinition:
-                    PortDefinitionTextualNotationBuilder.BuildPortDefinition(pocoPortDefinition, cursorCache, stringBuilder);
+                    PortDefinitionTextualNotationBuilder.BuildPortDefinition(pocoPortDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition pocoActionDefinition:
-                    ActionDefinitionTextualNotationBuilder.BuildActionDefinition(pocoActionDefinition, cursorCache, stringBuilder);
+                    ActionDefinitionTextualNotationBuilder.BuildActionDefinition(pocoActionDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationDefinition pocoEnumerationDefinition:
-                    EnumerationDefinitionTextualNotationBuilder.BuildEnumerationDefinition(pocoEnumerationDefinition, cursorCache, stringBuilder);
+                    EnumerationDefinitionTextualNotationBuilder.BuildEnumerationDefinition(pocoEnumerationDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition pocoAttributeDefinition:
-                    AttributeDefinitionTextualNotationBuilder.BuildAttributeDefinition(pocoAttributeDefinition, cursorCache, stringBuilder);
+                    AttributeDefinitionTextualNotationBuilder.BuildAttributeDefinition(pocoAttributeDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinitionOccurrenceDefinition when pocoOccurrenceDefinitionOccurrenceDefinition.IsValidForOccurrenceDefinition():
-                    OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinition(pocoOccurrenceDefinitionOccurrenceDefinition, cursorCache, stringBuilder);
+                    OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinition(pocoOccurrenceDefinitionOccurrenceDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinition:
-                    OccurrenceDefinitionTextualNotationBuilder.BuildIndividualDefinition(pocoOccurrenceDefinition, cursorCache, stringBuilder);
+                    OccurrenceDefinitionTextualNotationBuilder.BuildIndividualDefinition(pocoOccurrenceDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition pocoDefinition:
-                    DefinitionTextualNotationBuilder.BuildExtendedDefinition(pocoDefinition, cursorCache, stringBuilder);
+                    DefinitionTextualNotationBuilder.BuildExtendedDefinition(pocoDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage pocoLibraryPackage:
-                    LibraryPackageTextualNotationBuilder.BuildLibraryPackage(pocoLibraryPackage, cursorCache, stringBuilder);
+                    LibraryPackageTextualNotationBuilder.BuildLibraryPackage(pocoLibraryPackage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Dependencies.IDependency pocoDependency:
-                    DependencyTextualNotationBuilder.BuildDependency(pocoDependency, cursorCache, stringBuilder);
+                    DependencyTextualNotationBuilder.BuildDependency(pocoDependency, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Packages.IPackage pocoPackage:
-                    PackageTextualNotationBuilder.BuildPackage(pocoPackage, cursorCache, stringBuilder);
+                    PackageTextualNotationBuilder.BuildPackage(pocoPackage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement pocoAnnotatingElement:
-                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(pocoAnnotatingElement, cursorCache, stringBuilder);
+                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(pocoAnnotatingElement, writerContext, stringBuilder);
                     break;
             }
 
@@ -168,17 +168,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedRelatedElement:Element=NonFeatureElement|FeatureElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedRelatedElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedRelatedElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeature:
-                    FeatureTextualNotationBuilder.BuildFeatureElement(pocoFeature, cursorCache, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildFeatureElement(pocoFeature, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildNonFeatureElement(poco, cursorCache, stringBuilder);
+                    BuildNonFeatureElement(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -189,17 +189,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>MemberElement:Element=AnnotatingElement|NonFeatureElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMemberElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMemberElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement pocoAnnotatingElement:
-                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(pocoAnnotatingElement, cursorCache, stringBuilder);
+                    AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(pocoAnnotatingElement, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildNonFeatureElement(poco, cursorCache, stringBuilder);
+                    BuildNonFeatureElement(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -210,89 +210,89 @@ namespace SysML2.NET.TextualNotation
         /// <para>NonFeatureElement:Element=Dependency|Namespace|Type|Classifier|DataType|Class|Structure|Metaclass|Association|AssociationStructure|Interaction|Behavior|Function|Predicate|Multiplicity|Package|LibraryPackage|Specialization|Conjugation|Subclassification|Disjoining|FeatureInverting|FeatureTyping|Subsetting|Redefinition|TypeFeaturing</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNonFeatureElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNonFeatureElement(SysML2.NET.Core.POCO.Root.Elements.IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure pocoAssociationStructure:
-                    AssociationStructureTextualNotationBuilder.BuildAssociationStructure(pocoAssociationStructure, cursorCache, stringBuilder);
+                    AssociationStructureTextualNotationBuilder.BuildAssociationStructure(pocoAssociationStructure, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction pocoInteraction:
-                    InteractionTextualNotationBuilder.BuildInteraction(pocoInteraction, cursorCache, stringBuilder);
+                    InteractionTextualNotationBuilder.BuildInteraction(pocoInteraction, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Functions.IPredicate pocoPredicate:
-                    PredicateTextualNotationBuilder.BuildPredicate(pocoPredicate, cursorCache, stringBuilder);
+                    PredicateTextualNotationBuilder.BuildPredicate(pocoPredicate, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Metadata.IMetaclass pocoMetaclass:
-                    MetaclassTextualNotationBuilder.BuildMetaclass(pocoMetaclass, cursorCache, stringBuilder);
+                    MetaclassTextualNotationBuilder.BuildMetaclass(pocoMetaclass, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Functions.IFunction pocoFunction:
-                    FunctionTextualNotationBuilder.BuildFunction(pocoFunction, cursorCache, stringBuilder);
+                    FunctionTextualNotationBuilder.BuildFunction(pocoFunction, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Structures.IStructure pocoStructure:
-                    StructureTextualNotationBuilder.BuildStructure(pocoStructure, cursorCache, stringBuilder);
+                    StructureTextualNotationBuilder.BuildStructure(pocoStructure, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Associations.IAssociation pocoAssociation:
-                    AssociationTextualNotationBuilder.BuildAssociation(pocoAssociation, cursorCache, stringBuilder);
+                    AssociationTextualNotationBuilder.BuildAssociation(pocoAssociation, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Behaviors.IBehavior pocoBehavior:
-                    BehaviorTextualNotationBuilder.BuildBehavior(pocoBehavior, cursorCache, stringBuilder);
+                    BehaviorTextualNotationBuilder.BuildBehavior(pocoBehavior, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.DataTypes.IDataType pocoDataType:
-                    DataTypeTextualNotationBuilder.BuildDataType(pocoDataType, cursorCache, stringBuilder);
+                    DataTypeTextualNotationBuilder.BuildDataType(pocoDataType, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Classes.IClass pocoClass:
-                    ClassTextualNotationBuilder.BuildClass(pocoClass, cursorCache, stringBuilder);
+                    ClassTextualNotationBuilder.BuildClass(pocoClass, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.IMultiplicity pocoMultiplicity:
-                    MultiplicityTextualNotationBuilder.BuildMultiplicity(pocoMultiplicity, cursorCache, stringBuilder);
+                    MultiplicityTextualNotationBuilder.BuildMultiplicity(pocoMultiplicity, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Features.IRedefinition pocoRedefinition:
-                    RedefinitionTextualNotationBuilder.BuildRedefinition(pocoRedefinition, cursorCache, stringBuilder);
+                    RedefinitionTextualNotationBuilder.BuildRedefinition(pocoRedefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Features.ISubsetting pocoSubsetting:
-                    SubsettingTextualNotationBuilder.BuildSubsetting(pocoSubsetting, cursorCache, stringBuilder);
+                    SubsettingTextualNotationBuilder.BuildSubsetting(pocoSubsetting, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Features.IFeatureTyping pocoFeatureTyping:
-                    FeatureTypingTextualNotationBuilder.BuildFeatureTyping(pocoFeatureTyping, cursorCache, stringBuilder);
+                    FeatureTypingTextualNotationBuilder.BuildFeatureTyping(pocoFeatureTyping, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Classifiers.IClassifier pocoClassifier:
-                    ClassifierTextualNotationBuilder.BuildClassifier(pocoClassifier, cursorCache, stringBuilder);
+                    ClassifierTextualNotationBuilder.BuildClassifier(pocoClassifier, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage pocoLibraryPackage:
-                    LibraryPackageTextualNotationBuilder.BuildLibraryPackage(pocoLibraryPackage, cursorCache, stringBuilder);
+                    LibraryPackageTextualNotationBuilder.BuildLibraryPackage(pocoLibraryPackage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification pocoSubclassification:
-                    SubclassificationTextualNotationBuilder.BuildSubclassification(pocoSubclassification, cursorCache, stringBuilder);
+                    SubclassificationTextualNotationBuilder.BuildSubclassification(pocoSubclassification, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing pocoTypeFeaturing:
-                    TypeFeaturingTextualNotationBuilder.BuildTypeFeaturing(pocoTypeFeaturing, cursorCache, stringBuilder);
+                    TypeFeaturingTextualNotationBuilder.BuildTypeFeaturing(pocoTypeFeaturing, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Dependencies.IDependency pocoDependency:
-                    DependencyTextualNotationBuilder.BuildDependency(pocoDependency, cursorCache, stringBuilder);
+                    DependencyTextualNotationBuilder.BuildDependency(pocoDependency, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
-                    TypeTextualNotationBuilder.BuildType(pocoType, cursorCache, stringBuilder);
+                    TypeTextualNotationBuilder.BuildType(pocoType, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Packages.IPackage pocoPackage:
-                    PackageTextualNotationBuilder.BuildPackage(pocoPackage, cursorCache, stringBuilder);
+                    PackageTextualNotationBuilder.BuildPackage(pocoPackage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.ISpecialization pocoSpecialization:
-                    SpecializationTextualNotationBuilder.BuildSpecialization(pocoSpecialization, cursorCache, stringBuilder);
+                    SpecializationTextualNotationBuilder.BuildSpecialization(pocoSpecialization, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.IConjugation pocoConjugation:
-                    ConjugationTextualNotationBuilder.BuildConjugation(pocoConjugation, cursorCache, stringBuilder);
+                    ConjugationTextualNotationBuilder.BuildConjugation(pocoConjugation, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.IDisjoining pocoDisjoining:
-                    DisjoiningTextualNotationBuilder.BuildDisjoining(pocoDisjoining, cursorCache, stringBuilder);
+                    DisjoiningTextualNotationBuilder.BuildDisjoining(pocoDisjoining, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Features.IFeatureInverting pocoFeatureInverting:
-                    FeatureInvertingTextualNotationBuilder.BuildFeatureInverting(pocoFeatureInverting, cursorCache, stringBuilder);
+                    FeatureInvertingTextualNotationBuilder.BuildFeatureInverting(pocoFeatureInverting, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.INamespace pocoNamespace:
-                    NamespaceTextualNotationBuilder.BuildNamespace(pocoNamespace, cursorCache, stringBuilder);
+                    NamespaceTextualNotationBuilder.BuildNamespace(pocoNamespace, writerContext, stringBuilder);
                     break;
             }
 

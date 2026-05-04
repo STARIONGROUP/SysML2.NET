@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedSubsetting:Subsetting=subsettedFeature=[QualifiedName]|subsettedFeature=OwnedFeatureChain{ownedRelatedElement+=subsettedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.SubsettedFeature) && poco.SubsettedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedSubsettedFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedSubsettedFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedSubsettedFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.SubsettedFeature != null)
             {
-                stringBuilder.Append(poco.SubsettedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.SubsettedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -60,23 +60,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>Subsetting=('specialization'Identification)?'subset'SpecificTypeSUBSETSGeneralTypeRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("specialization ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("subset ");
-            SpecializationTextualNotationBuilder.BuildSpecificType(poco, cursorCache, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildSpecificType(poco, writerContext, stringBuilder);
             stringBuilder.Append(" :> ");
-            SpecializationTextualNotationBuilder.BuildGeneralType(poco, cursorCache, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            SpecializationTextualNotationBuilder.BuildGeneralType(poco, writerContext, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

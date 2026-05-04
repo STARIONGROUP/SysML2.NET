@@ -39,12 +39,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>Documentation='doc'Identification('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IDocumentation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDocumentation(SysML2.NET.Core.POCO.Root.Annotations.IDocumentation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildDocumentation(SysML2.NET.Core.POCO.Root.Annotations.IDocumentation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("doc ");
-            ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+            ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
             if (!string.IsNullOrWhiteSpace(poco.Locale))
             {

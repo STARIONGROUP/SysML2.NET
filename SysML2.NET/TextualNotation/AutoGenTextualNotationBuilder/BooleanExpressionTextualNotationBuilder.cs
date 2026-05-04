@@ -39,19 +39,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>BooleanExpression=FeaturePrefix'bool'FeatureDeclarationValuePart?FunctionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBooleanExpression(SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBooleanExpression(SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("bool ");
-            FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
+            FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
 
             if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }
-            TypeTextualNotationBuilder.BuildFunctionBody(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildFunctionBody(poco, writerContext, stringBuilder);
 
         }
     }

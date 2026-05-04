@@ -39,16 +39,16 @@ namespace SysML2.NET.TextualNotation
         /// <para>Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IComment" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("comment ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
                 if (ownedRelationshipCursor.Current != null)
                 {
@@ -59,11 +59,11 @@ namespace SysML2.NET.TextualNotation
 
                         if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
                         {
-                            AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                            AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
+
                         }
                     }
-                    ownedRelationshipCursor.Move();
-
 
                     while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
                     {
@@ -74,7 +74,7 @@ namespace SysML2.NET.TextualNotation
 
                             if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation elementAsAnnotation)
                             {
-                                AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, cursorCache, stringBuilder);
+                                AnnotationTextualNotationBuilder.BuildAnnotation(elementAsAnnotation, writerContext, stringBuilder);
                             }
                         }
                         ownedRelationshipCursor.Move();

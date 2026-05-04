@@ -39,35 +39,35 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedExpression:Expression=ConditionalExpression|ConditionalBinaryOperatorExpression|BinaryOperatorExpression|UnaryOperatorExpression|ClassificationExpression|MetaclassificationExpression|ExtentExpression|PrimaryExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalExpression when pocoOperatorExpressionConditionalExpression.IsValidForConditionalExpression():
-                    OperatorExpressionTextualNotationBuilder.BuildConditionalExpression(pocoOperatorExpressionConditionalExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildConditionalExpression(pocoOperatorExpressionConditionalExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalBinaryOperatorExpression when pocoOperatorExpressionConditionalBinaryOperatorExpression.IsValidForConditionalBinaryOperatorExpression():
-                    OperatorExpressionTextualNotationBuilder.BuildConditionalBinaryOperatorExpression(pocoOperatorExpressionConditionalBinaryOperatorExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildConditionalBinaryOperatorExpression(pocoOperatorExpressionConditionalBinaryOperatorExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionBinaryOperatorExpression when pocoOperatorExpressionBinaryOperatorExpression.IsValidForBinaryOperatorExpression():
-                    OperatorExpressionTextualNotationBuilder.BuildBinaryOperatorExpression(pocoOperatorExpressionBinaryOperatorExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildBinaryOperatorExpression(pocoOperatorExpressionBinaryOperatorExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionUnaryOperatorExpression when pocoOperatorExpressionUnaryOperatorExpression.IsValidForUnaryOperatorExpression():
-                    OperatorExpressionTextualNotationBuilder.BuildUnaryOperatorExpression(pocoOperatorExpressionUnaryOperatorExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildUnaryOperatorExpression(pocoOperatorExpressionUnaryOperatorExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionClassificationExpression when pocoOperatorExpressionClassificationExpression.IsValidForClassificationExpression():
-                    OperatorExpressionTextualNotationBuilder.BuildClassificationExpression(pocoOperatorExpressionClassificationExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildClassificationExpression(pocoOperatorExpressionClassificationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionMetaclassificationExpression when pocoOperatorExpressionMetaclassificationExpression.IsValidForMetaclassificationExpression():
-                    OperatorExpressionTextualNotationBuilder.BuildMetaclassificationExpression(pocoOperatorExpressionMetaclassificationExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildMetaclassificationExpression(pocoOperatorExpressionMetaclassificationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpression:
-                    OperatorExpressionTextualNotationBuilder.BuildExtentExpression(pocoOperatorExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildExtentExpression(pocoOperatorExpression, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildPrimaryExpression(poco, cursorCache, stringBuilder);
+                    BuildPrimaryExpression(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -78,17 +78,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>PrimaryExpression:Expression=FeatureChainExpression|NonFeatureChainPrimaryExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPrimaryExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPrimaryExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureChainExpression pocoFeatureChainExpression:
-                    FeatureChainExpressionTextualNotationBuilder.BuildFeatureChainExpression(pocoFeatureChainExpression, cursorCache, stringBuilder);
+                    FeatureChainExpressionTextualNotationBuilder.BuildFeatureChainExpression(pocoFeatureChainExpression, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildNonFeatureChainPrimaryExpression(poco, cursorCache, stringBuilder);
+                    BuildNonFeatureChainPrimaryExpression(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -99,32 +99,32 @@ namespace SysML2.NET.TextualNotation
         /// <para>NonFeatureChainPrimaryExpression:Expression=BracketExpression|IndexExpression|SequenceExpression|SelectExpression|CollectExpression|FunctionOperationExpression|BaseExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNonFeatureChainPrimaryExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNonFeatureChainPrimaryExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression pocoIndexExpression:
-                    IndexExpressionTextualNotationBuilder.BuildIndexExpression(pocoIndexExpression, cursorCache, stringBuilder);
+                    IndexExpressionTextualNotationBuilder.BuildIndexExpression(pocoIndexExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ISelectExpression pocoSelectExpression:
-                    SelectExpressionTextualNotationBuilder.BuildSelectExpression(pocoSelectExpression, cursorCache, stringBuilder);
+                    SelectExpressionTextualNotationBuilder.BuildSelectExpression(pocoSelectExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ICollectExpression pocoCollectExpression:
-                    CollectExpressionTextualNotationBuilder.BuildCollectExpression(pocoCollectExpression, cursorCache, stringBuilder);
+                    CollectExpressionTextualNotationBuilder.BuildCollectExpression(pocoCollectExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpression:
-                    OperatorExpressionTextualNotationBuilder.BuildBracketExpression(pocoOperatorExpression, cursorCache, stringBuilder);
+                    OperatorExpressionTextualNotationBuilder.BuildBracketExpression(pocoOperatorExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpression:
-                    InvocationExpressionTextualNotationBuilder.BuildFunctionOperationExpression(pocoInvocationExpression, cursorCache, stringBuilder);
+                    InvocationExpressionTextualNotationBuilder.BuildFunctionOperationExpression(pocoInvocationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionSequenceExpression when pocoExpressionSequenceExpression.IsValidForSequenceExpression():
-                    BuildSequenceExpression(pocoExpressionSequenceExpression, cursorCache, stringBuilder);
+                    BuildSequenceExpression(pocoExpressionSequenceExpression, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildBaseExpression(poco, cursorCache, stringBuilder);
+                    BuildBaseExpression(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -135,12 +135,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>SequenceExpression:Expression='('SequenceExpressionList')'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSequenceExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSequenceExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("(");
-            BuildSequenceExpressionList(poco, cursorCache, stringBuilder);
+            BuildSequenceExpressionList(poco, writerContext, stringBuilder);
             stringBuilder.Append(") ");
 
         }
@@ -150,11 +150,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>SequenceExpressionList:Expression=OwnedExpression','?|SequenceOperatorExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSequenceExpressionList(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildSequenceExpressionList(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildSequenceExpressionListHandCoded(poco, cursorCache, stringBuilder);
+            BuildSequenceExpressionListHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -162,18 +162,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>FunctionReference:Expression=ownedRelationship+=ReferenceTyping</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionReference(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFunctionReference(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
-                    FeatureTypingTextualNotationBuilder.BuildReferenceTyping(elementAsFeatureTyping, cursorCache, stringBuilder);
+                    FeatureTypingTextualNotationBuilder.BuildReferenceTyping(elementAsFeatureTyping, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -186,32 +186,32 @@ namespace SysML2.NET.TextualNotation
         /// <para>BaseExpression:Expression=NullExpression|LiteralExpression|FeatureReferenceExpression|MetadataAccessExpression|InvocationExpression|ConstructorExpression|BodyExpression</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBaseExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBaseExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpression:
-                    InvocationExpressionTextualNotationBuilder.BuildInvocationExpression(pocoInvocationExpression, cursorCache, stringBuilder);
+                    InvocationExpressionTextualNotationBuilder.BuildInvocationExpression(pocoInvocationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IConstructorExpression pocoConstructorExpression:
-                    ConstructorExpressionTextualNotationBuilder.BuildConstructorExpression(pocoConstructorExpression, cursorCache, stringBuilder);
+                    ConstructorExpressionTextualNotationBuilder.BuildConstructorExpression(pocoConstructorExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.INullExpression pocoNullExpression:
-                    NullExpressionTextualNotationBuilder.BuildNullExpression(pocoNullExpression, cursorCache, stringBuilder);
+                    NullExpressionTextualNotationBuilder.BuildNullExpression(pocoNullExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression pocoLiteralExpression:
-                    LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(pocoLiteralExpression, cursorCache, stringBuilder);
+                    LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(pocoLiteralExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression pocoFeatureReferenceExpressionFeatureReferenceExpression when pocoFeatureReferenceExpressionFeatureReferenceExpression.IsValidForFeatureReferenceExpression():
-                    FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(pocoFeatureReferenceExpressionFeatureReferenceExpression, cursorCache, stringBuilder);
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(pocoFeatureReferenceExpressionFeatureReferenceExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression pocoFeatureReferenceExpression:
-                    FeatureReferenceExpressionTextualNotationBuilder.BuildBodyExpression(pocoFeatureReferenceExpression, cursorCache, stringBuilder);
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildBodyExpression(pocoFeatureReferenceExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression pocoMetadataAccessExpression:
-                    MetadataAccessExpressionTextualNotationBuilder.BuildMetadataAccessExpression(pocoMetadataAccessExpression, cursorCache, stringBuilder);
+                    MetadataAccessExpressionTextualNotationBuilder.BuildMetadataAccessExpression(pocoMetadataAccessExpression, writerContext, stringBuilder);
                     break;
             }
 
@@ -222,13 +222,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>ExpressionBody:Expression='{'FunctionBodyPart'}'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpressionBody(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildExpressionBody(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append(' ');
             stringBuilder.AppendLine("{");
-            TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, writerContext, stringBuilder);
             stringBuilder.AppendLine("}");
 
         }
@@ -238,19 +238,19 @@ namespace SysML2.NET.TextualNotation
         /// <para>Expression=FeaturePrefix'expr'FeatureDeclarationValuePart?FunctionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, cursorCache, stringBuilder);
+            SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("expr ");
-            FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, cursorCache, stringBuilder);
+            FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
 
             if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
             {
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }
-            TypeTextualNotationBuilder.BuildFunctionBody(poco, cursorCache, stringBuilder);
+            TypeTextualNotationBuilder.BuildFunctionBody(poco, writerContext, stringBuilder);
 
         }
     }

@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System;
     using System.Linq;
     using System.Text;
 
@@ -50,27 +51,27 @@ namespace SysML2.NET.TextualNotation
         /// (dispatching to <see cref="FeatureTextualNotationBuilder.BuildBasicFeaturePrefix"/>).</para>
         /// </summary>
         /// <param name="poco">The <see cref="IFeature" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildFeaturePrefixHandCoded(IFeature poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFeaturePrefixHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (poco.IsEnd)
             {
-                FeatureTextualNotationBuilder.BuildEndFeaturePrefix(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildEndFeaturePrefix(poco, writerContext, stringBuilder);
 
                 if (ownedRelationshipCursor.Current is IOwningMembership owningMembership
                     && owningMembership.OwnedRelatedElement.OfType<IFeature>().Any()
                     && !owningMembership.OwnedRelatedElement.OfType<IMetadataUsage>().Any())
                 {
-                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(owningMembership, cursorCache, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(owningMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
             }
             else
             {
-                FeatureTextualNotationBuilder.BuildBasicFeaturePrefix(poco, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildBasicFeaturePrefix(poco, writerContext, stringBuilder);
             }
         }
 
@@ -89,51 +90,51 @@ namespace SysML2.NET.TextualNotation
         /// <c>SourceSuccessionMember</c> prefix before the <c>StructureUsageMember</c>.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildNonBehaviorBodyItemHandCoded(IElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildNonBehaviorBodyItemHandCoded(IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is IImport import)
             {
-                ImportTextualNotationBuilder.BuildImport(import, cursorCache, stringBuilder);
+                ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
             }
             else if (ownedRelationshipCursor.Current is IFeatureMembership featureMembership)
             {
                 if (featureMembership.IsValidForSourceSuccessionMember())
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembership, cursorCache, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is IFeatureMembership structureMembership
                     && structureMembership.IsValidForStructureUsageMember())
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(structureMembership, cursorCache, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(structureMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
                 else if (ownedRelationshipCursor.Current is IVariantMembership variantMembership)
                 {
-                    VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, cursorCache, stringBuilder);
+                    VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
                 else if (ownedRelationshipCursor.Current is IFeatureMembership nonOccurrenceMembership
                          && nonOccurrenceMembership.IsValidForNonOccurrenceUsageMember())
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(nonOccurrenceMembership, cursorCache, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(nonOccurrenceMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
                 else if (ownedRelationshipCursor.Current is IOwningMembership owningMembership)
                 {
                     if (owningMembership.IsValidForNonFeatureMember())
                     {
-                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, cursorCache, stringBuilder);
+                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
                     }
                     else
                     {
-                        MembershipTextualNotationBuilder.BuildAliasMember(owningMembership, cursorCache, stringBuilder);
+                        MembershipTextualNotationBuilder.BuildAliasMember(owningMembership, writerContext, stringBuilder);
                     }
 
                     ownedRelationshipCursor.Move();
@@ -143,11 +144,11 @@ namespace SysML2.NET.TextualNotation
             {
                 if (owningMembership.IsValidForNonFeatureMember())
                 {
-                    OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, cursorCache, stringBuilder);
+                    OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
                 }
                 else
                 {
-                    MembershipTextualNotationBuilder.BuildAliasMember(owningMembership, cursorCache, stringBuilder);
+                    MembershipTextualNotationBuilder.BuildAliasMember(owningMembership, writerContext, stringBuilder);
                 }
 
                 ownedRelationshipCursor.Move();
@@ -155,7 +156,7 @@ namespace SysML2.NET.TextualNotation
             else if (ownedRelationshipCursor.Current is IMembership membership)
             {
                 // AliasMember : Membership — plain Membership that is neither OwningMembership nor FeatureMembership
-                MembershipTextualNotationBuilder.BuildAliasMember(membership, cursorCache, stringBuilder);
+                MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
             }
         }
@@ -167,9 +168,9 @@ namespace SysML2.NET.TextualNotation
         /// <see cref="IExpression" /> POCO; this method simply emits it as a string.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IExpression" /> that holds the real value expression</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildRealValueHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildRealValueHandCoded(IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco is ILiteralRational literalRational)
             {
@@ -215,6 +216,171 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.AppendLine(" */");
             stringBuilder.AppendLine();
+        }
+
+        /// <summary>
+        /// Appends the shortest resolvable name of the <see cref="IElement"/> for the textual notation,
+        /// per KerML specification section 8.2.3.5.
+        /// <para>When the <paramref name="writerContext"/> carries a non-null
+        /// <see cref="TextualNotationWriterContext.ContextNamespace"/>, the method walks up the
+        /// namespace chain to find whether the element's simple name resolves via imports
+        /// (per 8.2.3.5.4 Full Resolution). If so, the simple name is used; otherwise the full
+        /// <c>qualifiedName</c> is emitted.</para>
+        /// </summary>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="poco">The <see cref="IElement"/> that needs to have its name appended</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> providing the serialization context</param>
+        internal static void AppendQualifiedName(StringBuilder stringBuilder, IElement poco, TextualNotationWriterContext writerContext)
+        {
+            if (poco is IMembership membership)
+            {
+                // Membership references (used in import declarations) must retain
+                // their full qualified name — the path identifies WHAT is being imported.
+                stringBuilder.Append(membership.MemberElement.qualifiedName);
+            }
+            else
+            {
+                // Element references (used in type/feature references) can be shortened
+                // when the element is resolvable by its simple name via imports (8.2.3.5).
+                stringBuilder.Append(QueryShortestResolvableName(poco, writerContext?.ContextNamespace));
+            }
+        }
+
+        /// <summary>
+        /// Determines the shortest name that will resolve to the given <paramref name="element"/>
+        /// per the KerML name resolution rules (8.2.3.5).
+        /// <para>Per 8.2.3.5.4, full resolution walks up from the local namespace through
+        /// containing namespaces to the global namespace. If the element's simple name resolves
+        /// via the <c>membership</c> (which includes imported memberships) of any namespace in
+        /// that chain, the simple name is sufficient.</para>
+        /// </summary>
+        /// <param name="element">The referenced <see cref="IElement"/> to resolve</param>
+        /// <param name="contextNamespace">
+        /// The root <see cref="INamespace"/> being serialized, or <c>null</c> to fall back to the full qualified name
+        /// </param>
+        /// <returns>The shortest name that resolves to the element</returns>
+        private static string QueryShortestResolvableName(IElement element, INamespace contextNamespace)
+        {
+            if (element == null)
+            {
+                return string.Empty;
+            }
+
+            var simpleName = element.EscapedName();
+
+            if (!string.IsNullOrWhiteSpace(simpleName) && contextNamespace != null)
+            {
+                // Per 8.2.3.5.4, full resolution walks up from the local namespace through
+                // containing namespaces. The contextNamespace is the root namespace being
+                // serialized; imports that make the simple name resolvable may be on any
+                // descendant namespace (e.g. a LibraryPackage nested inside the root).
+                // We check the context namespace and all its descendant namespaces.
+                if (QueryIsResolvableInNamespaceTree(contextNamespace, element, simpleName))
+                {
+                    return simpleName;
+                }
+            }
+
+            return element.qualifiedName ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Recursively checks whether the given <paramref name="element"/> is resolvable by its
+        /// <paramref name="simpleName"/> within the <paramref name="namespace"/> or any of its
+        /// descendant namespaces (per 8.2.3.5.4 full resolution, which walks up from the local
+        /// namespace — checking descendants ensures we cover all import scopes in the output model).
+        /// </summary>
+        /// <param name="namespace">The namespace to check (including descendants)</param>
+        /// <param name="element">The element to find</param>
+        /// <param name="simpleName">The simple name to match</param>
+        /// <returns><c>true</c> if the element is found by simple name in the namespace tree</returns>
+        private static bool QueryIsResolvableInNamespaceTree(INamespace @namespace, IElement element, string simpleName)
+        {
+            try
+            {
+                if (QueryIsResolvableBySimpleName(@namespace, element, simpleName))
+                {
+                    return true;
+                }
+            }
+            catch (NotSupportedException)
+            {
+                // membership may not be fully implemented for this namespace
+            }
+
+            try
+            {
+                foreach (var childNamespace in @namespace.ownedMember.OfType<INamespace>())
+                {
+                    if (QueryIsResolvableInNamespaceTree(childNamespace, element, simpleName))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (NotSupportedException)
+            {
+                // ownedMember may not be fully implemented for this namespace
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether the given <paramref name="element"/> is resolvable by its
+        /// <paramref name="simpleName"/> within the <paramref name="namespace"/>'s
+        /// memberships (owned, imported, and inherited).
+        /// </summary>
+        /// <param name="namespace">The namespace to check</param>
+        /// <param name="element">The element to find</param>
+        /// <param name="simpleName">The simple name to match</param>
+        /// <returns><c>true</c> if the element is found by simple name in the namespace</returns>
+        private static bool QueryIsResolvableBySimpleName(INamespace @namespace, IElement element, string simpleName)
+        {
+            // Check ownedMembership first (non-derived, always available)
+            foreach (var ownedMember in @namespace.ownedMembership)
+            {
+                if (ownedMember is IOwningMembership owningMembership
+                    && owningMembership.OwnedRelatedElement.Contains(element))
+                {
+                    return true;
+                }
+
+                if (ownedMember.MemberElement == element)
+                {
+                    return true;
+                }
+            }
+
+            // Check imports: walk ownedImport (ownedRelationship filtered to IImport) to find
+            // MembershipImports that reference the element directly by its membership.
+            foreach (var import in @namespace.ownedImport)
+            {
+                if (import is IMembershipImport membershipImport
+                    && membershipImport.ImportedMembership is IMembership importedMembership
+                    && importedMembership.MemberElement == element)
+                {
+                    return true;
+                }
+
+                if (import is INamespaceImport namespaceImport)
+                {
+                    var importedNs = namespaceImport.ImportedNamespace;
+
+                    if (importedNs != null)
+                    {
+                        foreach (var visibleMember in importedNs.ownedMembership)
+                        {
+                            if (visibleMember.MemberElement == element)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

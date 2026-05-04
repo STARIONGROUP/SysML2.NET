@@ -39,12 +39,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>IfNode:IfActionUsage=ActionNodePrefix'if'ownedRelationship+=ExpressionParameterMemberownedRelationship+=ActionBodyParameterMember('else'ownedRelationship+=(ActionBodyParameterMember|IfNodeParameterMember))?</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIfNode(SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildIfNode(SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, cursorCache, stringBuilder);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("if ");
 
             if (ownedRelationshipCursor.Current != null)
@@ -52,7 +52,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -63,7 +63,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -75,10 +75,10 @@ namespace SysML2.NET.TextualNotation
                 switch (ownedRelationshipCursor.Current)
                 {
                     case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembershipActionBodyParameterMember when pocoParameterMembershipActionBodyParameterMember.IsValidForActionBodyParameterMember():
-                        ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(pocoParameterMembershipActionBodyParameterMember, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(pocoParameterMembershipActionBodyParameterMember, writerContext, stringBuilder);
                         break;
                     case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembership:
-                        ParameterMembershipTextualNotationBuilder.BuildIfNodeParameterMember(pocoParameterMembership, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildIfNodeParameterMember(pocoParameterMembership, writerContext, stringBuilder);
                         break;
                 }
                 ownedRelationshipCursor.Move();

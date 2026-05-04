@@ -36,7 +36,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule FlowDeclaration
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// FlowDeclaration : FlowUsage =
@@ -47,9 +47,9 @@ namespace SysML2.NET.TextualNotation
         ///
         /// Auto-gen emits OccurrenceUsagePrefix + 'flow ' before and DefinitionBody after.
         /// </remarks>
-        private static void BuildFlowDeclarationHandCoded(IFlowUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFlowDeclarationHandCoded(IFlowUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName);
@@ -57,28 +57,28 @@ namespace SysML2.NET.TextualNotation
             if (hasDeclaration || ownedRelationshipCursor.Current is not IEndFeatureMembership)
             {
                 // Alt 1: UsageDeclaration ValuePart? ('of' FlowPayloadFeatureMember)? ('from' FlowEndMember 'to' FlowEndMember)?
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
 
                 if (ownedRelationshipCursor.Current is IFeatureMembership payloadMember
                     && ownedRelationshipCursor.Current is not IEndFeatureMembership)
                 {
                     stringBuilder.Append("of ");
-                    FeatureMembershipTextualNotationBuilder.BuildFlowPayloadFeatureMember(payloadMember, cursorCache, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildFlowPayloadFeatureMember(payloadMember, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is IEndFeatureMembership firstFlowEnd)
                 {
                     stringBuilder.Append("from ");
-                    EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(firstFlowEnd, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(firstFlowEnd, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
 
                     stringBuilder.Append("to ");
 
                     if (ownedRelationshipCursor.Current is IEndFeatureMembership secondFlowEnd)
                     {
-                        EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(secondFlowEnd, cursorCache, stringBuilder);
+                        EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(secondFlowEnd, writerContext, stringBuilder);
                     }
 
                     ownedRelationshipCursor.Move();
@@ -89,14 +89,14 @@ namespace SysML2.NET.TextualNotation
                 // Alt 2: FlowEndMember 'to' FlowEndMember
                 if (ownedRelationshipCursor.Current is IEndFeatureMembership firstFlowEnd)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(firstFlowEnd, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(firstFlowEnd, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
 
                     stringBuilder.Append("to ");
 
                     if (ownedRelationshipCursor.Current is IEndFeatureMembership secondFlowEnd)
                     {
-                        EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(secondFlowEnd, cursorCache, stringBuilder);
+                        EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(secondFlowEnd, writerContext, stringBuilder);
                     }
 
                     ownedRelationshipCursor.Move();
@@ -108,7 +108,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule MessageDeclaration
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// MessageDeclaration : FlowUsage =
@@ -119,9 +119,9 @@ namespace SysML2.NET.TextualNotation
         ///
         /// Auto-gen emits OccurrenceUsagePrefix + 'message ' before and DefinitionBody after.
         /// </remarks>
-        private static void BuildMessageDeclarationHandCoded(IFlowUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildMessageDeclarationHandCoded(IFlowUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName);
@@ -129,28 +129,28 @@ namespace SysML2.NET.TextualNotation
             if (hasDeclaration || ownedRelationshipCursor.Current is not IParameterMembership)
             {
                 // Alt 1: UsageDeclaration ValuePart? ('of' FlowPayloadFeatureMember)? ('from' MessageEventMember 'to' MessageEventMember)?
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
-                FeatureTextualNotationBuilder.BuildValuePart(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
 
                 if (ownedRelationshipCursor.Current is IFeatureMembership payloadMember
                     && ownedRelationshipCursor.Current is not IParameterMembership)
                 {
                     stringBuilder.Append("of ");
-                    FeatureMembershipTextualNotationBuilder.BuildFlowPayloadFeatureMember(payloadMember, cursorCache, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildFlowPayloadFeatureMember(payloadMember, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is IParameterMembership firstMessageEvent)
                 {
                     stringBuilder.Append("from ");
-                    ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(firstMessageEvent, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(firstMessageEvent, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
 
                     stringBuilder.Append("to ");
 
                     if (ownedRelationshipCursor.Current is IParameterMembership secondMessageEvent)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(secondMessageEvent, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(secondMessageEvent, writerContext, stringBuilder);
                     }
 
                     ownedRelationshipCursor.Move();
@@ -161,14 +161,14 @@ namespace SysML2.NET.TextualNotation
                 // Alt 2: MessageEventMember 'to' MessageEventMember
                 if (ownedRelationshipCursor.Current is IParameterMembership firstMessageEvent)
                 {
-                    ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(firstMessageEvent, cursorCache, stringBuilder);
+                    ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(firstMessageEvent, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
 
                     stringBuilder.Append("to ");
 
                     if (ownedRelationshipCursor.Current is IParameterMembership secondMessageEvent)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(secondMessageEvent, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildMessageEventMember(secondMessageEvent, writerContext, stringBuilder);
                     }
 
                     ownedRelationshipCursor.Move();

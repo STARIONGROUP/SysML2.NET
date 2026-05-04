@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfaceUsageDeclaration:InterfaceUsage=UsageDeclarationValuePart?('connect'InterfacePart)?|InterfacePart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceUsageDeclaration(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInterfaceUsageDeclaration(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildInterfaceUsageDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            BuildInterfaceUsageDeclarationHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -51,17 +51,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfacePart:InterfaceUsage=BinaryInterfacePart|NaryInterfacePart</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage pocoInterfaceUsageBinaryInterfacePart when pocoInterfaceUsageBinaryInterfacePart.IsValidForBinaryInterfacePart():
-                    BuildBinaryInterfacePart(pocoInterfaceUsageBinaryInterfacePart, cursorCache, stringBuilder);
+                    BuildBinaryInterfacePart(pocoInterfaceUsageBinaryInterfacePart, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildNaryInterfacePart(poco, cursorCache, stringBuilder);
+                    BuildNaryInterfacePart(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -72,18 +72,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>BinaryInterfacePart:InterfaceUsage=ownedRelationship+=InterfaceEndMember'to'ownedRelationship+=InterfaceEndMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBinaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildBinaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -95,7 +95,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -108,11 +108,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>NaryInterfacePart:InterfaceUsage='('ownedRelationship+=InterfaceEndMember','ownedRelationship+=InterfaceEndMember(','ownedRelationship+=InterfaceEndMember)*')'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildNaryInterfacePart(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("(");
 
             if (ownedRelationshipCursor.Current != null)
@@ -120,7 +120,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -132,7 +132,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                 {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();
@@ -147,7 +147,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
                     {
-                        EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, cursorCache, stringBuilder);
+                        EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
                     }
                 }
                 ownedRelationshipCursor.Move();
@@ -162,14 +162,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>InterfaceUsage=OccurrenceUsagePrefix'interface'InterfaceUsageDeclarationInterfaceBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceUsage(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildInterfaceUsage(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("interface ");
-            BuildInterfaceUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildInterfaceBody(poco, cursorCache, stringBuilder);
+            BuildInterfaceUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildInterfaceBody(poco, writerContext, stringBuilder);
 
         }
     }

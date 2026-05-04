@@ -39,14 +39,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>Message:FlowUsage=OccurrenceUsagePrefix'message'MessageDeclarationDefinitionBody{isAbstract=true}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMessage(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMessage(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("message ");
-            BuildMessageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildDefinitionBody(poco, cursorCache, stringBuilder);
+            BuildMessageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, writerContext, stringBuilder);
             // NonParsing Assignment Element : isAbstract = true => Does not have to be process
 
         }
@@ -56,11 +56,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>MessageDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember)?|ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMessageDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMessageDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildMessageDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            BuildMessageDeclarationHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildFlowDeclarationHandCoded(poco, cursorCache, stringBuilder);
+            BuildFlowDeclarationHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -80,14 +80,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowUsage=OccurrenceUsagePrefix'flow'FlowDeclarationDefinitionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowUsage(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowUsage(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("flow ");
-            BuildFlowDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildDefinitionBody(poco, cursorCache, stringBuilder);
+            BuildFlowDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, writerContext, stringBuilder);
 
         }
     }

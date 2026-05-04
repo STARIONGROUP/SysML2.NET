@@ -39,14 +39,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>AttributeDefinition:AttributeDefinition=DefinitionPrefix'attribute''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAttributeDefinition(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAttributeDefinition(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, cursorCache, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("attribute ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, writerContext, stringBuilder);
 
         }
     }

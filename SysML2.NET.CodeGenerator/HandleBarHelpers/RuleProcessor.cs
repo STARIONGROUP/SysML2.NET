@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
-    using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
 
@@ -39,25 +38,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     /// </summary>
     internal sealed partial class RuleProcessor
     {
-        /// <summary>
-        /// Emits a <c>Build{ruleName}HandCoded(variable, cursorCache, stringBuilder);</c> fallback call.
-        /// When <paramref name="deduplicate" /> is <c>true</c>, the call is only emitted if it has not
-        /// already been emitted for the same rule name in the current generation scope.
-        /// </summary>
-        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
-        /// <param name="ruleName">The grammar rule name used to form the method name</param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        /// <param name="deduplicate">When <c>true</c>, suppress duplicate emissions via <see cref="RuleGenerationContext.EmittedHandCodedCalls" /></param>
-        private void EmitHandCodedFallback(EncodedTextWriter writer, string ruleName, RuleGenerationContext ruleGenerationContext, bool deduplicate = false)
-        {
-            if (deduplicate && !ruleGenerationContext.EmittedHandCodedCalls.Add(ruleName))
-            {
-                return;
-            }
-
-            writer.WriteSafeString($"Build{ruleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, cursorCache, stringBuilder);");
-        }
-
         /// <summary>
         /// Core orchestration method that processes grammar alternatives and emits C# code.
         /// Dispatches to pattern handlers for recognized patterns, or falls back to element-by-element processing.
@@ -73,16 +53,88 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (alternatives.Count == 1)
             {
-                ProcessSingleAlternative(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext, isPartOfMultipleAlternative);
+                this.ProcessSingleAlternative(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext, isPartOfMultipleAlternative);
             }
             else if (alternatives.All(x => x.Elements.Count == 1))
             {
-                ProcessSingleElementAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
+                this.ProcessSingleElementAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
             }
             else
             {
-                ProcessMultiElementAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
+                this.ProcessMultiElementAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
             }
+        }
+
+        /// <summary>
+        /// Emits the body of a single alternative by iterating its elements and delegating to <see cref="ProcessRuleElement" />.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass" /></param>
+        /// <param name="alternative">The <see cref="Alternatives" /> whose elements are emitted</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        internal void EmitAlternativeBody(EncodedTextWriter writer, IClass umlClass, Alternatives alternative, RuleGenerationContext ruleGenerationContext)
+        {
+            var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
+            var previousIndex = ruleGenerationContext.CurrentElementIndex;
+            ruleGenerationContext.CurrentSiblingElements = alternative.Elements;
+
+            for (var elementIndex = 0; elementIndex < alternative.Elements.Count; elementIndex++)
+            {
+                ruleGenerationContext.CurrentElementIndex = elementIndex;
+                this.ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
+            }
+
+            ruleGenerationContext.CurrentSiblingElements = previousSiblings;
+            ruleGenerationContext.CurrentElementIndex = previousIndex;
+        }
+
+        /// <summary>
+        /// Declares cursor variables for all enumerable properties referenced by assignment elements in the given alternative.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="umlClass">The related <see cref="IClass" /></param>
+        /// <param name="alternatives">The <see cref="Alternatives" /> containing assignment elements</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        internal void DeclareAllRequiredCursors(EncodedTextWriter writer, IClass umlClass, Alternatives alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            foreach (var ruleElement in alternatives.Elements)
+            {
+                switch (ruleElement)
+                {
+                    case AssignmentElement assignmentElement:
+                        this.DeclareCursorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
+                        break;
+                    case GroupElement groupElement:
+                        foreach (var groupElementAlternative in groupElement.Alternatives)
+                        {
+                            this.DeclareAllRequiredCursors(writer, umlClass, groupElementAlternative, ruleGenerationContext);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Emits a <c>Build{ruleName}HandCoded(variable, writerContext, stringBuilder);</c> fallback call.
+        /// When <paramref name="deduplicate" /> is <c>true</c>, the call is only emitted if it has not
+        /// already been emitted for the same rule name in the current generation scope.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="ruleName">The grammar rule name used to form the method name</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <param name="deduplicate">
+        /// When <c>true</c>, suppress duplicate emissions via
+        /// <see cref="RuleGenerationContext.EmittedHandCodedCalls" />
+        /// </param>
+        private void EmitHandCodedFallback(EncodedTextWriter writer, string ruleName, RuleGenerationContext ruleGenerationContext, bool deduplicate = false)
+        {
+            if (deduplicate && !ruleGenerationContext.EmittedHandCodedCalls.Add(ruleName))
+            {
+                return;
+            }
+
+            writer.WriteSafeString($"Build{ruleName}HandCoded({ruleGenerationContext.CurrentVariableName ?? "poco"}, writerContext, stringBuilder);");
         }
 
         /// <summary>
@@ -97,7 +149,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         private void ProcessSingleAlternative(EncodedTextWriter writer, IClass umlClass, Alternatives alternative, RuleGenerationContext ruleGenerationContext, bool isPartOfMultipleAlternative)
         {
             var elements = alternative.Elements;
-            DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+            this.DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
 
             if (ruleGenerationContext.CallerRule is { IsOptional: true, IsCollection: false })
             {
@@ -139,7 +191,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         ruleGenerationContext.CurrentElementIndex = elementIndex;
                         var previousCaller = ruleGenerationContext.CallerRule;
-                        ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext);
+                        this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext);
                         ruleGenerationContext.CallerRule = previousCaller;
                     }
 
@@ -157,7 +209,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (referencedRule != null)
                         {
-                            var condition = GenerateInlineOptionalCondition(referencedRule, umlClass, ruleGenerationContext.AllRules, "poco");
+                            var condition = this.GenerateInlineOptionalCondition(referencedRule, umlClass, ruleGenerationContext.AllRules, "poco");
 
                             if (condition != null)
                             {
@@ -184,7 +236,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     for (var elementIndex = 0; elementIndex < elements.Count; elementIndex++)
                     {
                         ruleGenerationContext.CurrentElementIndex = elementIndex;
-                        ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext);
+                        this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext);
                     }
 
                     ruleGenerationContext.CurrentSiblingElements = previousSiblings;
@@ -208,7 +260,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     ruleGenerationContext.CurrentElementIndex = elementIndex;
                     var previousCaller = ruleGenerationContext.CallerRule;
-                    ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext, isPartOfMultipleAlternative);
+                    this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext, isPartOfMultipleAlternative);
                     ruleGenerationContext.CallerRule = previousCaller;
                 }
 
@@ -229,7 +281,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (alternatives.ElementAt(0).Elements[0].TextualNotationRule.IsMultiCollectionAssignment)
             {
-                ProcessMultiCollectionAssignment(writer, umlClass, alternatives, ruleGenerationContext);
+                this.ProcessMultiCollectionAssignment(writer, umlClass, alternatives, ruleGenerationContext);
                 return;
             }
 
@@ -237,11 +289,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (types.Count == 1)
             {
-                ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
+                this.ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
             }
             else
             {
-                ProcessMixedTypeSingleElementAlternatives(writer, umlClass, alternatives, ruleGenerationContext, types);
+                this.ProcessMixedTypeSingleElementAlternatives(writer, umlClass, alternatives, ruleGenerationContext, types);
             }
         }
 
@@ -260,7 +312,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 foreach (var alternative in alternatives)
                 {
-                    DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
+                    this.DeclareAllRequiredCursors(writer, umlClass, alternative, ruleGenerationContext);
                 }
 
                 for (var alternativeIndex = 0; alternativeIndex < alternatives.Count; alternativeIndex++)
@@ -284,7 +336,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (targetProperty.QueryIsEnumerable())
                             {
-                                DeclareAllRequiredCursors(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext);
+                                this.DeclareAllRequiredCursors(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext);
 
                                 var iterator = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
 
@@ -297,14 +349,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
                             }
 
-                            ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
+                            this.ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
 
                             writer.WriteSafeString($"{Environment.NewLine}}}");
                             break;
 
                         case NonTerminalElement nonTerminalElement:
                             writer.WriteSafeString($"{{{Environment.NewLine}");
-                            ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, ruleGenerationContext);
+                            this.ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, ruleGenerationContext);
                             writer.WriteSafeString($"{Environment.NewLine}}}");
                             break;
                     }
@@ -312,7 +364,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else if (types.SequenceEqual([typeof(NonTerminalElement), typeof(AssignmentElement)]))
             {
-                EmitNonTerminalThenAssignmentDispatch(writer, umlClass, alternatives, ruleGenerationContext);
+                this.EmitNonTerminalThenAssignmentDispatch(writer, umlClass, alternatives, ruleGenerationContext);
             }
             else if (alternatives.ElementAt(0).Elements[0] is TerminalElement terminalElement && alternatives.ElementAt(1).Elements[0] is AssignmentElement assignmentElement)
             {
@@ -320,18 +372,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 writer.WriteSafeString($"if(!{targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
                 writer.WriteSafeString($"{{{Environment.NewLine}");
-                ProcessRuleElement(writer, umlClass, terminalElement, ruleGenerationContext);
+                this.ProcessRuleElement(writer, umlClass, terminalElement, ruleGenerationContext);
                 writer.WriteSafeString($"{Environment.NewLine}}}");
                 writer.WriteSafeString("else");
                 writer.WriteSafeString($"{Environment.NewLine}{{{Environment.NewLine}");
-                ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
+                this.ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
                 writer.WriteSafeString($"{Environment.NewLine}}}");
             }
             else
             {
                 var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
 
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, deduplicate: true);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
             }
         }
 
@@ -353,7 +405,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (referencedAssignmentNonTerminals.Count != assignmentElements.Count)
             {
                 var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -363,7 +415,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (existingCursor == null)
             {
-                writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
+                writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()});{Environment.NewLine}");
                 var cursorDef = new CursorDefinition { DefinedForProperty = targetProperty };
 
                 foreach (var assignmentElement in assignmentElements)
@@ -395,7 +447,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var previousVariableName = ruleGenerationContext.CurrentVariableName;
                 ruleGenerationContext.CurrentVariableName = assignmentVarName;
-                ProcessNonTerminalElement(writer, mappedElement.UmlClass, mappedElement.RuleElement, ruleGenerationContext);
+                this.ProcessNonTerminalElement(writer, mappedElement.UmlClass, mappedElement.RuleElement, ruleGenerationContext);
                 ruleGenerationContext.CurrentVariableName = previousVariableName;
 
                 writer.WriteSafeString($"{Environment.NewLine}{cursorVarName}.Move();{Environment.NewLine}");
@@ -411,7 +463,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 ? nonTerminalReferencedRule.EffectiveTarget
                 : umlClass.Name;
 
-            var nonTerminalCall = ResolveBuilderCall(umlClass, nonTerminalElement, nonTerminalTypeTarget, ruleGenerationContext);
+            var nonTerminalCall = this.ResolveBuilderCall(umlClass, nonTerminalElement, nonTerminalTypeTarget, ruleGenerationContext);
 
             if (nonTerminalCall != null)
             {
@@ -422,7 +474,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var previousCaller = ruleGenerationContext.CallerRule;
                 var previousName = ruleGenerationContext.CurrentVariableName;
                 ruleGenerationContext.CallerRule = nonTerminalElement;
-                ProcessAlternatives(writer, umlClass, nonTerminalReferencedRule?.Alternatives, ruleGenerationContext);
+                this.ProcessAlternatives(writer, umlClass, nonTerminalReferencedRule?.Alternatives, ruleGenerationContext);
                 ruleGenerationContext.CallerRule = previousCaller;
                 ruleGenerationContext.CurrentVariableName = previousName;
             }
@@ -443,12 +495,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             // When all alternatives consist exclusively of terminal elements (and optionally non-parsing assignments), handle via code-gen
             if (alternatives.All(alt => alt.Elements.Count > 0 && alt.Elements.All(element => element is TerminalElement or NonParsingAssignmentElement)))
             {
-                EmitTerminalOnlyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
+                this.EmitTerminalOnlyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
                 return;
             }
 
             // Detect pattern: property=[QualifiedName] | property=NonTerminal{containment+=property}
-            if (alternatives.Count == 2 && TryEmitQualifiedNameOrChainAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+            if (alternatives.Count == 2 && this.TryEmitQualifiedNameOrChainAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
             {
                 return;
             }
@@ -459,34 +511,34 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (hasTerminalOnlyFirstAlt && alternatives.Count == 2)
             {
-                EmitTerminalVsBodyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
+                this.EmitTerminalVsBodyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
             }
             else
             {
                 // Try each pattern handler in order; fall back to HandCoded if none match
-                if (TryHandleOperatorLiteralAlternation(writer, umlClass, alternatives, ruleGenerationContext))
+                if (this.TryHandleOperatorLiteralAlternation(writer, umlClass, alternatives, ruleGenerationContext))
                 {
                     return;
                 }
 
-                if (TryHandleEmptyVsNonEmptyMembership(writer, umlClass, alternatives, ruleGenerationContext))
+                if (this.TryHandleEmptyVsNonEmptyMembership(writer, umlClass, alternatives, ruleGenerationContext))
                 {
                     return;
                 }
 
-                if (TryHandlePocoTypeDispatchWithCompoundAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+                if (this.TryHandlePocoTypeDispatchWithCompoundAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
                 {
                     return;
                 }
 
-                if (TryHandleReferenceOrInline(writer, umlClass, alternatives, ruleGenerationContext))
+                if (this.TryHandleReferenceOrInline(writer, umlClass, alternatives, ruleGenerationContext))
                 {
                     return;
                 }
 
                 var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
 
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, deduplicate: true);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
             }
         }
 
@@ -626,11 +678,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
             {
-                builderCallString = $"Build{chainNonTerminal.Name}({chainVarName}, cursorCache, stringBuilder);";
+                builderCallString = $"Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
             }
             else
             {
-                builderCallString = $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, cursorCache, stringBuilder);";
+                builderCallString = $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
             }
 
             writer.WriteSafeString($"if ({variableName}.{resolvedContainmentName}.Contains({variableName}.{resolvedPropertyName}) && {variableName}.{resolvedPropertyName} is {chainTypeName} {chainVarName}){Environment.NewLine}");
@@ -639,7 +691,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"}}{Environment.NewLine}");
             writer.WriteSafeString($"else if ({variableName}.{resolvedPropertyName} != null){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            writer.WriteSafeString($"stringBuilder.Append({variableName}.{resolvedPropertyName}.qualifiedName);{Environment.NewLine}");
+            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext);{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
@@ -669,7 +721,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (allCollectionAssignments.Count > 0)
             {
-                EmitTerminalVsBodyWithCollectionAssignments(writer, umlClass, firstAlt, secondAlt, allCollectionAssignments, ruleGenerationContext);
+                this.EmitTerminalVsBodyWithCollectionAssignments(writer, umlClass, firstAlt, secondAlt, allCollectionAssignments, ruleGenerationContext);
             }
             else
             {
@@ -677,7 +729,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (collectionNonTerminals.Count > 0)
                 {
-                    EmitTerminalVsBodyWithCollectionNonTerminals(writer, umlClass, firstAlt, secondAlt, collectionNonTerminals, ruleGenerationContext);
+                    this.EmitTerminalVsBodyWithCollectionNonTerminals(writer, umlClass, firstAlt, secondAlt, collectionNonTerminals, ruleGenerationContext);
                 }
                 else
                 {
@@ -685,12 +737,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (nonCollectionNonTerminals.Count > 0)
                     {
-                        EmitTerminalVsBodyWithSingleNonTerminal(writer, umlClass, firstAlt, secondAlt, nonCollectionNonTerminals, ruleGenerationContext);
+                        this.EmitTerminalVsBodyWithSingleNonTerminal(writer, umlClass, firstAlt, secondAlt, nonCollectionNonTerminals, ruleGenerationContext);
                     }
                     else
                     {
                         var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                        EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                        this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                     }
                 }
             }
@@ -708,7 +760,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (targetProperty != null)
             {
                 var bodyPropertyAccess = targetProperty.QueryPropertyNameBasedOnUmlProperties();
-                writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{bodyPropertyAccess}).Current == null){Environment.NewLine}");
+                writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{bodyPropertyAccess}).Current == null){Environment.NewLine}");
 
                 writer.WriteSafeString($"{{{Environment.NewLine}");
                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -716,11 +768,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString($"else{Environment.NewLine}");
                 writer.WriteSafeString($"{{{Environment.NewLine}");
 
-                DeclareAllRequiredCursors(writer, umlClass, secondAlt, ruleGenerationContext);
+                this.DeclareAllRequiredCursors(writer, umlClass, secondAlt, ruleGenerationContext);
 
                 foreach (var element in secondAlt.Elements)
                 {
-                    ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
+                    this.ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
                 }
 
                 writer.WriteSafeString($"}}{Environment.NewLine}");
@@ -728,7 +780,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             else
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
         }
 
@@ -743,7 +795,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (nonTerminalRule == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -752,7 +804,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (collectionPropertyNames.Count == 0)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -763,13 +815,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (targetProperty == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-            writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+            writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -782,7 +834,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (element is NonTerminalElement { IsCollection: true })
                 {
                     var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
-                    writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
+                    writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
 
                     var collectionNonTerminal = (NonTerminalElement)element;
                     var referencedRule = ruleGenerationContext.FindRule(collectionNonTerminal.Name);
@@ -791,7 +843,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ? referencedRule.EffectiveTarget
                         : umlClass.Name;
 
-                    var perItemCall = ResolveBuilderCall(umlClass, collectionNonTerminal, typeTarget, ruleGenerationContext);
+                    var perItemCall = this.ResolveBuilderCall(umlClass, collectionNonTerminal, typeTarget, ruleGenerationContext);
 
                     writer.WriteSafeString($"while ({cursorVarName}.Current != null){Environment.NewLine}");
                     writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -805,7 +857,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var previousCaller = ruleGenerationContext.CallerRule;
                         var previousName = ruleGenerationContext.CurrentVariableName;
                         ruleGenerationContext.CallerRule = collectionNonTerminal;
-                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                        this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
                         ruleGenerationContext.CallerRule = previousCaller;
                         ruleGenerationContext.CurrentVariableName = previousName;
                     }
@@ -814,7 +866,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
+                    this.ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
                 }
             }
 
@@ -832,7 +884,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (nonTerminalRule == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -841,7 +893,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (collectionPropertyNames.Count == 0)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -852,13 +904,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (targetProperty == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-            writer.WriteSafeString($"if(cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+            writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -871,7 +923,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (element is NonTerminalElement { IsCollection: false } singleNonTerminal)
                 {
                     var cursorVarName = $"{targetProperty.Name.LowerCaseFirstLetter()}Cursor";
-                    writer.WriteSafeString($"var {cursorVarName} = cursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
+                    writer.WriteSafeString($"var {cursorVarName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
 
                     var referencedRule = ruleGenerationContext.FindRule(singleNonTerminal.Name);
 
@@ -879,7 +931,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ? referencedRule.EffectiveTarget
                         : umlClass.Name;
 
-                    var perItemCall = ResolveBuilderCall(umlClass, singleNonTerminal, typeTarget, ruleGenerationContext);
+                    var perItemCall = this.ResolveBuilderCall(umlClass, singleNonTerminal, typeTarget, ruleGenerationContext);
 
                     writer.WriteSafeString($"if ({cursorVarName}.Current != null){Environment.NewLine}");
                     writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -893,7 +945,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var previousCaller = ruleGenerationContext.CallerRule;
                         var previousName = ruleGenerationContext.CurrentVariableName;
                         ruleGenerationContext.CallerRule = singleNonTerminal;
-                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                        this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
                         ruleGenerationContext.CallerRule = previousCaller;
                         ruleGenerationContext.CurrentVariableName = previousName;
                     }
@@ -902,61 +954,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
+                    this.ProcessRuleElement(writer, umlClass, element, ruleGenerationContext);
                 }
             }
 
             writer.WriteSafeString($"}}{Environment.NewLine}");
-        }
-
-        /// <summary>
-        /// Emits the body of a single alternative by iterating its elements and delegating to <see cref="ProcessRuleElement" />.
-        /// </summary>
-        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
-        /// <param name="umlClass">The current <see cref="IClass" /></param>
-        /// <param name="alternative">The <see cref="Alternatives" /> whose elements are emitted</param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        internal void EmitAlternativeBody(EncodedTextWriter writer, IClass umlClass, Alternatives alternative, RuleGenerationContext ruleGenerationContext)
-        {
-            var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
-            var previousIndex = ruleGenerationContext.CurrentElementIndex;
-            ruleGenerationContext.CurrentSiblingElements = alternative.Elements;
-
-            for (var elementIndex = 0; elementIndex < alternative.Elements.Count; elementIndex++)
-            {
-                ruleGenerationContext.CurrentElementIndex = elementIndex;
-                ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
-            }
-
-            ruleGenerationContext.CurrentSiblingElements = previousSiblings;
-            ruleGenerationContext.CurrentElementIndex = previousIndex;
-        }
-
-        /// <summary>
-        /// Declares cursor variables for all enumerable properties referenced by assignment elements in the given alternative.
-        /// </summary>
-        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
-        /// <param name="umlClass">The related <see cref="IClass" /></param>
-        /// <param name="alternatives">The <see cref="Alternatives" /> containing assignment elements</param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        internal void DeclareAllRequiredCursors(EncodedTextWriter writer, IClass umlClass, Alternatives alternatives, RuleGenerationContext ruleGenerationContext)
-        {
-            foreach (var ruleElement in alternatives.Elements)
-            {
-                switch (ruleElement)
-                {
-                    case AssignmentElement assignmentElement:
-                        DeclareCursorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
-                        break;
-                    case GroupElement groupElement:
-                        foreach (var groupElementAlternative in groupElement.Alternatives)
-                        {
-                            DeclareAllRequiredCursors(writer, umlClass, groupElementAlternative, ruleGenerationContext);
-                        }
-
-                        break;
-                }
-            }
         }
     }
 }
