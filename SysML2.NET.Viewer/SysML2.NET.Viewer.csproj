@@ -22,8 +22,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.7" PrivateAssets="all" />
-        <PackageReference Include="ReactiveUI" Version="23.2.1" />
-        <PackageReference Include="Radzen.Blazor" Version="10.3.1" />
+        <PackageReference Include="ReactiveUI" Version="23.2.19" />
+        <PackageReference Include="Radzen.Blazor" Version="10.3.2" />
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
         <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
