@@ -268,7 +268,7 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembershipBehaviorUsageMember when pocoFeatureMembershipBehaviorUsageMember.IsValidForBehaviorUsageMember():
+                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembershipBehaviorUsageMember when pocoFeatureMembershipBehaviorUsageMember.IsValidForBehaviorUsageMember(writerContext):
                     BuildBehaviorUsageMember(pocoFeatureMembershipBehaviorUsageMember, writerContext, stringBuilder);
                     break;
                 default:

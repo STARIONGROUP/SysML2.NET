@@ -58,29 +58,30 @@ namespace SysML2.NET.TextualNotation
         /// <summary>
         /// Asserts that the <see cref="IFeature"/> is valid for the Typings rule.
         /// <para><c>Typings : Feature = TypedBy (',' ownedRelationship += FeatureTyping)*</c></para>
-        /// <para>Matches when the feature owns at least one <see cref="IFeatureTyping"/>.</para>
+        /// <para>Matches when the feature's <c>ownedRelationship</c> cursor is currently
+        /// positioned at an <see cref="IFeatureTyping"/>.</para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns an <see cref="IFeatureTyping"/></returns>
-        internal static bool IsValidForTypings(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IFeatureTyping"/></returns>
+        internal static bool IsValidForTypings(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship => relationship is IFeatureTyping) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is IFeatureTyping;
         }
 
         /// <summary>
         /// Asserts that the <see cref="IFeature"/> is valid for the Subsettings rule.
         /// <para><c>Subsettings : Feature = Subsets (',' ownedRelationship += OwnedSubsetting)*</c></para>
-        /// <para>Matches when the feature owns an <see cref="ISubsetting"/> that is a plain subsetting —
-        /// i.e. not one of the more specific subtypes (<see cref="IRedefinition"/>,
-        /// <see cref="IReferenceSubsetting"/>, <see cref="ICrossSubsetting"/>), each of which has its
-        /// own dedicated rule (Redefinitions / References / Crosses) elsewhere in the switch.</para>
+        /// <para>Matches when the cursor is at an <see cref="ISubsetting"/> that is NOT one of the
+        /// more specific subtypes (<see cref="IRedefinition"/>, <see cref="IReferenceSubsetting"/>,
+        /// <see cref="ICrossSubsetting"/>), each of which has its own dedicated rule.</para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns a plain <see cref="ISubsetting"/></returns>
-        internal static bool IsValidForSubsettings(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is a plain <see cref="ISubsetting"/></returns>
+        internal static bool IsValidForSubsettings(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship =>
-                relationship is ISubsetting and not IRedefinition and not IReferenceSubsetting and not ICrossSubsetting) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is ISubsetting and not IRedefinition and not IReferenceSubsetting and not ICrossSubsetting;
         }
 
         /// <summary>
@@ -88,10 +89,11 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>References : Feature = REFERENCES ownedRelationship += OwnedReferenceSubsetting</c></para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns an <see cref="IReferenceSubsetting"/></returns>
-        internal static bool IsValidForReferences(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IReferenceSubsetting"/></returns>
+        internal static bool IsValidForReferences(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship => relationship is IReferenceSubsetting) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is IReferenceSubsetting;
         }
 
         /// <summary>
@@ -99,10 +101,11 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>Crosses : Feature = CROSSES ownedRelationship += OwnedCrossSubsetting</c></para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns an <see cref="ICrossSubsetting"/></returns>
-        internal static bool IsValidForCrosses(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="ICrossSubsetting"/></returns>
+        internal static bool IsValidForCrosses(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship => relationship is ICrossSubsetting) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is ICrossSubsetting;
         }
 
         /// <summary>
@@ -110,10 +113,11 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>ChainingPart : Feature = 'chains' (ownedRelationship += OwnedFeatureChaining | FeatureChain)</c></para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns an <see cref="IFeatureChaining"/></returns>
-        internal static bool IsValidForChainingPart(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IFeatureChaining"/></returns>
+        internal static bool IsValidForChainingPart(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship => relationship is IFeatureChaining) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is IFeatureChaining;
         }
 
         /// <summary>
@@ -121,24 +125,26 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>InvertingPart : Feature = 'inverse' 'of' ownedRelationship += OwnedFeatureInverting</c></para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns an <see cref="IFeatureInverting"/></returns>
-        internal static bool IsValidForInvertingPart(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IFeatureInverting"/></returns>
+        internal static bool IsValidForInvertingPart(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship => relationship is IFeatureInverting) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is IFeatureInverting;
         }
 
         /// <summary>
         /// Asserts that the <see cref="IFeature"/> is valid for the PositionalArgumentList rule.
         /// <para><c>PositionalArgumentList : Feature = e.ownedRelationship += ArgumentMember (',' e.ownedRelationship += ArgumentMember)*</c></para>
-        /// <para>Matches when the feature owns an <see cref="IParameterMembership"/> (as opposed to
-        /// NamedArgumentList, which owns plain <see cref="IFeatureMembership"/> members without being
-        /// <see cref="IParameterMembership"/>).</para>
+        /// <para>Matches when the cursor is positioned at an <see cref="IParameterMembership"/>
+        /// (positional arguments) — the alternative <c>NamedArgumentList</c> uses plain
+        /// <see cref="IFeatureMembership"/> members.</para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
-        /// <returns>True if the feature owns an <see cref="IParameterMembership"/></returns>
-        internal static bool IsValidForPositionalArgumentList(this IFeature feature)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IParameterMembership"/></returns>
+        internal static bool IsValidForPositionalArgumentList(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return feature?.OwnedRelationship.Any(relationship => relationship is IParameterMembership) == true;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is IParameterMembership;
         }
 
         /// <summary>
@@ -146,10 +152,11 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>DisjoiningPart : Type = 'disjoint' 'from' ownedRelationship += OwnedDisjoining (',' ownedRelationship += OwnedDisjoining)*</c></para>
         /// </summary>
         /// <param name="type">The <see cref="IType"/></param>
-        /// <returns>True if the type owns an <see cref="IDisjoining"/></returns>
-        internal static bool IsValidForDisjoiningPart(this IType type)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IDisjoining"/></returns>
+        internal static bool IsValidForDisjoiningPart(this IType type, TextualNotationWriterContext writerContext)
         {
-            return type?.OwnedRelationship.Any(relationship => relationship is IDisjoining) == true;
+            return QueryCurrentOwnedRelationship(type, writerContext) is IDisjoining;
         }
 
         /// <summary>
@@ -157,10 +164,11 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>UnioningPart : Type = 'unions' ownedRelationship += Unioning (',' ownedRelationship += Unioning)*</c></para>
         /// </summary>
         /// <param name="type">The <see cref="IType"/></param>
-        /// <returns>True if the type owns an <see cref="IUnioning"/></returns>
-        internal static bool IsValidForUnioningPart(this IType type)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IUnioning"/></returns>
+        internal static bool IsValidForUnioningPart(this IType type, TextualNotationWriterContext writerContext)
         {
-            return type?.OwnedRelationship.Any(relationship => relationship is IUnioning) == true;
+            return QueryCurrentOwnedRelationship(type, writerContext) is IUnioning;
         }
 
         /// <summary>
@@ -168,10 +176,28 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>IntersectingPart : Type = 'intersects' ownedRelationship += Intersecting (',' ownedRelationship += Intersecting)*</c></para>
         /// </summary>
         /// <param name="type">The <see cref="IType"/></param>
-        /// <returns>True if the type owns an <see cref="IIntersecting"/></returns>
-        internal static bool IsValidForIntersectingPart(this IType type)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the cursor's current element is an <see cref="IIntersecting"/></returns>
+        internal static bool IsValidForIntersectingPart(this IType type, TextualNotationWriterContext writerContext)
         {
-            return type?.OwnedRelationship.Any(relationship => relationship is IIntersecting) == true;
+            return QueryCurrentOwnedRelationship(type, writerContext) is IIntersecting;
+        }
+
+        /// <summary>
+        /// Returns the current element under the <c>ownedRelationship</c> cursor for the given
+        /// <paramref name="element"/>, or <c>null</c> when context/cursor cannot be obtained.
+        /// </summary>
+        /// <param name="element">The <see cref="IFeature"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>The current cursor element, or <c>null</c></returns>
+        private static IElement QueryCurrentOwnedRelationship(IElement element, TextualNotationWriterContext writerContext)
+        {
+            if (element == null || writerContext?.CursorCache == null)
+            {
+                return null;
+            }
+
+            return writerContext.CursorCache.GetOrCreateCursor(element.Id, "ownedRelationship", element.OwnedRelationship).Current;
         }
 
         /// <summary>
@@ -184,8 +210,9 @@ namespace SysML2.NET.TextualNotation
         /// SatisfyRequirementUsage inherits <see cref="IRequirementUsage"/>).</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns a behavior-usage element</returns>
-        internal static bool IsValidForBehaviorUsageMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForBehaviorUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.Any(element =>
                 element is IActionUsage or IStateUsage or IConstraintUsage
@@ -199,8 +226,9 @@ namespace SysML2.NET.TextualNotation
         /// so exactly two <see cref="IEndFeatureMembership"/> entries = binary.</para>
         /// </summary>
         /// <param name="connector">The <see cref="IConnector"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the connector owns exactly two <see cref="IEndFeatureMembership"/> children</returns>
-        internal static bool IsValidForBinaryConnectorDeclaration(this IConnector connector)
+        internal static bool IsValidForBinaryConnectorDeclaration(this IConnector connector, TextualNotationWriterContext writerContext)
         {
             return connector?.OwnedRelationship.OfType<IEndFeatureMembership>().Count() == 2;
         }
@@ -213,8 +241,9 @@ namespace SysML2.NET.TextualNotation
         /// <see cref="IEndFeatureMembership"/> entries: exactly two = binary, otherwise n-ary.</para>
         /// </summary>
         /// <param name="connectionUsage">The <see cref="IConnectionUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the connection usage owns exactly two <see cref="IEndFeatureMembership"/> children</returns>
-        internal static bool IsValidForBinaryConnectorPart(this IConnectionUsage connectionUsage)
+        internal static bool IsValidForBinaryConnectorPart(this IConnectionUsage connectionUsage, TextualNotationWriterContext writerContext)
         {
             return connectionUsage?.OwnedRelationship.OfType<IEndFeatureMembership>().Count() == 2;
         }
@@ -226,8 +255,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>InterfaceEndMember : EndFeatureMembership</c> — exactly two <see cref="IEndFeatureMembership"/> = binary.</para>
         /// </summary>
         /// <param name="interfaceUsage">The <see cref="IInterfaceUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the interface usage owns exactly two <see cref="IEndFeatureMembership"/> children</returns>
-        internal static bool IsValidForBinaryInterfacePart(this IInterfaceUsage interfaceUsage)
+        internal static bool IsValidForBinaryInterfacePart(this IInterfaceUsage interfaceUsage, TextualNotationWriterContext writerContext)
         {
             return interfaceUsage?.OwnedRelationship.OfType<IEndFeatureMembership>().Count() == 2;
         }
@@ -242,8 +272,9 @@ namespace SysML2.NET.TextualNotation
         /// <see cref="IFlowUsage"/>.</para>
         /// </summary>
         /// <param name="usage">The <see cref="IUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the usage is a structural-usage metaclass</returns>
-        internal static bool IsValidForStructureUsageElement(this IUsage usage)
+        internal static bool IsValidForStructureUsageElement(this IUsage usage, TextualNotationWriterContext writerContext)
         {
             return usage is IOccurrenceUsage or IItemUsage or IPartUsage or IViewUsage
                 or IRenderingUsage or IPortUsage or IConnectionUsage or IInterfaceUsage
@@ -257,8 +288,9 @@ namespace SysML2.NET.TextualNotation
         /// specific rules (<c>IndividualUsage</c>, <c>PortionUsage</c>).</para>
         /// </summary>
         /// <param name="occurrenceUsage">The <see cref="IOccurrenceUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the usage is a plain occurrence (no individual, no portion kind)</returns>
-        internal static bool IsValidForOccurrenceUsage(this IOccurrenceUsage occurrenceUsage)
+        internal static bool IsValidForOccurrenceUsage(this IOccurrenceUsage occurrenceUsage, TextualNotationWriterContext writerContext)
         {
             return occurrenceUsage is { IsIndividual: false, PortionKind: null };
         }
@@ -271,8 +303,9 @@ namespace SysML2.NET.TextualNotation
         /// and should flow to the default case.</para>
         /// </summary>
         /// <param name="occurrenceUsage">The <see cref="IOccurrenceUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the usage is an individual (not a portion)</returns>
-        internal static bool IsValidForIndividualUsage(this IOccurrenceUsage occurrenceUsage)
+        internal static bool IsValidForIndividualUsage(this IOccurrenceUsage occurrenceUsage, TextualNotationWriterContext writerContext)
         {
             return occurrenceUsage is { IsIndividual: true, PortionKind: null };
         }
@@ -285,8 +318,9 @@ namespace SysML2.NET.TextualNotation
         /// <c>IndividualDefinition</c> is the default fallback.</para>
         /// </summary>
         /// <param name="occurrenceDefinition">The <see cref="IOccurrenceDefinition"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the definition is a plain occurrence (not an individual)</returns>
-        internal static bool IsValidForOccurrenceDefinition(this IOccurrenceDefinition occurrenceDefinition)
+        internal static bool IsValidForOccurrenceDefinition(this IOccurrenceDefinition occurrenceDefinition, TextualNotationWriterContext writerContext)
         {
             return occurrenceDefinition is { IsIndividual: false };
         }
@@ -297,8 +331,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>FlowUsage = OccurrenceUsagePrefix 'flow' FlowDeclaration DefinitionBody</c></para>
         /// </summary>
         /// <param name="flowUsage">The <see cref="IFlowUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the usage is not abstract (i.e. not a Message)</returns>
-        internal static bool IsValidForFlowUsage(this IFlowUsage flowUsage)
+        internal static bool IsValidForFlowUsage(this IFlowUsage flowUsage, TextualNotationWriterContext writerContext)
         {
             return flowUsage is { IsAbstract: false };
         }
@@ -310,8 +345,9 @@ namespace SysML2.NET.TextualNotation
         /// distinguisher between a Message and a plain FlowUsage in the unparse direction.</para>
         /// </summary>
         /// <param name="flowUsage">The <see cref="IFlowUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the usage is abstract (a Message)</returns>
-        internal static bool IsValidForMessage(this IFlowUsage flowUsage)
+        internal static bool IsValidForMessage(this IFlowUsage flowUsage, TextualNotationWriterContext writerContext)
         {
             return flowUsage is { IsAbstract: true };
         }
@@ -322,8 +358,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>GuardExpressionMember : TransitionFeatureMembership = 'if' { kind = 'guard' } …</c></para>
         /// </summary>
         /// <param name="transitionUsage">The <see cref="ITransitionUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the transition owns a guard-kind transition feature membership</returns>
-        internal static bool IsValidForGuardedTargetSuccession(this ITransitionUsage transitionUsage)
+        internal static bool IsValidForGuardedTargetSuccession(this ITransitionUsage transitionUsage, TextualNotationWriterContext writerContext)
         {
             return transitionUsage?.OwnedRelationship.Any(relationship =>
                 relationship is ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard }) == true;
@@ -335,8 +372,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>ActionBodyParameter : ActionUsage = ('action' UsageDeclaration?)? '{' ActionBodyItem* '}'</c></para>
         /// </summary>
         /// <param name="parameterMembership">The <see cref="IParameterMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns an <see cref="IActionUsage"/></returns>
-        internal static bool IsValidForActionBodyParameterMember(this IParameterMembership parameterMembership)
+        internal static bool IsValidForActionBodyParameterMember(this IParameterMembership parameterMembership, TextualNotationWriterContext writerContext)
         {
             return parameterMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any() == true;
         }
@@ -397,8 +435,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>ConditionalExpression : OperatorExpression = operator='if' …</c></para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the expression's <c>Operator</c> is <c>"if"</c></returns>
-        internal static bool IsValidForConditionalExpression(this IOperatorExpression operatorExpression)
+        internal static bool IsValidForConditionalExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
         {
             return operatorExpression?.Operator == "if";
         }
@@ -408,8 +447,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>operator = ConditionalBinaryOperator</c> where <c>ConditionalBinaryOperator = '??' | 'or' | 'and' | 'implies'</c></para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the expression's <c>Operator</c> is one of the conditional binary operators</returns>
-        internal static bool IsValidForConditionalBinaryOperatorExpression(this IOperatorExpression operatorExpression)
+        internal static bool IsValidForConditionalBinaryOperatorExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
         {
             return operatorExpression?.Operator is not null && ConditionalBinaryOperators.Contains(operatorExpression.Operator);
         }
@@ -422,8 +462,9 @@ namespace SysML2.NET.TextualNotation
         /// requires the expression to own at least two <see cref="IParameterMembership"/> arguments.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the expression matches the BinaryOperatorExpression rule</returns>
-        internal static bool IsValidForBinaryOperatorExpression(this IOperatorExpression operatorExpression)
+        internal static bool IsValidForBinaryOperatorExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
         {
             if (operatorExpression?.Operator is null || !BinaryOperators.Contains(operatorExpression.Operator))
             {
@@ -445,8 +486,9 @@ namespace SysML2.NET.TextualNotation
         /// to own a single <see cref="IParameterMembership"/> argument.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the expression matches the UnaryOperatorExpression rule</returns>
-        internal static bool IsValidForUnaryOperatorExpression(this IOperatorExpression operatorExpression)
+        internal static bool IsValidForUnaryOperatorExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
         {
             if (operatorExpression?.Operator is null || !UnaryOperators.Contains(operatorExpression.Operator))
             {
@@ -469,8 +511,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>Matches when the operator is one of <c>'istype'</c>, <c>'hastype'</c>, <c>'@'</c>, or <c>'as'</c>.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the expression's <c>Operator</c> is a classification-test or cast operator</returns>
-        internal static bool IsValidForClassificationExpression(this IOperatorExpression operatorExpression)
+        internal static bool IsValidForClassificationExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
         {
             return operatorExpression?.Operator is not null && ClassificationExpressionOperators.Contains(operatorExpression.Operator);
         }
@@ -488,8 +531,9 @@ namespace SysML2.NET.TextualNotation
         /// deferred.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the expression's <c>Operator</c> is a meta-cast or metaclassification-test operator</returns>
-        internal static bool IsValidForMetaclassificationExpression(this IOperatorExpression operatorExpression)
+        internal static bool IsValidForMetaclassificationExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
         {
             return operatorExpression?.Operator is not null && MetaclassificationExpressionOperators.Contains(operatorExpression.Operator);
         }
@@ -504,8 +548,9 @@ namespace SysML2.NET.TextualNotation
         /// disambiguates.</para>
         /// </summary>
         /// <param name="expression">The <see cref="IExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True for any non-null expression</returns>
-        internal static bool IsValidForSequenceExpression(this IExpression expression)
+        internal static bool IsValidForSequenceExpression(this IExpression expression, TextualNotationWriterContext writerContext)
         {
             return expression is not null;
         }
@@ -521,8 +566,9 @@ namespace SysML2.NET.TextualNotation
         /// dispatcher should place any future BodyExpression case before this guard.</para>
         /// </summary>
         /// <param name="featureReferenceExpression">The <see cref="IFeatureReferenceExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True for any non-null expression</returns>
-        internal static bool IsValidForFeatureReferenceExpression(this IFeatureReferenceExpression featureReferenceExpression)
+        internal static bool IsValidForFeatureReferenceExpression(this IFeatureReferenceExpression featureReferenceExpression, TextualNotationWriterContext writerContext)
         {
             return featureReferenceExpression is not null;
         }
@@ -537,8 +583,9 @@ namespace SysML2.NET.TextualNotation
         /// an <c>ActionBodyItem</c> dispatch, which is the only caller.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership references its target via cross-reference only</returns>
-        internal static bool IsValidForInitialNodeMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForInitialNodeMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership is { MemberElement: not null }
                 && featureMembership.OwnedRelatedElement.Count == 0;
@@ -553,8 +600,9 @@ namespace SysML2.NET.TextualNotation
         /// checked first, then ActionTargetSuccessionMember).</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns a succession or transition usage</returns>
-        internal static bool IsValidForActionTargetSuccessionMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForActionTargetSuccessionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.Any(element => element is ISuccessionAsUsage or ITransitionUsage) == true;
         }
@@ -568,8 +616,9 @@ namespace SysML2.NET.TextualNotation
         /// or its descendants). The broadest accurate predicate is "owns an <see cref="IActionUsage"/>".</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns an <see cref="IActionUsage"/></returns>
-        internal static bool IsValidForActionBehaviorMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForActionBehaviorMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any() == true;
         }
@@ -580,8 +629,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>GuardedSuccession : TransitionUsage = ('succession' UsageDeclaration)? 'first' … ownedRelationship += GuardExpressionMember 'then' …</c></para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns a transition usage with a guard-kind feature</returns>
-        internal static bool IsValidForGuardedSuccessionMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForGuardedSuccessionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.OfType<ITransitionUsage>().Any(transition =>
                 transition.OwnedRelationship.Any(relationship =>
@@ -598,8 +648,9 @@ namespace SysML2.NET.TextualNotation
         /// broader predicate only matches the residual transition case.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns an <see cref="ITransitionUsage"/></returns>
-        internal static bool IsValidForTransitionUsageMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForTransitionUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.OfType<ITransitionUsage>().Any() == true;
         }
@@ -615,8 +666,9 @@ namespace SysML2.NET.TextualNotation
         /// perfectly capture the parse context.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns a transition usage whose first parameter is empty</returns>
-        internal static bool IsValidForTargetTransitionUsageMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForTargetTransitionUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.OfType<ITransitionUsage>().Any(transition =>
                 transition.OwnedRelationship.OfType<IParameterMembership>().FirstOrDefault() is IParameterMembership parameterMembership
@@ -628,8 +680,9 @@ namespace SysML2.NET.TextualNotation
         /// <para><c>EntryActionMember : StateSubactionMembership = MemberPrefix kind = 'entry' …</c></para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership is a <see cref="IStateSubactionMembership"/> with <c>Kind == Entry</c></returns>
-        internal static bool IsValidForEntryActionMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForEntryActionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership is IStateSubactionMembership { Kind: SysML2.NET.Core.Systems.States.StateSubactionKind.Entry };
         }
@@ -641,70 +694,38 @@ namespace SysML2.NET.TextualNotation
         /// <see cref="ISuccessionAsUsage"/>.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if the membership owns a succession or transition usage</returns>
-        internal static bool IsValidForEntryTransitionMemberRule(this IFeatureMembership featureMembership)
+        internal static bool IsValidForEntryTransitionMemberRule(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.Any(element => element is ITransitionUsage or ISuccessionAsUsage) == true;
         }
-
+        
         /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the DoActionMember rule (StateBodyItem).
-        /// <para><c>DoActionMember : StateSubactionMembership = MemberPrefix kind = 'do' …</c></para>
-        /// </summary>
-        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
-        /// <returns>True if the membership is a <see cref="IStateSubactionMembership"/> with <c>Kind == Do</c></returns>
-        internal static bool IsValidForDoActionMember(this IFeatureMembership featureMembership)
-        {
-            return featureMembership is IStateSubactionMembership { Kind: SysML2.NET.Core.Systems.States.StateSubactionKind.Do };
-        }
-
-        /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ExitActionMember rule (StateBodyItem).
-        /// <para><c>ExitActionMember : StateSubactionMembership = MemberPrefix kind = 'exit' …</c></para>
-        /// </summary>
-        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
-        /// <returns>True if the membership is a <see cref="IStateSubactionMembership"/> with <c>Kind == Exit</c></returns>
-        internal static bool IsValidForExitActionMember(this IFeatureMembership featureMembership)
-        {
-            return featureMembership is IStateSubactionMembership { Kind: SysML2.NET.Core.Systems.States.StateSubactionKind.Exit };
-        }
-
-        /// <summary>
-        /// Asserts that the <see cref="IElement"/> matches the lexical <c>BASIC_NAME</c> rule
-        /// (i.e. the name would be expressed as a <c>BASIC_NAME</c> rather than an
-        /// <c>UNRESTRICTED_NAME</c>). Used to dispatch inside the generated <c>NAME</c>
-        /// switch inlined by <c>QualifiedName</c>.
-        /// <para>Delegates to <see cref="StringExtensions.QueryIsValidBasicName"/>, which checks
-        /// the declared name against the <c>[a-zA-Z_][a-zA-Z0-9_]*</c> pattern and excludes
-        /// reserved keywords.</para>
-        /// </summary>
-        /// <param name="element">The <see cref="IElement"/></param>
-        /// <returns>True if the element's declared name is a valid basic name</returns>
-        internal static bool IsValidForBASIC_NAME(this IElement element)
-        {
-            return !string.IsNullOrWhiteSpace(element?.DeclaredName) && element.DeclaredName.QueryIsValidBasicName();
-        }
-
-        /// <summary>
-        /// Asserts that the <see cref="IOwningMembership"/> contains at least one <see cref="IFeature"/>
-        /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
+        /// Asserts that the <see cref="IOwningMembership"/> is valid for the NonFeatureMember rule.
+        /// <para><c>NonFeatureMember : OwningMembership = MemberPrefix ownedRelatedElement += MemberElement</c></para>
+        /// <para><c>MemberElement = AnnotatingElement | NonFeatureElement</c> — a NonFeatureMember
+        /// owns an element that is NOT an <see cref="IFeature"/>.</para>
         /// </summary>
         /// <param name="owningMembership">The <see cref="IOwningMembership"/></param>
-        /// <returns>True if one <see cref="IFeature"/> is contained in the <see cref="IRelationship.OwnedRelatedElement"/></returns>
-        internal static bool IsValidForNonFeatureMember(this IOwningMembership owningMembership)
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if no <see cref="IFeature"/> is contained in the <see cref="IRelationship.OwnedRelatedElement"/></returns>
+        internal static bool IsValidForNonFeatureMember(this IOwningMembership owningMembership, TextualNotationWriterContext writerContext)
+        {
+            return !owningMembership.OwnedRelatedElement.OfType<IFeature>().Any();
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IOwningMembership"/> is valid for the FeatureMember rule.
+        /// <para><c>FeatureMember : OwningMembership = TypeFeatureMember | OwnedFeatureMember</c></para>
+        /// <para>Both alternatives own an <see cref="IFeature"/>.</para>
+        /// </summary>
+        /// <param name="owningMembership">The <see cref="IOwningMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if at least one <see cref="IFeature"/> is contained in the <see cref="IRelationship.OwnedRelatedElement"/></returns>
+        internal static bool IsValidForFeatureMember(this IOwningMembership owningMembership, TextualNotationWriterContext writerContext)
         {
             return owningMembership.OwnedRelatedElement.OfType<IFeature>().Any();
-        }
-
-        /// <summary>
-        /// Asserts that the <see cref="IOwningMembership"/> does not contain any <see cref="IFeature"/>
-        /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
-        /// </summary>
-        /// <param name="owningMembership">The <see cref="IOwningMembership"/></param>
-        /// <returns>True if no <see cref="IFeature"/> is contained in the <see cref="IRelationship.OwnedRelatedElement"/></returns>
-        internal static bool IsValidForFeatureMember(this IOwningMembership owningMembership)
-        {
-            return !owningMembership.IsValidForNonFeatureMember();
         }
 
         /// <summary>
@@ -712,8 +733,9 @@ namespace SysML2.NET.TextualNotation
         /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if it contains one <see cref="ISuccessionAsUsage"/></returns>
-        internal static bool IsValidForSourceSuccessionMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForSourceSuccessionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership.OwnedRelatedElement.OfType<ISuccessionAsUsage>().Any();
         }
@@ -723,8 +745,9 @@ namespace SysML2.NET.TextualNotation
         /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if it contains one <see cref="IOccurrenceUsage"/></returns>
-        internal static bool IsValidForOccurrenceUsageMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForOccurrenceUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership.OwnedRelatedElement.OfType<IOccurrenceUsage>().Any();
         }
@@ -734,10 +757,11 @@ namespace SysML2.NET.TextualNotation
         /// but no <see cref="IOccurrenceUsage"/> inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if it contains one <see cref="IUsage"/> but no <see cref="IOccurrenceUsage"/></returns>
-        internal static bool IsValidForNonOccurrenceUsageMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForNonOccurrenceUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return !featureMembership.IsValidForOccurrenceUsageMember() && featureMembership.OwnedRelatedElement.OfType<IUsage>().Any();
+            return !featureMembership.IsValidForOccurrenceUsageMember(writerContext) && featureMembership.OwnedRelatedElement.OfType<IUsage>().Any();
         }
 
         /// <summary>
@@ -745,8 +769,9 @@ namespace SysML2.NET.TextualNotation
         /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
         /// <returns>True if contains any of the required element types</returns>
-        internal static bool IsValidForStructureUsageMember(this IFeatureMembership featureMembership)
+        internal static bool IsValidForStructureUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership.OwnedRelatedElement.OfType<OccurrenceUsage>().Any()
                    || featureMembership.OwnedRelatedElement.OfType<EventOccurrenceUsage>().Any()

@@ -50,12 +50,12 @@ namespace SysML2.NET.TextualNotation
                 switch (ownedRelationshipCursor.Current)
                 {
                     // Action-specific cases
-                    case IFeatureMembership featureMembershipForInitialNode when featureMembershipForInitialNode.IsValidForInitialNodeMember():
+                    case IFeatureMembership featureMembershipForInitialNode when featureMembershipForInitialNode.IsValidForInitialNodeMember(writerContext):
                     {
                         FeatureMembershipTextualNotationBuilder.BuildInitialNodeMember(featureMembershipForInitialNode, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
-                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember())
+                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -64,24 +64,24 @@ namespace SysML2.NET.TextualNotation
                         break;
                     }
 
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember():
+                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
                     {
                         var nextElement = ownedRelationshipCursor.GetNext(1);
 
-                        if (nextElement is IFeatureMembership nextForActionBehavior && nextForActionBehavior.IsValidForActionBehaviorMember())
+                        if (nextElement is IFeatureMembership nextForActionBehavior && nextForActionBehavior.IsValidForActionBehaviorMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
                             FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
 
-                            while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember())
+                            while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
                             {
                                 FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
                                 ownedRelationshipCursor.Move();
                             }
                         }
-                        else if (nextElement is IFeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember())
+                        else if (nextElement is IFeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -96,12 +96,12 @@ namespace SysML2.NET.TextualNotation
                         break;
                     }
 
-                    case IFeatureMembership featureMembershipForActionBehavior when featureMembershipForActionBehavior.IsValidForActionBehaviorMember():
+                    case IFeatureMembership featureMembershipForActionBehavior when featureMembershipForActionBehavior.IsValidForActionBehaviorMember(writerContext):
                     {
                         FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember(featureMembershipForActionBehavior, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
-                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember())
+                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -110,7 +110,7 @@ namespace SysML2.NET.TextualNotation
                         break;
                     }
 
-                    case IFeatureMembership featureMembershipForGuarded when featureMembershipForGuarded.IsValidForGuardedSuccessionMember():
+                    case IFeatureMembership featureMembershipForGuarded when featureMembershipForGuarded.IsValidForGuardedSuccessionMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildGuardedSuccessionMember(featureMembershipForGuarded, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
@@ -126,12 +126,12 @@ namespace SysML2.NET.TextualNotation
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember():
+                    case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember():
+                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
@@ -173,11 +173,11 @@ namespace SysML2.NET.TextualNotation
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember():
+                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
                     {
                         var nextElement = ownedRelationshipCursor.GetNext(1);
 
-                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember())
+                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -192,12 +192,12 @@ namespace SysML2.NET.TextualNotation
                         break;
                     }
 
-                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember():
+                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember():
+                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
@@ -314,11 +314,11 @@ namespace SysML2.NET.TextualNotation
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember():
+                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
                     {
                         var nextElement = ownedRelationshipCursor.GetNext(1);
 
-                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember())
+                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -333,12 +333,12 @@ namespace SysML2.NET.TextualNotation
                         break;
                     }
 
-                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember():
+                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildInterfaceOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember():
+                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
@@ -398,7 +398,7 @@ namespace SysML2.NET.TextualNotation
                         StateSubactionMembershipTextualNotationBuilder.BuildEntryActionMember(entryActionMember, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
-                        while (ownedRelationshipCursor.Current is IFeatureMembership entryTransition && entryTransition.IsValidForEntryTransitionMemberRule())
+                        while (ownedRelationshipCursor.Current is IFeatureMembership entryTransition && entryTransition.IsValidForEntryTransitionMemberRule(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildEntryTransitionMember(entryTransition, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -418,24 +418,24 @@ namespace SysML2.NET.TextualNotation
                         break;
 
                     // SourceSuccessionMember? + BehaviorUsageMember + TargetTransitionUsageMember*
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember():
+                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
                     {
                         var nextElement = ownedRelationshipCursor.GetNext(1);
 
-                        if (nextElement is IFeatureMembership nextForBehavior && nextForBehavior.IsValidForBehaviorUsageMember())
+                        if (nextElement is IFeatureMembership nextForBehavior && nextForBehavior.IsValidForBehaviorUsageMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
                             FeatureMembershipTextualNotationBuilder.BuildBehaviorUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
 
-                            while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition && targetTransition.IsValidForTargetTransitionUsageMember())
+                            while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition && targetTransition.IsValidForTargetTransitionUsageMember(writerContext))
                             {
                                 FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
                                 ownedRelationshipCursor.Move();
                             }
                         }
-                        else if (nextElement is IFeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember())
+                        else if (nextElement is IFeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -451,12 +451,12 @@ namespace SysML2.NET.TextualNotation
                     }
 
                     // BehaviorUsageMember without preceding SourceSuccessionMember
-                    case IFeatureMembership featureMembershipForBehavior when featureMembershipForBehavior.IsValidForBehaviorUsageMember():
+                    case IFeatureMembership featureMembershipForBehavior when featureMembershipForBehavior.IsValidForBehaviorUsageMember(writerContext):
                     {
                         FeatureMembershipTextualNotationBuilder.BuildBehaviorUsageMember(featureMembershipForBehavior, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
-                        while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition && targetTransition.IsValidForTargetTransitionUsageMember())
+                        while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition && targetTransition.IsValidForTargetTransitionUsageMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
@@ -466,7 +466,7 @@ namespace SysML2.NET.TextualNotation
                     }
 
                     // TransitionUsageMember
-                    case IFeatureMembership featureMembershipForTransition when featureMembershipForTransition.IsValidForTransitionUsageMember():
+                    case IFeatureMembership featureMembershipForTransition when featureMembershipForTransition.IsValidForTransitionUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildTransitionUsageMember(featureMembershipForTransition, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
@@ -482,12 +482,12 @@ namespace SysML2.NET.TextualNotation
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember():
+                    case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember():
+                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;

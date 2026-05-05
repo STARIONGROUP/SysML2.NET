@@ -81,16 +81,16 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureTypings when pocoFeatureTypings.IsValidForTypings():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureTypings when pocoFeatureTypings.IsValidForTypings(writerContext):
                     BuildTypings(pocoFeatureTypings, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureSubsettings when pocoFeatureSubsettings.IsValidForSubsettings():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureSubsettings when pocoFeatureSubsettings.IsValidForSubsettings(writerContext):
                     BuildSubsettings(pocoFeatureSubsettings, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureReferences when pocoFeatureReferences.IsValidForReferences():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureReferences when pocoFeatureReferences.IsValidForReferences(writerContext):
                     BuildReferences(pocoFeatureReferences, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureCrosses when pocoFeatureCrosses.IsValidForCrosses():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureCrosses when pocoFeatureCrosses.IsValidForCrosses(writerContext):
                     BuildCrosses(pocoFeatureCrosses, writerContext, stringBuilder);
                     break;
                 default:
@@ -688,10 +688,10 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureChainingPart when pocoFeatureChainingPart.IsValidForChainingPart():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureChainingPart when pocoFeatureChainingPart.IsValidForChainingPart(writerContext):
                     BuildChainingPart(pocoFeatureChainingPart, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureInvertingPart when pocoFeatureInvertingPart.IsValidForInvertingPart():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureInvertingPart when pocoFeatureInvertingPart.IsValidForInvertingPart(writerContext):
                     BuildInvertingPart(pocoFeatureInvertingPart, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
@@ -1026,7 +1026,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("(");
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeaturePositionalArgumentList when pocoFeaturePositionalArgumentList.IsValidForPositionalArgumentList():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeaturePositionalArgumentList when pocoFeaturePositionalArgumentList.IsValidForPositionalArgumentList(writerContext):
                     BuildPositionalArgumentList(pocoFeaturePositionalArgumentList, writerContext, stringBuilder);
                     break;
                 default:

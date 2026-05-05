@@ -45,22 +45,22 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalExpression when pocoOperatorExpressionConditionalExpression.IsValidForConditionalExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalExpression when pocoOperatorExpressionConditionalExpression.IsValidForConditionalExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildConditionalExpression(pocoOperatorExpressionConditionalExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalBinaryOperatorExpression when pocoOperatorExpressionConditionalBinaryOperatorExpression.IsValidForConditionalBinaryOperatorExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalBinaryOperatorExpression when pocoOperatorExpressionConditionalBinaryOperatorExpression.IsValidForConditionalBinaryOperatorExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildConditionalBinaryOperatorExpression(pocoOperatorExpressionConditionalBinaryOperatorExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionBinaryOperatorExpression when pocoOperatorExpressionBinaryOperatorExpression.IsValidForBinaryOperatorExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionBinaryOperatorExpression when pocoOperatorExpressionBinaryOperatorExpression.IsValidForBinaryOperatorExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildBinaryOperatorExpression(pocoOperatorExpressionBinaryOperatorExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionUnaryOperatorExpression when pocoOperatorExpressionUnaryOperatorExpression.IsValidForUnaryOperatorExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionUnaryOperatorExpression when pocoOperatorExpressionUnaryOperatorExpression.IsValidForUnaryOperatorExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildUnaryOperatorExpression(pocoOperatorExpressionUnaryOperatorExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionClassificationExpression when pocoOperatorExpressionClassificationExpression.IsValidForClassificationExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionClassificationExpression when pocoOperatorExpressionClassificationExpression.IsValidForClassificationExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildClassificationExpression(pocoOperatorExpressionClassificationExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionMetaclassificationExpression when pocoOperatorExpressionMetaclassificationExpression.IsValidForMetaclassificationExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionMetaclassificationExpression when pocoOperatorExpressionMetaclassificationExpression.IsValidForMetaclassificationExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildMetaclassificationExpression(pocoOperatorExpressionMetaclassificationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpression:
@@ -120,7 +120,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpression:
                     InvocationExpressionTextualNotationBuilder.BuildFunctionOperationExpression(pocoInvocationExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionSequenceExpression when pocoExpressionSequenceExpression.IsValidForSequenceExpression():
+                case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionSequenceExpression when pocoExpressionSequenceExpression.IsValidForSequenceExpression(writerContext):
                     BuildSequenceExpression(pocoExpressionSequenceExpression, writerContext, stringBuilder);
                     break;
                 default:
@@ -204,7 +204,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression pocoLiteralExpression:
                     LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(pocoLiteralExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression pocoFeatureReferenceExpressionFeatureReferenceExpression when pocoFeatureReferenceExpressionFeatureReferenceExpression.IsValidForFeatureReferenceExpression():
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression pocoFeatureReferenceExpressionFeatureReferenceExpression when pocoFeatureReferenceExpressionFeatureReferenceExpression.IsValidForFeatureReferenceExpression(writerContext):
                     FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(pocoFeatureReferenceExpressionFeatureReferenceExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression pocoFeatureReferenceExpression:

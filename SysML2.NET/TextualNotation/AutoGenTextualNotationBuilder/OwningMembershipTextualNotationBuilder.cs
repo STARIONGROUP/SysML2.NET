@@ -339,7 +339,7 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership pocoOwningMembershipNonFeatureMember when pocoOwningMembershipNonFeatureMember.IsValidForNonFeatureMember():
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership pocoOwningMembershipNonFeatureMember when pocoOwningMembershipNonFeatureMember.IsValidForNonFeatureMember(writerContext):
                     BuildNonFeatureMember(pocoOwningMembershipNonFeatureMember, writerContext, stringBuilder);
                     break;
                 default:

@@ -103,14 +103,14 @@ namespace SysML2.NET.TextualNotation
             }
             else if (ownedRelationshipCursor.Current is IFeatureMembership featureMembership)
             {
-                if (featureMembership.IsValidForSourceSuccessionMember())
+                if (featureMembership.IsValidForSourceSuccessionMember(writerContext))
                 {
                     FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is IFeatureMembership structureMembership
-                    && structureMembership.IsValidForStructureUsageMember())
+                    && structureMembership.IsValidForStructureUsageMember(writerContext))
                 {
                     FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(structureMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
@@ -121,14 +121,14 @@ namespace SysML2.NET.TextualNotation
                     ownedRelationshipCursor.Move();
                 }
                 else if (ownedRelationshipCursor.Current is IFeatureMembership nonOccurrenceMembership
-                         && nonOccurrenceMembership.IsValidForNonOccurrenceUsageMember())
+                         && nonOccurrenceMembership.IsValidForNonOccurrenceUsageMember(writerContext))
                 {
                     FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(nonOccurrenceMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
                 else if (ownedRelationshipCursor.Current is IOwningMembership owningMembership)
                 {
-                    if (owningMembership.IsValidForNonFeatureMember())
+                    if (owningMembership.IsValidForNonFeatureMember(writerContext))
                     {
                         OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
                     }
@@ -142,7 +142,7 @@ namespace SysML2.NET.TextualNotation
             }
             else if (ownedRelationshipCursor.Current is IOwningMembership owningMembership)
             {
-                if (owningMembership.IsValidForNonFeatureMember())
+                if (owningMembership.IsValidForNonFeatureMember(writerContext))
                 {
                     OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
                 }

@@ -74,7 +74,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append("else ");
                 switch (ownedRelationshipCursor.Current)
                 {
-                    case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembershipActionBodyParameterMember when pocoParameterMembershipActionBodyParameterMember.IsValidForActionBodyParameterMember():
+                    case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembershipActionBodyParameterMember when pocoParameterMembershipActionBodyParameterMember.IsValidForActionBodyParameterMember(writerContext):
                         ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(pocoParameterMembershipActionBodyParameterMember, writerContext, stringBuilder);
                         break;
                     case SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership pocoParameterMembership:

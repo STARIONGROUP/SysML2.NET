@@ -57,7 +57,7 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage pocoInterfaceUsageBinaryInterfacePart when pocoInterfaceUsageBinaryInterfacePart.IsValidForBinaryInterfacePart():
+                case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage pocoInterfaceUsageBinaryInterfacePart when pocoInterfaceUsageBinaryInterfacePart.IsValidForBinaryInterfacePart(writerContext):
                     BuildBinaryInterfacePart(pocoInterfaceUsageBinaryInterfacePart, writerContext, stringBuilder);
                     break;
                 default:

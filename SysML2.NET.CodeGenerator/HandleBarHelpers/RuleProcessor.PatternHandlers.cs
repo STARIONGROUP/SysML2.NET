@@ -626,7 +626,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 for (var elementIndex = 0; elementIndex < unguardedElements.Count - 1; elementIndex++)
                                 {
                                     var element = unguardedElements[elementIndex];
-                                    whenGuards[element.RuleElement] = $"{{0}}.IsValidFor{element.RuleElement.Name}()";
+                                    whenGuards[element.RuleElement] = $"{{0}}.IsValidFor{element.RuleElement.Name}(writerContext)";
                                 }
                             }
                         }
@@ -801,7 +801,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                                 else
                                 {
-                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName()} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()} when {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}.IsValidFor{orderedElement.RuleElement.Name}():{Environment.NewLine}");
+                                    writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName()} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()} when {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}.IsValidFor{orderedElement.RuleElement.Name}(writerContext):{Environment.NewLine}");
                                 }
 
                                 var previousVariableName = ruleGenerationContext.CurrentVariableName;

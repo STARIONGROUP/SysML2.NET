@@ -138,7 +138,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition pocoAttributeDefinition:
                     AttributeDefinitionTextualNotationBuilder.BuildAttributeDefinition(pocoAttributeDefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinitionOccurrenceDefinition when pocoOccurrenceDefinitionOccurrenceDefinition.IsValidForOccurrenceDefinition():
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinitionOccurrenceDefinition when pocoOccurrenceDefinitionOccurrenceDefinition.IsValidForOccurrenceDefinition(writerContext):
                     OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinition(pocoOccurrenceDefinitionOccurrenceDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinition:

@@ -597,13 +597,13 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeDisjoiningPart when pocoTypeDisjoiningPart.IsValidForDisjoiningPart():
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeDisjoiningPart when pocoTypeDisjoiningPart.IsValidForDisjoiningPart(writerContext):
                     BuildDisjoiningPart(pocoTypeDisjoiningPart, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeUnioningPart when pocoTypeUnioningPart.IsValidForUnioningPart():
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeUnioningPart when pocoTypeUnioningPart.IsValidForUnioningPart(writerContext):
                     BuildUnioningPart(pocoTypeUnioningPart, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeIntersectingPart when pocoTypeIntersectingPart.IsValidForIntersectingPart():
+                case SysML2.NET.Core.POCO.Core.Types.IType pocoTypeIntersectingPart when pocoTypeIntersectingPart.IsValidForIntersectingPart(writerContext):
                     BuildIntersectingPart(pocoTypeIntersectingPart, writerContext, stringBuilder);
                     break;
                 default:
@@ -817,11 +817,11 @@ namespace SysML2.NET.TextualNotation
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             switch (ownedRelationshipCursor.Current)
             {
-                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership when owningMembership.IsValidForNonFeatureMember():
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership when owningMembership.IsValidForNonFeatureMember(writerContext):
                     OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(owningMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                     break;
-                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership when owningMembership.IsValidForFeatureMember():
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership when owningMembership.IsValidForFeatureMember(writerContext):
                     OwningMembershipTextualNotationBuilder.BuildFeatureMember(owningMembership, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                     break;

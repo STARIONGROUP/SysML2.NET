@@ -45,7 +45,7 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnectorBinaryConnectorDeclaration when pocoConnectorBinaryConnectorDeclaration.IsValidForBinaryConnectorDeclaration():
+                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnectorBinaryConnectorDeclaration when pocoConnectorBinaryConnectorDeclaration.IsValidForBinaryConnectorDeclaration(writerContext):
                     BuildBinaryConnectorDeclaration(pocoConnectorBinaryConnectorDeclaration, writerContext, stringBuilder);
                     break;
                 default:

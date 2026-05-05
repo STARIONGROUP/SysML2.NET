@@ -309,7 +309,7 @@ namespace SysML2.NET.TextualNotation
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement():
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement(writerContext):
                     BuildStructureUsageElement(pocoUsageStructureUsageElement, writerContext, stringBuilder);
                     break;
                 default:
@@ -339,7 +339,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage pocoAllocationUsage:
                     AllocationUsageTextualNotationBuilder.BuildAllocationUsage(pocoAllocationUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsageMessage when pocoFlowUsageMessage.IsValidForMessage():
+                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsageMessage when pocoFlowUsageMessage.IsValidForMessage(writerContext):
                     FlowUsageTextualNotationBuilder.BuildMessage(pocoFlowUsageMessage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsage:
@@ -366,10 +366,10 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
                     PortUsageTextualNotationBuilder.BuildPortUsage(pocoPortUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage():
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage():
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
@@ -462,7 +462,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage pocoAllocationUsage:
                     AllocationUsageTextualNotationBuilder.BuildAllocationUsage(pocoAllocationUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsageFlowUsage when pocoFlowUsageFlowUsage.IsValidForFlowUsage():
+                case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsageFlowUsage when pocoFlowUsageFlowUsage.IsValidForFlowUsage(writerContext):
                     FlowUsageTextualNotationBuilder.BuildFlowUsage(pocoFlowUsageFlowUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage pocoFlowUsage:
@@ -504,10 +504,10 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
                     AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage():
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage():
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
@@ -564,7 +564,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
                     PortUsageTextualNotationBuilder.BuildDefaultInterfaceEnd(pocoPortUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement():
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement(writerContext):
                     BuildStructureUsageElement(pocoUsageStructureUsageElement, writerContext, stringBuilder);
                     break;
                 default:
@@ -588,7 +588,7 @@ namespace SysML2.NET.TextualNotation
                 case SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage pocoSuccessionAsUsage:
                     SuccessionAsUsageTextualNotationBuilder.BuildTargetSuccession(pocoSuccessionAsUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.States.ITransitionUsage pocoTransitionUsageGuardedTargetSuccession when pocoTransitionUsageGuardedTargetSuccession.IsValidForGuardedTargetSuccession():
+                case SysML2.NET.Core.POCO.Systems.States.ITransitionUsage pocoTransitionUsageGuardedTargetSuccession when pocoTransitionUsageGuardedTargetSuccession.IsValidForGuardedTargetSuccession(writerContext):
                     TransitionUsageTextualNotationBuilder.BuildGuardedTargetSuccession(pocoTransitionUsageGuardedTargetSuccession, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.States.ITransitionUsage pocoTransitionUsage:
