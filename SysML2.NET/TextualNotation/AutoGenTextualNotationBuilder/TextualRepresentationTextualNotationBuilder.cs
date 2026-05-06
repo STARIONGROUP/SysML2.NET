@@ -39,15 +39,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>TextualRepresentation=('rep'Identification)?'language'language=STRING_VALUEbody=REGULAR_COMMENT</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.ITextualRepresentation" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTextualRepresentation(SysML2.NET.Core.POCO.Root.Annotations.ITextualRepresentation poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildTextualRepresentation(SysML2.NET.Core.POCO.Root.Annotations.ITextualRepresentation poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append("rep ");
-                ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
             }
 

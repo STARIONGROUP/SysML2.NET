@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowEnd=(ownedRelationship+=FlowEndSubsetting)?ownedRelationship+=FlowFeatureMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current != null)
             {
@@ -53,11 +53,11 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
                     {
-                        ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(elementAsReferenceSubsetting, cursorCache, stringBuilder);
+                        ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(elementAsReferenceSubsetting, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+
                     }
                 }
-                ownedRelationshipCursor.Move();
-
                 stringBuilder.Append(' ');
             }
 
@@ -67,7 +67,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
                 {
-                    FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(elementAsFeatureMembership, cursorCache, stringBuilder);
+                    FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(elementAsFeatureMembership, writerContext, stringBuilder);
                 }
             }
             ownedRelationshipCursor.Move();

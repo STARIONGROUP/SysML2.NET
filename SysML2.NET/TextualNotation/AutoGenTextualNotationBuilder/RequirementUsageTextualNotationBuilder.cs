@@ -39,18 +39,18 @@ namespace SysML2.NET.TextualNotation
         /// <para>ObjectiveRequirementUsage:RequirementUsage=UsageExtensionKeyword*ConstraintUsageDeclarationRequirementBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildObjectiveRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildObjectiveRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
-            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildRequirementBody(poco, cursorCache, stringBuilder);
+            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, writerContext, stringBuilder);
 
         }
 
@@ -59,11 +59,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementVerificationUsage:RequirementUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecialization*RequirementBody|(UsageExtensionKeyword*'requirement'|UsageExtensionKeyword+)ConstraintUsageDeclarationRequirementBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementVerificationUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRequirementVerificationUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildRequirementVerificationUsageHandCoded(poco, cursorCache, stringBuilder);
+            BuildRequirementVerificationUsageHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -71,14 +71,14 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementUsage=OccurrenceUsagePrefix'requirement'ConstraintUsageDeclarationRequirementBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("requirement ");
-            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildRequirementBody(poco, cursorCache, stringBuilder);
+            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, writerContext, stringBuilder);
 
         }
     }

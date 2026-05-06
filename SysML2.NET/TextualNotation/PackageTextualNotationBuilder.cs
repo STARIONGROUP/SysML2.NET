@@ -33,9 +33,9 @@ namespace SysML2.NET.TextualNotation
         /// Build the non-existing Filter Package import rule
         /// </summary>
         /// <param name="poco">The <see cref="IPackage"/> from which the rule should be built</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/></param>
-        private static void BuildFilterPackageImport(IPackage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildFilterPackageImport(IPackage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
         }
     }

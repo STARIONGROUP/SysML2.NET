@@ -35,26 +35,26 @@ namespace SysML2.NET.TextualNotation
         /// <remarks>RelationshipOwnedElement:Relationship=ownedRelatedElement+=OwnedRelatedElement|ownedRelationship+=OwnedAnnotation. Each alternative consumes exactly one element from its respective collection.</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildRelationshipOwnedElementHandCoded(IRelationship poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildRelationshipOwnedElementHandCoded(IRelationship poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             // Alternative 1: process one OwnedRelatedElement if the ownedRelatedElement cursor has a current value
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (ownedRelatedElementCursor.Current != null)
             {
-                ElementTextualNotationBuilder.BuildOwnedRelatedElement(ownedRelatedElementCursor.Current, cursorCache, stringBuilder);
+                ElementTextualNotationBuilder.BuildOwnedRelatedElement(ownedRelatedElementCursor.Current, writerContext, stringBuilder);
                 ownedRelatedElementCursor.Move();
                 return;
             }
 
             // Alternative 2: process one OwnedAnnotation from the ownedRelationship cursor
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is IAnnotation annotation)
             {
-                AnnotationTextualNotationBuilder.BuildOwnedAnnotation(annotation, cursorCache, stringBuilder);
+                AnnotationTextualNotationBuilder.BuildOwnedAnnotation(annotation, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
             }
         }

@@ -34,19 +34,19 @@ namespace SysML2.NET.TextualNotation
         /// <remarks>SequenceExpressionList:Expression=OwnedExpression','?|SequenceOperatorExpression. SequenceOperatorExpression is an OperatorExpression with operator=','.</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSequenceExpressionListHandCoded(IExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildSequenceExpressionListHandCoded(IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             // Dispatch: if the poco is an OperatorExpression with operator=',', emit as SequenceOperatorExpression;
             // otherwise emit as OwnedExpression (the optional trailing comma in the grammar is not emitted)
             if (poco is SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression { Operator: "," } operatorExpression)
             {
-                OperatorExpressionTextualNotationBuilder.BuildSequenceOperatorExpression(operatorExpression, cursorCache, stringBuilder);
+                OperatorExpressionTextualNotationBuilder.BuildSequenceOperatorExpression(operatorExpression, writerContext, stringBuilder);
             }
             else
             {
-                BuildOwnedExpression(poco, cursorCache, stringBuilder);
+                BuildOwnedExpression(poco, writerContext, stringBuilder);
             }
         }
     }

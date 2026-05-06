@@ -39,13 +39,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>AttributeUsage:AttributeUsage=UsagePrefix'attribute'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAttributeUsage(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAttributeUsage(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildUsagePrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("attribute ");
-            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, writerContext, stringBuilder);
 
         }
     }

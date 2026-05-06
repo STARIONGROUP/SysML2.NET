@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>ImportDeclaration:Import=MembershipImport|NamespaceImport</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IImport" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildImportDeclaration(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildImportDeclaration(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport pocoMembershipImport:
-                    MembershipImportTextualNotationBuilder.BuildMembershipImport(pocoMembershipImport, cursorCache, stringBuilder);
+                    MembershipImportTextualNotationBuilder.BuildMembershipImport(pocoMembershipImport, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.INamespaceImport pocoNamespaceImport:
-                    NamespaceImportTextualNotationBuilder.BuildNamespaceImport(pocoNamespaceImport, cursorCache, stringBuilder);
+                    NamespaceImportTextualNotationBuilder.BuildNamespaceImport(pocoNamespaceImport, writerContext, stringBuilder);
                     break;
             }
 
@@ -60,9 +60,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>Import=visibility=VisibilityIndicator'import'(isImportAll?='all')?ImportDeclarationRelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IImport" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildImport(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildImport(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append(poco.Visibility.ToString().ToLower());
             stringBuilder.Append(' ');
@@ -74,8 +74,8 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            BuildImportDeclaration(poco, cursorCache, stringBuilder);
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            BuildImportDeclaration(poco, writerContext, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

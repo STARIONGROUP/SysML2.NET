@@ -33,9 +33,9 @@ namespace SysML2.NET.TextualNotation
         /// Build the Value rule for real
         /// </summary>
         /// <param name="poco">The <see cref="ILiteralExpression"/></param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/></param>
-        private static void BuildValue(ILiteralExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildValue(ILiteralExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
         }
     }

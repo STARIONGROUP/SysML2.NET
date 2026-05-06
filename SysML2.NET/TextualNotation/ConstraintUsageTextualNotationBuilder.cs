@@ -50,27 +50,27 @@ namespace SysML2.NET.TextualNotation
         /// own body.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IConstraintUsage"/> being serialised</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache"/> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache"/> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
-        private static void BuildRequirementConstraintUsageHandCoded(IConstraintUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildRequirementConstraintUsageHandCoded(IConstraintUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (poco.OwnedRelationship.OfType<IReferenceSubsetting>().Any())
             {
                 // Alt 1: OwnedReferenceSubsetting FeatureSpecializationPart? RequirementBody
                 if (ownedRelationshipCursor.Current is IReferenceSubsetting referenceSubsetting)
                 {
-                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(referenceSubsetting, cursorCache, stringBuilder);
+                    ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(referenceSubsetting, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is ISpecialization)
                 {
-                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, cursorCache, stringBuilder);
+                    FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, writerContext, stringBuilder);
                 }
 
-                TypeTextualNotationBuilder.BuildRequirementBody(poco, cursorCache, stringBuilder);
+                TypeTextualNotationBuilder.BuildRequirementBody(poco, writerContext, stringBuilder);
             }
             else
             {
@@ -78,12 +78,12 @@ namespace SysML2.NET.TextualNotation
                 while (ownedRelationshipCursor.Current is IOwningMembership membership
                        && membership.OwnedRelatedElement.OfType<IMetadataUsage>().Any())
                 {
-                    UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                    UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
                 }
 
                 stringBuilder.Append("constraint ");
-                BuildConstraintUsageDeclaration(poco, cursorCache, stringBuilder);
-                TypeTextualNotationBuilder.BuildCalculationBody(poco, cursorCache, stringBuilder);
+                BuildConstraintUsageDeclaration(poco, writerContext, stringBuilder);
+                TypeTextualNotationBuilder.BuildCalculationBody(poco, writerContext, stringBuilder);
             }
         }
     }

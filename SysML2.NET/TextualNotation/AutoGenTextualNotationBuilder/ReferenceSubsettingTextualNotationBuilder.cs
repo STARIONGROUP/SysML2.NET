@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedReferenceSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=OwnedFeatureChain{ownedRelatedElement+=referenceFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedReferenceSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedReferenceSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.ReferencedFeature) && poco.ReferencedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedReferencedFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedReferencedFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedReferencedFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.ReferencedFeature != null)
             {
-                stringBuilder.Append(poco.ReferencedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ReferencedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -60,17 +60,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>FlowEndSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=FeatureChainPrefix{ownedRelatedElement+=referencedFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowEndSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFlowEndSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.ReferencedFeature) && poco.ReferencedFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedReferencedFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildFeatureChainPrefix(chainedReferencedFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildFeatureChainPrefix(chainedReferencedFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.ReferencedFeature != null)
             {
-                stringBuilder.Append(poco.ReferencedFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ReferencedFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 

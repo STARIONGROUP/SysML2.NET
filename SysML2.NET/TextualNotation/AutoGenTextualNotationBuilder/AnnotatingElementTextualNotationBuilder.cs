@@ -39,23 +39,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>AnnotatingElement=Comment|Documentation|TextualRepresentation|MetadataFeature</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildAnnotatingElement(SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildAnnotatingElement(SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature pocoMetadataFeature:
-                    MetadataFeatureTextualNotationBuilder.BuildMetadataFeature(pocoMetadataFeature, cursorCache, stringBuilder);
+                    MetadataFeatureTextualNotationBuilder.BuildMetadataFeature(pocoMetadataFeature, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Annotations.IDocumentation pocoDocumentation:
-                    DocumentationTextualNotationBuilder.BuildDocumentation(pocoDocumentation, cursorCache, stringBuilder);
+                    DocumentationTextualNotationBuilder.BuildDocumentation(pocoDocumentation, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Annotations.IComment pocoComment:
-                    CommentTextualNotationBuilder.BuildComment(pocoComment, cursorCache, stringBuilder);
+                    CommentTextualNotationBuilder.BuildComment(pocoComment, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Annotations.ITextualRepresentation pocoTextualRepresentation:
-                    TextualRepresentationTextualNotationBuilder.BuildTextualRepresentation(pocoTextualRepresentation, cursorCache, stringBuilder);
+                    TextualRepresentationTextualNotationBuilder.BuildTextualRepresentation(pocoTextualRepresentation, writerContext, stringBuilder);
                     break;
             }
 

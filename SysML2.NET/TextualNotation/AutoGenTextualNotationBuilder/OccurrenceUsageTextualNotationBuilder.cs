@@ -39,11 +39,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceUsagePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOccurrenceUsagePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, writerContext, stringBuilder);
 
             if (poco.IsIndividual)
             {
@@ -60,10 +60,10 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
-                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
 
@@ -74,22 +74,22 @@ namespace SysML2.NET.TextualNotation
         /// <para>IndividualUsage:OccurrenceUsage=BasicUsagePrefixisIndividual?='individual'UsageExtensionKeyword*Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIndividualUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildIndividualUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, writerContext, stringBuilder);
             if (poco.IsIndividual)
             {
                 stringBuilder.Append(" individual ");
             }
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
-            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, writerContext, stringBuilder);
 
         }
 
@@ -98,11 +98,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>PortionUsage:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?portionKind=PortionKindUsageExtensionKeyword*Usage{isPortion=true}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPortionUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildPortionUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, writerContext, stringBuilder);
 
             if (poco.IsIndividual)
             {
@@ -112,13 +112,13 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append(poco.PortionKind.ToString().ToLower());
             stringBuilder.Append(' ');
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
-            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, writerContext, stringBuilder);
             // NonParsing Assignment Element : isPortion = true => Does not have to be process
 
         }
@@ -128,11 +128,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildControlNodePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildControlNodePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildRefPrefix(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildRefPrefix(poco, writerContext, stringBuilder);
 
             if (poco.IsIndividual)
             {
@@ -149,10 +149,10 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
-                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, cursorCache, stringBuilder);
+                UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
 
@@ -163,13 +163,13 @@ namespace SysML2.NET.TextualNotation
         /// <para>OccurrenceUsage=OccurrenceUsagePrefix'occurrence'Usage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOccurrenceUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildOccurrenceUsagePrefix(poco, cursorCache, stringBuilder);
+            BuildOccurrenceUsagePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("occurrence ");
-            UsageTextualNotationBuilder.BuildUsage(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsage(poco, writerContext, stringBuilder);
 
         }
     }

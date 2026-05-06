@@ -22,6 +22,7 @@ namespace SysML2.NET.Tests.TextualNotation
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
     using Microsoft.Extensions.Logging;
@@ -76,16 +77,16 @@ namespace SysML2.NET.Tests.TextualNotation
                 Assert.That(this.rootNamespace.Id, Is.EqualTo(Guid.Parse("88e753b3-e75d-525f-b9ad-d5e9095b98ec")));
             });
         }
-
+        
         [Test]
         public void Verify_that_textual_notation_is_produced_from_Quantities_root_namespace()
         {
-            using var cursorCache = new CursorCache();
+            using var writerContext = new TextualNotationWriterContext(this.rootNamespace);
             var stringBuilder = new StringBuilder();
 
             try
             {
-                NamespaceTextualNotationBuilder.BuildRootNamespace(this.rootNamespace, cursorCache, stringBuilder);
+                NamespaceTextualNotationBuilder.BuildRootNamespace(this.rootNamespace, writerContext, stringBuilder);
             }
             catch (System.NotSupportedException notSupportedException)
             {
@@ -106,6 +107,8 @@ namespace SysML2.NET.Tests.TextualNotation
                 Assert.That(textualNotation, Does.Contain("library"));
                 Assert.That(textualNotation, Does.Contain("package"));
                 Assert.That(textualNotation, Does.Contain("Quantities"));
+                Assert.That(textualNotation, Does.Contain("private import ScalarValues::NumericalValue"));
+                Assert.That(textualNotation, Does.Contain("isBound: Boolean"));
             });
         }
     }

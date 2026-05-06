@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>ForkNode=ControlNodePrefixisComposite?='fork'UsageDeclarationActionBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IForkNode" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildForkNode(SysML2.NET.Core.POCO.Systems.Actions.IForkNode poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildForkNode(SysML2.NET.Core.POCO.Systems.Actions.IForkNode poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, cursorCache, stringBuilder);
+            OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, writerContext, stringBuilder);
             if (poco.IsComposite)
             {
                 stringBuilder.Append(" fork ");
             }
-            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, cursorCache, stringBuilder);
-            TypeTextualNotationBuilder.BuildActionBody(poco, cursorCache, stringBuilder);
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
         }
     }

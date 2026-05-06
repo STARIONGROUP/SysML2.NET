@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// Builds the Textual Notation string for the rule TargetTransitionUsage
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionUsage" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// TargetTransitionUsage : TransitionUsage =
@@ -57,19 +57,19 @@ namespace SysML2.NET.TextualNotation
         /// TransitionSuccessionMember + ActionBody after. This method handles only the
         /// optional middle section.
         /// </remarks>
-        private static void BuildTargetTransitionUsageHandCoded(ITransitionUsage poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildTargetTransitionUsageHandCoded(ITransitionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard } guardMember)
             {
                 // Alt 3: GuardExpressionMember (EffectBehaviorMember)?
-                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(guardMember, cursorCache, stringBuilder);
+                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(guardMember, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 if (ownedRelationshipCursor.Current is ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Effect } effectMember)
                 {
-                    TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(effectMember, cursorCache, stringBuilder);
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(effectMember, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
             }
@@ -91,25 +91,25 @@ namespace SysML2.NET.TextualNotation
                 }
 
                 // Both Alt 1 and Alt 2: consume EmptyParameterMember
-                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyParam, cursorCache, stringBuilder);
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyParam, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
                 // Consume TriggerActionMember if present (mandatory in Alt 2, optional in Alt 1)
                 if (ownedRelationshipCursor.Current is ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Trigger } triggerMember)
                 {
-                    TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(triggerMember, cursorCache, stringBuilder);
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(triggerMember, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard } guardAfterTrigger)
                 {
-                    TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(guardAfterTrigger, cursorCache, stringBuilder);
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(guardAfterTrigger, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
 
                 if (ownedRelationshipCursor.Current is ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Effect } effectAfterGuard)
                 {
-                    TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(effectAfterGuard, cursorCache, stringBuilder);
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(effectAfterGuard, writerContext, stringBuilder);
                     ownedRelationshipCursor.Move();
                 }
             }

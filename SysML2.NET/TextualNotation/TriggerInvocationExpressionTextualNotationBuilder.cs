@@ -36,11 +36,11 @@ namespace SysML2.NET.TextualNotation
         /// <remarks>TriggerExpression:TriggerInvocationExpression=kind=('at'|'after')ownedRelationship+=ArgumentMember|kind='when'ownedRelationship+=ArgumentExpressionMember</remarks>
         /// </summary>
         /// <param name="poco">The <see cref="ITriggerInvocationExpression" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildTriggerExpressionHandCoded(ITriggerInvocationExpression poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        private static void BuildTriggerExpressionHandCoded(ITriggerInvocationExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
             switch (poco.Kind)
             {
@@ -51,7 +51,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is IParameterMembership argumentMember)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildArgumentMember(argumentMember, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildArgumentMember(argumentMember, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                     }
 
@@ -61,7 +61,7 @@ namespace SysML2.NET.TextualNotation
 
                     if (ownedRelationshipCursor.Current is IParameterMembership argumentExpressionMember)
                     {
-                        ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(argumentExpressionMember, cursorCache, stringBuilder);
+                        ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(argumentExpressionMember, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                     }
 

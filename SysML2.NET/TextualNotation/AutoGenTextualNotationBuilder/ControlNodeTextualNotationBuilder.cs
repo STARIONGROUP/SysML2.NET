@@ -39,23 +39,23 @@ namespace SysML2.NET.TextualNotation
         /// <para>ControlNode=MergeNode|DecisionNode|JoinNode|ForkNode</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IControlNode" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildControlNode(SysML2.NET.Core.POCO.Systems.Actions.IControlNode poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildControlNode(SysML2.NET.Core.POCO.Systems.Actions.IControlNode poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Systems.Actions.IMergeNode pocoMergeNode:
-                    MergeNodeTextualNotationBuilder.BuildMergeNode(pocoMergeNode, cursorCache, stringBuilder);
+                    MergeNodeTextualNotationBuilder.BuildMergeNode(pocoMergeNode, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Actions.IDecisionNode pocoDecisionNode:
-                    DecisionNodeTextualNotationBuilder.BuildDecisionNode(pocoDecisionNode, cursorCache, stringBuilder);
+                    DecisionNodeTextualNotationBuilder.BuildDecisionNode(pocoDecisionNode, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Actions.IJoinNode pocoJoinNode:
-                    JoinNodeTextualNotationBuilder.BuildJoinNode(pocoJoinNode, cursorCache, stringBuilder);
+                    JoinNodeTextualNotationBuilder.BuildJoinNode(pocoJoinNode, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Actions.IForkNode pocoForkNode:
-                    ForkNodeTextualNotationBuilder.BuildForkNode(pocoForkNode, cursorCache, stringBuilder);
+                    ForkNodeTextualNotationBuilder.BuildForkNode(pocoForkNode, writerContext, stringBuilder);
                     break;
             }
 

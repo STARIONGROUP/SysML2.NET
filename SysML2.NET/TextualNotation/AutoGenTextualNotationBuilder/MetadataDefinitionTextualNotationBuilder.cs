@@ -39,9 +39,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>MetadataDefinition=(isAbstract?='abstract')?DefinitionExtensionKeyword*'metadata''def'Definition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataDefinition(SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildMetadataDefinition(SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
             if (poco.IsAbstract)
@@ -50,15 +50,15 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            var ownedRelationshipCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, cursorCache, stringBuilder);
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
             }
 
             stringBuilder.Append("metadata ");
             stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, cursorCache, stringBuilder);
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, writerContext, stringBuilder);
 
         }
     }

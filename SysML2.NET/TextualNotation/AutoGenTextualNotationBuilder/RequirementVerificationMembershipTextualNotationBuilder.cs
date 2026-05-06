@@ -39,12 +39,12 @@ namespace SysML2.NET.TextualNotation
         /// <para>RequirementVerificationMember:RequirementVerificationMembership=MemberPrefix'verify'{kind='requirement'}ownedRelatedElement+=RequirementVerificationUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementVerificationMember(SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildRequirementVerificationMember(SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
-            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("verify ");
             // NonParsing Assignment Element : kind = 'requirement' => Does not have to be process
 
@@ -53,7 +53,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage elementAsRequirementUsage)
                 {
-                    RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(elementAsRequirementUsage, cursorCache, stringBuilder);
+                    RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(elementAsRequirementUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();

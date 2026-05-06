@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.CollectionProcessing.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -66,14 +66,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             var cursorDefinition = new CursorDefinition { DefinedForProperty = targetProperty };
                             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
-                            writer.WriteSafeString($"var {cursorDefinition.CursorVariableName} = cursorCache.GetOrCreateCursor({ruleGenerationContext.CurrentVariableName}.Id, \"{targetProperty.Name}\", {ruleGenerationContext.CurrentVariableName}.{propertyAccessName});{Environment.NewLine}");
+                            writer.WriteSafeString($"var {cursorDefinition.CursorVariableName} = writerContext.CursorCache.GetOrCreateCursor({ruleGenerationContext.CurrentVariableName}.Id, \"{targetProperty.Name}\", {ruleGenerationContext.CurrentVariableName}.{propertyAccessName});{Environment.NewLine}");
                             ruleGenerationContext.DefinedCursors.Add(cursorDefinition);
                             cursorVariableName = cursorDefinition.CursorVariableName;
                         }
 
-                        var perItemCall = ResolveBuilderCall(umlClass, nonTerminalElement, typeTarget, ruleGenerationContext);
+                        var perItemCall = this.ResolveBuilderCall(umlClass, nonTerminalElement, typeTarget, ruleGenerationContext);
 
-                        var whileTypeExclusion = ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
+                        var whileTypeExclusion = this.ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
 
                         string whileCondition;
 
@@ -116,7 +116,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             if (assignmentTargetTypes?.Count == 1)
                             {
-                                var contentTypeGuard = ResolveContentTypeGuard(cursorVariableName, referencedRule, propertyName, umlClass, ruleGenerationContext);
+                                var contentTypeGuard = this.ResolveContentTypeGuard(cursorVariableName, referencedRule, propertyName, umlClass, ruleGenerationContext);
 
                                 if (!string.IsNullOrWhiteSpace(contentTypeGuard))
                                 {
@@ -149,7 +149,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             var previousName = ruleGenerationContext.CurrentVariableName;
                             ruleGenerationContext.CallerRule = nonTerminalElement;
 
-                            ProcessAlternatives(writer, umlClass, referencedRule.Alternatives, ruleGenerationContext);
+                            this.ProcessAlternatives(writer, umlClass, referencedRule.Alternatives, ruleGenerationContext);
 
                             ruleGenerationContext.CallerRule = previousCaller;
                             ruleGenerationContext.CurrentVariableName = previousName;
@@ -164,7 +164,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var handCodedRuleName = nonTerminalElement.TextualNotationRule?.RuleName ?? nonTerminalElement.Name;
 
-            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, deduplicate: true);
+            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
             writer.WriteSafeString(Environment.NewLine);
         }
 
@@ -302,7 +302,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (innerRule != null)
                     {
-                        return ResolveContentTypeGuard(cursorVariableName, innerRule, outerPropertyName, umlClass, ruleGenerationContext);
+                        return this.ResolveContentTypeGuard(cursorVariableName, innerRule, outerPropertyName, umlClass, ruleGenerationContext);
                     }
                 }
 
@@ -350,7 +350,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
             {
-                return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+                return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);";
             }
 
             var targetType = RuleQueryUtilities.FindNamedElement(umlClass.Cache, typeTarget);
@@ -359,13 +359,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 if (umlClass.QueryAllGeneralClassifiers().Contains(targetClass))
                 {
-                    return $"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+                    return $"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);";
                 }
 
                 return null;
             }
 
-            return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, cursorCache, stringBuilder);";
+            return $"Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);";
         }
 
         /// <summary>
@@ -422,7 +422,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            var condition = GenerateInlineOptionalCondition(referencedRule, targetClass, ruleGenerationContext.AllRules, variableName);
+            var condition = this.GenerateInlineOptionalCondition(referencedRule, targetClass, ruleGenerationContext.AllRules, variableName);
 
             if (condition == null)
             {

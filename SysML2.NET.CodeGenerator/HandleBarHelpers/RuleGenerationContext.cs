@@ -98,6 +98,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         public HashSet<string> EmittedHandCodedCalls { get; } = [];
 
         /// <summary>
+        /// Gets or sets a pending cursor move statement to be emitted inside the innermost
+        /// consumption block of <c>ProcessNonTerminalElement</c>. This is set by
+        /// <c>ProcessAssignmentElement</c> for <c>+=</c> assignments inside optional groups
+        /// (<c>?</c> quantifier), ensuring the cursor only advances when the element was
+        /// actually consumed by the builder call.
+        /// </summary>
+        public string PendingCursorMove { get; set; }
+
+        /// <summary>
         /// Determines whether the next sibling element is a terminal that uses <c>AppendLine</c>
         /// (e.g., <c>{</c>, <c>}</c>, <c>;</c>), in which case a trailing space would be unnecessary.
         /// </summary>

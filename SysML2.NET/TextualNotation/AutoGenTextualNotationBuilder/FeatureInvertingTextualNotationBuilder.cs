@@ -39,17 +39,17 @@ namespace SysML2.NET.TextualNotation
         /// <para>OwnedFeatureInverting:FeatureInverting=invertingFeature=[QualifiedName]|invertingFeature=OwnedFeatureChain{ownedRelatedElement+=invertingFeature}</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureInverting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildOwnedFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             if (poco.OwnedRelatedElement.Contains(poco.InvertingFeature) && poco.InvertingFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedInvertingFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedInvertingFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedInvertingFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.InvertingFeature != null)
             {
-                stringBuilder.Append(poco.InvertingFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -60,11 +60,11 @@ namespace SysML2.NET.TextualNotation
         /// <para>FeatureInverting=('inverting'Identification?)?'inverse'(featureInverted=[QualifiedName]|featureInverted=OwnedFeatureChain{ownedRelatedElement+=featureInverted})'of'(invertingFeature=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain{ownedRelatedElement+=invertingFeature})RelationshipBody</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureInverting" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
@@ -72,7 +72,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName))
                 {
-                    ElementTextualNotationBuilder.BuildIdentification(poco, cursorCache, stringBuilder);
+                    ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
@@ -80,11 +80,11 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("inverse ");
             if (poco.OwnedRelatedElement.Contains(poco.FeatureInverted) && poco.FeatureInverted is SysML2.NET.Core.POCO.Core.Features.IFeature chainedFeatureInvertedAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedFeatureInvertedAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedFeatureInvertedAsFeature, writerContext, stringBuilder);
             }
             else if (poco.FeatureInverted != null)
             {
-                stringBuilder.Append(poco.FeatureInverted.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureInverted, writerContext);
                 stringBuilder.Append(' ');
             }
 
@@ -92,16 +92,16 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("of ");
             if (poco.OwnedRelatedElement.Contains(poco.InvertingFeature) && poco.InvertingFeature is SysML2.NET.Core.POCO.Core.Features.IFeature chainedInvertingFeatureAsFeature)
             {
-                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedInvertingFeatureAsFeature, cursorCache, stringBuilder);
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(chainedInvertingFeatureAsFeature, writerContext, stringBuilder);
             }
             else if (poco.InvertingFeature != null)
             {
-                stringBuilder.Append(poco.InvertingFeature.qualifiedName);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature, writerContext);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append(' ');
-            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, cursorCache, stringBuilder);
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
     }

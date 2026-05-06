@@ -39,15 +39,15 @@ namespace SysML2.NET.TextualNotation
         /// <para>FramedConcernMember:FramedConcernMembership=MemberPrefix?'frame'ownedRelatedElement+=FramedConcernUsage</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFramedConcernMember(SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildFramedConcernMember(SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelatedElementCursor = cursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
-                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, cursorCache, stringBuilder);
+                MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             }
             stringBuilder.Append("frame ");
 
@@ -56,7 +56,7 @@ namespace SysML2.NET.TextualNotation
 
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage elementAsConcernUsage)
                 {
-                    ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(elementAsConcernUsage, cursorCache, stringBuilder);
+                    ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(elementAsConcernUsage, writerContext, stringBuilder);
                 }
             }
             ownedRelatedElementCursor.Move();

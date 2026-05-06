@@ -39,9 +39,9 @@ namespace SysML2.NET.TextualNotation
         /// <para>VisibilityIndicator:VisibilityKind='public'|'private'|'protected'</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.Root.Namespaces.VisibilityKind" /> from which the rule should be build</param>
-        /// <param name="cursorCache">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildVisibilityIndicator(SysML2.NET.Core.Root.Namespaces.VisibilityKind poco, ICursorCache cursorCache, StringBuilder stringBuilder)
+        public static void BuildVisibilityIndicator(SysML2.NET.Core.Root.Namespaces.VisibilityKind poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
 
         }
