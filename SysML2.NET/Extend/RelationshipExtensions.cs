@@ -36,6 +36,13 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// relatedElement = source-&gt;union(target)
+        /// </code>
+        /// The relatedElements of a Relationship consist of all of its source Elements followed by all of its target Elements.
+        /// </remarks>
         /// <param name="relationshipSubject">
         /// The subject <see cref="IRelationship"/>
         /// </param>
@@ -51,6 +58,15 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// Return whether this Relationship has either an owningRelatedElement or owningRelationship that is a
         /// library element.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// if owningRelatedElement &lt;&gt; null then owningRelatedElement.libraryNamespace()
+        /// else if owningRelationship &lt;&gt; null then owningRelationship.libraryNamespace()
+        /// else null endif endif
+        /// </code>
+        /// Return whether this Relationship has either an owningRelatedElement or owningRelationship that is a library element. Unlike Element::libraryNamespace which only checks owningRelationship, the Relationship override first checks owningRelatedElement (since a Relationship may be owned by a non-Relationship Element via the owningRelatedElement/ownedRelationship association rather than via owningRelationship).
+        /// </remarks>
         /// <param name="relationshipSubject">
         /// The subject <see cref="IRelationship"/>
         /// </param>
@@ -73,6 +89,17 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// owningRelatedElement. Otherwise, return the path of the Relationship as specified for an Element in
         /// general.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// if owningRelationship = null and owningRelatedElement &lt;&gt; null then
+        /// owningRelatedElement.path() + '/' +
+        /// owningRelatedElement.ownedRelationship-&gt;indexOf(self).toString()
+        /// else self.oclAsType(Element).path()
+        /// endif
+        /// </code>
+        /// If the owningRelationship of the Relationship is null but its owningRelatedElement is non-null, construct the path using the position of the Relationship in the list of ownedRelationships of its owningRelatedElement. Otherwise, return the path of the Relationship as specified for an Element in general.
+        /// </remarks>
         /// <param name="relationshipSubject">
         /// The subject <see cref="IRelationship"/>
         /// </param>
