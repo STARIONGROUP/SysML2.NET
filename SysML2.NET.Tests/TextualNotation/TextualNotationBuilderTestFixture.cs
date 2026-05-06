@@ -90,7 +90,7 @@ namespace SysML2.NET.Tests.TextualNotation
             }
             catch (System.NotSupportedException notSupportedException)
             {
-                TestContext.WriteLine($"Builder stopped early due to unimplemented derived property: {notSupportedException.Message}");
+                TestContext.WriteLine($"Builder stopped early due to unimplemented derived property: {notSupportedException.Message}, {notSupportedException.StackTrace}");
             }
 
             var textualNotation = stringBuilder.ToString();
