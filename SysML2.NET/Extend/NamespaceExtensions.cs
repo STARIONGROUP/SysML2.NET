@@ -25,7 +25,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System.Linq;
     using System.Text;
 
-    using SysML2.NET.Comparer;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -40,6 +39,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// importedMembership = importedMemberships(Set{})
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -54,6 +59,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// member = membership.memberElement
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -82,6 +93,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// ownedImport = ownedRelationship-&gt;selectByKind(Import)
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -96,10 +113,15 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// ownedMember = ownedMembership-&gt;selectByKind(OwningMembership).ownedMemberElement
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
-        /// <remarks>OCL Constraint : ownedMember = ownedMembership->selectByKind(OwningMembership).ownedMemberElement </remarks>
         /// <returns>
         /// the computed result
         /// </returns>
@@ -111,6 +133,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// ownedMembership = ownedRelationship-&gt;selectByKind(Membership)
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -125,6 +153,13 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Return the names of the given element as it is known in this Namespace.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// let elementMemberships : Sequence(Membership) = memberships-&gt;select(memberElement = element) in
+        /// memberships.memberShortName-&gt;union(memberships.memberName)-&gt;asSet()
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -170,6 +205,17 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// Returns this visibility of mem relative to this Namespace. If mem is an importedMembership, this is
         /// the visibility of its Import. Otherwise it is the visibility of the Membership itself.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// if importedMembership-&gt;includes(mem) then
+        ///     ownedImport-&gt;select(importedMemberships(Set{})-&gt;includes(mem)).first().visibility
+        /// else
+        ///     if memberships-&gt;includes(mem) then mem.visibility
+        ///     else VisibilityKind::private endif
+        /// endif
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -212,6 +258,21 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// Memberships of all owned Namespaces. When computing imported Memberships, ignore this Namespace and
         /// any Namespaces in the given excluded set.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// let visibleMemberships : OrderedSet(Membership) =
+        ///     if includeAll then membershipsOfVisibility(null, excluded)
+        ///     else membershipsOfVisibility(VisibilityKind::public, excluded) endif
+        /// in
+        /// if not isRecursive then visibleMemberships
+        /// else visibleMemberships-&gt;union(
+        ///     ownedMember-&gt;selectAsKind(Namespace).
+        ///     select(includeAll or owningMembership.visibility = VisibilityKind::public)-&gt;
+        ///     visibleMemberships(excluded-&gt;including(self), true, includeAll))
+        /// endif
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -276,6 +337,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// excluding those Imports whose importOwningNamespace is in the excluded set, and excluding
         /// Memberships that have distinguisibility collisions with each other or with any ownedMembership.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// ownedImport.importedMemberships(excluded-&gt;including(self))
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -287,66 +354,61 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </returns>
         internal static List<IMembership> ComputeImportedMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded)
         {
-            var importedMemberships = namespaceSubject.ownedImport.Where(x => !excluded.Contains(x.importOwningNamespace))
-                .SelectMany(x => x.ImportedMemberships(excluded))
+            if (namespaceSubject == null)
+            {
+                throw new ArgumentNullException(nameof(namespaceSubject));
+            }
+
+            var excludedWithSelf = new List<INamespace>(excluded) { namespaceSubject };
+
+            var importedMemberships = namespaceSubject.ownedImport
+                .SelectMany(import => import.ImportedMemberships(excludedWithSelf))
                 .Distinct()
                 .ToList();
 
-            var ownedMembershipNames = namespaceSubject.ownedMembership
-                .Select(membership => membership.MemberName)
-                .ToHashSet(NullSafeStringComparer.Instance);
+            var ownedMemberships = namespaceSubject.ownedMembership;
 
-            var ownedMembershipShortNames = namespaceSubject.ownedMembership
-                .Select(membership => membership.MemberShortName)
-                .ToHashSet(NullSafeStringComparer.Instance);
+            return 
+            [
+                ..importedMemberships.Where(import =>
+                ownedMemberships.All(owned => IsDistinguishableMembership(import, owned))
+                && importedMemberships.All(other => other == import || IsDistinguishableMembership(import, other)))
+            ];
+        }
 
-            var importedNameFrequency = new Dictionary<string, int>(importedMemberships.Count);
-            var importedShortNameFrequency = new Dictionary<string, int>(importedMemberships.Count);
-            var importedNullNameCount = 0;
-            var importedNullShortNameCount = 0;
-
-            foreach (var membership in importedMemberships)
+        /// <summary>
+        /// Determines whether <paramref name="left"/> is distinguishable from <paramref name="right"/>
+        /// according to the default OCL body of <c>Membership::isDistinguishableFrom</c>.
+        /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// memberShortName = null and memberName = null or
+        /// (memberShortName &lt;&gt; other.memberShortName and memberShortName &lt;&gt; other.memberName and
+        ///  memberName &lt;&gt; other.memberShortName and memberName &lt;&gt; other.memberName)
+        /// </code>
+        /// </remarks>
+        /// <param name="left">
+        /// The <see cref="IMembership" /> on whose perspective distinguishability is evaluated.
+        /// </param>
+        /// <param name="right">
+        /// The <see cref="IMembership" /> being compared against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> when <paramref name="left"/> can be distinguished from <paramref name="right"/>
+        /// per the default Membership distinguishability rule; otherwise <see langword="false"/>.
+        /// </returns>
+        private static bool IsDistinguishableMembership(IMembership left, IMembership right)
+        {
+            if (left.MemberShortName == null && left.MemberName == null)
             {
-                var memberName = membership.MemberName;
-
-                if (memberName != null)
-                {
-                    importedNameFrequency[memberName] = importedNameFrequency.TryGetValue(memberName, out var nameCount) ? nameCount + 1 : 1;
-                }
-                else
-                {
-                    importedNullNameCount++;
-                }
-
-                var memberShortName = membership.MemberShortName;
-
-                if (memberShortName != null)
-                {
-                    importedShortNameFrequency[memberShortName] = importedShortNameFrequency.TryGetValue(memberShortName, out var shortNameCount) ? shortNameCount + 1 : 1;
-                }
-                else
-                {
-                    importedNullShortNameCount++;
-                }
+                return true;
             }
 
-            var nonCollidingImportedMemberships = importedMemberships.Where(membership =>
-            {
-                var memberName = membership.MemberName;
-                var memberShortName = membership.MemberShortName;
-
-                var nameCollidesWithOwned = ownedMembershipNames.Contains(memberName) || ownedMembershipShortNames.Contains(memberShortName);
-
-                var nameCollidesWithImported =
-                    (memberName != null && importedNameFrequency.TryGetValue(memberName, out var nameFrequency) && nameFrequency > 1)
-                    || (memberName == null && importedNullNameCount > 1)
-                    || (memberShortName != null && importedShortNameFrequency.TryGetValue(memberShortName, out var shortNameFrequency) && shortNameFrequency > 1)
-                    || (memberShortName == null && importedNullShortNameCount > 1);
-
-                return !nameCollidesWithOwned && !nameCollidesWithImported;
-            }).ToList();
-
-            return nonCollidingImportedMemberships;
+            return left.MemberShortName != right.MemberShortName
+                && left.MemberShortName != right.MemberName
+                && left.MemberName != right.MemberShortName
+                && left.MemberName != right.MemberName;
         }
 
         /// <summary>
@@ -356,6 +418,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// of visibility. When computing imported Memberships, ignore this Namespace and any Namespaces in the
         /// given excluded set.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// ownedMembership-&gt;select(mem | visibility = null or mem.visibility = visibility)-&gt;union(
+        ///     ownedImport-&gt;select(imp | visibility = null or imp.visibility = visibility).
+        ///     importedMemberships(excluded-&gt;including(self)))
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -400,6 +470,24 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// notation. According to the KerML name resolution rules every qualified name will resolve to either a
         /// single Membership, or to none.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// let qualification : String = qualificationOf(qualifiedName) in
+        /// let name : String = unqualifiedNameOf(qualifiedName) in
+        /// if qualification = null then resolveLocal(name)
+        /// else
+        ///     if qualification = '$' then resolveGlobal(name)
+        ///     else
+        ///         let namespaceMembership : Membership = resolve(qualification) in
+        ///         if namespaceMembership = null or
+        ///             not namespaceMembership.memberElement.oclIsKindOf(Namespace) then null
+        ///         else namespaceMembership.memberElement.oclAsType(Namespace).resolveVisible(name)
+        ///         endif
+        ///     endif
+        /// endif
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -495,6 +583,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// containing outer scopes as necessary. However, if this Namespace is a root Namespace, then the
         /// resolution is done directly in global scope.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// if owningNamespace = null then resolveGlobal(name)
+        /// else
+        ///     let memberships : Membership = membership-&gt;select(memberShortName = name or memberName = name)
+        ///     in
+        ///     if memberships-&gt;notEmpty() then memberships-&gt;first()
+        ///     else owningNamspace.resolveLocal(name)
+        ///     endif
+        /// endif
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>
@@ -529,6 +630,15 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Resolve a simple name from the visible Memberships of this Namespace.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// let memberships : Sequence(Membership) =
+        ///     visibleMemberships(Set{}, false, false)-&gt;select(memberShortName = name or memberName = name)
+        /// in
+        /// if memberships-&gt;isEmpty() then null else memberships-&gt;first() endif
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceSubject">
         /// The subject <see cref="INamespace"/>
         /// </param>

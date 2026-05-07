@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -66,6 +67,15 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// triggerAction = ownedFeatureMembership-&gt;
+        ///                             selectByKind(TransitionFeatureMembership)-&gt;
+        ///                             select(kind = TransitionFeatureKind::trigger).transitionFeatures-&gt;
+        ///                             selectByKind(AcceptActionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -81,6 +91,15 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// guardExpression = ownedFeatureMembership-&gt;
+        ///                             selectByKind(TransitionFeatureMembership)-&gt;
+        ///                             select(kind = TransitionFeatureKind::trigger).transitionFeature-&gt;
+        ///                             selectByKind(Expression)
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -96,6 +115,15 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// source =
+        ///                             let sourceFeature : Feature = sourceFeature() in
+        ///                             if sourceFeature = null then null
+        ///                             else sourceFeature.featureTarget.oclAsType(ActionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -111,6 +139,12 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// succession = ownedMember-&gt;selectByKind(Succession)-&gt;at(1)
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -126,6 +160,20 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// target =
+        ///                             if succession.targetFeature-&gt;isEmpty() then null
+        ///                             else
+        ///                             let targetFeature : Feature =
+        ///                             succession.targetFeature-&gt;first().featureTarget in
+        ///                             if not targetFeature.oclIsKindOf(ActionUsage) then null
+        ///                             else targetFeature.oclAsType(ActionUsage)
+        ///                             endif
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -141,6 +189,15 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// triggerAction = ownedFeatureMembership-&gt;
+        ///                             selectByKind(TransitionFeatureMembership)-&gt;
+        ///                             select(kind = TransitionFeatureKind::trigger).transitionFeature-&gt;
+        ///                             selectByKind(AcceptActionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -156,6 +213,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Return the payloadParameter of the triggerAction of this TransitionUsage, if it has one.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if triggerAction-&gt;isEmpty() then null
+        ///                                 else triggerAction-&gt;first().payloadParameter
+        ///                                 endif
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>
@@ -173,6 +238,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// first member of the TransitionUsage that is a Feature, that is owned by the TransitionUsage via a
         /// Membership that is not a FeatureMembership, and whose featureTarget is an ActionUsage.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// let features : Sequence(Feature) = ownedMembership-&gt;
+        ///                                 reject(oclIsKindOf(FeatureMembership)).memberElement-&gt;
+        ///                                 selectByKind(Feature)-&gt;
+        ///                                 select(featureTarget.oclIsKindOf(ActionUsage)) in
+        ///                                 if features-&gt;isEmpty() then null
+        ///                                 else features-&gt;first()
+        ///                                 endif
+        /// </code>
+        /// </remarks>
         /// <param name="transitionUsageSubject">
         /// The subject <see cref="ITransitionUsage"/>
         /// </param>

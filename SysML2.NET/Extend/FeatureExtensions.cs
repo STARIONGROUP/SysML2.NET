@@ -1231,7 +1231,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 var anythingMembership = featureSubject.ResolveGlobal("Base::Anything");
                 var anythingElement = anythingMembership?.MemberElement;
                 
-                return featureSubject.featuringType.Count == 0 || featureSubject.featuringType.All(f => f == anythingElement);
+                return featureSubject.featuringType.All(f => f == anythingElement);
             }
 
             if (featureSubject.featuringType.All(f => type.IsCompatibleWith(f)))

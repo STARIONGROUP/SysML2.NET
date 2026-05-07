@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -65,6 +66,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// exposedElement = ownedImport-&gt;selectByKind(Expose).
+        ///                             importedMemberships(Set{}).memberElement-&gt;
+        ///                             select(elm | includeAsExposed(elm))-&gt;
+        ///                             asOrderedSet()
+        /// </code>
+        /// </remarks>
         /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
@@ -80,6 +90,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// satisfiedViewpoint = ownedRequirement-&gt;
+        ///                             selectByKind(ViewpointUsage)-&gt;
+        ///                             select(isComposite)
+        /// </code>
+        /// </remarks>
         /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
@@ -95,6 +113,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// viewCondition = ownedMembership-&gt;
+        ///                             selectByKind(ElementFilterMembership).
+        ///                             condition
+        /// </code>
+        /// </remarks>
         /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
@@ -125,6 +151,17 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// viewRendering =
+        ///                             let renderings: OrderedSet(ViewRenderingMembership) =
+        ///                             featureMembership-&gt;selectByKind(ViewRenderingMembership) in
+        ///                             if renderings-&gt;isEmpty() then null
+        ///                             else renderings-&gt;first().referencedRendering
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
@@ -140,6 +177,18 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Determine whether the given element meets all the owned and inherited viewConditions.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// let metadataFeatures: Sequence(AnnotatingElement) =
+        ///                                 element.ownedAnnotation.annotatingElement-&gt;
+        ///                                 select(oclIsKindOf(MetadataFeature)) in
+        ///                                 self.membership-&gt;selectByKind(ElementFilterMembership).
+        ///                                 condition-&gt;forAll(cond |
+        ///                                 metadataFeatures-&gt;exists(elem |
+        ///                                 cond.checkCondition(elem)))
+        /// </code>
+        /// </remarks>
         /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>

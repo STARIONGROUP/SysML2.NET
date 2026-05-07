@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -56,6 +57,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// instantiatedType = instantiatedType()
+        /// </code>
+        /// </remarks>
         /// <param name="instantiationExpressionSubject">
         /// The subject <see cref="IInstantiationExpression"/>
         /// </param>
@@ -74,6 +81,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// Type.                            <b>Note.</b> This operation is overridden in the subclass
         /// OperatorExpression.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// let members : Sequence(Element) = ownedMembership-&gt;
+        ///                                 reject(oclIsKindOf(FeatureMembership)).memberElement in
+        ///                                 if members-&gt;isEmpty() or not members-&gt;first().oclIsKindOf(Type) then null
+        ///                                 else typeMembers-&gt;first().oclAsType(Type)
+        ///                                 endif
+        /// </code>
+        /// </remarks>
         /// <param name="instantiationExpressionSubject">
         /// The subject <see cref="IInstantiationExpression"/>
         /// </param>

@@ -23,7 +23,7 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
     using System;
     using System.Collections.Generic;
 
-    {{ #Class.WriteEnumerationNameSpaces this}}
+    {{ #Class.WriteEnumerationNameSpacesWithOperation this}}
     {{ #Class.WriteNameSpaces this POCO}}
 
     /// <summary>
@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+{{#if (Property.QueryHasOwnedConstraints property)}}
+        {{Property.WriteOwnedRulesAsRemarksBlock property}}
+{{/if}}
         /// <param name="{{String.LowerCaseFirstLetter ../this.Name}}Subject">
         /// The subject <see cref="I{{../this.Name}}"/>
         /// </param>
@@ -53,6 +56,9 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         {{/each}}
         {{#each (this.OwnedOperation) as | operation | }}
             {{ #Documentation operation }}
+{{#if (Operation.QueryHasOwnedConstraints operation)}}
+            {{Operation.WriteOwnedRulesAsRemarksBlock operation}}
+{{/if}}
             /// <param name="{{String.LowerCaseFirstLetter ../this.Name}}Subject">
             /// The subject <see cref="I{{../this.Name}}"/>
             /// </param>
@@ -63,7 +69,7 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
                 throw new NotSupportedException("Create a GitHub issue when this method is required");
             }
             {{#unless @last}}
-        
+
             {{/unless}}
         {{/each}}
     }

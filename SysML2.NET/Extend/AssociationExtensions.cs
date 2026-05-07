@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -54,6 +56,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// relatedType = associationEnd.type
+        /// </code>
+        /// </remarks>
         /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>
@@ -69,6 +77,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// sourceType =
+        ///                             if relatedType-&gt;isEmpty() then null
+        ///                             else relatedType-&gt;first() endif
+        /// </code>
+        /// </remarks>
         /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>
@@ -84,6 +100,18 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// targetType =
+        ///                             if relatedType-&gt;size() &lt; 2 then OrderedSet{}
+        ///                             else
+        ///                             relatedType-&gt;
+        ///                             subSequence(2, relatedType-&gt;size())-&gt;
+        ///                             asOrderedSet()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="associationSubject">
         /// The subject <see cref="IAssociation"/>
         /// </param>

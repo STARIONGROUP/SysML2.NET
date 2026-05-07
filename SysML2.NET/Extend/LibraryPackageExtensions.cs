@@ -23,6 +23,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -37,6 +38,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <summary>
         /// The libraryNamespace for a LibraryPackage is itself.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// self
+        /// </code>
+        /// </remarks>
         /// <param name="libraryPackageSubject">
         /// The subject <see cref="ILibraryPackage"/>
         /// </param>

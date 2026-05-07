@@ -21,32 +21,53 @@
 namespace SysML2.NET.Tests.Extend
 {
     using System;
-    
+
     using NUnit.Framework;
-    
+
+    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     [TestFixture]
     public class OwningMembershipExtensionsTestFixture
     {
         [Test]
-        public void ComputeOwnedMemberElement_ThrowsArgumentNullException()
+        public void VerifyComputeOwnedMemberElement()
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElement(), Throws.TypeOf<ArgumentNullException>());
+
+            // OwnedRelatedElement.Count == 0 → IncompleteModelException
+            var emptyMembership = new OwningMembership();
+            Assert.That(() => emptyMembership.ComputeOwnedMemberElement(), Throws.TypeOf<IncompleteModelException>());
+
+            // OwnedRelatedElement.Count == 1 → returns that element
+            var container = new Namespace();
+            var singleMembership = new OwningMembership();
+            var ownedElement = new Definition { DeclaredName = "SingleElement" };
+            container.AssignOwnership(singleMembership, ownedElement);
+            Assert.That(singleMembership.ComputeOwnedMemberElement(), Is.SameAs(ownedElement));
+
+            // OwnedRelatedElement.Count > 1 → IncompleteModelException
+            var multiMembership = new OwningMembership();
+            ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(new Definition());
+            ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(new Definition());
+            Assert.That(() => multiMembership.ComputeOwnedMemberElement(), Throws.TypeOf<IncompleteModelException>());
         }
-        
+
         [Test]
         public void ComputeOwnedMemberElementId_ThrowsNotSupportedException()
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElementId(), Throws.TypeOf<NotSupportedException>());
         }
-        
+
         [Test]
         public void ComputeOwnedMemberName_ThrowsArgumentNullException()
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberName(), Throws.TypeOf<ArgumentNullException>());
         }
-        
+
         [Test]
         public void ComputeOwnedMemberShortName_ThrowsArgumentNullException()
         {
