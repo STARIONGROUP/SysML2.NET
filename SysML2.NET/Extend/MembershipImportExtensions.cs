@@ -38,6 +38,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// importedMembership is a Namespace, then Memberships are also recursively imported from that
         /// Namespace.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if not isRecursive or
+        ///                                 not importedElement.oclIsKindOf(Namespace) or
+        ///                                 excluded-&gt;includes(importedElement)
+        ///                                 then Sequence{importedMembership}
+        ///                                 else importedElement.oclAsType(Namespace).
+        ///                                 visibleMemberships(excluded, true, importAll)-&gt;
+        ///                                 prepend(importedMembership)
+        ///                                 endif
+        /// </code>
+        /// </remarks>
         /// <param name="membershipImportSubject">
         /// The subject <see cref="IMembershipImport"/>
         /// </param>

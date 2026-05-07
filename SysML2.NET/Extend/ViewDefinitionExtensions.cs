@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -61,6 +63,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// satisfiedViewpoint = ownedRequirement-&gt;
+        ///                             selectByKind(ViewpointUsage)-&gt;
+        ///                             select(isComposite)
+        /// </code>
+        /// </remarks>
         /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
@@ -76,6 +86,12 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// view = usage-&gt;selectByKind(ViewUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
@@ -91,6 +107,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// viewCondition = ownedMembership-&gt;
+        ///                             selectByKind(ElementFilterMembership).
+        ///                             condition
+        /// </code>
+        /// </remarks>
         /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>
@@ -106,6 +130,17 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// viewRendering =
+        ///                             let renderings: OrderedSet(ViewRenderingMembership) =
+        ///                             featureMembership-&gt;selectByKind(ViewRenderingMembership) in
+        ///                             if renderings-&gt;isEmpty() then null
+        ///                             else renderings-&gt;first().referencedRendering
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="viewDefinitionSubject">
         /// The subject <see cref="IViewDefinition"/>
         /// </param>

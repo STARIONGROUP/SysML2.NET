@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -57,6 +58,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// A MetadataAccessExpression is always model-level evaluable.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// true
+        /// </code>
+        /// </remarks>
         /// <param name="metadataAccessExpressionSubject">
         /// The subject <see cref="IMetadataAccessExpression"/>
         /// </param>
@@ -79,6 +86,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// referencedElement and whose ownedFeatures are bound to the values of the MOF properties of the
         /// referencedElement.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// referencedElement.ownedElement-&gt;
+        ///                                 select(oclIsKindOf(MetadataFeature)
+        ///                                 and annotatedElement-&gt;includes(referencedElement))-&gt;
+        ///                                 including(metaclassFeature())
+        /// </code>
+        /// </remarks>
         /// <param name="metadataAccessExpressionSubject">
         /// The subject <see cref="IMetadataAccessExpression"/>
         /// </param>

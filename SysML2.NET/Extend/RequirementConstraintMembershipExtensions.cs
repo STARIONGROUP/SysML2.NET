@@ -56,6 +56,19 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// referencedConstraint =
+        ///                             let referencedFeature : Feature =
+        ///                             ownedConstraint.referencedFeatureTarget() in
+        ///                             if referencedFeature = null then ownedConstraint
+        ///                             else if referencedFeature.oclIsKindOf(ConstraintUsage) then
+        ///                             refrencedFeature.oclAsType(ConstraintUsage)
+        ///                             else null
+        ///                             endif endif
+        /// </code>
+        /// </remarks>
         /// <param name="requirementConstraintMembershipSubject">
         /// The subject <see cref="IRequirementConstraintMembership"/>
         /// </param>

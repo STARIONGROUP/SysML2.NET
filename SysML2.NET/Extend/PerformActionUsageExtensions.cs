@@ -24,12 +24,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -81,6 +83,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// PerformActionUsage. If the PerformActionUsage is its own performedAction, then the naming Feature is
         /// the same as the usual default for a Usage.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if performedAction &lt;&gt; self then performedAction
+        ///                                 else self.oclAsType(Usage).namingFeature()
+        ///                                 endif
+        /// </code>
+        /// </remarks>
         /// <param name="performActionUsageSubject">
         /// The subject <see cref="IPerformActionUsage"/>
         /// </param>

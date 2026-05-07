@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -42,6 +43,13 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// An InvocationExpression is model-level evaluable if all its argument Expressions are model-level
         /// evaluable and its function is model-level evaluable.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// argument-&gt;forAll(modelLevelEvaluable(visited)) and
+        ///                                 function.isModelLevelEvaluable
+        /// </code>
+        /// </remarks>
         /// <param name="invocationExpressionSubject">
         /// The subject <see cref="IInvocationExpression"/>
         /// </param>

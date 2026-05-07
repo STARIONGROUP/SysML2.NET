@@ -38,6 +38,12 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// portDefinition = conjugatedPortDefinition.originalPortDefinition
+        /// </code>
+        /// </remarks>
         /// <param name="conjugatedPortTypingSubject">
         /// The subject <see cref="IConjugatedPortTyping"/>
         /// </param>

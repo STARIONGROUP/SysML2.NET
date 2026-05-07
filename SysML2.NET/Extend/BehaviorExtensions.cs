@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -55,6 +57,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// step = feature-&gt;selectByKind(Step)
+        /// </code>
+        /// </remarks>
         /// <param name="behaviorSubject">
         /// The subject <see cref="IBehavior"/>
         /// </param>

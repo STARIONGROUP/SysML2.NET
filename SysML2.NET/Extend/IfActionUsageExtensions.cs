@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -65,6 +66,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// elseAction =
+        ///                             let parameter : Feature = inputParameter(3) in
+        ///                             if parameter &lt;&gt; null and parameter.oclIsKindOf(ActionUsage) then
+        ///                             parameter.oclAsType(ActionUsage)
+        ///                             else
+        ///                             null
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="ifActionUsageSubject">
         /// The subject <see cref="IIfActionUsage"/>
         /// </param>
@@ -80,6 +93,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// ifArgument =
+        ///                             let parameter : Feature = inputParameter(1) in
+        ///                             if parameter &lt;&gt; null and parameter.oclIsKindOf(Expression) then
+        ///                             parameter.oclAsType(Expression)
+        ///                             else
+        ///                             null
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="ifActionUsageSubject">
         /// The subject <see cref="IIfActionUsage"/>
         /// </param>
@@ -95,6 +120,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// thenAction =
+        ///                             let parameter : Feature = inputParameter(2) in
+        ///                             if parameter &lt;&gt; null and parameter.oclIsKindOf(ActionUsage) then
+        ///                             parameter.oclAsType(ActionUsage)
+        ///                             else
+        ///                             null
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="ifActionUsageSubject">
         /// The subject <see cref="IIfActionUsage"/>
         /// </param>

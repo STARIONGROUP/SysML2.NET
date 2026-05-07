@@ -42,6 +42,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// The ownedMemberParameter of a ReturnParameterMembership must have direction out. (This is a leaf
         /// operation that cannot be further redefined.)
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// FeatureDirectionKind::out
+        /// </code>
+        /// </remarks>
         /// <param name="returnParameterMembershipSubject">
         /// The subject <see cref="IReturnParameterMembership"/>
         /// </param>
