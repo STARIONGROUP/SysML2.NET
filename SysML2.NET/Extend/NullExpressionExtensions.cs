@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -42,12 +41,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// A NullExpression is always model-level evaluable.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// true
-        /// </code>
-        /// </remarks>
         /// <param name="nullExpressionSubject">
         /// The subject <see cref="INullExpression"/>
         /// </param>
@@ -66,12 +59,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// The model-level value of a NullExpression is an empty sequence.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// Sequence{}
-        /// </code>
-        /// </remarks>
         /// <param name="nullExpressionSubject">
         /// The subject <see cref="INullExpression"/>
         /// </param>

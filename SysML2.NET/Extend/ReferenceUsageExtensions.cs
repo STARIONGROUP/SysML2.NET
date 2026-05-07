@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -78,16 +77,6 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// If this ReferenceUsage is the payload parameter of a TransitionUsage, then its naming Feature is the
         /// payloadParameter of the triggerAction of that TransitionUsage (if any).
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if owningType &lt;&gt; null and owningType.oclIsKindOf(TransitionUsage) and
-        ///                                 owningType.oclAsType(TransitionUsage).inputParameter(2) = self then
-        ///                                 owningType.oclAsType(TransitionUsage).triggerPayloadParameter()
-        ///                                 else self.oclAsType(Usage).namingFeature()
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="referenceUsageSubject">
         /// The subject <see cref="IReferenceUsage"/>
         /// </param>

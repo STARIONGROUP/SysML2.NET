@@ -71,12 +71,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL (KerML XMI):
-        /// <code>
-        /// ownedMemberName = ownedMemberElement.name
-        /// </code>
-        /// </remarks>
         /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
@@ -91,12 +85,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL (KerML XMI):
-        /// <code>
-        /// ownedMemberShortName = ownedMemberElement.shortName
-        /// </code>
-        /// </remarks>
         /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>

@@ -23,8 +23,6 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -63,19 +61,6 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// doAction =
-        ///                             let doMemberships : Sequence(StateSubactionMembership) =
-        ///                             ownedMembership-&gt;
-        ///                             selectByKind(StateSubactionMembership)-&gt;
-        ///                             select(kind = StateSubactionKind::do) in
-        ///                             if doMemberships-&gt;isEmpty() then null
-        ///                             else doMemberships-&gt;at(1)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
@@ -91,19 +76,6 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// entryAction =
-        ///                             let entryMemberships : Sequence(StateSubactionMembership) =
-        ///                             ownedMembership-&gt;
-        ///                             selectByKind(StateSubactionMembership)-&gt;
-        ///                             select(kind = StateSubactionKind::entry) in
-        ///                             if entryMemberships-&gt;isEmpty() then null
-        ///                             else entryMemberships-&gt;at(1)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
@@ -119,19 +91,6 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// exitAction =
-        ///                             let exitMemberships : Sequence(StateSubactionMembership) =
-        ///                             ownedMembership-&gt;
-        ///                             selectByKind(StateSubactionMembership)-&gt;
-        ///                             select(kind = StateSubactionKind::exit) in
-        ///                             if exitMemberships-&gt;isEmpty() then null
-        ///                             else exitMemberships-&gt;at(1)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>
@@ -147,12 +106,6 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// state = action-&gt;selectByKind(StateUsage)
-        /// </code>
-        /// </remarks>
         /// <param name="stateDefinitionSubject">
         /// The subject <see cref="IStateDefinition"/>
         /// </param>

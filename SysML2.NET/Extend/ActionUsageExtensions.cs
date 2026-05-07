@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -81,12 +80,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Return the owned input parameters of this ActionUsage.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// input-&gt;select(f | f.owner = self)
-        /// </code>
-        /// </remarks>
         /// <param name="actionUsageSubject">
         /// The subject <see cref="IActionUsage"/>
         /// </param>
@@ -103,14 +96,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// Return the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage has less
         /// than i owned input parameters.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if inputParameters()-&gt;size() &lt; i then null
-        ///                                 else inputParameters()-&gt;at(i)
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="actionUsageSubject">
         /// The subject <see cref="IActionUsage"/>
         /// </param>
@@ -131,19 +116,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// FeatureValue of the i-th owned input parameter of the ActionUsage. Return null if the ActionUsage
         /// has less than i owned input parameters or the i-th owned input parameter has no FeatureValue.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if inputParameter(i) = null then null
-        ///                                 else
-        ///                                 let featureValue : Sequence(FeatureValue) = inputParameter(i).
-        ///                                 ownedMembership-&gt;select(oclIsKindOf(FeatureValue)) in
-        ///                                 if featureValue-&gt;isEmpty() then null
-        ///                                 else featureValue-&gt;at(1).value
-        ///                                 endif
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="actionUsageSubject">
         /// The subject <see cref="IActionUsage"/>
         /// </param>
@@ -164,17 +136,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// ActionUsage but is not the entryAction or exitAction of a StateDefinition or StateUsage. If so, then
         /// it represents an Action that is a subaction of another Action.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// isComposite and owningType &lt;&gt; null and
-        ///                                 (owningType.oclIsKindOf(ActionDefinition) or
-        ///                                 owningType.oclIsKindOf(ActionUsage)) and
-        ///                                 (owningFeatureMembership.oclIsKindOf(StateSubactionMembership) implies
-        ///                                 owningFeatureMembership.oclAsType(StateSubactionMembership).kind =
-        ///                                 StateSubactionKind::do)
-        /// </code>
-        /// </remarks>
         /// <param name="actionUsageSubject">
         /// The subject <see cref="IActionUsage"/>
         /// </param>

@@ -21,7 +21,6 @@
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -37,7 +36,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using uml4net.Classification;
     using uml4net.CommonStructure;
     using uml4net.StructuredClassifiers;
-    using uml4net.Values;
 
     /// <summary>
     /// A handlebars block helper for the <see cref="IProperty"/> interface
@@ -1122,151 +1120,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 return property.Type is IClassifier { IsAbstract: true };
             });
-
-            handlebars.RegisterHelper("Property.QueryHasOwnedConstraints", (_, arguments) =>
-            {
-                if (arguments.Length != 1 || arguments[0] is not IProperty property)
-                {
-                    throw new HandlebarsException("{{Property.QueryHasOwnedConstraints}} expects a single IProperty argument");
-                }
-
-                return HasRenderableConstraint(property.QueryOwnedConstraints());
-            });
-
-            handlebars.RegisterHelper("Operation.QueryHasOwnedConstraints", (_, arguments) =>
-            {
-                if (arguments.Length != 1 || arguments[0] is not IOperation operation)
-                {
-                    throw new HandlebarsException("{{Operation.QueryHasOwnedConstraints}} expects a single IOperation argument");
-                }
-
-                return HasRenderableConstraint(operation.QueryOwnedConstraints());
-            });
-
-            handlebars.RegisterHelper("Property.WriteOwnedRulesAsRemarksBlock", (writer, _, arguments) =>
-            {
-                if (arguments.Length != 1 || arguments[0] is not IProperty property)
-                {
-                    throw new HandlebarsException("{{Property.WriteOwnedRulesAsRemarksBlock}} expects a single IProperty argument");
-                }
-
-                writer.WriteSafeString(BuildOwnedRulesRemarksBlock(property.QueryOwnedConstraints()));
-            });
-
-            handlebars.RegisterHelper("Operation.WriteOwnedRulesAsRemarksBlock", (writer, _, arguments) =>
-            {
-                if (arguments.Length != 1 || arguments[0] is not IOperation operation)
-                {
-                    throw new HandlebarsException("{{Operation.WriteOwnedRulesAsRemarksBlock}} expects a single IOperation argument");
-                }
-
-                writer.WriteSafeString(BuildOwnedRulesRemarksBlock(operation.QueryOwnedConstraints()));
-            });
-        }
-
-        /// <summary>
-        /// Builds a complete XML <c>&lt;remarks&gt;</c> block listing every constraint body carried by
-        /// the supplied <see cref="IConstraint"/> sequence, labelled by language. Returns the empty
-        /// string when no constraint carries an <see cref="IOpaqueExpression"/> body.
-        /// </summary>
-        /// <param name="constraints">The constraints to render.</param>
-        /// <returns>
-        /// A multi-line string starting with <c>/// &lt;remarks&gt;</c> and ending with <c>/// &lt;/remarks&gt;</c>,
-        /// each line prefixed for direct emission inside the Extend template; empty when nothing to emit.
-        /// </returns>
-        /// <summary>
-        /// Returns <see langword="true"/> when at least one constraint in <paramref name="constraints"/>
-        /// carries an <see cref="IOpaqueExpression"/> with at least one non-blank body line — i.e. when
-        /// <see cref="BuildOwnedRulesRemarksBlock"/> would emit a non-empty <c>&lt;remarks&gt;</c> block.
-        /// </summary>
-        /// <param name="constraints">The constraints to evaluate.</param>
-        /// <returns>Whether the helpers would produce any output for these constraints.</returns>
-        private static bool HasRenderableConstraint(IEnumerable<IConstraint> constraints)
-        {
-            foreach (var constraint in constraints)
-            {
-                var opaqueExpression = constraint.Specification?.OfType<IOpaqueExpression>().FirstOrDefault();
-
-                if (opaqueExpression?.Body != null && opaqueExpression.Body.Any(body => !string.IsNullOrWhiteSpace(body)))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static string BuildOwnedRulesRemarksBlock(IEnumerable<IConstraint> constraints)
-        {
-            var entries = new List<(string Language, string Body)>();
-
-            foreach (var constraint in constraints)
-            {
-                var opaqueExpression = constraint.Specification?.OfType<IOpaqueExpression>().FirstOrDefault();
-
-                if (opaqueExpression == null || opaqueExpression.Body == null)
-                {
-                    continue;
-                }
-
-                var bodies = opaqueExpression.Body;
-                var languages = opaqueExpression.Language;
-
-                for (var index = 0; index < bodies.Count; index++)
-                {
-                    if (string.IsNullOrWhiteSpace(bodies[index]))
-                    {
-                        continue;
-                    }
-
-                    var language = languages != null && index < languages.Count && !string.IsNullOrWhiteSpace(languages[index])
-                        ? languages[index].Trim()
-                        : "Constraint";
-
-                    entries.Add((language, bodies[index].Trim()));
-                }
-            }
-
-            if (entries.Count == 0)
-            {
-                return string.Empty;
-            }
-
-            var sb = new StringBuilder();
-            sb.AppendLine("/// <remarks>");
-
-            for (var index = 0; index < entries.Count; index++)
-            {
-                var (language, body) = entries[index];
-
-                sb.AppendLine($"/// {EscapeXml(language)}:");
-                sb.AppendLine("/// <code>");
-
-                foreach (var line in body.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n'))
-                {
-                    sb.AppendLine($"/// {EscapeXml(line.TrimEnd())}");
-                }
-
-                sb.AppendLine("/// </code>");
-            }
-
-            sb.Append("/// </remarks>");
-
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Replaces XML-significant characters with their entity equivalents so the result is safe to
-        /// embed inside an XML doc comment.
-        /// </summary>
-        /// <param name="value">The string to escape.</param>
-        /// <returns>The escaped string.</returns>
-        private static string EscapeXml(string value)
-        {
-            return value
-                .Replace("&", "&amp;")
-                .Replace("<", "&lt;")
-                .Replace(">", "&gt;");
         }
 
         /// <summary>

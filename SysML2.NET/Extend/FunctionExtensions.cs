@@ -23,8 +23,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -72,19 +70,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// result =
-        ///                             let resultParams : Sequence(Feature) =
-        ///                             featureMemberships-&gt;
-        ///                             selectByKind(ReturnParameterMembership).
-        ///                             ownedMemberParameter in
-        ///                             if resultParams-&gt;notEmpty() then resultParams-&gt;first()
-        ///                             else null
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="functionSubject">
         /// The subject <see cref="IFunction"/>
         /// </param>

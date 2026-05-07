@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -43,18 +42,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The instantiatedType of an OperatorExpression is the resolution of it's operator from one of the
         /// packages BaseFunctions, DataFunctions, or ControlFunctions from the Kernel Function Library.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let libFunctions : Sequence(Element) =
-        ///                                 Sequence{'BaseFunctions', 'DataFunctions', 'ControlFunctions'}-&gt;
-        ///                                 collect(ns | resolveGlobal(ns + "::'" + operator + "'").
-        ///                                 memberElement) in
-        ///                                 if libFunctions-&gt;isEmpty() then null
-        ///                                 else libFunctions-&gt;first().oclAsType(Type)
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="operatorExpressionSubject">
         /// The subject <see cref="IOperatorExpression"/>
         /// </param>

@@ -23,8 +23,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -64,14 +62,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// actorParameter = featureMembership-&gt;
-        ///                             selectByKind(ActorMembership).
-        ///                             ownedActorParameter
-        /// </code>
-        /// </remarks>
         /// <param name="caseDefinitionSubject">
         /// The subject <see cref="ICaseDefinition"/>
         /// </param>
@@ -87,19 +77,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// objectiveRequirement =
-        ///                             let objectives: OrderedSet(RequirementUsage) =
-        ///                             featureMembership-&gt;
-        ///                             selectByKind(ObjectiveMembership).
-        ///                             ownedRequirement in
-        ///                             if objectives-&gt;isEmpty() then null
-        ///                             else objectives-&gt;first().ownedObjectiveRequirement
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="caseDefinitionSubject">
         /// The subject <see cref="ICaseDefinition"/>
         /// </param>
@@ -115,17 +92,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// subjectParameter =
-        ///                             let subjectMems : OrderedSet(SubjectMembership) =
-        ///                             featureMembership-&gt;selectByKind(SubjectMembership) in
-        ///                             if subjectMems-&gt;isEmpty() then null
-        ///                             else subjectMems-&gt;first().ownedSubjectParameter
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="caseDefinitionSubject">
         /// The subject <see cref="ICaseDefinition"/>
         /// </param>

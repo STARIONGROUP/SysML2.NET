@@ -38,12 +38,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL (KerML XMI):
-        /// <code>
-        /// filterCondition = ownedMembership-&gt;selectByKind(ElementFilterMembership).condition
-        /// </code>
-        /// </remarks>
+        /// <remarks>OCL2: filterCondition = ownedMembership-> selectByKind(ElementFilterMembership).condition </remarks>
         /// <param name="packageSubject">
         /// The subject <see cref="IPackage"/>
         /// </param>
@@ -58,12 +53,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <summary>
         /// Exclude Elements that do not meet all the filterConditions.
         /// </summary>
-        /// <remarks>
-        /// OCL (KerML XMI):
-        /// <code>
-        /// self.oclAsType(Namespace).importedMemberships(excluded)-&gt;select(m | self.includeAsMember(m.memberElement))
-        /// </code>
-        /// </remarks>
         /// <param name="packageSubject">
         /// The subject <see cref="IPackage"/>
         /// </param>
@@ -95,15 +84,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <summary>
         /// Determine whether the given element meets all the filterConditions.
         /// </summary>
-        /// <remarks>
-        /// OCL (KerML XMI):
-        /// <code>
-        /// let metadataFeatures: Sequence(AnnotatingElement) =
-        ///     element.ownedAnnotation.annotatingElement-&gt;selectByKind(MetadataFeature)
-        /// in
-        /// self.filterCondition-&gt;forAll(cond | metadataFeatures-&gt;exists(elem | cond.checkCondition(elem)))
-        /// </code>
-        /// </remarks>
         /// <param name="packageSubject">
         /// The subject <see cref="IPackage"/>
         /// </param>

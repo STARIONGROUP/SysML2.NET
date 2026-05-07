@@ -35,15 +35,6 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// annotatingElement =
-        ///                             if ownedAnnotatingElement &lt;&gt; null then ownedAnnotatingElement
-        ///                             else owningAnnotatingElement
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="annotationSubject">
         /// The subject <see cref="IAnnotation"/>
         /// </param>
@@ -59,17 +50,6 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedAnnotatingElement =
-        ///                             let ownedAnnotatingElements : Sequence(AnnotatingElement) =
-        ///                             ownedRelatedElement-&gt;selectByKind(AnnotatingElement) in
-        ///                             if ownedAnnotatingElements-&gt;isEmpty() then null
-        ///                             else ownedAnnotatingElements-&gt;first()
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="annotationSubject">
         /// The subject <see cref="IAnnotation"/>
         /// </param>

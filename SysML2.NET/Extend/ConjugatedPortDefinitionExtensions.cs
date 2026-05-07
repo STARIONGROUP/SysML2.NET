@@ -23,8 +23,6 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -93,15 +91,6 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// If the name of the originalPortDefinition is non-empty, then return that with the character ~
         /// prepended.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let originalName : String = originalPortDefinition.name in
-        ///                                 if originalName = null then null
-        ///                                 else '~' + originalName
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="conjugatedPortDefinitionSubject">
         /// The subject <see cref="IConjugatedPortDefinition"/>
         /// </param>

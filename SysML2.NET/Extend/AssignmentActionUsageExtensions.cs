@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -66,18 +65,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// referent =
-        ///                             let unownedFeatures : Sequence(Feature) = ownedMembership-&gt;
-        ///                             reject(oclIsKindOf(FeatureMembership)).memberElement-&gt;
-        ///                             selectByKind(Feature) in
-        ///                             if unownedFeatures-&gt;isEmpty() then null
-        ///                             else unownedFeatures-&gt;first().oclAsType(Feature)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="assignmentActionUsageSubject">
         /// The subject <see cref="IAssignmentActionUsage"/>
         /// </param>
@@ -108,12 +95,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// valueExpression = argument(2)
-        /// </code>
-        /// </remarks>
         /// <param name="assignmentActionUsageSubject">
         /// The subject <see cref="IAssignmentActionUsage"/>
         /// </param>

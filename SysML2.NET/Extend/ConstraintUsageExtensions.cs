@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -83,18 +82,6 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// an ownedReferenceSubsetting is the featureTarget of the referencedFeature of that
         /// ownedReferenceSubsetting.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if owningFeatureMembership &lt;&gt; null and
-        ///                                 owningFeatureMembership.oclIsKindOf(RequirementConstraintMembership) and
-        ///                                 ownedReferenceSubsetting &lt;&gt; null then
-        ///                                 ownedReferenceSubsetting.referencedFeature.featureTarget
-        ///                                 else
-        ///                                 self.oclAsType(OccurrenceUsage).namingFeature()
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="constraintUsageSubject">
         /// The subject <see cref="IConstraintUsage"/>
         /// </param>
@@ -110,12 +97,6 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <summary>
         /// A ConstraintUsage is not model-level evaluable.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// false
-        /// </code>
-        /// </remarks>
         /// <param name="constraintUsageSubject">
         /// The subject <see cref="IConstraintUsage"/>
         /// </param>

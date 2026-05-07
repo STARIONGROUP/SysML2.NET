@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -43,12 +42,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// A ConstructorExpression is model-level evaluable if all its argument Expressions are model-level
         /// evaluable.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// argument-&gt;forAll(modelLevelEvaluable(visited))
-        /// </code>
-        /// </remarks>
         /// <param name="constructorExpressionSubject">
         /// The subject <see cref="IConstructorExpression"/>
         /// </param>

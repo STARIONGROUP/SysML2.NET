@@ -344,6 +344,10 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// otherwise, represented as a restricted name according to the lexical structure of the KerML textual
         /// notation (i.e., surrounded by single quote characters and with special characters escaped).
         /// </summary>
+        /// <remarks>
+        /// No explicit OCL derivation rule in XMI. Derived from UML association semantics:
+        /// Return name, if that is not null, otherwise the shortName, if that is not null, otherwise null. If the returned value is non-null, it is returned as-is if it has the form of a basic name, or, otherwise, represented as a restricted name according to the lexical structure of the KerML textual notation (i.e., surrounded by single quote characters and with special characters escaped).
+        /// </remarks>
         /// <param name="elementSubject">
         /// The subject <see cref="IElement"/>
         /// </param>

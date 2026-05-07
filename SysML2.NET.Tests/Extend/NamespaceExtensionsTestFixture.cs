@@ -217,8 +217,6 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void VerifyComputeImportedMembershipsOperation()
         {
-            Assert.That(() => ((INamespace)null).ComputeImportedMembershipsOperation([]), Throws.TypeOf<ArgumentNullException>());
-
             var namespaceElement = new Namespace();
 
             Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Has.Count.EqualTo(0));

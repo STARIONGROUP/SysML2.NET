@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Actions;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -46,20 +45,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// Triggers package, depending on whether the kind of this TriggerInvocationExpression is when, at or
         /// after, respectively.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// resolveGlobal(
-        ///                                 if kind = TriggerKind::when then
-        ///                                 'Triggers::TriggerWhen'
-        ///                                 else if kind = TriggerKind::at then
-        ///                                 'Triggers::TriggerAt'
-        ///                                 else
-        ///                                 'Triggers::TriggerAfter'
-        ///                                 endif endif
-        ///                                 ).memberElement.oclAsType(Type)
-        /// </code>
-        /// </remarks>
         /// <param name="triggerInvocationExpressionSubject">
         /// The subject <see cref="ITriggerInvocationExpression"/>
         /// </param>

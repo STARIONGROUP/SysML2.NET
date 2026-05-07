@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -66,18 +65,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// loopVariable =
-        ///                             if ownedFeature-&gt;isEmpty() or
-        ///                             not ownedFeature-&gt;first().oclIsKindOf(ReferenceUsage) then
-        ///                             null
-        ///                             else
-        ///                             ownedFeature-&gt;first().oclAsType(ReferenceUsage)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="forLoopActionUsageSubject">
         /// The subject <see cref="IForLoopActionUsage"/>
         /// </param>
@@ -93,12 +80,6 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// seqArgument = argument(1)
-        /// </code>
-        /// </remarks>
         /// <param name="forLoopActionUsageSubject">
         /// The subject <see cref="IForLoopActionUsage"/>
         /// </param>

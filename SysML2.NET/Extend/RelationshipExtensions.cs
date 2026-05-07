@@ -51,9 +51,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </returns>
         internal static List<IElement> ComputeRelatedElement(this IRelationship relationshipSubject)
         {
-            return relationshipSubject == null
-                ? throw new ArgumentNullException(nameof(relationshipSubject))
-                : [..relationshipSubject.Source.Union(relationshipSubject.Target)];
+            return relationshipSubject == null ? throw new ArgumentNullException(nameof(relationshipSubject)) : [..relationshipSubject.Source, ..relationshipSubject.Target];
         }
 
         /// <summary>

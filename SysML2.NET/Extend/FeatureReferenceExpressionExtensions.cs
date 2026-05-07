@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -42,19 +41,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// referent =
-        ///                             let nonParameterMemberships : Sequence(Membership) = ownedMembership-&gt;
-        ///                             reject(oclIsKindOf(ParameterMembership)) in
-        ///                             if nonParameterMemberships-&gt;isEmpty() or
-        ///                             not nonParameterMemberships-&gt;first().memberElement.oclIsKindOf(Feature)
-        ///                             then null
-        ///                             else nonParameterMemberships-&gt;first().memberElement.oclAsType(Feature)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="featureReferenceExpressionSubject">
         /// The subject <see cref="IFeatureReferenceExpression"/>
         /// </param>
@@ -75,21 +61,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         ///   <li>has no featuringTypes and, if it has a FeatureValue, the value Expression is model-level
         /// evaluable.</li>                            </ul>
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// referent.conformsTo('Anything::self') or
-        ///                                 visited-&gt;excludes(referent) and
-        ///                                 (referent.oclIsKindOf(Expression) and
-        ///                                 referent.oclAsType(Expression).modelLevelEvaluable(visited-&gt;including(referent)) or
-        ///                                 referent.owningType &lt;&gt; null and
-        ///                                 (referent.owningType.isOclKindOf(MetaClass) or
-        ///                                 referent.owningType.isOclKindOf(MetadataFeature)) or
-        ///                                 referent.featuringType-&gt;isEmpty() and
-        ///                                 (referent.valuation = null or
-        ///                                 referent.valuation.modelLevelEvaluable(visited-&gt;including(referent))))
-        /// </code>
-        /// </remarks>
         /// <param name="featureReferenceExpressionSubject">
         /// The subject <see cref="IFeatureReferenceExpression"/>
         /// </param>
@@ -116,24 +87,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         ///                    <li>Else, if the referent is not an Expression, return the referent.</li>        
         /// <li>Else return the empty sequence.</li>                            </ul>
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if not target.oclIsKindOf(Type) then Sequence{}
-        ///                                 else
-        ///                                 let feature: Sequence(Feature) =
-        ///                                 target.oclAsType(Type).feature-&gt;select(f |
-        ///                                 f.ownedRedefinition.redefinedFeature-&gt;
-        ///                                 includes(referent)) in
-        ///                                 if feature-&gt;notEmpty() then
-        ///                                 feature.valuation.value.evaluate(target)
-        ///                                 else if referent.featuringType-&gt;isEmpty()
-        ///                                 then referent
-        ///                                 else Sequence{}
-        ///                                 endif endif
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="featureReferenceExpressionSubject">
         /// The subject <see cref="IFeatureReferenceExpression"/>
         /// </param>

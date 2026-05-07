@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -64,17 +63,6 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// eventOccurrence =
-        ///                             if referencedFeatureTarget() = null then self
-        ///                             else if referencedFeatureTarget().oclIsKindOf(OccurrenceUsage) then
-        ///                             referencedFeatureTarget().oclAsType(OccurrenceUsage)
-        ///                             else null
-        ///                             endif endif
-        /// </code>
-        /// </remarks>
         /// <param name="eventOccurrenceUsageSubject">
         /// The subject <see cref="IEventOccurrenceUsage"/>
         /// </param>

@@ -21,14 +21,11 @@
 namespace SysML2.NET.CodeGenerator.Extensions
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using uml4net.Classification;
-    using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.SimpleClassifiers;
-    using uml4net.StructuredClassifiers;
 
     /// <summary>
     /// Extension class for the <see cref="IProperty"/> 
@@ -138,52 +135,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             return "THIS WILL PRODUCE COMPILE ERROR";
-        }
-
-        /// <summary>
-        /// Returns every <see cref="IConstraint"/> from the owning class's <c>OwnedRule</c> that
-        /// applies to the given derived <see cref="IProperty"/>. The XMI shipped with this
-        /// project links derivation rules to the owning class (not the specific attribute) and uses
-        /// the naming convention <c>derive{ClassName}{PropertyName}</c>; both signals are honoured.
-        /// </summary>
-        /// <param name="property">The property to query. Must not be <see langword="null"/>.</param>
-        /// <returns>An enumerable of constraining <see cref="IConstraint"/>s; empty when none apply.</returns>
-        public static IEnumerable<IConstraint> QueryOwnedConstraints(this IProperty property)
-        {
-            ArgumentNullException.ThrowIfNull(property);
-
-            if (property.Owner is not IClass owningClass)
-            {
-                return [];
-            }
-
-            var explicitMatches = owningClass.OwnedRule
-                .Where(rule => rule.ConstrainedElement.Contains(property))
-                .ToList();
-
-            if (explicitMatches.Count > 0)
-            {
-                return explicitMatches;
-            }
-
-            var expectedDeriveName = "derive" + owningClass.Name + property.Name.CapitalizeFirstLetter();
-
-            return owningClass.OwnedRule
-                .Where(rule => string.Equals(rule.Name, expectedDeriveName, StringComparison.Ordinal));
-        }
-
-        /// <summary>
-        /// Returns every <see cref="IConstraint"/> directly owned by the given <see cref="IOperation"/>
-        /// via its <c>OwnedRule</c> namespace facet. Used by the Extend code-generation template to
-        /// surface the operation's constraint(s) as XML <c>&lt;remarks&gt;</c> blocks.
-        /// </summary>
-        /// <param name="operation">The operation to query. Must not be <see langword="null"/>.</param>
-        /// <returns>An enumerable of <see cref="IConstraint"/>s; empty when none are declared.</returns>
-        public static IEnumerable<IConstraint> QueryOwnedConstraints(this IOperation operation)
-        {
-            ArgumentNullException.ThrowIfNull(operation);
-
-            return operation.OwnedRule;
         }
     }
 }

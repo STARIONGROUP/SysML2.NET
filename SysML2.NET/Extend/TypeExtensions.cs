@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -39,12 +38,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// English:
-        /// <code>
-        /// differencingType = ownedDifferencing.differencingType
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -60,12 +53,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// directedFeature = feature-&gt;select(f | directionOf(f) &lt;&gt; null)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -81,12 +68,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// endFeature = feature-&gt;select(isEnd)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -102,12 +83,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// feature = featureMembership.ownedMemberFeature
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -123,13 +98,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// featureMembership = ownedFeatureMembership-&gt;union(
-        ///                             inheritedMembership-&gt;selectByKind(FeatureMembership))
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -145,13 +113,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// inheritedFeature = inheritedMemberships-&gt;
-        ///                             selectByKind(FeatureMembership).memberFeature
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -167,12 +128,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// inheritedMembership = inheritedMemberships(Set{}, Set{}, false)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -188,15 +143,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// input = feature-&gt;select(f |
-        ///                             let direction: FeatureDirectionKind = directionOf(f) in
-        ///                             direction = FeatureDirectionKind::_'in' or
-        ///                             direction = FeatureDirectionKind::inout)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -212,12 +158,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// intersectingType = ownedIntersecting.intersectingType
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -248,17 +188,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// multiplicity =
-        ///                             let ownedMultiplicities: Sequence(Multiplicity) =
-        ///                             ownedMember-&gt;selectByKind(Multiplicity) in
-        ///                             if ownedMultiplicities-&gt;isEmpty() then null
-        ///                             else ownedMultiplicities-&gt;first()
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -274,15 +203,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// output = feature-&gt;select(f |
-        ///                             let direction: FeatureDirectionKind = directionOf(f) in
-        ///                             direction = FeatureDirectionKind::out or
-        ///                             direction = FeatureDirectionKind::inout)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -298,16 +218,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedConjugator =
-        ///                             let ownedConjugators: Sequence(Conjugator) =
-        ///                             ownedRelationship-&gt;selectByKind(Conjugation) in
-        ///                             if ownedConjugators-&gt;isEmpty() then null
-        ///                             else ownedConjugators-&gt;at(1) endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -323,13 +233,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedDifferencing =
-        ///                             ownedRelationship-&gt;selectByKind(Differencing)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -345,13 +248,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedDisjoining =
-        ///                             ownedRelationship-&gt;selectByKind(Disjoining)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -367,12 +263,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedEndFeature = ownedFeature-&gt;select(isEnd)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -388,12 +278,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// English:
-        /// <code>
-        /// ownedFeature = ownedFeatureMembership.ownedMemberFeature
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -409,12 +293,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedFeatureMembership = ownedRelationship-&gt;selectByKind(FeatureMembership)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -430,12 +308,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedRelationship-&gt;selectByKind(Intersecting)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -451,13 +323,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedSpecialization = ownedRelationship-&gt;selectByKind(Specialization)-&gt;
-        ///                             select(s | s.special = self)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -473,13 +338,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedUnioning =
-        ///                             ownedRelationship-&gt;selectByKind(Unioning)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -495,12 +353,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// unioningType = ownedUnioning.unioningType
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -516,18 +368,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// The visible Memberships of a Type include inheritedMemberships.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let visibleMemberships : OrderedSet(Membership) =
-        ///                                 self.oclAsType(Namespace).
-        ///                                 visibleMemberships(excluded, isRecursive, includeAll) in
-        ///                                 let visibleInheritedMemberships : OrderedSet(Membership) =
-        ///                                 inheritedMemberships(excluded-&gt;including(self), Set{}, isRecursive)-&gt;
-        ///                                 select(includeAll or visibility = VisibilityKind::public) in
-        ///                                 visibleMemberships-&gt;union(visibleInheritedMemberships)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -554,13 +394,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// When computing inheritable Memberships, exclude Imports of excludedNamespaces, Specializations of
         /// excludedTypes, and, if excludeImplied = true, all implied Specializations.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// removeRedefinedFeatures(
-        ///                                 inheritableMemberships(excludedNamespaces, excludedTypes, excludeImplied))
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -587,14 +420,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// that are this Type or are in the given set of excludedTypes. If excludeImplied = true, then also
         /// transitively exclude any supertypes from implied Specializations.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let excludingSelf : Set(Type) = excludedType-&gt;including(self) in
-        ///                                 supertypes(excludeImplied)-&gt;reject(t | excludingSelf-&gt;includes(t)).
-        ///                                 nonPrivateMemberships(excludedNamespaces, excludingSelf, excludeImplied)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -622,20 +447,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// exclude Types in the given set of excludedTypes. If excludeImplied = true, then also exclude any
         /// supertypes from implied Specializations.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let publicMemberships : OrderedSet(Membership) =
-        ///                                 membershipsOfVisibility(VisibilityKind::public, excludedNamespaces) in
-        ///                                 let protectedMemberships : OrderedSet(Membership) =
-        ///                                 membershipsOfVisibility(VisibilityKind::protected, excludedNamespaces) in
-        ///                                 let inheritedMemberships : OrderedSet(Membership) =
-        ///                                 inheritedMemberships(excludedNamespaces, excludedTypes, excludeImplied) in
-        ///                                 publicMemberships-&gt;
-        ///                                 union(protectedMemberships)-&gt;
-        ///                                 union(inheritedMemberships)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -667,20 +478,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
         /// redefined by the memberElement.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let reducedMemberships : Sequence(Membership) =
-        ///                                 memberships-&gt;reject(mem1 |
-        ///                                 memberships-&gt;excluding(mem1)-&gt;
-        ///                                 exists(mem2 | allRedefinedFeaturesOf(mem2)-&gt;
-        ///                                 includes(mem1.memberElement))) in
-        ///                                 let redefinedFeatures : Set(Feature) =
-        ///                                 ownedFeature.redefinition.redefinedFeature-&gt;asSet() in
-        ///                                 reducedMemberships-&gt;reject(mem | allRedefinedFeaturesOf(mem)-&gt;
-        ///                                 exists(feature | redefinedFeatures-&gt;includes(feature)))
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -700,14 +497,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// If the memberElement of the given membership is a Feature, then return all Features directly or
         /// indirectly redefined by the memberElement.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if not membership.memberElement.oclIsType(Feature) then Set{}
-        ///                                 else membership.memberElement.oclAsType(Feature).allRedefinedFeatures()
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -727,12 +516,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// If the given feature is a feature of this Type, then return its direction relative to this Type,
         /// taking conjugation into account.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// directionOfExcluding(f, Set{})
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -752,27 +535,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Return the direction of the given feature relative to this Type, excluding a given set of Types from
         /// the search of supertypes of this Type.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let excludedSelf : Set(Type) = excluded-&gt;including(self) in
-        ///                                 if feature.owningType = self then feature.direction
-        ///                                 else
-        ///                                 let directions : Sequence(FeatureDirectionKind) =
-        ///                                 supertypes(false)-&gt;excluding(excludedSelf).
-        ///                                 directionOfExcluding(feature, excludedSelf)-&gt;
-        ///                                 select(d | d &lt;&gt; null) in
-        ///                                 if directions-&gt;isEmpty() then null
-        ///                                 else
-        ///                                 let direction : FeatureDirectionKind = directions-&gt;first() in
-        ///                                 if not isConjugated then direction
-        ///                                 else if direction = FeatureDirectionKind::_'in' then FeatureDirectionKind::out
-        ///                                 else if direction = FeatureDirectionKind::out then FeatureDirectionKind::_'in'
-        ///                                 else direction
-        ///                                 endif endif endif   endif
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -796,16 +558,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// the general Types from all ownedSpecializations of this type, if excludeImplied = false, or all
         /// non-implied ownedSpecializations, if excludeImplied = true.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if isConjugated then Sequence{conjugator.originalType}
-        ///                                 else if not excludeImplied then ownedSpecialization.general
-        ///                                 else ownedSpecialization-&gt;reject(isImplied).general
-        ///                                 endif
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -825,12 +577,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Return this Type and all Types that are directly or transitively supertypes of this Type (as
         /// determined by the supertypes operation with excludeImplied = false).
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// OrderedSet{self}-&gt;closure(supertypes(false))
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -846,16 +592,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Check whether this Type is a direct or indirect specialization of the given supertype.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if isConjugated then
-        ///                                 ownedConjugator.originalType.specializes(supertype)
-        ///                                 else
-        ///                                 allSupertypes()-&gt;includes(supertype)
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -876,14 +612,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// libraryTypeName must conform to the syntax of a KerML qualified name and must resolve to a Type in
         /// global scope.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let mem : Membership = resolveGlobal(libraryTypeName) in
-        ///                                 mem &lt;&gt; null and mem.memberElement.oclIsKindOf(Type) and
-        ///                                 specializes(mem.memberElement.oclAsType(Type))
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -903,12 +631,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// By default, this Type is compatible with an otherType if it directly or indirectly specializes the
         /// otherType.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// specializes(otherType)
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>
@@ -927,18 +649,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Return the owned or inherited Multiplicities for this Type<./code>.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// if multiplicity &lt;&gt; null then OrderedSet{multiplicity}
-        ///                                 else
-        ///                                 ownedSpecialization.general-&gt;closure(t |
-        ///                                 if t.multiplicity &lt;&gt; null then OrderedSet{}
-        ///                                 else ownedSpecialization.general
-        ///                                 )-&gt;select(multiplicity &lt;&gt; null).multiplicity-&gt;asOrderedSet()
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="typeSubject">
         /// The subject <see cref="IType"/>
         /// </param>

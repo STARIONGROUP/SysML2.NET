@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -42,19 +41,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// targetFeature =
-        ///                             let nonParameterMemberships : Sequence(Membership) = ownedMembership-&gt;
-        ///                             reject(oclIsKindOf(ParameterMembership)) in
-        ///                             if nonParameterMemberships-&gt;isEmpty() or
-        ///                             not nonParameterMemberships-&gt;first().memberElement.oclIsKindOf(Feature)
-        ///                             then null
-        ///                             else nonParameterMemberships-&gt;first().memberElement.oclAsType(Feature)
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="featureChainExpressionSubject">
         /// The subject <see cref="IFeatureChainExpression"/>
         /// </param>
@@ -71,18 +57,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// Return the first ownedFeature of the first owned input parameter of this FeatureChainExpression (if
         /// any).
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let inputParameters : Feature = ownedFeatures-&gt;
-        ///                                 select(direction = _'in') in
-        ///                                 if inputParameters-&gt;isEmpty() or
-        ///                                 inputParameters-&gt;first().ownedFeature-&gt;isEmpty()
-        ///                                 then null
-        ///                                 else inputParameters-&gt;first().ownedFeature-&gt;first()
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="featureChainExpressionSubject">
         /// The subject <see cref="IFeatureChainExpression"/>
         /// </param>

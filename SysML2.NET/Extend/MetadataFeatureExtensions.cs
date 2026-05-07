@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -40,16 +39,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// metaclass =
-        ///                             let metaclassTypes : Sequence(Type) = type-&gt;selectByKind(Metaclass) in
-        ///                             if metaclassTypes-&gt;isEmpty() then null
-        ///                             else metaClassTypes-&gt;first()
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="metadataFeatureSubject">
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
@@ -67,23 +56,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// redefined by a feature, then return the result of evaluating the appropriate (model-level evaluable)
         /// value Expression for it (if any), with the MetadataFeature as the target.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let selectedFeatures : Sequence(Feature) = feature-&gt;
-        ///                                 select(closure(ownedRedefinition.redefinedFeature)-&gt;
-        ///                                 includes(baseFeature)) in
-        ///                                 if selectedFeatures-&gt;isEmpty() then null
-        ///                                 else
-        ///                                 let selectedFeature : Feature = selectedFeatures-&gt;first() in
-        ///                                 let featureValues : FeatureValue = selectedFeature-&gt;
-        ///                                 closure(ownedRedefinition.redefinedFeature).ownedMember-&gt;
-        ///                                 selectAsKind(FeatureValue) in
-        ///                                 if featureValues-&gt;isEmpty() then null
-        ///                                 else featureValues-&gt;first().value.evaluate(self)
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="metadataFeatureSubject">
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
@@ -102,12 +74,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <summary>
         /// Check if this MetadataFeature has a metaclass which is a kind of SemanticMetadata.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// specializesFromLibrary('Metaobjects::SemanticMetadata')
-        /// </code>
-        /// </remarks>
         /// <param name="metadataFeatureSubject">
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
@@ -124,12 +90,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// Check if this MetadataFeature has a metaclass that is a kind of KerML::Element (that is, it is from
         /// the reflective abstract syntax model).
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// specializesFromLibrary('KerML::Element')
-        /// </code>
-        /// </remarks>
         /// <param name="metadataFeatureSubject">
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>
@@ -146,16 +106,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// If this MetadataFeature reflectively represents a model element, then return the corresponding
         /// Element instance from the MOF abstract syntax representation of the model.
         /// </summary>
-        /// <remarks>
-        /// English:
-        /// <code>
-        /// No OCL
-        /// </code>
-        /// OCL2.0:
-        /// <code>
-        /// isSyntactic()
-        /// </code>
-        /// </remarks>
         /// <param name="metadataFeatureSubject">
         /// The subject <see cref="IMetadataFeature"/>
         /// </param>

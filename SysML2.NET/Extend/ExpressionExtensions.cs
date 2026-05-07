@@ -24,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -56,12 +55,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// isModelLevelEvaluable = modelLevelEvaluable(Set(Element){})
-        /// </code>
-        /// </remarks>
         /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
@@ -77,19 +70,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// result =
-        ///                             let resultParams : Sequence(Feature) =
-        ///                             featureMemberships-&gt;
-        ///                             selectByKind(ReturnParameterMembership).
-        ///                             ownedMemberParameter in
-        ///                             if resultParams-&gt;notEmpty() then resultParams-&gt;first()
-        ///                             else null
-        ///                             endif
-        /// </code>
-        /// </remarks>
         /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
@@ -112,17 +92,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// ResultExpressionMembership. The parameters  must not have any ownedFeatures or a FeatureValue, and
         /// the result Expression must be model-level evaluable.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// ownedSpecialization-&gt;forAll(isImplied) and
-        ///                                 ownedFeature-&gt;forAll(f |
-        ///                                 (directionOf(f) = FeatureDirectionKind::_'in' or f = result) and
-        ///                                 f.ownedFeature-&gt;isEmpty() and f.valuation = null or
-        ///                                 f.owningFeatureMembership.oclIsKindOf(ResultExpressionMembership) and
-        ///                                 f.oclAsType(Expression).modelLevelEvaluable(visited)
-        /// </code>
-        /// </remarks>
         /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
@@ -144,22 +113,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// which, for a fully evaluable Expression, will be a LiteralExpression or a Feature that is not an
         /// Expression.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// isModelLevelEvaluable
-        /// </code>
-        /// OCL2.0:
-        /// <code>
-        /// let resultExprs : Sequence(Expression) =
-        ///                                 ownedFeatureMembership-&gt;
-        ///                                 selectByKind(ResultExpressionMembership).
-        ///                                 ownedResultExpression in
-        ///                                 if resultExpr-&gt;isEmpty() then Sequence{}
-        ///                                 else resultExprs-&gt;first().evaluate(target)
-        ///                                 endif
-        /// </code>
-        /// </remarks>
         /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
@@ -179,15 +132,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Model-level evaluate this Expression with the given target. If the result is a LiteralBoolean,
         /// return its value. Otherwise return false.
         /// </summary>
-        /// <remarks>
-        /// OCL2.0:
-        /// <code>
-        /// let results: Sequence(Element) = evaluate(target) in
-        ///                                 result-&gt;size() = 1 and
-        ///                                 results-&gt;first().oclIsKindOf(LiteralBoolean) and
-        ///                                 results-&gt;first().oclAsType(LiteralBoolean).value
-        /// </code>
-        /// </remarks>
         /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
