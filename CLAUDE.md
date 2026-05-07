@@ -43,11 +43,11 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 
 **Every code change touching any of the following paths MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing:**
 
-- Every file under `SysML2.NET/TextualNotation/` — both hand-coded partials (`*.cs`), the generated `AutoGenTextualNotationBuilder/*.cs`, `IsValidFor` guard extensions (`TextualNotationValidationExtensions.cs`), and any membership / string / cursor helpers that sit beside them.
+- Every file under `SysML2.NET.Serializer.TextualNotation/Writers/` — both hand-coded partials (`*.cs`), the generated `AutoGenTextualNotationBuilder/*.cs`, `IsValidFor` guard extensions (`TextualNotationValidationExtensions.cs`), and any membership / string / cursor helpers that sit beside them.
 - Every file under `SysML2.NET/LexicalRules/` — both hand-coded members and the generated `AutoGenLexicalRules/*.cs` (`Keywords`, `SymbolicKeywordKind`, `SymbolicKeywordKindExtensions`).
 - `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and any Handlebars template under `SysML2.NET.CodeGenerator/Templates/Uml/` that emits textual-notation or lexical-rules code.
 
-**The KEBNF grammar context applies to ALL of these locations** — not just the generator. When implementing or reviewing hand-coded methods in `SysML2.NET/TextualNotation/`, the author and the reviewer must re-ground in:
+**The KEBNF grammar context applies to ALL of these locations** — not just the generator. When implementing or reviewing hand-coded methods in `SysML2.NET.Serializer.TextualNotation/Writers/`, the author and the reviewer must re-ground in:
 - `SysML2.NET.CodeGenerator/GRAMMAR.md` — the cursor / builder conventions and patterns
 - `Resources/SysML-textual-bnf.kebnf` and `Resources/KerML-textual-bnf.kebnf` — the grammar source of truth
 - The rule's `<para>{…}</para>` XML doc on the generated sibling method (if the method is a HandCoded companion)
@@ -86,7 +86,7 @@ The XMI files (`Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml`) d
 - `Resources/specification/1-Kernel_Modeling_Language.pdf.txt` — *Kernel Modeling Language (KerML) Version 1.0* (OMG formal/2026-03-01). Consult when working with metaclasses in the `Root.*`, `Core.*`, and `Kernel.*` namespaces (under `SysML2.NET/Core/AutoGenDto/` and `AutoGenPoco/`), when an OCL constraint is unclear, or when reasoning about element/relationship/feature/classification semantics that the XMI does not spell out.
 - `Resources/specification/2a-OMG_Systems_Modeling_Language.pdf.txt` — *OMG Systems Modeling Language (SysML) Version 2.0, Part 1: Language Specification* (OMG formal/2026-03-02). Consult when working with the systems-engineering-specific metaclasses in `Systems.*` namespaces — Parts, Ports, Connections, Interfaces, Actions, States, Interactions, Requirements, Constraints, Use Cases, Analysis/Verification Cases, Views, Metadata — and to ground the Definition/Usage pattern.
 - `Resources/specification/3-Systems_Modeling_API_and_Services.pdf.txt` — *Systems Modeling API and Services Version 1.0* (OMG formal/2026-03-04). Consult when working in `SysML2.NET.REST/`, `SysML2.NET/PIM/`, `SysML2.NET.Serializer.Dictionary/`, or `SysML2.NET/ModelInterchange/`. Defines the Platform-Independent Model (ProjectService, ElementNavigationService, ProjectDataVersioningService, QueryService, ExternalRelationshipService, ProjectUsageService) and the REST/HTTP and OSLC PSMs.
-- `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt` — SST tutorial, Release 2026-03. Informative companion to the KEBNF grammar; consult for canonical examples and idioms when implementing or reviewing rules under `SysML2.NET/TextualNotation/` and `SysML2.NET/LexicalRules/`.
+- `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt` — SST tutorial, Release 2026-03. Informative companion to the KEBNF grammar; consult for canonical examples and idioms when implementing or reviewing rules under `SysML2.NET.Serializer.TextualNotation/Writers/` and `SysML2.NET/LexicalRules/`.
 - `Resources/specification/Intro to the SysML v2 Language-Graphical Notation.pdf.txt` — SST tutorial, Release 2026-03. Consult when working on `SysML2.NET.Viewer/` (Blazor) for the visual-rendering conventions of each metaclass family.
 
 These text files are large (PDF-converted, up to 1.3 MB) and the conversion is not always clean. Read them with `Read` `offset`/`limit` and use `Grep` to jump to chapter/section anchors (e.g. `^7\.\d+`, `Clause 8\.`, or a metaclass name) rather than loading whole files into context.
@@ -111,6 +111,7 @@ SysML2.NET.Serializer.Json   - JSON (de)serialization via System.Text.Json
 SysML2.NET.Serializer.Xmi    - XMI (de)serialization
 SysML2.NET.Serializer.MessagePack - MessagePack binary serialization
 SysML2.NET.Serializer.Dictionary  - Dictionary-based serialization (PIM)
+SysML2.NET.Serializer.TextualNotation - Writers/, Writers/AutoGenTextualNotationBuilder/, validation extensions, cursor helpers
 SysML2.NET.Dal               - Data Access Layer (Assembler, ElementFactory)
 SysML2.NET.REST              - REST client + Session for SysML2 API servers
 SysML2.NET.Kpar              - Reader/Writer for .kpar archive format

@@ -2,7 +2,7 @@
 
 This file provides essential context for working on the SysML2 textual notation code generator (`RulesHelper.cs` and related files). Read this when modifying grammar processing or the `TextualNotationBuilder` generation pipeline.
 
-> **⚠ Reviewer agent is mandatory for every change.** Before committing any modification to `SysML2.NET/TextualNotation/*.cs` or to `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`, invoke the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) to verify grammar correctness. See CLAUDE.md "Textual notation reviewer is MANDATORY" for details.
+> **⚠ Reviewer agent is mandatory for every change.** Before committing any modification to `SysML2.NET.Serializer.TextualNotation/Writers/*.cs` or to `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`, invoke the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) to verify grammar correctness. See CLAUDE.md "Textual notation reviewer is MANDATORY" for details.
 
 ## EBNF / KEBNF Notation Legend
 
@@ -40,10 +40,10 @@ KEBNF grammar files (Grammar/Resources/*.kebnf)
   into Grammar/Model/* (RuleElement hierarchy)
   processed by HandleBarHelpers/RulesHelper.cs
   via Handlebars template (Templates/Uml/textualNotationBuilder.hbs)
-  emits SysML2.NET/TextualNotation/AutoGenTextualNotationBuilder/*.cs
+  emits SysML2.NET.Serializer.TextualNotation/Writers/AutoGenTextualNotationBuilder/*.cs
 ```
 
-**Hand-coded counterparts** live in `SysML2.NET/TextualNotation/*.cs` (parent folder) as `partial` classes. When code-gen can't handle a rule, it emits `Build{RuleName}HandCoded(poco, cursorCache, stringBuilder)` which must be implemented in the hand-coded partial.
+**Hand-coded counterparts** live in `SysML2.NET.Serializer.TextualNotation/Writers/*.cs` (parent folder) as `partial` classes. When code-gen can't handle a rule, it emits `Build{RuleName}HandCoded(poco, cursorCache, stringBuilder)` which must be implemented in the hand-coded partial.
 
 ## Grammar Element Types (`Grammar/Model/`)
 
@@ -138,7 +138,7 @@ Build{RuleName}HandCoded(poco, cursorCache, stringBuilder);
 ```
 
 The hand-coded partial class file must:
-1. Live in `SysML2.NET/TextualNotation/{ClassName}TextualNotationBuilder.cs`
+1. Live in `SysML2.NET.Serializer.TextualNotation/Writers/{ClassName}TextualNotationBuilder.cs`
 2. Declare `public static partial class {ClassName}TextualNotationBuilder`
 3. Implement the method as `private static void Build{RuleName}HandCoded(...)` 
 4. Use `NotSupportedException` (not `NotImplementedException`) for unimplemented stubs
@@ -157,12 +157,12 @@ After modifying `RulesHelper.cs`:
 dotnet build SysML2.NET.CodeGenerator/SysML2.NET.CodeGenerator.csproj
 dotnet test SysML2.NET.CodeGenerator.Tests/SysML2.NET.CodeGenerator.Tests.csproj --filter UmlCoreTextualNotationBuilderGeneratorTestFixture
 # Generated files land in SysML2.NET.CodeGenerator.Tests/bin/Debug/net10.0/UML/_SysML2.NET.Core.UmlCoreTextualNotationBuilderGenerator/
-cp SysML2.NET.CodeGenerator.Tests/bin/Debug/net10.0/UML/_SysML2.NET.Core.UmlCoreTextualNotationBuilderGenerator/*.cs SysML2.NET/TextualNotation/AutoGenTextualNotationBuilder/
+cp SysML2.NET.CodeGenerator.Tests/bin/Debug/net10.0/UML/_SysML2.NET.Core.UmlCoreTextualNotationBuilderGenerator/*.cs SysML2.NET.Serializer.TextualNotation/Writers/AutoGenTextualNotationBuilder/
 dotnet build SysML2.NET.sln
 dotnet test SysML2.NET.sln
 ```
 
 **Count remaining HandCoded calls** to track progress:
 ```bash
-grep -r "HandCoded" SysML2.NET/TextualNotation/AutoGenTextualNotationBuilder/*.cs | wc -l
+grep -r "HandCoded" SysML2.NET.Serializer.TextualNotation/Writers/AutoGenTextualNotationBuilder/*.cs | wc -l
 ```
