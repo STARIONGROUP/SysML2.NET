@@ -210,7 +210,10 @@ namespace SysML2.NET.Tests.Extend
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(namespaceElement.ComputeVisibleMembershipsOperation([], false, false), Has.Count.EqualTo(2));
-                Assert.That(() => namespaceElement.ComputeVisibleMembershipsOperation([], true, false), Throws.TypeOf<NotSupportedException>());
+
+                // recursive case: public ownedMemberships of the outer namespace, plus visible
+                // memberships harvested from each public nested INamespace.
+                Assert.That(namespaceElement.ComputeVisibleMembershipsOperation([], true, false), Is.EquivalentTo(new[] { publicMembership, nestedOwning, nestedMembership }));
             }
         }
 
