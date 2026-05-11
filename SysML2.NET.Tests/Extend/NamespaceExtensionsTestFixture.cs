@@ -48,7 +48,7 @@ namespace SysML2.NET.Tests.Extend
             importedNamespace.AssignOwnership(importedMembership, importedElement);
 
             var namespaceImport = new NamespaceImport { ImportedNamespace = importedNamespace };
-            namespaceElement.AssignOwnership(namespaceImport, new Namespace());
+            namespaceElement.AssignOwnership(namespaceImport);
 
             Assert.That(namespaceElement.ComputeImportedMembership(), Is.EquivalentTo([importedMembership]));
         }
@@ -95,7 +95,7 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(namespaceElement.ComputeOwnedImport(), Has.Count.EqualTo(0));
 
             var namespaceImport = new NamespaceImport();
-            namespaceElement.AssignOwnership(namespaceImport, new Namespace());
+            namespaceElement.AssignOwnership(namespaceImport);
 
             Assert.That(namespaceElement.ComputeOwnedImport(), Is.EquivalentTo([namespaceImport]));
         }
@@ -146,7 +146,7 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(namespaceElement.ComputeNamesOfOperation(element), Has.Count.EqualTo(0));
 
             var membership = new Membership { MemberName = "elementName", MemberShortName = "en", MemberElement = element };
-            namespaceElement.AssignOwnership(membership, element);
+            namespaceElement.AssignOwnership(membership);
 
             Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["en", "elementName"]));
 
@@ -229,7 +229,7 @@ namespace SysML2.NET.Tests.Extend
             importedNamespace.AssignOwnership(importedMembership, importedElement);
 
             var namespaceImport = new NamespaceImport { ImportedNamespace = importedNamespace };
-            namespaceElement.AssignOwnership(namespaceImport, new Namespace());
+            namespaceElement.AssignOwnership(namespaceImport);
 
             Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Is.EquivalentTo([importedMembership]));
 

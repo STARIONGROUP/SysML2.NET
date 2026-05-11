@@ -29,6 +29,8 @@ dotnet-coverage collect "dotnet test SysML2.NET.sln --no-build" -f xml -o covera
 
 Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attributes.
 
+**When writing or modifying unit tests** in any `*.Tests/` project: read `TESTING.md` at the repo root for the NUnit conventions (one `[Test]` per method-under-test, `Assert.That` everywhere, `Assert.EnterMultipleScope` only for consecutive asserts, mandatory positive + negative coverage, assertion idiom preferences, `Verify{MethodUnderTest}` naming).
+
 ## Architecture
 
 ### Code Generation
@@ -155,3 +157,4 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 - Use meaningful variable names instead of single-letter names in any context (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c', 'element' instead of 'e')
 - Use 'NotSupportedException' (not 'NotImplementedException') for placeholder/stub methods that require manual implementation
 - Prefer C# property patterns ('x is IType { Prop: value }') over declared-variable-plus-predicate form ('x is IType name && name.Prop == value') when the narrowed variable is only consulted once; the property-pattern form is more concise and intent-revealing
+- Surround every braced block (`if`, `else if`, `while`, `for`, `foreach`, `switch`, `using`, `try`/`catch`/`finally`, `lock`, `do…while`, anonymous `{ }`) with a blank line on both sides — the rule does NOT apply at the very start/end of a method body, nor between a `}` and a continuation keyword (`else`, `catch`, `finally`, `while` of `do…while`) that belongs to the same control flow

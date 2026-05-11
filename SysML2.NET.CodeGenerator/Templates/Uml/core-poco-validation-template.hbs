@@ -1,0 +1,115 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="ElementExtensions.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Extensions
+{
+    using SysML2.NET.Core.POCO.Root.Elements;
+
+    /// <summary>
+    /// Auto-generated companion to the hand-coded <see cref="ElementExtensions"/> partial class.
+    /// </summary>
+    public static partial class ElementExtensions
+    {
+        /// <summary>
+        /// Determines whether <paramref name="target"/> is a structurally valid element to be added as an
+        /// <see cref="IRelationship.OwnedRelatedElement"/> of <paramref name="bridgeRelationship"/>, based on
+        /// the typed composite property declared by the bridge's metaclass in the KerML/SysML2 metamodel.
+        /// </summary>
+        /// <param name="bridgeRelationship">The bridge <see cref="IRelationship"/>.</param>
+        /// <param name="target">The candidate <see cref="IElement"/>.</param>
+        /// <returns><c>true</c> if <paramref name="target"/>'s runtime type satisfies the constraint;
+        /// otherwise <c>false</c>.</returns>
+        public static bool QueryIsValidForContainment(this IRelationship bridgeRelationship, IElement target)
+        {
+            return bridgeRelationship switch
+            {
+                {{#each TargetRules as | rule |}}
+                {{rule.BridgeFqn}} => {{rule.TargetCheck}},
+                {{/each}}
+                _ => true,
+            };
+        }
+
+        /// <summary>
+        /// Returns the simple C# interface name of the expected target type for the supplied
+        /// <paramref name="bridgeRelationship"/>, used to compose the error message thrown by
+        /// <c>AssignOwnership</c> when the target is not a valid containment target.
+        /// </summary>
+        /// <param name="bridgeRelationship">The bridge <see cref="IRelationship"/>.</param>
+        /// <returns>The expected target type's simple interface name.</returns>
+        public static string ExpectedContainmentTypeName(this IRelationship bridgeRelationship)
+        {
+            return bridgeRelationship switch
+            {
+                {{#each TargetRules as | rule |}}
+                {{rule.BridgeFqn}} => nameof({{rule.TargetFqn}}),
+                {{/each}}
+                _ => nameof(IElement),
+            };
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="source"/> is a structurally valid containment owner for
+        /// <paramref name="bridgeRelationship"/>, based on the typed property declared by the bridge's
+        /// metaclass that subsets <see cref="IRelationship.OwningRelatedElement"/> in the KerML/SysML2
+        /// metamodel (e.g. an <c>IFeatureMembership</c> requires an <c>IType</c> owner).
+        /// </summary>
+        /// <param name="bridgeRelationship">The bridge <see cref="IRelationship"/>.</param>
+        /// <param name="source">The candidate owner <see cref="IElement"/>.</param>
+        /// <returns><c>true</c> if <paramref name="source"/>'s runtime type satisfies the owner-side
+        /// constraint; otherwise <c>false</c>.</returns>
+        public static bool QueryIsValidContainmentOwner(this IRelationship bridgeRelationship, IElement source)
+        {
+            return bridgeRelationship switch
+            {
+                {{#each OwnerRules as | rule |}}
+                {{rule.BridgeFqn}} => {{rule.OwnerCheck}},
+                {{/each}}
+                _ => true,
+            };
+        }
+
+        /// <summary>
+        /// Returns the simple C# interface name of the expected owner type for the supplied
+        /// <paramref name="bridgeRelationship"/>, used to compose the error message thrown by
+        /// <c>AssignOwnership</c> when the source is not a valid containment owner.
+        /// </summary>
+        /// <param name="bridgeRelationship">The bridge <see cref="IRelationship"/>.</param>
+        /// <returns>The expected owner type's simple interface name.</returns>
+        public static string ExpectedContainmentOwnerTypeName(this IRelationship bridgeRelationship)
+        {
+            return bridgeRelationship switch
+            {
+                {{#each OwnerRules as | rule |}}
+                {{rule.BridgeFqn}} => nameof({{rule.OwnerFqn}}),
+                {{/each}}
+                _ => nameof(IElement),
+            };
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
