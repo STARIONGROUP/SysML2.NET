@@ -742,7 +742,7 @@ namespace SysML2.NET.Tests.Extend
             // a feature whose featuringType is a specific Type is featured within that Type.
             var owningType = new Type();
             var owningTypeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = owningType };
-            feature.AssignOwnership(owningTypeFeaturing, new Feature());
+            feature.AssignOwnership(owningTypeFeaturing);
 
             using (Assert.EnterMultipleScope())
             {
@@ -767,11 +767,11 @@ namespace SysML2.NET.Tests.Extend
             // that same Type — subject can access target.
             var sharedType = new Type();
             var subjectTypeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = sharedType };
-            feature.AssignOwnership(subjectTypeFeaturing, new Feature());
+            feature.AssignOwnership(subjectTypeFeaturing);
 
             var target = new Feature();
             var targetTypeFeaturing = new TypeFeaturing { FeatureOfType = target, FeaturingType = sharedType };
-            target.AssignOwnership(targetTypeFeaturing, new Feature());
+            target.AssignOwnership(targetTypeFeaturing);
 
             Assert.That(feature.ComputeCanAccessOperation(target), Is.True);
         }
@@ -833,16 +833,16 @@ namespace SysML2.NET.Tests.Extend
             // is filtered when excludeImplied = true.
             var general = new Type();
             var specialization = new Specialization { Specific = feature, General = general };
-            feature.AssignOwnership(specialization, general);
+            feature.AssignOwnership(specialization);
 
             var impliedGeneral = new Type();
             var impliedSpecialization = new Specialization { Specific = feature, General = impliedGeneral, IsImplied = true };
-            feature.AssignOwnership(impliedSpecialization, impliedGeneral);
+            feature.AssignOwnership(impliedSpecialization);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(feature.ComputeRedefinedSupertypesOperation(false), Is.EquivalentTo(new[] { general, impliedGeneral }));
-                Assert.That(feature.ComputeRedefinedSupertypesOperation(true), Is.EquivalentTo(new[] { general }));
+                Assert.That(feature.ComputeRedefinedSupertypesOperation(false), Is.EquivalentTo([general, impliedGeneral]));
+                Assert.That(feature.ComputeRedefinedSupertypesOperation(true), Is.EquivalentTo([general]));
             }
         }
 
@@ -860,13 +860,13 @@ namespace SysML2.NET.Tests.Extend
             // is excluded.
             var subsettedFeature = new Feature();
             var subsetting = new Subsetting { SubsettedFeature = subsettedFeature };
-            feature.AssignOwnership(subsetting, new Feature());
+            feature.AssignOwnership(subsetting);
 
             var crossSubsettedFeature = new Feature();
             var crossSubsetting = new CrossSubsetting { CrossedFeature = crossSubsettedFeature };
-            feature.AssignOwnership(crossSubsetting, new Feature());
+            feature.AssignOwnership(crossSubsetting);
 
-            Assert.That(feature.ComputeTypingFeaturesOperation(), Is.EquivalentTo(new[] { subsettedFeature }));
+            Assert.That(feature.ComputeTypingFeaturesOperation(), Is.EquivalentTo([subsettedFeature]));
         }
 
         [Test]
@@ -884,14 +884,14 @@ namespace SysML2.NET.Tests.Extend
             // populated: a feature with chaining [first, second] satisfies the chain match.
             var matching = new Feature();
             var chaining1 = new FeatureChaining { ChainingFeature = first };
-            matching.AssignOwnership(chaining1, new Feature());
+            matching.AssignOwnership(chaining1);
 
             var chaining2 = new FeatureChaining { ChainingFeature = second };
-            matching.AssignOwnership(chaining2, new Feature());
+            matching.AssignOwnership(chaining2);
 
             // The subject specializes the matching feature so it shows up in the BFS visited set.
             var specialization = new Specialization { Specific = feature, General = matching };
-            feature.AssignOwnership(specialization, matching);
+            feature.AssignOwnership(specialization);
 
             using (Assert.EnterMultipleScope())
             {
@@ -914,7 +914,7 @@ namespace SysML2.NET.Tests.Extend
             // populated: a feature that specializes a Type is compatible with that Type.
             var supertype = new Type();
             var specialization = new Specialization { Specific = feature, General = supertype };
-            feature.AssignOwnership(specialization, supertype);
+            feature.AssignOwnership(specialization);
 
             Assert.That(feature.ComputeRedefinedIsCompatibleWithOperation(supertype), Is.True);
         }
@@ -949,7 +949,7 @@ namespace SysML2.NET.Tests.Extend
             rootNamespace.AssignOwnership(subjectMembership, subject);
 
             var redefinition = new Redefinition { RedefinedFeature = libraryFeature };
-            subject.AssignOwnership(redefinition, new Feature());
+            subject.AssignOwnership(redefinition);
 
             using (Assert.EnterMultipleScope())
             {
