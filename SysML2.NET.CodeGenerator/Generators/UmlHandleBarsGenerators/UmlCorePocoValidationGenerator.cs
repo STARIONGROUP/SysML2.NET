@@ -410,20 +410,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                     return depth;
                 }
 
-                foreach (var redefined in current.RedefinedProperty)
+                foreach (var redefined in current.RedefinedProperty.Where(redefined => visited.Add(redefined.XmiId)))
                 {
-                    if (visited.Add(redefined.XmiId))
-                    {
-                        queue.Enqueue((redefined, depth + 1));
-                    }
+                    queue.Enqueue((redefined, depth + 1));
                 }
 
-                foreach (var subsetted in current.SubsettedProperty)
+                foreach (var subsetted in current.SubsettedProperty.Where(subsetted => visited.Add(subsetted.XmiId)))
                 {
-                    if (visited.Add(subsetted.XmiId))
-                    {
-                        queue.Enqueue((subsetted, depth + 1));
-                    }
+                    queue.Enqueue((subsetted, depth + 1));
                 }
             }
 
