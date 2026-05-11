@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -62,6 +64,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// actorParameter = featureMembership-&gt;
+        ///                             selectByKind(ActorMembership).
+        ///                             ownedActorParameter
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
@@ -77,6 +87,15 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// assumedConstraint = ownedFeatureMembership-&gt;
+        ///                             selectByKind(RequirementConstraintMembership)-&gt;
+        ///                             select(kind = RequirementConstraintKind::assumption).
+        ///                             ownedConstraint
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
@@ -92,6 +111,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// framedConcern = featureMembership-&gt;
+        ///                             selectByKind(FramedConcernMembership).
+        ///                             ownedConcern
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
@@ -107,6 +134,15 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// requiredConstraint = ownedFeatureMembership-&gt;
+        ///                             selectByKind(RequirementConstraintMembership)-&gt;
+        ///                             select(kind = RequirementConstraintKind::requirement).
+        ///                             ownedConstraint
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
@@ -122,6 +158,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// stakeholderParameter = featureMembership-&gt;
+        ///                             selectByKind(StakholderMembership).
+        ///                             ownedStakeholderParameter
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
@@ -137,6 +181,17 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// subjectParameter =
+        ///                             let subjects : OrderedSet(SubjectMembership) =
+        ///                             featureMembership-&gt;selectByKind(SubjectMembership) in
+        ///                             if subjects-&gt;isEmpty() then null
+        ///                             else subjects-&gt;first().ownedSubjectParameter
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>
@@ -152,6 +207,12 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// text = documentation.body
+        /// </code>
+        /// </remarks>
         /// <param name="requirementDefinitionSubject">
         /// The subject <see cref="IRequirementDefinition"/>
         /// </param>

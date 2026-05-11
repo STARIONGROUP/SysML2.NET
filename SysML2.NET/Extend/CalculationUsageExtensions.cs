@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -80,6 +81,12 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// <summary>
         /// A CalculationUsage is not model-level evaluable.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// false
+        /// </code>
+        /// </remarks>
         /// <param name="calculationUsageSubject">
         /// The subject <see cref="ICalculationUsage"/>
         /// </param>

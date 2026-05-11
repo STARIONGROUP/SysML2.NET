@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -65,6 +66,12 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// payloadArgument = argument(1)
+        /// </code>
+        /// </remarks>
         /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
@@ -80,6 +87,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// payloadParameter =
+        ///                             if parameter-&gt;isEmpty() then null
+        ///                             else parameter-&gt;first() endif
+        /// </code>
+        /// </remarks>
         /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
@@ -95,6 +110,12 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// receiverArgument = argument(2)
+        /// </code>
+        /// </remarks>
         /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>
@@ -110,6 +131,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Check if this AcceptActionUsage is the triggerAction of a TransitionUsage.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// owningType &lt;&gt; null and
+        ///                                 owningType.oclIsKindOf(TransitionUsage) and
+        ///                                 owningType.oclAsType(TransitionUsage).triggerAction-&gt;includes(self)
+        /// </code>
+        /// </remarks>
         /// <param name="acceptActionUsageSubject">
         /// The subject <see cref="IAcceptActionUsage"/>
         /// </param>

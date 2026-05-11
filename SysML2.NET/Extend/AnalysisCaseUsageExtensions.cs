@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -80,6 +81,18 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// resultExpression =
+        ///                             let results : OrderedSet(ResultExpressionMembership) =
+        ///                             featureMembersip-&gt;
+        ///                             selectByKind(ResultExpressionMembership) in
+        ///                             if results-&gt;isEmpty() then null
+        ///                             else results-&gt;first().ownedResultExpression
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="analysisCaseUsageSubject">
         /// The subject <see cref="IAnalysisCaseUsage"/>
         /// </param>

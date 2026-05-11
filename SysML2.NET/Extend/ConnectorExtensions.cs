@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
@@ -70,6 +71,23 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// let commonFeaturingTypes : OrderedSet(Type) =
+        ///                             relatedFeature-&gt;closure(featuringType)-&gt;select(t |
+        ///                             relatedFeature-&gt;forAll(f | f.isFeaturedWithin(t))
+        ///                             ) in
+        ///                             let nearestCommonFeaturingTypes : OrderedSet(Type) =
+        ///                             commonFeaturingTypes-&gt;reject(t1 |
+        ///                             commonFeaturingTypes-&gt;exists(t2 |
+        ///                             t2 &lt;&gt; t1 and t2-&gt;closure(featuringType)-&gt;contains(t1)
+        ///                             )) in
+        ///                             if nearestCommonFeaturingTypes-&gt;isEmpty() then null
+        ///                             else nearestCommonFeaturingTypes-&gt;first()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
@@ -85,6 +103,13 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// relatedFeature = connectorEnd.ownedReferenceSubsetting-&gt;
+        ///                             select(s | s &lt;&gt; null).subsettedFeature
+        /// </code>
+        /// </remarks>
         /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
@@ -100,6 +125,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// sourceFeature =
+        ///                             if relatedFeature-&gt;isEmpty() then null
+        ///                             else relatedFeature-&gt;first()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>
@@ -115,6 +149,18 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// targetFeature =
+        ///                             if relatedFeature-&gt;size() &lt; 2 then OrderedSet{}
+        ///                             else
+        ///                             relatedFeature-&gt;
+        ///                             subSequence(2, relatedFeature-&gt;size())-&gt;
+        ///                             asOrderedSet()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="connectorSubject">
         /// The subject <see cref="IConnector"/>
         /// </param>

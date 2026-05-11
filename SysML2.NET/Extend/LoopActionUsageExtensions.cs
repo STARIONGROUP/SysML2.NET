@@ -24,12 +24,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -64,6 +66,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// bodyAction =
+        ///                             let parameter : Feature = inputParameter(2) in
+        ///                             if parameter &lt;&gt; null and parameter.oclIsKindOf(Action) then
+        ///                             parameter.oclAsType(Action)
+        ///                             else
+        ///                             null
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="loopActionUsageSubject">
         /// The subject <see cref="ILoopActionUsage"/>
         /// </param>

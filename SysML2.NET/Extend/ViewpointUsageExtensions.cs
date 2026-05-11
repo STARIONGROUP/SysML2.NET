@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -80,6 +81,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// viewpointStakeholder = framedConcern.featureMemberhsip-&gt;
+        ///                             selectByKind(StakeholderMembership).
+        ///                             ownedStakeholderParameter
+        /// </code>
+        /// </remarks>
         /// <param name="viewpointUsageSubject">
         /// The subject <see cref="IViewpointUsage"/>
         /// </param>

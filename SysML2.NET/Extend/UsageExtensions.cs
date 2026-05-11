@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -76,6 +77,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// directedUsage = directedFeature-&gt;selectByKind(Usage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -91,6 +98,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// isReference = not isComposite
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -106,6 +119,20 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// mayTimeVary =
+        ///                             owningType &lt;&gt; null and
+        ///                             owningType.specializesFromLibrary('Occurrences::Occurrence') and
+        ///                             not (
+        ///                             isPortion or
+        ///                             specializesFromLibrary('Links::SelfLink') or
+        ///                             specializesFromLibrary('Occurrences::HappensLink') or
+        ///                             isComposite and specializesFromLibrary('Actions::Action')
+        ///                             )
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -121,6 +148,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedAction = nestedUsage-&gt;selectByKind(ActionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -136,6 +169,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedAllocation = nestedUsage-&gt;selectByKind(AllocationUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -151,6 +190,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedAnalysisCase = nestedUsage-&gt;selectByKind(AnalysisCaseUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -166,6 +211,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedAttribute = nestedUsage-&gt;selectByKind(AttributeUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -181,6 +232,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedCalculation = nestedUsage-&gt;selectByKind(CalculationUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -196,6 +253,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedCase = nestedUsage-&gt;selectByKind(CaseUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -211,6 +274,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedConcern = nestedUsage-&gt;selectByKind(ConcernUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -226,6 +295,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedConnection = nestedUsage-&gt;selectByKind(ConnectorAsUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -241,6 +316,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedConstraint = nestedUsage-&gt;selectByKind(ConstraintUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -256,6 +337,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// ownedNested = nestedUsage-&gt;selectByKind(EnumerationUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -271,6 +358,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedFlow = nestedUsage-&gt;selectByKind(FlowConnectionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -286,6 +379,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedInterface = nestedUsage-&gt;selectByKind(ReferenceUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -301,6 +400,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedItem = nestedUsage-&gt;selectByKind(ItemUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -316,6 +421,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedMetadata = nestedUsage-&gt;selectByKind(MetadataUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -331,6 +442,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedOccurrence = nestedUsage-&gt;selectByKind(OccurrenceUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -346,6 +463,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedPart = nestedUsage-&gt;selectByKind(PartUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -361,6 +484,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedPort = nestedUsage-&gt;selectByKind(PortUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -376,6 +505,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedReference = nestedUsage-&gt;selectByKind(ReferenceUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -391,6 +526,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedRendering = nestedUsage-&gt;selectByKind(RenderingUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -406,6 +547,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedRequirement = nestedUsage-&gt;selectByKind(RequirementUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -421,6 +568,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedState = nestedUsage-&gt;selectByKind(StateUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -436,6 +589,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedTransition = nestedUsage-&gt;selectByKind(TransitionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -451,6 +610,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedUsage = ownedFeature-&gt;selectByKind(Usage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -466,6 +631,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedUseCase = nestedUsage-&gt;selectByKind(UseCaseUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -481,6 +652,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedVerificationCase = nestedUsage-&gt;selectByKind(VerificationCaseUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -496,6 +673,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedView = nestedUsage-&gt;selectByKind(ViewUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -511,6 +694,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// nestedViewpoint = nestedUsage-&gt;selectByKind(ViewpointUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -556,6 +745,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// usage = feature-&gt;selectByKind(Usage)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -571,6 +766,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// variant = variantMembership.ownedVariantUsage
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -586,6 +787,12 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// variantMembership = ownedMembership-&gt;selectByKind(VariantMembership)
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -602,6 +809,16 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// If this Usage is a variant, then its naming Feature is the referencedFeature of its
         /// ownedReferenceSubsetting.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if not owningMembership.oclIsKindOf(VariantMembership) then
+        ///                                 self.oclAsType(Feature).namingFeature()
+        ///                                 else if ownedReferenceSubsetting = null then null
+        ///                                 else ownedReferenceSubsetting.referencedFeature
+        ///                                 endif endif
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>
@@ -618,6 +835,14 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// If ownedReferenceSubsetting is not null, return the featureTarget of the referencedFeature of the
         /// ownedReferenceSubsetting.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if ownedReferenceSubsetting = null then null
+        ///                                 else ownedReferenceSubsetting.referencedFeature.featureTarget
+        ///                                 endif
+        /// </code>
+        /// </remarks>
         /// <param name="usageSubject">
         /// The subject <see cref="IUsage"/>
         /// </param>

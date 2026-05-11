@@ -38,6 +38,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// Memberships are also recursively imported from any ownedMembers of the importedNamespace that are
         /// themselves Namespaces.
         /// </summary>
+        /// <remarks>
+        /// OCL (KerML XMI):
+        /// <code>
+        /// if excluded-&gt;includes(importedNamespace) then Sequence{}
+        /// else importedNamespace.visibleMemberships(excluded, isRecursive, isImportAll)
+        /// endif
+        /// </code>
+        /// </remarks>
         /// <param name="namespaceImportSubject">
         /// The subject <see cref="INamespaceImport"/>
         /// </param>

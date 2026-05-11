@@ -55,6 +55,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// Return the required value of the direction of the ownedMemberParameter. By default, this is in.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// FeatureDirectionKind::_'in'
+        /// </code>
+        /// </remarks>
         /// <param name="parameterMembershipSubject">
         /// The subject <see cref="IParameterMembership"/>
         /// </param>

@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -61,6 +63,12 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// action = usage-&gt;selectByKind(ActionUsage)
+        /// </code>
+        /// </remarks>
         /// <param name="actionDefinitionSubject">
         /// The subject <see cref="IActionDefinition"/>
         /// </param>

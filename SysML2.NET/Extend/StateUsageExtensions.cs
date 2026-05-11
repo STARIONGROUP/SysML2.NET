@@ -24,12 +24,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -64,6 +66,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// doAction =
+        ///                             let doMemberships : Sequence(StateSubactionMembership) =
+        ///                             ownedMembership-&gt;
+        ///                             selectByKind(StateSubactionMembership)-&gt;
+        ///                             select(kind = StateSubactionKind::do) in
+        ///                             if doMemberships-&gt;isEmpty() then null
+        ///                             else doMemberships-&gt;at(1)
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="stateUsageSubject">
         /// The subject <see cref="IStateUsage"/>
         /// </param>
@@ -79,6 +94,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// entryAction =
+        ///                             let entryMemberships : Sequence(StateSubactionMembership) =
+        ///                             ownedMembership-&gt;
+        ///                             selectByKind(StateSubactionMembership)-&gt;
+        ///                             select(kind = StateSubactionKind::entry) in
+        ///                             if entryMemberships-&gt;isEmpty() then null
+        ///                             else entryMemberships-&gt;at(1)
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="stateUsageSubject">
         /// The subject <see cref="IStateUsage"/>
         /// </param>
@@ -94,6 +122,19 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// exitAction =
+        ///                             let exitMemberships : Sequence(StateSubactionMembership) =
+        ///                             ownedMembership-&gt;
+        ///                             selectByKind(StateSubactionMembership)-&gt;
+        ///                             select(kind = StateSubactionKind::exit) in
+        ///                             if exitMemberships-&gt;isEmpty() then null
+        ///                             else exitMemberships-&gt;at(1)
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="stateUsageSubject">
         /// The subject <see cref="IStateUsage"/>
         /// </param>
@@ -127,6 +168,17 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// it represents a StateAction that is a substate or exclusiveState (for isParallel = false) of another
         /// StateAction.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// isComposite and owningType &lt;&gt; null and
+        ///                                 (owningType.oclIsKindOf(StateDefinition) and
+        ///                                 owningType.oclAsType(StateDefinition).isParallel = isParallel or
+        ///                                 owningType.oclIsKindOf(StateUsage) and
+        ///                                 owningType.oclAsType(StateUsage).isParallel = isParallel) and
+        ///                                 not owningFeatureMembership.oclIsKindOf(StateSubactionMembership)
+        /// </code>
+        /// </remarks>
         /// <param name="stateUsageSubject">
         /// The subject <see cref="IStateUsage"/>
         /// </param>

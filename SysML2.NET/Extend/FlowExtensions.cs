@@ -24,6 +24,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     using System.Collections.Generic;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -43,6 +44,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// flowEnd = connectorEnd-&gt;selectByKind(FlowEnd)
+        /// </code>
+        /// </remarks>
         /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
@@ -73,6 +80,17 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// payloadFeature =
+        ///                             let payloadFeatures : Sequence(PayloadFeature) =
+        ///                             ownedFeature-&gt;selectByKind(PayloadFeature) in
+        ///                             if payloadFeatures-&gt;isEmpty() then null
+        ///                             else payloadFeatures-&gt;first()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
@@ -88,6 +106,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// payloadType =
+        ///                             if payloadFeature = null then Sequence{}
+        ///                             else payloadFeature.type
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
@@ -103,6 +130,17 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// sourceOutputFeature =
+        ///                             if connectorEnd-&gt;isEmpty() or
+        ///                             connectorEnd.ownedFeature-&gt;isEmpty()
+        ///                             then null
+        ///                             else connectorEnd.ownedFeature-&gt;first()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
@@ -118,6 +156,17 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// targetInputFeature =
+        ///                             if connectorEnd-&gt;size() &lt; 2 or
+        ///                             connectorEnd-&gt;at(2).ownedFeature-&gt;isEmpty()
+        ///                             then null
+        ///                             else connectorEnd-&gt;at(2).ownedFeature-&gt;first()
+        ///                             endif
+        /// </code>
+        /// </remarks>
         /// <param name="flowSubject">
         /// The subject <see cref="IFlow"/>
         /// </param>
