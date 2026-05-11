@@ -66,9 +66,8 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(package.ComputeRedefinedImportedMembershipsOperation([]), Is.Empty);
 
             var importMember = new MembershipImport();
-            var type = new Type();
-            
-            package.AssignOwnership(importMember, type);
+
+            package.AssignOwnership(importMember);
             Assert.That(()=> package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
             
             var membership = new ElementFilterMembership();

@@ -44,17 +44,17 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(feature.ComputeOwnedFeatureChaining(), Has.Count.EqualTo(0));
 
             var subsetting = new Subsetting();
-            feature.AssignOwnership(subsetting, new Feature());
+            feature.AssignOwnership(subsetting);
 
             Assert.That(feature.ComputeOwnedFeatureChaining(), Has.Count.EqualTo(0));
 
             var chainingTarget1 = new Feature();
             var chaining1 = new FeatureChaining { ChainingFeature = chainingTarget1 };
-            feature.AssignOwnership(chaining1, new Feature());
+            feature.AssignOwnership(chaining1);
 
             var chainingTarget2 = new Feature();
             var chaining2 = new FeatureChaining { ChainingFeature = chainingTarget2 };
-            feature.AssignOwnership(chaining2, new Feature());
+            feature.AssignOwnership(chaining2);
 
             var result = feature.ComputeOwnedFeatureChaining();
 
@@ -77,12 +77,12 @@ namespace SysML2.NET.Tests.Extend
 
             var otherFeature = new Feature();
             var invertingPointingElsewhere = new FeatureInverting { FeatureInverted = otherFeature };
-            feature.AssignOwnership(invertingPointingElsewhere, new Feature());
+            feature.AssignOwnership(invertingPointingElsewhere);
 
             Assert.That(feature.ComputeOwnedFeatureInverting(), Has.Count.EqualTo(0));
 
             var invertingPointingSelf = new FeatureInverting { FeatureInverted = feature };
-            feature.AssignOwnership(invertingPointingSelf, new Feature());
+            feature.AssignOwnership(invertingPointingSelf);
 
             var result = feature.ComputeOwnedFeatureInverting();
 
@@ -104,13 +104,13 @@ namespace SysML2.NET.Tests.Extend
 
             var otherFeature = new Feature();
             var typeFeaturingPointingElsewhere = new TypeFeaturing { FeatureOfType = otherFeature };
-            feature.AssignOwnership(typeFeaturingPointingElsewhere, new Feature());
+            feature.AssignOwnership(typeFeaturingPointingElsewhere);
 
             Assert.That(feature.ComputeOwnedTypeFeaturing(), Has.Count.EqualTo(0));
 
             var featuringType = new Type();
             var typeFeaturingPointingSelf = new TypeFeaturing { FeatureOfType = feature, FeaturingType = featuringType };
-            feature.AssignOwnership(typeFeaturingPointingSelf, new Feature());
+            feature.AssignOwnership(typeFeaturingPointingSelf);
 
             var result = feature.ComputeOwnedTypeFeaturing();
 
@@ -131,18 +131,18 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(feature.ComputeOwnedSubsetting(), Has.Count.EqualTo(0));
 
             var specialization = new Specialization();
-            feature.AssignOwnership(specialization, new Feature());
+            feature.AssignOwnership(specialization);
 
             Assert.That(feature.ComputeOwnedSubsetting(), Has.Count.EqualTo(0));
 
             var subsetting = new Subsetting();
-            feature.AssignOwnership(subsetting, new Feature());
+            feature.AssignOwnership(subsetting);
 
             var redefinition = new Redefinition();
-            feature.AssignOwnership(redefinition, new Feature());
+            feature.AssignOwnership(redefinition);
 
             var referenceSubsetting = new ReferenceSubsetting();
-            feature.AssignOwnership(referenceSubsetting, new Feature());
+            feature.AssignOwnership(referenceSubsetting);
 
             var result = feature.ComputeOwnedSubsetting();
 
@@ -159,15 +159,15 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(feature.ComputeOwnedRedefinition(), Has.Count.EqualTo(0));
 
             var subsetting = new Subsetting();
-            feature.AssignOwnership(subsetting, new Feature());
+            feature.AssignOwnership(subsetting);
 
             Assert.That(feature.ComputeOwnedRedefinition(), Has.Count.EqualTo(0));
 
             var redefinition1 = new Redefinition();
-            feature.AssignOwnership(redefinition1, new Feature());
+            feature.AssignOwnership(redefinition1);
 
             var redefinition2 = new Redefinition();
-            feature.AssignOwnership(redefinition2, new Feature());
+            feature.AssignOwnership(redefinition2);
 
             var result = feature.ComputeOwnedRedefinition();
 
@@ -189,7 +189,7 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(feature.ComputeOwnedReferenceSubsetting(), Is.Null);
 
             var referenceSubsetting = new ReferenceSubsetting();
-            feature.AssignOwnership(referenceSubsetting, new Feature());
+            feature.AssignOwnership(referenceSubsetting);
 
             Assert.That(feature.ComputeOwnedReferenceSubsetting(), Is.SameAs(referenceSubsetting));
         }
@@ -204,7 +204,7 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(feature.ComputeOwnedCrossSubsetting(), Is.Null);
 
             var crossSubsetting = new CrossSubsetting();
-            feature.AssignOwnership(crossSubsetting, new Feature());
+            feature.AssignOwnership(crossSubsetting);
 
             Assert.That(feature.ComputeOwnedCrossSubsetting(), Is.SameAs(crossSubsetting));
         }
@@ -219,17 +219,17 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(feature.ComputeOwnedTyping(), Has.Count.EqualTo(0));
 
             var specialization = new Specialization();
-            feature.AssignOwnership(specialization, new Feature());
+            feature.AssignOwnership(specialization);
 
             Assert.That(feature.ComputeOwnedTyping(), Has.Count.EqualTo(0));
 
             var type1 = new Type();
             var typing1 = new FeatureTyping { Type = type1 };
-            feature.AssignOwnership(typing1, new Feature());
+            feature.AssignOwnership(typing1);
 
             var type2 = new Type();
             var typing2 = new FeatureTyping { Type = type2 };
-            feature.AssignOwnership(typing2, new Feature());
+            feature.AssignOwnership(typing2);
 
             var result = feature.ComputeOwnedTyping();
 
@@ -252,11 +252,11 @@ namespace SysML2.NET.Tests.Extend
 
             var target1 = new Feature();
             var chaining1 = new FeatureChaining { ChainingFeature = target1 };
-            feature.AssignOwnership(chaining1, new Feature());
+            feature.AssignOwnership(chaining1);
 
             var target2 = new Feature();
             var chaining2 = new FeatureChaining { ChainingFeature = target2 };
-            feature.AssignOwnership(chaining2, new Feature());
+            feature.AssignOwnership(chaining2);
 
             var result = feature.ComputeChainingFeature();
 
@@ -325,11 +325,11 @@ namespace SysML2.NET.Tests.Extend
 
             var target1 = new Feature();
             var chaining1 = new FeatureChaining { ChainingFeature = target1 };
-            feature.AssignOwnership(chaining1, new Feature());
+            feature.AssignOwnership(chaining1);
 
             var lastTarget = new Feature();
             var chaining2 = new FeatureChaining { ChainingFeature = lastTarget };
-            feature.AssignOwnership(chaining2, new Feature());
+            feature.AssignOwnership(chaining2);
 
             Assert.That(feature.ComputeFeatureTarget(), Is.SameAs(lastTarget));
         }
@@ -369,19 +369,19 @@ namespace SysML2.NET.Tests.Extend
 
             var crossedFeature = new Feature();
             var crossSubsetting = new CrossSubsetting { CrossedFeature = crossedFeature };
-            feature.AssignOwnership(crossSubsetting, new Feature());
+            feature.AssignOwnership(crossSubsetting);
 
             Assert.That(feature.ComputeCrossFeature(), Is.Null);
 
             var chainingTarget1 = new Feature();
             var chaining1 = new FeatureChaining { ChainingFeature = chainingTarget1 };
-            crossedFeature.AssignOwnership(chaining1, new Feature());
+            crossedFeature.AssignOwnership(chaining1);
 
             Assert.That(feature.ComputeCrossFeature(), Is.Null);
 
             var chainingTarget2 = new Feature();
             var chaining2 = new FeatureChaining { ChainingFeature = chainingTarget2 };
-            crossedFeature.AssignOwnership(chaining2, new Feature());
+            crossedFeature.AssignOwnership(chaining2);
 
             Assert.That(feature.ComputeCrossFeature(), Is.SameAs(chainingTarget2));
         }
@@ -397,7 +397,7 @@ namespace SysML2.NET.Tests.Extend
 
             var theType = new Type();
             var typeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = theType };
-            feature.AssignOwnership(typeFeaturing, new Feature());
+            feature.AssignOwnership(typeFeaturing);
 
             var result = feature.ComputeFeaturingType();
 
@@ -410,10 +410,10 @@ namespace SysML2.NET.Tests.Extend
             var chainingTarget = new Feature();
             var chainingTargetType = new Type();
             var chainingTypeFeaturing = new TypeFeaturing { FeatureOfType = chainingTarget, FeaturingType = chainingTargetType };
-            chainingTarget.AssignOwnership(chainingTypeFeaturing, new Feature());
+            chainingTarget.AssignOwnership(chainingTypeFeaturing);
 
             var chaining = new FeatureChaining { ChainingFeature = chainingTarget };
-            feature.AssignOwnership(chaining, new Feature());
+            feature.AssignOwnership(chaining);
 
             var resultWithChaining = feature.ComputeFeaturingType();
 
@@ -431,11 +431,11 @@ namespace SysML2.NET.Tests.Extend
 
             var type1 = new Type();
             var typing1 = new FeatureTyping { Type = type1 };
-            feature.AssignOwnership(typing1, new Feature());
+            feature.AssignOwnership(typing1);
 
             var type2 = new Type();
             var typing2 = new FeatureTyping { Type = type2 };
-            feature.AssignOwnership(typing2, new Feature());
+            feature.AssignOwnership(typing2);
 
             var result = feature.ComputeType();
 
@@ -458,13 +458,13 @@ namespace SysML2.NET.Tests.Extend
 
             var redefinedFeature = new Feature { DeclaredName = "redefined" };
             var redefinition = new Redefinition { RedefinedFeature = redefinedFeature };
-            feature.AssignOwnership(redefinition, new Feature());
+            feature.AssignOwnership(redefinition);
 
             Assert.That(feature.ComputeNamingFeatureOperation(), Is.SameAs(redefinedFeature));
 
             var redefinedFeature2 = new Feature { DeclaredName = "redefined2" };
             var redefinition2 = new Redefinition { RedefinedFeature = redefinedFeature2 };
-            feature.AssignOwnership(redefinition2, new Feature());
+            feature.AssignOwnership(redefinition2);
 
             Assert.That(feature.ComputeNamingFeatureOperation(), Is.SameAs(redefinedFeature));
         }
@@ -489,13 +489,13 @@ namespace SysML2.NET.Tests.Extend
             var featureWithRedefinition = new Feature();
             var namingFeature = new Feature { DeclaredShortName = "nfShort" };
             var redefinition = new Redefinition { RedefinedFeature = namingFeature };
-            featureWithRedefinition.AssignOwnership(redefinition, new Feature());
+            featureWithRedefinition.AssignOwnership(redefinition);
 
             Assert.That(featureWithRedefinition.ComputeRedefinedEffectiveShortNameOperation(), Is.EqualTo("nfShort"));
 
             var featureNoNaming = new Feature();
             var redefinitionNoTarget = new Redefinition { RedefinedFeature = new Feature() };
-            featureNoNaming.AssignOwnership(redefinitionNoTarget, new Feature());
+            featureNoNaming.AssignOwnership(redefinitionNoTarget);
 
             Assert.That(featureNoNaming.ComputeRedefinedEffectiveShortNameOperation(), Is.Null);
         }
@@ -520,13 +520,13 @@ namespace SysML2.NET.Tests.Extend
             var featureWithRedefinition = new Feature();
             var namingFeature = new Feature { DeclaredName = "nfName" };
             var redefinition = new Redefinition { RedefinedFeature = namingFeature };
-            featureWithRedefinition.AssignOwnership(redefinition, new Feature());
+            featureWithRedefinition.AssignOwnership(redefinition);
 
             Assert.That(featureWithRedefinition.ComputeRedefinedEffectiveNameOperation(), Is.EqualTo("nfName"));
 
             var featureNoNaming = new Feature();
             var redefinitionNoTarget = new Redefinition { RedefinedFeature = new Feature() };
-            featureNoNaming.AssignOwnership(redefinitionNoTarget, new Feature());
+            featureNoNaming.AssignOwnership(redefinitionNoTarget);
 
             Assert.That(featureNoNaming.ComputeRedefinedEffectiveNameOperation(), Is.Null);
         }
@@ -571,7 +571,7 @@ namespace SysML2.NET.Tests.Extend
 
             var otherFeature = new Feature();
             var redefinition = new Redefinition { RedefinedFeature = otherFeature };
-            feature.AssignOwnership(redefinition, new Feature());
+            feature.AssignOwnership(redefinition);
 
             using (Assert.EnterMultipleScope())
             {
@@ -640,13 +640,13 @@ namespace SysML2.NET.Tests.Extend
 
             var theType = new Type();
             var typing = new FeatureTyping { Type = theType };
-            feature.AssignOwnership(typing, new Feature());
+            feature.AssignOwnership(typing);
 
             Assert.That(feature.ComputeIsCartesianProductOperation(), Is.False);
 
             var featuringType = new Type();
             var typeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = featuringType };
-            feature.AssignOwnership(typeFeaturing, new Feature());
+            feature.AssignOwnership(typeFeaturing);
 
             Assert.That(feature.ComputeIsCartesianProductOperation(), Is.True);
         }
@@ -664,7 +664,7 @@ namespace SysML2.NET.Tests.Extend
 
             var theType = new Type();
             var typing = new FeatureTyping { Type = theType };
-            feature.AssignOwnership(typing, new Feature());
+            feature.AssignOwnership(typing);
 
             result = feature.ComputeAsCartesianProductOperation();
 
@@ -673,7 +673,7 @@ namespace SysML2.NET.Tests.Extend
 
             var featuringType = new Type();
             var typeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = featuringType };
-            feature.AssignOwnership(typeFeaturing, new Feature());
+            feature.AssignOwnership(typeFeaturing);
 
             result = feature.ComputeAsCartesianProductOperation();
 
@@ -747,7 +747,7 @@ namespace SysML2.NET.Tests.Extend
 
             var redefinedB = new Feature();
             var redefinitionAB = new Redefinition { RedefinedFeature = redefinedB };
-            feature.AssignOwnership(redefinitionAB, new Feature());
+            feature.AssignOwnership(redefinitionAB);
 
             result = feature.ComputeAllRedefinedFeaturesOperation();
 
@@ -760,7 +760,7 @@ namespace SysML2.NET.Tests.Extend
 
             var redefinedC = new Feature();
             var redefinitionBC = new Redefinition { RedefinedFeature = redefinedC };
-            redefinedB.AssignOwnership(redefinitionBC, new Feature());
+            redefinedB.AssignOwnership(redefinitionBC);
 
             result = feature.ComputeAllRedefinedFeaturesOperation();
 
