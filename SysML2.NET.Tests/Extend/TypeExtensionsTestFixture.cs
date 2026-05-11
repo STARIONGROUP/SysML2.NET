@@ -21,6 +21,7 @@
 namespace SysML2.NET.Tests.Extend
 {
     using System;
+    using System.Collections.Generic;
 
     using NUnit.Framework;
 
@@ -47,12 +48,12 @@ namespace SysML2.NET.Tests.Extend
 
             var differencingType = new Type();
             var differencing = new Differencing { DifferencingType = differencingType };
-            subject.AssignOwnership(differencing, differencingType);
+            subject.AssignOwnership(differencing);
 
             var unrelatedSpecialization = new Specialization();
-            subject.AssignOwnership(unrelatedSpecialization, new Type());
+            subject.AssignOwnership(unrelatedSpecialization);
 
-            Assert.That(subject.ComputeOwnedDifferencing(), Is.EquivalentTo(new[] { differencing }));
+            Assert.That(subject.ComputeOwnedDifferencing(), Is.EquivalentTo([differencing]));
         }
 
         [Test]
@@ -65,12 +66,12 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(subject.ComputeOwnedDisjoining(), Has.Count.EqualTo(0));
 
             var disjoining = new Disjoining();
-            subject.AssignOwnership(disjoining, new Type());
+            subject.AssignOwnership(disjoining);
 
             var unrelatedSpecialization = new Specialization();
-            subject.AssignOwnership(unrelatedSpecialization, new Type());
+            subject.AssignOwnership(unrelatedSpecialization);
 
-            Assert.That(subject.ComputeOwnedDisjoining(), Is.EquivalentTo(new[] { disjoining }));
+            Assert.That(subject.ComputeOwnedDisjoining(), Is.EquivalentTo([disjoining]));
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace SysML2.NET.Tests.Extend
             var owningMembership = new OwningMembership();
             subject.AssignOwnership(owningMembership, new Feature());
 
-            Assert.That(subject.ComputeOwnedFeatureMembership(), Is.EquivalentTo(new[] { featureMembership }));
+            Assert.That(subject.ComputeOwnedFeatureMembership(), Is.EquivalentTo([featureMembership]));
         }
 
         [Test]
@@ -103,12 +104,12 @@ namespace SysML2.NET.Tests.Extend
 
             var intersectingType = new Type();
             var intersecting = new Intersecting { IntersectingType = intersectingType };
-            subject.AssignOwnership(intersecting, intersectingType);
+            subject.AssignOwnership(intersecting);
 
             var unrelatedSpecialization = new Specialization();
-            subject.AssignOwnership(unrelatedSpecialization, new Type());
+            subject.AssignOwnership(unrelatedSpecialization);
 
-            Assert.That(subject.ComputeOwnedIntersecting(), Is.EquivalentTo(new[] { intersecting }));
+            Assert.That(subject.ComputeOwnedIntersecting(), Is.EquivalentTo([intersecting]));
         }
 
         [Test]
@@ -122,12 +123,12 @@ namespace SysML2.NET.Tests.Extend
 
             var unioningType = new Type();
             var unioning = new Unioning { UnioningType = unioningType };
-            subject.AssignOwnership(unioning, unioningType);
+            subject.AssignOwnership(unioning);
 
             var unrelatedSpecialization = new Specialization();
-            subject.AssignOwnership(unrelatedSpecialization, new Type());
+            subject.AssignOwnership(unrelatedSpecialization);
 
-            Assert.That(subject.ComputeOwnedUnioning(), Is.EquivalentTo(new[] { unioning }));
+            Assert.That(subject.ComputeOwnedUnioning(), Is.EquivalentTo([unioning]));
         }
 
         [Test]
@@ -141,14 +142,14 @@ namespace SysML2.NET.Tests.Extend
 
             var general = new Type();
             var specialization = new Specialization { Specific = subject, General = general };
-            subject.AssignOwnership(specialization, general);
+            subject.AssignOwnership(specialization);
 
             // a Specialization owned by subject but whose Specific points elsewhere must be filtered out
             var elsewhere = new Type();
             var foreignSpecialization = new Specialization { Specific = elsewhere, General = new Type() };
-            subject.AssignOwnership(foreignSpecialization, new Type());
+            subject.AssignOwnership(foreignSpecialization);
 
-            Assert.That(subject.ComputeOwnedSpecialization(), Is.EquivalentTo(new[] { specialization }));
+            Assert.That(subject.ComputeOwnedSpecialization(), Is.EquivalentTo([specialization]));
         }
 
         [Test]
@@ -162,7 +163,7 @@ namespace SysML2.NET.Tests.Extend
 
             var originalType = new Type();
             var conjugation = new Conjugation { ConjugatedType = subject, OriginalType = originalType };
-            subject.AssignOwnership(conjugation, originalType);
+            subject.AssignOwnership(conjugation);
 
             Assert.That(subject.ComputeOwnedConjugator(), Is.SameAs(conjugation));
         }
@@ -194,7 +195,7 @@ namespace SysML2.NET.Tests.Extend
 
             var originalType = new Type();
             var conjugation = new Conjugation { ConjugatedType = subject, OriginalType = originalType };
-            subject.AssignOwnership(conjugation, originalType);
+            subject.AssignOwnership(conjugation);
 
             Assert.That(subject.ComputeIsConjugated(), Is.True);
         }
@@ -210,12 +211,12 @@ namespace SysML2.NET.Tests.Extend
 
             var differencingType = new Type();
             var differencing = new Differencing { DifferencingType = differencingType };
-            subject.AssignOwnership(differencing, differencingType);
+            subject.AssignOwnership(differencing);
 
             var nullDifferencing = new Differencing();
-            subject.AssignOwnership(nullDifferencing, new Type());
+            subject.AssignOwnership(nullDifferencing);
 
-            Assert.That(subject.ComputeDifferencingType(), Is.EquivalentTo(new[] { differencingType }));
+            Assert.That(subject.ComputeDifferencingType(), Is.EquivalentTo([differencingType]));
         }
 
         [Test]
@@ -229,12 +230,12 @@ namespace SysML2.NET.Tests.Extend
 
             var intersectingType = new Type();
             var intersecting = new Intersecting { IntersectingType = intersectingType };
-            subject.AssignOwnership(intersecting, intersectingType);
+            subject.AssignOwnership(intersecting);
 
             var nullIntersecting = new Intersecting();
-            subject.AssignOwnership(nullIntersecting, new Type());
+            subject.AssignOwnership(nullIntersecting);
 
-            Assert.That(subject.ComputeIntersectingType(), Is.EquivalentTo(new[] { intersectingType }));
+            Assert.That(subject.ComputeIntersectingType(), Is.EquivalentTo([intersectingType]));
         }
 
         [Test]
@@ -248,12 +249,12 @@ namespace SysML2.NET.Tests.Extend
 
             var unioningType = new Type();
             var unioning = new Unioning { UnioningType = unioningType };
-            subject.AssignOwnership(unioning, unioningType);
+            subject.AssignOwnership(unioning);
 
             var nullUnioning = new Unioning();
-            subject.AssignOwnership(nullUnioning, new Type());
+            subject.AssignOwnership(nullUnioning);
 
-            Assert.That(subject.ComputeUnioningType(), Is.EquivalentTo(new[] { unioningType }));
+            Assert.That(subject.ComputeUnioningType(), Is.EquivalentTo([unioningType]));
         }
 
         [Test]
@@ -335,25 +336,25 @@ namespace SysML2.NET.Tests.Extend
 
             var general = new Type();
             var specialization = new Specialization { Specific = subject, General = general };
-            subject.AssignOwnership(specialization, general);
+            subject.AssignOwnership(specialization);
 
             var impliedGeneral = new Type();
             var impliedSpecialization = new Specialization { Specific = subject, General = impliedGeneral, IsImplied = true };
-            subject.AssignOwnership(impliedSpecialization, impliedGeneral);
+            subject.AssignOwnership(impliedSpecialization);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(subject.ComputeSupertypesOperation(false), Is.EquivalentTo(new[] { general, impliedGeneral }));
-                Assert.That(subject.ComputeSupertypesOperation(true), Is.EquivalentTo(new[] { general }));
+                Assert.That(subject.ComputeSupertypesOperation(false), Is.EquivalentTo([general, impliedGeneral]));
+                Assert.That(subject.ComputeSupertypesOperation(true), Is.EquivalentTo([general]));
             }
 
             // conjugated branch returns the OriginalType of the conjugator.
             var conjugatedSubject = new Type();
             var originalType = new Type();
             var conjugation = new Conjugation { ConjugatedType = conjugatedSubject, OriginalType = originalType };
-            conjugatedSubject.AssignOwnership(conjugation, originalType);
+            conjugatedSubject.AssignOwnership(conjugation);
 
-            Assert.That(conjugatedSubject.ComputeSupertypesOperation(false), Is.EquivalentTo(new[] { originalType }));
+            Assert.That(conjugatedSubject.ComputeSupertypesOperation(false), Is.EquivalentTo([originalType]));
         }
 
         [Test]
@@ -374,20 +375,20 @@ namespace SysML2.NET.Tests.Extend
             var top = new Type();
 
             var subjectToMiddle = new Specialization { Specific = subject, General = middle };
-            subject.AssignOwnership(subjectToMiddle, middle);
+            subject.AssignOwnership(subjectToMiddle);
 
             var middleToTop = new Specialization { Specific = middle, General = top };
-            middle.AssignOwnership(middleToTop, top);
+            middle.AssignOwnership(middleToTop);
 
             // 3-level chain plus a self-loop to demonstrate cycle safety.
             var cycleSpecialization = new Specialization { Specific = top, General = subject };
-            top.AssignOwnership(cycleSpecialization, subject);
+            top.AssignOwnership(cycleSpecialization);
 
             var result = subject.ComputeAllSupertypesOperation();
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(result, Is.EquivalentTo(new[] { subject, middle, top }));
+                Assert.That(result, Is.EquivalentTo([subject, middle, top]));
                 Assert.That(result, Has.Count.EqualTo(3));
             }
         }
@@ -407,7 +408,7 @@ namespace SysML2.NET.Tests.Extend
 
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
-            subject.AssignOwnership(specialization, supertype);
+            subject.AssignOwnership(specialization);
 
             using (Assert.EnterMultipleScope())
             {
@@ -419,11 +420,11 @@ namespace SysML2.NET.Tests.Extend
             var conjugatedSubject = new Type();
             var originalType = new Type();
             var conjugation = new Conjugation { ConjugatedType = conjugatedSubject, OriginalType = originalType };
-            conjugatedSubject.AssignOwnership(conjugation, originalType);
+            conjugatedSubject.AssignOwnership(conjugation);
 
             var originalSupertype = new Type();
             var originalSpecialization = new Specialization { Specific = originalType, General = originalSupertype };
-            originalType.AssignOwnership(originalSpecialization, originalSupertype);
+            originalType.AssignOwnership(originalSpecialization);
 
             Assert.That(conjugatedSubject.ComputeSpecializesOperation(originalSupertype), Is.True);
         }
@@ -443,7 +444,7 @@ namespace SysML2.NET.Tests.Extend
 
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
-            subject.AssignOwnership(specialization, supertype);
+            subject.AssignOwnership(specialization);
 
             Assert.That(subject.ComputeIsCompatibleWithOperation(supertype), Is.True);
         }
@@ -473,11 +474,11 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void VerifyComputeDirectionOfExcludingOperation()
         {
-            Assert.That(() => ((IType)null).ComputeDirectionOfExcludingOperation(new Feature(), new System.Collections.Generic.List<IType>()), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((IType)null).ComputeDirectionOfExcludingOperation(new Feature(), []), Throws.TypeOf<ArgumentNullException>());
 
             var subject = new Type();
 
-            Assert.That(() => subject.ComputeDirectionOfExcludingOperation(null, new System.Collections.Generic.List<IType>()), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => subject.ComputeDirectionOfExcludingOperation(null, []), Throws.TypeOf<ArgumentNullException>());
 
             // unrelated feature with unrelated owningType: result is null.
             var unrelatedFeature = new Feature { Direction = FeatureDirectionKind.In };
@@ -489,23 +490,23 @@ namespace SysML2.NET.Tests.Extend
             var featureMembership = new FeatureMembership();
             subject.AssignOwnership(featureMembership, ownedFeature);
 
-            Assert.That(subject.ComputeDirectionOfExcludingOperation(ownedFeature, new System.Collections.Generic.List<IType>()), Is.EqualTo(FeatureDirectionKind.In));
+            Assert.That(subject.ComputeDirectionOfExcludingOperation(ownedFeature, []), Is.EqualTo(FeatureDirectionKind.In));
 
             // conjugation flip: a conjugated subject inherits the feature direction from its OriginalType
             // and flips In↔Out at the current level.
             var conjugatedSubject = new Type();
             var originalType = new Type();
             var conjugation = new Conjugation { ConjugatedType = conjugatedSubject, OriginalType = originalType };
-            conjugatedSubject.AssignOwnership(conjugation, originalType);
+            conjugatedSubject.AssignOwnership(conjugation);
 
             var originalSpecialization = new Specialization { Specific = originalType, General = subject };
-            originalType.AssignOwnership(originalSpecialization, subject);
+            originalType.AssignOwnership(originalSpecialization);
 
             // For conjugatedSubject:
             //   supertypes(false) = [originalType]
             //   originalType.directionOfExcluding(ownedFeature, ...) traverses to subject and yields In
             //   then conjugatedSubject is conjugated → flip In to Out.
-            Assert.That(conjugatedSubject.ComputeDirectionOfExcludingOperation(ownedFeature, new System.Collections.Generic.List<IType>()), Is.EqualTo(FeatureDirectionKind.Out));
+            Assert.That(conjugatedSubject.ComputeDirectionOfExcludingOperation(ownedFeature, []), Is.EqualTo(FeatureDirectionKind.Out));
         }
 
         [Test]
@@ -578,7 +579,7 @@ namespace SysML2.NET.Tests.Extend
             var redefinedTarget = new Feature();
             var redefiningFeature = new Feature();
             var redefinition = new Redefinition { RedefinedFeature = redefinedTarget };
-            redefiningFeature.AssignOwnership(redefinition, new Feature());
+            redefiningFeature.AssignOwnership(redefinition);
 
             var featureMembership = new Membership { MemberElement = redefiningFeature };
 
@@ -595,26 +596,26 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void VerifyComputeRemoveRedefinedFeaturesOperation()
         {
-            Assert.That(() => ((IType)null).ComputeRemoveRedefinedFeaturesOperation(new System.Collections.Generic.List<IMembership>()), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((IType)null).ComputeRemoveRedefinedFeaturesOperation([]), Throws.TypeOf<ArgumentNullException>());
 
             var subject = new Type();
 
             Assert.That(() => subject.ComputeRemoveRedefinedFeaturesOperation(null), Throws.TypeOf<ArgumentNullException>());
 
             // empty input → empty output.
-            Assert.That(subject.ComputeRemoveRedefinedFeaturesOperation(new System.Collections.Generic.List<IMembership>()), Has.Count.EqualTo(0));
+            Assert.That(subject.ComputeRemoveRedefinedFeaturesOperation([]), Has.Count.EqualTo(0));
 
             // populated: two memberships where one carries a Feature that redefines the Feature in the other.
             // The redefining-feature membership should drop the redefined-feature membership.
             var baseFeature = new Feature();
             var derivedFeature = new Feature();
             var derivedRedefinesBase = new Redefinition { RedefinedFeature = baseFeature };
-            derivedFeature.AssignOwnership(derivedRedefinesBase, new Feature());
+            derivedFeature.AssignOwnership(derivedRedefinesBase);
 
             var baseMembership = new Membership { MemberElement = baseFeature };
             var derivedMembership = new Membership { MemberElement = derivedFeature };
 
-            var result = subject.ComputeRemoveRedefinedFeaturesOperation(new System.Collections.Generic.List<IMembership> { baseMembership, derivedMembership });
+            var result = subject.ComputeRemoveRedefinedFeaturesOperation([baseMembership, derivedMembership]);
 
             using (Assert.EnterMultipleScope())
             {
@@ -638,7 +639,7 @@ namespace SysML2.NET.Tests.Extend
             // the public membership surfaces; private members are excluded.
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
-            subject.AssignOwnership(specialization, supertype);
+            subject.AssignOwnership(specialization);
 
             var publicElement = new Type();
             var publicMembership = new OwningMembership { Visibility = VisibilityKind.Public };
@@ -671,7 +672,7 @@ namespace SysML2.NET.Tests.Extend
             // alone, so the public membership surfaces.
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
-            subject.AssignOwnership(specialization, supertype);
+            subject.AssignOwnership(specialization);
 
             var publicElement = new Type();
             var publicMembership = new OwningMembership { Visibility = VisibilityKind.Public };
@@ -724,15 +725,18 @@ namespace SysML2.NET.Tests.Extend
             var privateMembership = new OwningMembership { Visibility = VisibilityKind.Private };
             subject.AssignOwnership(privateMembership, privateElement);
 
+            var includeAllResult = subject.ComputeRedefinedVisibleMembershipsOperation(null, false, true);
+            var publicOnlyResult = subject.ComputeRedefinedVisibleMembershipsOperation(null, false, false);
+
             using (Assert.EnterMultipleScope())
             {
                 // includeAll = true → both public and private surface.
-                Assert.That(subject.ComputeRedefinedVisibleMembershipsOperation(null, false, true), Does.Contain(publicMembership));
-                Assert.That(subject.ComputeRedefinedVisibleMembershipsOperation(null, false, true), Does.Contain(privateMembership));
+                Assert.That(includeAllResult, Does.Contain(publicMembership));
+                Assert.That(includeAllResult, Does.Contain(privateMembership));
 
                 // includeAll = false → only public.
-                Assert.That(subject.ComputeRedefinedVisibleMembershipsOperation(null, false, false), Does.Contain(publicMembership));
-                Assert.That(subject.ComputeRedefinedVisibleMembershipsOperation(null, false, false), Does.Not.Contain(privateMembership));
+                Assert.That(publicOnlyResult, Does.Contain(publicMembership));
+                Assert.That(publicOnlyResult, Does.Not.Contain(privateMembership));
             }
         }
 
@@ -768,7 +772,7 @@ namespace SysML2.NET.Tests.Extend
             // resolving `memberFeature` on a populated FeatureMembership reads `ownedMemberFeature` → stub.
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
-            subject.AssignOwnership(specialization, supertype);
+            subject.AssignOwnership(specialization);
 
             var inheritedFeature = new Feature();
             var inheritedFeatureMembership = new FeatureMembership();
@@ -790,7 +794,7 @@ namespace SysML2.NET.Tests.Extend
             // the public membership surfaces in inheritedMembership.
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
-            subject.AssignOwnership(specialization, supertype);
+            subject.AssignOwnership(specialization);
 
             var publicElement = new Type();
             var publicMembership = new OwningMembership { Visibility = VisibilityKind.Public };
@@ -829,7 +833,7 @@ namespace SysML2.NET.Tests.Extend
             rootNamespace.AssignOwnership(subjectMembership, subject);
 
             var specialization = new Specialization { Specific = subject, General = libraryType };
-            subject.AssignOwnership(specialization, new Type());
+            subject.AssignOwnership(specialization);
 
             using (Assert.EnterMultipleScope())
             {
