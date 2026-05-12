@@ -577,7 +577,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
 
             // Call NamespaceExtensions directly: Type.VisibleMemberships is wired back to this method,
             // so going through INamespace.VisibleMemberships would recurse infinitely.
-            var visibleMemberships = NamespaceExtensions.ComputeVisibleMembershipsOperation(typeSubject, safeExcluded, isRecursive, includeAll);
+            var visibleMemberships = typeSubject.ComputeVisibleMembershipsOperation(safeExcluded, isRecursive, includeAll);
 
             var excludedWithSelf = new List<INamespace>(safeExcluded) { typeSubject };
 
@@ -1034,13 +1034,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
             {
                 var current = queue.Dequeue();
 
-                foreach (var supertype in current.Supertypes(false))
+                foreach (var supertype in current.Supertypes(false).Where(supertype => supertype != null && !visited.Contains(supertype)))
                 {
-                    if (supertype != null && !visited.Contains(supertype))
-                    {
-                        visited.Add(supertype);
-                        queue.Enqueue(supertype);
-                    }
+                    visited.Add(supertype);
+                    queue.Enqueue(supertype);
                 }
             }
 
@@ -1165,7 +1162,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         }
 
         /// <summary>
-        /// Return the owned or inherited Multiplicities for this Type<./code>.
+        /// Return the owned or inherited Multiplicities for this Type
         /// </summary>
         /// <remarks>
         /// OCL2.0:
