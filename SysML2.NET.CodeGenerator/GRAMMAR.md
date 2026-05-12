@@ -2,6 +2,8 @@
 
 This file provides essential context for working on the SysML2 textual notation code generator (`RulesHelper.cs` and related files). Read this when modifying grammar processing or the `TextualNotationBuilder` generation pipeline.
 
+> **For the end-to-end pipeline narrative** (parser → grammar model → `RuleProcessor` dispatch → patterns A/B/C/D → three-tier guard resolution → no-target lifting), see the longer companion document `TEXTUAL_NOTATION_CODEGEN.md` in this same folder.
+
 > **⚠ Reviewer agent is mandatory for every change.** Before committing any modification to `SysML2.NET.Serializer.TextualNotation/Writers/*.cs` or to `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`, invoke the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) to verify grammar correctness. See CLAUDE.md "Textual notation reviewer is MANDATORY" for details.
 
 ## EBNF / KEBNF Notation Legend
