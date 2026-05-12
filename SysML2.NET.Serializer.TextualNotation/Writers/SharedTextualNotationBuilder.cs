@@ -33,7 +33,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Serializer.TextualNotation.Writers;
 
     /// <summary>
     /// Hand-coded part of the <see cref="SharedTextualNotationBuilder" />.
@@ -42,6 +41,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     /// </summary>
     public static partial class SharedTextualNotationBuilder
     {
+        /// <summary>
+        /// Gets the name of the <see cref="IElement.OwnedRelationship" /> as const
+        /// </summary>
+        private const string OwnedRelationshipPropertyName = "ownedRelationship";
+        
         /// <summary>
         /// Builds the Textual Notation string for the rule FeaturePrefix.
         /// <para><c>FeaturePrefix = ( EndFeaturePrefix (ownedRelationship += OwnedCrossFeatureMember)?
@@ -57,7 +61,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildFeaturePrefixHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             if (poco.IsEnd)
             {
@@ -96,7 +100,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildNonBehaviorBodyItemHandCoded(IElement poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is IImport import)
             {
@@ -202,7 +206,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
         internal static void BuildTwoEndedConnectorDeclarationHandCoded(IFeature poco, string firstEndKeyword, string secondEndKeyword, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName)
@@ -273,7 +277,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
         internal static void BuildFlowDeclarationHandCoded(IFlow poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
                                  || !string.IsNullOrWhiteSpace(poco.DeclaredName);
@@ -352,7 +356,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
         internal static void BuildActionOrStateBodyItemNonBehaviorTailHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             switch (ownedRelationshipCursor.Current)
             {
@@ -422,7 +426,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             Action<IFeatureMembership, TextualNotationWriterContext, StringBuilder> buildOccurrenceUsageMember,
             Action<IFeatureMembership, TextualNotationWriterContext, StringBuilder> buildNonOccurrenceUsageMember)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             while (ownedRelationshipCursor.Current != null)
             {
@@ -502,7 +506,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
         internal static void BuildFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
             if (ownedRelationshipCursor.Current is ISpecialization)
             {
