@@ -46,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.ImportedMembership != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ImportedMembership, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ImportedMembership, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

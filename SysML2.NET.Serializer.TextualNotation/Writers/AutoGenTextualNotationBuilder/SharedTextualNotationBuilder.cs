@@ -79,7 +79,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (clientCursor.Current != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current, writerContext, poco);
                 clientCursor.Move();
             }
 
@@ -89,7 +89,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 if (clientCursor.Current != null)
                 {
-                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current, writerContext);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, clientCursor.Current, writerContext, poco);
                     clientCursor.Move();
                 }
                 clientCursor.Move();
@@ -99,7 +99,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (supplierCursor.Current != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current, writerContext, poco);
                 supplierCursor.Move();
             }
 
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 if (supplierCursor.Current != null)
                 {
-                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current, writerContext);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, supplierCursor.Current, writerContext, poco);
                     supplierCursor.Move();
                 }
                 supplierCursor.Move();

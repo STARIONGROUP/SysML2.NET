@@ -227,7 +227,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 case ValueLiteralElement valueLiteralElement:
                     if (valueLiteralElement.QueryIsQualifiedName())
                     {
-                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{ruleGenerationContext.CurrentVariableName}, writerContext);{Environment.NewLine}");
+                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{ruleGenerationContext.CurrentVariableName}, writerContext, poco);{Environment.NewLine}");
 
                         if (!ruleGenerationContext.IsNextElementNewLineTerminal())
                         {
@@ -306,7 +306,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         writer.WriteSafeString($"{Environment.NewLine}if({cursorToUse.CursorVariableName}.Current != null){Environment.NewLine}");
                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{cursorToUse.CursorVariableName}.Current, writerContext);{Environment.NewLine}");
+                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{cursorToUse.CursorVariableName}.Current, writerContext, poco);{Environment.NewLine}");
                         writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
                         writer.WriteSafeString("}");
                     }
@@ -383,7 +383,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 case ValueLiteralElement valueLiteralElement when valueLiteralElement.QueryIsQualifiedName():
                                     if (isPartOfMultipleAlternative)
                                     {
-                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName}, writerContext);{Environment.NewLine}");
+                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName}, writerContext, poco);{Environment.NewLine}");
 
                                         if (!ruleGenerationContext.IsNextElementNewLineTerminal())
                                         {
@@ -394,7 +394,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     {
                                         writer.WriteSafeString($"{Environment.NewLine}if (poco.{targetPropertyName} != null){Environment.NewLine}");
                                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName}, writerContext);{Environment.NewLine}");
+                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,poco.{targetPropertyName}, writerContext, poco);{Environment.NewLine}");
 
                                         if (!ruleGenerationContext.IsNextElementNewLineTerminal())
                                         {

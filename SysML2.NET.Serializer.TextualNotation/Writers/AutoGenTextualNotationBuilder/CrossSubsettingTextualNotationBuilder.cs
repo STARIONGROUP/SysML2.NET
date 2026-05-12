@@ -49,7 +49,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.CrossedFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.CrossedFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.CrossedFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

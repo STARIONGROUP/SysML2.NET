@@ -49,7 +49,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.DisjoiningType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.DisjoiningType, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.DisjoiningType, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -79,7 +79,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.TypeDisjoined != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.TypeDisjoined, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.TypeDisjoined, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -91,7 +91,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.DisjoiningType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.DisjoiningType, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.DisjoiningType, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

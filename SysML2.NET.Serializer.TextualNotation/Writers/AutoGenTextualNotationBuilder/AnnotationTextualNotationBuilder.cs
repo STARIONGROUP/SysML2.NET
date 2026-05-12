@@ -93,7 +93,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.AnnotatedElement != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.AnnotatedElement, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.AnnotatedElement, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

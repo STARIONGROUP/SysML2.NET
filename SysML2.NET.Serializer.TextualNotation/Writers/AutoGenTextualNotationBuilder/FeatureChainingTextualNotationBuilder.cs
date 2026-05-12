@@ -46,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.ChainingFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ChainingFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ChainingFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

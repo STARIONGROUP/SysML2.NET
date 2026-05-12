@@ -49,7 +49,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.InvertingFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -84,7 +84,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.FeatureInverted != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureInverted, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureInverted, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -96,7 +96,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.InvertingFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.InvertingFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

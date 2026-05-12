@@ -356,3 +356,4 @@ MigrationBackup/
 *.bak
 /switcher.json
 /.claude/settings.local.json
+/.team-notes/*

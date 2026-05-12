@@ -84,7 +84,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.MemberElement != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
@@ -103,7 +103,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.MemberElement != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             else
@@ -157,7 +157,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.MemberElement != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
