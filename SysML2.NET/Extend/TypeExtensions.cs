@@ -1198,12 +1198,9 @@ namespace SysML2.NET.Core.POCO.Core.Types
             var result = new List<IMultiplicity>();
             var queue = new Queue<IType>();
 
-            foreach (var general in typeSubject.ownedSpecialization.Select(specialization => specialization.General).Where(x => x != null))
+            foreach (var general in typeSubject.ownedSpecialization.Select(specialization => specialization.General).Where(x => x != null && visited.Add(x)))
             {
-                if (visited.Add(general))
-                {
-                    queue.Enqueue(general);
-                }
+                queue.Enqueue(general);
             }
 
             while (queue.Count > 0)
@@ -1216,12 +1213,9 @@ namespace SysML2.NET.Core.POCO.Core.Types
                     continue;
                 }
 
-                foreach (var general in current.ownedSpecialization.Select(specialization => specialization.General).Where(x => x != null))
+                foreach (var general in current.ownedSpecialization.Select(specialization => specialization.General).Where(x => x != null && visited.Add(x)))
                 {
-                    if (visited.Add(general))
-                    {
-                        queue.Enqueue(general);
-                    }
+                    queue.Enqueue(general);
                 }
             }
 
