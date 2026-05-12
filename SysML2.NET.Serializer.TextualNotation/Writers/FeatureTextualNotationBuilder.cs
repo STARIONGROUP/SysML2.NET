@@ -233,41 +233,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            if (ownedRelationshipCursor.Current is ISpecialization)
-            {
-                // Alt 1: FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
-                while (ownedRelationshipCursor.Current is ISpecialization)
-                {
-                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
-                }
-
-                var multiplicityElementPresent = ownedRelationshipCursor.Current is IOwningMembership owningMembership
-                    && owningMembership.OwnedRelatedElement.OfType<IMultiplicity>().Any();
-
-                if (multiplicityElementPresent || poco.IsOrdered || !poco.IsUnique)
-                {
-                    BuildMultiplicityPart(poco, writerContext, stringBuilder);
-                }
-
-                // Trailing FeatureSpecialization* — runs regardless of whether MultiplicityPart fired,
-                // per the grammar's three-segment shape `FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*`.
-                while (ownedRelationshipCursor.Current is ISpecialization)
-                {
-                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
-                }
-            }
-            else
-            {
-                // Alt 2: MultiplicityPart FeatureSpecialization*
-                BuildMultiplicityPart(poco, writerContext, stringBuilder);
-
-                while (ownedRelationshipCursor.Current is ISpecialization)
-                {
-                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
-                }
-            }
+            SharedTextualNotationBuilder.BuildFeatureSpecializationPartHandCoded(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
@@ -382,39 +348,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </remarks>
         private static void BuildPayloadFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            if (ownedRelationshipCursor.Current is ISpecialization)
-            {
-                // Alt 1: FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
-                while (ownedRelationshipCursor.Current is ISpecialization)
-                {
-                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
-                }
-
-                var multiplicityElementPresent = ownedRelationshipCursor.Current is IOwningMembership owningMembership
-                    && owningMembership.OwnedRelatedElement.OfType<IMultiplicity>().Any();
-
-                if (multiplicityElementPresent || poco.IsOrdered || !poco.IsUnique)
-                {
-                    BuildMultiplicityPart(poco, writerContext, stringBuilder);
-                }
-
-                while (ownedRelationshipCursor.Current is ISpecialization)
-                {
-                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
-                }
-            }
-            else
-            {
-                // Alt 2: MultiplicityPart FeatureSpecialization+
-                BuildMultiplicityPart(poco, writerContext, stringBuilder);
-
-                while (ownedRelationshipCursor.Current is ISpecialization)
-                {
-                    BuildFeatureSpecialization(poco, writerContext, stringBuilder);
-                }
-            }
+            SharedTextualNotationBuilder.BuildFeatureSpecializationPartHandCoded(poco, writerContext, stringBuilder);
         }
     }
 }

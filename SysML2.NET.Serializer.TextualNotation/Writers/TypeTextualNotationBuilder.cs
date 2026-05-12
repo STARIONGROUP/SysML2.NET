@@ -24,9 +24,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.States;
 
     /// <summary>
@@ -115,39 +113,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         ownedRelationshipCursor.Move();
                         break;
 
-                    // NonBehaviorBodyItem cases
-                    case IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IVariantMembership variantMembership:
-                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IOwningMembership owningMembership:
-                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IMembership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
+                    // NonBehaviorBodyItem cases — shared with StateBodyItem; see Shared helper.
                     default:
-                        ownedRelationshipCursor.Move();
+                        SharedTextualNotationBuilder.BuildActionOrStateBodyItemNonBehaviorTailHandCoded(poco, writerContext, stringBuilder);
                         break;
                 }
             }
@@ -162,66 +130,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildDefinitionBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            while (ownedRelationshipCursor.Current != null)
-            {
-                switch (ownedRelationshipCursor.Current)
-                {
-                    case IVariantMembership variantMembership:
-                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
-                    {
-                        var nextElement = ownedRelationshipCursor.GetNext(1);
-
-                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
-                        {
-                            FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                            FeatureMembershipTextualNotationBuilder.BuildOccurrenceUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                        }
-                        else
-                        {
-                            ownedRelationshipCursor.Move();
-                        }
-
-                        break;
-                    }
-
-                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IOwningMembership owningMembership:
-                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IMembership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    default:
-                        ownedRelationshipCursor.Move();
-                        break;
-                }
-            }
+            // DefinitionBodyItem shares its body with InterfaceBodyItem; the two rules differ only in the
+            // Occurrence / NonOccurrence membership builders, supplied here as method-group delegates.
+            SharedTextualNotationBuilder.BuildDefinitionOrInterfaceBodyItemHandCoded(
+                poco,
+                writerContext,
+                stringBuilder,
+                FeatureMembershipTextualNotationBuilder.BuildOccurrenceUsageMember,
+                FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember);
         }
 
         /// <summary>
@@ -303,66 +219,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         private static void BuildInterfaceBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            while (ownedRelationshipCursor.Current != null)
-            {
-                switch (ownedRelationshipCursor.Current)
-                {
-                    case IVariantMembership variantMembership:
-                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
-                    {
-                        var nextElement = ownedRelationshipCursor.GetNext(1);
-
-                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
-                        {
-                            FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                            FeatureMembershipTextualNotationBuilder.BuildInterfaceOccurrenceUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                        }
-                        else
-                        {
-                            ownedRelationshipCursor.Move();
-                        }
-
-                        break;
-                    }
-
-                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildInterfaceOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IOwningMembership owningMembership:
-                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IMembership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    default:
-                        ownedRelationshipCursor.Move();
-                        break;
-                }
-            }
+            // InterfaceBodyItem shares its body with DefinitionBodyItem; the two rules differ only in the
+            // Occurrence / NonOccurrence membership builders, supplied here as method-group delegates.
+            SharedTextualNotationBuilder.BuildDefinitionOrInterfaceBodyItemHandCoded(
+                poco,
+                writerContext,
+                stringBuilder,
+                FeatureMembershipTextualNotationBuilder.BuildInterfaceOccurrenceUsageMember,
+                FeatureMembershipTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageMember);
         }
 
         /// <summary>
@@ -471,39 +335,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         ownedRelationshipCursor.Move();
                         break;
 
-                    // NonBehaviorBodyItem cases
-                    case IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IVariantMembership variantMembership:
-                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IOwningMembership owningMembership:
-                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IMembership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
+                    // NonBehaviorBodyItem cases — shared with ActionBodyItem; see Shared helper.
                     default:
-                        ownedRelationshipCursor.Move();
+                        SharedTextualNotationBuilder.BuildActionOrStateBodyItemNonBehaviorTailHandCoded(poco, writerContext, stringBuilder);
                         break;
                 }
             }

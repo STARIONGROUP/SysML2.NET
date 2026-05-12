@@ -28,6 +28,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
@@ -176,6 +177,365 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (poco is ILiteralRational literalRational)
             {
                 stringBuilder.Append(literalRational.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            }
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the shared two-ended connector declaration template
+        /// used by <c>BindingConnectorDeclaration</c> (with <c>'of'</c>/<c>'='</c>) and
+        /// <c>SuccessionDeclaration</c> (with <c>'first'</c>/<c>'then'</c>).
+        /// <para><c>BindingConnectorDeclaration : BindingConnector =
+        /// FeatureDeclaration ( 'of' ownedRelationship += ConnectorEndMember '=' ownedRelationship += ConnectorEndMember )?
+        /// | ( isSufficient ?= 'all' )? ( 'of'? ownedRelationship += ConnectorEndMember '=' ownedRelationship += ConnectorEndMember )?</c></para>
+        /// <para><c>SuccessionDeclaration : Succession =
+        /// FeatureDeclaration ( 'first' ownedRelationship += ConnectorEndMember 'then' ownedRelationship += ConnectorEndMember )?
+        /// | ( isSufficient ?= 'all' )? ( 'first'? ownedRelationship += ConnectorEndMember 'then' ownedRelationship += ConnectorEndMember )?</c></para>
+        /// <para>Both rules share the same two-alternative shape; only the two end-keyword literals differ.
+        /// Alt 1 (declaration present) emits <c>FeatureDeclaration</c> then the two
+        /// <c>ConnectorEndMember</c> ends bracketed by the two keywords. Alt 2 (declaration absent)
+        /// emits the optional <c>'all'</c> sufficient flag then the same two-ended payload.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="IFeature"/> (a <c>BindingConnector</c> or <c>Succession</c>) from which the rule should be built</param>
+        /// <param name="firstEndKeyword">Keyword literal that precedes the first <c>ConnectorEndMember</c> (e.g. <c>"of "</c> or <c>"first "</c>)</param>
+        /// <param name="secondEndKeyword">Keyword literal that precedes the second <c>ConnectorEndMember</c> (e.g. <c>"= "</c> or <c>"then "</c>)</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> used to get access to the cursor cache for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
+        internal static void BuildTwoEndedConnectorDeclarationHandCoded(IFeature poco, string firstEndKeyword, string secondEndKeyword, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        {
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
+                                 || !string.IsNullOrWhiteSpace(poco.DeclaredName)
+                                 || ownedRelationshipCursor.Current is ISpecialization
+                                 || ownedRelationshipCursor.Current is IConjugation;
+
+            if (hasDeclaration)
+            {
+                // Alt 1: FeatureDeclaration (firstKw ConnectorEndMember secondKw ConnectorEndMember)?
+                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
+
+                if (ownedRelationshipCursor.Current is IEndFeatureMembership firstEnd)
+                {
+                    stringBuilder.Append(firstEndKeyword);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(firstEnd, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
+                    stringBuilder.Append(secondEndKeyword);
+
+                    if (ownedRelationshipCursor.Current is IEndFeatureMembership secondEnd)
+                    {
+                        EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(secondEnd, writerContext, stringBuilder);
+                    }
+
+                    ownedRelationshipCursor.Move();
+                }
+            }
+            else
+            {
+                // Alt 2: (isSufficient?='all')? (firstKw? ConnectorEndMember secondKw ConnectorEndMember)?
+                if (poco.IsSufficient)
+                {
+                    stringBuilder.Append("all ");
+                }
+
+                if (ownedRelationshipCursor.Current is IEndFeatureMembership firstEnd)
+                {
+                    stringBuilder.Append(firstEndKeyword);
+                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(firstEnd, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
+                    stringBuilder.Append(secondEndKeyword);
+
+                    if (ownedRelationshipCursor.Current is IEndFeatureMembership secondEnd)
+                    {
+                        EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(secondEnd, writerContext, stringBuilder);
+                    }
+
+                    ownedRelationshipCursor.Move();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the shared <c>FlowDeclaration</c> body used by both
+        /// <c>Flow</c> and <c>SuccessionFlow</c>.
+        /// <para><c>FlowDeclaration : Flow =
+        /// FeatureDeclaration ValuePart?
+        /// ( 'of' ownedRelationship += PayloadFeatureMember )?
+        /// ( 'from' ownedRelationship += FlowEndMember 'to' ownedRelationship += FlowEndMember )?
+        /// | ( isSufficient ?= 'all' )? ownedRelationship += FlowEndMember 'to' ownedRelationship += FlowEndMember</c></para>
+        /// <para><c>ISuccessionFlow</c> extends <c>IFlow</c>, so a single helper typed on <c>IFlow</c> serves
+        /// both rules. Auto-gen emits <c>FeaturePrefix + 'flow '</c> (or <c>'succession flow '</c>) before
+        /// and <c>TypeBody</c> after this method.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="IFlow"/> from which the rule should be built</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> used to get access to the cursor cache for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
+        internal static void BuildFlowDeclarationHandCoded(IFlow poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        {
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
+                                 || !string.IsNullOrWhiteSpace(poco.DeclaredName);
+
+            if (hasDeclaration || ownedRelationshipCursor.Current is not IEndFeatureMembership)
+            {
+                // Alt 1: FeatureDeclaration ValuePart? ('of' PayloadFeatureMember)? ('from' FlowEndMember 'to' FlowEndMember)?
+                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
+                FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
+
+                // 'of' PayloadFeatureMember? — IFeatureMembership but NOT IEndFeatureMembership
+                if (ownedRelationshipCursor.Current is IFeatureMembership payloadMember
+                    && ownedRelationshipCursor.Current is not IEndFeatureMembership)
+                {
+                    stringBuilder.Append("of ");
+                    FeatureMembershipTextualNotationBuilder.BuildPayloadFeatureMember(payloadMember, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                }
+
+                // 'from' FlowEndMember 'to' FlowEndMember?
+                if (ownedRelationshipCursor.Current is IEndFeatureMembership firstFlowEnd)
+                {
+                    stringBuilder.Append("from ");
+                    EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(firstFlowEnd, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
+                    stringBuilder.Append("to ");
+
+                    if (ownedRelationshipCursor.Current is IEndFeatureMembership secondFlowEnd)
+                    {
+                        EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(secondFlowEnd, writerContext, stringBuilder);
+                    }
+
+                    ownedRelationshipCursor.Move();
+                }
+            }
+            else
+            {
+                // Alt 2: (isSufficient?='all')? FlowEndMember 'to' FlowEndMember
+                if (poco.IsSufficient)
+                {
+                    stringBuilder.Append("all ");
+                }
+
+                if (ownedRelationshipCursor.Current is IEndFeatureMembership firstFlowEnd)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(firstFlowEnd, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
+                    stringBuilder.Append("to ");
+
+                    if (ownedRelationshipCursor.Current is IEndFeatureMembership secondFlowEnd)
+                    {
+                        EndFeatureMembershipTextualNotationBuilder.BuildFlowEndMember(secondFlowEnd, writerContext, stringBuilder);
+                    }
+
+                    ownedRelationshipCursor.Move();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Processes one cursor element with the trailing <c>NonBehaviorBodyItem</c> alternatives that
+        /// are shared between <c>ActionBodyItem</c> and <c>StateBodyItem</c>.
+        /// <para>Dispatches on <c>cursor.Current</c>'s runtime type and delegates to the corresponding
+        /// membership builder: <c>Import</c>, <c>VariantUsageMember</c>, <c>StructureUsageMember</c>,
+        /// <c>NonOccurrenceUsageMember</c>, <c>DefinitionMember</c> (for <see cref="IOwningMembership"/>),
+        /// <c>AliasMember</c> (for plain <see cref="IMembership"/>). The cursor is always advanced — when
+        /// no alternative matches, the default branch simply moves it.</para>
+        /// <para>Callers invoke this helper from the <c>default:</c> branch of their behavior-specific
+        /// outer switch so that all behavior-specific cases (e.g. <c>InitialNodeMember</c>,
+        /// <c>ActionBehaviorMember</c>, <c>EntryActionMember</c>) are matched first.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="IType"/> from which the rule should be built</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> used to get access to the cursor cache for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
+        internal static void BuildActionOrStateBodyItemNonBehaviorTailHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        {
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            switch (ownedRelationshipCursor.Current)
+            {
+                case IImport import:
+                    ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IVariantMembership variantMembership:
+                    VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IFeatureMembership featureMembershipForStructure when featureMembershipForStructure.IsValidForStructureUsageMember(writerContext):
+                    FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForStructure, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
+                    FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IOwningMembership owningMembership:
+                    OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IMembership membership:
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                default:
+                    ownedRelationshipCursor.Move();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the shared <c>DefinitionBodyItem</c> / <c>InterfaceBodyItem</c>
+        /// rule body. Both rules share an identical structural shape; only the inner
+        /// <c>OccurrenceUsageMember</c> / <c>NonOccurrenceUsageMember</c> builders differ, so they are
+        /// supplied as delegates by the caller.
+        /// <para><c>DefinitionBodyItem : Type = ownedRelationship += DefinitionMember
+        /// | ownedRelationship += VariantUsageMember
+        /// | ownedRelationship += NonOccurrenceUsageMember
+        /// | ( ownedRelationship += SourceSuccessionMember )? ownedRelationship += OccurrenceUsageMember
+        /// | ownedRelationship += AliasMember
+        /// | ownedRelationship += Import</c></para>
+        /// <para><c>InterfaceBodyItem : Type = ownedRelationship += DefinitionMember
+        /// | ownedRelationship += VariantUsageMember
+        /// | ownedRelationship += InterfaceNonOccurrenceUsageMember
+        /// | ( ownedRelationship += SourceSuccessionMember )? ownedRelationship += InterfaceOccurrenceUsageMember
+        /// | ownedRelationship += AliasMember
+        /// | ownedRelationship += Import</c></para>
+        /// </summary>
+        /// <param name="poco">The <see cref="IType"/> from which the rule should be built</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> used to get access to the cursor cache for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
+        /// <param name="buildOccurrenceUsageMember">Delegate that builds the <c>OccurrenceUsageMember</c> alternative — pass <c>FeatureMembershipTextualNotationBuilder.BuildOccurrenceUsageMember</c> for <c>DefinitionBodyItem</c> and <c>BuildInterfaceOccurrenceUsageMember</c> for <c>InterfaceBodyItem</c></param>
+        /// <param name="buildNonOccurrenceUsageMember">Delegate that builds the <c>NonOccurrenceUsageMember</c> alternative — pass <c>FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember</c> for <c>DefinitionBodyItem</c> and <c>BuildInterfaceNonOccurrenceUsageMember</c> for <c>InterfaceBodyItem</c></param>
+        internal static void BuildDefinitionOrInterfaceBodyItemHandCoded(
+            IType poco,
+            TextualNotationWriterContext writerContext,
+            StringBuilder stringBuilder,
+            Action<IFeatureMembership, TextualNotationWriterContext, StringBuilder> buildOccurrenceUsageMember,
+            Action<IFeatureMembership, TextualNotationWriterContext, StringBuilder> buildNonOccurrenceUsageMember)
+        {
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            while (ownedRelationshipCursor.Current != null)
+            {
+                switch (ownedRelationshipCursor.Current)
+                {
+                    case IVariantMembership variantMembership:
+                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
+                    {
+                        var nextElement = ownedRelationshipCursor.GetNext(1);
+
+                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
+                        {
+                            FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                            buildOccurrenceUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                        }
+                        else
+                        {
+                            ownedRelationshipCursor.Move();
+                        }
+
+                        break;
+                    }
+
+                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
+                        buildOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
+                        buildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IOwningMembership owningMembership:
+                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IMembership membership:
+                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    case IImport import:
+                        ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
+                    default:
+                        ownedRelationshipCursor.Move();
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the shared <c>FeatureSpecializationPart</c> body,
+        /// also reused by <c>PayloadFeatureSpecializationPart</c>.
+        /// <para><c>FeatureSpecializationPart : Feature = FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
+        /// | MultiplicityPart FeatureSpecialization*</c></para>
+        /// <para><c>PayloadFeatureSpecializationPart : Feature = ( FeatureSpecialization )+ MultiplicityPart? FeatureSpecialization*
+        /// | MultiplicityPart FeatureSpecialization+</c></para>
+        /// <para>The only grammar difference between the two rules (Alt 2's <c>+</c> vs <c>*</c>) is a
+        /// parse-time validation concern, not a serialization difference, so a single helper serves
+        /// both. Branches on whether the cursor starts on an <see cref="ISpecialization"/> or not,
+        /// mirroring the grammar's two alternatives; <c>while</c>-loops on
+        /// <c>cursor.Current is ISpecialization</c> drive the <c>+</c>/<c>*</c> quantifiers.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="IFeature"/> from which the rule should be built</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> used to get access to the cursor cache for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> that contains the entire textual notation</param>
+        internal static void BuildFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        {
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+
+            if (ownedRelationshipCursor.Current is ISpecialization)
+            {
+                // Alt 1: FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
+                while (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, writerContext, stringBuilder);
+                }
+
+                var multiplicityElementPresent = ownedRelationshipCursor.Current is IOwningMembership owningMembership
+                    && owningMembership.OwnedRelatedElement.OfType<IMultiplicity>().Any();
+
+                if (multiplicityElementPresent || poco.IsOrdered || !poco.IsUnique)
+                {
+                    FeatureTextualNotationBuilder.BuildMultiplicityPart(poco, writerContext, stringBuilder);
+                }
+
+                // Trailing FeatureSpecialization* — runs regardless of whether MultiplicityPart fired,
+                // per the grammar's three-segment shape `FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*`.
+                while (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, writerContext, stringBuilder);
+                }
+            }
+            else
+            {
+                // Alt 2: MultiplicityPart FeatureSpecialization*
+                FeatureTextualNotationBuilder.BuildMultiplicityPart(poco, writerContext, stringBuilder);
+
+                while (ownedRelationshipCursor.Current is ISpecialization)
+                {
+                    FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, writerContext, stringBuilder);
+                }
             }
         }
 

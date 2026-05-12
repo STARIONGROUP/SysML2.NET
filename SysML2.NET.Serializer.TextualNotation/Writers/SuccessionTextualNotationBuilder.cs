@@ -22,8 +22,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Text;
 
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Connectors;
 
     /// <summary>
@@ -42,62 +40,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         ///     FeatureDeclaration ( 'first' ownedRelationship += ConnectorEndMember 'then' ownedRelationship += ConnectorEndMember )?
         ///   | ( isSufficient ?= 'all' )? ( 'first'? ownedRelationship += ConnectorEndMember 'then' ownedRelationship += ConnectorEndMember )?
         ///
-        /// Auto-gen delegates entirely to this method.
+        /// Auto-gen delegates entirely to this method, which in turn delegates to the shared
+        /// <see cref="SharedTextualNotationBuilder.BuildTwoEndedConnectorDeclarationHandCoded"/> helper —
+        /// the rule shares its body with <c>BindingConnectorDeclaration</c> save for the two end-keyword literals.
         /// </remarks>
         private static void BuildSuccessionDeclarationHandCoded(ISuccession poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            var hasDeclaration = !string.IsNullOrWhiteSpace(poco.DeclaredShortName)
-                                 || !string.IsNullOrWhiteSpace(poco.DeclaredName)
-                                 || ownedRelationshipCursor.Current is ISpecialization
-                                 || ownedRelationshipCursor.Current is IConjugation;
-
-            if (hasDeclaration)
-            {
-                // Alt 1: FeatureDeclaration ('first' ConnectorEndMember 'then' ConnectorEndMember)?
-                FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
-
-                if (ownedRelationshipCursor.Current is IEndFeatureMembership firstEnd)
-                {
-                    stringBuilder.Append("first ");
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(firstEnd, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                    stringBuilder.Append("then ");
-
-                    if (ownedRelationshipCursor.Current is IEndFeatureMembership secondEnd)
-                    {
-                        EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(secondEnd, writerContext, stringBuilder);
-                    }
-
-                    ownedRelationshipCursor.Move();
-                }
-            }
-            else
-            {
-                // Alt 2: (isSufficient?='all')? ('first'? ConnectorEndMember 'then' ConnectorEndMember)?
-                if (poco.IsSufficient)
-                {
-                    stringBuilder.Append("all ");
-                }
-
-                if (ownedRelationshipCursor.Current is IEndFeatureMembership firstEnd)
-                {
-                    stringBuilder.Append("first ");
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(firstEnd, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                    stringBuilder.Append("then ");
-
-                    if (ownedRelationshipCursor.Current is IEndFeatureMembership secondEnd)
-                    {
-                        EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(secondEnd, writerContext, stringBuilder);
-                    }
-
-                    ownedRelationshipCursor.Move();
-                }
-            }
+            SharedTextualNotationBuilder.BuildTwoEndedConnectorDeclarationHandCoded(poco, "first ", "then ", writerContext, stringBuilder);
         }
     }
 }
