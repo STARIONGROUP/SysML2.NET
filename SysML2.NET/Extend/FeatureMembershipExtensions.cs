@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="FeatureMembershipExtensions"/> class provides extensions methods for
@@ -44,10 +45,16 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeOwnedMemberFeature(this IFeatureMembership featureMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (featureMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(featureMembershipSubject));
+            }
+
+            return featureMembershipSubject.OwnedRelatedElement.Count != 1
+                ? throw new IncompleteModelException($"{nameof(featureMembershipSubject)} must have exactly one related element")
+                : featureMembershipSubject.OwnedRelatedElement[0] as IFeature;
         }
 
         /// <summary>
@@ -59,10 +66,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeOwningType(this IFeatureMembership featureMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return featureMembershipSubject == null
+                ? throw new ArgumentNullException(nameof(featureMembershipSubject))
+                : featureMembershipSubject.OwningRelatedElement as IType;
         }
 
     }

@@ -46,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             if (poco.IntersectingType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.IntersectingType, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.IntersectingType, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             else

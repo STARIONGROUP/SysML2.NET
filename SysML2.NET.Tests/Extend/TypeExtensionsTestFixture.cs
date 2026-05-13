@@ -266,12 +266,21 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeOwnedFeature(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var feature = new Feature();
             var featureMembership = new FeatureMembership();
             subject.AssignOwnership(featureMembership, feature);
 
-            Assert.That(() => subject.ComputeOwnedFeature(), Throws.TypeOf<NotSupportedException>());
+            // An OwningMembership (non-FeatureMembership) sibling must be excluded.
+            var nonFeature = new Feature();
+            var owningMembership = new OwningMembership();
+            subject.AssignOwnership(owningMembership, nonFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeOwnedFeature(), Has.Count.EqualTo(1));
+                Assert.That(subject.ComputeOwnedFeature(), Does.Contain(feature));
+                Assert.That(subject.ComputeOwnedFeature(), Does.Not.Contain(nonFeature));
+            }
         }
 
         [Test]
@@ -283,12 +292,26 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeFeature(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var feature = new Feature();
             var featureMembership = new FeatureMembership();
             subject.AssignOwnership(featureMembership, feature);
 
-            Assert.That(() => subject.ComputeFeature(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(subject.ComputeFeature(), Is.EquivalentTo([feature]));
+
+            // Inherited FeatureMembership via Specialization must be INCLUDED in feature.
+            var supertype = new Type();
+            var specialization = new Specialization { Specific = subject, General = supertype };
+            subject.AssignOwnership(specialization);
+
+            var inheritedFeature = new Feature();
+            var inheritedFeatureMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            supertype.AssignOwnership(inheritedFeatureMembership, inheritedFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeFeature(), Does.Contain(feature));
+                Assert.That(subject.ComputeFeature(), Does.Contain(inheritedFeature));
+            }
         }
 
         [Test]
@@ -300,12 +323,21 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeOwnedEndFeature(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var endFeature = new Feature { IsEnd = true };
             var endMembership = new FeatureMembership();
             subject.AssignOwnership(endMembership, endFeature);
 
-            Assert.That(() => subject.ComputeOwnedEndFeature(), Throws.TypeOf<NotSupportedException>());
+            // A non-end (IsEnd = false) feature must be EXCLUDED.
+            var nonEndFeature = new Feature { IsEnd = false };
+            var nonEndMembership = new FeatureMembership();
+            subject.AssignOwnership(nonEndMembership, nonEndFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeOwnedEndFeature(), Has.Count.EqualTo(1));
+                Assert.That(subject.ComputeOwnedEndFeature(), Does.Contain(endFeature));
+                Assert.That(subject.ComputeOwnedEndFeature(), Does.Not.Contain(nonEndFeature));
+            }
         }
 
         [Test]
@@ -317,12 +349,37 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeEndFeature(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var endFeature = new Feature { IsEnd = true };
             var endMembership = new FeatureMembership();
             subject.AssignOwnership(endMembership, endFeature);
 
-            Assert.That(() => subject.ComputeEndFeature(), Throws.TypeOf<NotSupportedException>());
+            // A non-end (IsEnd = false) feature must be EXCLUDED.
+            var nonEndFeature = new Feature { IsEnd = false };
+            var nonEndMembership = new FeatureMembership();
+            subject.AssignOwnership(nonEndMembership, nonEndFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeEndFeature(), Has.Count.EqualTo(1));
+                Assert.That(subject.ComputeEndFeature(), Does.Contain(endFeature));
+                Assert.That(subject.ComputeEndFeature(), Does.Not.Contain(nonEndFeature));
+            }
+
+            // An inherited end feature (via Specialization) must also be INCLUDED.
+            var supertype = new Type();
+            var specialization = new Specialization { Specific = subject, General = supertype };
+            subject.AssignOwnership(specialization);
+
+            var inheritedEndFeature = new Feature { IsEnd = true };
+            var inheritedEndMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            supertype.AssignOwnership(inheritedEndMembership, inheritedEndFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeEndFeature(), Does.Contain(endFeature));
+                Assert.That(subject.ComputeEndFeature(), Does.Contain(inheritedEndFeature));
+                Assert.That(subject.ComputeEndFeature(), Does.Not.Contain(nonEndFeature));
+            }
         }
 
         [Test]
@@ -518,12 +575,21 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeDirectedFeature(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var directedFeature = new Feature { Direction = FeatureDirectionKind.In };
             var directedMembership = new FeatureMembership();
             subject.AssignOwnership(directedMembership, directedFeature);
 
-            Assert.That(() => subject.ComputeDirectedFeature(), Throws.TypeOf<NotSupportedException>());
+            // An undirected feature (Direction = null) must be EXCLUDED.
+            var undirectedFeature = new Feature { Direction = null };
+            var undirectedMembership = new FeatureMembership();
+            subject.AssignOwnership(undirectedMembership, undirectedFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeDirectedFeature(), Has.Count.EqualTo(1));
+                Assert.That(subject.ComputeDirectedFeature(), Does.Contain(directedFeature));
+                Assert.That(subject.ComputeDirectedFeature(), Does.Not.Contain(undirectedFeature));
+            }
         }
 
         [Test]
@@ -535,12 +601,33 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeInput(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var inFeature = new Feature { Direction = FeatureDirectionKind.In };
             var inMembership = new FeatureMembership();
             subject.AssignOwnership(inMembership, inFeature);
 
-            Assert.That(() => subject.ComputeInput(), Throws.TypeOf<NotSupportedException>());
+            // An Inout feature must also be INCLUDED (the `or` second branch).
+            var inoutFeature = new Feature { Direction = FeatureDirectionKind.Inout };
+            var inoutMembership = new FeatureMembership();
+            subject.AssignOwnership(inoutMembership, inoutFeature);
+
+            // An Out feature must be EXCLUDED.
+            var outFeature = new Feature { Direction = FeatureDirectionKind.Out };
+            var outMembership = new FeatureMembership();
+            subject.AssignOwnership(outMembership, outFeature);
+
+            // An undirected feature must be EXCLUDED.
+            var undirectedFeature = new Feature { Direction = null };
+            var undirectedMembership = new FeatureMembership();
+            subject.AssignOwnership(undirectedMembership, undirectedFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeInput(), Has.Count.EqualTo(2));
+                Assert.That(subject.ComputeInput(), Does.Contain(inFeature));
+                Assert.That(subject.ComputeInput(), Does.Contain(inoutFeature));
+                Assert.That(subject.ComputeInput(), Does.Not.Contain(outFeature));
+                Assert.That(subject.ComputeInput(), Does.Not.Contain(undirectedFeature));
+            }
         }
 
         [Test]
@@ -552,12 +639,33 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeOutput(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var outFeature = new Feature { Direction = FeatureDirectionKind.Out };
             var outMembership = new FeatureMembership();
             subject.AssignOwnership(outMembership, outFeature);
 
-            Assert.That(() => subject.ComputeOutput(), Throws.TypeOf<NotSupportedException>());
+            // An Inout feature must also be INCLUDED (the `or` second branch).
+            var inoutFeature = new Feature { Direction = FeatureDirectionKind.Inout };
+            var inoutMembership = new FeatureMembership();
+            subject.AssignOwnership(inoutMembership, inoutFeature);
+
+            // An In feature must be EXCLUDED.
+            var inFeature = new Feature { Direction = FeatureDirectionKind.In };
+            var inMembership = new FeatureMembership();
+            subject.AssignOwnership(inMembership, inFeature);
+
+            // An undirected feature must be EXCLUDED.
+            var undirectedFeature = new Feature { Direction = null };
+            var undirectedMembership = new FeatureMembership();
+            subject.AssignOwnership(undirectedMembership, undirectedFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeOutput(), Has.Count.EqualTo(2));
+                Assert.That(subject.ComputeOutput(), Does.Contain(outFeature));
+                Assert.That(subject.ComputeOutput(), Does.Contain(inoutFeature));
+                Assert.That(subject.ComputeOutput(), Does.Not.Contain(inFeature));
+                Assert.That(subject.ComputeOutput(), Does.Not.Contain(undirectedFeature));
+            }
         }
 
         [Test]
@@ -749,12 +857,32 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeFeatureMembership(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still a stub.
             var feature = new Feature();
             var featureMembership = new FeatureMembership();
             subject.AssignOwnership(featureMembership, feature);
 
-            Assert.That(() => subject.ComputeFeatureMembership(), Throws.TypeOf<NotSupportedException>());
+            // An OwningMembership (non-FeatureMembership) owned by the subject must be EXCLUDED.
+            var nonFeature = new Feature();
+            var owningMembership = new OwningMembership();
+            subject.AssignOwnership(owningMembership, nonFeature);
+
+            Assert.That(subject.ComputeFeatureMembership(), Is.EquivalentTo([featureMembership]));
+
+            // Inherited FeatureMembership via Specialization must be INCLUDED.
+            var supertype = new Type();
+            var specialization = new Specialization { Specific = subject, General = supertype };
+            subject.AssignOwnership(specialization);
+
+            var inheritedFeature = new Feature();
+            var inheritedFeatureMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            supertype.AssignOwnership(inheritedFeatureMembership, inheritedFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeFeatureMembership(), Does.Contain(featureMembership));
+                Assert.That(subject.ComputeFeatureMembership(), Does.Contain(inheritedFeatureMembership));
+                Assert.That(subject.ComputeFeatureMembership(), Does.Not.Contain(owningMembership));
+            }
         }
 
         [Test]
@@ -767,18 +895,30 @@ namespace SysML2.NET.Tests.Extend
             // empty case: no inherited memberships → no inherited features.
             Assert.That(subject.ComputeInheritedFeature(), Has.Count.EqualTo(0));
 
-            // populated case depends on FeatureMembershipExtensions.ComputeOwnedMemberFeature, which is still
-            // a stub: the OCL is `inheritedMembership->selectByKind(FeatureMembership).memberFeature`, and
-            // resolving `memberFeature` on a populated FeatureMembership reads `ownedMemberFeature` → stub.
             var supertype = new Type();
             var specialization = new Specialization { Specific = subject, General = supertype };
             subject.AssignOwnership(specialization);
 
             var inheritedFeature = new Feature();
-            var inheritedFeatureMembership = new FeatureMembership();
+            var inheritedFeatureMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
             supertype.AssignOwnership(inheritedFeatureMembership, inheritedFeature);
 
-            Assert.That(() => subject.ComputeInheritedFeature(), Throws.TypeOf<NotSupportedException>());
+            // An inherited non-FM OwningMembership on the supertype must be EXCLUDED.
+            var nonFmElement = new Feature();
+            var inheritedOwningMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            supertype.AssignOwnership(inheritedOwningMembership, nonFmElement);
+
+            // Own features of the subject must NOT surface in inheritedFeature.
+            var ownFeature = new Feature();
+            var ownFeatureMembership = new FeatureMembership();
+            subject.AssignOwnership(ownFeatureMembership, ownFeature);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeInheritedFeature(), Does.Contain(inheritedFeature));
+                Assert.That(subject.ComputeInheritedFeature(), Does.Not.Contain(nonFmElement));
+                Assert.That(subject.ComputeInheritedFeature(), Does.Not.Contain(ownFeature));
+            }
         }
 
         [Test]

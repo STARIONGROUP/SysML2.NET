@@ -996,7 +996,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureReference(SysML2.NET.Core.POCO.Core.Features.IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco, writerContext);
+            SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco, writerContext, poco);
             stringBuilder.Append(' ');
 
         }

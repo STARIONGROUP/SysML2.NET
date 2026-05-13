@@ -49,7 +49,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.RedefinedFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.RedefinedFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.RedefinedFeature != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.RedefinedFeature, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 

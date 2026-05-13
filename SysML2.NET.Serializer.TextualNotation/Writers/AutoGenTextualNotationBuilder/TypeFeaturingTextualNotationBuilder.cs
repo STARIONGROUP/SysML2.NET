@@ -46,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.FeaturingType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -73,14 +73,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.FeatureOfType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureOfType, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeatureOfType, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             stringBuilder.Append("by ");
 
             if (poco.FeaturingType != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.FeaturingType, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);

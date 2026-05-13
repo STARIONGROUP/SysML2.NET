@@ -46,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.Superclassifier != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -73,14 +73,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.Subclassifier != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Subclassifier, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Subclassifier, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             stringBuilder.Append(" :> ");
 
             if (poco.Superclassifier != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Superclassifier, writerContext, poco);
                 stringBuilder.Append(' ');
             }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);

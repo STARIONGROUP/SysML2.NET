@@ -691,7 +691,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"}}{Environment.NewLine}");
             writer.WriteSafeString($"else if ({variableName}.{resolvedPropertyName} != null){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
-            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext);{Environment.NewLine}");
+            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext, poco);{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
             writer.WriteSafeString($"}}{Environment.NewLine}");
 

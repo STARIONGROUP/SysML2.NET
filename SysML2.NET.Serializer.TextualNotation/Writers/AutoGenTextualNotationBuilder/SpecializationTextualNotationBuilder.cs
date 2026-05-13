@@ -62,7 +62,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.Specific != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Specific, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.Specific, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.General != null)
             {
-                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.General, writerContext);
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.General, writerContext, poco);
                 stringBuilder.Append(' ');
             }
 
