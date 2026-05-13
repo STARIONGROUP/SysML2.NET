@@ -101,32 +101,56 @@ The researcher MUST:
 After the researcher finishes, read `{{NOTES_FILE}}` yourself to verify it
 covers all methods + flags spec-text-only and stub-blocker cases.
 
-### 6. Spawn the implementer
+### 6. Spawn the implementer and tester in parallel
 
-`Agent({subagent_type: "general-purpose", model: "opus"})` with the v2 implementer
-prompt. Foreground. The prompt MUST instruct the implementer to read
+**Spawn both roles in a single orchestrator message** containing TWO `Agent(...)`
+tool calls — one for the implementer, one for the targeted-fixture tester. Both
+foreground (do not set `run_in_background`). Parallel `Agent` tool calls in the
+same assistant message execute concurrently; each agent runs in its own
+isolated context. The only thing they share is the researcher's notes file on
+disk.
+
+Spawn 1 — **implementer**:
+`Agent({subagent_type: "general-purpose", model: "opus"})` with the v2
+implementer prompt. The prompt MUST instruct the implementer to read
 `{{NOTES_FILE}}` first.
 
-After the implementer finishes:
-```bash
-dotnet build C:\CODE\SysML2.NET\SysML2.NET\SysML2.NET.csproj --nologo --verbosity quiet
-```
-
-If the build fails, dispatch the implementer back to fix its own bugs (do not
-delegate to a fresh agent unless the original is non-responsive).
-
-### 7. Spawn the tester
-
+Spawn 2 — **tester**:
 `Agent({subagent_type: "general-purpose", model: "opus"})` with the v2 tester
-prompt. Foreground. Instruct the tester to read `{{NOTES_FILE}}` first (each
-method has a "Test plan" section there).
+prompt. The prompt MUST instruct the tester to read `{{NOTES_FILE}}` first
+(each method has a "Test plan" section there).
 
-After the tester finishes:
-```bash
-dotnet test C:\CODE\SysML2.NET\SysML2.NET.Tests\SysML2.NET.Tests.csproj --filter "FullyQualifiedName~<FOO>ExtensionsTestFixture" --nologo --verbosity quiet
-```
+**Parallel-mode caveat for the tester**: when spawned in parallel with the
+implementer, the tester runs ONLY `dotnet build` on the test project (confirms
+the fixture compiles against the pre-existing interfaces in `Core/AutoGenPoco/`).
+It MUST NOT run `dotnet test` — production does not yet contain the
+implementer's parallel-turn edits, so every populated-case test would fail with
+`NotSupportedException` (useless signal). The orchestrator runs targeted
+`dotnet test` in step 7. State this explicitly in the tester's spawn prompt.
 
-Goal: 0 failures in the targeted fixture.
+### 7. Orchestrator verification (post-parallel)
+
+After both step-6 agents return, run sequentially in the orchestrator's own
+turn:
+
+1. Build production:
+   ```bash
+   dotnet build C:\CODE\SysML2.NET\SysML2.NET\SysML2.NET.csproj --nologo --verbosity quiet
+   ```
+   On failure, dispatch the implementer back to fix its own bugs (do not
+   delegate to a fresh agent unless the original is non-responsive).
+
+2. Run targeted fixture:
+   ```bash
+   dotnet test C:\CODE\SysML2.NET\SysML2.NET.Tests\SysML2.NET.Tests.csproj --filter "FullyQualifiedName~<FOO>ExtensionsTestFixture" --nologo --verbosity quiet
+   ```
+   Analyze each failure and route the fix:
+   - **OCL mistranslation in production** → re-dispatch the implementer.
+   - **Wrong test assertion** (e.g. assertion built against the original
+     contract that the implementer's deviation report invalidated) →
+     re-dispatch the tester.
+
+   Iterate until the targeted fixture has 0 failures.
 
 ### 8. Regression sweep (mandatory)
 
@@ -146,6 +170,14 @@ the tester back (via `SendMessage` to the still-running tester if available, els
 a fresh `Agent` call) with the failing-test list and instructions to update those
 assertions to assert real behavior. The regression sweep is in-scope per the
 template.
+
+**Parallel-spawn opportunity**: if step 7's verification surfaced targeted-fixture
+test-assertion fixes that were deferred to this step (i.e. there is BOTH (a)
+work for the targeted-fixture tester re-dispatch on `{{TEST_FILE}}` AND (b)
+work for the regression-sweep tester on sibling `*ExtensionsTestFixture.cs`
+files), spawn the two roles in a single orchestrator message with TWO
+`Agent(...)` tool calls, both foreground. They edit disjoint files so this is
+safe. If only one of (a) or (b) has work, spawn only that one.
 
 Iterate until 100% green or the user opts out.
 
@@ -176,8 +208,13 @@ Do NOT auto-commit. The user reviews and commits.
 
 - Use the **Opus** model for all four roles — they handle OCL→C# translation
   best and the user has explicitly preferred Opus for this workflow.
-- Spawn each role **foreground** (not `run_in_background`) because each step
-  depends on the previous's output.
+- Spawn each role **foreground** (not `run_in_background`). The implementer and
+  tester in step 6 are spawned in parallel by issuing TWO `Agent(...)` tool
+  calls in a single orchestrator message — both still foreground, just
+  concurrent. The same single-message-two-Agent-calls pattern applies to the
+  Level-2 parallel spawn in step 8 (targeted-fixture re-dispatch ∥
+  regression-sweep tester) when both have work. All other roles run
+  sequentially because they depend on the previous step's output.
 - The researcher runs **FIRST and is mandatory** — even when the production file's
   `<remarks>` already carries OCL, the researcher's notes file gives the
   implementer/tester/reviewer a single shared contract document, AND it's the only
