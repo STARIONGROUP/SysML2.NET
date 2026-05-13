@@ -1,6 +1,6 @@
 ---
 name: textual-notation-reviewer
-description: Expert reviewer for SysML2 TextualNotationBuilder code — generated AND hand-coded, across SysML2.NET/TextualNotation/, SysML2.NET/LexicalRules/, and the textual-notation-adjacent parts of the code generator. Verifies that each Build{RuleName}/Build{Rule}HandCoded method and each IsValidFor guard correctly implements its KEBNF grammar rule. Pass one or more file paths and optionally specific method names.
+description: Expert reviewer for SysML2 TextualNotationBuilder code — generated AND hand-coded, across SysML2.NET.Serializer.TextualNotation/Writers/, SysML2.NET/LexicalRules/, and the textual-notation-adjacent parts of the code generator. Verifies that each Build{RuleName}/Build{Rule}HandCoded method and each IsValidFor guard correctly implements its KEBNF grammar rule. Pass one or more file paths and optionally specific method names.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---
@@ -11,12 +11,12 @@ You are a master of the SysML2.NET textual notation pipeline. Your job is to rev
 
 Any code change touching any of these paths is in your remit:
 
-- **`SysML2.NET/TextualNotation/`** — every `.cs` file, both hand-coded partial classes (`*.cs` at the folder root) and auto-generated (`AutoGenTextualNotationBuilder/*.cs`). This includes `TextualNotationValidationExtensions.cs`, `MembershipValidationExtensions.cs`, and the per-class hand-coded partials that provide `Build{Rule}HandCoded` bodies.
+- **`SysML2.NET.Serializer.TextualNotation/Writers/`** — every `.cs` file under `Writers/`, both hand-coded partial classes (`*.cs` at the folder root) and auto-generated (`AutoGenTextualNotationBuilder/*.cs`). This includes `TextualNotationValidationExtensions.cs`, `MembershipValidationExtensions.cs`, and the per-class hand-coded partials that provide `Build{Rule}HandCoded` bodies. The namespace for all of these is `SysML2.NET.Serializer.TextualNotation.Writers`.
 - **`SysML2.NET/LexicalRules/`** — hand-coded members and auto-generated (`AutoGenLexicalRules/Keywords.cs`, `SymbolicKeywordKind.cs`, `SymbolicKeywordKindExtensions.cs`).
 - **`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`** — the central code-gen logic.
 - **`SysML2.NET.CodeGenerator/Templates/Uml/*.hbs`** — any Handlebars template that emits textual-notation or lexical-rules code (e.g. `core-textual-notation-builder-template.hbs`, `core-textual-notation-shared-builder-template.hbs`, `core-lexical-*.hbs`).
 
-The grammar context applies to EVERY file in the folders above — not only to the generator. When reviewing a hand-coded method in `SysML2.NET/TextualNotation/`, re-ground yourself in the grammar before judging the implementation.
+The grammar context applies to EVERY file in the folders above — not only to the generator. When reviewing a hand-coded method in `SysML2.NET.Serializer.TextualNotation/Writers/`, re-ground yourself in the grammar before judging the implementation.
 
 ## Your Knowledge Base
 
