@@ -30,6 +30,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="ParameterMembershipExtensions"/> class provides extensions methods for
@@ -46,10 +47,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeOwnedMemberParameter(this IParameterMembership parameterMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (parameterMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(parameterMembershipSubject));
+            }
+
+            return parameterMembershipSubject.OwnedRelatedElement.Count != 1
+                ? throw new IncompleteModelException($"{nameof(parameterMembershipSubject)} must have exactly one related element")
+                : parameterMembershipSubject.OwnedRelatedElement[0] as IFeature;
         }
 
         /// <summary>
@@ -67,10 +74,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind ComputeParameterDirectionOperation(this IParameterMembership parameterMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (parameterMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(parameterMembershipSubject));
+            }
+
+            return FeatureDirectionKind.In;
         }
     }
 }
