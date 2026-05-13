@@ -5,9 +5,10 @@ argument-hint: <absolute-path-to-Extensions-file.cs>
 
 # /implement-extensions
 
-Spawn the 4-role agent team (researcher → implementer → tester → reviewer, all
-Opus) for **$ARGUMENTS** — a `*Extensions.cs` file under `SysML2.NET/Extend/`
-whose `Compute*` methods are still stubs throwing `NotSupportedException`.
+Spawn the 4-role agent team (researcher → implementer → tester → reviewer) for
+**$ARGUMENTS** — a `*Extensions.cs` file under `SysML2.NET/Extend/` whose
+`Compute*` methods are still stubs throwing `NotSupportedException`. Per-role
+models are picked dynamically based on stub complexity (see step 3.5).
 
 The team template is at `C:\Users\atheate\.claude\team-templates\extension-impl.md`
 (v2). Read it first — its role prompts are the source of truth; this command body
@@ -67,15 +68,71 @@ methods. These are the stubs to implement.
 
 If the count is 0, stop — the file has no stubs left.
 
+### 3.5. Grade complexity, pick models
+
+For each stub method, look at its `<remarks>` OCL block (or note its absence) and
+tally these signals:
+
+- **trivial signals**
+  - No OCL block — spec-text-only redefinition with sibling precedent (e.g.
+    `FeatureMembership::ownedMemberFeature` mirrors
+    `OwningMembershipExtensions.ComputeOwnedMemberElement`)
+  - OCL is a single `OfType<T>` / `selectByKind` filter on `OwnedRelationship`
+    or `ownedMember`
+- **standard signals**
+  - OCL has `->select` / `->reject` / scalar chain navigation
+  - OCL has `->union` of single-step paths
+  - OCL has a single `oclAsType` cast or a single `oclIsKindOf` test
+- **complex signals**
+  - OCL has `->closure(...)` (cycle protection needed: BFS/DFS with `visited` set)
+  - OCL has nested `let` / `if-then-else` / multiple `oclAsType`
+  - OCL has multi-step `->union` (e.g.
+    `ownedMembership.OfType<X>().Union(otherChain.OfType<Y>())`)
+  - Cross-interface recursion (e.g. `Supertypes(false)`, recursive
+    `ImportedMemberships(excluded)`)
+- **bump-up signal**
+  - Total method count > 15 promotes the whole task one tier
+  - Even one complex signal anywhere → task is complex
+
+Grade the task overall as **trivial / standard / complex** using the worst signal
+observed. Then pick a model per role from this default table:
+
+| Role | Drives the choice | trivial | standard | complex |
+|---|---|---|---|---|
+| Researcher | OCL density × method count | Haiku | Sonnet | Opus |
+| Implementer | OCL operator complexity | Sonnet | Sonnet | Opus |
+| Tester (targeted fixture) | populated-case fixture wiring complexity | Sonnet | Sonnet | Opus |
+| Tester (regression sweep, if any) | OCL semantics needed to assert real behavior in sibling fixtures | Sonnet | Sonnet | Opus |
+| Reviewer | diff size × OCL density | Sonnet | Sonnet | Opus |
+
+Per-role asymmetry is encouraged. Examples:
+- Trivial impl + a regression sweep that touches 8 sibling tests asserting
+  moderate OCL → Sonnet implementer + Sonnet regression-sweep tester (still
+  Sonnet because the OCL is moderate, not complex).
+- Standard impl with a single `->closure` method buried in the list → bump
+  the implementer to Opus only, keep the rest at Sonnet.
+- Trivial 2-method spec-text-only file → Haiku researcher, Sonnet for the
+  rest.
+
+Record the per-role selection. It will be presented to the user in step 4 and
+applied at every `Agent(...)` spawn in steps 5–9.
+
 ### 4. Sanity check with the user
 
 Use `AskUserQuestion` to present:
 - The auto-derived paths (test fixture, interface, reference template, notes file).
 - The list of stub methods (or a count if there are many).
-- Two options: "Implement all" or "Implement a subset" (let the user paste a method
-  list as a custom answer).
+- The complexity grade and the per-role model selection from step 3.5.
+- Two questions:
+  1. Scope: "Implement all" or "Implement a subset" (let the user paste a method
+     list as a custom answer).
+  2. Models: "Use the dynamic per-role selection above" or override with
+     "All Opus" / "All Sonnet" / "Custom" (let the user paste a per-role
+     mapping).
 
-If they pick subset, narrow the method list. Otherwise proceed with all.
+If they pick subset, narrow the method list. If they override the model
+selection, apply that override at every `Agent(...)` spawn below. Otherwise
+proceed with the dynamic defaults.
 
 ### 5. Spawn the researcher (FIRST role — produces the notes file the others read)
 
@@ -83,9 +140,12 @@ Read the v2 team template at `C:\Users\atheate\.claude\team-templates\extension-
 to refresh the role prompts. Substitute the placeholders from step 2 + the method
 list from step 4.
 
-Spawn the **researcher** as `Agent({subagent_type: "general-purpose", model: "opus"})`
-with the v2 researcher prompt. Foreground (not `run_in_background`) — the next
-roles depend on the notes file.
+Spawn the **researcher** as
+`Agent({subagent_type: "general-purpose", model: <researcher_model>})`
+with the v2 researcher prompt, where `<researcher_model>` is the model picked
+in step 3.5 (Haiku for trivial, Sonnet for standard, Opus for complex — or the
+user's step-4 override). Foreground (not `run_in_background`) — the next roles
+depend on the notes file.
 
 The researcher MUST:
 - Treat the OCL `<defaultValue>`/`<ownedRule>` body in the XMI as the canonical
@@ -111,14 +171,18 @@ isolated context. The only thing they share is the researcher's notes file on
 disk.
 
 Spawn 1 — **implementer**:
-`Agent({subagent_type: "general-purpose", model: "opus"})` with the v2
-implementer prompt. The prompt MUST instruct the implementer to read
-`{{NOTES_FILE}}` first.
+`Agent({subagent_type: "general-purpose", model: <implementer_model>})` with the
+v2 implementer prompt, where `<implementer_model>` is the model picked in
+step 3.5 (Sonnet for trivial/standard, Opus for complex — or the user's step-4
+override). The prompt MUST instruct the implementer to read `{{NOTES_FILE}}`
+first.
 
-Spawn 2 — **tester**:
-`Agent({subagent_type: "general-purpose", model: "opus"})` with the v2 tester
-prompt. The prompt MUST instruct the tester to read `{{NOTES_FILE}}` first
-(each method has a "Test plan" section there).
+Spawn 2 — **tester (targeted fixture)**:
+`Agent({subagent_type: "general-purpose", model: <tester_model>})` with the v2
+tester prompt, where `<tester_model>` is the **targeted-fixture** tester model
+picked in step 3.5 (Sonnet for trivial/standard, Opus for complex — or the
+user's step-4 override). The prompt MUST instruct the tester to read
+`{{NOTES_FILE}}` first (each method has a "Test plan" section there).
 
 **Parallel-mode caveat for the tester**: when spawned in parallel with the
 implementer, the tester runs ONLY `dotnet build` on the test project (confirms
@@ -167,25 +231,58 @@ If failures exist, identify those of the form:
 These are pre-existing tests in sibling fixtures that asserted the stubs throw —
 they now fail because our new implementations make those paths succeed. Dispatch
 the tester back (via `SendMessage` to the still-running tester if available, else
-a fresh `Agent` call) with the failing-test list and instructions to update those
+a fresh `Agent` call with `model: <regression_sweep_tester_model>` from
+step 3.5) with the failing-test list and instructions to update those
 assertions to assert real behavior. The regression sweep is in-scope per the
 template.
+
+**Critical**: do NOT brief the tester as "replace the stale `Throws` assertion".
+Brief it as "**expand each touched test to cover every distinct branch implied
+by the production OCL**". This means, for each touched sibling test:
+- **Filter discrimination** — for every `OfType<X>()` / `selectByKind(X)`,
+  add a sibling element of a non-X kind to the fixture and assert it is
+  excluded.
+- **Predicate completeness** — for every `Where(...)` predicate composed of
+  `or` / `and` / equality clauses, add fixtures that exercise each clause both
+  true and false (e.g. for `direction = In or Inout`, add an `In` feature, an
+  `Inout` feature, an `Out` feature, and an undirected feature; assert the
+  first two are included and the last two excluded).
+- **Owned vs. inherited** — when the OCL unions an owned collection with an
+  inherited one (`X.union(inheritedMembership.selectByKind(...))`), wire a
+  Specialization in the fixture and confirm the inherited branch surfaces.
+  When the OCL is inheritance-only (`inheritedMemberships.selectByKind(...)`),
+  also wire a sibling owned member and confirm it does NOT surface.
+- **Null-projection guard** — when the LINQ chain ends with
+  `.Where(x => x != null)` (defending against a Select that may yield null),
+  construct a case where the projection yields null and assert it is filtered
+  out.
+
+A "single happy-path positive case + null + empty" pattern is **insufficient**
+for the regression sweep — it leaves filter, predicate, and inheritance branches
+untested. The original stub-blocker test only asserted one positive case because
+that's all that *could* be asserted while the upstream was stubbed; once the
+stub is gone, the full OCL surface is in scope.
 
 **Parallel-spawn opportunity**: if step 7's verification surfaced targeted-fixture
 test-assertion fixes that were deferred to this step (i.e. there is BOTH (a)
 work for the targeted-fixture tester re-dispatch on `{{TEST_FILE}}` AND (b)
 work for the regression-sweep tester on sibling `*ExtensionsTestFixture.cs`
 files), spawn the two roles in a single orchestrator message with TWO
-`Agent(...)` tool calls, both foreground. They edit disjoint files so this is
-safe. If only one of (a) or (b) has work, spawn only that one.
+`Agent(...)` tool calls, both foreground. Use the targeted-fixture
+`<tester_model>` for (a) and the `<regression_sweep_tester_model>` for (b)
+(both from step 3.5, or the user's step-4 override). They edit disjoint files
+so this is safe. If only one of (a) or (b) has work, spawn only that one.
 
 Iterate until 100% green or the user opts out.
 
 ### 9. Spawn the reviewer (LAST role — verdict only)
 
-`Agent({subagent_type: "general-purpose", model: "opus"})` with the v2 reviewer
-prompt. Foreground. The reviewer cross-checks `{{PRODUCTION_FILE}}` and
-`{{TEST_FILE}}` against `{{NOTES_FILE}}` and produces an "OK / NEEDS FIX" verdict.
+`Agent({subagent_type: "general-purpose", model: <reviewer_model>})` with the v2
+reviewer prompt, where `<reviewer_model>` is the model picked in step 3.5
+(Sonnet for trivial/standard, Opus for complex — or the user's step-4
+override). Foreground. The reviewer cross-checks `{{PRODUCTION_FILE}}` and
+`{{TEST_FILE}}` against `{{NOTES_FILE}}` and produces an "OK / NEEDS FIX"
+verdict.
 
 If the verdict is "NEEDS FIX", dispatch the implementer or tester back to
 action the findings (the reviewer never edits).
@@ -206,8 +303,12 @@ Do NOT auto-commit. The user reviews and commits.
 
 ## Notes for the orchestrator (you, the main agent)
 
-- Use the **Opus** model for all four roles — they handle OCL→C# translation
-  best and the user has explicitly preferred Opus for this workflow.
+- Pick the model per role using the complexity-grading rubric in step 3.5.
+  Default tiers are Haiku (researcher only, trivial task), Sonnet (most cases),
+  Opus (only when OCL has `->closure` / multi-step `->union` / cross-interface
+  recursion, or method count > 15). The user can override "all Opus" /
+  "all Sonnet" / "Custom" at the step-4 sanity check. Per-role asymmetry is
+  encouraged (e.g. trivial impl + Opus regression-sweep tester).
 - Spawn each role **foreground** (not `run_in_background`). The implementer and
   tester in step 6 are spawned in parallel by issuing TWO `Agent(...)` tool
   calls in a single orchestrator message — both still foreground, just

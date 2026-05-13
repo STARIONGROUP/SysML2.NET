@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -584,168 +585,154 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Appends the shortest resolvable name of the <see cref="IElement"/> for the textual notation,
-        /// per KerML specification section 8.2.3.5.
-        /// <para>When the <paramref name="writerContext"/> carries a non-null
-        /// <see cref="TextualNotationWriterContext.ContextNamespace"/>, the method walks up the
-        /// namespace chain to find whether the element's simple name resolves via imports
-        /// (per 8.2.3.5.4 Full Resolution). If so, the simple name is used; otherwise the full
-        /// <c>qualifiedName</c> is emitted.</para>
+        /// Appends the shortest resolvable name of the <paramref name="target"/>
+        /// <see cref="IElement"/> for the textual notation, per KerML specification section
+        /// 8.2.3.5.
+        /// <para>The local scope of the reference is derived as
+        /// <c>sourcePoco?.owningNamespace ?? writerContext.ContextNamespace</c>. The resolver
+        /// walks <em>up</em> from that local scope through each containing namespace, asking
+        /// the per-scope simple-name index cached on <paramref name="writerContext"/> whether
+        /// the target's <see cref="IElement.EscapedName"/> resolves locally. The first hit
+        /// wins. If no scope along the chain resolves the simple name to the target, the full
+        /// <see cref="IElement.qualifiedName"/> is emitted as a fallback.</para>
+        /// <para>Membership references in import declarations bypass shortening — the path
+        /// identifies WHAT is imported and must remain fully qualified.</para>
         /// </summary>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> to append to</param>
-        /// <param name="poco">The <see cref="IElement"/> that needs to have its name appended</param>
-        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> providing the serialization context</param>
-        internal static void AppendQualifiedName(StringBuilder stringBuilder, IElement poco, TextualNotationWriterContext writerContext)
+        /// <param name="target">The referenced <see cref="IElement"/> whose name is appended</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> providing the cache + root</param>
+        /// <param name="sourcePoco">
+        /// The <see cref="IElement"/> at whose syntactic position the reference appears (typically the
+        /// relationship POCO whose property is being unparsed). Its <c>owningNamespace</c> is the
+        /// local scope of the reference. Pass the enclosing-builder's <c>poco</c> at every call site.
+        /// </param>
+        internal static void AppendQualifiedName(StringBuilder stringBuilder, IElement target, TextualNotationWriterContext writerContext, IElement sourcePoco)
         {
-            if (poco is IMembership membership)
+            if (target == null)
+            {
+                return;
+            }
+
+            if (target is IMembership membership)
             {
                 // Membership references (used in import declarations) must retain
                 // their full qualified name — the path identifies WHAT is being imported.
-                stringBuilder.Append(membership.MemberElement.qualifiedName);
+                stringBuilder.Append(membership.MemberElement?.qualifiedName);
+                return;
             }
-            else
+
+            var simpleName = target.EscapedName();
+
+            if (string.IsNullOrWhiteSpace(simpleName))
             {
-                // Element references (used in type/feature references) can be shortened
-                // when the element is resolvable by its simple name via imports (8.2.3.5).
-                stringBuilder.Append(QueryShortestResolvableName(poco, writerContext?.ContextNamespace));
+                stringBuilder.Append(target.qualifiedName ?? string.Empty);
+                return;
             }
+
+            var scope = QueryLocalScope(sourcePoco) ?? writerContext?.ContextNamespace;
+
+            while (scope != null)
+            {
+                var index = writerContext.GetOrBuildSimpleNameIndex(scope);
+
+                if (index.TryGetValue(simpleName, out var elements) && elements.Contains(target))
+                {
+                    stringBuilder.Append(simpleName);
+                    return;
+                }
+
+                INamespace nextScope;
+
+                try
+                {
+                    nextScope = scope.owningNamespace;
+                }
+                catch (NotSupportedException)
+                {
+                    // owningNamespace not implemented for this scope — stop the upward walk
+                    // and fall through to the qualifiedName fallback below.
+                    break;
+                }
+
+                scope = nextScope;
+            }
+
+            stringBuilder.Append(target.qualifiedName ?? string.Empty);
         }
 
         /// <summary>
-        /// Determines the shortest name that will resolve to the given <paramref name="element"/>
-        /// per the KerML name resolution rules (8.2.3.5).
-        /// <para>Per 8.2.3.5.4, full resolution walks up from the local namespace through
-        /// containing namespaces to the global namespace. If the element's simple name resolves
-        /// via the <c>membership</c> (which includes imported memberships) of any namespace in
-        /// that chain, the simple name is sufficient.</para>
+        /// Returns the local <see cref="INamespace"/> where a reference rooted at
+        /// <paramref name="sourcePoco"/> syntactically appears, by climbing the source's
+        /// containment chain until a Namespace is reached.
+        /// <para>The chain is followed in this priority order at each hop:</para>
+        /// <list type="number">
+        ///   <item><description>The current element itself, if it is already an <see cref="INamespace"/>.</description></item>
+        ///   <item><description>The <see cref="IRelationship.OwningRelatedElement"/> when the
+        ///   current element is an <see cref="IRelationship"/>. Required for relationship POCOs
+        ///   such as <see cref="IRedefinition"/> / <see cref="ISubsetting"/> / <see cref="IFeatureTyping"/>
+        ///   whose <see cref="IElement.owningNamespace"/> is null because they are owned via
+        ///   <c>ownedRelationship</c>, not via a membership.</description></item>
+        ///   <item><description><see cref="IElement.owningNamespace"/> when non-null.</description></item>
+        ///   <item><description><see cref="IElement.owner"/> as a final fallback.</description></item>
+        /// </list>
+        /// <para>A visited set guards against accidental cycles in malformed models.</para>
         /// </summary>
-        /// <param name="element">The referenced <see cref="IElement"/> to resolve</param>
-        /// <param name="contextNamespace">
-        /// The root <see cref="INamespace"/> being serialized, or <c>null</c> to fall back to the full qualified name
-        /// </param>
-        /// <returns>The shortest name that resolves to the element</returns>
-        private static string QueryShortestResolvableName(IElement element, INamespace contextNamespace)
+        /// <param name="sourcePoco">The source <see cref="IElement"/> bearing the reference, or <see langword="null"/>.</param>
+        /// <returns>The local <see cref="INamespace"/>, or <see langword="null"/> when none can be derived.</returns>
+        private static INamespace QueryLocalScope(IElement sourcePoco)
         {
-            if (element == null)
+            if (sourcePoco == null)
             {
-                return string.Empty;
+                return null;
             }
 
-            var simpleName = element.EscapedName();
+            var visited = new HashSet<IElement>();
+            var current = sourcePoco;
 
-            if (!string.IsNullOrWhiteSpace(simpleName) && contextNamespace != null)
+            while (current != null && visited.Add(current))
             {
-                // Per 8.2.3.5.4, full resolution walks up from the local namespace through
-                // containing namespaces. The contextNamespace is the root namespace being
-                // serialized; imports that make the simple name resolvable may be on any
-                // descendant namespace (e.g. a LibraryPackage nested inside the root).
-                // We check the context namespace and all its descendant namespaces.
-                if (QueryIsResolvableInNamespaceTree(contextNamespace, element, simpleName))
+                if (current is INamespace asNamespace)
                 {
-                    return simpleName;
-                }
-            }
-
-            return element.qualifiedName ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Recursively checks whether the given <paramref name="element"/> is resolvable by its
-        /// <paramref name="simpleName"/> within the <paramref name="namespace"/> or any of its
-        /// descendant namespaces (per 8.2.3.5.4 full resolution, which walks up from the local
-        /// namespace — checking descendants ensures we cover all import scopes in the output model).
-        /// </summary>
-        /// <param name="namespace">The namespace to check (including descendants)</param>
-        /// <param name="element">The element to find</param>
-        /// <param name="simpleName">The simple name to match</param>
-        /// <returns><c>true</c> if the element is found by simple name in the namespace tree</returns>
-        private static bool QueryIsResolvableInNamespaceTree(INamespace @namespace, IElement element, string simpleName)
-        {
-            try
-            {
-                if (QueryIsResolvableBySimpleName(@namespace, element, simpleName))
-                {
-                    return true;
-                }
-            }
-            catch (NotSupportedException)
-            {
-                // membership may not be fully implemented for this namespace
-            }
-
-            try
-            {
-                foreach (var childNamespace in @namespace.ownedMember.OfType<INamespace>())
-                {
-                    if (QueryIsResolvableInNamespaceTree(childNamespace, element, simpleName))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (NotSupportedException)
-            {
-                // ownedMember may not be fully implemented for this namespace
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Checks whether the given <paramref name="element"/> is resolvable by its
-        /// <paramref name="simpleName"/> within the <paramref name="namespace"/>'s
-        /// memberships (owned, imported, and inherited).
-        /// </summary>
-        /// <param name="namespace">The namespace to check</param>
-        /// <param name="element">The element to find</param>
-        /// <param name="simpleName">The simple name to match</param>
-        /// <returns><c>true</c> if the element is found by simple name in the namespace</returns>
-        private static bool QueryIsResolvableBySimpleName(INamespace @namespace, IElement element, string simpleName)
-        {
-            // Check ownedMembership first (non-derived, always available)
-            foreach (var ownedMember in @namespace.ownedMembership)
-            {
-                if (ownedMember is IOwningMembership owningMembership
-                    && owningMembership.OwnedRelatedElement.Contains(element))
-                {
-                    return true;
+                    return asNamespace;
                 }
 
-                if (ownedMember.MemberElement == element)
+                if (current is IRelationship relationship && relationship.OwningRelatedElement != null)
                 {
-                    return true;
+                    current = relationship.OwningRelatedElement;
+                    continue;
                 }
+
+                INamespace owningNs = null;
+
+                try
+                {
+                    owningNs = current.owningNamespace;
+                }
+                catch (NotSupportedException)
+                {
+                    // owningNamespace not implemented — fall through to owner walk.
+                }
+
+                if (owningNs != null)
+                {
+                    return owningNs;
+                }
+
+                IElement nextOwner = null;
+
+                try
+                {
+                    nextOwner = current.owner;
+                }
+                catch (NotSupportedException)
+                {
+                    nextOwner = null;
+                }
+
+                current = nextOwner;
             }
 
-            // Check imports: walk ownedImport (ownedRelationship filtered to IImport) to find
-            // MembershipImports that reference the element directly by its membership.
-            foreach (var import in @namespace.ownedImport)
-            {
-                if (import is IMembershipImport membershipImport
-                    && membershipImport.ImportedMembership is IMembership importedMembership
-                    && importedMembership.MemberElement == element)
-                {
-                    return true;
-                }
-
-                if (import is INamespaceImport namespaceImport)
-                {
-                    var importedNs = namespaceImport.ImportedNamespace;
-
-                    if (importedNs != null)
-                    {
-                        foreach (var visibleMember in importedNs.ownedMembership)
-                        {
-                            if (visibleMember.MemberElement == element)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
+            return null;
         }
     }
 }
