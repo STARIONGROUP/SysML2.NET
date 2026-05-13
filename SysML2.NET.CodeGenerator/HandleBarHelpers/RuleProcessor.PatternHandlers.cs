@@ -29,6 +29,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
+    using uml4net;
+    using uml4net.Classification;
     using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
@@ -632,6 +634,66 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
+                    // Subtype-overlap guard synthesis.
+                    //
+                    // After the existing IsValidFor pass, every duplicate group still has at most
+                    // one unguarded member that becomes the bare `case I{Target}:` fall-through.
+                    // That fall-through is only safe when no SIBLING alternative may dispatch a
+                    // subtype of I{Target} — otherwise the unguarded case greedily swallows the
+                    // subtype before it can reach the dispatcher that handles it (e.g. the
+                    // OperatorExpression group's unguarded ExtentExpression case swallowing
+                    // FeatureChainExpression before it can reach the sibling PrimaryExpression
+                    // alternative).
+                    //
+                    // Detection: the group has subtype overlap if any other alternative in the
+                    // dispatch targets a class that is a SUPERTYPE of this group's target — that
+                    // sibling's dispatcher may then handle subtypes of this group's target inside
+                    // its own switch.
+                    //
+                    // When detected, synthesise a `when` guard for the would-be-default member
+                    // from the rule's parsed body (only parsed assignments contribute; non-parsing
+                    // `{ … }` is ignored per GRAMMAR.md).
+                    foreach (var duplicateGroup in duplicateClasses)
+                    {
+                        var stillUnguarded = duplicateGroup.Value
+                            .Where(element => !whenGuards.ContainsKey(element.RuleElement))
+                            .ToList();
+
+                        if (stillUnguarded.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        var groupTargetClass = duplicateGroup.Key;
+
+                        var hasSubtypeOverlap = mappedNonTerminalElements
+                            .Where(other => other.UmlClass != groupTargetClass)
+                            .Any(other => groupTargetClass.QueryAllGeneralClassifiers().Contains(other.UmlClass));
+
+                        if (!hasSubtypeOverlap)
+                        {
+                            continue;
+                        }
+
+                        foreach (var unguarded in stillUnguarded)
+                        {
+                            var referencedRule = ruleGenerationContext.AllRules
+                                .SingleOrDefault(rule => rule.RuleName == unguarded.RuleElement.Name);
+
+                            if (referencedRule == null)
+                            {
+                                continue;
+                            }
+
+                            var synthesisedGuard = this.SynthesiseGuardFromRuleBody(referencedRule, groupTargetClass, umlClass.Cache, ruleGenerationContext.AllRules);
+
+                            if (!string.IsNullOrEmpty(synthesisedGuard))
+                            {
+                                whenGuards[unguarded.RuleElement] = synthesisedGuard;
+                            }
+                        }
+                    }
+
                     var reorderedElements = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
                     var processedDuplicateClasses = new HashSet<IClass>();
 
@@ -937,6 +999,243 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString(Environment.NewLine);
                 }
             }
+        }
+
+        /// <summary>
+        /// Synthesises a <c>when</c>-clause guard template for a duplicate-group member that
+        /// would otherwise be emitted as the unguarded <c>case I{Target}:</c> fall-through, by
+        /// walking the rule's parsed body and emitting one predicate per
+        /// <see cref="AssignmentElement"/>. Non-parsing <c>{ prop = X }</c> assignments
+        /// (<see cref="NonParsingAssignmentElement"/>) are intentionally ignored — they are
+        /// write-only side effects of parsing per <c>SysML2.NET.CodeGenerator/GRAMMAR.md</c>
+        /// and must not influence dispatch.
+        /// </summary>
+        /// <param name="rule">The <see cref="TextualNotationRule"/> whose body to inspect</param>
+        /// <param name="targetClass">The duplicate group's target <see cref="IClass"/></param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/> used to resolve referenced rule targets</param>
+        /// <param name="allRules">All available rules for NonTerminal resolution</param>
+        /// <returns>
+        /// A <see cref="string.Format(string, object?)"/> template (with <c>{0}</c> as the
+        /// case variable name placeholder) ready for insertion into <c>whenGuards</c>, or
+        /// <c>null</c> when the rule body carries no usable parsed assignments.
+        /// </returns>
+        private string SynthesiseGuardFromRuleBody(TextualNotationRule rule, IClass targetClass, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            if (rule == null || targetClass == null)
+            {
+                return null;
+            }
+
+            var targetProperties = targetClass.QueryAllProperties();
+            var clauses = new List<string>();
+            var firstCursorEmitted = false;
+            var cursorMayHaveAdvanced = false;
+
+            CollectGuardClauses(rule.Alternatives.SelectMany(alternative => alternative.Elements), targetProperties, cache, allRules, clauses, ref firstCursorEmitted, ref cursorMayHaveAdvanced);
+
+            return clauses.Count == 0 ? null : string.Join(" && ", clauses);
+        }
+
+        /// <summary>
+        /// Recursively walks a sequence of <see cref="RuleElement"/> values produced by the rule
+        /// parser, accumulating one structural-predicate clause per parsed
+        /// <see cref="AssignmentElement"/> via <see cref="TryBuildClauseForAssignment"/>.
+        /// </summary>
+        /// <param name="elements">The elements to walk</param>
+        /// <param name="targetProperties">Properties of the duplicate group's target class</param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/> used to resolve referenced rule targets</param>
+        /// <param name="allRules">All available rules for NonTerminal resolution</param>
+        /// <param name="clauses">Accumulator into which non-null clauses are appended in source order</param>
+        /// <param name="firstCursorEmitted">
+        /// Tracks whether a cursor predicate has already been emitted for an
+        /// <c>ownedRelationship +=</c> assignment in this rule. Only the first such
+        /// assignment yields a cursor clause; subsequent ones run after the cursor has
+        /// advanced and cannot be expressed at dispatch time.
+        /// </param>
+        /// <param name="cursorMayHaveAdvanced">
+        /// Tracks whether any element walked so far may have advanced the dispatch cursor
+        /// (the <c>ownedRelationship</c> cursor) at runtime — either via a direct
+        /// <c>ownedRelationship +=</c> earlier in the body or via a <c>NonTerminalElement</c>
+        /// reference whose target rule may consume <c>ownedRelationship</c> internally. When
+        /// this becomes true, no subsequent <c>ownedRelationship += …</c> can yield a cursor
+        /// predicate at dispatch time because cursor position 0 no longer corresponds to that
+        /// assignment's target. Rules whose first <c>+=</c> sits behind a
+        /// <c>NonTerminal?</c>/<c>NonTerminal*</c> prefix (e.g. <c>IndividualDefinition</c>'s
+        /// trailing <c>ownedRelationship += EmptyMultiplicityMember</c>) therefore correctly
+        /// produce no cursor clause and fall back to leaving the rule as the unguarded default.
+        /// </param>
+        private static void CollectGuardClauses(IEnumerable<RuleElement> elements, IEnumerable<IProperty> targetProperties, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, List<string> clauses, ref bool firstCursorEmitted, ref bool cursorMayHaveAdvanced)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement assignment:
+                    {
+                        var clause = TryBuildClauseForAssignment(assignment, targetProperties, cache, allRules, ref firstCursorEmitted, cursorMayHaveAdvanced);
+
+                        if (!string.IsNullOrEmpty(clause))
+                        {
+                            clauses.Add(clause);
+                        }
+
+                        if (assignment.Operator == "+="
+                            && string.Equals(assignment.Property, "ownedRelationship", StringComparison.OrdinalIgnoreCase))
+                        {
+                            cursorMayHaveAdvanced = true;
+                        }
+
+                        break;
+                    }
+
+                    case NonTerminalElement:
+                    {
+                        // A NonTerminal reference may advance the dispatch cursor at runtime
+                        // because the referenced rule may consume `ownedRelationship +=`
+                        // internally. Conservatively assume it does so that we don't synthesise
+                        // a stale cursor-0 predicate for a later `ownedRelationship +=`.
+                        cursorMayHaveAdvanced = true;
+                        break;
+                    }
+
+                    case GroupElement group:
+                    {
+                        foreach (var groupAlternative in group.Alternatives)
+                        {
+                            CollectGuardClauses(groupAlternative.Elements, targetProperties, cache, allRules, clauses, ref firstCursorEmitted, ref cursorMayHaveAdvanced);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Builds a single <c>when</c>-clause predicate for one <see cref="AssignmentElement"/>,
+        /// per the synthesis table in <c>SysML2.NET.CodeGenerator/GRAMMAR.md</c>:
+        /// <list type="bullet">
+        ///   <item><c>prop = 'literal'</c> → <c>{0}.{Prop} == "literal"</c></item>
+        ///   <item><c>prop = [QualifiedName]</c> → <c>{0}.{Prop} != null</c></item>
+        ///   <item><c>prop = NonTerminal</c> → <c>{0}.{Prop} is I{RHS-target}</c> (narrows when possible, else <c>!= null</c>)</item>
+        ///   <item><c>ownedRelationship += NonTerminal</c> (first occurrence) → cursor predicate</item>
+        ///   <item><c>prop += NonTerminal</c> for any other collection → <c>{0}.{Prop}.OfType&lt;I{RHS-target}&gt;().Any()</c></item>
+        ///   <item><c>prop ?= 'kw'</c> → <c>null</c> (already handled by the boolean discriminator pass)</item>
+        /// </list>
+        /// </summary>
+        /// <param name="assignment">The <see cref="AssignmentElement"/> to translate</param>
+        /// <param name="targetProperties">Properties of the duplicate group's target class</param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/> used to resolve referenced rule targets</param>
+        /// <param name="allRules">All available rules for NonTerminal resolution</param>
+        /// <param name="firstCursorEmitted">Tracks whether a cursor predicate has been emitted yet for this rule.</param>
+        /// <param name="cursorMayHaveAdvanced">When true, suppresses any new cursor predicate because cursor position 0 no longer corresponds to the upcoming <c>ownedRelationship +=</c>.</param>
+        /// <returns>A <see cref="string.Format(string, object?)"/> template clause, or <c>null</c> when no clause applies.</returns>
+        private static string TryBuildClauseForAssignment(AssignmentElement assignment, IEnumerable<IProperty> targetProperties, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, ref bool firstCursorEmitted, bool cursorMayHaveAdvanced)
+        {
+            if (assignment?.Property == null || assignment.Operator == "?=")
+            {
+                return null;
+            }
+
+            var matchingProperty = targetProperties.FirstOrDefault(property => string.Equals(property.Name, assignment.Property, StringComparison.OrdinalIgnoreCase));
+
+            var propertyAccessor = matchingProperty != null
+                ? matchingProperty.QueryPropertyNameBasedOnUmlProperties()
+                : assignment.Property.CapitalizeFirstLetter();
+
+            switch (assignment.Operator)
+            {
+                case "=":
+                    return BuildScalarAssignmentClause(assignment, propertyAccessor, cache, allRules);
+                case "+=":
+                    return BuildCollectionAssignmentClause(assignment, propertyAccessor, cache, allRules, ref firstCursorEmitted, cursorMayHaveAdvanced);
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Translates a parsed scalar <c>=</c> assignment into its corresponding
+        /// <c>when</c>-clause predicate. Terminal-literal RHS becomes an equality check;
+        /// <c>[QualifiedName]</c> RHS becomes a non-null check; NonTerminal RHS narrows to
+        /// the referenced rule's target metaclass when known.
+        /// </summary>
+        /// <param name="assignment">The <see cref="AssignmentElement"/> with <see cref="AssignmentElement.Operator"/> <c>=</c></param>
+        /// <param name="propertyAccessor">The C# property name resolved via <see cref="PropertyExtension.QueryPropertyNameBasedOnUmlProperties"/></param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/> for resolving NonTerminal RHS targets</param>
+        /// <param name="allRules">All available rules for NonTerminal resolution</param>
+        /// <returns>A template clause, or <c>null</c> when no useful clause can be synthesised.</returns>
+        private static string BuildScalarAssignmentClause(AssignmentElement assignment, string propertyAccessor, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            switch (assignment.Value)
+            {
+                case TerminalElement terminal when !string.IsNullOrEmpty(terminal.Value):
+                    return $"{{0}}.{propertyAccessor} == \"{terminal.Value}\"";
+
+                case ValueLiteralElement valueLiteral when valueLiteral.QueryIsQualifiedName():
+                    return $"{{0}}.{propertyAccessor} != null";
+
+                case NonTerminalElement nonTerminal:
+                {
+                    var rhsTargetClass = RuleQueryUtilities.ResolveRuleTargetClass(nonTerminal, cache, allRules);
+                    return rhsTargetClass != null
+                        ? $"{{0}}.{propertyAccessor} is {rhsTargetClass.QueryFullyQualifiedTypeName()}"
+                        : $"{{0}}.{propertyAccessor} != null";
+                }
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Translates a parsed collection <c>+=</c> assignment into its corresponding
+        /// <c>when</c>-clause predicate. For the first <c>ownedRelationship +=</c> in the
+        /// rule body the predicate inspects the dispatch cursor's current element; for any
+        /// other collection it inspects the collection contents directly. Subsequent
+        /// <c>ownedRelationship +=</c> assignments produce no clause because the cursor
+        /// will have advanced past them by the time their position is reached at runtime.
+        /// </summary>
+        /// <param name="assignment">The <see cref="AssignmentElement"/> with <see cref="AssignmentElement.Operator"/> <c>+=</c></param>
+        /// <param name="propertyAccessor">The C# collection-property name resolved via <see cref="PropertyExtension.QueryPropertyNameBasedOnUmlProperties"/></param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/> for resolving NonTerminal RHS targets</param>
+        /// <param name="allRules">All available rules for NonTerminal resolution</param>
+        /// <param name="firstCursorEmitted">Tracks whether a cursor predicate has been emitted yet for this rule.</param>
+        /// <param name="cursorMayHaveAdvanced">
+        /// When true, the dispatch cursor may have advanced past position 0 at runtime due to a
+        /// prior <c>ownedRelationship +=</c> or a preceding <c>NonTerminal</c> reference whose
+        /// target rule may consume the cursor. Suppresses cursor predicate emission so we don't
+        /// generate stale <c>cursor.Current is …</c> checks against the wrong position.
+        /// </param>
+        /// <returns>A template clause, or <c>null</c> when no useful clause can be synthesised.</returns>
+        private static string BuildCollectionAssignmentClause(AssignmentElement assignment, string propertyAccessor, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, ref bool firstCursorEmitted, bool cursorMayHaveAdvanced)
+        {
+            if (assignment.Value is not NonTerminalElement nonTerminal)
+            {
+                return null;
+            }
+
+            var rhsTargetClass = RuleQueryUtilities.ResolveRuleTargetClass(nonTerminal, cache, allRules);
+
+            if (rhsTargetClass == null)
+            {
+                return null;
+            }
+
+            var rhsTargetTypeName = rhsTargetClass.QueryFullyQualifiedTypeName();
+
+            if (string.Equals(assignment.Property, "ownedRelationship", StringComparison.OrdinalIgnoreCase))
+            {
+                if (firstCursorEmitted || cursorMayHaveAdvanced)
+                {
+                    return null;
+                }
+
+                firstCursorEmitted = true;
+                return $"writerContext.CursorCache.GetOrCreateCursor({{0}}.Id, \"{assignment.Property}\", {{0}}.{propertyAccessor}).Current is {rhsTargetTypeName}";
+            }
+
+            return $"{{0}}.{propertyAccessor}.OfType<{rhsTargetTypeName}>().Any()";
         }
     }
 }

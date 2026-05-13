@@ -498,8 +498,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageReferenceUsage when pocoReferenceUsageReferenceUsage.IsEnd:
                     ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsageReferenceUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsage:
-                    ReferenceUsageTextualNotationBuilder.BuildVariantReference(pocoReferenceUsage, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageVariantReference when writerContext.CursorCache.GetOrCreateCursor(pocoReferenceUsageVariantReference.Id, "ownedRelationship", pocoReferenceUsageVariantReference.OwnedRelationship).Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting:
+                    ReferenceUsageTextualNotationBuilder.BuildVariantReference(pocoReferenceUsageVariantReference, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
                     AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, writerContext, stringBuilder);
@@ -510,8 +510,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
-                    OccurrenceUsageTextualNotationBuilder.BuildPortionUsage(pocoOccurrenceUsage, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsagePortionUsage when pocoOccurrenceUsagePortionUsage.PortionKind != null:
+                    OccurrenceUsageTextualNotationBuilder.BuildPortionUsage(pocoOccurrenceUsagePortionUsage, writerContext, stringBuilder);
                     break;
                 default:
                     BuildBehaviorUsageElement(poco, writerContext, stringBuilder);
