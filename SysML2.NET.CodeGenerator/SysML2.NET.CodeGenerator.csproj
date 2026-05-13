@@ -20,15 +20,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
-    <PackageReference Include="Humanizer.Core" Version="3.0.10" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.8" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="5.3.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.8" />
-    <PackageReference Include="Stef.Validation" Version="0.3.0" />
-    <PackageReference Include="System.Composition" Version="10.0.8" />
-    <PackageReference Include="uml4net.HandleBars" Version="8.1.2" />
+      <PackageReference Include="Microsoft.CodeAnalysis" Version="5.3.0" />
+      <PackageReference Include="uml4net.HandleBars" Version="8.1.2" />
     <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.1.2" />
   </ItemGroup>
   <ItemGroup>
