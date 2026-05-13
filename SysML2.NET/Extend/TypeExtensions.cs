@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="TypeExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -51,10 +52,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IType> ComputeDifferencingType(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.ownedDifferencing.Select(x => x.DifferencingType).Where(x => x != null)];
         }
 
         /// <summary>
@@ -72,10 +74,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeDirectedFeature(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.feature.Where(memberFeature => typeSubject.DirectionOf(memberFeature) != null)];
         }
 
         /// <summary>
@@ -93,10 +96,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeEndFeature(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.feature.Where(memberFeature => memberFeature.IsEnd)];
         }
 
         /// <summary>
@@ -114,10 +118,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeFeature(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.featureMembership.Select(membership => membership.ownedMemberFeature).Where(x => x != null)];
         }
 
         /// <summary>
@@ -136,10 +141,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeatureMembership> ComputeFeatureMembership(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.ownedFeatureMembership.Union(typeSubject.inheritedMembership.OfType<IFeatureMembership>())];
         }
 
         /// <summary>
@@ -158,10 +164,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeInheritedFeature(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.inheritedMembership.OfType<IFeatureMembership>().Select(membership => membership.ownedMemberFeature).Where(x => x != null)];
         }
 
         /// <summary>
@@ -179,10 +186,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeInheritedMembership(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : typeSubject.InheritedMemberships([], [], false);
         }
 
         /// <summary>
@@ -203,10 +211,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeInput(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.feature.Where(memberFeature => typeSubject.DirectionOf(memberFeature) is FeatureDirectionKind.In or FeatureDirectionKind.Inout)];
         }
 
         /// <summary>
@@ -224,10 +233,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IType> ComputeIntersectingType(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.ownedIntersecting.Select(intersecting => intersecting.IntersectingType).Where(x => x != null)];
         }
 
         /// <summary>
@@ -239,10 +249,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsConjugated(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : typeSubject.ownedConjugator != null;
         }
 
         /// <summary>
@@ -265,10 +276,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IMultiplicity ComputeMultiplicity(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : typeSubject.ownedMember.OfType<IMultiplicity>().FirstOrDefault();
         }
 
         /// <summary>
@@ -289,10 +301,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeOutput(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.feature.Where(memberFeature => typeSubject.DirectionOf(memberFeature) is FeatureDirectionKind.Out or FeatureDirectionKind.Inout)];
         }
 
         /// <summary>
@@ -314,10 +327,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IConjugation ComputeOwnedConjugator(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : typeSubject.OwnedRelationship.OfType<IConjugation>().FirstOrDefault();
         }
 
         /// <summary>
@@ -336,10 +350,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IDifferencing> ComputeOwnedDifferencing(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.OwnedRelationship.OfType<IDifferencing>()];
         }
 
         /// <summary>
@@ -358,10 +373,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IDisjoining> ComputeOwnedDisjoining(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.OwnedRelationship.OfType<IDisjoining>()];
         }
 
         /// <summary>
@@ -379,10 +395,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeOwnedEndFeature(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.ownedFeature.Where(memberFeature => memberFeature.IsEnd)];
         }
 
         /// <summary>
@@ -400,10 +417,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeOwnedFeature(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.ownedFeatureMembership.Select(membership => membership.ownedMemberFeature).Where(x => x != null)];
         }
 
         /// <summary>
@@ -421,10 +439,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeatureMembership> ComputeOwnedFeatureMembership(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.OwnedRelationship.OfType<IFeatureMembership>()];
         }
 
         /// <summary>
@@ -442,10 +461,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IIntersecting> ComputeOwnedIntersecting(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.OwnedRelationship.OfType<IIntersecting>()];
         }
 
         /// <summary>
@@ -464,10 +484,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<ISpecialization> ComputeOwnedSpecialization(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.OwnedRelationship.OfType<ISpecialization>().Where(specialization => specialization.Specific == typeSubject)];
         }
 
         /// <summary>
@@ -486,10 +507,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUnioning> ComputeOwnedUnioning(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.OwnedRelationship.OfType<IUnioning>()];
         }
 
         /// <summary>
@@ -507,10 +529,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IType> ComputeUnioningType(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return typeSubject == null
+                ? throw new ArgumentNullException(nameof(typeSubject))
+                : [..typeSubject.ownedUnioning.Select(unioning => unioning.UnioningType).Where(x => x != null)];
         }
 
         /// <summary>
@@ -543,10 +566,25 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeRedefinedVisibleMembershipsOperation(this IType typeSubject, List<INamespace> excluded, bool isRecursive, bool includeAll)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            var safeExcluded = excluded ?? [];
+
+            // Call NamespaceExtensions directly: Type.VisibleMemberships is wired back to this method,
+            // so going through INamespace.VisibleMemberships would recurse infinitely.
+            var visibleMemberships = typeSubject.ComputeVisibleMembershipsOperation(safeExcluded, isRecursive, includeAll);
+
+            var excludedWithSelf = new List<INamespace>(safeExcluded) { typeSubject };
+
+            var visibleInheritedMemberships = typeSubject.InheritedMemberships(excludedWithSelf, [], isRecursive)
+                .Where(membership => includeAll || membership.Visibility == VisibilityKind.Public);
+
+            return [..visibleMemberships.Union(visibleInheritedMemberships)];
         }
 
         /// <summary>
@@ -576,10 +614,16 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeInheritedMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            var inheritable = typeSubject.InheritableMemberships(excludedNamespaces ?? [], excludedTypes ?? [], excludeImplied);
+
+            return typeSubject.RemoveRedefinedFeatures(inheritable);
         }
 
         /// <summary>
@@ -610,10 +654,31 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeInheritableMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            var safeExcludedNamespaces = excludedNamespaces ?? [];
+            var safeExcludedTypes = excludedTypes ?? [];
+
+            var excludingSelf = new List<IType>(safeExcludedTypes) { typeSubject };
+
+            var result = new List<IMembership>();
+
+            foreach (var supertype in typeSubject.Supertypes(excludeImplied))
+            {
+                if (supertype == null || excludingSelf.Contains(supertype))
+                {
+                    continue;
+                }
+
+                result.AddRange(supertype.NonPrivateMemberships(safeExcludedNamespaces, excludingSelf, excludeImplied));
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -651,18 +716,29 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeNonPrivateMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            var safeExcludedNamespaces = excludedNamespaces ?? [];
+            var safeExcludedTypes = excludedTypes ?? [];
+
+            var publicMemberships = typeSubject.MembershipsOfVisibility(VisibilityKind.Public, safeExcludedNamespaces);
+            var protectedMemberships = typeSubject.MembershipsOfVisibility(VisibilityKind.Protected, safeExcludedNamespaces);
+            var inheritedMemberships = typeSubject.InheritedMemberships(safeExcludedNamespaces, safeExcludedTypes, excludeImplied);
+
+            return [..publicMemberships.Union(protectedMemberships).Union(inheritedMemberships)];
         }
 
         /// <summary>
         /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
-        /// which either of the following two conditions holds:                            <ol>                 
+        /// which either of the following two conditions holds:                            <ol>
         ///           <li>The memberElement of the Membership is included in redefined Features of another
         /// Membership in memberships.</li>                            <li>One of the redefined Features of the
-        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>                     
+        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>
         ///       </ol>                            For this purpose, the redefined Features of a Membership
         /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
         /// redefined by the memberElement.
@@ -690,10 +766,35 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeRemoveRedefinedFeaturesOperation(this IType typeSubject, List<IMembership> memberships)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (memberships == null)
+            {
+                throw new ArgumentNullException(nameof(memberships));
+            }
+
+            var reducedMemberships = memberships
+                .Where(currentMembership => !memberships.Any(otherMembership =>
+                    otherMembership != currentMembership
+                    && typeSubject.AllRedefinedFeaturesOf(otherMembership).Contains(currentMembership.MemberElement as IFeature)))
+                .ToList();
+
+            var redefinedFeatures = typeSubject.ownedFeature
+                .SelectMany(ownedFeature => ownedFeature.OwnedRelationship.OfType<IRedefinition>())
+                .Select(redefinition => redefinition.RedefinedFeature)
+                .Where(x => x != null)
+                .ToHashSet();
+
+            return
+            [
+                ..reducedMemberships.Where(membership =>
+                    !typeSubject.AllRedefinedFeaturesOf(membership).Any(redefinedFeatures.Contains))
+            ];
         }
 
         /// <summary>
@@ -717,10 +818,21 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeAllRedefinedFeaturesOfOperation(this IType typeSubject, IMembership membership)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (membership == null)
+            {
+                throw new ArgumentNullException(nameof(membership));
+            }
+
+            return membership.MemberElement is IFeature memberFeature
+                ? memberFeature.AllRedefinedFeatures()
+                : [];
         }
 
         /// <summary>
@@ -742,10 +854,19 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind? ComputeDirectionOfOperation(this IType typeSubject, IFeature feature)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (feature == null)
+            {
+                throw new ArgumentNullException(nameof(feature));
+            }
+
+            return typeSubject.DirectionOfExcluding(feature, []);
         }
 
         /// <summary>
@@ -785,10 +906,56 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind? ComputeDirectionOfExcludingOperation(this IType typeSubject, IFeature feature, List<IType> excluded)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (feature == null)
+            {
+                throw new ArgumentNullException(nameof(feature));
+            }
+
+            var excludedWithSelf = new List<IType>(excluded ?? []) { typeSubject };
+
+            if (feature.owningType == typeSubject)
+            {
+                return feature.Direction;
+            }
+
+            FeatureDirectionKind? direction = null;
+
+            foreach (var supertype in typeSubject.Supertypes(false))
+            {
+                if (supertype == null || excludedWithSelf.Contains(supertype))
+                {
+                    continue;
+                }
+
+                var supertypeDirection = supertype.DirectionOfExcluding(feature, excludedWithSelf);
+
+                if (supertypeDirection != null)
+                {
+                    direction = supertypeDirection;
+                    break;
+                }
+            }
+
+            if (direction == null)
+            {
+                return null;
+            }
+
+            return typeSubject.isConjugated
+                ? direction switch
+                {
+                    FeatureDirectionKind.In => FeatureDirectionKind.Out,
+                    FeatureDirectionKind.Out => FeatureDirectionKind.In,
+                    _ => direction
+                }
+                : direction;
         }
 
         /// <summary>
@@ -815,10 +982,25 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IType> ComputeSupertypesOperation(this IType typeSubject, bool excludeImplied)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (typeSubject.isConjugated)
+            {
+                var originalType = typeSubject.ownedConjugator?.OriginalType;
+
+                return originalType == null ? [] : [originalType];
+            }
+
+            var specializations = excludeImplied
+                ? typeSubject.ownedSpecialization.Where(specialization => !specialization.IsImplied)
+                : typeSubject.ownedSpecialization;
+
+            return [..specializations.Select(specialization => specialization.General).Where(x => x != null)];
         }
 
         /// <summary>
@@ -837,10 +1019,29 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IType> ComputeAllSupertypesOperation(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            var visited = new List<IType> { typeSubject };
+            var queue = new Queue<IType>();
+            queue.Enqueue(typeSubject);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                foreach (var supertype in current.Supertypes(false).Where(supertype => supertype != null && !visited.Contains(supertype)))
+                {
+                    visited.Add(supertype);
+                    queue.Enqueue(supertype);
+                }
+            }
+
+            return visited;
         }
 
         /// <summary>
@@ -865,10 +1066,26 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeSpecializesOperation(this IType typeSubject, IType supertype)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (supertype == null)
+            {
+                throw new ArgumentNullException(nameof(supertype));
+            }
+
+            if (typeSubject.isConjugated)
+            {
+                var originalType = typeSubject.ownedConjugator?.OriginalType;
+
+                return originalType != null && originalType.Specializes(supertype);
+            }
+
+            return typeSubject.AllSupertypes().Contains(supertype);
         }
 
         /// <summary>
@@ -893,10 +1110,21 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeSpecializesFromLibraryOperation(this IType typeSubject, string libraryTypeName)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (string.IsNullOrWhiteSpace(libraryTypeName))
+            {
+                return false;
+            }
+
+            var resolved = typeSubject.ResolveGlobal(libraryTypeName);
+
+            return resolved?.MemberElement is IType libraryType && typeSubject.Specializes(libraryType);
         }
 
         /// <summary>
@@ -918,14 +1146,23 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsCompatibleWithOperation(this IType typeSubject, IType otherType)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (otherType == null)
+            {
+                throw new ArgumentNullException(nameof(otherType));
+            }
+
+            return typeSubject.Specializes(otherType);
         }
 
         /// <summary>
-        /// Return the owned or inherited Multiplicities for this Type<./code>.
+        /// Return the owned or inherited Multiplicities for this Type
         /// </summary>
         /// <remarks>
         /// OCL2.0:
@@ -945,10 +1182,44 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMultiplicity" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMultiplicity> ComputeMultiplicitiesOperation(this IType typeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (typeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(typeSubject));
+            }
+
+            if (typeSubject.multiplicity != null)
+            {
+                return [typeSubject.multiplicity];
+            }
+
+            var visited = new HashSet<IType> { typeSubject };
+            var result = new List<IMultiplicity>();
+            var queue = new Queue<IType>();
+
+            foreach (var general in typeSubject.ownedSpecialization.Select(specialization => specialization.General).Where(x => x != null && visited.Add(x)))
+            {
+                queue.Enqueue(general);
+            }
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                if (current.multiplicity != null)
+                {
+                    result.Add(current.multiplicity);
+                    continue;
+                }
+
+                foreach (var general in current.ownedSpecialization.Select(specialization => specialization.General).Where(x => x != null && visited.Add(x)))
+                {
+                    queue.Enqueue(general);
+                }
+            }
+
+            return result;
         }
     }
 }

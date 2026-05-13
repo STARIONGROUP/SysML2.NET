@@ -24,9 +24,11 @@ namespace SysML2.NET.Tests.Extend
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -587,7 +589,22 @@ namespace SysML2.NET.Tests.Extend
 
             var feature = new Feature();
 
-            Assert.That(() => feature.ComputeDirectionForOperation(new Type()), Throws.TypeOf<NotSupportedException>());
+            using (Assert.EnterMultipleScope())
+            {
+                // null type → result is null per the OCL guard.
+                Assert.That(feature.ComputeDirectionForOperation(null), Is.Null);
+
+                // a Type that has no relationship to the feature returns null direction.
+                Assert.That(feature.ComputeDirectionForOperation(new Type()), Is.Null);
+            }
+
+            // populated: a feature owned by a Type via FeatureMembership returns its declared Direction.
+            var directedFeature = new Feature { Direction = FeatureDirectionKind.In };
+            var owningType = new Type();
+            var featureMembership = new FeatureMembership();
+            owningType.AssignOwnership(featureMembership, directedFeature);
+
+            Assert.That(directedFeature.ComputeDirectionForOperation(owningType), Is.EqualTo(FeatureDirectionKind.In));
         }
 
         [Test]
@@ -710,12 +727,30 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeature)null).ComputeIsFeaturedWithinOperation(null), Throws.TypeOf<ArgumentNullException>());
 
-            // all body cases blocked by TypeExtensions.ComputeRedefinedVisibleMembershipsOperation
-            // (reached via ResolveGlobal path even for type=null and empty featuringTypes,
-            // because the impl resolves Base::Anything to check implicit featuring).
             var feature = new Feature();
 
-            Assert.That(() => feature.ComputeIsFeaturedWithinOperation(null), Throws.TypeOf<NotSupportedException>());
+            using (Assert.EnterMultipleScope())
+            {
+                // type = null: with no featuringType entries, forAll over the empty set is vacuously true.
+                Assert.That(feature.ComputeIsFeaturedWithinOperation(null), Is.True);
+
+                // type non-null: with no featuringType entries, type.IsCompatibleWith forall is vacuously
+                // true → returns true.
+                Assert.That(feature.ComputeIsFeaturedWithinOperation(new Type()), Is.True);
+            }
+
+            // a feature whose featuringType is a specific Type is featured within that Type.
+            var owningType = new Type();
+            var owningTypeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = owningType };
+            feature.AssignOwnership(owningTypeFeaturing);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(feature.ComputeIsFeaturedWithinOperation(owningType), Is.True);
+
+                // and not within an unrelated Type.
+                Assert.That(feature.ComputeIsFeaturedWithinOperation(new Type()), Is.False);
+            }
         }
 
         [Test]
@@ -723,11 +758,22 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeature)null).ComputeCanAccessOperation(null), Throws.TypeOf<ArgumentNullException>());
 
-            // all body cases blocked by TypeExtensions.ComputeRedefinedVisibleMembershipsOperation
-            // (reached via IsFeaturedWithin → ResolveGlobal path even for empty featuringTypes).
             var feature = new Feature();
 
-            Assert.That(() => feature.ComputeCanAccessOperation(new Feature()), Throws.TypeOf<NotSupportedException>());
+            // empty case: no featuringType on the subject feature → visited stays empty → returns false.
+            Assert.That(feature.ComputeCanAccessOperation(new Feature()), Is.False);
+
+            // populated: subject feature is featured by a Type, and the target feature is featured within
+            // that same Type — subject can access target.
+            var sharedType = new Type();
+            var subjectTypeFeaturing = new TypeFeaturing { FeatureOfType = feature, FeaturingType = sharedType };
+            feature.AssignOwnership(subjectTypeFeaturing);
+
+            var target = new Feature();
+            var targetTypeFeaturing = new TypeFeaturing { FeatureOfType = target, FeaturingType = sharedType };
+            target.AssignOwnership(targetTypeFeaturing);
+
+            Assert.That(feature.ComputeCanAccessOperation(target), Is.True);
         }
 
         [Test]
@@ -780,7 +826,24 @@ namespace SysML2.NET.Tests.Extend
 
             var feature = new Feature();
 
-            Assert.That(() => feature.ComputeRedefinedSupertypesOperation(false), Throws.TypeOf<NotSupportedException>());
+            // empty case: no specializations, no chaining → empty supertypes list.
+            Assert.That(feature.ComputeRedefinedSupertypesOperation(false), Has.Count.EqualTo(0));
+
+            // populated: a Specialization adds its General to supertypes; an implied Specialization
+            // is filtered when excludeImplied = true.
+            var general = new Type();
+            var specialization = new Specialization { Specific = feature, General = general };
+            feature.AssignOwnership(specialization);
+
+            var impliedGeneral = new Type();
+            var impliedSpecialization = new Specialization { Specific = feature, General = impliedGeneral, IsImplied = true };
+            feature.AssignOwnership(impliedSpecialization);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(feature.ComputeRedefinedSupertypesOperation(false), Is.EquivalentTo([general, impliedGeneral]));
+                Assert.That(feature.ComputeRedefinedSupertypesOperation(true), Is.EquivalentTo([general]));
+            }
         }
 
         [Test]
@@ -788,12 +851,22 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeature)null).ComputeTypingFeaturesOperation(), Throws.TypeOf<ArgumentNullException>());
 
-            // body cases (non-conjugated subsetting filtering, CrossSubsetting exclusion,
-            // chainingFeature append) are blocked by TypeExtensions.ComputeIsConjugated stub
-            // which is called via featureSubject.isConjugated at the start of the implementation
             var feature = new Feature();
 
-            Assert.That(() => feature.ComputeTypingFeaturesOperation(), Throws.TypeOf<NotSupportedException>());
+            // empty case: not conjugated, no Subsetting, no chainingFeature → empty list.
+            Assert.That(feature.ComputeTypingFeaturesOperation(), Has.Count.EqualTo(0));
+
+            // populated (non-conjugated): a Subsetting contributes its SubsettedFeature; CrossSubsetting
+            // is excluded.
+            var subsettedFeature = new Feature();
+            var subsetting = new Subsetting { SubsettedFeature = subsettedFeature };
+            feature.AssignOwnership(subsetting);
+
+            var crossSubsettedFeature = new Feature();
+            var crossSubsetting = new CrossSubsetting { CrossedFeature = crossSubsettedFeature };
+            feature.AssignOwnership(crossSubsetting);
+
+            Assert.That(feature.ComputeTypingFeaturesOperation(), Is.EquivalentTo([subsettedFeature]));
         }
 
         [Test]
@@ -802,8 +875,29 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(() => ((IFeature)null).ComputeSubsetsChainOperation(null, null), Throws.TypeOf<ArgumentNullException>());
 
             var feature = new Feature();
+            var first = new Feature();
+            var second = new Feature();
 
-            Assert.That(() => feature.ComputeSubsetsChainOperation(new Feature(), new Feature()), Throws.TypeOf<NotSupportedException>());
+            // empty case: bare feature with no specializations and no chainingFeature → false.
+            Assert.That(feature.ComputeSubsetsChainOperation(first, second), Is.False);
+
+            // populated: a feature with chaining [first, second] satisfies the chain match.
+            var matching = new Feature();
+            var chaining1 = new FeatureChaining { ChainingFeature = first };
+            matching.AssignOwnership(chaining1);
+
+            var chaining2 = new FeatureChaining { ChainingFeature = second };
+            matching.AssignOwnership(chaining2);
+
+            // The subject specializes the matching feature so it shows up in the BFS visited set.
+            var specialization = new Specialization { Specific = feature, General = matching };
+            feature.AssignOwnership(specialization);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(feature.ComputeSubsetsChainOperation(first, second), Is.True);
+                Assert.That(feature.ComputeSubsetsChainOperation(second, first), Is.False);
+            }
         }
 
         [Test]
@@ -813,7 +907,16 @@ namespace SysML2.NET.Tests.Extend
 
             var feature = new Feature();
 
-            Assert.That(() => feature.ComputeRedefinedIsCompatibleWithOperation(new Type()), Throws.TypeOf<NotSupportedException>());
+            // empty case: bare feature has no Specialization to an unrelated Type and the otherType is not
+            // a Feature → returns false.
+            Assert.That(feature.ComputeRedefinedIsCompatibleWithOperation(new Type()), Is.False);
+
+            // populated: a feature that specializes a Type is compatible with that Type.
+            var supertype = new Type();
+            var specialization = new Specialization { Specific = feature, General = supertype };
+            feature.AssignOwnership(specialization);
+
+            Assert.That(feature.ComputeRedefinedIsCompatibleWithOperation(supertype), Is.True);
         }
 
         [Test]
@@ -821,12 +924,51 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeature)null).ComputeRedefinesFromLibraryOperation(null), Throws.TypeOf<ArgumentNullException>());
 
-            // positive verification of library redefinition requires a loaded library model
-            // and is blocked by TypeExtensions.ComputeRedefinedVisibleMembershipsOperation stub
-            // (via ResolveGlobal → VisibleMemberships chain)
-            var feature = new Feature();
+            var bareFeature = new Feature();
 
-            Assert.That(() => feature.ComputeRedefinesFromLibraryOperation("Some::Library::Feature"), Throws.TypeOf<NotSupportedException>());
+            using (Assert.EnterMultipleScope())
+            {
+                // null/blank library names short-circuit through ResolveGlobal to false.
+                Assert.That(bareFeature.ComputeRedefinesFromLibraryOperation(null), Is.False);
+                Assert.That(bareFeature.ComputeRedefinesFromLibraryOperation("  "), Is.False);
+
+                // a name that does not resolve in this fixture (no library wired) returns false.
+                Assert.That(bareFeature.ComputeRedefinesFromLibraryOperation("Some::Library::Feature"), Is.False);
+            }
+
+            // positive case: build a small library namespace, place the subject feature in it,
+            // and have the subject redefine the library feature.
+            var rootNamespace = new Namespace();
+
+            var libraryFeature = new Feature { DeclaredName = "LibFeature" };
+            var libraryMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            rootNamespace.AssignOwnership(libraryMembership, libraryFeature);
+
+            var subject = new Feature();
+            var subjectMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            rootNamespace.AssignOwnership(subjectMembership, subject);
+
+            var redefinition = new Redefinition { RedefinedFeature = libraryFeature };
+            subject.AssignOwnership(redefinition);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeRedefinesFromLibraryOperation("LibFeature"), Is.True);
+
+                // resolves to a Feature the subject does NOT redefine → false.
+                var unrelatedFeature = new Feature { DeclaredName = "UnrelatedFeature" };
+                var unrelatedMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+                rootNamespace.AssignOwnership(unrelatedMembership, unrelatedFeature);
+
+                Assert.That(subject.ComputeRedefinesFromLibraryOperation("UnrelatedFeature"), Is.False);
+
+                // resolves to a non-Feature element → false.
+                var libraryType = new Type { DeclaredName = "LibType" };
+                var libraryTypeMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+                rootNamespace.AssignOwnership(libraryTypeMembership, libraryType);
+
+                Assert.That(subject.ComputeRedefinesFromLibraryOperation("LibType"), Is.False);
+            }
         }
     }
 }
