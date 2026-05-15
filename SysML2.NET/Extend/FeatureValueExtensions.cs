@@ -45,10 +45,11 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeFeatureWithValue(this IFeatureValue featureValueSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return featureValueSubject == null
+                ? throw new ArgumentNullException(nameof(featureValueSubject))
+                : featureValueSubject.OwningRelatedElement as IFeature;
         }
 
         /// <summary>
@@ -60,11 +61,16 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeValue(this IFeatureValue featureValueSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
-        }
+            if (featureValueSubject == null)
+            {
+                throw new ArgumentNullException(nameof(featureValueSubject));
+            }
 
+            return featureValueSubject.OwnedRelatedElement.Count == 1
+                    ? featureValueSubject.OwnedRelatedElement[0] as IExpression
+                    : null;
+        }
     }
 }

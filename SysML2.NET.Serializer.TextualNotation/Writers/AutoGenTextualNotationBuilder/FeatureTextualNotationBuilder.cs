@@ -694,11 +694,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureInvertingPart when pocoFeatureInvertingPart.IsValidForInvertingPart(writerContext):
                     BuildInvertingPart(pocoFeatureInvertingPart, writerContext, stringBuilder);
                     break;
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureTypeFeaturingPart when writerContext.CursorCache.GetOrCreateCursor(pocoFeatureTypeFeaturingPart.Id, "ownedRelationship", pocoFeatureTypeFeaturingPart.OwnedRelationship).Current is SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing && pocoFeatureTypeFeaturingPart.ownedTypeFeaturing.OfType<SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing>().Any():
+                    BuildTypeFeaturingPart(pocoFeatureTypeFeaturingPart, writerContext, stringBuilder);
+                    break;
                 case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
                     TypeTextualNotationBuilder.BuildTypeRelationshipPart(pocoType, writerContext, stringBuilder);
-                    break;
-                default:
-                    BuildTypeFeaturingPart(poco, writerContext, stringBuilder);
                     break;
             }
 

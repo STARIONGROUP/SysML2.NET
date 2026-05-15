@@ -540,19 +540,34 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Asserts that the <see cref="IExpression"/> is valid for the SequenceExpression rule.
-        /// <para><c>SequenceExpression = OwnedExpression ','? | SequenceOperatorExpression</c></para>
-        /// <para>Acts as a catch-all in the PrimaryExpression switch: by the time a switch reaches this
-        /// case, every more-specific PrimaryExpression variant (Classification, Metaclassification,
-        /// Conditional*, BinaryOp, UnaryOp, FeatureReference, …) has already failed, so any remaining
-        /// <see cref="IExpression"/> is valid as a SequenceExpression. No runtime property further
-        /// disambiguates.</para>
+        /// <para><c>SequenceExpression : Expression = '(' SequenceExpressionList ')'</c></para>
+        /// <para>SequenceExpression is the wrapping <c>(…)</c> rule that applies to expressions
+        /// which are not one of the more specific <c>BaseExpression</c> variants
+        /// (<c>NullExpression | LiteralExpression | FeatureReferenceExpression |
+        /// MetadataAccessExpression | InvocationExpression | ConstructorExpression | BodyExpression</c>).
+        /// The grammar lists SequenceExpression before BaseExpression as an alternative, but at
+        /// unparse time we don't have the surface-text parens to discriminate, so this guard
+        /// must explicitly exclude the BaseExpression metaclasses to prevent it from swallowing
+        /// them.</para>
         /// </summary>
         /// <param name="expression">The <see cref="IExpression"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True for any non-null expression</returns>
+        /// <returns>
+        /// True when the expression is not null and is not one of the runtime types handled
+        /// by <c>BaseExpression</c>'s dispatch (<see cref="INullExpression"/>,
+        /// <see cref="ILiteralExpression"/>, <see cref="IFeatureReferenceExpression"/>,
+        /// <see cref="IMetadataAccessExpression"/>, <see cref="IInvocationExpression"/>,
+        /// <see cref="IConstructorExpression"/>); false otherwise.
+        /// </returns>
         internal static bool IsValidForSequenceExpression(this IExpression expression, TextualNotationWriterContext writerContext)
         {
-            return expression is not null;
+            return expression is not null
+                && expression is not INullExpression
+                && expression is not ILiteralExpression
+                && expression is not IFeatureReferenceExpression
+                && expression is not IMetadataAccessExpression
+                && expression is not IInvocationExpression
+                && expression is not IConstructorExpression;
         }
 
         /// <summary>

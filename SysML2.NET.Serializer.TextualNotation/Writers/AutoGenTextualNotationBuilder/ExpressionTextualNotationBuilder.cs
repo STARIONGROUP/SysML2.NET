@@ -63,8 +63,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionMetaclassificationExpression when pocoOperatorExpressionMetaclassificationExpression.IsValidForMetaclassificationExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildMetaclassificationExpression(pocoOperatorExpressionMetaclassificationExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpression:
-                    OperatorExpressionTextualNotationBuilder.BuildExtentExpression(pocoOperatorExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionExtentExpression when pocoOperatorExpressionExtentExpression.Operator == "all" && writerContext.CursorCache.GetOrCreateCursor(pocoOperatorExpressionExtentExpression.Id, "ownedRelationship", pocoOperatorExpressionExtentExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                    OperatorExpressionTextualNotationBuilder.BuildExtentExpression(pocoOperatorExpressionExtentExpression, writerContext, stringBuilder);
                     break;
                 default:
                     BuildPrimaryExpression(poco, writerContext, stringBuilder);

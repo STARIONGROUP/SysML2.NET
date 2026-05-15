@@ -31,7 +31,7 @@ SysML2 grammar rules (in `Grammar/Resources/*.kebnf` and the `<para>…</para>` 
 | Scalar assignment | `prop = X` | Assign the parsed value of `X` to the property `prop` |
 | Collection assignment | `prop += X` | Append one parsed `X` to the collection `prop` |
 | Boolean assignment | `prop ?= 'keyword'` | Set `prop = true` when the terminal is present |
-| Non-parsing assignment | `{ prop = 'val' }` | Implicit side-effect in parse direction; in unparse direction it emits no output |
+| Non-parsing assignment | `{ prop = 'val' }` | Implicit side-effect in parse direction; in unparse direction it emits no output, and it does NOT participate in dispatch-guard synthesis — only parsed assignments (`prop = X`, `prop += X`, `prop ?= X`) do |
 | QualifiedName value literal | `prop = [QualifiedName]` | Cross-reference by qualified name |
 
 ## Pipeline Overview
@@ -115,7 +115,15 @@ When multiple alternatives map to the same UML class (creating duplicate switch 
 
 1. **`?=` boolean guards** (primary) — e.g., `EndUsagePrefix` has `isEnd?='end'`, so it gets `when poco.IsEnd`
 2. **`IsValidFor{RuleName}()` extension methods** (fallback) — hand-coded in `MembershipValidationExtensions.cs` or `TextualNotationValidationExtensions.cs`. Used when `?=` can't disambiguate
-3. **Type ordering** — more specific types (deeper inheritance) come first, fallback case (matching `NamedElementToGenerate`) goes last as `default:`
+3. **Synthesised structural guards** (subtype-overlap defence) — when a duplicate group's target class has subtypes routed by a sibling alternative (i.e. another alternative targets a SUPERTYPE of the group's target), the would-be-default member is NOT left as a bare `case I{Target}:`. Instead, `RuleProcessor.PatternHandlers.cs#SynthesiseGuardFromRuleBody` walks the rule body and AND-combines one predicate per parsed `AssignmentElement`:
+   - `prop = 'literal'` → `poco.{Prop} == "literal"`
+   - `prop = [QualifiedName]` → `poco.{Prop} != null`
+   - `prop = NonTerminal` → `poco.{Prop} is I{RHS-target}` (or `!= null` when the RHS target cannot be resolved)
+   - first `ownedRelationship += NonTerminal` → `cursor.Current is I{RHS-target}`
+   - non-cursor `prop += NonTerminal` → `poco.{Prop}.OfType<I{RHS-target}>().Any()`
+   - `prop ?= 'kw'` → produced by step 1, not re-synthesised here
+   - `{ prop = X }` non-parsing → ignored
+4. **Type ordering** — more specific types (deeper inheritance) come first, fallback case (matching `NamedElementToGenerate`) goes last as `default:`
 
 ## Patterns Handled by Code-Gen
 
