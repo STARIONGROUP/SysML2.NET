@@ -24,11 +24,10 @@ namespace SysML2.NET.Viewer.Services.Authentication
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Blazored.SessionStorage;
-
     using Microsoft.AspNetCore.Components.Authorization;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
+    using Microsoft.JSInterop;
 
 	using SySML2.NET.REST;
 
@@ -107,7 +106,7 @@ namespace SysML2.NET.Viewer.Services.Authentication
             {
                 await this.restClient.Open(username, password, url, cancellationToken);
 
-                await this.sessionStorageService.SetItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey, username, cancellationToken);
+                this.sessionStorageService.SetItem(AnonymousAuthenticationStateProvider.SessionStorageKey, username);
 
                 ((AnonymousAuthenticationStateProvider)this.authenticationStateProvider).NotifyAuthenticationStateChanged();
                 return AuthenticationStatusKind.Success;
@@ -126,10 +125,11 @@ namespace SysML2.NET.Viewer.Services.Authentication
         /// <returns>
         /// a <see cref="Task"/>
         /// </returns>
-        public async Task Logout(CancellationToken cancellationToken)
+        public Task Logout(CancellationToken cancellationToken)
         {
-            await this.sessionStorageService.RemoveItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey, cancellationToken);
+            this.sessionStorageService.RemoveItem(AnonymousAuthenticationStateProvider.SessionStorageKey);
             ((AnonymousAuthenticationStateProvider)this.authenticationStateProvider).NotifyAuthenticationStateChanged();
+            return Task.CompletedTask;
         }
     }
 }

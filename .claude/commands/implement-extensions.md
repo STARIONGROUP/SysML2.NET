@@ -58,8 +58,19 @@ From `$ARGUMENTS = C:\CODE\SysML2.NET\SysML2.NET\Extend\<FOO>Extensions.cs`:
 - **Subject param name**: lowercase first char of `<FOO>` + `<FOO>[1..]` + `Subject` (e.g. `Type` → `typeSubject`, `Feature` → `featureSubject`).
 - **Notes file**: `C:\CODE\SysML2.NET\.team-notes\<foo>-extensions-spec.md` (kebab-case `<foo>`). Create the `.team-notes\` directory if it doesn't exist (`mkdir -p`).
 - **Team name**: `<foo>-extensions-impl`.
+- **GitHub issue number**: discover via
+  ```bash
+  gh issue list --repo STARIONGROUP/SysML2.NET --state all \
+      --search "SysML2.NET/Extend/<FOO>Extensions.cs in:body" \
+      --json number,title,state --limit 5
+  ```
+  Pick the single match. If 0 results or >1 results, surface to the user and
+  ask for an explicit issue number before proceeding (do not guess).
+  Search-by-body is preferred over search-by-title because the body always
+  contains the canonical source-path string and is therefore unambiguous.
+- **Issue URL**: `https://github.com/STARIONGROUP/SysML2.NET/issues/<num>`.
 
-Print the derived paths back to the user as a sanity check.
+Print the derived paths (including the issue URL) back to the user as a sanity check.
 
 ### 3. Enumerate stub methods
 
@@ -298,8 +309,69 @@ Report to the user:
   consider a follow-up issue").
 - Spec-text-only methods (e.g. `IsConjugated`) — flag separately so the user
   knows the implementation is grounded in spec prose rather than OCL.
+- **Issue checklist sync**: `<issue-url>` — `<newly-ticked>` newly ticked,
+  `<newly-added>` newly added, `<ticked>/<total>` total (filled in after step 11).
 
 Do NOT auto-commit. The user reviews and commits.
+
+### 11. Sync GitHub issue checklist
+
+Runs **unconditionally** after step 10, even on reviewer NEEDS FIX. Rationale:
+the issue should always reflect the current implementation state of the file;
+unresolved findings are separately surfaced in the final-summary report. The
+`gh issue edit` push must touch ONLY the `### Checklist` section.
+
+1. **Fetch current issue body**:
+   ```bash
+   gh issue view <issue-number> --repo STARIONGROUP/SysML2.NET --json body -q .body > <tmp-old-body>
+   ```
+   Read the file with the Read tool. Locate the `### Checklist` section
+   (everything between that header and the next `### ` header or EOF).
+
+2. **Enumerate implementation status from the production file**. For each
+   `Compute*` method declared in `{{PRODUCTION_FILE}}`:
+   - Extract the full extension-method signature in the same format the
+     existing checklist uses (return type + method name + `(this <Iface>[, …])`),
+     e.g. `List<IClassifier> ComputeDefinition(this IUsage)`.
+   - Mark **implemented** when BOTH of the following hold:
+     - The method body does not contain `throw new NotSupportedException`.
+     - The targeted-fixture test for it (`Verify{MethodName}` in
+       `{{TEST_FILE}}`) passed in step 7's last `dotnet test` run. Use the
+       output already captured; do NOT re-run tests.
+
+3. **Compute the new Checklist section**:
+   - For each existing checklist item: tick it (`- [x]`) if the corresponding
+     method is implemented per (2); otherwise leave its current state.
+   - For each `Compute*` method in `{{PRODUCTION_FILE}}` whose signature is
+     not present in the checklist (use exact-string match on the back-tick
+     content), append it as a new line. Tick it iff implemented.
+   - Preserve the relative order of pre-existing items. Append new items
+     after the last existing item, in declaration order from the production
+     file.
+   - Do NOT remove any existing item, even if its signature no longer matches
+     a method in the production file (signature drift is the user's call).
+
+4. **Stitch the new body**: replace ONLY the lines under `### Checklist`
+   (up to the next `### ` header or EOF) with the recomputed block.
+   Everything else — `### Prerequisites`, `### Description`,
+   `### System Configuration`, blank lines, trailing whitespace — is
+   preserved verbatim. Use a small string-slice (not a regex rewrite of the
+   whole body) to minimize the diff.
+
+5. **Push the update**:
+   ```bash
+   gh issue edit <issue-number> --repo STARIONGROUP/SysML2.NET --body-file <tmp-new-body>
+   ```
+   Use `--body-file` (not `--body "..."`) so multi-line content survives the
+   shell unchanged.
+
+6. **Verify**: re-fetch with `gh issue view` and diff against the version you
+   pushed. If the diff is non-empty outside the Checklist section, abort and
+   surface to the user — do NOT push a second time.
+
+7. **Report** back into the step-10 final-summary line: issue URL, count of
+   newly ticked items, count of newly added items, and the resulting
+   `<ticked>/<total>` ratio.
 
 ## Notes for the orchestrator (you, the main agent)
 
@@ -326,3 +398,8 @@ Do NOT auto-commit. The user reviews and commits.
 - If a build error involves an explicit-interface-impl loop (e.g. `(INamespace)x`
   cast not bypassing virtual dispatch), call the static extension method directly
   rather than via interface dispatch — pattern from the TypeExtensions task fix.
+- The step-11 GitHub-issue sync runs **unconditionally** after step 10, even on
+  reviewer NEEDS FIX. Rationale: the issue should always reflect the current
+  implementation state of the file; unresolved findings are separately surfaced
+  in the final-summary report. The `gh issue edit` push must touch ONLY the
+  `### Checklist` section — verify with a re-fetch + diff before reporting "done".
