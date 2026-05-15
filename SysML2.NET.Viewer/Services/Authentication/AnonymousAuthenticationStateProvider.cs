@@ -24,9 +24,8 @@ namespace SysML2.NET.Viewer.Services.Authentication
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using Blazored.SessionStorage;
-
     using Microsoft.AspNetCore.Components.Authorization;
+    using Microsoft.JSInterop;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
@@ -74,7 +73,7 @@ namespace SysML2.NET.Viewer.Services.Authentication
         /// </returns>
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await this.sessionStorage.GetItemAsync<string>(SessionStorageKey);
+            var token = this.sessionStorage.GetItem<string>(SessionStorageKey);
             
 			if (string.IsNullOrEmpty(token))
             {

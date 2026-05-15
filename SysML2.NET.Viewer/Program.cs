@@ -24,7 +24,6 @@ namespace SysML2.NET.Viewer
     using System.Net.Http;
     using System.Reflection;
     using System.Threading.Tasks;
-    using Blazored.SessionStorage;
     using BlazorStrap;
 
     using Microsoft.AspNetCore.Components.Authorization;
@@ -86,7 +85,7 @@ namespace SysML2.NET.Viewer
         /// <param name="builder">The <see cref="WebAssemblyHostBuilder" /></param>
         private static void AddServices(WebAssemblyHostBuilder builder)
         {
-            builder.Services.AddBlazoredSessionStorage();
+            builder.Services.AddSessionStorageServices();
             builder.Services.AddAuthorizationCore();
 
             builder.Services.AddScoped<DialogService>();

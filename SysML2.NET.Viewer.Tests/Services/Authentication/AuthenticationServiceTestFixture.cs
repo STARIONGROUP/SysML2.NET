@@ -24,8 +24,8 @@ namespace SysML2.NET.Viewer.Tests.Services.Authentication
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Blazored.SessionStorage;
-    
+    using Microsoft.JSInterop;
+
     using Moq;
 
     using NUnit.Framework;
@@ -88,7 +88,7 @@ namespace SysML2.NET.Viewer.Tests.Services.Authentication
 
             await this.authenticationService.Logout(cts.Token);
 
-            this.sessionStorageService.Verify(x => x.RemoveItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey, cts.Token), Times.Once);
+            this.sessionStorageService.Verify(x => x.RemoveItem(AnonymousAuthenticationStateProvider.SessionStorageKey), Times.Once);
         }
     }
 }

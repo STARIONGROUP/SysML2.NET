@@ -22,14 +22,13 @@ namespace SysML2.NET.Viewer.Tests.ViewModels.Components
 {
     using System.Threading.Tasks;
 
-    using Blazored.SessionStorage;
-
     using Bunit;
     using Bunit.TestDoubles;
-    
+
     using TestContext = Bunit.TestContext;
 
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.JSInterop;
 
     using Moq;
 
