@@ -109,6 +109,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
                 Assert.That(textualNotation, Does.Contain("private import ScalarValues::NumericalValue"));
                 Assert.That(textualNotation, Does.Contain("isBound: Boolean"));
                 Assert.That(textualNotation, Does.Contain(":>> elements"));
+                Assert.That(textualNotation, Does.Contain("assert constraint orderSum"));
+                Assert.That(textualNotation, Does.Contain("assert constraint boundMatch"));
             });
         }
     }

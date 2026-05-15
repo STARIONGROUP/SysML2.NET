@@ -208,15 +208,37 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// all inherit transitively (PerformActionUsage/ExhibitStateUsage/IncludeUseCaseUsage are
         /// <see cref="IActionUsage"/> descendants, AssertConstraintUsage inherits <see cref="IConstraintUsage"/>,
         /// SatisfyRequirementUsage inherits <see cref="IRequirementUsage"/>).</para>
+        /// <para>Several other <see cref="IActionUsage"/> descendants are NOT BehaviorUsageElement
+        /// alternatives — they belong to the sibling <c>ActionNodeMember</c> rule
+        /// (<see cref="IControlNode"/>, <see cref="ISendActionUsage"/>, <see cref="IAcceptActionUsage"/>,
+        /// <see cref="IAssignmentActionUsage"/>, <see cref="ITerminateActionUsage"/>,
+        /// <see cref="IIfActionUsage"/>, <see cref="ILoopActionUsage"/>) or to the
+        /// <c>TransitionUsage</c> / <c>TargetTransitionUsage</c> rules
+        /// (<see cref="ITransitionUsage"/>). Without the explicit exclusions below, a membership
+        /// owning e.g. a <see cref="IControlNode"/> would be silently mis-routed to
+        /// <c>BuildBehaviorUsageMember</c> by the dispatchers at
+        /// <c>FeatureMembershipTextualNotationBuilder.cs:271</c> and
+        /// <c>TypeTextualNotationBuilder.cs:289/318</c>, emitting the literal <c>action</c> keyword
+        /// instead of the expected ActionNode keyword (<c>merge</c>, <c>fork</c>, <c>decision</c>,
+        /// <c>join</c>, <c>send</c>, <c>accept</c>, <c>assign</c>, <c>terminate</c>, <c>if</c>,
+        /// <c>while</c>, <c>for</c>) or the transition keyword.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns a behavior-usage element</returns>
+        /// <returns>True if the membership owns a behavior-usage element (and that element is not routed by a more specific sibling rule)</returns>
         internal static bool IsValidForBehaviorUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.Any(element =>
-                element is IActionUsage or IStateUsage or IConstraintUsage
-                or IRequirementUsage or ICaseUsage) == true;
+                (element is IActionUsage or IStateUsage or IConstraintUsage
+                    or IRequirementUsage or ICaseUsage)
+                && element is not IControlNode
+                && element is not ISendActionUsage
+                && element is not IAcceptActionUsage
+                && element is not IAssignmentActionUsage
+                && element is not ITerminateActionUsage
+                && element is not IIfActionUsage
+                && element is not ILoopActionUsage
+                && element is not ITransitionUsage) == true;
         }
 
         /// <summary>
@@ -270,15 +292,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>Matches any structural-usage metaclass. IndividualUsage/PortionUsage/EventOccurrenceUsage
         /// inherit <see cref="IOccurrenceUsage"/>; Message and SuccessionFlowUsage inherit
         /// <see cref="IFlowUsage"/>.</para>
+        /// <para>The BehaviorUsageElement subtypes (<see cref="IActionUsage"/>, <see cref="IConstraintUsage"/>
+        /// and their descendants) ALSO inherit <see cref="IOccurrenceUsage"/> via the metaclass hierarchy
+        /// (e.g. <c>IConstraintUsage : IOccurrenceUsage</c>, <c>IActionUsage : IOccurrenceUsage</c>),
+        /// so the bare <c>is IOccurrenceUsage</c> would silently pull them in. They must be explicitly
+        /// excluded so the upstream dispatcher (<c>BuildOccurrenceUsageElement</c>) routes them to
+        /// <c>BuildBehaviorUsageElement</c> instead — without this exclusion they fall through the
+        /// <c>BuildStructureUsageElement</c> switch to the bare <c>case IOccurrenceUsage → BuildPortionUsage</c>
+        /// arm, which mis-renders constraints as <c>#name;</c>.</para>
+        /// <para><see cref="IFlowUsage"/> is itself <see cref="IActionUsage"/> (per
+        /// <c>IFlowUsage : IConnectorAsUsage, IFlow, IActionUsage</c>), but it is a
+        /// StructureUsageElement alternative, so the IActionUsage exclusion makes an explicit
+        /// IFlowUsage exception.</para>
         /// </summary>
         /// <param name="usage">The <see cref="IUsage"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the usage is a structural-usage metaclass</returns>
+        /// <returns>True if the usage is a structural-usage metaclass (and not a behavior-usage subtype routed by a sibling rule)</returns>
         internal static bool IsValidForStructureUsageElement(this IUsage usage, TextualNotationWriterContext writerContext)
         {
-            return usage is IOccurrenceUsage or IItemUsage or IPartUsage or IViewUsage
-                or IRenderingUsage or IPortUsage or IConnectionUsage or IInterfaceUsage
-                or IAllocationUsage or IFlowUsage;
+            return (usage is IOccurrenceUsage or IItemUsage or IPartUsage or IViewUsage
+                    or IRenderingUsage or IPortUsage or IConnectionUsage or IInterfaceUsage
+                    or IAllocationUsage or IFlowUsage)
+                && usage is not IConstraintUsage
+                && (usage is not IActionUsage || usage is IFlowUsage);
         }
 
         /// <summary>
@@ -286,13 +322,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para><c>OccurrenceUsage = OccurrenceUsagePrefix 'occurrence' Usage</c> — the general case
         /// where neither <c>isIndividual</c> nor <c>portionKind</c> has been set by one of the more
         /// specific rules (<c>IndividualUsage</c>, <c>PortionUsage</c>).</para>
+        /// <para>The bare-keyword form must NOT match runtime types covered by sibling rules in
+        /// <c>StructureUsageElement</c> (<see cref="IItemUsage"/>, <see cref="IPortUsage"/>,
+        /// <see cref="IEventOccurrenceUsage"/>) or <c>BehaviorUsageElement</c>
+        /// (<see cref="IActionUsage"/>, <see cref="IConstraintUsage"/>) — each of those has its
+        /// own dedicated grammar rule and dispatch arm. Without these exclusions, a constraint
+        /// or action would be silently rendered as <c>occurrence&#160;name;</c>.</para>
         /// </summary>
         /// <param name="occurrenceUsage">The <see cref="IOccurrenceUsage"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the usage is a plain occurrence (no individual, no portion kind)</returns>
+        /// <returns>True if the usage is a plain occurrence (no individual, no portion kind, and not routed by a more specific sibling rule)</returns>
         internal static bool IsValidForOccurrenceUsage(this IOccurrenceUsage occurrenceUsage, TextualNotationWriterContext writerContext)
         {
-            return occurrenceUsage is { IsIndividual: false, PortionKind: null };
+            return occurrenceUsage is { IsIndividual: false, PortionKind: null }
+                && occurrenceUsage is not IItemUsage
+                && occurrenceUsage is not IPortUsage
+                && occurrenceUsage is not IActionUsage
+                && occurrenceUsage is not IConstraintUsage
+                && occurrenceUsage is not IEventOccurrenceUsage;
         }
 
         /// <summary>
