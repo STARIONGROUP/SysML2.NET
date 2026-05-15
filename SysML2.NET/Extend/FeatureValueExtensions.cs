@@ -63,12 +63,14 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
         /// </returns>
         internal static IExpression ComputeValue(this IFeatureValue featureValueSubject)
         {
-            return featureValueSubject == null
-                ? throw new ArgumentNullException(nameof(featureValueSubject))
-                : featureValueSubject.OwnedRelatedElement.Count == 1
+            if (featureValueSubject == null)
+            {
+                throw new ArgumentNullException(nameof(featureValueSubject));
+            }
+
+            return featureValueSubject.OwnedRelatedElement.Count == 1
                     ? featureValueSubject.OwnedRelatedElement[0] as IExpression
                     : null;
         }
-
     }
 }

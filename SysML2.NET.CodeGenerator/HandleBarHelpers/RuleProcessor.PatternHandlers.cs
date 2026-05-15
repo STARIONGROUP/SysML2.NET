@@ -675,21 +675,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             continue;
                         }
 
-                        foreach (var unguarded in stillUnguarded)
+                        foreach (var unguarded in stillUnguarded.Select(x => x.RuleElement))
                         {
                             var referencedRule = ruleGenerationContext.AllRules
-                                .SingleOrDefault(rule => rule.RuleName == unguarded.RuleElement.Name);
+                                .SingleOrDefault(rule => rule.RuleName == unguarded.Name);
 
                             if (referencedRule == null)
                             {
                                 continue;
                             }
 
-                            var synthesisedGuard = this.SynthesiseGuardFromRuleBody(referencedRule, groupTargetClass, umlClass.Cache, ruleGenerationContext.AllRules);
+                            var synthesisedGuard = SynthesiseGuardFromRuleBody(referencedRule, groupTargetClass, umlClass.Cache, ruleGenerationContext.AllRules);
 
                             if (!string.IsNullOrEmpty(synthesisedGuard))
                             {
-                                whenGuards[unguarded.RuleElement] = synthesisedGuard;
+                                whenGuards[unguarded] = synthesisedGuard;
                             }
                         }
                     }
@@ -1019,7 +1019,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// case variable name placeholder) ready for insertion into <c>whenGuards</c>, or
         /// <c>null</c> when the rule body carries no usable parsed assignments.
         /// </returns>
-        private string SynthesiseGuardFromRuleBody(TextualNotationRule rule, IClass targetClass, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
+        private static string SynthesiseGuardFromRuleBody(TextualNotationRule rule, IClass targetClass, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
         {
             if (rule == null || targetClass == null)
             {
