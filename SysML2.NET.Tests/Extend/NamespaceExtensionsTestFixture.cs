@@ -240,7 +240,28 @@ namespace SysML2.NET.Tests.Extend
             var ownedMembership = new OwningMembership { Visibility = VisibilityKind.Public };
             namespaceElement.AssignOwnership(ownedMembership, collidingElement);
 
+            // Clause B (cross-comparisons): import and owned share both metaclass (Definition)
+            // and MemberName ("imported"), so they are NOT distinguishable -> import excluded.
             Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Has.Count.EqualTo(0));
+
+            // Clause C (metaclass non-conformance): wire a second importedNamespace whose
+            // owned member is a Namespace (NOT a Definition) named "imported". It collides on
+            // MemberName with the owned Definition above, but the metaclasses are unrelated
+            // (Namespace vs Definition — neither IsAssignableFrom the other), so per
+            // Membership::isDistinguishableFrom Clause C the pair IS distinguishable, and the
+            // import must surface. The previous partial helper omitted Clause C and would have
+            // wrongly excluded this import; this assertion locks in the spec-correct behavior.
+            var crossMetaclassNamespace = new Namespace();
+            var crossMetaclassElement = new Namespace { DeclaredName = "imported" };
+            var crossMetaclassMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            crossMetaclassNamespace.AssignOwnership(crossMetaclassMembership, crossMetaclassElement);
+
+            var crossMetaclassImport = new NamespaceImport { ImportedNamespace = crossMetaclassNamespace };
+            namespaceElement.AssignOwnership(crossMetaclassImport);
+
+            Assert.That(
+                namespaceElement.ComputeImportedMembershipsOperation([]),
+                Is.EquivalentTo([crossMetaclassMembership]));
         }
 
         [Test]

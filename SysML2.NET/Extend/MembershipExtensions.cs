@@ -42,10 +42,11 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeMemberElementId(this IMembership membershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return membershipSubject == null
+                ? throw new ArgumentNullException(nameof(membershipSubject))
+                : membershipSubject.MemberElement.ElementId;
         }
 
         /// <summary>
@@ -78,10 +79,48 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsDistinguishableFromOperation(this IMembership membershipSubject, IMembership other)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (membershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(membershipSubject));
+            }
+
+            if (other == null)
+            {
+                throw new ArgumentNullException(nameof(other));
+            }
+
+            // Clause C: metaclass incompatibility.
+            // OCL: not (memberElement.oclKindOf(other.memberElement.oclType())
+            //           or other.memberElement.oclKindOf(memberElement.oclType()))
+            // De Morgan: !A && !B. A null memberElement on either side trips this
+            // (no conformance is possible).
+            var thisType = membershipSubject.MemberElement?.GetType();
+            var otherType = other.MemberElement?.GetType();
+
+            if (thisType == null || otherType == null
+                || (!otherType.IsAssignableFrom(thisType)
+                    && !thisType.IsAssignableFrom(otherType)))
+            {
+                return true;
+            }
+
+            // NamePart1 (OCL spells it shortMemberName — known XMI typo, real
+            // attribute is MemberShortName):
+            //   memberShortName = null
+            //   OR (memberShortName != other.memberShortName
+            //       AND memberShortName != other.memberName)
+            var shortNamePart = string.IsNullOrWhiteSpace(membershipSubject.MemberShortName)
+                || (membershipSubject.MemberShortName != other.MemberShortName
+                    && membershipSubject.MemberShortName != other.MemberName);
+
+            // NamePart2: same shape, MemberName variant.
+            var namePart = string.IsNullOrWhiteSpace(membershipSubject.MemberName)
+                || (membershipSubject.MemberName != other.MemberShortName
+                    && membershipSubject.MemberName != other.MemberName);
+
+            return shortNamePart && namePart;
         }
     }
 }

@@ -187,6 +187,27 @@ hand-reformat of `FeatureExtensions.cs`. All four roles must enforce these.
 - **Use camelCase derived properties when in scope and implemented**: prefer
   `subject.fooBar` over re-deriving when that derived property is itself
   implemented.
+- **Invoke operations and derived properties via the POCO instance member,
+  not the static `Compute*` extension** — e.g.
+  `subject.IsDistinguishableFrom(other)`, `subject.qualifiedName`,
+  `subject.NamingFeature()`, NOT
+  `MembershipExtensions.ComputeIsDistinguishableFromOperation(subject, other)`,
+  `ElementExtensions.ComputeQualifiedName(subject)`,
+  `FeatureExtensions.ComputeNamingFeatureOperation(subject)`. The POCO's
+  instance member dispatches virtually and honors any subclass
+  **redefinition** of the operation/derived property; calling the static
+  extension directly bypasses dispatch and silently skips overrides — a
+  real defect class, easy to introduce and hard to spot.
+  **Exception (oclAsType pattern):** when the OCL itself uses
+  `self.oclAsType(SuperType).method()`, the C# translation MUST use the
+  static-extension-method form to BYPASS dispatch and target the SuperType's
+  body. Two precedents:
+  - `Usage::namingFeature()` → `FeatureExtensions.ComputeNamingFeatureOperation(usage)`
+    (would otherwise recurse into the Usage override).
+  - `OwningMembership::path()` → `RelationshipExtensions.ComputeRedefinedPathOperation(owningMembership)`
+    (same shape, OwningMembership upcast to Relationship).
+  Without an explicit `oclAsType(...)` in the source OCL, default to the
+  POCO instance call.
 - **Do not change the namespace, using directives, or method signatures.**
 
 ---
