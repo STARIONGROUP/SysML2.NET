@@ -57,9 +57,22 @@ namespace SysML2.NET.Tests.Extend
         }
 
         [Test]
-        public void ComputeOwnedMemberElementId_ThrowsNotSupportedException()
+        public void VerifyComputeOwnedMemberElementId()
         {
-            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElementId(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElementId(), Throws.TypeOf<ArgumentNullException>());
+
+            // OwnedRelatedElement.Count != 1 → IncompleteModelException propagated from ComputeOwnedMemberElement
+            var emptyMembership = new OwningMembership();
+
+            Assert.That(() => emptyMembership.ComputeOwnedMemberElementId(), Throws.TypeOf<IncompleteModelException>());
+
+            // Populated: one owned element → returns that element's ElementId
+            var container = new Namespace();
+            var membership = new OwningMembership();
+            var ownedElement = new Definition { ElementId = "test-element-id-42" };
+            container.AssignOwnership(membership, ownedElement);
+
+            Assert.That(membership.ComputeOwnedMemberElementId(), Is.EqualTo(ownedElement.ElementId));
         }
 
         [Test]
@@ -72,6 +85,41 @@ namespace SysML2.NET.Tests.Extend
         public void ComputeOwnedMemberShortName_ThrowsArgumentNullException()
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberShortName(), Throws.TypeOf<ArgumentNullException>());
+        }
+
+        [Test]
+        public void VerifyComputeRedefinedPathOperation()
+        {
+            Assert.That(() => ((IOwningMembership)null).ComputeRedefinedPathOperation(), Throws.TypeOf<ArgumentNullException>());
+
+            // OwnedRelatedElement.Count != 1 → IncompleteModelException propagated from ComputeOwnedMemberElement
+            var emptyMembership = new OwningMembership();
+
+            Assert.That(() => emptyMembership.ComputeRedefinedPathOperation(), Throws.TypeOf<IncompleteModelException>());
+
+            // qualifiedName != null → returns qualifiedName + "/owningMembership"
+            // Wire: owning package → named child namespace → named member definition
+            var rootPackage = new Namespace();
+            var childNamespace = new Namespace { DeclaredName = "Pkg" };
+            var childMembership = new OwningMembership();
+            rootPackage.AssignOwnership(childMembership, childNamespace);
+
+            var member = new Definition { DeclaredName = "Member" };
+            var memberMembership = new OwningMembership();
+            childNamespace.AssignOwnership(memberMembership, member);
+
+            Assert.That(memberMembership.ComputeRedefinedPathOperation(), Is.EqualTo("Pkg::Member/owningMembership"));
+
+            // qualifiedName == null → delegates to RelationshipExtensions.ComputeRedefinedPathOperation
+            // Wire: an OwningMembership with an unnamed owned element (no owning namespace → qualifiedName is null)
+            var unnamedContainer = new Namespace();
+            var unnamedMembership = new OwningMembership();
+            var unnamedElement = new Definition();
+            unnamedContainer.AssignOwnership(unnamedMembership, unnamedElement);
+
+            var expectedPath = ((IRelationship)unnamedMembership).ComputeRedefinedPathOperation();
+
+            Assert.That(unnamedMembership.ComputeRedefinedPathOperation(), Is.EqualTo(expectedPath));
         }
     }
 }
