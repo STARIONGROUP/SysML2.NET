@@ -22,15 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
 {
     using System;
     using System.Collections.Generic;
-
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Core.Classifiers;
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using System.Linq;
+    
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.Allocations;
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
@@ -74,10 +67,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUsage> ComputeDirectedUsage(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.directedFeature.OfType<IUsage>()];
         }
 
         /// <summary>
@@ -95,10 +89,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IActionUsage> ComputeOwnedAction(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IActionUsage>()];
         }
 
         /// <summary>
@@ -116,10 +111,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAllocationUsage> ComputeOwnedAllocation(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IAllocationUsage>()];
         }
 
         /// <summary>
@@ -137,10 +133,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAnalysisCaseUsage> ComputeOwnedAnalysisCase(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IAnalysisCaseUsage>()];
         }
 
         /// <summary>
@@ -158,10 +155,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAttributeUsage> ComputeOwnedAttribute(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IAttributeUsage>()];
         }
 
         /// <summary>
@@ -179,10 +177,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<ICalculationUsage> ComputeOwnedCalculation(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<ICalculationUsage>()];
         }
 
         /// <summary>
@@ -200,10 +199,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<ICaseUsage> ComputeOwnedCase(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<ICaseUsage>()];
         }
 
         /// <summary>
@@ -221,10 +221,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IConcernUsage> ComputeOwnedConcern(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IConcernUsage>()];
         }
 
         /// <summary>
@@ -242,10 +243,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IConnectorAsUsage> ComputeOwnedConnection(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IConnectorAsUsage>()];
         }
 
         /// <summary>
@@ -263,10 +265,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IConstraintUsage> ComputeOwnedConstraint(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IConstraintUsage>()];
         }
 
         /// <summary>
@@ -284,10 +287,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IEnumerationUsage> ComputeOwnedEnumeration(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IEnumerationUsage>()];
         }
 
         /// <summary>
@@ -305,10 +309,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFlowUsage> ComputeOwnedFlow(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IFlowUsage>()];
         }
 
         /// <summary>
@@ -326,10 +331,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IInterfaceUsage> ComputeOwnedInterface(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IInterfaceUsage>()];
         }
 
         /// <summary>
@@ -347,10 +353,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IItemUsage> ComputeOwnedItem(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IItemUsage>()];
         }
 
         /// <summary>
@@ -368,10 +375,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMetadataUsage> ComputeOwnedMetadata(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IMetadataUsage>()];
         }
 
         /// <summary>
@@ -389,10 +397,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IOccurrenceUsage> ComputeOwnedOccurrence(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IOccurrenceUsage>()];
         }
 
         /// <summary>
@@ -410,10 +419,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPartUsage> ComputeOwnedPart(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IPartUsage>()];
         }
 
         /// <summary>
@@ -431,10 +441,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPortUsage> ComputeOwnedPort(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IPortUsage>()];
         }
 
         /// <summary>
@@ -452,10 +463,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IReferenceUsage> ComputeOwnedReference(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IReferenceUsage>()];
         }
 
         /// <summary>
@@ -473,10 +485,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IRenderingUsage> ComputeOwnedRendering(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IRenderingUsage>()];
         }
 
         /// <summary>
@@ -494,10 +507,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IRequirementUsage> ComputeOwnedRequirement(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IRequirementUsage>()];
         }
 
         /// <summary>
@@ -515,10 +529,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IStateUsage> ComputeOwnedState(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IStateUsage>()];
         }
 
         /// <summary>
@@ -536,10 +551,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<ITransitionUsage> ComputeOwnedTransition(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<ITransitionUsage>()];
         }
 
         /// <summary>
@@ -557,10 +573,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUsage> ComputeOwnedUsage(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedFeature.OfType<IUsage>()];
         }
 
         /// <summary>
@@ -578,10 +595,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUseCaseUsage> ComputeOwnedUseCase(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IUseCaseUsage>()];
         }
 
         /// <summary>
@@ -599,10 +617,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IVerificationCaseUsage> ComputeOwnedVerificationCase(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IVerificationCaseUsage>()];
         }
 
         /// <summary>
@@ -620,10 +639,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IViewUsage> ComputeOwnedView(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IViewUsage>()];
         }
 
         /// <summary>
@@ -641,10 +661,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IViewpointUsage> ComputeOwnedViewpoint(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedUsage.OfType<IViewpointUsage>()];
         }
 
         /// <summary>
@@ -662,10 +683,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUsage> ComputeUsage(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.feature.OfType<IUsage>()];
         }
 
         /// <summary>
@@ -683,10 +705,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUsage> ComputeVariant(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.variantMembership.Select(membership => membership.ownedVariantUsage).Where(usage => usage != null)];
         }
 
         /// <summary>
@@ -704,11 +727,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IVariantMembership> ComputeVariantMembership(this IDefinition definitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return definitionSubject == null
+                ? throw new ArgumentNullException(nameof(definitionSubject))
+                : [..definitionSubject.ownedMembership.OfType<IVariantMembership>()];
         }
-
     }
 }
