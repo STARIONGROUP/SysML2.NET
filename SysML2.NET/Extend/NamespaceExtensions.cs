@@ -368,47 +368,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 
             var ownedMemberships = namespaceSubject.ownedMembership;
 
-            return 
+            return
             [
                 ..importedMemberships.Where(import =>
-                ownedMemberships.All(owned => IsDistinguishableMembership(import, owned))
-                && importedMemberships.All(other => other == import || IsDistinguishableMembership(import, other)))
+                ownedMemberships.All(import.ComputeIsDistinguishableFromOperation)
+                && importedMemberships.All(other => other == import || import.ComputeIsDistinguishableFromOperation(other)))
             ];
-        }
-
-        /// <summary>
-        /// Determines whether <paramref name="left"/> is distinguishable from <paramref name="right"/>
-        /// according to the default OCL body of <c>Membership::isDistinguishableFrom</c>.
-        /// </summary>
-        /// <remarks>
-        /// OCL (KerML XMI):
-        /// <code>
-        /// memberShortName = null and memberName = null or
-        /// (memberShortName &lt;&gt; other.memberShortName and memberShortName &lt;&gt; other.memberName and
-        ///  memberName &lt;&gt; other.memberShortName and memberName &lt;&gt; other.memberName)
-        /// </code>
-        /// </remarks>
-        /// <param name="left">
-        /// The <see cref="IMembership" /> on whose perspective distinguishability is evaluated.
-        /// </param>
-        /// <param name="right">
-        /// The <see cref="IMembership" /> being compared against.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> when <paramref name="left"/> can be distinguished from <paramref name="right"/>
-        /// per the default Membership distinguishability rule; otherwise <see langword="false"/>.
-        /// </returns>
-        private static bool IsDistinguishableMembership(IMembership left, IMembership right)
-        {
-            if (left.MemberShortName == null && left.MemberName == null)
-            {
-                return true;
-            }
-
-            return left.MemberShortName != right.MemberShortName
-                && left.MemberShortName != right.MemberName
-                && left.MemberName != right.MemberShortName
-                && left.MemberName != right.MemberName;
         }
 
         /// <summary>
