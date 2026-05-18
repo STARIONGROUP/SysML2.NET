@@ -1,6 +1,6 @@
 ---
 description: Spawn researcher/implementer/tester/reviewer team to fill in stub Compute* methods in a SysML2.NET Extend file
-argument-hint: <absolute-path-to-Extensions-file.cs>
+argument-hint: <path-to-Extensions-file.cs (relative to repo root or absolute)>
 ---
 
 # /implement-extensions
@@ -10,9 +10,21 @@ Spawn the 4-role agent team (researcher → implementer → tester → reviewer)
 `Compute*` methods are still stubs throwing `NotSupportedException`. Per-role
 models are picked dynamically based on stub complexity (see step 3.5).
 
-The team template is at `C:\Users\atheate\.claude\team-templates\extension-impl.md`
-(v2). Read it first — its role prompts are the source of truth; this command body
-is the orchestration glue.
+The team template is at `.claude/team-templates/extension-impl.md` (v2, repo-tracked).
+Read it first — its role prompts are the source of truth; this command body is the
+orchestration glue.
+
+## Path conventions (portable across contributors)
+
+All paths in this command are **repo-relative with forward slashes**, so the workflow
+works for any contributor regardless of where they cloned the repo (e.g.
+`C:\code\SysML2.NET`, `~/projects/SysML2.NET`, `D:\dev\SysML2.NET`). Forward slashes
+are accepted by both `dotnet` CLI and `bash` (incl. Git Bash on Windows, WSL,
+macOS, Linux).
+
+When invoking tools that REQUIRE absolute paths (e.g. `Read`, `Edit`, `Write`), the
+orchestrator resolves repo-relative paths at runtime by prepending the working
+directory (the repo root, where `/implement-extensions` was invoked).
 
 ## Hard scope rule
 
@@ -37,26 +49,32 @@ scope. Use the stub-blocker test pattern (see template).
 
 ### 1. Validate input
 
-Confirm `$ARGUMENTS` is:
-- An absolute Windows path with backslashes.
-- A file matching `C:\CODE\SysML2.NET\SysML2.NET\Extend\*Extensions.cs`.
-- The file exists.
+Accept `$ARGUMENTS` in any of these forms:
+- Repo-relative path: `SysML2.NET/Extend/<FOO>Extensions.cs`
+- Repo-relative with `@` prefix (Claude Code file-reference): `@SysML2.NET/Extend/<FOO>Extensions.cs`
+- Absolute path on the contributor's machine (Windows or POSIX), with `@` prefix or without
 
-If validation fails, stop and ask the user to re-invoke with a corrected path.
+**Normalization rule**: extract the `<FOO>Extensions.cs` filename from the input and
+reconstruct the canonical repo-relative path `SysML2.NET/Extend/<FOO>Extensions.cs`.
+Then verify this file exists from the repo root (the working directory). If it
+doesn't, stop and surface to the user.
 
 ### 2. Auto-derive paths
 
-From `$ARGUMENTS = C:\CODE\SysML2.NET\SysML2.NET\Extend\<FOO>Extensions.cs`:
+From the normalized canonical path `SysML2.NET/Extend/<FOO>Extensions.cs`:
 
-- **Production file**: `$ARGUMENTS` itself.
-- **Test fixture**: `C:\CODE\SysML2.NET\SysML2.NET.Tests\Extend\<FOO>ExtensionsTestFixture.cs`.
+- **Production file**: `SysML2.NET/Extend/<FOO>Extensions.cs`.
+- **Test fixture**: `SysML2.NET.Tests/Extend/<FOO>ExtensionsTestFixture.cs`.
   If it does not exist, surface that to the user — likely scope mismatch.
-- **Reference production file**: `C:\CODE\SysML2.NET\SysML2.NET\Extend\NamespaceExtensions.cs`.
-- **Reference test file**: `C:\CODE\SysML2.NET\SysML2.NET.Tests\Extend\NamespaceExtensionsTestFixture.cs`.
-- **Target interface**: `I<FOO>` — find via Glob `SysML2.NET\Core\AutoGenPoco\**\I<FOO>.cs`.
+- **Reference production file**: `SysML2.NET/Extend/NamespaceExtensions.cs`.
+- **Reference test file**: `SysML2.NET.Tests/Extend/NamespaceExtensionsTestFixture.cs`.
+- **Target interface**: `I<FOO>` — find via Glob `SysML2.NET/Core/AutoGenPoco/**/I<FOO>.cs`.
 - **Target metaclass name**: `<FOO>`.
 - **Subject param name**: lowercase first char of `<FOO>` + `<FOO>[1..]` + `Subject` (e.g. `Type` → `typeSubject`, `Feature` → `featureSubject`).
-- **Notes file**: `C:\CODE\SysML2.NET\.team-notes\<foo>-extensions-spec.md` (kebab-case `<foo>`). Create the `.team-notes\` directory if it doesn't exist (`mkdir -p`).
+- **Notes file**: `.team-notes/<foo>-extensions-spec.md` (kebab-case `<foo>`). The
+  `.team-notes/` directory is gitignored at `.gitignore` line `/.team-notes/*`, so
+  the file is per-contributor scratch. Create the directory if it doesn't exist
+  (`mkdir -p .team-notes`).
 - **Team name**: `<foo>-extensions-impl`.
 - **GitHub issue number**: discover via
   ```bash
@@ -147,7 +165,7 @@ proceed with the dynamic defaults.
 
 ### 5. Spawn the researcher (FIRST role — produces the notes file the others read)
 
-Read the v2 team template at `C:\Users\atheate\.claude\team-templates\extension-impl.md`
+Read the v2 team template at `.claude/team-templates/extension-impl.md`
 to refresh the role prompts. Substitute the placeholders from step 2 + the method
 list from step 4.
 
@@ -208,16 +226,16 @@ implementer's parallel-turn edits, so every populated-case test would fail with
 After both step-6 agents return, run sequentially in the orchestrator's own
 turn:
 
-1. Build production:
+1. Build production (paths are repo-relative, executed from the repo root):
    ```bash
-   dotnet build C:\CODE\SysML2.NET\SysML2.NET\SysML2.NET.csproj --nologo --verbosity quiet
+   dotnet build SysML2.NET/SysML2.NET.csproj --nologo --verbosity quiet
    ```
    On failure, dispatch the implementer back to fix its own bugs (do not
    delegate to a fresh agent unless the original is non-responsive).
 
 2. Run targeted fixture:
    ```bash
-   dotnet test C:\CODE\SysML2.NET\SysML2.NET.Tests\SysML2.NET.Tests.csproj --filter "FullyQualifiedName~<FOO>ExtensionsTestFixture" --nologo --verbosity quiet
+   dotnet test SysML2.NET.Tests/SysML2.NET.Tests.csproj --filter "FullyQualifiedName~<FOO>ExtensionsTestFixture" --nologo --verbosity quiet
    ```
    Analyze each failure and route the fix:
    - **OCL mistranslation in production** → re-dispatch the implementer.
@@ -232,7 +250,7 @@ turn:
 Run the full solution test suite:
 
 ```bash
-dotnet test C:\CODE\SysML2.NET\SysML2.NET.sln --no-build --nologo --verbosity quiet
+dotnet test SysML2.NET.sln --no-build --nologo --verbosity quiet
 ```
 
 If failures exist, identify those of the form:

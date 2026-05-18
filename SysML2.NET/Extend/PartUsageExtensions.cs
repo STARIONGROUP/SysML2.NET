@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Parts
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -77,10 +78,11 @@ namespace SysML2.NET.Core.POCO.Systems.Parts
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPartDefinition> ComputePartDefinition(this IPartUsage partUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return partUsageSubject == null
+                ? throw new ArgumentNullException(nameof(partUsageSubject))
+                : [..partUsageSubject.itemDefinition.OfType<IPartDefinition>()];
         }
 
     }
