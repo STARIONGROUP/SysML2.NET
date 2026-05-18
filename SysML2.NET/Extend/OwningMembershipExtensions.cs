@@ -62,10 +62,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.ElementId;
         }
 
         /// <summary>
@@ -119,10 +118,21 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedPathOperation(this IOwningMembership owningMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (owningMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(owningMembershipSubject));
+            }
+
+            var ownedElement = owningMembershipSubject.ownedMemberElement;
+
+            if (ownedElement.qualifiedName != null)
+            {
+                return $"{ownedElement.qualifiedName}/owningMembership";
+            }
+
+            return RelationshipExtensions.ComputeRedefinedPathOperation(owningMembershipSubject);
         }
     }
 }
