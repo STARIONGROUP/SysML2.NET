@@ -371,8 +371,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
             return
             [
                 ..importedMemberships.Where(import =>
-                ownedMemberships.All(import.ComputeIsDistinguishableFromOperation)
-                && importedMemberships.All(other => other == import || import.ComputeIsDistinguishableFromOperation(other)))
+                ownedMemberships.All(import.IsDistinguishableFrom)
+                && importedMemberships.All(other => other == import || import.IsDistinguishableFrom(other)))
             ];
         }
 
