@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ActionUsageExtensions.cs" company="Starion Group S.A.">
-//
-//    Copyright (C) 2022-2026 Starion Group S.A.
-//
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
-//
+// 
+//   Copyright 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -22,44 +22,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.Systems.Occurrences;
-    using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Functions;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Systems.Allocations;
-    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
-    using SysML2.NET.Core.POCO.Systems.Attributes;
-    using SysML2.NET.Core.POCO.Systems.Calculations;
-    using SysML2.NET.Core.POCO.Systems.Cases;
-    using SysML2.NET.Core.POCO.Systems.Connections;
-    using SysML2.NET.Core.POCO.Systems.Constraints;
-    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Core.POCO.Systems.Enumerations;
-    using SysML2.NET.Core.POCO.Systems.Flows;
-    using SysML2.NET.Core.POCO.Systems.Interfaces;
-    using SysML2.NET.Core.POCO.Systems.Items;
-    using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Core.POCO.Systems.Occurrences;
-    using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.States;
-    using SysML2.NET.Core.POCO.Systems.UseCases;
-    using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Core.Systems.States;
 
     /// <summary>
-    /// The <see cref="ActionUsageExtensions"/> class provides extensions methods for
-    /// the <see cref="IActionUsage"/> interface
+    /// The <see cref="ActionUsageExtensions" /> class provides extensions methods for
+    /// the <see cref="IActionUsage" /> interface
     /// </summary>
     internal static class ActionUsageExtensions
     {
@@ -67,15 +41,16 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// Computes the derived property.
         /// </summary>
         /// <param name="actionUsageSubject">
-        /// The subject <see cref="IActionUsage"/>
+        /// The subject <see cref="IActionUsage" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IBehavior> ComputeActionDefinition(this IActionUsage actionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return actionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(actionUsageSubject))
+                : [.. actionUsageSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IBehavior>()];
         }
 
         /// <summary>
@@ -88,15 +63,16 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </code>
         /// </remarks>
         /// <param name="actionUsageSubject">
-        /// The subject <see cref="IActionUsage"/>
+        /// The subject <see cref="IActionUsage" />
         /// </param>
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeInputParametersOperation(this IActionUsage actionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return actionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(actionUsageSubject))
+                : [.. actionUsageSubject.input.Where(inputFeature => inputFeature.owner == actionUsageSubject)];
         }
 
         /// <summary>
@@ -112,7 +88,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </code>
         /// </remarks>
         /// <param name="actionUsageSubject">
-        /// The subject <see cref="IActionUsage"/>
+        /// The subject <see cref="IActionUsage" />
         /// </param>
         /// <param name="i">
         /// No documentation provided
@@ -120,10 +96,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeInputParameterOperation(this IActionUsage actionUsageSubject, int i)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (actionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(actionUsageSubject));
+            }
+
+            var inputParameters = actionUsageSubject.InputParameters();
+
+            return i <= 0 || inputParameters.Count < i
+                ? null
+                : inputParameters[i - 1];
         }
 
         /// <summary>
@@ -145,7 +129,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </code>
         /// </remarks>
         /// <param name="actionUsageSubject">
-        /// The subject <see cref="IActionUsage"/>
+        /// The subject <see cref="IActionUsage" />
         /// </param>
         /// <param name="i">
         /// No documentation provided
@@ -153,10 +137,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IExpression" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeArgumentOperation(this IActionUsage actionUsageSubject, int i)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return actionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(actionUsageSubject))
+                : actionUsageSubject.InputParameter(i)?.ownedMembership.OfType<IFeatureValue>().FirstOrDefault()?.value;
         }
 
         /// <summary>
@@ -176,15 +161,22 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </code>
         /// </remarks>
         /// <param name="actionUsageSubject">
-        /// The subject <see cref="IActionUsage"/>
+        /// The subject <see cref="IActionUsage" />
         /// </param>
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsSubactionUsageOperation(this IActionUsage actionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (actionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(actionUsageSubject));
+            }
+
+            return actionUsageSubject.IsComposite
+                   && actionUsageSubject.owningType is IActionDefinition or IActionUsage
+                   && (actionUsageSubject.owningFeatureMembership is not IStateSubactionMembership ssm
+                       || ssm.Kind == StateSubactionKind.Do);
         }
     }
 }
