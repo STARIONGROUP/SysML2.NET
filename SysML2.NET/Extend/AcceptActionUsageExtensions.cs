@@ -78,10 +78,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputePayloadArgument(this IAcceptActionUsage acceptActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return acceptActionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(acceptActionUsageSubject))
+                : acceptActionUsageSubject.Argument(1);
         }
 
         /// <summary>
@@ -101,10 +102,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IReferenceUsage ComputePayloadParameter(this IAcceptActionUsage acceptActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (acceptActionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(acceptActionUsageSubject));
+            }
+
+            var parameters = acceptActionUsageSubject.parameter;
+
+            return parameters.Count == 0
+                ? null
+                : parameters[0] as IReferenceUsage;
         }
 
         /// <summary>
@@ -122,10 +131,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeReceiverArgument(this IAcceptActionUsage acceptActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return acceptActionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(acceptActionUsageSubject))
+                : acceptActionUsageSubject.Argument(2);
         }
 
         /// <summary>
@@ -145,10 +155,12 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsTriggerActionOperation(this IAcceptActionUsage acceptActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return acceptActionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(acceptActionUsageSubject))
+                : acceptActionUsageSubject.owningType is ITransitionUsage transitionUsage
+                  && transitionUsage.triggerAction.Contains(acceptActionUsageSubject);
         }
     }
 }
