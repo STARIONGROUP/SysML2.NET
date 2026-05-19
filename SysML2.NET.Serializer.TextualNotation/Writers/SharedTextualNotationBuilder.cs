@@ -21,19 +21,21 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
+    using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Hand-coded part of the <see cref="SharedTextualNotationBuilder" />.
@@ -545,6 +547,28 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Appends a name token in its textual-notation form: emit the raw identifier when it
+        /// satisfies the KEBNF basic-name production (and is not a reserved keyword), otherwise
+        /// emit the unrestricted-name form (single-quoted, with internal special characters
+        /// escaped per Section 8.2.2.3 of the KerML specification).
+        /// <para>This helper is intended for code-generated assignments of the form
+        /// <c>property = NAME</c> (e.g. <c>declaredName</c>, <c>declaredShortName</c>), where
+        /// the raw string is stored on the POCO but the emitted token must respect the
+        /// lexical-rule constraints of the grammar.</para>
+        /// </summary>
+        /// <param name="stringBuilder">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="name">The raw name string as stored on the POCO; <see langword="null"/> or whitespace is a no-op</param>
+        internal static void AppendName(StringBuilder stringBuilder, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return;
+            }
+
+            stringBuilder.Append(name.QueryIsValidBasicName() ? name : name.ToUnrestrictedName());
+        }
+
+        /// <summary>
         /// Appends a body text formatted as a REGULAR_COMMENT (<c>/* ... */</c>).
         /// <para>The grammar defines <c>REGULAR_COMMENT = '/*' COMMENT_TEXT '*/'</c>.
         /// During parsing, the <c>/*</c> and <c>*/</c> delimiters are stripped and each
@@ -555,6 +579,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="body">The body text to format as a REGULAR_COMMENT</param>
         internal static void AppendRegularComment(StringBuilder stringBuilder, string body)
         {
+            stringBuilder.AppendLine();
+            
             if (string.IsNullOrWhiteSpace(body))
             {
                 stringBuilder.AppendLine("/* */");
@@ -588,23 +614,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Appends the shortest resolvable name of the <paramref name="target"/>
         /// <see cref="IElement"/> for the textual notation, per KerML specification section
         /// 8.2.3.5.
-        /// <para>The local scope of the reference is derived as
-        /// <c>sourcePoco?.owningNamespace ?? writerContext.ContextNamespace</c>. The resolver
-        /// walks <em>up</em> from that local scope through each containing namespace, asking
-        /// the per-scope simple-name index cached on <paramref name="writerContext"/> whether
-        /// the target's <see cref="IElement.EscapedName"/> resolves locally. The first hit
-        /// wins. If no scope along the chain resolves the simple name to the target, the full
-        /// <see cref="IElement.qualifiedName"/> is emitted as a fallback.</para>
-        /// <para>Membership references in import declarations bypass shortening — the path
-        /// identifies WHAT is imported and must remain fully qualified.</para>
+        /// <para>This method is a thin facade over
+        /// <see cref="NameResolutionCache.Resolve" /> on the writer context's
+        /// <see cref="TextualNotationWriterContext.NameResolutionCache" />. The cache owns all
+        /// resolution state: the eager per-namespace simple-name indices, the lazy
+        /// source-POCO scope chains, and the lazy memoised resolved-emission strings. Repeated
+        /// references to the same <c>(target, source-scope)</c> pair are returned from the
+        /// memo without re-walking any chain.</para>
         /// </summary>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> to append to</param>
         /// <param name="target">The referenced <see cref="IElement"/> whose name is appended</param>
-        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> providing the cache + root</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> providing the cache</param>
         /// <param name="sourcePoco">
         /// The <see cref="IElement"/> at whose syntactic position the reference appears (typically the
-        /// relationship POCO whose property is being unparsed). Its <c>owningNamespace</c> is the
-        /// local scope of the reference. Pass the enclosing-builder's <c>poco</c> at every call site.
+        /// relationship POCO whose property is being unparsed). Its local scope drives the
+        /// memoisation key. Pass the enclosing-builder's <c>poco</c> at every call site.
         /// </param>
         internal static void AppendQualifiedName(StringBuilder stringBuilder, IElement target, TextualNotationWriterContext writerContext, IElement sourcePoco)
         {
@@ -613,126 +637,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            if (target is IMembership membership)
-            {
-                // Membership references (used in import declarations) must retain
-                // their full qualified name — the path identifies WHAT is being imported.
-                stringBuilder.Append(membership.MemberElement?.qualifiedName);
-                return;
-            }
-
-            var simpleName = target.EscapedName();
-
-            if (string.IsNullOrWhiteSpace(simpleName))
-            {
-                stringBuilder.Append(target.qualifiedName ?? string.Empty);
-                return;
-            }
-
-            var scope = QueryLocalScope(sourcePoco) ?? writerContext?.ContextNamespace;
-
-            while (scope != null)
-            {
-                var index = writerContext.GetOrBuildSimpleNameIndex(scope);
-
-                if (index.TryGetValue(simpleName, out var elements) && elements.Contains(target))
-                {
-                    stringBuilder.Append(simpleName);
-                    return;
-                }
-
-                INamespace nextScope;
-
-                try
-                {
-                    nextScope = scope.owningNamespace;
-                }
-                catch (NotSupportedException)
-                {
-                    // owningNamespace not implemented for this scope — stop the upward walk
-                    // and fall through to the qualifiedName fallback below.
-                    break;
-                }
-
-                scope = nextScope;
-            }
-
-            stringBuilder.Append(target.qualifiedName ?? string.Empty);
-        }
-
-        /// <summary>
-        /// Returns the local <see cref="INamespace"/> where a reference rooted at
-        /// <paramref name="sourcePoco"/> syntactically appears, by climbing the source's
-        /// containment chain until a Namespace is reached.
-        /// <para>The chain is followed in this priority order at each hop:</para>
-        /// <list type="number">
-        ///   <item><description>The current element itself, if it is already an <see cref="INamespace"/>.</description></item>
-        ///   <item><description>The <see cref="IRelationship.OwningRelatedElement"/> when the
-        ///   current element is an <see cref="IRelationship"/>. Required for relationship POCOs
-        ///   such as <see cref="IRedefinition"/> / <see cref="ISubsetting"/> / <see cref="IFeatureTyping"/>
-        ///   whose <see cref="IElement.owningNamespace"/> is null because they are owned via
-        ///   <c>ownedRelationship</c>, not via a membership.</description></item>
-        ///   <item><description><see cref="IElement.owningNamespace"/> when non-null.</description></item>
-        ///   <item><description><see cref="IElement.owner"/> as a final fallback.</description></item>
-        /// </list>
-        /// <para>A visited set guards against accidental cycles in malformed models.</para>
-        /// </summary>
-        /// <param name="sourcePoco">The source <see cref="IElement"/> bearing the reference, or <see langword="null"/>.</param>
-        /// <returns>The local <see cref="INamespace"/>, or <see langword="null"/> when none can be derived.</returns>
-        private static INamespace QueryLocalScope(IElement sourcePoco)
-        {
-            if (sourcePoco == null)
-            {
-                return null;
-            }
-
-            var visited = new HashSet<IElement>();
-            var current = sourcePoco;
-
-            while (current != null && visited.Add(current))
-            {
-                if (current is INamespace asNamespace)
-                {
-                    return asNamespace;
-                }
-
-                if (current is IRelationship relationship && relationship.OwningRelatedElement != null)
-                {
-                    current = relationship.OwningRelatedElement;
-                    continue;
-                }
-
-                INamespace owningNs = null;
-
-                try
-                {
-                    owningNs = current.owningNamespace;
-                }
-                catch (NotSupportedException)
-                {
-                    // owningNamespace not implemented — fall through to owner walk.
-                }
-
-                if (owningNs != null)
-                {
-                    return owningNs;
-                }
-
-                IElement nextOwner = null;
-
-                try
-                {
-                    nextOwner = current.owner;
-                }
-                catch (NotSupportedException)
-                {
-                    nextOwner = null;
-                }
-
-                current = nextOwner;
-            }
-
-            return null;
+            stringBuilder.Append(writerContext.NameResolutionCache.Resolve(target, sourcePoco));
         }
     }
 }

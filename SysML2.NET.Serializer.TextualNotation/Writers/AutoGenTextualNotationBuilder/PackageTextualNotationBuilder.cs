@@ -124,9 +124,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (ownedRelationshipCursor.Current != null)
             {
                 BuildFilterPackageImport(poco, writerContext, stringBuilder);
-            }
-            ownedRelationshipCursor.Move();
+                ownedRelationshipCursor.Move();
 
+            }
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembershipGuard && elementFilterMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any())
             {

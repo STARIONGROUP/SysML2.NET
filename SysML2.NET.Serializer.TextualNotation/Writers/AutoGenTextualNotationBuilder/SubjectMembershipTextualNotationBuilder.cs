@@ -52,10 +52,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
                 {
                     ReferenceUsageTextualNotationBuilder.BuildSubjectUsage(elementAsReferenceUsage, writerContext, stringBuilder);
+                    ownedRelatedElementCursor.Move();
+
                 }
             }
-            ownedRelatedElementCursor.Move();
-
 
         }
 
@@ -76,10 +76,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
                 {
                     ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(elementAsReferenceUsage, writerContext, stringBuilder);
+                    ownedRelatedElementCursor.Move();
+
                 }
             }
-            ownedRelatedElementCursor.Move();
-
 
         }
     }

@@ -51,10 +51,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
                     ParameterMembershipTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
             stringBuilder.Append(".");
 
             if (ownedRelationshipCursor.Current != null)
@@ -63,10 +63,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
                 {
                     MembershipTextualNotationBuilder.BuildFeatureChainMember(elementAsMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
     }

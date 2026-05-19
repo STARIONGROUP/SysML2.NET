@@ -51,10 +51,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
                     FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -83,10 +83,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
                     FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(elementAsFeatureTyping, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 

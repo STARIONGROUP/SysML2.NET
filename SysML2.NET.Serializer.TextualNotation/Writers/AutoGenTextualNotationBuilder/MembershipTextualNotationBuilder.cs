@@ -68,7 +68,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (!string.IsNullOrWhiteSpace(poco.MemberShortName))
             {
                 stringBuilder.Append("<");
-                stringBuilder.Append(poco.MemberShortName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.MemberShortName);
                 stringBuilder.Append(">");
                 stringBuilder.Append(' ');
             }
@@ -76,7 +76,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (!string.IsNullOrWhiteSpace(poco.MemberName))
             {
-                stringBuilder.Append(poco.MemberName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.MemberName);
                 stringBuilder.Append(' ');
             }
 
@@ -116,10 +116,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                     {
                         FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
+                        ownedRelatedElementCursor.Move();
+
                     }
                 }
-                ownedRelatedElementCursor.Move();
-
 
             }
         }
@@ -191,10 +191,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                     {
                         FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
+                        ownedRelatedElementCursor.Move();
+
                     }
                 }
-                ownedRelatedElementCursor.Move();
-
 
             }
         }

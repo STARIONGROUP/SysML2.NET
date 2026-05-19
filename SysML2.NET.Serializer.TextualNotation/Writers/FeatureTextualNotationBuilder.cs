@@ -197,20 +197,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
             {
                 stringBuilder.Append('<');
-                stringBuilder.Append(poco.DeclaredShortName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.DeclaredShortName);
                 stringBuilder.Append('>');
 
                 if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
                 {
                     stringBuilder.Append(' ');
-                    stringBuilder.Append(poco.DeclaredName);
+                    SharedTextualNotationBuilder.AppendName(stringBuilder, poco.DeclaredName);
                 }
 
                 stringBuilder.Append(' ');
             }
             else if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                stringBuilder.Append(poco.DeclaredName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.DeclaredName);
                 stringBuilder.Append(' ');
             }
         }

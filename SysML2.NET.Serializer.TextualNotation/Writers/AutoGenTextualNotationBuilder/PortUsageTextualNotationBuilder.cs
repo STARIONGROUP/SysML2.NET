@@ -62,7 +62,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting)
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -81,7 +81,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
-                stringBuilder.Append(poco.DeclaredName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.DeclaredName);
                 stringBuilder.Append(" ::> ");
                 stringBuilder.Append(' ');
             }
@@ -93,10 +93,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
                 {
                     ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 

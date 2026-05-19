@@ -53,10 +53,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
                     ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             if (ownedRelationshipCursor.Current != null)
             {
@@ -64,10 +64,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
                     ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             if (ownedRelationshipCursor.Current != null)
             {

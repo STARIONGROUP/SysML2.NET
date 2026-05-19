@@ -53,10 +53,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage elementAsRenderingUsage)
                 {
                     RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(elementAsRenderingUsage, writerContext, stringBuilder);
+                    ownedRelatedElementCursor.Move();
+
                 }
             }
-            ownedRelatedElementCursor.Move();
-
 
         }
     }

@@ -538,10 +538,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.ISpecialization elementAsSpecialization)
                 {
                     SpecializationTextualNotationBuilder.BuildOwnedSpecialization(elementAsSpecialization, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.ISpecialization)
             {
@@ -579,10 +579,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IConjugation elementAsConjugation)
                 {
                     ConjugationTextualNotationBuilder.BuildOwnedConjugation(elementAsConjugation, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -632,10 +632,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDisjoining elementAsDisjoining)
                 {
                     DisjoiningTextualNotationBuilder.BuildOwnedDisjoining(elementAsDisjoining, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDisjoining)
             {
@@ -673,10 +673,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IUnioning elementAsUnioning)
                 {
                     UnioningTextualNotationBuilder.BuildUnioning(elementAsUnioning, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IUnioning unioningGuard && unioningGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any())
             {
@@ -714,10 +714,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IIntersecting elementAsIntersecting)
                 {
                     IntersectingTextualNotationBuilder.BuildIntersecting(elementAsIntersecting, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IIntersecting intersectingGuard && intersectingGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any())
             {
@@ -755,10 +755,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDifferencing elementAsDifferencing)
                 {
                     DifferencingTextualNotationBuilder.BuildDifferencing(elementAsDifferencing, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IDifferencing differencingGuard && differencingGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any())
             {
