@@ -29,9 +29,11 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.Systems.States;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -162,14 +164,35 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(acceptNotTransition.ComputeIsTriggerActionOperation(), Is.False);
 
-            // Branch C — owningType IS ITransitionUsage: triggerAction dispatch hits the ComputeTriggerAction stub.
-            var transitionOwner = new TransitionUsage();
-            var featureMembershipC = new FeatureMembership();
-            var acceptInTransition = new AcceptActionUsage();
-            transitionOwner.AssignOwnership(featureMembershipC, acceptInTransition);
+            // Branch C1 — owningType IS TransitionUsage, NO Trigger TFM present.
+            // AcceptActionUsage is owned via plain OwningMembership → ownedFeatureMembership has no TFMs at all.
+            // triggerAction evaluates to an empty list → .Contains(self) is false.
+            var transitionOwnerC1 = new TransitionUsage();
+            var acceptInTransitionC1 = new AcceptActionUsage();
+            transitionOwnerC1.AssignOwnership(new OwningMembership(), acceptInTransitionC1);
 
-            // For Later: populated case depends on TransitionUsageExtensions.ComputeTriggerAction at SysML2.NET/Extend/TransitionUsageExtensions.cs:208, which is still a stub.
-            Assert.That(() => acceptInTransition.ComputeIsTriggerActionOperation(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(acceptInTransitionC1.ComputeIsTriggerActionOperation(), Is.False);
+
+            // Branch C2 — owningType IS TransitionUsage, with Trigger TFM.
+            // The Where(Kind == Trigger) filter passes, then .transitionFeature is accessed, which dispatches
+            // through TransitionFeatureMembershipExtensions.ComputeTransitionFeature (still a stub).
+            // For Later: depends on TransitionFeatureMembershipExtensions.ComputeTransitionFeature at SysML2.NET/Extend/TransitionFeatureMembershipExtensions.cs:51, which is still a stub.
+            var transitionOwnerC2 = new TransitionUsage();
+            var triggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+            var acceptInTransitionC2 = new AcceptActionUsage();
+            transitionOwnerC2.AssignOwnership(triggerTfm, acceptInTransitionC2);
+
+            Assert.That(() => acceptInTransitionC2.ComputeIsTriggerActionOperation(), Throws.TypeOf<NotSupportedException>());
+
+            // Branch C3 — owningType IS TransitionUsage, only non-Trigger TFMs (Effect kind).
+            // The Where(Kind == Trigger) filter excludes the Effect TFM → triggerAction returns empty list.
+            // .transitionFeature is never accessed, so the stub is never hit → .Contains(self) is false.
+            var transitionOwnerC3 = new TransitionUsage();
+            var effectTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Effect };
+            var acceptInTransitionC3 = new AcceptActionUsage();
+            transitionOwnerC3.AssignOwnership(effectTfm, acceptInTransitionC3);
+
+            Assert.That(acceptInTransitionC3.ComputeIsTriggerActionOperation(), Is.False);
         }
     }
 }
