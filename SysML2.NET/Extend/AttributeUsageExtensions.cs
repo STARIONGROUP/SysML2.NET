@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -63,16 +64,25 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// Walks <c>OwnedRelationship</c> → <c>IFeatureTyping</c> → <c>Type</c> directly,
+        /// filtering to <c>IDataType</c>. The AttributeUsage POCO's explicit-interface
+        /// <c>IUsage.definition</c> impl delegates to <c>this.attributeDefinition</c>,
+        /// which would route back into this method → stack overflow. Bypassing the
+        /// instance property mirrors the technique in
+        /// <see cref="UsageExtensions.ComputeDefinition" />.
+        /// </remarks>
         /// <param name="attributeUsageSubject">
         /// The subject <see cref="IAttributeUsage"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IDataType> ComputeAttributeDefinition(this IAttributeUsage attributeUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return attributeUsageSubject == null
+                ? throw new ArgumentNullException(nameof(attributeUsageSubject))
+                : [..attributeUsageSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IDataType>()];
         }
 
         /// <summary>
@@ -84,10 +94,11 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsReference(this IAttributeUsage attributeUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return attributeUsageSubject == null
+                ? throw new ArgumentNullException(nameof(attributeUsageSubject))
+                : true;
         }
 
     }
