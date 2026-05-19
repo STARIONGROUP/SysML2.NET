@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="TransitionUsageExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -22,10 +22,12 @@ namespace SysML2.NET.Core.POCO.Systems.States
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.Systems.States;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -82,10 +84,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IActionUsage> ComputeEffectAction(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            return [..transitionUsageSubject.ownedFeatureMembership
+                .OfType<ITransitionFeatureMembership>()
+                .Where(tfm => tfm.Kind == TransitionFeatureKind.Effect)
+                .Select(tfm => tfm.transitionFeature)
+                .OfType<IActionUsage>()];
         }
 
         /// <summary>
@@ -106,10 +116,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IExpression> ComputeGuardExpression(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            return [..transitionUsageSubject.ownedFeatureMembership
+                .OfType<ITransitionFeatureMembership>()
+                .Where(tfm => tfm.Kind == TransitionFeatureKind.Guard)
+                .Select(tfm => tfm.transitionFeature)
+                .OfType<IExpression>()];
         }
 
         /// <summary>
@@ -130,10 +148,16 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputeSource(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            var sourceFeature = transitionUsageSubject.SourceFeature();
+
+            return sourceFeature?.featureTarget as IActionUsage;
         }
 
         /// <summary>
@@ -151,10 +175,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static ISuccession ComputeSuccession(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            return transitionUsageSubject.ownedMember.OfType<ISuccession>().FirstOrDefault();
         }
 
         /// <summary>
@@ -180,10 +208,25 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputeTarget(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            var succession = transitionUsageSubject.succession;
+
+            if (succession == null)
+            {
+                return null;
+            }
+
+            var firstTargetFeature = succession.targetFeature.Count == 0
+                ? null
+                : succession.targetFeature[0];
+
+            return firstTargetFeature?.featureTarget as IActionUsage;
         }
 
         /// <summary>
@@ -204,10 +247,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAcceptActionUsage> ComputeTriggerAction(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            return [..transitionUsageSubject.ownedFeatureMembership
+                .OfType<ITransitionFeatureMembership>()
+                .Where(tfm => tfm.Kind == TransitionFeatureKind.Trigger)
+                .Select(tfm => tfm.transitionFeature)
+                .OfType<IAcceptActionUsage>()];
         }
 
         /// <summary>
@@ -227,10 +278,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="IReferenceUsage" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IReferenceUsage ComputeTriggerPayloadParameterOperation(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            var triggerActions = transitionUsageSubject.triggerAction;
+
+            return triggerActions.Count == 0
+                ? null
+                : triggerActions[0].payloadParameter;
         }
 
         /// <summary>
@@ -256,10 +315,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeSourceFeatureOperation(this ITransitionUsage transitionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (transitionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionUsageSubject));
+            }
+
+            return transitionUsageSubject.ownedMembership
+                .Where(m => m is not IFeatureMembership)
+                .Select(m => m.MemberElement)
+                .OfType<IFeature>()
+                .FirstOrDefault(f => f.featureTarget is IActionUsage);
         }
     }
 }
