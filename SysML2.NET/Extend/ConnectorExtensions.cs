@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="ConnectorExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -22,15 +22,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="ConnectorExtensions"/> class provides extensions methods for
@@ -47,10 +43,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAssociation> ComputeAssociation(this IConnector connectorSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return connectorSubject == null
+                ? throw new ArgumentNullException(nameof(connectorSubject))
+                : [..connectorSubject.OwnedRelationship
+                      .OfType<IFeatureTyping>()
+                      .Select(featureTyping => featureTyping.Type)
+                      .OfType<IAssociation>()];
         }
 
         /// <summary>
@@ -62,10 +62,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeConnectorEnd(this IConnector connectorSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return connectorSubject == null
+                ? throw new ArgumentNullException(nameof(connectorSubject))
+                : [..connectorSubject.feature.Where(memberFeature => memberFeature.IsEnd)];
         }
 
         /// <summary>
@@ -94,10 +95,38 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeDefaultFeaturingType(this IConnector connectorSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (connectorSubject == null)
+            {
+                throw new ArgumentNullException(nameof(connectorSubject));
+            }
+
+            var relatedFeatures = connectorSubject.relatedFeature;
+
+            if (relatedFeatures.Count == 0)
+            {
+                return null;
+            }
+
+            var fullClosure = ComputeFeaturingTypeClosure(relatedFeatures);
+
+            var commonFeaturingTypes = fullClosure
+                .Where(candidate => relatedFeatures.All(relatedFeature => relatedFeature.IsFeaturedWithin(candidate)))
+                .ToList();
+
+            if (commonFeaturingTypes.Count == 0)
+            {
+                return null;
+            }
+
+            var nearestCommonFeaturingTypes = commonFeaturingTypes
+                .Where(candidateType => !commonFeaturingTypes.Any(successorType =>
+                    successorType != candidateType
+                    && ComputeFeaturingTypeClosure([successorType]).Contains(candidateType)))
+                .ToList();
+
+            return nearestCommonFeaturingTypes.Count == 0 ? null : nearestCommonFeaturingTypes[0];
         }
 
         /// <summary>
@@ -116,10 +145,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeRelatedFeature(this IConnector connectorSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return connectorSubject == null
+                ? throw new ArgumentNullException(nameof(connectorSubject))
+                : [..connectorSubject.connectorEnd
+                      .Select(connectorEndFeature => connectorEndFeature.ownedReferenceSubsetting)
+                      .Where(referenceSubsetting => referenceSubsetting != null)
+                      .Select(referenceSubsetting => referenceSubsetting.SubsettedFeature)];
         }
 
         /// <summary>
@@ -140,10 +173,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeSourceFeature(this IConnector connectorSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (connectorSubject == null)
+            {
+                throw new ArgumentNullException(nameof(connectorSubject));
+            }
+
+            var relatedFeatures = connectorSubject.relatedFeature;
+
+            return relatedFeatures.Count == 0 ? null : relatedFeatures[0];
         }
 
         /// <summary>
@@ -167,11 +206,64 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeTargetFeature(this IConnector connectorSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (connectorSubject == null)
+            {
+                throw new ArgumentNullException(nameof(connectorSubject));
+            }
+
+            var relatedFeatures = connectorSubject.relatedFeature;
+
+            return relatedFeatures.Count < 2 ? [] : relatedFeatures.GetRange(1, relatedFeatures.Count - 1);
         }
 
+        /// <summary>
+        /// Computes the OCL <c>closure(featuringType)</c> over a seed set of <see cref="IType"/> nodes.
+        /// </summary>
+        /// <remarks>
+        /// The <c>featuringType</c> navigation is declared on <see cref="IFeature"/> only — pure
+        /// <see cref="IType"/> nodes that are not also <see cref="IFeature"/> are sinks. The walk
+        /// is breadth-first and uses a <see cref="HashSet{T}"/> visited-set to guarantee
+        /// termination on cyclic featuringType graphs. The seed elements are included in the
+        /// result, mirroring OCL <c>closure</c> semantics.
+        /// </remarks>
+        /// <param name="seed">
+        /// The seed collection of <see cref="IType"/> elements from which to begin the closure.
+        /// </param>
+        /// <returns>
+        /// The closure of the seed under the <c>featuringType</c> navigation, in BFS visit order.
+        /// </returns>
+        private static List<IType> ComputeFeaturingTypeClosure(IEnumerable<IType> seed)
+        {
+            var visited = new HashSet<IType>();
+            var result = new List<IType>();
+            var queue = new Queue<IType>(seed);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                if (current == null || !visited.Add(current))
+                {
+                    continue;
+                }
+
+                result.Add(current);
+
+                if (current is IFeature currentFeature)
+                {
+                    foreach (var featuringType in currentFeature.featuringType)
+                    {
+                        if (featuringType != null && !visited.Contains(featuringType))
+                        {
+                            queue.Enqueue(featuringType);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
