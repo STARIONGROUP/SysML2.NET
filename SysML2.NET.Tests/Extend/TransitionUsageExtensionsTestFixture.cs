@@ -35,6 +35,8 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.Systems.States;
     using SysML2.NET.Extensions;
 
+    using PocoFeature = SysML2.NET.Core.POCO.Core.Features.Feature;
+
     [TestFixture]
     public class TransitionUsageExtensionsTestFixture
     {
@@ -149,13 +151,80 @@ namespace SysML2.NET.Tests.Extend
             // No Succession in ownedMember → succession is null → null.
             Assert.That(transitionUsage.ComputeTarget(), Is.Null);
 
-            // Succession present but targetFeature access hits ConnectorExtensions.ComputeTargetFeature stub.
-            // For Later: populated path depends on ConnectorExtensions.ComputeTargetFeature
-            // at SysML2.NET/Extend/ConnectorExtensions.cs:171, which is still a stub.
-            var succession = new Succession();
-            transitionUsage.AssignOwnership(new OwningMembership(), succession);
+            // Helper: wire a connector end onto the given succession.
+            // Creates a Feature(IsEnd=true) with a ReferenceSubsetting pointing at relatedTarget,
+            // wrapped in a FeatureMembership owned by the succession.
+            static void AddSuccessionEnd(Succession owningSuccession, IFeature relatedTarget)
+            {
+                var endFeature = new PocoFeature { IsEnd = true };
+                var referenceSubsetting = new ReferenceSubsetting { ReferencedFeature = relatedTarget };
+                endFeature.AssignOwnership(referenceSubsetting);
 
-            Assert.That(() => transitionUsage.ComputeTarget(), Throws.TypeOf<NotSupportedException>());
+                var featureMembership = new FeatureMembership();
+                owningSuccession.AssignOwnership(featureMembership, endFeature);
+            }
+
+            // Succession present, one connector end → relatedFeature has 1 element → targetFeature is empty
+            // (GetRange(1, 0)) → firstTargetFeature is null → null.
+            var successionOneEnd = new Succession();
+            transitionUsage.AssignOwnership(new OwningMembership(), successionOneEnd);
+            AddSuccessionEnd(successionOneEnd, new PocoFeature());
+
+            Assert.That(transitionUsage.ComputeTarget(), Is.Null);
+
+            // Succession present, two connector ends, second end's relatedTarget is a plain Feature.
+            // featureTarget of Feature (no chaining) = Feature itself → not IActionUsage → null.
+            var transitionUsage2 = new TransitionUsage();
+            var successionNonAction = new Succession();
+            transitionUsage2.AssignOwnership(new OwningMembership(), successionNonAction);
+
+            var nonActionTarget = new PocoFeature();
+            AddSuccessionEnd(successionNonAction, new PocoFeature());
+            AddSuccessionEnd(successionNonAction, nonActionTarget);
+
+            Assert.That(transitionUsage2.ComputeTarget(), Is.Null);
+
+            // firstTargetFeature.featureTarget == null → null.
+            // Wire the second end's relatedTarget with a FeatureChaining whose ChainingFeature = null,
+            // which makes featureTarget derive to null.
+            var transitionUsage3 = new TransitionUsage();
+            var successionNullFeatureTarget = new Succession();
+            transitionUsage3.AssignOwnership(new OwningMembership(), successionNullFeatureTarget);
+
+            var relatedTargetWithNullChain = new PocoFeature();
+            relatedTargetWithNullChain.AssignOwnership(new FeatureChaining { ChainingFeature = null });
+
+            AddSuccessionEnd(successionNullFeatureTarget, new PocoFeature());
+            AddSuccessionEnd(successionNullFeatureTarget, relatedTargetWithNullChain);
+
+            // relatedTargetWithNullChain.featureTarget = null (last ChainingFeature is null) → null.
+            Assert.That(transitionUsage3.ComputeTarget(), Is.Null);
+
+            // POSITIVE case: two connector ends, the second end's relatedTarget is an ActionUsage.
+            // ActionUsage has no chaining → featureTarget = itself = IActionUsage → returned.
+            var transitionUsage4 = new TransitionUsage();
+            var successionPositive = new Succession();
+            transitionUsage4.AssignOwnership(new OwningMembership(), successionPositive);
+
+            var actionUsageTarget = new ActionUsage();
+            AddSuccessionEnd(successionPositive, new PocoFeature());
+            AddSuccessionEnd(successionPositive, actionUsageTarget);
+
+            Assert.That(transitionUsage4.ComputeTarget(), Is.SameAs(actionUsageTarget));
+
+            // Three connector ends: source, targetEnd2 (ActionUsage), targetEnd3 (plain Feature).
+            // targetFeature = [targetEnd2, targetEnd3]; firstTargetFeature = targetEnd2 (ActionUsage)
+            // → featureTarget = itself → returned.
+            var transitionUsage5 = new TransitionUsage();
+            var successionThreeEnds = new Succession();
+            transitionUsage5.AssignOwnership(new OwningMembership(), successionThreeEnds);
+
+            var actionUsageTarget5 = new ActionUsage();
+            AddSuccessionEnd(successionThreeEnds, new PocoFeature());
+            AddSuccessionEnd(successionThreeEnds, actionUsageTarget5);
+            AddSuccessionEnd(successionThreeEnds, new PocoFeature());
+
+            Assert.That(transitionUsage5.ComputeTarget(), Is.SameAs(actionUsageTarget5));
         }
 
         [Test]
