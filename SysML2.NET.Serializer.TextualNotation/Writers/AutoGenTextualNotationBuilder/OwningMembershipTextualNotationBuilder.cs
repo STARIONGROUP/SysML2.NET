@@ -410,8 +410,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembership:
-                    FeatureMembershipTextualNotationBuilder.BuildOwnedFeatureMember(pocoFeatureMembership, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembershipOwnedFeatureMember when writerContext.CursorCache.GetOrCreateCursor(pocoFeatureMembershipOwnedFeatureMember.Id, "ownedRelatedElement", pocoFeatureMembershipOwnedFeatureMember.OwnedRelatedElement).Current is SysML2.NET.Core.POCO.Core.Features.IFeature:
+                    FeatureMembershipTextualNotationBuilder.BuildOwnedFeatureMember(pocoFeatureMembershipOwnedFeatureMember, writerContext, stringBuilder);
                     break;
                 default:
                     BuildTypeFeatureMember(poco, writerContext, stringBuilder);

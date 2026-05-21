@@ -30,6 +30,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
@@ -229,16 +230,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         internal static bool IsValidForBehaviorUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.Any(element =>
-                (element is IActionUsage or IStateUsage or IConstraintUsage
-                    or IRequirementUsage or ICaseUsage)
-                && element is not IControlNode
-                && element is not ISendActionUsage
-                && element is not IAcceptActionUsage
-                && element is not IAssignmentActionUsage
-                && element is not ITerminateActionUsage
-                && element is not IIfActionUsage
-                && element is not ILoopActionUsage
-                && element is not ITransitionUsage) == true;
+                (element is (IActionUsage or IStateUsage or IConstraintUsage
+                    or IRequirementUsage or ICaseUsage) and not IControlNode and not ISendActionUsage and not IAcceptActionUsage and not IAssignmentActionUsage and not ITerminateActionUsage and not IIfActionUsage and not ILoopActionUsage and not ITransitionUsage)) == true;
         }
 
         /// <summary>
@@ -310,11 +303,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>True if the usage is a structural-usage metaclass (and not a behavior-usage subtype routed by a sibling rule)</returns>
         internal static bool IsValidForStructureUsageElement(this IUsage usage, TextualNotationWriterContext writerContext)
         {
-            return (usage is IOccurrenceUsage or IItemUsage or IPartUsage or IViewUsage
-                    or IRenderingUsage or IPortUsage or IConnectionUsage or IInterfaceUsage
-                    or IAllocationUsage or IFlowUsage)
-                && usage is not IConstraintUsage
-                && (usage is not IActionUsage || usage is IFlowUsage);
+            return (usage is (IOccurrenceUsage or IItemUsage or IPartUsage or IViewUsage
+                or IRenderingUsage or IPortUsage or IConnectionUsage or IInterfaceUsage
+                or IAllocationUsage or IFlowUsage) and not IConstraintUsage and (not IActionUsage or IFlowUsage));
         }
 
         /// <summary>
@@ -334,12 +325,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>True if the usage is a plain occurrence (no individual, no portion kind, and not routed by a more specific sibling rule)</returns>
         internal static bool IsValidForOccurrenceUsage(this IOccurrenceUsage occurrenceUsage, TextualNotationWriterContext writerContext)
         {
-            return occurrenceUsage is { IsIndividual: false, PortionKind: null }
-                && occurrenceUsage is not IItemUsage
-                && occurrenceUsage is not IPortUsage
-                && occurrenceUsage is not IActionUsage
-                && occurrenceUsage is not IConstraintUsage
-                && occurrenceUsage is not IEventOccurrenceUsage;
+            return occurrenceUsage is { IsIndividual: false, PortionKind: null } and not IItemUsage and not IPortUsage and not IActionUsage and not IConstraintUsage and not IEventOccurrenceUsage;
         }
 
         /// <summary>

@@ -73,8 +73,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange pocoMultiplicityRange:
-                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(pocoMultiplicityRange, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange pocoMultiplicityRangeMultiplicityRange when writerContext.CursorCache.GetOrCreateCursor(pocoMultiplicityRangeMultiplicityRange.Id, "ownedRelationship", pocoMultiplicityRangeMultiplicityRange.OwnedRelationship).Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership:
+                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(pocoMultiplicityRangeMultiplicityRange, writerContext, stringBuilder);
                     break;
                 default:
                     BuildMultiplicitySubset(poco, writerContext, stringBuilder);

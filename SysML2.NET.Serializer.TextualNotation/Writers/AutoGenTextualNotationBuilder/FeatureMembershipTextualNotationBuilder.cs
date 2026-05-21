@@ -289,7 +289,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("first ");
-            BuildMemberFeature(poco, writerContext, stringBuilder);
+            BuildInitialNodeMemberHandCoded(poco, writerContext, stringBuilder);
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, writerContext, stringBuilder);
 
         }
@@ -538,7 +538,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedExpressionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-            BuildOwnedFeatureMember(poco, writerContext, stringBuilder);
+            BuildOwnedExpressionMemberHandCoded(poco, writerContext, stringBuilder);
 
         }
 

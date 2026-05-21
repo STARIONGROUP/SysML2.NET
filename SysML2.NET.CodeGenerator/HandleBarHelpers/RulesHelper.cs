@@ -29,6 +29,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
     using uml4net.CommonStructure;
+    using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
 
     /// <summary>
@@ -92,9 +93,67 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     };
 
                     ruleGenerationContext.AllRules.AddRange(allRules);
+
+                    var isOperatorExpressionRule = IsOperatorExpressionRule(textualRule, umlClass);
+                    var isOwnedExpressionRule = string.Equals(textualRule.RuleName, "OwnedExpression", StringComparison.Ordinal);
+
+                    if (isOwnedExpressionRule)
+                    {
+                        writer.WriteSafeString("var operatorParensNeeded = writerContext.OperatorContextStack.Count > 0 && SysML2.NET.Serializer.TextualNotation.Writers.OperatorPrecedence.NeedsParenthesesAsOperand(writerContext.OperatorContextStack.Peek(), poco);" + Environment.NewLine);
+                        writer.WriteSafeString("if (operatorParensNeeded) { stringBuilder.Append('('); }" + Environment.NewLine);
+                    }
+
+                    if (isOperatorExpressionRule)
+                    {
+                        writer.WriteSafeString("writerContext.OperatorContextStack.Push(poco);" + Environment.NewLine);
+                        writer.WriteSafeString("try" + Environment.NewLine + "{" + Environment.NewLine);
+                    }
+
                     processor.ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
+
+                    if (isOperatorExpressionRule)
+                    {
+                        writer.WriteSafeString("}" + Environment.NewLine + "finally" + Environment.NewLine + "{" + Environment.NewLine + "writerContext.OperatorContextStack.Pop();" + Environment.NewLine + "}" + Environment.NewLine);
+                    }
+
+                    if (isOwnedExpressionRule)
+                    {
+                        writer.WriteSafeString("if (operatorParensNeeded) { stringBuilder.Append(')'); }" + Environment.NewLine);
+                    }
                 }
             });
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="rule"/> targets an <c>IOperatorExpression</c>
+        /// (or any of its subclasses) as the rule's effective metaclass. Used by
+        /// <c>WriteRule</c> to wrap the generated builder body with a precedence-stack
+        /// push/pop so operand-rendering can decide on parens.
+        /// </summary>
+        /// <param name="rule">The textual notation rule being generated.</param>
+        /// <param name="umlClass">The rule's target <see cref="IClass"/>.</param>
+        /// <returns><c>true</c> when the target is <c>OperatorExpression</c> or a subclass.</returns>
+        private static bool IsOperatorExpressionRule(TextualNotationRule rule, IClass umlClass)
+        {
+            if (umlClass == null)
+            {
+                return false;
+            }
+
+            if (string.Equals(umlClass.Name, "OperatorExpression", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            foreach (var general in umlClass.QueryAllGeneralClassifiers())
+            {
+                if (string.Equals(general.Name, "OperatorExpression", StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

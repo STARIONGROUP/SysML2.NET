@@ -21,7 +21,9 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System;
+    using System.Collections.Generic;
 
+    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
@@ -49,7 +51,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             this.CursorCache = new CursorCache();
             this.ContextNamespace = contextNamespace ?? throw new ArgumentNullException(nameof(contextNamespace));
             this.NameResolutionCache = new NameResolutionCache(contextNamespace);
+            this.OperatorContextStack = new Stack<IExpression>();
         }
+
+        /// <summary>
+        /// Gets the stack of currently-active enclosing operator expressions. The textual
+        /// notation builder for each <c>IOperatorExpression</c>-typed rule pushes its
+        /// <see cref="IExpression"/> poco on entry and pops it on exit (try/finally), so
+        /// operand-emission paths can peek the top to obtain the enclosing operator and
+        /// consult <see cref="OperatorPrecedence.NeedsParenthesesAsOperand"/> to decide
+        /// whether the operand needs to be wrapped in <c>(…)</c>.
+        /// </summary>
+        public Stack<IExpression> OperatorContextStack { get; }
 
         /// <summary>
         /// Gets the <see cref="ICursorCache"/> used for cursor-based element traversal.

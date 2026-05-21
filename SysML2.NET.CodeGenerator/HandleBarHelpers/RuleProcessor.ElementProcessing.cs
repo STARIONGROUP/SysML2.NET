@@ -348,6 +348,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             {
                                 writer.WriteSafeString($"SharedTextualNotationBuilder.AppendName(stringBuilder, poco.{targetPropertyName});");
                             }
+                            else if (string.Equals(targetPropertyName, "Operator", StringComparison.Ordinal))
+                            {
+                                // Operator tokens (binary, unary, conditional) need a trailing
+                                // space to separate them from the next operand. Matches the
+                                // convention used by the operator-switch dispatch path
+                                // (RuleProcessor.PatternHandlers.cs:94-95).
+                                writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});{Environment.NewLine}");
+                                writer.WriteSafeString("stringBuilder.Append(' ');");
+                            }
                             else
                             {
                                 writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});");
@@ -433,7 +442,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, writerContext, stringBuilder);");
+                // The grammar's assignment property does not resolve against the target
+                // metamodel class (e.g. the OMG kebnf carries a one-off `ownedFeatureMember`
+                // vs. metamodel `ownedMemberFeature` typo for `OwnedExpressionMember`).
+                // Delegate to the HandCoded sibling per the documented convention rather
+                // than emitting a name-collision-prone `Build{Property}(poco, …)` call.
+                var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
         }
 

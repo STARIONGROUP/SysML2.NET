@@ -41,6 +41,47 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Builds the Textual Notation string for the rule InitialNodeMember.
+        /// <remarks>InitialNodeMember:FeatureMembership=MemberPrefix'first'memberFeature=[QualifiedName]RelationshipBody</remarks>
+        /// <para>The grammar's <c>memberFeature</c> property does not resolve against
+        /// <see cref="IFeatureMembership"/> — the metamodel only exposes
+        /// <c>ownedMemberFeature</c> on <c>IFeatureMembership</c> and <c>MemberElement</c>
+        /// on its parent <c>IMembership</c>. This hand-coded sibling carries the
+        /// remaining <c>[QualifiedName]</c> emission as a stub; the surrounding
+        /// <c>MemberPrefix</c>, <c>'first'</c>, and <c>RelationshipBody</c> tokens are
+        /// already emitted by the autogen wrapper.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildInitialNodeMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        {
+            // Preserves the previous empty-stub behavior of BuildMemberFeature for this
+            // call site. The full QualifiedName-emission still requires a dedicated
+            // implementation; left as a follow-up.
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule OwnedExpressionMember.
+        /// <remarks>OwnedExpressionMember:FeatureMembership=ownedFeatureMember=OwnedExpression</remarks>
+        /// <para>The grammar property name <c>ownedFeatureMember</c> does not exist on
+        /// <see cref="IFeatureMembership"/> — the OMG kebnf carries a one-off typo and
+        /// the real metamodel property is <c>ownedMemberFeature</c>. This hand-coded
+        /// sibling resolves the typo at emission time, dispatching the membership's
+        /// <c>OwnedMemberFeature</c> through <c>BuildOwnedExpression</c>.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedExpressionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        {
+            if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
+            {
+                ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, writerContext, stringBuilder);
+            }
+        }
+
+        /// <summary>
         /// Builds the Textual Notation string for the rule EntryTransitionMember
         /// <remarks>EntryTransitionMember:FeatureMembership=MemberPrefix(ownedRelatedElement+=GuardedTargetSuccession|'then'ownedRelatedElement+=TargetSuccession)';'</remarks>
         /// </summary>
