@@ -238,6 +238,9 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(() => requirementUsage.ComputeSubjectParameter(), Throws.TypeOf<NotSupportedException>());
         }
 
+        private static readonly string[] ExpectedSingleComputedText = new[] { "The requirement text." };
+        private static readonly string[] ExpectedMultipleComputedText = new[] { "The requirement text.", "Additional context." };
+
         [Test]
         public void VerifyComputeText()
         {
@@ -253,14 +256,14 @@ namespace SysML2.NET.Tests.Extend
             var firstAnnotation = new Annotation();
             requirementUsage.AssignOwnership(firstAnnotation, firstDocumentation);
 
-            Assert.That(requirementUsage.ComputeText(), Is.EqualTo(new[] { "The requirement text." }));
+            Assert.That(requirementUsage.ComputeText(), Is.EqualTo(ExpectedSingleComputedText));
 
             // Two Documentation elements — both bodies appear in order.
             var secondDocumentation = new Documentation { Body = "Additional context." };
             var secondAnnotation = new Annotation();
             requirementUsage.AssignOwnership(secondAnnotation, secondDocumentation);
 
-            Assert.That(requirementUsage.ComputeText(), Is.EqualTo(new[] { "The requirement text.", "Additional context." }));
+            Assert.That(requirementUsage.ComputeText(), Is.EqualTo(ExpectedMultipleComputedText));
         }
     }
 }
