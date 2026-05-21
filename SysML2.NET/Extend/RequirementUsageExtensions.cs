@@ -22,40 +22,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.Systems.Occurrences;
-    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Kernel.Classes;
-    using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Systems.Actions;
-    using SysML2.NET.Core.POCO.Systems.Allocations;
-    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
-    using SysML2.NET.Core.POCO.Systems.Attributes;
-    using SysML2.NET.Core.POCO.Systems.Calculations;
-    using SysML2.NET.Core.POCO.Systems.Cases;
-    using SysML2.NET.Core.POCO.Systems.Connections;
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Core.POCO.Systems.Enumerations;
-    using SysML2.NET.Core.POCO.Systems.Flows;
-    using SysML2.NET.Core.POCO.Systems.Interfaces;
-    using SysML2.NET.Core.POCO.Systems.Items;
-    using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Core.POCO.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Core.POCO.Systems.States;
-    using SysML2.NET.Core.POCO.Systems.UseCases;
-    using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Core.POCO.Systems.Views;
 
     /// <summary>
     /// The <see cref="RequirementUsageExtensions"/> class provides extensions methods for
@@ -80,10 +54,11 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPartUsage> ComputeActorParameter(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : [..requirementUsageSubject.featureMembership.OfType<IActorMembership>().Select(actorMembership => actorMembership.ownedActorParameter)];
         }
 
         /// <summary>
@@ -104,10 +79,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : [..requirementUsageSubject.ownedFeatureMembership
+                      .OfType<IRequirementConstraintMembership>()
+                      .Where(requirementConstraintMembership => requirementConstraintMembership.Kind == RequirementConstraintKind.Assumption)
+                      .Select(requirementConstraintMembership => requirementConstraintMembership.ownedConstraint)];
         }
 
         /// <summary>
@@ -127,10 +106,11 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : [..requirementUsageSubject.featureMembership.OfType<IFramedConcernMembership>().Select(framedConcernMembership => framedConcernMembership.ownedConcern)];
         }
 
         /// <summary>
@@ -151,10 +131,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : [..requirementUsageSubject.ownedFeatureMembership
+                      .OfType<IRequirementConstraintMembership>()
+                      .Where(requirementConstraintMembership => requirementConstraintMembership.Kind == RequirementConstraintKind.Requirement)
+                      .Select(requirementConstraintMembership => requirementConstraintMembership.ownedConstraint)];
         }
 
         /// <summary>
@@ -166,10 +150,15 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : requirementUsageSubject.OwnedRelationship
+                      .OfType<IFeatureTyping>()
+                      .Select(featureTyping => featureTyping.Type)
+                      .OfType<IRequirementDefinition>()
+                      .FirstOrDefault();
         }
 
         /// <summary>
@@ -189,10 +178,12 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            // The OCL uses "AStakholderMembership" which is a typo in the XMI source; the correct C# type is IStakeholderMembership.
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : [..requirementUsageSubject.featureMembership.OfType<IStakeholderMembership>().Select(stakeholderMembership => stakeholderMembership.ownedStakeholderParameter)];
         }
 
         /// <summary>
@@ -215,10 +206,18 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IUsage ComputeSubjectParameter(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (requirementUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(requirementUsageSubject));
+            }
+
+            var subjects = requirementUsageSubject.featureMembership.OfType<ISubjectMembership>().ToList();
+
+            return subjects.Count == 0
+                ? null
+                : subjects[0].ownedSubjectParameter;
         }
 
         /// <summary>
@@ -236,10 +235,11 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<string> ComputeText(this IRequirementUsage requirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : [..requirementUsageSubject.documentation.Select(documentation => documentation.Body)];
         }
 
     }
