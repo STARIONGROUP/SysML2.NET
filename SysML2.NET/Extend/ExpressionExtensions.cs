@@ -22,15 +22,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="ExpressionExtensions"/> class provides extensions methods for
@@ -47,10 +44,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFunction ComputeFunction(this IExpression expressionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return expressionSubject == null
+                ? throw new ArgumentNullException(nameof(expressionSubject))
+                : expressionSubject.type.OfType<IFunction>().FirstOrDefault();
         }
 
         /// <summary>
@@ -68,10 +66,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsModelLevelEvaluable(this IExpression expressionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return expressionSubject?.ModelLevelEvaluable([]) ?? throw new ArgumentNullException(nameof(expressionSubject));
         }
 
         /// <summary>
@@ -96,10 +93,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeResult(this IExpression expressionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (expressionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(expressionSubject));
+            }
+
+            var resultParams = expressionSubject.featureMembership
+                .OfType<IReturnParameterMembership>()
+                .Select(returnParameterMembership => returnParameterMembership.ownedMemberParameter)
+                .ToList();
+
+            return resultParams.Count == 0 ? null : resultParams[0];
         }
 
         /// <summary>
@@ -132,10 +138,41 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeModelLevelEvaluableOperation(this IExpression expressionSubject, List<IFeature> visited)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (expressionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(expressionSubject));
+            }
+
+            visited ??= [];
+
+            if (!expressionSubject.ownedSpecialization.All(specialization => specialization.IsImplied))
+            {
+                return false;
+            }
+
+            var resultFeature = expressionSubject.result;
+
+            foreach (var ownedFeature in expressionSubject.ownedFeature)
+            {
+                //  f.valuation == null clause omitted — IFeature has no Valuation property in the current POCO (metamodel gap). Follow-up issue required.
+                var branchA =
+                    (expressionSubject.DirectionOf(ownedFeature) == FeatureDirectionKind.In
+                     || ReferenceEquals(ownedFeature, resultFeature))
+                    && ownedFeature.ownedFeature.Count == 0;
+
+                var branchB =
+                    ownedFeature.owningFeatureMembership is IResultExpressionMembership
+                    && (ownedFeature as IExpression)?.ModelLevelEvaluable(visited) == true;
+
+                if (!(branchA || branchB))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -169,10 +206,21 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IElement> ComputeEvaluateOperation(this IExpression expressionSubject, IElement target)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (expressionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(expressionSubject));
+            }
+
+            var resultExprs = expressionSubject.ownedFeatureMembership
+                .OfType<IResultExpressionMembership>()
+                .Select(resultExpressionMembership => resultExpressionMembership.ownedResultExpression)
+                .ToList();
+
+            return resultExprs.Count == 0
+                ? []
+                : resultExprs[0].Evaluate(target);
         }
 
         /// <summary>
@@ -197,10 +245,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeCheckConditionOperation(this IExpression expressionSubject, IElement target)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (expressionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(expressionSubject));
+            }
+
+            var results = expressionSubject.Evaluate(target);
+
+            return results.Count == 1 && results[0] is ILiteralBoolean { Value: true };
         }
     }
 }
