@@ -112,7 +112,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Extracts all boolean property names assigned via the conditional operator from a grammar rule.
+        /// Extracts all boolean property names assigned via the conditional operator
+        /// (<c>?=</c>) from a grammar rule, restricted to assignments that are
+        /// <em>guaranteed to fire</em> whenever the rule matches. A <c>?=</c> at the
+        /// top level of the rule body is guaranteed; one inside an optional
+        /// (<c>?</c>), repeating (<c>*</c>/<c>+</c>), or alternation
+        /// (<c>(A | B)</c>) group — or reached through a NonTerminal whose
+        /// referenced rule itself has multiple top-level alternatives — is
+        /// <em>conditional</em> and is excluded, because <c>IsX</c> would be
+        /// <c>true</c> only for the subset of inputs that took that path. The
+        /// conditional-position filter prevents the duplicate-class
+        /// discriminator pass (<c>RuleProcessor.PatternHandlers.cs</c>) from
+        /// emitting unreliable <c>when poco.IsX</c> guards that silently drop
+        /// runtime instances where the keyword was not matched.
         /// </summary>
         /// <param name="rule">The <see cref="TextualNotationRule" /> to inspect</param>
         /// <param name="allRules">All available rules for recursive lookup</param>
@@ -120,42 +132,79 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         internal static List<string> QueryBooleanAssignmentProperties(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules)
         {
             var result = new List<string>();
-            CollectBooleanAssignmentProperties(rule.Alternatives.SelectMany(x => x.Elements).ToList(), allRules, result, new HashSet<string>());
+
+            // A rule with multiple top-level alternatives is itself an alternation
+            // choice — `?=` reached through any single alternative is conditional.
+            var topLevelIsConditional = rule.Alternatives.Count > 1;
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectBooleanAssignmentProperties(alternative.Elements, allRules, result, new HashSet<string>(), topLevelIsConditional);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Recursively collects boolean <c>?=</c> assignment property names from a list of <see cref="RuleElement" />
+        /// Recursively collects boolean <c>?=</c> assignment property names from a
+        /// list of <see cref="RuleElement" />. Only assignments at
+        /// <em>unconditional</em> positions (<paramref name="isConditional" />
+        /// <c>== false</c>) are collected — see
+        /// <see cref="QueryBooleanAssignmentProperties" /> for why.
         /// </summary>
         /// <param name="elements">The elements to inspect</param>
         /// <param name="allRules">All available rules for resolving NonTerminal references</param>
         /// <param name="result">The accumulated list of boolean property names</param>
         /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
-        internal static void CollectBooleanAssignmentProperties(IReadOnlyList<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, List<string> result, HashSet<string> visited)
+        /// <param name="isConditional">
+        /// <c>true</c> when the current walk position is inside an optional /
+        /// repeating / alternation group (directly or transitively) so any
+        /// <c>?=</c> reached from here cannot serve as a guaranteed discriminator.
+        /// </param>
+        internal static void CollectBooleanAssignmentProperties(IReadOnlyList<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, List<string> result, HashSet<string> visited, bool isConditional)
         {
             foreach (var element in elements)
             {
                 switch (element)
                 {
-                    case AssignmentElement { Operator: "?=" } assignment:
+                    case AssignmentElement { Operator: "?=" } assignment when !isConditional:
                         result.Add(assignment.Property);
                         break;
+
                     case GroupElement groupElement:
+                    {
+                        var groupIsConditional = isConditional
+                            || groupElement.IsOptional
+                            || groupElement.IsCollection
+                            || groupElement.Alternatives.Count > 1;
+
                         foreach (var groupAlternative in groupElement.Alternatives)
                         {
-                            CollectBooleanAssignmentProperties(groupAlternative.Elements, allRules, result, visited);
+                            CollectBooleanAssignmentProperties(groupAlternative.Elements, allRules, result, visited, groupIsConditional);
                         }
 
                         break;
+                    }
+
                     case NonTerminalElement nonTerminal:
+                    {
                         var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminal.Name);
 
                         if (referencedRule != null && visited.Add(referencedRule.RuleName))
                         {
-                            CollectBooleanAssignmentProperties(referencedRule.Alternatives.SelectMany(x => x.Elements).ToList(), allRules, result, visited);
+                            var nonTerminalIsConditional = isConditional
+                                || nonTerminal.IsOptional
+                                || nonTerminal.IsCollection
+                                || referencedRule.Alternatives.Count > 1;
+
+                            foreach (var alternative in referencedRule.Alternatives)
+                            {
+                                CollectBooleanAssignmentProperties(alternative.Elements, allRules, result, visited, nonTerminalIsConditional);
+                            }
                         }
 
                         break;
+                    }
                 }
             }
         }

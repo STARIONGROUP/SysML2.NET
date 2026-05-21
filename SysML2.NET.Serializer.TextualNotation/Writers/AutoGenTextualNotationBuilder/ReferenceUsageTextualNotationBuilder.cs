@@ -389,11 +389,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageRefPrefix when pocoUsageRefPrefix.IsDerived:
-                    UsageTextualNotationBuilder.BuildRefPrefix(pocoUsageRefPrefix, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageEndUsagePrefix when pocoUsageEndUsagePrefix.IsEnd:
+                    UsageTextualNotationBuilder.BuildEndUsagePrefix(pocoUsageEndUsagePrefix, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsage:
-                    UsageTextualNotationBuilder.BuildEndUsagePrefix(pocoUsage, writerContext, stringBuilder);
+                    UsageTextualNotationBuilder.BuildRefPrefix(pocoUsage, writerContext, stringBuilder);
                     break;
             }
 

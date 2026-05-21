@@ -45,7 +45,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageNonOccurrenceUsageElement when pocoUsageNonOccurrenceUsageElement.IsEnd:
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageNonOccurrenceUsageElement when pocoUsageNonOccurrenceUsageElement.IsValidForNonOccurrenceUsageElement(writerContext):
                     BuildNonOccurrenceUsageElement(pocoUsageNonOccurrenceUsageElement, writerContext, stringBuilder);
                     break;
                 default:
@@ -184,11 +184,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageBasicUsagePrefix when pocoUsageBasicUsagePrefix.IsDerived:
-                    BuildBasicUsagePrefix(pocoUsageBasicUsagePrefix, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageEndUsagePrefix when pocoUsageEndUsagePrefix.IsEnd:
+                    BuildEndUsagePrefix(pocoUsageEndUsagePrefix, writerContext, stringBuilder);
                     break;
                 default:
-                    BuildEndUsagePrefix(poco, writerContext, stringBuilder);
+                    BuildBasicUsagePrefix(poco, writerContext, stringBuilder);
                     break;
             }
 
@@ -284,11 +284,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage pocoEnumerationUsage:
                     EnumerationUsageTextualNotationBuilder.BuildEnumerationUsage(pocoEnumerationUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageReferenceUsage when pocoReferenceUsageReferenceUsage.IsEnd:
-                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsageReferenceUsage, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageDefaultReferenceUsage when pocoReferenceUsageDefaultReferenceUsage.IsValidForDefaultReferenceUsage(writerContext):
+                    ReferenceUsageTextualNotationBuilder.BuildDefaultReferenceUsage(pocoReferenceUsageDefaultReferenceUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsage:
-                    ReferenceUsageTextualNotationBuilder.BuildDefaultReferenceUsage(pocoReferenceUsage, writerContext, stringBuilder);
+                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
                     AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, writerContext, stringBuilder);
@@ -368,11 +368,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
                     PortUsageTextualNotationBuilder.BuildPortUsage(pocoPortUsage, writerContext, stringBuilder);
                     break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsIndividual:
+                    OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
+                    break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, writerContext, stringBuilder);
-                    break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage(writerContext):
-                    OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
                     OccurrenceUsageTextualNotationBuilder.BuildPortionUsage(pocoOccurrenceUsage, writerContext, stringBuilder);
@@ -497,16 +497,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
                     PortUsageTextualNotationBuilder.BuildPortUsage(pocoPortUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageReferenceUsage when pocoReferenceUsageReferenceUsage.IsEnd:
-                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsageReferenceUsage, writerContext, stringBuilder);
-                    break;
-                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageVariantReference when writerContext.CursorCache.GetOrCreateCursor(pocoReferenceUsageVariantReference.Id, "ownedRelationship", pocoReferenceUsageVariantReference.OwnedRelationship).Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting:
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsageVariantReference when pocoReferenceUsageVariantReference.IsValidForVariantReference(writerContext):
                     ReferenceUsageTextualNotationBuilder.BuildVariantReference(pocoReferenceUsageVariantReference, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage pocoReferenceUsage:
+                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
                     AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage(writerContext):
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsIndividual:
                     OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):

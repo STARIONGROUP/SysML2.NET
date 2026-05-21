@@ -138,11 +138,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition pocoAttributeDefinition:
                     AttributeDefinitionTextualNotationBuilder.BuildAttributeDefinition(pocoAttributeDefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinitionOccurrenceDefinition when pocoOccurrenceDefinitionOccurrenceDefinition.IsValidForOccurrenceDefinition(writerContext):
-                    OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinition(pocoOccurrenceDefinitionOccurrenceDefinition, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinitionIndividualDefinition when pocoOccurrenceDefinitionIndividualDefinition.IsIndividual:
+                    OccurrenceDefinitionTextualNotationBuilder.BuildIndividualDefinition(pocoOccurrenceDefinitionIndividualDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition pocoOccurrenceDefinition:
-                    OccurrenceDefinitionTextualNotationBuilder.BuildIndividualDefinition(pocoOccurrenceDefinition, writerContext, stringBuilder);
+                    OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinition(pocoOccurrenceDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition pocoDefinition:
                     DefinitionTextualNotationBuilder.BuildExtendedDefinition(pocoDefinition, writerContext, stringBuilder);

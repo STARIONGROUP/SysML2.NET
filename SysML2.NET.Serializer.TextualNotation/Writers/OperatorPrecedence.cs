@@ -223,6 +223,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var innerBucket = GetBucket(innerPrecedence);
             var outerBucket = GetBucket(outerPrecedence);
 
+            // Unary prefix operators (`~`, `not`, unary `+`/`-`) bind tighter than any binary
+            // operator and have no LHS to confuse with — they are unambiguous as operands and
+            // never need parenthesization, even when crossing operator-family buckets. E.g.
+            // `not a and b` re-parses unambiguously as `(not a) and b`.
+            if (innerBucket == PrecedenceBucket.Unary)
+            {
+                return false;
+            }
+
             if (innerBucket != outerBucket)
             {
                 return true;

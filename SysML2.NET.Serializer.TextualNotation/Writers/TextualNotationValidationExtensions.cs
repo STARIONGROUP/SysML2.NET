@@ -278,6 +278,59 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Asserts that the <see cref="IUsage"/> is valid for the NonOccurrenceUsageElement rule.
+        /// <para><c>NonOccurrenceUsageElement : Usage = DefaultReferenceUsage | ReferenceUsage |
+        /// AttributeUsage | EnumerationUsage | BindingConnectorAsUsage | SuccessionAsUsage | ExtendedUsage</c></para>
+        /// <para>None of these alternatives target <see cref="IOccurrenceUsage"/> or its
+        /// subclasses. The sibling rule <c>OccurrenceUsageElement</c> handles
+        /// <see cref="IOccurrenceUsage"/> instances (items, parts, actions, etc.). Thus the
+        /// runtime discriminator is purely class-based: anything that is NOT an
+        /// <see cref="IOccurrenceUsage"/> flows to the non-occurrence branch.</para>
+        /// </summary>
+        /// <param name="usage">The <see cref="IUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if the usage is not an <see cref="IOccurrenceUsage"/></returns>
+        internal static bool IsValidForNonOccurrenceUsageElement(this IUsage usage, TextualNotationWriterContext writerContext)
+        {
+            return usage is not IOccurrenceUsage;
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IReferenceUsage"/> is valid for the DefaultReferenceUsage rule.
+        /// <para><c>DefaultReferenceUsage : ReferenceUsage = RefPrefix Usage</c> — the form
+        /// WITHOUT the <c>'ref'</c> keyword.</para>
+        /// <para><c>ReferenceUsage = ( EndUsagePrefix | RefPrefix ) 'ref' Usage</c> — the form
+        /// WITH the <c>'ref'</c> keyword, which sets <see cref="IUsage.IsReference"/> to <c>true</c>
+        /// via <c>BasicUsagePrefix</c>'s <c>isReference ?= 'ref'</c>.</para>
+        /// <para>Distinguishes the two by the <see cref="IUsage.IsReference"/> property:
+        /// <c>!IsReference</c> means no <c>'ref'</c> keyword → default form.</para>
+        /// </summary>
+        /// <param name="referenceUsage">The <see cref="IReferenceUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if the reference usage has no <c>'ref'</c> keyword (i.e. default form)</returns>
+        internal static bool IsValidForDefaultReferenceUsage(this IReferenceUsage referenceUsage, TextualNotationWriterContext writerContext)
+        {
+            return !referenceUsage.isReference;
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IReferenceUsage"/> is valid for the VariantReference rule.
+        /// <para><c>VariantReference : ReferenceUsage = ownedRelationship += OwnedReferenceSubsetting
+        /// FeatureSpecialization* UsageBody</c> — a reference-usage form that carries an owned
+        /// <see cref="IReferenceSubsetting"/> in its relationships.</para>
+        /// <para>The sibling alternative <c>ReferenceUsage = ( EndUsagePrefix | RefPrefix ) 'ref' Usage</c>
+        /// does not produce an <see cref="IReferenceSubsetting"/> at the reference-usage's own
+        /// relationship level, so the presence of one discriminates the variant form.</para>
+        /// </summary>
+        /// <param name="referenceUsage">The <see cref="IReferenceUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if the reference usage has an owned <see cref="IReferenceSubsetting"/></returns>
+        internal static bool IsValidForVariantReference(this IReferenceUsage referenceUsage, TextualNotationWriterContext writerContext)
+        {
+            return referenceUsage.OwnedRelationship.OfType<IReferenceSubsetting>().Any();
+        }
+
+        /// <summary>
         /// Asserts that the <see cref="IUsage"/> is valid for the StructureUsageElement rule.
         /// <para><c>StructureUsageElement : Usage = OccurrenceUsage | IndividualUsage | PortionUsage
         /// | EventOccurrenceUsage | ItemUsage | PartUsage | ViewUsage | RenderingUsage | PortUsage
