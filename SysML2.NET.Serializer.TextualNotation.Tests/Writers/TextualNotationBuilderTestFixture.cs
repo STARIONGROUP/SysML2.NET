@@ -81,6 +81,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         public void Verify_that_textual_notation_is_produced_from_Quantities_root_namespace()
         {
             using var writerContext = new TextualNotationWriterContext(this.rootNamespace);
+            writerContext.EmitOperatorParentheses = false;
             var stringBuilder = new StringBuilder();
 
             try

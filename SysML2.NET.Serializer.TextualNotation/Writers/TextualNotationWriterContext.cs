@@ -52,7 +52,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             this.ContextNamespace = contextNamespace ?? throw new ArgumentNullException(nameof(contextNamespace));
             this.NameResolutionCache = new NameResolutionCache(contextNamespace);
             this.OperatorContextStack = new Stack<IExpression>();
+            this.EmitOperatorParentheses = true;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the writer should emit precedence-aware
+        /// parentheses around operator-expression operands. Defaults to <c>true</c>, which
+        /// produces the spec-canonical form (KerML §8.2.5.8.1 / SysML §8.4.3.2) where
+        /// nested operator expressions are wrapped in <c>(…)</c> to guarantee round-trip
+        /// fidelity against the precedence-climbing parser.
+        /// <para>
+        /// Set to <c>false</c> to suppress the writer-side disambiguation parens entirely.
+        /// The resulting output is more compact and matches the idiomatic shorthand used
+        /// throughout the SysML tutorials (e.g. <c>a and b or c</c>), but a model whose
+        /// operand nesting does not align with the parser's default precedence ordering may
+        /// re-parse to a structurally-different AST in that mode.
+        /// </para>
+        /// </summary>
+        public bool EmitOperatorParentheses { get; set; }
 
         /// <summary>
         /// Gets the stack of currently-active enclosing operator expressions. The textual

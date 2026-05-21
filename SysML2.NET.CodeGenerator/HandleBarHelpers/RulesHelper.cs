@@ -99,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (isOwnedExpressionRule)
                     {
-                        writer.WriteSafeString("var operatorParensNeeded = writerContext.OperatorContextStack.Count > 0 && SysML2.NET.Serializer.TextualNotation.Writers.OperatorPrecedence.NeedsParenthesesAsOperand(writerContext.OperatorContextStack.Peek(), poco);" + Environment.NewLine);
+                        writer.WriteSafeString("var operatorParensNeeded = writerContext.EmitOperatorParentheses && writerContext.OperatorContextStack.Count > 0 && SysML2.NET.Serializer.TextualNotation.Writers.OperatorPrecedence.NeedsParenthesesAsOperand(writerContext.OperatorContextStack.Peek(), poco);" + Environment.NewLine);
                         writer.WriteSafeString("if (operatorParensNeeded) { stringBuilder.Append('('); }" + Environment.NewLine);
                     }
 
