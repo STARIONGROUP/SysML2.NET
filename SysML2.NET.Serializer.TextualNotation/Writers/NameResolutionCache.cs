@@ -540,7 +540,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            foreach (var supertype in supertypes.Where(supertype => supertype != null && !ReferenceEquals(supertype, type)))
+            foreach (var supertype in supertypes.Where(s => s != null && !ReferenceEquals(s, type)))
             {
                 if (supertype is INamespace supertypeAsNamespace)
                 {
