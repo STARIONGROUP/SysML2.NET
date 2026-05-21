@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ConnectorExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -253,12 +253,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
 
                 if (current is IFeature currentFeature)
                 {
-                    foreach (var featuringType in currentFeature.featuringType)
+                    foreach (var featuringType in currentFeature.featuringType.Where(featuringType => featuringType != null && !visited.Contains(featuringType)))
                     {
-                        if (featuringType != null && !visited.Contains(featuringType))
-                        {
-                            queue.Enqueue(featuringType);
-                        }
+                        queue.Enqueue(featuringType);
                     }
                 }
             }
