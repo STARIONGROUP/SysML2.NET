@@ -22,18 +22,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Connectors;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="FlowExtensions"/> class provides extensions methods for
@@ -56,10 +52,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFlowEnd> ComputeFlowEnd(this IFlow flowSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return flowSubject == null
+                ? throw new ArgumentNullException(nameof(flowSubject))
+                : [..flowSubject.connectorEnd.OfType<IFlowEnd>()];
         }
 
         /// <summary>
@@ -71,10 +68,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IInteraction> ComputeInteraction(this IFlow flowSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return flowSubject == null
+                ? throw new ArgumentNullException(nameof(flowSubject))
+                : [..flowSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IInteraction>()];
         }
 
         /// <summary>
@@ -97,10 +95,16 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IPayloadFeature ComputePayloadFeature(this IFlow flowSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (flowSubject == null)
+            {
+                throw new ArgumentNullException(nameof(flowSubject));
+            }
+
+            var payloadFeatures = flowSubject.ownedFeature.OfType<IPayloadFeature>().ToList();
+
+            return payloadFeatures.Count == 0 ? null : payloadFeatures[0];
         }
 
         /// <summary>
@@ -121,10 +125,18 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IClassifier> ComputePayloadType(this IFlow flowSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (flowSubject == null)
+            {
+                throw new ArgumentNullException(nameof(flowSubject));
+            }
+
+            var payloadFeature = flowSubject.payloadFeature;
+
+            return payloadFeature == null
+                ? []
+                : [..payloadFeature.type.OfType<IClassifier>()];
         }
 
         /// <summary>
@@ -147,10 +159,23 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeSourceOutputFeature(this IFlow flowSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (flowSubject == null)
+            {
+                throw new ArgumentNullException(nameof(flowSubject));
+            }
+
+            var connectorEnds = flowSubject.connectorEnd;
+
+            if (connectorEnds.Count == 0)
+            {
+                return null;
+            }
+
+            var flatOwnedFeatures = connectorEnds.SelectMany(connectorEndFeature => connectorEndFeature.ownedFeature).ToList();
+
+            return flatOwnedFeatures.Count == 0 ? null : flatOwnedFeatures[0];
         }
 
         /// <summary>
@@ -173,11 +198,23 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeTargetInputFeature(this IFlow flowSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
-        }
+            if (flowSubject == null)
+            {
+                throw new ArgumentNullException(nameof(flowSubject));
+            }
 
+            var connectorEnds = flowSubject.connectorEnd;
+
+            if (connectorEnds.Count < 2)
+            {
+                return null;
+            }
+
+            var secondConnectorEndOwnedFeatures = connectorEnds[1].ownedFeature;
+
+            return secondConnectorEndOwnedFeatures.Count == 0 ? null : secondConnectorEndOwnedFeatures[0];
+        }
     }
 }
