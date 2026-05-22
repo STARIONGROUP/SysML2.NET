@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="ViewUsageExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -22,40 +22,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.Systems.Occurrences;
-    using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Classes;
     using SysML2.NET.Core.POCO.Kernel.Functions;
-    using SysML2.NET.Core.POCO.Kernel.Structures;
+    using SysML2.NET.Core.POCO.Kernel.Metadata;
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Systems.Actions;
-    using SysML2.NET.Core.POCO.Systems.Allocations;
-    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
-    using SysML2.NET.Core.POCO.Systems.Attributes;
-    using SysML2.NET.Core.POCO.Systems.Calculations;
-    using SysML2.NET.Core.POCO.Systems.Cases;
-    using SysML2.NET.Core.POCO.Systems.Connections;
-    using SysML2.NET.Core.POCO.Systems.Constraints;
-    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Core.POCO.Systems.Enumerations;
-    using SysML2.NET.Core.POCO.Systems.Flows;
-    using SysML2.NET.Core.POCO.Systems.Interfaces;
-    using SysML2.NET.Core.POCO.Systems.Items;
-    using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Core.POCO.Systems.Occurrences;
-    using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Core.POCO.Systems.States;
-    using SysML2.NET.Core.POCO.Systems.UseCases;
-    using SysML2.NET.Core.POCO.Systems.VerificationCases;
 
     /// <summary>
     /// The <see cref="ViewUsageExtensions"/> class provides extensions methods for
@@ -81,10 +56,19 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IElement> ComputeExposedElement(this IViewUsage viewUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewUsageSubject))
+                : [
+                    ..viewUsageSubject.ownedImport
+                        .OfType<IExpose>()
+                        .SelectMany(expose => expose.ImportedMemberships([]))
+                        .Select(membership => membership.MemberElement)
+                        .Where(memberElement => memberElement != null)
+                        .Where(viewUsageSubject.IncludeAsExposed)
+                        .Distinct()
+                ];
         }
 
         /// <summary>
@@ -104,10 +88,11 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewUsage viewUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewUsageSubject))
+                : [..viewUsageSubject.nestedRequirement.OfType<IViewpointUsage>().Where(viewpointUsage => viewpointUsage.IsComposite)];
         }
 
         /// <summary>
@@ -127,10 +112,16 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IExpression> ComputeViewCondition(this IViewUsage viewUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewUsageSubject))
+                : [
+                    ..viewUsageSubject.ownedMembership
+                        .OfType<IElementFilterMembership>()
+                        .Select(elementFilterMembership => elementFilterMembership.condition)
+                        .Where(condition => condition != null)
+                ];
         }
 
         /// <summary>
@@ -142,10 +133,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewUsageSubject))
+                : viewUsageSubject.OwnedRelationship
+                    .OfType<IFeatureTyping>()
+                    .Select(featureTyping => featureTyping.Type)
+                    .OfType<IViewDefinition>()
+                    .FirstOrDefault();
         }
 
         /// <summary>
@@ -168,10 +164,16 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRenderingUsage ComputeViewRendering(this IViewUsage viewUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (viewUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(viewUsageSubject));
+            }
+
+            var renderings = viewUsageSubject.featureMembership.OfType<IViewRenderingMembership>().ToList();
+
+            return renderings.Count == 0 ? null : renderings[0].referencedRendering;
         }
 
         /// <summary>
@@ -198,10 +200,30 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIncludeAsExposedOperation(this IViewUsage viewUsageSubject, IElement element)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (viewUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(viewUsageSubject));
+            }
+
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
+            var metadataFeatures = element.ownedAnnotation
+                .Select(annotation => annotation.annotatingElement)
+                .OfType<IMetadataFeature>()
+                .ToList();
+
+            var conditions = viewUsageSubject.membership
+                .OfType<IElementFilterMembership>()
+                .Select(elementFilterMembership => elementFilterMembership.condition)
+                .Where(condition => condition != null)
+                .ToList();
+
+            return conditions.All(condition => metadataFeatures.Any(condition.CheckCondition));
         }
     }
 }
