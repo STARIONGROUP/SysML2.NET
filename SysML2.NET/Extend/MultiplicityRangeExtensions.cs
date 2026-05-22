@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="MultiplicityRangeExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -22,15 +22,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The <see cref="MultiplicityRangeExtensions"/> class provides extensions methods for
@@ -57,10 +53,23 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IExpression> ComputeBound(this IMultiplicityRange multiplicityRangeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (multiplicityRangeSubject is null)
+            {
+                throw new ArgumentNullException(nameof(multiplicityRangeSubject));
+            }
+
+            var upper = multiplicityRangeSubject.upperBound;
+
+            if (upper is null)
+            {
+                return [];
+            }
+
+            var lower = multiplicityRangeSubject.lowerBound;
+
+            return lower is null ? [upper] : [lower, upper];
         }
 
         /// <summary>
@@ -83,10 +92,18 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeLowerBound(this IMultiplicityRange multiplicityRangeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (multiplicityRangeSubject is null)
+            {
+                throw new ArgumentNullException(nameof(multiplicityRangeSubject));
+            }
+
+            var ownedExpressions = multiplicityRangeSubject.ownedMember
+                .OfType<IExpression>()
+                .ToList();
+
+            return ownedExpressions.Count < 2 ? null : ownedExpressions[0];
         }
 
         /// <summary>
@@ -110,10 +127,23 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeUpperBound(this IMultiplicityRange multiplicityRangeSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (multiplicityRangeSubject is null)
+            {
+                throw new ArgumentNullException(nameof(multiplicityRangeSubject));
+            }
+
+            var ownedExpressions = multiplicityRangeSubject.ownedMember
+                .OfType<IExpression>()
+                .ToList();
+
+            return ownedExpressions.Count switch
+            {
+                0 => null,
+                1 => ownedExpressions[0],
+                _ => ownedExpressions[1],
+            };
         }
 
         /// <summary>
@@ -135,18 +165,43 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// The subject <see cref="IMultiplicityRange"/>
         /// </param>
         /// <param name="lower">
-        /// No documentation provided
+        /// The candidate lower bound as a non-negative integer.
         /// </param>
         /// <param name="upper">
-        /// No documentation provided
+        /// The candidate upper bound encoded as an UnlimitedNatural string (<c>"*"</c> for unbounded, or an invariant-culture decimal).
         /// </param>
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeHasBoundsOperation(this IMultiplicityRange multiplicityRangeSubject, int lower, string upper)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (multiplicityRangeSubject is null)
+            {
+                throw new ArgumentNullException(nameof(multiplicityRangeSubject));
+            }
+
+            var valueOfUpper = multiplicityRangeSubject.ValueOf(multiplicityRangeSubject.upperBound);
+
+            if (!string.Equals(valueOfUpper, upper, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var lowerValue = multiplicityRangeSubject.ValueOf(multiplicityRangeSubject.lowerBound);
+            var lowerAsString = lower.ToString(CultureInfo.InvariantCulture);
+
+            if (string.Equals(lowerValue, lowerAsString, StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            if (lowerValue is not null)
+            {
+                return false;
+            }
+
+            return string.Equals(lowerAsString, upper, StringComparison.Ordinal)
+                || (lower == 0 && string.Equals(upper, "*", StringComparison.Ordinal));
         }
 
         /// <summary>
@@ -177,15 +232,36 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// The subject <see cref="IMultiplicityRange"/>
         /// </param>
         /// <param name="bound">
-        /// No documentation provided
+        /// The bound expression to evaluate; may be null, in which case the result is null.
         /// </param>
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static string ComputeValueOfOperation(this IMultiplicityRange multiplicityRangeSubject, IExpression bound)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (multiplicityRangeSubject is null)
+            {
+                throw new ArgumentNullException(nameof(multiplicityRangeSubject));
+            }
+
+            if (bound is null || !bound.isModelLevelEvaluable)
+            {
+                return null;
+            }
+
+            var boundEval = bound.Evaluate(multiplicityRangeSubject.owningType);
+
+            if (boundEval.Count != 1)
+            {
+                return null;
+            }
+
+            return boundEval[0] switch
+            {
+                ILiteralInfinity => "*",
+                ILiteralInteger { Value: var value } when value >= 0 => value.ToString(CultureInfo.InvariantCulture),
+                _ => null,
+            };
         }
     }
 }
