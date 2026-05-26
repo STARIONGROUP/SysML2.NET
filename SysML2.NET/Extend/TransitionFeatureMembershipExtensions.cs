@@ -57,6 +57,5 @@ namespace SysML2.NET.Core.POCO.Systems.States
 
             return transitionFeatureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IStep>(nameof(transitionFeatureMembershipSubject));
         }
-
     }
 }
