@@ -229,17 +229,19 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(requirementUsage.ComputeSubjectParameter(), Is.Null);
 
-            // Populated case: SubjectMembership is present; selecting ownedSubjectParameter triggers an
-            // upstream stub (SubjectMembershipExtensions.ComputeOwnedSubjectParameter is not yet implemented).
+            // Populated case: SubjectMembership is present alongside the earlier ParameterMembership.
+            // OfType<ISubjectMembership> must discriminate — only the subject's ownedSubjectParameter surfaces.
+            // This also covers the mixed-state discrimination: both a ParameterMembership and a SubjectMembership
+            // are wired; the result must be the subject usage, not the parameter usage.
             var subjectMembership = new SubjectMembership();
             var subjectUsage = new Usage();
             requirementUsage.AssignOwnership(subjectMembership, subjectUsage);
 
-            Assert.That(() => requirementUsage.ComputeSubjectParameter(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(requirementUsage.ComputeSubjectParameter(), Is.SameAs(subjectUsage));
         }
 
-        private static readonly string[] ExpectedSingleComputedText = new[] { "The requirement text." };
-        private static readonly string[] ExpectedMultipleComputedText = new[] { "The requirement text.", "Additional context." };
+        private static readonly string[] ExpectedSingleComputedText = ["The requirement text."];
+        private static readonly string[] ExpectedMultipleComputedText = ["The requirement text.", "Additional context."];
 
         [Test]
         public void VerifyComputeText()

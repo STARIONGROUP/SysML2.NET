@@ -21,17 +21,9 @@
 namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
-    using System.Collections.Generic;
 
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="SubjectMembershipExtensions"/> class provides extensions methods for
@@ -48,10 +40,16 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IUsage ComputeOwnedSubjectParameter(this ISubjectMembership subjectMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (subjectMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(subjectMembershipSubject));
+            }
+
+            return subjectMembershipSubject.OwnedRelatedElement.Count != 1
+                ? throw new IncompleteModelException($"{nameof(subjectMembershipSubject)} must have exactly one related element")
+                : subjectMembershipSubject.OwnedRelatedElement[0] as IUsage;
         }
 
     }
