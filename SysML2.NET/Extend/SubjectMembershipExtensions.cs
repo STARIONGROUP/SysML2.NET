@@ -21,6 +21,8 @@
 namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Exceptions;
@@ -47,9 +49,11 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(subjectMembershipSubject));
             }
 
-            return subjectMembershipSubject.OwnedRelatedElement.Count != 1
-                ? throw new IncompleteModelException($"{nameof(subjectMembershipSubject)} must have exactly one related element")
-                : subjectMembershipSubject.OwnedRelatedElement[0] as IUsage;
+            var matches = subjectMembershipSubject.OwnedRelatedElement.OfType<IUsage>().ToList();
+
+            return matches.Count == 1
+                ? matches[0]
+                : throw new IncompleteModelException($"{nameof(subjectMembershipSubject)} must have exactly one related element of type {nameof(IUsage)}");
         }
 
     }

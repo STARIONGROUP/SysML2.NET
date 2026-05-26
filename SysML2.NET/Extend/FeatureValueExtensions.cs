@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -29,6 +30,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="FeatureValueExtensions"/> class provides extensions methods for
@@ -68,9 +70,11 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
                 throw new ArgumentNullException(nameof(featureValueSubject));
             }
 
-            return featureValueSubject.OwnedRelatedElement.Count == 1
-                    ? featureValueSubject.OwnedRelatedElement[0] as IExpression
-                    : null;
+            var matches = featureValueSubject.OwnedRelatedElement.OfType<IExpression>().ToList();
+
+            return matches.Count == 1
+                ? matches[0]
+                : throw new IncompleteModelException($"{nameof(featureValueSubject)} must have exactly one related element of type {nameof(IExpression)}");
         }
     }
 }

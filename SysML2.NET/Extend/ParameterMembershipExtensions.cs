@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -54,9 +55,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
                 throw new ArgumentNullException(nameof(parameterMembershipSubject));
             }
 
-            return parameterMembershipSubject.OwnedRelatedElement.Count != 1
-                ? throw new IncompleteModelException($"{nameof(parameterMembershipSubject)} must have exactly one related element")
-                : parameterMembershipSubject.OwnedRelatedElement[0] as IFeature;
+            var matches = parameterMembershipSubject.OwnedRelatedElement.OfType<IFeature>().ToList();
+
+            return matches.Count == 1
+                ? matches[0]
+                : throw new IncompleteModelException($"{nameof(parameterMembershipSubject)} must have exactly one related element of type {nameof(IFeature)}");
         }
 
         /// <summary>

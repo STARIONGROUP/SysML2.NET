@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -61,6 +62,12 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeatureValue)null).ComputeValue(), Throws.TypeOf<ArgumentNullException>());
 
+            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            var emptyFeatureValue = new FeatureValue();
+
+            Assert.That(() => emptyFeatureValue.ComputeValue(), Throws.TypeOf<IncompleteModelException>());
+
+            // Single IExpression wired via the public API → returned.
             var feature = new Feature();
             var featureValue = new FeatureValue();
             var literalBoolean = new LiteralBoolean();
@@ -69,13 +76,36 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(featureValue.ComputeValue(), Is.SameAs(literalBoolean));
 
-            // Non-Expression owned member: direct field bypass — the cast must return null.
+            // Two IExpressions in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            var twoExprFeatureValue = new FeatureValue();
+            var firstExpression = new LiteralBoolean();
+            var secondExpression = new LiteralBoolean();
+
+            ((IContainedRelationship)twoExprFeatureValue).OwnedRelatedElement.Add(firstExpression);
+            ((IContainedRelationship)twoExprFeatureValue).OwnedRelatedElement.Add(secondExpression);
+
+            Assert.That(() => twoExprFeatureValue.ComputeValue(), Throws.TypeOf<IncompleteModelException>());
+
+            // Mixed-type owned related elements: exactly one IExpression alongside a non-IExpression (Namespace).
+            // The OfType<IExpression>() projection MUST pick out the IExpression regardless of its position
+            // (this is the core robustness guarantee — never positionally index the unfiltered collection).
+            var mixedFeatureValue = new FeatureValue();
+            var siblingNonExpression = new Namespace();
+            var mixedExpression = new LiteralBoolean();
+
+            ((IContainedRelationship)mixedFeatureValue).OwnedRelatedElement.Add(siblingNonExpression);
+            ((IContainedRelationship)mixedFeatureValue).OwnedRelatedElement.Add(mixedExpression);
+
+            Assert.That(mixedFeatureValue.ComputeValue(), Is.SameAs(mixedExpression));
+
+            // OwnedRelatedElement populated with non-IExpression element(s) only → no IExpression match:
+            // [1..1] violation, throws IncompleteModelException.
             var nonExprFeatureValue = new FeatureValue();
             var nonExprElement = new Namespace();
 
             ((IContainedRelationship)nonExprFeatureValue).OwnedRelatedElement.Add(nonExprElement);
 
-            Assert.That(nonExprFeatureValue.ComputeValue(), Is.Null);
+            Assert.That(() => nonExprFeatureValue.ComputeValue(), Throws.TypeOf<IncompleteModelException>());
         }
     }
 }

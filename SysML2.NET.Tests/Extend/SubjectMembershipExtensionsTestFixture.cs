@@ -41,10 +41,12 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((ISubjectMembership)null).ComputeOwnedSubjectParameter(), Throws.TypeOf<ArgumentNullException>());
 
+            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var subjectMembership = new SubjectMembership();
 
             Assert.That(() => subjectMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<IncompleteModelException>());
 
+            // Single IUsage wired via the public API → returned.
             var owningType = new Type();
             var subjectUsage = new Usage();
 
@@ -52,26 +54,36 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subjectMembership.ComputeOwnedSubjectParameter(), Is.SameAs(subjectUsage));
 
-            // Wiring two usages to verify the multiple-element guard:
-            // First create a fresh membership with two elements via the backdoor.
-            var twoElementMembership = new SubjectMembership();
+            // Two IUsages in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            var twoUsageMembership = new SubjectMembership();
+            var firstUsage = new Usage();
             var secondUsage = new Usage();
 
-            ((IContainedRelationship)twoElementMembership).OwnedRelatedElement.Add(subjectUsage);
-            ((IContainedRelationship)twoElementMembership).OwnedRelatedElement.Add(secondUsage);
+            ((IContainedRelationship)twoUsageMembership).OwnedRelatedElement.Add(firstUsage);
+            ((IContainedRelationship)twoUsageMembership).OwnedRelatedElement.Add(secondUsage);
 
-            Assert.That(() => twoElementMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoUsageMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<IncompleteModelException>());
 
-            // NOTE: wiring a non-IUsage element as the sole OwnedRelatedElement is not possible via the
-            // public AssignOwnership API (ISubjectMembership requires an IUsage target).
-            // To cover the as-cast-returns-null path we directly populate OwnedRelatedElement with a
-            // plain Namespace (which is not an IUsage).
+            // Mixed-type owned related elements: exactly one IUsage alongside a non-IUsage (Namespace).
+            // The OfType<IUsage>() projection MUST pick out the IUsage regardless of its position
+            // (this is the core robustness guarantee — never positionally index the unfiltered collection).
+            var mixedMembership = new SubjectMembership();
+            var siblingNonUsage = new Namespace();
+            var mixedUsage = new Usage();
+
+            ((IContainedRelationship)mixedMembership).OwnedRelatedElement.Add(siblingNonUsage);
+            ((IContainedRelationship)mixedMembership).OwnedRelatedElement.Add(mixedUsage);
+
+            Assert.That(mixedMembership.ComputeOwnedSubjectParameter(), Is.SameAs(mixedUsage));
+
+            // OwnedRelatedElement populated with non-IUsage element(s) only → no IUsage match:
+            // [1..1] violation, throws IncompleteModelException.
             var nonUsageMembership = new SubjectMembership();
             var nonUsageElement = new Namespace();
 
             ((IContainedRelationship)nonUsageMembership).OwnedRelatedElement.Add(nonUsageElement);
 
-            Assert.That(nonUsageMembership.ComputeOwnedSubjectParameter(), Is.Null);
+            Assert.That(() => nonUsageMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<IncompleteModelException>());
         }
     }
 }
