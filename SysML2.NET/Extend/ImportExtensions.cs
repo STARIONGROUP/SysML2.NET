@@ -36,16 +36,33 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// Spec-text-only: the UML <c>Import.importedElement</c> attribute has no OCL body of its
+        /// own. Each concrete subclass defines its own derivation rule
+        /// (<c>deriveMembershipImportImportedElement</c>: <c>importedElement = importedMembership.memberElement</c>,
+        /// and <c>deriveNamespaceImportImportedElement</c>: <c>importedElement = importedNamespace</c>).
+        /// Both subtype POCOs route their <c>importedElement</c> getter through this single static
+        /// extension, so the dispatch happens here via a switch on the subject's concrete type.
+        /// </remarks>
         /// <param name="importSubject">
         /// The subject <see cref="IImport"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IElement ComputeImportedElement(this IImport importSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (importSubject == null)
+            {
+                throw new ArgumentNullException(nameof(importSubject));
+            }
+
+            return importSubject switch
+            {
+                IMembershipImport membershipImport => membershipImport.ImportedMembership?.MemberElement,
+                INamespaceImport namespaceImport => namespaceImport.ImportedNamespace,
+                _ => null
+            };
         }
 
         /// <summary>
@@ -76,15 +93,22 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
         /// <remarks>
-        /// This method is no longer called at runtime. The POCO classes (<see cref="NamespaceImport"/>,
-        /// <see cref="MembershipImport"/>) now provide explicit interface implementations of
-        /// <see cref="IImport.ImportedMemberships"/> that dispatch directly to their respective
-        /// <c>ComputeRedefinedImportedMembershipsOperation</c> extension methods.
+        /// The UML <c>Import.importedMemberships</c> operation is abstract (no body in the XMI). Both
+        /// concrete subclasses, <see cref="NamespaceImport"/> and <see cref="MembershipImport"/>, redefine
+        /// it with their own OCL <c>bodyCondition</c>s, and their POCO partials provide explicit-interface
+        /// implementations of <see cref="IImport.ImportedMemberships"/> that dispatch directly to their
+        /// respective <c>ComputeRedefinedImportedMembershipsOperation</c> extension methods. Consequently,
+        /// this static extension on the abstract base is never reached at runtime, and a deliberate
+        /// <see cref="NotSupportedException"/> guards any future direct call.
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeImportedMembershipsOperation(this IImport importSubject, List<INamespace> excluded)
         {
-            throw new NotSupportedException("This method should not be called. Import subtypes handle dispatch via explicit interface implementations.");
+            throw new NotSupportedException(
+                "Import is abstract and its importedMemberships operation is redefined by every concrete subclass " +
+                "(NamespaceImport, MembershipImport). The POCO partials route IImport.ImportedMemberships(...) " +
+                "directly to ComputeRedefinedImportedMembershipsOperation on the matching subtype, so this static " +
+                "extension is unreachable at runtime.");
         }
     }
 }
