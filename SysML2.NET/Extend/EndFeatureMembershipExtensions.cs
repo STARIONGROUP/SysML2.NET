@@ -21,13 +21,8 @@
 namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
-    using System.Collections.Generic;
 
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="EndFeatureMembershipExtensions"/> class provides extensions methods for
@@ -44,11 +39,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeOwnedMemberFeature(this IEndFeatureMembership endFeatureMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
-        }
+            if (endFeatureMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(endFeatureMembershipSubject));
+            }
 
+            return endFeatureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IFeature>(nameof(endFeatureMembershipSubject));
+        }
     }
 }
