@@ -57,14 +57,29 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(transitionUsage.ComputeEffectAction(), Has.Count.EqualTo(0));
 
-            // Effect-kind TFM wired with an ActionUsage as transitionFeature.
-            // For Later: populated path depends on TransitionFeatureMembershipExtensions.ComputeTransitionFeature
-            // at SysML2.NET/Extend/TransitionFeatureMembershipExtensions.cs:51, which is still a stub.
+            // Effect-kind TFM wired with an ActionUsage as transitionFeature → positive case.
+            // The Trigger TFM already wired above proves Kind-filter discrimination (Trigger excluded by Effect filter).
             var effectTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Effect };
             var effectAction = new ActionUsage();
             transitionUsage.AssignOwnership(effectTfm, effectAction);
 
-            Assert.That(() => transitionUsage.ComputeEffectAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(transitionUsage.ComputeEffectAction(), Is.EqualTo([effectAction]));
+
+            // Kind-filter discrimination: add a Guard TFM whose transitionFeature is an IActionUsage → excluded
+            // because its Kind is Guard, not Effect.
+            var guardTfmForEffectTest = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Guard };
+            var guardActionUsageStep = new ActionUsage();
+            transitionUsage.AssignOwnership(guardTfmForEffectTest, guardActionUsageStep);
+
+            Assert.That(transitionUsage.ComputeEffectAction(), Is.EqualTo([effectAction]));
+
+            // Type-discrimination: a second Effect-kind TFM whose transitionFeature is NOT an IActionUsage
+            // (a LiteralBoolean / IExpression) → excluded by the trailing OfType<IActionUsage>().
+            var effectTfmWrongType = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Effect };
+            var expressionStep = new LiteralBoolean();
+            transitionUsage.AssignOwnership(effectTfmWrongType, expressionStep);
+
+            Assert.That(transitionUsage.ComputeEffectAction(), Is.EqualTo([effectAction]));
         }
 
         [Test]
@@ -84,14 +99,29 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(transitionUsage.ComputeGuardExpression(), Has.Count.EqualTo(0));
 
-            // Guard-kind TFM wired with a LiteralBoolean (IExpression) as transitionFeature.
-            // For Later: populated path depends on TransitionFeatureMembershipExtensions.ComputeTransitionFeature
-            // at SysML2.NET/Extend/TransitionFeatureMembershipExtensions.cs:51, which is still a stub.
+            // Guard-kind TFM wired with a LiteralBoolean (IExpression) as transitionFeature → positive case.
+            // The Trigger TFM already wired above proves Kind-filter discrimination (Trigger excluded by Guard filter).
             var guardTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Guard };
             var guardExpression = new LiteralBoolean();
             transitionUsage.AssignOwnership(guardTfm, guardExpression);
 
-            Assert.That(() => transitionUsage.ComputeGuardExpression(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(transitionUsage.ComputeGuardExpression(), Is.EqualTo([guardExpression]));
+
+            // Kind-filter discrimination: add an Effect TFM whose transitionFeature is an IExpression → excluded
+            // because its Kind is Effect, not Guard.
+            var effectTfmForGuardTest = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Effect };
+            var effectExpressionStep = new LiteralBoolean();
+            transitionUsage.AssignOwnership(effectTfmForGuardTest, effectExpressionStep);
+
+            Assert.That(transitionUsage.ComputeGuardExpression(), Is.EqualTo([guardExpression]));
+
+            // Type-discrimination: a second Guard-kind TFM whose transitionFeature is NOT an IExpression
+            // (an ActionUsage) → excluded by the trailing OfType<IExpression>().
+            var guardTfmWrongType = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Guard };
+            var actionUsageStep = new ActionUsage();
+            transitionUsage.AssignOwnership(guardTfmWrongType, actionUsageStep);
+
+            Assert.That(transitionUsage.ComputeGuardExpression(), Is.EqualTo([guardExpression]));
         }
 
         [Test]
@@ -248,14 +278,29 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(transitionUsage.ComputeTriggerAction(), Has.Count.EqualTo(0));
 
-            // Trigger-kind TFM wired with an AcceptActionUsage as transitionFeature.
-            // For Later: populated path depends on TransitionFeatureMembershipExtensions.ComputeTransitionFeature
-            // at SysML2.NET/Extend/TransitionFeatureMembershipExtensions.cs:51, which is still a stub.
+            // Trigger-kind TFM wired with an AcceptActionUsage as transitionFeature → positive case.
+            // The Effect and Guard TFMs already wired above prove Kind-filter discrimination.
             var triggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
             var acceptAction = new AcceptActionUsage();
             transitionUsage.AssignOwnership(triggerTfm, acceptAction);
 
-            Assert.That(() => transitionUsage.ComputeTriggerAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(transitionUsage.ComputeTriggerAction(), Is.EqualTo([acceptAction]));
+
+            // Kind-filter discrimination: add a Guard TFM whose transitionFeature is an AcceptActionUsage → excluded
+            // because its Kind is Guard, not Trigger.
+            var guardTfmForTriggerTest = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Guard };
+            var guardAcceptAction = new AcceptActionUsage();
+            transitionUsage.AssignOwnership(guardTfmForTriggerTest, guardAcceptAction);
+
+            Assert.That(transitionUsage.ComputeTriggerAction(), Is.EqualTo([acceptAction]));
+
+            // Type-discrimination: a second Trigger-kind TFM whose transitionFeature is NOT an IAcceptActionUsage
+            // (a plain ActionUsage) → excluded by the trailing OfType<IAcceptActionUsage>().
+            var triggerTfmWrongType = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+            var actionUsageStep = new ActionUsage();
+            transitionUsage.AssignOwnership(triggerTfmWrongType, actionUsageStep);
+
+            Assert.That(transitionUsage.ComputeTriggerAction(), Is.EqualTo([acceptAction]));
         }
 
         [Test]
@@ -268,9 +313,9 @@ namespace SysML2.NET.Tests.Extend
             // No Trigger TFMs → triggerAction is empty → null.
             Assert.That(transitionUsage.ComputeTriggerPayloadParameterOperation(), Is.Null);
 
-            // Trigger TFM wired but access to transitionFeature hits ComputeTransitionFeature stub.
-            // For Later: populated path depends on TransitionFeatureMembershipExtensions.ComputeTransitionFeature
-            // at SysML2.NET/Extend/TransitionFeatureMembershipExtensions.cs:51, which is still a stub.
+            // Trigger TFM wired; triggerAction now resolves (ComputeTransitionFeature is implemented).
+            // The NotSupportedException is now thrown by AcceptActionUsage.payloadParameter → StepExtensions.ComputeParameter,
+            // which is still a stub. Expand this test when StepExtensions.ComputeParameter is implemented.
             var triggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
             var acceptAction = new AcceptActionUsage();
             transitionUsage.AssignOwnership(triggerTfm, acceptAction);

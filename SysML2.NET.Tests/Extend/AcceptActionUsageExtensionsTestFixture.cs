@@ -173,16 +173,16 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(acceptInTransitionC1.ComputeIsTriggerActionOperation(), Is.False);
 
-            // Branch C2 — owningType IS TransitionUsage, with Trigger TFM.
-            // The Where(Kind == Trigger) filter passes, then .transitionFeature is accessed, which dispatches
-            // through TransitionFeatureMembershipExtensions.ComputeTransitionFeature (still a stub).
-            // For Later: depends on TransitionFeatureMembershipExtensions.ComputeTransitionFeature at SysML2.NET/Extend/TransitionFeatureMembershipExtensions.cs:51, which is still a stub.
+            // Branch C2 — owningType IS TransitionUsage, with Trigger TFM whose transitionFeature IS this
+            // AcceptActionUsage → triggerAction contains self → true.
+            // Note: a useful negative companion would be a sibling AcceptActionUsage that is NOT wired as the
+            // transitionFeature of any Trigger TFM (e.g. owned via plain OwningMembership), asserting Is.False.
             var transitionOwnerC2 = new TransitionUsage();
             var triggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
             var acceptInTransitionC2 = new AcceptActionUsage();
             transitionOwnerC2.AssignOwnership(triggerTfm, acceptInTransitionC2);
 
-            Assert.That(() => acceptInTransitionC2.ComputeIsTriggerActionOperation(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(acceptInTransitionC2.ComputeIsTriggerActionOperation(), Is.True);
 
             // Branch C3 — owningType IS TransitionUsage, only non-Trigger TFMs (Effect kind).
             // The Where(Kind == Trigger) filter excludes the Effect TFM → triggerAction returns empty list.
