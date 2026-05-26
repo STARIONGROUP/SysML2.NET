@@ -41,10 +41,12 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeatureMembership)null).ComputeOwnedMemberFeature(), Throws.TypeOf<ArgumentNullException>());
 
+            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var featureMembership = new FeatureMembership();
 
             Assert.That(() => featureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<IncompleteModelException>());
 
+            // Single IFeature wired via the public API → returned.
             var owningType = new Type();
             var feature = new Feature();
 
@@ -52,16 +54,36 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(featureMembership.ComputeOwnedMemberFeature(), Is.SameAs(feature));
 
-            // NOTE: wiring a non-IFeature element as the sole OwnedRelatedElement is not possible via the
-            // public AssignOwnership API (it validates that FeatureMembership requires an IFeature target).
-            // To cover the as-cast-returns-null path we directly set OwningRelatedElement on a fresh
-            // membership so that OwnedRelatedElement[0] is a plain Namespace (which is not an IFeature).
+            // Two IFeatures in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            var twoFeatureMembership = new FeatureMembership();
+            var firstFeature = new Feature();
+            var secondFeature = new Feature();
+
+            ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(firstFeature);
+            ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(secondFeature);
+
+            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<IncompleteModelException>());
+
+            // Mixed-type owned related elements: exactly one IFeature alongside a non-IFeature (Namespace).
+            // The OfType<IFeature>() projection MUST pick out the IFeature regardless of its position
+            // (this is the core robustness guarantee — never positionally index the unfiltered collection).
+            var mixedMembership = new FeatureMembership();
+            var siblingNonFeature = new Namespace();
+            var mixedFeature = new Feature();
+
+            ((IContainedRelationship)mixedMembership).OwnedRelatedElement.Add(siblingNonFeature);
+            ((IContainedRelationship)mixedMembership).OwnedRelatedElement.Add(mixedFeature);
+
+            Assert.That(mixedMembership.ComputeOwnedMemberFeature(), Is.SameAs(mixedFeature));
+
+            // OwnedRelatedElement populated with non-IFeature element(s) only → no IFeature match:
+            // [1..1] violation, throws IncompleteModelException.
             var nonFeatureMembership = new FeatureMembership();
             var nonFeatureElement = new Namespace();
 
             ((IContainedRelationship)nonFeatureMembership).OwnedRelatedElement.Add(nonFeatureElement);
 
-            Assert.That(nonFeatureMembership.ComputeOwnedMemberFeature(), Is.Null);
+            Assert.That(() => nonFeatureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<IncompleteModelException>());
         }
 
         [Test]

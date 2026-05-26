@@ -161,3 +161,28 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 - Prefer C# property patterns ('x is IType { Prop: value }') over declared-variable-plus-predicate form ('x is IType name && name.Prop == value') when the narrowed variable is only consulted once; the property-pattern form is more concise and intent-revealing
 - Surround every braced block (`if`, `else if`, `while`, `for`, `foreach`, `switch`, `using`, `try`/`catch`/`finally`, `lock`, `do…while`, anonymous `{ }`) with a blank line on both sides — the rule does NOT apply at the very start/end of a method body, nor between a `}` and a continuation keyword (`else`, `catch`, `finally`, `while` of `do…while`) that belongs to the same control flow
 - When invoking an operation or derived property on a POCO from inside an extension method, call the POCO's instance member (e.g. `subject.IsDistinguishableFrom(other)`, `subject.qualifiedName`), NOT the static `ComputeXxxOperation` / `ComputeXxx` extension method. Virtual dispatch on the POCO honors operation/property REDEFINITION in subclass POCOs; calling the static extension directly bypasses dispatch and silently skips overrides. The static-extension form is reserved EXCLUSIVELY for the C# translation of OCL `self.oclAsType(SuperType).method()` — an explicit upcast that mandates targeting the SuperType's body (e.g. `Usage::namingFeature()` → `FeatureExtensions.ComputeNamingFeatureOperation(usage)`; `OwningMembership::path()` → `RelationshipExtensions.ComputeRedefinedPathOperation(owningMembership)`)
+- **`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` storage collections are `[0..*]` — NEVER cardinality-limited.** The [1..1] / [0..1] multiplicities that appear in the metamodel apply to *derived* / *redefined* properties (e.g. `OwningMembership::ownedMemberElement`, `FeatureMembership::ownedMemberFeature`, `SubjectMembership::ownedSubjectParameter`), NOT to the underlying storage. When implementing such a derivation, **project from the collection — do not assume positional indexing**. The canonical "in-between" pattern is *filter-by-type-then-validate-count*: project with `OfType<ITargetType>()`, then validate the projection count against the **derived property's declared multiplicity** (read it from the `[Property(lowerValue:…, upperValue:…)]` attribute on the generated POCO interface, or directly from the UML XMI). The failure mode depends on the multiplicity:
+
+  | Multiplicity | Empty projection | Single-match projection | 2+ match projection |
+  |---|---|---|---|
+  | `[1..1]` (lowerValue=1, upperValue=1) | `throw IncompleteModelException` | return the match | `throw IncompleteModelException` |
+  | `[0..1]` (lowerValue=0, upperValue=1) | `return null` | return the match | `throw IncompleteModelException` |
+  | `[0..*]` / `[1..*]` | (use `List<T>` projection; not this pattern) | n/a | n/a |
+
+  `IncompleteModelException` is the loud signal to SDK users that the model is malformed — DO NOT swallow it as `null` when the multiplicity is `[1..1]`, and DO NOT raise it for the empty case when the multiplicity is `[0..1]` (a legitimately-optional property).
+
+  ```csharp
+  // [1..1] type-narrowed redefinition (e.g. SubjectMembership::ownedSubjectParameter : IUsage)
+  var matches = subject.OwnedRelatedElement.OfType<ITargetType>().ToList();
+
+  return matches.Count == 1
+      ? matches[0]
+      : throw new IncompleteModelException($"{nameof(subject)} must have exactly one related element of type {nameof(ITargetType)}");
+
+  // [1..1] non-narrowing redefinition (e.g. OwningMembership::ownedMemberElement : IElement)
+  return subject.OwnedRelatedElement.Count == 1
+      ? subject.OwnedRelatedElement[0]
+      : throw new IncompleteModelException($"{nameof(subject)} must have exactly one related element");
+  ```
+
+  Do NOT use `.Count != 1 → throw` followed by `OwnedRelatedElement[0] as ITargetType` — that pattern silently drops the correctly-typed element when it does not sit at index 0 (e.g. when an `IAnnotation` target is also present, since `AssignOwnership` allows owned related elements for both `IOwningMembership` AND `IAnnotation`). Same rule applies to any other derived property that subsets one of these two `[0..*]` storage collections.

@@ -43,10 +43,12 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IParameterMembership)null).ComputeOwnedMemberParameter(), Throws.TypeOf<ArgumentNullException>());
 
+            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var parameterMembership = new ParameterMembership();
 
             Assert.That(() => parameterMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<IncompleteModelException>());
 
+            // Single IFeature wired via the public API → returned.
             var owningType = new Type();
             var feature = new Feature();
 
@@ -54,26 +56,35 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(parameterMembership.ComputeOwnedMemberParameter(), Is.SameAs(feature));
 
-            // Wiring two features to verify the multiple-element guard:
-            // First remove the existing wiring so we can create a fresh membership with two elements.
-            var twoElementMembership = new ParameterMembership();
+            // Two IFeatures in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            var twoFeatureMembership = new ParameterMembership();
             var secondFeature = new Feature();
 
-            ((IContainedRelationship)twoElementMembership).OwnedRelatedElement.Add(feature);
-            ((IContainedRelationship)twoElementMembership).OwnedRelatedElement.Add(secondFeature);
+            ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(feature);
+            ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(secondFeature);
 
-            Assert.That(() => twoElementMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<IncompleteModelException>());
 
-            // NOTE: wiring a non-IFeature element as the sole OwnedRelatedElement is not possible via the
-            // public AssignOwnership API (IParameterMembership requires an IFeature target).
-            // To cover the as-cast-returns-null path we directly populate OwnedRelatedElement with a
-            // plain Namespace (which is not an IFeature).
+            // Mixed-type owned related elements: exactly one IFeature alongside a non-IFeature (Namespace).
+            // The OfType<IFeature>() projection MUST pick out the IFeature regardless of its position
+            // (this is the core robustness guarantee — never positionally index the unfiltered collection).
+            var mixedMembership = new ParameterMembership();
+            var siblingNonFeature = new Namespace();
+            var mixedFeature = new Feature();
+
+            ((IContainedRelationship)mixedMembership).OwnedRelatedElement.Add(siblingNonFeature);
+            ((IContainedRelationship)mixedMembership).OwnedRelatedElement.Add(mixedFeature);
+
+            Assert.That(mixedMembership.ComputeOwnedMemberParameter(), Is.SameAs(mixedFeature));
+
+            // OwnedRelatedElement populated with non-IFeature element(s) only → no IFeature match:
+            // [1..1] violation, throws IncompleteModelException.
             var nonFeatureMembership = new ParameterMembership();
             var nonFeatureElement = new Namespace();
 
             ((IContainedRelationship)nonFeatureMembership).OwnedRelatedElement.Add(nonFeatureElement);
 
-            Assert.That(nonFeatureMembership.ComputeOwnedMemberParameter(), Is.Null);
+            Assert.That(() => nonFeatureMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<IncompleteModelException>());
         }
 
         [Test]
