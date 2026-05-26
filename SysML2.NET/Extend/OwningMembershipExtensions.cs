@@ -26,7 +26,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="OwningMembershipExtensions"/> class provides extensions methods for
@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(owningMembershipSubject));
             }
 
-            return owningMembershipSubject.OwnedRelatedElement.Count != 1 ? throw new IncompleteModelException($"{nameof(owningMembershipSubject)} must have exactly one related element") : owningMembershipSubject.OwnedRelatedElement[0];
+            return owningMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IElement>(nameof(owningMembershipSubject));
         }
 
         /// <summary>

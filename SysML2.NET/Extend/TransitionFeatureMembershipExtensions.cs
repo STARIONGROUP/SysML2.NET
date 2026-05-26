@@ -31,6 +31,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="TransitionFeatureMembershipExtensions"/> class provides extensions methods for
@@ -47,11 +48,14 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IStep ComputeTransitionFeature(this ITransitionFeatureMembership transitionFeatureMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
-        }
+            if (transitionFeatureMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(transitionFeatureMembershipSubject));
+            }
 
+            return transitionFeatureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IStep>(nameof(transitionFeatureMembershipSubject));
+        }
     }
 }

@@ -22,10 +22,9 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="SubjectMembershipExtensions"/> class provides extensions methods for
@@ -49,11 +48,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(subjectMembershipSubject));
             }
 
-            var matches = subjectMembershipSubject.OwnedRelatedElement.OfType<IUsage>().ToList();
-
-            return matches.Count == 1
-                ? matches[0]
-                : throw new IncompleteModelException($"{nameof(subjectMembershipSubject)} must have exactly one related element of type {nameof(IUsage)}");
+            return subjectMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IUsage>(nameof(subjectMembershipSubject));
         }
 
     }

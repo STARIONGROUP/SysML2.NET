@@ -22,14 +22,13 @@ namespace SysML2.NET.Core.POCO.Core.Types
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="FeatureMembershipExtensions"/> class provides extensions methods for
@@ -53,11 +52,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(featureMembershipSubject));
             }
 
-            var matches = featureMembershipSubject.OwnedRelatedElement.OfType<IFeature>().ToList();
-
-            return matches.Count == 1
-                ? matches[0]
-                : throw new IncompleteModelException($"{nameof(featureMembershipSubject)} must have exactly one related element of type {nameof(IFeature)}");
+            return featureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IFeature>(nameof(featureMembershipSubject));
         }
 
         /// <summary>

@@ -22,7 +22,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -31,7 +30,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ParameterMembershipExtensions"/> class provides extensions methods for
@@ -55,11 +54,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
                 throw new ArgumentNullException(nameof(parameterMembershipSubject));
             }
 
-            var matches = parameterMembershipSubject.OwnedRelatedElement.OfType<IFeature>().ToList();
-
-            return matches.Count == 1
-                ? matches[0]
-                : throw new IncompleteModelException($"{nameof(parameterMembershipSubject)} must have exactly one related element of type {nameof(IFeature)}");
+            return parameterMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IFeature>(nameof(parameterMembershipSubject));
         }
 
         /// <summary>

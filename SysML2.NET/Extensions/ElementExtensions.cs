@@ -21,11 +21,13 @@
 namespace SysML2.NET.Extensions
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// Extension method for the <see cref="IElement"/> interface
@@ -218,6 +220,73 @@ namespace SysML2.NET.Extensions
             {
                 ((IContainedElement)source).OwnedRelationship.Add(bridgeRelationship);
             }
+        }
+
+        /// <summary>
+        /// Returns the single element of type <typeparamref name="T"/> from <paramref name="elements"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The narrowed element type the caller is interested in (e.g. <c>IUsage</c>, <c>IFeature</c>,
+        /// <c>IStep</c>, <c>IExpression</c>). Pass <see cref="IElement"/> for non-narrowing
+        /// single-element extraction (e.g. <c>OwningMembership::ownedMemberElement</c>).
+        /// </typeparam>
+        /// <param name="elements">
+        /// The source <c>[0..*]</c> storage collection — typically
+        /// <see cref="IRelationship.OwnedRelatedElement"/> or <see cref="IElement.OwnedRelationship"/>
+        /// (assignable thanks to <see cref="IReadOnlyList{T}"/> covariance).
+        /// </param>
+        /// <param name="subjectName">
+        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
+        /// embedded in the diagnostic message produced on a multiplicity violation.
+        /// </param>
+        /// <returns>The single element of type <typeparamref name="T"/></returns>
+        /// <exception cref="IncompleteModelException">
+        /// Thrown when no element of type <typeparamref name="T"/> is present (missing case), or when
+        /// more than one is present (multiplicity violation). The exception message distinguishes the
+        /// two cases so SDK consumers can act on the precise model defect.
+        /// </exception>
+        /// <remarks>
+        /// <para>
+        /// Canonical helper for derived <c>[1..1]</c> composite properties that subset a <c>[0..*]</c>
+        /// storage collection (e.g. <c>SubjectMembership::ownedSubjectParameter</c>,
+        /// <c>FeatureMembership::ownedMemberFeature</c>,
+        /// <c>ParameterMembership::ownedMemberParameter</c>,
+        /// <c>TransitionFeatureMembership::transitionFeature</c>,
+        /// <c>FeatureValue::value</c>,
+        /// <c>OwningMembership::ownedMemberElement</c> with <typeparamref name="T"/> = <see cref="IElement"/>).
+        /// </para>
+        /// <para>
+        /// The implementation is zero-allocation (index-based iteration over the
+        /// <see cref="IReadOnlyList{T}"/>; no LINQ materialisation, no intermediate list) and
+        /// early-exits on the second match. The storage collection is structurally <c>[0..*]</c>;
+        /// the <c>[1..1]</c> invariant lives on the derived property and is enforced here at the
+        /// point of access.
+        /// </para>
+        /// </remarks>
+        internal static T RequireSingleOfType<T>(this IReadOnlyList<IElement> elements, string subjectName)
+            where T : class, IElement
+        {
+            T found = null;
+
+            for (var index = 0; index < elements.Count; index++)
+            {
+                if (elements[index] is not T match)
+                {
+                    continue;
+                }
+
+                if (found is not null)
+                {
+                    throw new IncompleteModelException(
+                        $"{subjectName} contains more than one element of type {typeof(T).Name}");
+                }
+
+                found = match;
+            }
+
+            return found
+                ?? throw new IncompleteModelException(
+                    $"{subjectName} must have an element of type {typeof(T).Name}");
         }
 
         /// <summary>
