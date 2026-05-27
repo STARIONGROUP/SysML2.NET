@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="StateUsageExtensionsTestFixture.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -28,7 +28,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.Systems.States;
@@ -54,17 +53,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(stateUsageWithEntry.ComputeDoAction(), Is.Null);
 
-            // Matching kind: one StateSubactionMembership of kind Do → NotSupportedException until
-            // StateSubactionMembershipExtensions.ComputeAction stub is resolved.
-            // For Later: depends on StateSubactionMembershipExtensions.ComputeAction stub
+            // Matching kind: one StateSubactionMembership of kind Do → returns the wired ActionUsage.
             var stateUsageWithDo = new StateUsage();
             var doAction = new ActionUsage();
             stateUsageWithDo.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Do }, doAction);
 
-            Assert.That(() => stateUsageWithDo.ComputeDoAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(stateUsageWithDo.ComputeDoAction(), Is.SameAs(doAction));
 
-            // All three kinds present → first matching Do membership's action is accessed → NotSupportedException.
-            // For Later: depends on StateSubactionMembershipExtensions.ComputeAction stub
+            // All three kinds present → the Kind filter picks the Do membership's action; Entry and Exit excluded.
             var stateUsageAllKinds = new StateUsage();
             var allKindsEntry = new ActionUsage();
             var allKindsDo = new ActionUsage();
@@ -73,7 +69,7 @@ namespace SysML2.NET.Tests.Extend
             stateUsageAllKinds.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Do }, allKindsDo);
             stateUsageAllKinds.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Exit }, allKindsExit);
 
-            Assert.That(() => stateUsageAllKinds.ComputeDoAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(stateUsageAllKinds.ComputeDoAction(), Is.SameAs(allKindsDo));
         }
 
         [Test]
@@ -93,17 +89,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(stateUsageWithDo.ComputeEntryAction(), Is.Null);
 
-            // Matching kind: one StateSubactionMembership of kind Entry → NotSupportedException until
-            // StateSubactionMembershipExtensions.ComputeAction stub is resolved.
-            // For Later: depends on StateSubactionMembershipExtensions.ComputeAction stub
+            // Matching kind: one StateSubactionMembership of kind Entry → returns the wired ActionUsage.
             var stateUsageWithEntry = new StateUsage();
             var entryAction = new ActionUsage();
             stateUsageWithEntry.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Entry }, entryAction);
 
-            Assert.That(() => stateUsageWithEntry.ComputeEntryAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(stateUsageWithEntry.ComputeEntryAction(), Is.SameAs(entryAction));
 
-            // All three kinds present → first matching Entry membership's action is accessed → NotSupportedException.
-            // For Later: depends on StateSubactionMembershipExtensions.ComputeAction stub
+            // All three kinds present → the Kind filter picks the Entry membership's action; Do and Exit excluded.
             var stateUsageAllKinds = new StateUsage();
             var allKindsEntry = new ActionUsage();
             var allKindsDo = new ActionUsage();
@@ -112,7 +105,7 @@ namespace SysML2.NET.Tests.Extend
             stateUsageAllKinds.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Do }, allKindsDo);
             stateUsageAllKinds.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Exit }, allKindsExit);
 
-            Assert.That(() => stateUsageAllKinds.ComputeEntryAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(stateUsageAllKinds.ComputeEntryAction(), Is.SameAs(allKindsEntry));
         }
 
         [Test]
@@ -132,17 +125,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(stateUsageWithDo.ComputeExitAction(), Is.Null);
 
-            // Matching kind: one StateSubactionMembership of kind Exit → NotSupportedException until
-            // StateSubactionMembershipExtensions.ComputeAction stub is resolved.
-            // For Later: depends on StateSubactionMembershipExtensions.ComputeAction stub
+            // Matching kind: one StateSubactionMembership of kind Exit → returns the wired ActionUsage.
             var stateUsageWithExit = new StateUsage();
             var exitAction = new ActionUsage();
             stateUsageWithExit.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Exit }, exitAction);
 
-            Assert.That(() => stateUsageWithExit.ComputeExitAction(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(stateUsageWithExit.ComputeExitAction(), Is.SameAs(exitAction));
 
-            // All three kinds present → first matching Exit membership's action is accessed → NotSupportedException.
-            // For Later: depends on StateSubactionMembershipExtensions.ComputeAction stub
+            // All three kinds present → the Kind filter picks the Exit membership's action; Entry and Do excluded.
             var stateUsageAllKinds = new StateUsage();
             var allKindsEntry = new ActionUsage();
             var allKindsDo = new ActionUsage();
@@ -151,54 +141,7 @@ namespace SysML2.NET.Tests.Extend
             stateUsageAllKinds.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Do }, allKindsDo);
             stateUsageAllKinds.AssignOwnership(new StateSubactionMembership { Kind = StateSubactionKind.Exit }, allKindsExit);
 
-            Assert.That(() => stateUsageAllKinds.ComputeExitAction(), Throws.TypeOf<NotSupportedException>());
-        }
-
-        [Test]
-        public void VerifyComputeStateDefinition()
-        {
-            Assert.That(() => ((IStateUsage)null).ComputeStateDefinition(), Throws.TypeOf<ArgumentNullException>());
-
-            // Empty: no FeatureTyping in OwnedRelationship → empty list.
-            var emptyStateUsage = new StateUsage();
-
-            Assert.That(emptyStateUsage.ComputeStateDefinition(), Has.Count.EqualTo(0));
-
-            // One FeatureTyping whose Type is a StateDefinition (which implements IBehavior) → returned.
-            var stateUsageWithStateDefinition = new StateUsage();
-            var stateDefinition = new StateDefinition();
-            stateUsageWithStateDefinition.AssignOwnership(new FeatureTyping { Type = stateDefinition });
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(stateUsageWithStateDefinition.ComputeStateDefinition(), Has.Count.EqualTo(1));
-                Assert.That(stateUsageWithStateDefinition.ComputeStateDefinition(), Does.Contain(stateDefinition));
-            }
-
-            // One FeatureTyping whose Type is a plain Behavior (not IStateDefinition) → also returned (spec allows it).
-            var stateUsageWithBehavior = new StateUsage();
-            var plainBehavior = new Behavior();
-            stateUsageWithBehavior.AssignOwnership(new FeatureTyping { Type = plainBehavior });
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(stateUsageWithBehavior.ComputeStateDefinition(), Has.Count.EqualTo(1));
-                Assert.That(stateUsageWithBehavior.ComputeStateDefinition(), Does.Contain(plainBehavior));
-            }
-
-            // Mixed FeatureTypings: one IBehavior and one plain Classifier (not an IBehavior) → only the IBehavior returned.
-            var mixedStateUsage = new StateUsage();
-            var mixedBehavior = new StateDefinition();
-            var nonBehaviorType = new Classifier();
-            mixedStateUsage.AssignOwnership(new FeatureTyping { Type = mixedBehavior });
-            mixedStateUsage.AssignOwnership(new FeatureTyping { Type = nonBehaviorType });
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(mixedStateUsage.ComputeStateDefinition(), Has.Count.EqualTo(1));
-                Assert.That(mixedStateUsage.ComputeStateDefinition(), Does.Contain(mixedBehavior));
-                Assert.That(mixedStateUsage.ComputeStateDefinition(), Does.Not.Contain(nonBehaviorType));
-            }
+            Assert.That(stateUsageAllKinds.ComputeExitAction(), Is.SameAs(allKindsExit));
         }
 
         [Test]
@@ -253,6 +196,53 @@ namespace SysML2.NET.Tests.Extend
             otherParent.AssignOwnership(new FeatureMembership(), substateUnderOtherType);
 
             Assert.That(substateUnderOtherType.ComputeIsSubstateUsageOperation(false), Is.False);
+        }
+
+        [Test]
+        public void VerifyComputeStateDefinition()
+        {
+            Assert.That(() => ((IStateUsage)null).ComputeStateDefinition(), Throws.TypeOf<ArgumentNullException>());
+
+            // Empty: no FeatureTyping in OwnedRelationship → empty list.
+            var emptyStateUsage = new StateUsage();
+
+            Assert.That(emptyStateUsage.ComputeStateDefinition(), Has.Count.EqualTo(0));
+
+            // One FeatureTyping whose Type is a StateDefinition (which implements IBehavior) → returned.
+            var stateUsageWithStateDefinition = new StateUsage();
+            var stateDefinition = new StateDefinition();
+            stateUsageWithStateDefinition.AssignOwnership(new FeatureTyping { Type = stateDefinition });
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(stateUsageWithStateDefinition.ComputeStateDefinition(), Has.Count.EqualTo(1));
+                Assert.That(stateUsageWithStateDefinition.ComputeStateDefinition(), Does.Contain(stateDefinition));
+            }
+
+            // One FeatureTyping whose Type is a plain Behavior (not IStateDefinition) → also returned (spec allows it).
+            var stateUsageWithBehavior = new StateUsage();
+            var plainBehavior = new Behavior();
+            stateUsageWithBehavior.AssignOwnership(new FeatureTyping { Type = plainBehavior });
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(stateUsageWithBehavior.ComputeStateDefinition(), Has.Count.EqualTo(1));
+                Assert.That(stateUsageWithBehavior.ComputeStateDefinition(), Does.Contain(plainBehavior));
+            }
+
+            // Mixed FeatureTypings: one IBehavior and one plain Classifier (not an IBehavior) → only the IBehavior returned.
+            var mixedStateUsage = new StateUsage();
+            var mixedBehavior = new StateDefinition();
+            var nonBehaviorType = new Classifier();
+            mixedStateUsage.AssignOwnership(new FeatureTyping { Type = mixedBehavior });
+            mixedStateUsage.AssignOwnership(new FeatureTyping { Type = nonBehaviorType });
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(mixedStateUsage.ComputeStateDefinition(), Has.Count.EqualTo(1));
+                Assert.That(mixedStateUsage.ComputeStateDefinition(), Does.Contain(mixedBehavior));
+                Assert.That(mixedStateUsage.ComputeStateDefinition(), Does.Not.Contain(nonBehaviorType));
+            }
         }
     }
 }

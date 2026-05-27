@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ExpressionExtensionsTestFixture.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -28,15 +28,73 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Functions;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Extensions;
+
+    using Type = SysML2.NET.Core.POCO.Core.Types.Type;
 
     [TestFixture]
     public class ExpressionExtensionsTestFixture
     {
+        [Test]
+        public void VerifyComputeCheckConditionOperation()
+        {
+            // Null guard on subject.
+            Assert.That(() => ((IExpression)null).ComputeCheckConditionOperation(null), Throws.TypeOf<ArgumentNullException>());
+
+            var expression = new Expression();
+
+            // target == null: forwarded to Evaluate; empty-resultExprs branch returns [] → false (Count != 1).
+            Assert.That(expression.ComputeCheckConditionOperation(null), Is.False);
+
+            // Empty: Evaluate returns [] (no ResultExpressionMembership) → false (Count != 1).
+            Assert.That(expression.ComputeCheckConditionOperation(null), Is.False);
+
+            // Populated case: ResultExpressionMembership wired — Evaluate delegates through the inner
+            // (empty) Expression and returns the empty list. CheckCondition requires Count == 1 AND
+            // a LiteralBoolean { Value: true }, so it returns false.
+            var expressionWithRem = new Expression();
+            var resultExprMembership = new ResultExpressionMembership();
+            var innerExpression = new Expression();
+            expressionWithRem.AssignOwnership(resultExprMembership, innerExpression);
+
+            Assert.That(expressionWithRem.ComputeCheckConditionOperation(null), Is.False);
+        }
+
+        [Test]
+        public void VerifyComputeEvaluateOperation()
+        {
+            // Null guard on subject.
+            Assert.That(() => ((IExpression)null).ComputeEvaluateOperation(null), Throws.TypeOf<ArgumentNullException>());
+
+            var expression = new Expression();
+
+            // target == null is permitted for the empty branch (base body doesn't dereference target).
+            Assert.That(() => expression.ComputeEvaluateOperation(null), Throws.Nothing);
+
+            // Empty: no IResultExpressionMembership in ownedFeatureMembership → returns empty list.
+            Assert.That(expression.ComputeEvaluateOperation(null), Is.Empty);
+
+            // Discrimination: FeatureMembership with non-ResultExpressionMembership type → still empty.
+            var plainMembership = new FeatureMembership();
+            var plainFeature = new Feature();
+            expression.AssignOwnership(plainMembership, plainFeature);
+
+            Assert.That(expression.ComputeEvaluateOperation(null), Is.Empty);
+
+            // Populated case: ResultExpressionMembership wired — the production code resolves
+            // resultExpressionMembership.ownedResultExpression (the inner Expression) and recursively
+            // calls Evaluate on it. The inner Expression is itself empty (no nested
+            // ResultExpressionMembership), so its Evaluate returns the empty list.
+            var expressionWithRem = new Expression();
+            var resultExprMembership = new ResultExpressionMembership();
+            var innerExpression = new Expression();
+            expressionWithRem.AssignOwnership(resultExprMembership, innerExpression);
+
+            Assert.That(expressionWithRem.ComputeEvaluateOperation(null), Is.Empty);
+        }
+
         [Test]
         public void VerifyComputeFunction()
         {
@@ -48,7 +106,7 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(expression.ComputeFunction(), Is.Null);
 
             // Negative: FeatureTyping pointing at a non-Function Type → null.
-            var nonFunctionType = new SysML2.NET.Core.POCO.Core.Types.Type();
+            var nonFunctionType = new Type();
             var typingToNonFunction = new FeatureTyping { Type = nonFunctionType };
             expression.AssignOwnership(typingToNonFunction);
 
@@ -91,38 +149,6 @@ namespace SysML2.NET.Tests.Extend
             expressionWithNonImplied.AssignOwnership(nonImpliedSpecialization);
 
             Assert.That(expressionWithNonImplied.ComputeIsModelLevelEvaluable(), Is.False);
-        }
-
-        [Test]
-        public void VerifyComputeResult()
-        {
-            Assert.That(() => ((IExpression)null).ComputeResult(), Throws.TypeOf<ArgumentNullException>());
-
-            var expression = new Expression();
-
-            // Empty: no featureMembership → null.
-            Assert.That(expression.ComputeResult(), Is.Null);
-
-            // Negative: FeatureMembership with non-ReturnParameterMembership → null.
-            var featureMembership = new FeatureMembership();
-            var plainFeature = new Feature();
-            expression.AssignOwnership(featureMembership, plainFeature);
-
-            Assert.That(expression.ComputeResult(), Is.Null);
-
-            // Positive: one ReturnParameterMembership with ownedMemberParameter set → that Feature returned.
-            var resultFeature = new Feature();
-            var returnParamMembership = new ReturnParameterMembership();
-            expression.AssignOwnership(returnParamMembership, resultFeature);
-
-            Assert.That(expression.ComputeResult(), Is.SameAs(resultFeature));
-
-            // Multiple ReturnParameterMemberships (illegal per OCL validation but tolerated) → first returned.
-            var secondResultFeature = new Feature();
-            var secondReturnParamMembership = new ReturnParameterMembership();
-            expression.AssignOwnership(secondReturnParamMembership, secondResultFeature);
-
-            Assert.That(expression.ComputeResult(), Is.SameAs(resultFeature));
         }
 
         [Test]
@@ -205,85 +231,49 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(expressionWithValuation.ComputeModelLevelEvaluableOperation([]), Is.True);
 
-            // BRANCH_B: ownedFeature under ResultExpressionMembership — STUB-BLOCKER.
-            // Although BRANCH_B logic only accesses owningFeatureMembership and calls ModelLevelEvaluable
-            // on the inner Expression, the production code first computes expressionSubject.result (line 157
-            // of ExpressionExtensions.cs), which traverses featureMembership → inheritedMembership →
-            // ownedFeature → ResultExpressionMembership.ownedMemberFeature → ownedResultExpression →
-            // ResultExpressionMembershipExtensions.ComputeOwnedResultExpression, which is a stub.
-            // Therefore the BRANCH_B recursion path cannot be exercised until that stub is implemented.
+            // BRANCH_B: ownedFeature owned via ResultExpressionMembership — passes branchB.
+            // The inner Expression is empty (no specializations, no features), so its recursive
+            // ModelLevelEvaluable call returns true; the outer Expression's single owned feature
+            // satisfies branchB (owningFeatureMembership is IResultExpressionMembership AND
+            // innerExpression.ModelLevelEvaluable is true). Outer returns true.
             var expressionBranchB = new Expression();
             var innerExpression = new Expression();
             var resultExprMembershipB = new ResultExpressionMembership();
             expressionBranchB.AssignOwnership(resultExprMembershipB, innerExpression);
 
-            Assert.That(
-                () => expressionBranchB.ComputeModelLevelEvaluableOperation([]),
-                Throws.TypeOf<NotSupportedException>());
+            Assert.That(expressionBranchB.ComputeModelLevelEvaluableOperation([]), Is.True);
         }
 
         [Test]
-        public void VerifyComputeEvaluateOperation()
+        public void VerifyComputeResult()
         {
-            // Null guard on subject.
-            Assert.That(() => ((IExpression)null).ComputeEvaluateOperation(null), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((IExpression)null).ComputeResult(), Throws.TypeOf<ArgumentNullException>());
 
             var expression = new Expression();
 
-            // target == null is permitted for the empty branch (base body doesn't dereference target).
-            Assert.That(() => expression.ComputeEvaluateOperation(null), Throws.Nothing);
+            // Empty: no featureMembership → null.
+            Assert.That(expression.ComputeResult(), Is.Null);
 
-            // Empty: no IResultExpressionMembership in ownedFeatureMembership → returns empty list.
-            Assert.That(expression.ComputeEvaluateOperation(null), Is.Empty);
-
-            // Discrimination: FeatureMembership with non-ResultExpressionMembership type → still empty.
-            var plainMembership = new FeatureMembership();
+            // Negative: FeatureMembership with non-ReturnParameterMembership → null.
+            var featureMembership = new FeatureMembership();
             var plainFeature = new Feature();
-            expression.AssignOwnership(plainMembership, plainFeature);
+            expression.AssignOwnership(featureMembership, plainFeature);
 
-            Assert.That(expression.ComputeEvaluateOperation(null), Is.Empty);
+            Assert.That(expression.ComputeResult(), Is.Null);
 
-            // STUB-BLOCKER: wire a ResultExpressionMembership → the production code calls
-            // resultExpressionMembership.ownedResultExpression, which dispatches to
-            // ResultExpressionMembershipExtensions.ComputeOwnedResultExpression, which is a stub
-            // that throws NotSupportedException. Assert the stub propagates.
-            var expressionWithRem = new Expression();
-            var resultExprMembership = new ResultExpressionMembership();
-            var innerExpression = new Expression();
-            expressionWithRem.AssignOwnership(resultExprMembership, innerExpression);
+            // Positive: one ReturnParameterMembership with ownedMemberParameter set → that Feature returned.
+            var resultFeature = new Feature();
+            var returnParamMembership = new ReturnParameterMembership();
+            expression.AssignOwnership(returnParamMembership, resultFeature);
 
-            // ResultExpressionMembershipExtensions.ComputeOwnedResultExpression is a stub — NSE expected.
-            Assert.That(
-                () => expressionWithRem.ComputeEvaluateOperation(null),
-                Throws.TypeOf<NotSupportedException>());
-        }
+            Assert.That(expression.ComputeResult(), Is.SameAs(resultFeature));
 
-        [Test]
-        public void VerifyComputeCheckConditionOperation()
-        {
-            // Null guard on subject.
-            Assert.That(() => ((IExpression)null).ComputeCheckConditionOperation(null), Throws.TypeOf<ArgumentNullException>());
+            // Multiple ReturnParameterMemberships (illegal per OCL validation but tolerated) → first returned.
+            var secondResultFeature = new Feature();
+            var secondReturnParamMembership = new ReturnParameterMembership();
+            expression.AssignOwnership(secondReturnParamMembership, secondResultFeature);
 
-            var expression = new Expression();
-
-            // target == null: forwarded to Evaluate; empty-resultExprs branch returns [] → false (Count != 1).
-            Assert.That(expression.ComputeCheckConditionOperation(null), Is.False);
-
-            // Empty: Evaluate returns [] (no ResultExpressionMembership) → false (Count != 1).
-            Assert.That(expression.ComputeCheckConditionOperation(null), Is.False);
-
-            // STUB-BLOCKER: wire a ResultExpressionMembership → Evaluate delegates to ComputeEvaluateOperation,
-            // which accesses resultExpressionMembership.ownedResultExpression →
-            // ResultExpressionMembershipExtensions.ComputeOwnedResultExpression is a stub → NSE propagates.
-            var expressionWithRem = new Expression();
-            var resultExprMembership = new ResultExpressionMembership();
-            var innerExpression = new Expression();
-            expressionWithRem.AssignOwnership(resultExprMembership, innerExpression);
-
-            // ResultExpressionMembershipExtensions.ComputeOwnedResultExpression is a stub — NSE expected.
-            Assert.That(
-                () => expressionWithRem.ComputeCheckConditionOperation(null),
-                Throws.TypeOf<NotSupportedException>());
+            Assert.That(expression.ComputeResult(), Is.SameAs(resultFeature));
         }
     }
 }

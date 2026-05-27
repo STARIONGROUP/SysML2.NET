@@ -203,14 +203,13 @@ namespace SysML2.NET.Tests.Extend
             // identical to the populated stub-blocker case below.
             // The discrimination block is omitted until upstream stubs are implemented.
 
-            // Populated case: StakeholderMembership is present; selecting ownedStakeholderParameter
-            // triggers an upstream stub (StakeholderMembershipExtensions.ComputeOwnedStakeholderParameter
-            // is not yet implemented).
+            // Populated case: StakeholderMembership is present — ownedStakeholderParameter surfaces
+            // the wired PartUsage and ComputeStakeholderParameter returns it.
             var stakeholderMembership = new StakeholderMembership();
             var stakeholderPartUsage = new PartUsage();
             requirementUsage.AssignOwnership(stakeholderMembership, stakeholderPartUsage);
 
-            Assert.That(() => requirementUsage.ComputeStakeholderParameter(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(requirementUsage.ComputeStakeholderParameter(), Is.EqualTo([stakeholderPartUsage]));
         }
 
         [Test]
