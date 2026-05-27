@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="ViewUsageExtensionsTestFixture.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -61,6 +61,46 @@ namespace SysML2.NET.Tests.Extend
             viewUsage.AssignOwnership(membershipExpose);
 
             Assert.That(() => viewUsage.ComputeExposedElement(), Throws.TypeOf<NotSupportedException>());
+        }
+
+        [Test]
+        public void VerifyComputeIncludeAsExposedOperation()
+        {
+            // Null guard on subject.
+            Assert.That(() => ((IViewUsage)null).ComputeIncludeAsExposedOperation(new Feature()), Throws.TypeOf<ArgumentNullException>());
+
+            var viewUsage = new ViewUsage();
+
+            // Null guard on element parameter.
+            Assert.That(() => viewUsage.ComputeIncludeAsExposedOperation(null), Throws.TypeOf<ArgumentNullException>());
+
+            var element = new Feature();
+
+            // Case (a) — empty conditions: ViewUsage has no ElementFilterMembership in membership;
+            // forAll over empty sequence is vacuously true → returns true.
+            Assert.That(viewUsage.ComputeIncludeAsExposedOperation(element), Is.True);
+
+            // Case (a) variant: non-filter memberships present, still no ElementFilterMembership →
+            // conditions remain empty → vacuously true.
+            var nonFilterFeature = new Feature();
+            var nonFilterMembership = new FeatureMembership();
+            viewUsage.AssignOwnership(nonFilterMembership, nonFilterFeature);
+
+            Assert.That(viewUsage.ComputeIncludeAsExposedOperation(element), Is.True);
+
+            // Case (b) — ElementFilterMembership.condition (ComputeCondition) is implemented.
+            // element has no ownedAnnotations → metadataFeatures is empty. A bare BooleanExpression
+            // (no ResultExpressionMembership children) evaluates to [] → CheckCondition returns
+            // false → metadataFeatures.Any(cond.CheckCondition) is false → forAll fails →
+            // element is excluded → returns false.
+            // Note: AnnotationExtensions.ComputeAnnotatingElement remains a NotSupportedException
+            // stub (C:\CODE\SysML2.NET\SysML2.NET\Extend\AnnotationExtensions.cs), but it is not
+            // reached here because element.ownedAnnotation is empty.
+            var filterCondition = new BooleanExpression();
+            var filterMembership = new ElementFilterMembership();
+            viewUsage.AssignOwnership(filterMembership, filterCondition);
+
+            Assert.That(viewUsage.ComputeIncludeAsExposedOperation(element), Is.False);
         }
 
         [Test]
@@ -119,14 +159,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(viewUsage.ComputeViewCondition(), Is.Empty);
 
-            // STUB-BLOCKER: Wiring an ElementFilterMembership and reading its condition property
-            // dispatches to ElementFilterMembershipExtensions.ComputeCondition, which is a NotSupportedException
-            // stub. The populated case cannot be tested cleanly until that upstream stub is implemented.
+            // Positive: ElementFilterMembership.condition (ComputeCondition) is implemented —
+            // the owned BooleanExpression is now returned directly.
             var filterCondition = new BooleanExpression();
             var filterMembership = new ElementFilterMembership();
             viewUsage.AssignOwnership(filterMembership, filterCondition);
 
-            Assert.That(() => viewUsage.ComputeViewCondition(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewUsage.ComputeViewCondition(), Is.EqualTo([filterCondition]));
         }
 
         [Test]
@@ -187,43 +226,6 @@ namespace SysML2.NET.Tests.Extend
             viewUsage.AssignOwnership(viewRenderingMembership, renderingUsage);
 
             Assert.That(() => viewUsage.ComputeViewRendering(), Throws.TypeOf<NotSupportedException>());
-        }
-
-        [Test]
-        public void VerifyComputeIncludeAsExposedOperation()
-        {
-            // Null guard on subject.
-            Assert.That(() => ((IViewUsage)null).ComputeIncludeAsExposedOperation(new Feature()), Throws.TypeOf<ArgumentNullException>());
-
-            var viewUsage = new ViewUsage();
-
-            // Null guard on element parameter.
-            Assert.That(() => viewUsage.ComputeIncludeAsExposedOperation(null), Throws.TypeOf<ArgumentNullException>());
-
-            var element = new Feature();
-
-            // Case (a) — empty conditions: ViewUsage has no ElementFilterMembership in membership;
-            // forAll over empty sequence is vacuously true → returns true.
-            Assert.That(viewUsage.ComputeIncludeAsExposedOperation(element), Is.True);
-
-            // Case (a) variant: non-filter memberships present, still no ElementFilterMembership →
-            // conditions remain empty → vacuously true.
-            var nonFilterFeature = new Feature();
-            var nonFilterMembership = new FeatureMembership();
-            viewUsage.AssignOwnership(nonFilterMembership, nonFilterFeature);
-
-            Assert.That(viewUsage.ComputeIncludeAsExposedOperation(element), Is.True);
-
-            // Cases (b), (c), (d) — STUB-BLOCKER: adding an ElementFilterMembership and reading its
-            // condition property dispatches to ElementFilterMembershipExtensions.ComputeCondition,
-            // which is a NotSupportedException stub. Additionally, annotation.annotatingElement
-            // dispatches to AnnotationExtensions.ComputeAnnotatingElement (also stubbed). These
-            // cases cannot be tested cleanly until the upstream stubs are implemented.
-            var filterCondition = new BooleanExpression();
-            var filterMembership = new ElementFilterMembership();
-            viewUsage.AssignOwnership(filterMembership, filterCondition);
-
-            Assert.That(() => viewUsage.ComputeIncludeAsExposedOperation(element), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

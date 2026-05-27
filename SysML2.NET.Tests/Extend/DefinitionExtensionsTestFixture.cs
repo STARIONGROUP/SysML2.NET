@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DefinitionExtensionsTestFixture.cs" company="Starion Group S.A.">
-//
+// 
 //   Copyright 2022-2026 Starion Group S.A.
-//
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -27,8 +27,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.Allocations;
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
@@ -56,109 +54,6 @@ namespace SysML2.NET.Tests.Extend
     [TestFixture]
     public class DefinitionExtensionsTestFixture
     {
-        /// <summary>
-        /// Builds a Definition owning one of every Usage subkind referenced by the
-        /// owned-* derived selectors, and returns the (subject, kindMap) for use
-        /// across the 23 ComputeOwnedXxx tests. Each subkind is wired via a
-        /// FeatureMembership in OwnedRelationship.
-        /// </summary>
-        private static Definition BuildDefinitionWithMixedOwnedKinds(out OwnedKindBag bag)
-        {
-            var subject = new Definition();
-
-            bag = new OwnedKindBag
-            {
-                Action = new ActionUsage(),
-                Allocation = new AllocationUsage(),
-                AnalysisCase = new AnalysisCaseUsage(),
-                Attribute = new AttributeUsage(),
-                Calculation = new CalculationUsage(),
-                Case = new CaseUsage(),
-                Concern = new ConcernUsage(),
-                Connection = new BindingConnectorAsUsage(),
-                Constraint = new ConstraintUsage(),
-                Enumeration = new EnumerationUsage(),
-                Flow = new FlowUsage(),
-                Interface = new InterfaceUsage(),
-                Item = new ItemUsage(),
-                Metadata = new MetadataUsage(),
-                Occurrence = new OccurrenceUsage(),
-                Part = new PartUsage(),
-                Port = new PortUsage(),
-                Reference = new ReferenceUsage(),
-                Rendering = new RenderingUsage(),
-                Requirement = new RequirementUsage(),
-                State = new StateUsage(),
-                Transition = new TransitionUsage(),
-                UseCase = new UseCaseUsage(),
-                VerificationCase = new VerificationCaseUsage(),
-                View = new ViewUsage(),
-                Viewpoint = new ViewpointUsage(),
-                BareUsage = new Usage(),
-            };
-
-            subject.AssignOwnership(new FeatureMembership(), bag.Action);
-            subject.AssignOwnership(new FeatureMembership(), bag.Allocation);
-            subject.AssignOwnership(new FeatureMembership(), bag.AnalysisCase);
-            subject.AssignOwnership(new FeatureMembership(), bag.Attribute);
-            subject.AssignOwnership(new FeatureMembership(), bag.Calculation);
-            subject.AssignOwnership(new FeatureMembership(), bag.Case);
-            subject.AssignOwnership(new FeatureMembership(), bag.Concern);
-            subject.AssignOwnership(new FeatureMembership(), bag.Connection);
-            subject.AssignOwnership(new FeatureMembership(), bag.Constraint);
-            subject.AssignOwnership(new FeatureMembership(), bag.Enumeration);
-            subject.AssignOwnership(new FeatureMembership(), bag.Flow);
-            subject.AssignOwnership(new FeatureMembership(), bag.Interface);
-            subject.AssignOwnership(new FeatureMembership(), bag.Item);
-            subject.AssignOwnership(new FeatureMembership(), bag.Metadata);
-            subject.AssignOwnership(new FeatureMembership(), bag.Occurrence);
-            subject.AssignOwnership(new FeatureMembership(), bag.Part);
-            subject.AssignOwnership(new FeatureMembership(), bag.Port);
-            subject.AssignOwnership(new FeatureMembership(), bag.Reference);
-            subject.AssignOwnership(new FeatureMembership(), bag.Rendering);
-            subject.AssignOwnership(new FeatureMembership(), bag.Requirement);
-            subject.AssignOwnership(new FeatureMembership(), bag.State);
-            subject.AssignOwnership(new FeatureMembership(), bag.Transition);
-            subject.AssignOwnership(new FeatureMembership(), bag.UseCase);
-            subject.AssignOwnership(new FeatureMembership(), bag.VerificationCase);
-            subject.AssignOwnership(new FeatureMembership(), bag.View);
-            subject.AssignOwnership(new FeatureMembership(), bag.Viewpoint);
-            subject.AssignOwnership(new FeatureMembership(), bag.BareUsage);
-
-            return subject;
-        }
-
-        private sealed class OwnedKindBag
-        {
-            public ActionUsage Action;
-            public AllocationUsage Allocation;
-            public AnalysisCaseUsage AnalysisCase;
-            public AttributeUsage Attribute;
-            public CalculationUsage Calculation;
-            public CaseUsage Case;
-            public ConcernUsage Concern;
-            public BindingConnectorAsUsage Connection;
-            public ConstraintUsage Constraint;
-            public EnumerationUsage Enumeration;
-            public FlowUsage Flow;
-            public InterfaceUsage Interface;
-            public ItemUsage Item;
-            public MetadataUsage Metadata;
-            public OccurrenceUsage Occurrence;
-            public PartUsage Part;
-            public PortUsage Port;
-            public ReferenceUsage Reference;
-            public RenderingUsage Rendering;
-            public RequirementUsage Requirement;
-            public StateUsage State;
-            public TransitionUsage Transition;
-            public UseCaseUsage UseCase;
-            public VerificationCaseUsage VerificationCase;
-            public ViewUsage View;
-            public ViewpointUsage Viewpoint;
-            public Usage BareUsage;
-        }
-
         [Test]
         public void VerifyComputeDirectedUsage()
         {
@@ -634,16 +529,22 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(emptySubject.ComputeVariant(), Has.Count.EqualTo(0));
 
-            // Populated case is stub-blocked: VariantMembershipExtensions.ComputeOwnedVariantUsage
-            // is still a NotSupportedException stub. Asserting NotSupportedException here makes the
-            // block visible; once the upstream stub is implemented, this assertion will fail loudly,
-            // forcing a real assertion to be written.
-            // For Later: populated case depends on VariantMembershipExtensions.ComputeOwnedVariantUsage, which is still a stub.
+            // Populated case: VariantMembershipExtensions.ComputeOwnedVariantUsage is now implemented.
+            // variant = variantMembership.ownedVariantUsage
             var subject = new Definition();
             var variantUsage = new PartUsage();
             subject.AssignOwnership(new VariantMembership(), variantUsage);
 
-            Assert.That(() => subject.ComputeVariant(), Throws.TypeOf<NotSupportedException>());
+            // A non-VariantMembership FeatureMembership in the same subject MUST NOT surface.
+            var nonVariantUsage = new PartUsage();
+            subject.AssignOwnership(new FeatureMembership(), nonVariantUsage);
+
+            var result = subject.ComputeVariant();
+
+            using var scope = Assert.EnterMultipleScope();
+
+            Assert.That(result, Is.EqualTo([variantUsage]));
+            Assert.That(result, Does.Not.Contain(nonVariantUsage));
         }
 
         [Test]
@@ -665,6 +566,109 @@ namespace SysML2.NET.Tests.Extend
             subject.AssignOwnership(new FeatureMembership(), plainNested);
 
             Assert.That(subject.ComputeVariantMembership(), Is.EquivalentTo(new[] { variantMembership }));
+        }
+
+        /// <summary>
+        /// Builds a Definition owning one of every Usage subkind referenced by the
+        /// owned-* derived selectors, and returns the (subject, kindMap) for use
+        /// across the 23 ComputeOwnedXxx tests. Each subkind is wired via a
+        /// FeatureMembership in OwnedRelationship.
+        /// </summary>
+        private static Definition BuildDefinitionWithMixedOwnedKinds(out OwnedKindBag bag)
+        {
+            var subject = new Definition();
+
+            bag = new OwnedKindBag
+            {
+                Action = new ActionUsage(),
+                Allocation = new AllocationUsage(),
+                AnalysisCase = new AnalysisCaseUsage(),
+                Attribute = new AttributeUsage(),
+                Calculation = new CalculationUsage(),
+                Case = new CaseUsage(),
+                Concern = new ConcernUsage(),
+                Connection = new BindingConnectorAsUsage(),
+                Constraint = new ConstraintUsage(),
+                Enumeration = new EnumerationUsage(),
+                Flow = new FlowUsage(),
+                Interface = new InterfaceUsage(),
+                Item = new ItemUsage(),
+                Metadata = new MetadataUsage(),
+                Occurrence = new OccurrenceUsage(),
+                Part = new PartUsage(),
+                Port = new PortUsage(),
+                Reference = new ReferenceUsage(),
+                Rendering = new RenderingUsage(),
+                Requirement = new RequirementUsage(),
+                State = new StateUsage(),
+                Transition = new TransitionUsage(),
+                UseCase = new UseCaseUsage(),
+                VerificationCase = new VerificationCaseUsage(),
+                View = new ViewUsage(),
+                Viewpoint = new ViewpointUsage(),
+                BareUsage = new Usage()
+            };
+
+            subject.AssignOwnership(new FeatureMembership(), bag.Action);
+            subject.AssignOwnership(new FeatureMembership(), bag.Allocation);
+            subject.AssignOwnership(new FeatureMembership(), bag.AnalysisCase);
+            subject.AssignOwnership(new FeatureMembership(), bag.Attribute);
+            subject.AssignOwnership(new FeatureMembership(), bag.Calculation);
+            subject.AssignOwnership(new FeatureMembership(), bag.Case);
+            subject.AssignOwnership(new FeatureMembership(), bag.Concern);
+            subject.AssignOwnership(new FeatureMembership(), bag.Connection);
+            subject.AssignOwnership(new FeatureMembership(), bag.Constraint);
+            subject.AssignOwnership(new FeatureMembership(), bag.Enumeration);
+            subject.AssignOwnership(new FeatureMembership(), bag.Flow);
+            subject.AssignOwnership(new FeatureMembership(), bag.Interface);
+            subject.AssignOwnership(new FeatureMembership(), bag.Item);
+            subject.AssignOwnership(new FeatureMembership(), bag.Metadata);
+            subject.AssignOwnership(new FeatureMembership(), bag.Occurrence);
+            subject.AssignOwnership(new FeatureMembership(), bag.Part);
+            subject.AssignOwnership(new FeatureMembership(), bag.Port);
+            subject.AssignOwnership(new FeatureMembership(), bag.Reference);
+            subject.AssignOwnership(new FeatureMembership(), bag.Rendering);
+            subject.AssignOwnership(new FeatureMembership(), bag.Requirement);
+            subject.AssignOwnership(new FeatureMembership(), bag.State);
+            subject.AssignOwnership(new FeatureMembership(), bag.Transition);
+            subject.AssignOwnership(new FeatureMembership(), bag.UseCase);
+            subject.AssignOwnership(new FeatureMembership(), bag.VerificationCase);
+            subject.AssignOwnership(new FeatureMembership(), bag.View);
+            subject.AssignOwnership(new FeatureMembership(), bag.Viewpoint);
+            subject.AssignOwnership(new FeatureMembership(), bag.BareUsage);
+
+            return subject;
+        }
+
+        private sealed class OwnedKindBag
+        {
+            public ActionUsage Action;
+            public AllocationUsage Allocation;
+            public AnalysisCaseUsage AnalysisCase;
+            public AttributeUsage Attribute;
+            public Usage BareUsage;
+            public CalculationUsage Calculation;
+            public CaseUsage Case;
+            public ConcernUsage Concern;
+            public BindingConnectorAsUsage Connection;
+            public ConstraintUsage Constraint;
+            public EnumerationUsage Enumeration;
+            public FlowUsage Flow;
+            public InterfaceUsage Interface;
+            public ItemUsage Item;
+            public MetadataUsage Metadata;
+            public OccurrenceUsage Occurrence;
+            public PartUsage Part;
+            public PortUsage Port;
+            public ReferenceUsage Reference;
+            public RenderingUsage Rendering;
+            public RequirementUsage Requirement;
+            public StateUsage State;
+            public TransitionUsage Transition;
+            public UseCaseUsage UseCase;
+            public VerificationCaseUsage VerificationCase;
+            public ViewUsage View;
+            public ViewpointUsage Viewpoint;
         }
     }
 }

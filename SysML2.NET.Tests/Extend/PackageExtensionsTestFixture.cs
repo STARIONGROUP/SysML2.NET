@@ -21,10 +21,9 @@
 namespace SysML2.NET.Tests.Extend
 {
     using System;
-    
+
     using NUnit.Framework;
 
-    using SysML2.NET.Core.POCO.Kernel.Associations;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -44,16 +43,41 @@ namespace SysML2.NET.Tests.Extend
             var package = new Package();
 
             Assert.That(package.ComputeFilterCondition(), Is.Empty);
+
             var membership = new ElementFilterMembership();
             var expression = new BooleanExpression();
 
             var annotation = new Annotation();
             var comment = new Comment();
-            
+
             package.AssignOwnership(membership, expression);
             package.AssignOwnership(annotation, comment);
-            
-            Assert.That(package.ComputeFilterCondition, Throws.InstanceOf<NotSupportedException>());
+
+            // ElementFilterMembership.condition (ComputeCondition) is implemented — the
+            // populated case now returns the owned IExpression directly.
+            Assert.That(package.ComputeFilterCondition(), Is.EqualTo([expression]));
+        }
+
+        [Test]
+        public void VerifyComputeIncludeAsMemberOperation()
+        {
+            Assert.That(() => ((IPackage)null).ComputeIncludeAsMemberOperation(null), Throws.TypeOf<ArgumentNullException>());
+
+            var package = new Package();
+            Assert.That(package.ComputeIncludeAsMemberOperation(null), Is.False);
+
+            var element = new Type();
+            Assert.That(package.ComputeIncludeAsMemberOperation(element), Is.True);
+
+            var membership = new ElementFilterMembership();
+            var expression = new BooleanExpression();
+
+            package.AssignOwnership(membership, expression);
+
+            // ElementFilterMembership.condition is now implemented. A bare BooleanExpression
+            // (no ResultExpressionMembership children) evaluates to [] → CheckCondition returns
+            // false → element does not pass all filters → includeAsMember returns false.
+            Assert.That(package.ComputeIncludeAsMemberOperation(element), Is.False);
         }
 
         [Test]
@@ -68,30 +92,12 @@ namespace SysML2.NET.Tests.Extend
             var importMember = new MembershipImport();
 
             package.AssignOwnership(importMember);
-            Assert.That(()=> package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
-            
+            Assert.That(() => package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
+
             var membership = new ElementFilterMembership();
             var expression = new BooleanExpression();
             package.AssignOwnership(membership, expression);
-            Assert.That(()=> package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
-        }
-
-        [Test]
-        public void VerifyComputeIncludeAsMemberOperation()
-        {
-            Assert.That(() => ((IPackage)null).ComputeIncludeAsMemberOperation(null), Throws.TypeOf<ArgumentNullException>());
-
-            var package = new Package();
-            Assert.That(package.ComputeIncludeAsMemberOperation(null), Is.False);
-
-            var element = new Type();
-            Assert.That(package.ComputeIncludeAsMemberOperation(element), Is.True);
-            var membership = new ElementFilterMembership();
-            var expression = new BooleanExpression();
-            
-            package.AssignOwnership(membership, expression);
-            
-            Assert.That(() => package.ComputeIncludeAsMemberOperation(element), Throws.TypeOf<NotSupportedException>());
+            Assert.That(() => package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
         }
     }
 }
