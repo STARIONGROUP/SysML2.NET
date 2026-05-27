@@ -1,7 +1,7 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="PortDefinitionExtensionsTestFixture.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -21,18 +21,36 @@
 namespace SysML2.NET.Tests.Extend
 {
     using System;
-    
+
     using NUnit.Framework;
-    
+
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Extensions;
 
     [TestFixture]
     public class PortDefinitionExtensionsTestFixture
     {
         [Test]
-        public void ComputeConjugatedPortDefinition_ThrowsNotSupportedException()
+        public void Verify_ComputeConjugatedPortDefinition()
         {
-            Assert.That(() => ((IPortDefinition)null).ComputeConjugatedPortDefinition(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(
+                () => ((IPortDefinition)null).ComputeConjugatedPortDefinition(),
+                Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("portDefinitionSubject"));
+
+            var emptyPortDefinition = new PortDefinition();
+            Assert.That(emptyPortDefinition.ComputeConjugatedPortDefinition(), Is.Null);
+
+            var portDefinitionWithConjugated = new PortDefinition();
+            var conjugated = new ConjugatedPortDefinition();
+            portDefinitionWithConjugated.AssignOwnership(new OwningMembership(), conjugated);
+            Assert.That(portDefinitionWithConjugated.ComputeConjugatedPortDefinition(), Is.SameAs(conjugated));
+
+            var portDefinitionWithOtherMember = new PortDefinition();
+            var partUsage = new PartUsage();
+            portDefinitionWithOtherMember.AssignOwnership(new OwningMembership(), partUsage);
+            Assert.That(portDefinitionWithOtherMember.ComputeConjugatedPortDefinition(), Is.Null);
         }
     }
 }
