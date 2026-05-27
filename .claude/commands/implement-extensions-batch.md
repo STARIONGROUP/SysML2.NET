@@ -1,5 +1,5 @@
 ---
-description: Spawn the 4-role team across N SysML2.NET Extend files in one run — creates a batch branch, assigns the related GitHub issues to the user, and updates each issue's checklist on completion
+description: Spawn the 4-role team across N SysML2.NET Extend files in one run — creates and pushes a batch branch, assigns the related GitHub issues to the user, and updates each issue's checklist on completion
 argument-hint: <file1.cs> <file2.cs> [<file3.cs> ...]   (2–6 Extension file names; each will be normalised to SysML2.NET/Extend/<Foo>Extensions.cs)
 ---
 
@@ -13,7 +13,9 @@ single-file flow:
 1. **Pre-flight validation** of every file + its GitHub issue, before any state
    change.
 2. **Creates a new git branch** off `development` with a deterministic name
-   derived from the batch's issue numbers.
+   derived from the batch's issue numbers, AND pushes it to `origin` with
+   upstream tracking set so the user can immediately open a pull request after
+   committing.
 3. **Assigns every related GitHub issue to the invoking user** (`@me`).
 4. **Parallelises agent spawns across files** wherever their target files are
    disjoint.
@@ -138,10 +140,24 @@ batch-impl-extensions-<dashed-issue-numbers>
 - If more than 4 issues: include the first 4 + `-plus<N-4>` suffix (e.g.
   `batch-impl-extensions-123-180-186-190-plus2` for N=6).
 
-Create:
+Create locally **and immediately publish to `origin` with upstream tracking**:
 ```bash
 git switch -c <branch-name> origin/development
+git push -u origin <branch-name>
 ```
+
+The push lifts the branch onto the remote at the same commit as
+`origin/development` (no diff yet — that comes after the batch's edits + the
+user's commit). Setting upstream now means:
+- The user's eventual `git push` after committing needs no flags.
+- A pull request can be opened via the GitHub UI or `gh pr create` as soon as
+  the user pushes their first commit, without an additional `git push -u`
+  step.
+
+If the `git push -u` fails (network, auth, branch-protection refusing empty
+pushes), log the failure but **continue with the batch**. The implementation
+work is the main goal; the branch will still exist locally and the user can
+re-push manually at the end. Surface the failure clearly in the final summary.
 
 Refuse if the branch already exists locally OR on origin (`git ls-remote
 --exit-code origin <branch>`) — ask the user to pick a different batch or delete
@@ -253,7 +269,10 @@ step-11 logic from `/implement-extensions`:
 
 Print to the user:
 
-- **Branch**: name + base ref + how to delete-if-aborting.
+- **Branch**: name + base ref + remote-tracking state (`pushed to origin` /
+  `local only — push failed at step 6, push manually with: git push -u origin <branch>`)
+  + how to delete-if-aborting (locally: `git branch -D <branch>`; remotely if
+  pushed: `git push origin --delete <branch>`).
 - **Per-file table**:
 
   | File | Stubs impl. | Targeted tests | Reg. sweep impact | Reviewer | Issue |
@@ -269,8 +288,11 @@ Print to the user:
   - Out-of-scope blockers surfaced (e.g. "VerifyComputeX in <Sibling>TestFixture
     is still stub-blocked on `<UpstreamMethod>` — consider a follow-up issue").
 
-- **Reminder**: nothing is auto-committed. User reviews `git diff`, decides
-  whether to commit / push / open PR.
+- **Reminder**: nothing is auto-committed. The branch exists locally (and on
+  `origin` with upstream tracking, when step 6's push succeeded). User reviews
+  `git diff`, commits, then `git push` (no flags needed — tracking is already
+  set) and opens the PR via `gh pr create --base development --head <branch>`
+  or the GitHub UI.
 
 ## Failure handling
 
@@ -281,6 +303,7 @@ Print to the user:
 | Ambiguous issue | Step 2 | `AskUserQuestion` for an explicit issue number per file. |
 | Dirty working tree | Step 4 | Abort, ask user to commit/stash. |
 | Branch already exists | Step 6 | Abort; ask user to pick a different batch or delete the stale branch. |
+| `git push -u origin <branch>` fails (network, auth, branch protection) | Step 6 | Log + continue (non-blocking; surface clearly in step 14 final summary with a manual re-push command). |
 | `gh issue edit --add-assignee` fails for one issue | Step 7 | Log + continue (non-blocking; implementation still proceeds). |
 | Production build fails after implementer | Step 10.1 | Attribute to the file, re-dispatch that implementer. |
 | Targeted test fails | Step 10.2 | Attribute (OCL vs test bug), re-dispatch correct role. |
