@@ -1,35 +1,32 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IntersectingExtensions.cs" company="Starion Group S.A.">
-//
-//    Copyright (C) 2022-2026 Starion Group S.A.
-//
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
 namespace SysML2.NET.Core.POCO.Core.Types
 {
     using System;
-    using System.Collections.Generic;
 
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
-    /// The <see cref="IntersectingExtensions"/> class provides extensions methods for
-    /// the <see cref="IIntersecting"/> interface
+    /// The <see cref="IntersectingExtensions" /> class provides extensions methods for
+    /// the <see cref="IIntersecting" /> interface
     /// </summary>
     internal static class IntersectingExtensions
     {
@@ -37,16 +34,21 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Computes the derived property.
         /// </summary>
         /// <param name="intersectingSubject">
-        /// The subject <see cref="IIntersecting"/>
+        /// The subject <see cref="IIntersecting" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeTypeIntersected(this IIntersecting intersectingSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
-        }
+            if (intersectingSubject == null)
+            {
+                throw new ArgumentNullException(nameof(intersectingSubject));
+            }
 
+            return intersectingSubject.OwningRelatedElement as IType
+                   ?? throw new IncompleteModelException(
+                       $"{nameof(intersectingSubject)} must have an owning related element of type {nameof(IType)}");
+        }
     }
 }

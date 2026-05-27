@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="UnioningExtensionsTestFixture.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -21,18 +21,45 @@
 namespace SysML2.NET.Tests.Extend
 {
     using System;
-    
+
     using NUnit.Framework;
-    
+
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Exceptions;
+
+    using SysMLType = SysML2.NET.Core.POCO.Core.Types.Type;
 
     [TestFixture]
     public class UnioningExtensionsTestFixture
     {
         [Test]
-        public void ComputeTypeUnioned_ThrowsNotSupportedException()
+        public void VerifyComputeTypeUnioned()
         {
-            Assert.That(() => ((IUnioning)null).ComputeTypeUnioned(), Throws.TypeOf<NotSupportedException>());
+            // Null subject → ArgumentNullException.
+            Assert.That(() => ((IUnioning)null).ComputeTypeUnioned(), Throws.TypeOf<ArgumentNullException>());
+
+            // Empty Unioning (OwningRelatedElement is null) → [1..1] violation: IncompleteModelException.
+            var emptyUnioning = new Unioning();
+
+            Assert.That(() => emptyUnioning.ComputeTypeUnioned(), Throws.TypeOf<IncompleteModelException>());
+
+            // OwningRelatedElement is an IType → returns the same instance.
+            var type = new SysMLType();
+            var unioningWithType = new Unioning();
+
+            ((IContainedRelationship)unioningWithType).OwningRelatedElement = type;
+
+            Assert.That(unioningWithType.ComputeTypeUnioned(), Is.SameAs(type));
+
+            // OwningRelatedElement is a non-IType element (Annotation) → [1..1] type violation: IncompleteModelException.
+            var annotation = new Annotation();
+            var unioningWithAnnotation = new Unioning();
+
+            ((IContainedRelationship)unioningWithAnnotation).OwningRelatedElement = annotation;
+
+            Assert.That(() => unioningWithAnnotation.ComputeTypeUnioned(), Throws.TypeOf<IncompleteModelException>());
         }
     }
 }
