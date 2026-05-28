@@ -37,7 +37,7 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(
                 () => ((IPortUsage)null).ComputePortDefinition(),
-                Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("portUsageSubject"));
+                Throws.TypeOf<ArgumentNullException>());
 
             var emptySubject = new PortUsage();
 

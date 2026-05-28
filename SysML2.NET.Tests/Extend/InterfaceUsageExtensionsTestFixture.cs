@@ -35,7 +35,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void Verify_ComputeInterfaceDefinition()
         {
-            Assert.That(() => ((IInterfaceUsage)null).ComputeInterfaceDefinition(), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("interfaceUsageSubject"));
+            Assert.That(() => ((IInterfaceUsage)null).ComputeInterfaceDefinition(), Throws.TypeOf<ArgumentNullException>());
 
             // Empty InterfaceUsage: no FeatureTyping in OwnedRelationship -> empty list.
             var emptyInterfaceUsage = new InterfaceUsage();

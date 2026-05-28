@@ -51,6 +51,38 @@ stub-blocker test pattern (see template) when an in-scope test would otherwise
 need to traverse a still-stubbed upstream method that is NOT part of the current
 batch.
 
+## Pre-flight: detect orchestrator plan mode
+
+If the orchestrator session is itself in **plan mode** at the moment
+`/implement-extensions-batch` runs, spawned sub-agents (researchers, implementers,
+testers, reviewers) inherit that state. The Agent tool's `mode: "acceptEdits"`
+parameter does NOT override the inherited plan-mode state on the current Claude
+Code build — sub-agents will respect the `<system-reminder>` that declares plan
+mode and refuse to apply any edits, even though their prompts tell them to.
+
+Symptom: every sub-agent reports "ready to execute on exit from plan mode" and
+writes its work to its own per-agent plan file at
+`C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` instead of to the
+target file.
+
+Before spawning any sub-agent, check whether plan mode is active in the
+orchestrator session. If it is:
+
+1. **Stop** and surface the situation to the user with `AskUserQuestion`. Two
+   options:
+   - **Exit plan mode first** (user toggles their harness off plan mode, then
+     re-invokes the command). Cleanest.
+   - **Proceed in degraded mode**: spawn researchers as normal (they only need
+     to write to `.team-notes/`, which the orchestrator can copy into place
+     from their per-agent plan files if blocked). For Phase IT (implementers +
+     testers) and Phase RV (reviewers), the orchestrator applies the
+     production / test edits itself, reading each implementer's plan file to
+     extract the verbatim code. Reviewers can still run read-only.
+
+2. If the user picks degraded mode, set an internal `PLAN_MODE_DEGRADED=true`
+   flag for the run and follow the per-phase divergences in the **Notes for
+   the orchestrator** block below.
+
 ## Workflow
 
 ### 1. Parse `$ARGUMENTS` and validate the batch
@@ -310,6 +342,8 @@ Print to the user:
 | Sibling test failure in regression sweep | Step 11 | Dispatch a regression-sweep tester per touched fixture; in scope. |
 | Reviewer NEEDS FIX | Step 12 | Re-dispatch implementer or tester for that file only; other files' results still reported. |
 | One file's implementation fails after branch + assignment | Any step ≥ 6 | Keep the branch; surface in final summary; user decides whether to retry via `/implement-extensions` for that single file or revert. |
+| Sub-agent inherits orchestrator plan mode and refuses to edit | Phases R / IT / RV | Surface to user via `AskUserQuestion`. Either exit plan mode and retry, or proceed in degraded mode (orchestrator copies researcher specs from agent plan files into `.team-notes/`, applies implementer + tester code from agent plan files, runs reviewers as read-only). |
+| Agent's `mode: "acceptEdits"` parameter does not override inherited plan mode | Phases IT / RV | Known limitation of this Claude Code build. The orchestrator must apply the edits itself in degraded mode (see "Pre-flight: detect orchestrator plan mode"). |
 
 ## Parallelism caps (orchestrator self-enforced)
 
@@ -339,3 +373,25 @@ Print to the user:
 - If the user supplies a single file, route them to `/implement-extensions`
   with the same filename rather than creating a degenerate 1-file "batch"
   branch.
+- **Plan-mode degraded mode** (`PLAN_MODE_DEGRADED=true`):
+  - **Phase R**: researchers will write to per-agent plan files instead of
+    `.team-notes/`. After each returns, copy its plan file from
+    `C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` into
+    `.team-notes/<foo>-extensions-spec.md` and verify content matches the
+    schema the template expects.
+  - **Phase IT**: implementers + testers will write to per-agent plan files,
+    NOT to the production / test fixtures. The orchestrator reads each
+    agent's plan file, extracts the verbatim code, and applies the edits
+    itself via `Edit` / `Write`. Build + targeted tests still run in
+    Phase V. Do NOT mark Phase IT complete on the sub-agent's "ready to
+    execute" message alone — only after the orchestrator has applied each
+    file's diffs and the build is green.
+  - **Phase RV**: reviewers operate read-only, so plan mode does not block
+    them. No degradation needed.
+  - **Sanity check**: in degraded mode, the orchestrator does roughly 2× the
+    work it would in normal mode. Budget for it — do not silently fall
+    behind on Phase V verification just because Phase IT cost more turns.
+- The Agent tool's `mode` parameter cannot reliably escape inherited plan mode
+  on this Claude Code build. The orchestrator MUST detect plan mode at
+  pre-flight and pick the degraded-mode branch deliberately rather than
+  assuming `mode: "acceptEdits"` will work.

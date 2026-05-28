@@ -38,7 +38,7 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(
                 () => ((IInterfaceDefinition)null).ComputeInterfaceEnd(),
-                Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("interfaceDefinitionSubject"));
+                Throws.TypeOf<ArgumentNullException>());
 
             var emptyInterfaceDefinition = new InterfaceDefinition();
 

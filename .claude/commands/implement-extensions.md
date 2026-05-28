@@ -45,6 +45,39 @@ This is the user-memory `feedback_scope_discipline.md` rule. Even when an adjace
 stub blocks dependent test coverage, surface the blocker; do not silently expand
 scope. Use the stub-blocker test pattern (see template).
 
+## Pre-flight: detect orchestrator plan mode
+
+If the orchestrator session is itself in **plan mode** at the moment
+`/implement-extensions` runs, spawned sub-agents (researcher, implementer, tester,
+reviewer) inherit that state. The Agent tool's `mode: "acceptEdits"` parameter
+does NOT override the inherited plan-mode state on the current Claude Code build
+— sub-agents will respect the `<system-reminder>` that declares plan mode and
+refuse to apply any edits, even though their prompts tell them to.
+
+Symptom: every sub-agent reports "ready to execute on exit from plan mode" and
+writes its work to its own per-agent plan file at
+`C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` instead of to the
+target file.
+
+Before spawning any sub-agent, check whether plan mode is active in the
+orchestrator session. If it is:
+
+1. **Stop** and surface the situation to the user with `AskUserQuestion`. Two
+   options:
+   - **Exit plan mode first** (user toggles their harness off plan mode, then
+     re-invokes the command). Cleanest.
+   - **Proceed in degraded mode**: spawn the researcher as normal (it only
+     needs to write to `.team-notes/`, which the orchestrator can copy into
+     place from the agent's plan file if blocked). For the step-6 implementer
+     + tester pair and the step-9 reviewer, the orchestrator applies the
+     production / test edits itself, reading each sub-agent's plan file to
+     extract the verbatim code. The reviewer is already read-only and runs
+     unaffected.
+
+2. If the user picks degraded mode, set an internal `PLAN_MODE_DEGRADED=true`
+   flag for the run and follow the per-step divergences in the **Notes for
+   the orchestrator** block at the bottom of this file.
+
 ## Workflow
 
 ### 1. Validate input
@@ -421,3 +454,31 @@ unresolved findings are separately surfaced in the final-summary report. The
   implementation state of the file; unresolved findings are separately surfaced
   in the final-summary report. The `gh issue edit` push must touch ONLY the
   `### Checklist` section — verify with a re-fetch + diff before reporting "done".
+- **Plan-mode degraded mode** (`PLAN_MODE_DEGRADED=true` — set in the pre-flight
+  step at the top of this file):
+  - **Step 5 (researcher)**: the researcher will write its spec to a per-agent
+    plan file under `C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md`
+    instead of `.team-notes/<foo>-extensions-spec.md`. After it returns, copy
+    the agent plan file into `.team-notes/<foo>-extensions-spec.md` and verify
+    the content matches the schema in `.claude/team-templates/extension-impl.md`.
+  - **Step 6 (implementer + tester)**: both will write their final production
+    / test code to per-agent plan files, NOT to `{{PRODUCTION_FILE}}` /
+    `{{TEST_FILE}}`. The orchestrator reads each agent's plan file, extracts
+    the verbatim code, and applies the edits itself via `Edit` / `Write`.
+    Step 7's `dotnet build` + targeted `dotnet test` then runs against the
+    orchestrator-applied diffs as normal. Do NOT mark step 6 complete on the
+    sub-agent's "ready to execute" message alone — only after the orchestrator
+    has applied each file's diffs and the build is green.
+  - **Step 8 (regression sweep)**: same as step 6 — the regression-sweep
+    tester writes to a per-agent plan file; orchestrator applies the diffs to
+    each touched sibling fixture itself.
+  - **Step 9 (reviewer)**: read-only, so plan mode does not block it. No
+    degradation needed.
+  - **Sanity check**: in degraded mode, the orchestrator does roughly 2× the
+    work it would in normal mode (it now applies the edits the sub-agents
+    would otherwise apply themselves). Budget for it — do not silently fall
+    behind on step-7 verification just because step 6 cost more turns.
+- The Agent tool's `mode` parameter cannot reliably escape inherited plan mode
+  on this Claude Code build. The orchestrator MUST detect plan mode at
+  pre-flight and pick the degraded-mode branch deliberately rather than
+  assuming `mode: "acceptEdits"` will work.
