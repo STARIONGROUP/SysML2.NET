@@ -79,6 +79,12 @@ across every file in the batch.
                  in the recent TypeExtensions task) and surfaces transitive
                  stub-blockers before the implementer hits them.
 
+1.5 Orchestrator → renders inline per-file spec preview, asks user via
+                 AskUserQuestion to approve before any code is written.
+                 MANDATORY every run, even when researcher reports zero
+                 ambiguities. See "Phase R-A" / step 5.5 in
+                 .claude/commands/implement-extensions.md.
+
 2. Implementer → implements all methods in {{PRODUCTION_FILE}}, sliced by
                  dependency tier (Tier 1: direct OfType filters; Tier 2:
                  chains over Tier 1; Tier 3: depends on operations; Tier 4:
@@ -107,6 +113,14 @@ When invoked through `/implement-extensions-batch`, the workflow above runs
                  AGENT RUN. Reads {{REFERENCE_PRODUCTION_FILE}} and
                  {{REFERENCE_TEST_FILE}} ONCE up front, not per file.
 
+1.5 Orchestrator → renders inline per-file spec preview (one block per
+                 batch file), asks user via AskUserQuestion to approve
+                 before any code is written. Options: Approve / Drop
+                 specific files / Abort + research again. MANDATORY every
+                 run, even when researcher reports zero ambiguities. See
+                 "Phase R-A" / step 9.5 in
+                 .claude/commands/implement-extensions-batch.md.
+
 2. Implementer → walks {{BATCH_FILES}} and implements each
                  SysML2.NET/Extend/<Foo>Extensions.cs in its single agent run.
                  Reads each file's notes file before editing it. ACL =
@@ -123,14 +137,14 @@ When invoked through `/implement-extensions-batch`, the workflow above runs
 4. Reviewer    → walks {{BATCH_FILES}} and applies the OCL-translation +
                  test-fixture checklists per file; READ-ONLY.
 
-5. Orchestrator → after Phases R / IT, runs ONE consolidated build, ONE
-                 consolidated targeted test (filter joining every fixture
-                 in the batch), then the regression sweep. On any failure,
-                 it sends a SendMessage to the relevant named teammate
-                 (`researcher`, `implementer`, or `tester`) with the
-                 failing-file list — the same agent keeps its context and
-                 fixes in place. Fresh Agent spawns are not used inside
-                 the iteration loop.
+5. Orchestrator → after Phases R / R-A / IT, runs ONE consolidated build,
+                 ONE consolidated targeted test (filter joining every
+                 fixture in the batch), then the regression sweep. On any
+                 failure, it sends a SendMessage to the relevant named
+                 teammate (`researcher`, `implementer`, or `tester`) with
+                 the failing-file list — the same agent keeps its context
+                 and fixes in place. Fresh Agent spawns are not used
+                 inside the iteration loop.
 ```
 
 The role boundaries are **identical** to single-file mode: the implementer
@@ -138,30 +152,22 @@ never edits test files, the tester never edits production files, the reviewer
 is read-only. The only thing that changes is the size of the per-role allowed
 file set (one file → N files in the batch).
 
-## Plan-mode-aware prompting (added 2026-05-28)
+## Plan-mode-aware prompting (reworked 2026-05-28)
 
-If the orchestrator session is in plan mode when this template is used, sub-agents
-will inherit it and cannot apply edits. The Agent-tool `mode: "acceptEdits"`
-parameter does NOT override the inherited state on the current Claude Code build.
+Plan mode is now the natural pre-execution approval gate for both `/implement-extensions` and `/implement-extensions-batch` — the orchestrator stays in plan mode, does read-only pre-flight, writes the proposed-execution plan to the plan file, calls `ExitPlanMode`, and proceeds on approval. The "degraded mode" workaround documented in the previous version of this section (orchestrator applies edits on behalf of sub-agents) is no longer needed because the orchestrator never spawns sub-agents while plan mode is active.
 
-Role prompts in this template are written so that the orchestrator can fall back
-to applying edits itself when this happens:
+See the **"Pre-flight: plan mode IS the pre-execution approval gate (Gate 0)"** section in each command file:
+- `.claude/commands/implement-extensions.md`
+- `.claude/commands/implement-extensions-batch.md`
 
-- **Researcher** prompts always direct the agent to write the spec to its
-  declared `{{NOTES_FILE}}` location. In plan-mode-degraded runs the agent will
-  write to a per-agent plan file under
-  `C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` instead; the
-  orchestrator then copies it to `.team-notes/`.
-- **Implementer / tester** prompts must emit the verbatim production / test code
-  in their text response (or, equivalently, in their per-agent plan file) so it
-  survives a plan-mode block. The orchestrator extracts and applies it via
-  `Edit` / `Write`.
-- **Reviewer** prompts are already read-only and unaffected by plan mode.
+The structural approval workflow ships with **two gates** now:
 
-The `/implement-extensions-batch` command body documents the degraded-mode flow
-end-to-end in its "Pre-flight: detect orchestrator plan mode" section. The
-single-file `/implement-extensions` command should also adopt the same flow —
-see that file's notes section.
+| Gate | Fires | Approves | UI |
+|---|---|---|---|
+| Gate 0 (pre-execution) | At invocation, if orchestrator is in plan mode | Composition + branch + team + model picks | `ExitPlanMode` plan-approval UI |
+| Gate R-A (post-researcher) | After researcher returns `spec ready`, before implementer/tester spawn | The per-method derivation plan inline-rendered from each `.team-notes/<foo>-extensions-spec.md` | `AskUserQuestion` with 2–3 options |
+
+Tool-level permission prompts (`Bash(dotnet build *)`, `Bash(git push *)`, `TeamCreate`, `Agent(...)`, etc.) continue to surface per the user's `settings.json`. The gates govern STRUCTURAL approval only; they do not auto-allow individual tool calls.
 
 ## Hard scope-discipline rule (v2)
 
