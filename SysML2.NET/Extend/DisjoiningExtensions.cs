@@ -42,10 +42,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeOwningType(this IDisjoining disjoiningSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return disjoiningSubject == null
+                ? throw new ArgumentNullException(nameof(disjoiningSubject))
+                : disjoiningSubject.OwningRelatedElement as IType;
         }
 
     }

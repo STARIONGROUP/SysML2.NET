@@ -42,10 +42,11 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeOwningFeature(this IFeatureInverting featureInvertingSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return featureInvertingSubject == null
+                ? throw new ArgumentNullException(nameof(featureInvertingSubject))
+                : featureInvertingSubject.OwningRelatedElement as IFeature;
         }
 
     }

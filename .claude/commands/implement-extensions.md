@@ -45,38 +45,33 @@ This is the user-memory `feedback_scope_discipline.md` rule. Even when an adjace
 stub blocks dependent test coverage, surface the blocker; do not silently expand
 scope. Use the stub-blocker test pattern (see template).
 
-## Pre-flight: detect orchestrator plan mode
+## Pre-flight: plan mode IS the pre-execution approval gate (Gate 0)
 
-If the orchestrator session is itself in **plan mode** at the moment
-`/implement-extensions` runs, spawned sub-agents (researcher, implementer, tester,
-reviewer) inherit that state. The Agent tool's `mode: "acceptEdits"` parameter
-does NOT override the inherited plan-mode state on the current Claude Code build
-— sub-agents will respect the `<system-reminder>` that declares plan mode and
-refuse to apply any edits, even though their prompts tell them to.
+If the orchestrator session is in **plan mode** when `/implement-extensions` is invoked, use plan mode as the natural pre-execution approval gate. Do NOT spawn any sub-agent. Instead:
 
-Symptom: every sub-agent reports "ready to execute on exit from plan mode" and
-writes its work to its own per-agent plan file at
-`C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` instead of to the
-target file.
+1. **Stay in plan mode.** Do all the READ-ONLY pre-flight work that steps 1 → 3.5 of this command require:
+   - Validate the input file exists (per step 1's normalization rule); refuse if missing.
+   - Auto-derive the per-file paths (per step 2): production, test fixture, target interface, subject param, notes file, team name.
+   - Look up the GitHub issue via `gh issue list --search "<path> in:body"`. Surface ambiguity (0 or >1 match) via `AskUserQuestion`.
+   - Enumerate stub `Compute*` methods (per step 3); abort if 0 stubs.
+   - Grade complexity, pick per-role models (per step 3.5).
+   - Read `git status --porcelain` (read-only; refuse on dirty tree if you intend the run to be clean).
 
-Before spawning any sub-agent, check whether plan mode is active in the
-orchestrator session. If it is:
+2. **Write the plan file** (at the path Claude Code provides in the plan-mode system reminder) with the standard structure (Context, Recommended approach, Critical files, Verification). The "Recommended approach" section is a concise description of the proposed execution:
+   - The one production file + its derived test fixture + notes file + GitHub issue number.
+   - Per-role model picks (from step 3.5). Note that `ExitPlanMode` is binary (approve / reject), so the user cannot override models from inside the plan-approval UI. Two override paths are supported: (a) reject the plan and re-invoke with an explicit model preference in the prompt, OR (b) accept the plan and the orchestrator fires a follow-up `AskUserQuestion` BEFORE step 5's researcher spawn.
+   - Stub method count + complexity grade.
+   - Workflow shape: step 5 (researcher) → step 5.5 (Gate R-A approval) → step 6 (implementer + tester) → step 7 (verification) → step 8 (regression sweep) → step 9 (reviewer) → step 10 (final summary) → step 11 (issue checklist sync).
+   - Explicit mention that step 5.5 will pause for `AskUserQuestion` after the researcher returns its `spec ready` (so the user knows there is exactly ONE more structural checkpoint after this one).
 
-1. **Stop** and surface the situation to the user with `AskUserQuestion`. Two
-   options:
-   - **Exit plan mode first** (user toggles their harness off plan mode, then
-     re-invokes the command). Cleanest.
-   - **Proceed in degraded mode**: spawn the researcher as normal (it only
-     needs to write to `.team-notes/`, which the orchestrator can copy into
-     place from the agent's plan file if blocked). For the step-6 implementer
-     + tester pair and the step-9 reviewer, the orchestrator applies the
-     production / test edits itself, reading each sub-agent's plan file to
-     extract the verbatim code. The reviewer is already read-only and runs
-     unaffected.
+3. **Call `ExitPlanMode`.** The user reviews the plan in the standard plan-approval UI:
+   - **Approve (unchanged)** → plan mode exits, orchestrator proceeds (model-override `AskUserQuestion` per step 2 above, then step 5 → 5.5 → 6 → 7 → 8 → 9 → 10 → 11).
+   - **Approve (edited)** → the tool result includes a `## Approved Plan (edited by user):` block with the user's modifications. The orchestrator MUST treat the EDITED plan content as the source of truth — re-parse the (single) file path + model picks from it, NOT from the originally-proposed plan. (Standard Claude Code plan-edit-on-approval pattern; see the `<system-reminder>` after every `ExitPlanMode` approval.)
+   - **Reject** → nothing executes. The plan file remains for the user's reference.
 
-2. If the user picks degraded mode, set an internal `PLAN_MODE_DEGRADED=true`
-   flag for the run and follow the per-step divergences in the **Notes for
-   the orchestrator** block at the bottom of this file.
+If the orchestrator session is **NOT in plan mode** when the command is invoked, continue with the existing step 4 sanity-check (`AskUserQuestion` for scope + models). Gate 0 only fires in plan mode; otherwise the existing step 4 plays the same role.
+
+**Important — tool-level prompts are NOT auto-allowed.** Gate 0 (and Gate R-A in step 5.5) govern STRUCTURAL approval only. Individual tool calls — `Bash(dotnet build *)`, `Bash(git push *)`, `Agent(...)`, etc. — continue to surface per the user's `settings.json` and harness defaults. The user has chosen to keep handling those prompts manually; the gates do not bypass them.
 
 ## Workflow
 
@@ -220,8 +215,31 @@ The researcher MUST:
 - Flag any method whose OCL transitively reads a still-stubbed sibling
   `Compute*` so the tester knows to use the stub-blocker pattern.
 
-After the researcher finishes, read `{{NOTES_FILE}}` yourself to verify it
-covers all methods + flags spec-text-only and stub-blocker cases.
+After the researcher finishes, read `{{NOTES_FILE}}` yourself to verify it covers all methods + flags spec-text-only and stub-blocker cases. Proceed to step 5.5 (Phase R-A approval gate) — DO NOT spawn implementer + tester directly.
+
+### 5.5. Phase R-A — Researcher-plan approval gate (MANDATORY, every run)
+
+Before spawning implementer + tester, the orchestrator MUST render an inline spec preview and ask for explicit approval. This is non-skippable, even when the researcher reports zero ambiguities. It is the only chance the user gets to inspect the per-method derivation plan before any code is written to disk.
+
+1. **Render** an inline preview in the chat response. Pull from `{{NOTES_FILE}}`:
+   - File path + GitHub issue number (link to issue if practical).
+   - Per method:
+     - Signature line (`internal static <ReturnType> Compute<Name>(this {{TARGET_INTERFACE}} {{SUBJECT_PARAM}})`).
+     - Derivation source tag: `OCL in XMI`, `OCL in <remarks>`, or `spec-text only`.
+     - The suggested C# code block from the notes — single fenced block, cap ≤ 8 lines.
+     - Dependencies summary (sibling derived properties used; upstream stubs hit).
+     - Stub-blocker flag (if any) — signals that the populated case will need the stub-blocker test pattern.
+   - Use a compact Markdown format. Cap total preview at ~80 lines.
+
+2. **Ask** via `AskUserQuestion` (single question, 2 options — "drop files" collapses out in single-file mode):
+   - **Approve — spawn implementer + tester now** *(Recommended)*. Proceeds to step 6.
+   - **Abort — research again with feedback**. Orchestrator forwards the user's free-form `Other` text to the still-addressable `researcher` via `SendMessage`, waits for a fresh `spec ready`, then re-runs step 5.5.
+
+3. **On Approve**, proceed to step 6. Do NOT re-ask until the run completes.
+
+4. **On Abort (user rejects without requesting re-research)**, stop the orchestration. The notes file remains for the user's reference.
+
+Rationale: the previous "After the researcher finishes, read `{{NOTES_FILE}}` yourself to verify" instruction was an internal check by the orchestrator, with no user-visible gate. This gate runs *every time*, so the user always sees the researcher's contract before any code is committed to disk. The gate governs STRUCTURAL approval only — individual tool-permission prompts that the user's `settings.json` requires (e.g. `Bash(dotnet build *)`) continue to surface during steps 6 / 7 / 8 / 9 / 11.
 
 ### 6. Spawn the implementer and tester in parallel
 
@@ -454,31 +472,7 @@ unresolved findings are separately surfaced in the final-summary report. The
   implementation state of the file; unresolved findings are separately surfaced
   in the final-summary report. The `gh issue edit` push must touch ONLY the
   `### Checklist` section — verify with a re-fetch + diff before reporting "done".
-- **Plan-mode degraded mode** (`PLAN_MODE_DEGRADED=true` — set in the pre-flight
-  step at the top of this file):
-  - **Step 5 (researcher)**: the researcher will write its spec to a per-agent
-    plan file under `C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md`
-    instead of `.team-notes/<foo>-extensions-spec.md`. After it returns, copy
-    the agent plan file into `.team-notes/<foo>-extensions-spec.md` and verify
-    the content matches the schema in `.claude/team-templates/extension-impl.md`.
-  - **Step 6 (implementer + tester)**: both will write their final production
-    / test code to per-agent plan files, NOT to `{{PRODUCTION_FILE}}` /
-    `{{TEST_FILE}}`. The orchestrator reads each agent's plan file, extracts
-    the verbatim code, and applies the edits itself via `Edit` / `Write`.
-    Step 7's `dotnet build` + targeted `dotnet test` then runs against the
-    orchestrator-applied diffs as normal. Do NOT mark step 6 complete on the
-    sub-agent's "ready to execute" message alone — only after the orchestrator
-    has applied each file's diffs and the build is green.
-  - **Step 8 (regression sweep)**: same as step 6 — the regression-sweep
-    tester writes to a per-agent plan file; orchestrator applies the diffs to
-    each touched sibling fixture itself.
-  - **Step 9 (reviewer)**: read-only, so plan mode does not block it. No
-    degradation needed.
-  - **Sanity check**: in degraded mode, the orchestrator does roughly 2× the
-    work it would in normal mode (it now applies the edits the sub-agents
-    would otherwise apply themselves). Budget for it — do not silently fall
-    behind on step-7 verification just because step 6 cost more turns.
-- The Agent tool's `mode` parameter cannot reliably escape inherited plan mode
-  on this Claude Code build. The orchestrator MUST detect plan mode at
-  pre-flight and pick the degraded-mode branch deliberately rather than
-  assuming `mode: "acceptEdits"` will work.
+- **Plan mode is handled by Gate 0 at the top of this file** — the orchestrator writes the proposed-execution plan to the plan file, calls `ExitPlanMode`, and proceeds on approval. The orchestrator never spawns sub-agents while plan mode is active, so the previous "degraded mode" workaround is no longer needed and has been removed.
+- **Gate R-A (step 5.5) is mandatory every run.** It is the only structural checkpoint between the researcher returning `spec ready` and the implementer + tester being spawned. Do not skip it even when the researcher reports zero ambiguities — the user explicitly asked for an unconditional gate so they can review per-method derivations before code is written.
+- **Tool-level prompts (`Bash(...)`, `Edit(...)`, `Write(...)`, `Agent(...)`) still surface per the user's `settings.json`.** Gate 0 and Gate R-A govern STRUCTURAL approval only. The user has explicitly chosen to keep handling tool-level prompts manually rather than auto-allowing them via permission rules or hooks.
+- **Sub-agent-side deadlocks**: if an implementer or tester gets parked on a harness UI permission prompt the user cannot action, the orchestrator should take over the deadlocked work directly from its own permission scope (running `dotnet build` / `dotnet test` / `gh issue edit` itself). Send `shutdown_request` to the parked sub-agent. Surface clearly in the final summary.

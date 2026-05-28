@@ -53,6 +53,22 @@ Don't use this template when:
 | `{{METHOD_LIST}}` | Bullet list of methods to implement, in dependency order | (per-task) |
 | `{{ORCHESTRATOR_NAME}}` | Team-lead name for SendMessage | `team-lead` |
 
+### Batch-mode placeholders (used by `/implement-extensions-batch`)
+
+When this template is instantiated by `/implement-extensions-batch`, each role
+agent is spawned **once for the whole batch** instead of once per file. The
+per-file slot values (`{{TARGET_INTERFACE}}`, `{{PRODUCTION_FILE}}`,
+`{{TEST_FILE}}`, `{{NOTES_FILE}}`, `{{METHOD_LIST}}`, …) are replaced by a single
+batch-wide placeholder:
+
+| Placeholder | Description | Example value |
+|---|---|---|
+| `{{BATCH_FILES}}` | Numbered list of files in the batch, each carrying the same per-file slot values listed above plus its individual `{{METHOD_LIST}}`. The agent walks the list sequentially in its single context. | `1. Foo — interface IFoo, prod SysML2.NET/Extend/FooExtensions.cs, tests …, notes .team-notes/foo-extensions-spec.md, methods […]\n2. Bar — …` |
+
+Shared placeholders (`{{REFERENCE_PRODUCTION_FILE}}`, `{{REFERENCE_TEST_FILE}}`,
+`{{TEAM_NAME}}`, `{{ORCHESTRATOR_NAME}}`) are unchanged — they are the same
+across every file in the batch.
+
 ## Workflow
 
 ```
@@ -62,6 +78,12 @@ Don't use this template when:
                  the case where a method has no OCL body (e.g. Type::isConjugated
                  in the recent TypeExtensions task) and surfaces transitive
                  stub-blockers before the implementer hits them.
+
+1.5 Orchestrator → renders inline per-file spec preview, asks user via
+                 AskUserQuestion to approve before any code is written.
+                 MANDATORY every run, even when researcher reports zero
+                 ambiguities. See "Phase R-A" / step 5.5 in
+                 .claude/commands/implement-extensions.md.
 
 2. Implementer → implements all methods in {{PRODUCTION_FILE}}, sliced by
                  dependency tier (Tier 1: direct OfType filters; Tier 2:
@@ -80,30 +102,72 @@ Don't use this template when:
                  fixtures that now fail get updated as part of the same PR.
 ```
 
-## Plan-mode-aware prompting (added 2026-05-28)
+### Batch-mode workflow (one team for all N files)
 
-If the orchestrator session is in plan mode when this template is used, sub-agents
-will inherit it and cannot apply edits. The Agent-tool `mode: "acceptEdits"`
-parameter does NOT override the inherited state on the current Claude Code build.
+When invoked through `/implement-extensions-batch`, the workflow above runs
+**once for the whole batch** instead of once per file:
 
-Role prompts in this template are written so that the orchestrator can fall back
-to applying edits itself when this happens:
+```
+1. Researcher  → walks {{BATCH_FILES}} and writes ONE
+                 .team-notes/<foo>-extensions-spec.md per file IN ITS SINGLE
+                 AGENT RUN. Reads {{REFERENCE_PRODUCTION_FILE}} and
+                 {{REFERENCE_TEST_FILE}} ONCE up front, not per file.
 
-- **Researcher** prompts always direct the agent to write the spec to its
-  declared `{{NOTES_FILE}}` location. In plan-mode-degraded runs the agent will
-  write to a per-agent plan file under
-  `C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` instead; the
-  orchestrator then copies it to `.team-notes/`.
-- **Implementer / tester** prompts must emit the verbatim production / test code
-  in their text response (or, equivalently, in their per-agent plan file) so it
-  survives a plan-mode block. The orchestrator extracts and applies it via
-  `Edit` / `Write`.
-- **Reviewer** prompts are already read-only and unaffected by plan mode.
+1.5 Orchestrator → renders inline per-file spec preview (one block per
+                 batch file), asks user via AskUserQuestion to approve
+                 before any code is written. Options: Approve / Drop
+                 specific files / Abort + research again. MANDATORY every
+                 run, even when researcher reports zero ambiguities. See
+                 "Phase R-A" / step 9.5 in
+                 .claude/commands/implement-extensions-batch.md.
 
-The `/implement-extensions-batch` command body documents the degraded-mode flow
-end-to-end in its "Pre-flight: detect orchestrator plan mode" section. The
-single-file `/implement-extensions` command should also adopt the same flow —
-see that file's notes section.
+2. Implementer → walks {{BATCH_FILES}} and implements each
+                 SysML2.NET/Extend/<Foo>Extensions.cs in its single agent run.
+                 Reads each file's notes file before editing it. ACL =
+                 the set of production files listed in {{BATCH_FILES}};
+                 refuses every other path.
+
+3. Tester      → walks {{BATCH_FILES}} and rewrites each
+                 SysML2.NET.Tests/Extend/<Foo>ExtensionsTestFixture.cs. ACL =
+                 the set of test fixtures listed in {{BATCH_FILES}}, PLUS
+                 (after the orchestrator's regression-sweep SendMessage)
+                 any sibling *ExtensionsTestFixture.cs touched by the new
+                 implementations.
+
+4. Reviewer    → walks {{BATCH_FILES}} and applies the OCL-translation +
+                 test-fixture checklists per file; READ-ONLY.
+
+5. Orchestrator → after Phases R / R-A / IT, runs ONE consolidated build,
+                 ONE consolidated targeted test (filter joining every
+                 fixture in the batch), then the regression sweep. On any
+                 failure, it sends a SendMessage to the relevant named
+                 teammate (`researcher`, `implementer`, or `tester`) with
+                 the failing-file list — the same agent keeps its context
+                 and fixes in place. Fresh Agent spawns are not used
+                 inside the iteration loop.
+```
+
+The role boundaries are **identical** to single-file mode: the implementer
+never edits test files, the tester never edits production files, the reviewer
+is read-only. The only thing that changes is the size of the per-role allowed
+file set (one file → N files in the batch).
+
+## Plan-mode-aware prompting (reworked 2026-05-28)
+
+Plan mode is now the natural pre-execution approval gate for both `/implement-extensions` and `/implement-extensions-batch` — the orchestrator stays in plan mode, does read-only pre-flight, writes the proposed-execution plan to the plan file, calls `ExitPlanMode`, and proceeds on approval. The "degraded mode" workaround documented in the previous version of this section (orchestrator applies edits on behalf of sub-agents) is no longer needed because the orchestrator never spawns sub-agents while plan mode is active.
+
+See the **"Pre-flight: plan mode IS the pre-execution approval gate (Gate 0)"** section in each command file:
+- `.claude/commands/implement-extensions.md`
+- `.claude/commands/implement-extensions-batch.md`
+
+The structural approval workflow ships with **two gates** now:
+
+| Gate | Fires | Approves | UI |
+|---|---|---|---|
+| Gate 0 (pre-execution) | At invocation, if orchestrator is in plan mode | Composition + branch + team + model picks | `ExitPlanMode` plan-approval UI |
+| Gate R-A (post-researcher) | After researcher returns `spec ready`, before implementer/tester spawn | The per-method derivation plan inline-rendered from each `.team-notes/<foo>-extensions-spec.md` | `AskUserQuestion` with 2–3 options |
+
+Tool-level permission prompts (`Bash(dotnet build *)`, `Bash(git push *)`, `TeamCreate`, `Agent(...)`, etc.) continue to surface per the user's `settings.json`. The gates govern STRUCTURAL approval only; they do not auto-allow individual tool calls.
 
 ## Hard scope-discipline rule (v2)
 
@@ -315,6 +379,33 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with summary `spec ready` and a li
 of methods where the OCL is ambiguous, missing, or transitively depends on other
 stubbed extensions.
 
+## Batch-mode operation
+
+When the orchestrator passes `{{BATCH_FILES}}` instead of a single
+`{{NOTES_FILE}}` / `{{PRODUCTION_FILE}}` set, you are the SOLE researcher for
+the whole batch. Operate as follows:
+
+1. **Read shared context ONCE** at the start of your run, not per file:
+   - `{{REFERENCE_PRODUCTION_FILE}}` (the canonical NamespaceExtensions.cs).
+   - The OCL operator translation idioms in the team template (already in your
+     prompt).
+   The XMI files (`Resources/KerML_only_xmi.uml`,
+   `Resources/SysML_only_xmi.uml`) and the spec text files are also shared —
+   keep a single open mental map across files; do not re-summarize each.
+2. **Iterate `{{BATCH_FILES}}` sequentially.** For each entry — which carries
+   its own `{{TARGET_INTERFACE}}`, `{{TARGET_METACLASS_NAME}}`,
+   `{{SUBJECT_PARAM}}`, `{{PRODUCTION_FILE}}`, `{{NOTES_FILE}}`, and
+   `{{METHOD_LIST}}` — perform your single-file research workflow above and
+   write that entry's `{{NOTES_FILE}}`.
+3. **Edit ACL = the set of `{{NOTES_FILE}}` paths listed in `{{BATCH_FILES}}`.**
+   Every other path is read-only. If a tool call would violate this, abort and
+   message `{{ORCHESTRATOR_NAME}}`.
+4. **Final SendMessage** to `{{ORCHESTRATOR_NAME}}`:
+   `spec ready, files: N, ambiguous-OCL: {Foo: [methods], …},
+   spec-text-only: {Foo: [methods], …}, stub-blocker-flagged-in: {Foo: [methods], …}`.
+5. **Remain addressable** for the rest of the run. The implementer, tester, or
+   reviewer may SendMessage you a clarification request on one file's OCL.
+
 Begin.
 ```
 
@@ -401,6 +492,45 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with:
 Begin by reading `{{NOTES_FILE}}`, then the method `<remarks>` blocks in
 {{PRODUCTION_FILE}}, then the reference template ({{REFERENCE_PRODUCTION_FILE}}),
 then making the edits.
+
+## Batch-mode operation
+
+When the orchestrator passes `{{BATCH_FILES}}` instead of a single
+`{{PRODUCTION_FILE}}` / `{{NOTES_FILE}}` set, you are the SOLE implementer for
+the whole batch. Operate as follows:
+
+1. **Read shared context ONCE** at the start of your run:
+   - `{{REFERENCE_PRODUCTION_FILE}}` (the canonical NamespaceExtensions.cs).
+   - The OCL operator translation table is already in your prompt.
+2. **Edit ACL = the set of `{{PRODUCTION_FILE}}` paths listed in
+   `{{BATCH_FILES}}`.** You may Edit/Write ONLY those production files.
+   - Refuse every test fixture path (tester's territory).
+   - Refuse every other production file in `SysML2.NET/Extend/` or
+     `SysML2.NET/Core/` (scope-discipline rule).
+   - Refuse auto-generated POCOs and code-gen templates.
+   If a tool call would violate this, abort and message `{{ORCHESTRATOR_NAME}}`.
+3. **Iterate `{{BATCH_FILES}}` in a sensible order.** Independent metaclasses
+   first (no cross-file references), files whose OCL transitively reads a
+   sibling-batch metaclass last. For each entry — which carries its own
+   `{{TARGET_INTERFACE}}`, `{{SUBJECT_PARAM}}`, `{{PRODUCTION_FILE}}`,
+   `{{NOTES_FILE}}`, and `{{METHOD_LIST}}` — read that entry's `{{NOTES_FILE}}`
+   first, then implement each method in its `{{PRODUCTION_FILE}}` per the
+   single-file workflow above.
+4. **Build once at the end**:
+   ```bash
+   dotnet build SysML2.NET/SysML2.NET.csproj
+   ```
+   Not per file — the build is shared. On failure, identify which file's
+   diff broke it and iterate.
+5. **Final SendMessage** to `{{ORCHESTRATOR_NAME}}`:
+   `dev complete, files: N, order: [Foo, Bar, …],
+   deviations-per-file: {Foo: [...], Bar: [...]},
+   upstream-stubs-touched: [methods you couldn't fully implement and how you
+   handled them]`.
+6. **Remain addressable.** When the orchestrator's targeted-test run surfaces
+   an OCL mistranslation in any file's production, it will SendMessage you
+   the `(file, method, observed-vs-expected)` triple. Fix in place — your
+   context (notes already read, prior decisions) is preserved.
 ```
 
 ---
@@ -512,6 +642,50 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with:
 Begin by reading `{{NOTES_FILE}}` (each method has a "Test plan" section), the
 production methods you need to test, the reference fixture
 (`{{REFERENCE_TEST_FILE}}`), the current `{{TEST_FILE}}`, then making the edits.
+
+## Batch-mode operation
+
+When the orchestrator passes `{{BATCH_FILES}}` instead of a single
+`{{TEST_FILE}}` / `{{NOTES_FILE}}` set, you are the SOLE tester for the whole
+batch. Operate as follows:
+
+1. **Read shared context ONCE** at the start of your run:
+   - `{{REFERENCE_TEST_FILE}}` (the canonical NamespaceExtensionsTestFixture.cs).
+   - NUnit conventions in `TESTING.md` at the repo root.
+2. **Edit ACL = the set of `{{TEST_FILE}}` paths listed in `{{BATCH_FILES}}`.**
+   - Refuse every production file under `SysML2.NET/Extend/` or
+     `SysML2.NET/Core/` (implementer's territory and the scope-discipline rule).
+   - Refuse auto-generated POCOs and code-gen templates.
+   - **Regression-sweep extension**: once the orchestrator sends you the
+     regression-sweep brief (after the full-solution `dotnet test`), the ACL
+     extends to the listed sibling `*ExtensionsTestFixture.cs` files for that
+     dispatch only.
+   If a tool call would violate the current ACL, abort and message
+   `{{ORCHESTRATOR_NAME}}`.
+3. **Iterate `{{BATCH_FILES}}` sequentially.** For each entry — which carries
+   its own `{{TARGET_INTERFACE}}`, `{{TARGET_METACLASS_NAME}}`,
+   `{{TEST_FILE}}`, `{{NOTES_FILE}}`, and `{{METHOD_LIST}}` — read that
+   entry's `{{NOTES_FILE}}` (the "Test plan" sections) and rewrite its
+   `{{TEST_FILE}}` per the single-file workflow above.
+4. **Parallel-mode caveat is unchanged**: while you are spawned in parallel
+   with the implementer, you run `dotnet build` on the test project ONLY and
+   MUST NOT run `dotnet test`. The orchestrator runs the consolidated targeted
+   test after both of you return.
+5. **Final SendMessage** to `{{ORCHESTRATOR_NAME}}`:
+   `tests complete, files: N,
+   stub-blocker-pattern-applied-in: {Foo: [methods], …},
+   weak-populated-case-in: {Foo: [methods, reason], …}`.
+6. **Remain addressable** for two follow-up dispatches:
+   - **Wrong assertion fix**: if the orchestrator's targeted-test run blames
+     a failing assertion on the test code rather than the production OCL,
+     it will SendMessage you the `(file, method, observed-vs-expected)`
+     triple. Fix in place.
+   - **Regression sweep**: after Phase V the orchestrator sends you the list
+     of sibling fixtures whose `Throws.TypeOf<NotSupportedException>()`
+     assertions now fail. Apply the **expand-don't-replace** edit pattern
+     (filter discrimination + predicate completeness + owned vs inherited +
+     null-projection guard) per sibling fixture. The ACL extension above
+     applies for this dispatch.
 ```
 
 ---
@@ -628,6 +802,27 @@ Produce a concise report to `{{ORCHESTRATOR_NAME}}` (via SendMessage) with:
 
 Do NOT modify any code yourself. The orchestrator (or the implementer/tester
 re-dispatched by the orchestrator) will action your findings.
+
+## Batch-mode operation
+
+When the orchestrator passes `{{BATCH_FILES}}` instead of a single
+`(notes, production, tests)` triple, you are the SOLE reviewer for the whole
+batch. Operate as follows:
+
+1. **Edit ACL = none.** You are READ-ONLY across the entire repo — same as
+   single-file mode. The size of `{{BATCH_FILES}}` does not loosen this.
+2. **Iterate `{{BATCH_FILES}}` sequentially.** For each entry, walk its
+   `(notes file, production file, test file)` triple and apply the full
+   single-file OCL-translation checklist + test-fixture checklist above.
+3. **Final SendMessage** to `{{ORCHESTRATOR_NAME}}`:
+   - Top line: `OK` or `NEEDS FIX` (batch-wide verdict; NEEDS FIX wins if any
+     file fails).
+   - Body: per-file findings grouped as
+     `{Foo: [{file, line, concern, suggested fix}, …],
+       Bar: [...], …}`.
+     For files with no findings, list `Foo: OK`.
+4. The orchestrator routes individual findings to `implementer` or `tester`
+   via SendMessage; you do not edit and you do not re-run.
 ```
 
 ---
@@ -656,6 +851,24 @@ In a fresh conversation, when the user asks to implement methods in another
 
 For low-friction invocation, use the slash command at
 `.claude/commands/implement-extensions.md` which automates steps 1–7.
+
+### Instantiation for a batch (one team for N files)
+
+When `/implement-extensions-batch` invokes this template, the per-role prompts
+are augmented with the "Batch-mode operation" section already documented inside
+each role prompt above:
+
+1. `TeamCreate({team_name: "batch-extensions-impl-<branch-suffix>"})` once.
+2. Spawn FOUR named teammates (`researcher`, `implementer`, `tester`,
+   `reviewer`) via `Agent` calls, each with the role's full prompt (single-file
+   body + Batch-mode operation addendum) and `{{BATCH_FILES}}` expanded.
+3. Sequence: researcher → (implementer ∥ tester) → orchestrator verification
+   → regression-sweep brief via `SendMessage to: "tester"` → reviewer.
+4. Iterate fixes via `SendMessage` to the named teammate — do not spawn fresh
+   `Agent` calls inside the iteration loop.
+
+See `.claude/commands/implement-extensions-batch.md` for the end-to-end
+orchestration.
 
 ## Provenance
 
