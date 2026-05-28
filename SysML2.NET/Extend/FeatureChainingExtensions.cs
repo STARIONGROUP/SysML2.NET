@@ -42,10 +42,11 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeFeatureChained(this IFeatureChaining featureChainingSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return featureChainingSubject == null
+                ? throw new ArgumentNullException(nameof(featureChainingSubject))
+                : featureChainingSubject.OwningRelatedElement as IFeature;
         }
 
     }

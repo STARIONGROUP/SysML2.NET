@@ -42,10 +42,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IType ComputeTypeDifferenced(this IDifferencing differencingSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return differencingSubject == null
+                ? throw new ArgumentNullException(nameof(differencingSubject))
+                : differencingSubject.OwningRelatedElement as IType;
         }
 
     }

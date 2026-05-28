@@ -43,10 +43,11 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeCrossingFeature(this ICrossSubsetting crossSubsettingSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return crossSubsettingSubject == null
+                ? throw new ArgumentNullException(nameof(crossSubsettingSubject))
+                : crossSubsettingSubject.OwningRelatedElement as IFeature;
         }
 
     }
