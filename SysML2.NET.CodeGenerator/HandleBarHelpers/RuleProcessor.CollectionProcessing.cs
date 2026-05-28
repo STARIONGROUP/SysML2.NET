@@ -29,6 +29,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
+    using uml4net.Classification;
     using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
@@ -370,10 +371,24 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
         /// <summary>
         /// Generates an inline condition expression for an optional non-terminal reference.
+        /// For enumerable properties whose consumption type can be resolved from the referenced
+        /// rule's <c>+=</c> assignments, emits a cursor-typed guard
+        /// (<c>{prop}Cursor.Current is T</c>) — declaring the cursor immediately into
+        /// <paramref name="writer" /> when not already present in
+        /// <see cref="RuleGenerationContext.DefinedCursors" />. The cursor principle aligns the
+        /// caller's guard with the position the called rule will actually consume from. When the
+        /// type cannot be resolved or <paramref name="variableName"/> is not the top-level
+        /// <c>poco</c>, the legacy <c>{var}.{Property}.Count != 0</c> form is preserved.
         /// </summary>
-        private string GenerateInlineOptionalCondition(TextualNotationRule referencedRule, IClass targetClass, IReadOnlyList<TextualNotationRule> allRules, string variableName)
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to emit any required cursor declarations</param>
+        /// <param name="referencedRule">The optional non-terminal's referenced rule</param>
+        /// <param name="targetClass">The host class (provides UML metadata)</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <param name="variableName">The variable name from which the property is accessed (typically <c>poco</c>)</param>
+        /// <returns>The condition expression, or <c>null</c> when no property names are referenced</returns>
+        private string GenerateInlineOptionalCondition(EncodedTextWriter writer, TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext, string variableName)
         {
-            var propertyNames = referencedRule.QueryAllReferencedPropertyNames(allRules);
+            var propertyNames = referencedRule.QueryAllReferencedPropertyNames(ruleGenerationContext.AllRules);
 
             if (propertyNames.Count == 0)
             {
@@ -396,7 +411,25 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.QueryIsEnumerable())
                 {
-                    conditionParts.Add($"{variableName}.{umlPropertyName}.Count != 0");
+                    var cursorTypedCheck = TryBuildCursorTypedCheck(writer, referencedRule, targetClass, property, propertyName, ruleGenerationContext, variableName);
+
+                    if (cursorTypedCheck != null)
+                    {
+                        conditionParts.Add(cursorTypedCheck);
+                    }
+                    else if (referencedRule.QueryAllReferencedCollectionAssignments(propertyName, ruleGenerationContext.AllRules).Count > 0)
+                    {
+                        // The referenced rule has += consumptions of this property but the cursor
+                        // types could not be resolved — fall back to the legacy collection-level
+                        // non-empty check rather than skip the clause entirely.
+                        conditionParts.Add($"{variableName}.{umlPropertyName}.Count != 0");
+                    }
+
+                    // No += consumptions exist for this property anywhere in the referenced rule
+                    // tree (the property name reached the result set via a scalar `=` reference,
+                    // typically pulled in by a transitive non-terminal walk). Skipping the clause
+                    // tightens the guard to reflect what the called rule will actually consume
+                    // and avoids evaluating derived properties that the caller never reads.
                 }
                 else
                 {
@@ -405,6 +438,95 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             return conditionParts.Count != 0 ? string.Join(" || ", conditionParts) : null;
+        }
+
+        /// <summary>
+        /// Resolves the runtime types the referenced rule's <c>+=</c> assignments consume from the
+        /// supplied <paramref name="property" /> and, when all are resolvable AND
+        /// <paramref name="variableName" /> is <c>poco</c>, returns a cursor-typed boolean
+        /// expression (declaring or reusing a cursor as needed). Returns <c>null</c> to signal
+        /// that the caller should fall back to the legacy <c>.Count != 0</c> form.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to emit a cursor declaration when one is required</param>
+        /// <param name="referencedRule">The optional non-terminal's referenced rule</param>
+        /// <param name="targetClass">The host class (provides the UML cache for class-name resolution)</param>
+        /// <param name="property">The host class property targeted by the rule's <c>+=</c> consumptions</param>
+        /// <param name="propertyName">The matching grammar property name</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <param name="variableName">The variable name the host method uses for the POCO</param>
+        /// <returns>The cursor-typed boolean expression, or <c>null</c> if the legacy fallback should be used</returns>
+        private static string TryBuildCursorTypedCheck(EncodedTextWriter writer, TextualNotationRule referencedRule, IClass targetClass, IProperty property, string propertyName, RuleGenerationContext ruleGenerationContext, string variableName)
+        {
+            if (!string.Equals(variableName, "poco", StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            var collectionAssignments = referencedRule.QueryAllReferencedCollectionAssignments(propertyName, ruleGenerationContext.AllRules);
+
+            if (collectionAssignments.Count == 0)
+            {
+                return null;
+            }
+
+            var resolvedTypeNames = new List<string>();
+
+            foreach (var assignmentElement in collectionAssignments)
+            {
+                var typeName = ResolveAssignmentTargetTypeName(assignmentElement, targetClass, ruleGenerationContext);
+
+                if (typeName == null)
+                {
+                    return null;
+                }
+
+                if (!resolvedTypeNames.Contains(typeName))
+                {
+                    resolvedTypeNames.Add(typeName);
+                }
+            }
+
+            var cursorVariableName = EnsureCursorDeclared(writer, property, ruleGenerationContext);
+
+            if (resolvedTypeNames.Count == 1)
+            {
+                return $"{cursorVariableName}.Current is {resolvedTypeNames[0]}";
+            }
+
+            var typeChecks = resolvedTypeNames.Select(typeName => $"{cursorVariableName}.Current is {typeName}");
+
+            return $"({string.Join(" || ", typeChecks)})";
+        }
+
+        /// <summary>
+        /// Returns the cursor variable name for <paramref name="property" />, reusing an
+        /// already-declared cursor when one is present in
+        /// <see cref="RuleGenerationContext.DefinedCursors" /> and emitting a new declaration into
+        /// <paramref name="writer" /> otherwise. The new declaration is registered in
+        /// <see cref="RuleGenerationContext.DefinedCursors" /> so subsequent host-rule elements
+        /// targeting the same property reuse it.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> that receives the cursor declaration line when emitted</param>
+        /// <param name="property">The property whose cursor is needed</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns>The cursor variable name to use in the guard expression</returns>
+        private static string EnsureCursorDeclared(EncodedTextWriter writer, IProperty property, RuleGenerationContext ruleGenerationContext)
+        {
+            var existingCursor = ruleGenerationContext.DefinedCursors.FirstOrDefault(x => x.IsCursorValidForProperty(property));
+
+            if (existingCursor != null)
+            {
+                return existingCursor.CursorVariableName;
+            }
+
+            var cursorDefinition = new CursorDefinition { DefinedForProperty = property };
+            var propertyAccessName = property.QueryPropertyNameBasedOnUmlProperties();
+
+            writer.WriteSafeString($"var {cursorDefinition.CursorVariableName} = writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{property.Name}\", poco.{propertyAccessName});{Environment.NewLine}");
+
+            ruleGenerationContext.DefinedCursors.Add(cursorDefinition);
+
+            return cursorDefinition.CursorVariableName;
         }
 
         /// <summary>
@@ -422,7 +544,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            var condition = this.GenerateInlineOptionalCondition(referencedRule, targetClass, ruleGenerationContext.AllRules, variableName);
+            var condition = this.GenerateInlineOptionalCondition(writer, referencedRule, targetClass, ruleGenerationContext, variableName);
 
             if (condition == null)
             {

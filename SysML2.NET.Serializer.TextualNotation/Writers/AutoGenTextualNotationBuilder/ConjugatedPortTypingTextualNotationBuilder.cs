@@ -44,7 +44,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public static void BuildConjugatedPortTyping(SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             stringBuilder.Append("~");
-            BuildOriginalPortDefinition(poco, writerContext, stringBuilder);
+            BuildConjugatedPortTypingHandCoded(poco, writerContext, stringBuilder);
 
         }
     }

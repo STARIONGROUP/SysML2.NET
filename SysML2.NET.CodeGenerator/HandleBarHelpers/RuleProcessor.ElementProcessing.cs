@@ -275,9 +275,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = assignmentElement;
 
-                        var isInsideOptionalGroup = assignmentElement.Container is GroupElement { IsOptional: true, IsCollection: false };
+                        // Route the cursor Move() through PendingCursorMove so that ProcessNonTerminalElement
+                        // emits it INSIDE the type-discrimination block — Move() then fires only when the
+                        // runtime cast actually matches (cursor advances only on real += consumption,
+                        // honouring the Move() ↔ += Golden Rule). When the assignment is inside a collection
+                        // group `(...)*` / `(...)+`, the loop body's own emitter handles the move; when it is
+                        // part of a multi-alternative dispatch, the dispatcher handles the move.
+                        var shouldEmitCursorMove = !isPartOfMultipleAlternative
+                            && assignmentElement.Container is not GroupElement { IsCollection: true };
 
-                        if (isInsideOptionalGroup)
+                        if (shouldEmitCursorMove)
                         {
                             ruleGenerationContext.PendingCursorMove = $"{Environment.NewLine}{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}";
                         }
@@ -285,13 +292,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         this.ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, ruleGenerationContext);
                         ruleGenerationContext.CurrentVariableName = previousVariableName;
                         ruleGenerationContext.CallerRule = previousCaller;
-
-                        if (!isPartOfMultipleAlternative
-                            && assignmentElement.Container is not GroupElement { IsCollection: true }
-                            && !isInsideOptionalGroup)
-                        {
-                            writer.WriteSafeString($"{cursorToUse.CursorVariableName}.Move();{Environment.NewLine}");
-                        }
                     }
                     else if (assignmentElement.Value is GroupElement groupElement)
                     {
@@ -322,7 +322,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         writer.WriteSafeString($"{Environment.NewLine}if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                        writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});{Environment.NewLine}");
+
+                        if (assignmentElement.Value is NonTerminalElement { Name: "NAME" })
+                        {
+                            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendName(stringBuilder, poco.{targetProperty.Name.CapitalizeFirstLetter()});{Environment.NewLine}");
+                        }
+                        else
+                        {
+                            writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});{Environment.NewLine}");
+                        }
+
                         writer.WriteSafeString("}");
                     }
                     else
@@ -334,6 +343,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             if (assignmentElement.Value is NonTerminalElement { Name: "REGULAR_COMMENT" })
                             {
                                 writer.WriteSafeString($"SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.{targetPropertyName});");
+                            }
+                            else if (assignmentElement.Value is NonTerminalElement { Name: "NAME" })
+                            {
+                                writer.WriteSafeString($"SharedTextualNotationBuilder.AppendName(stringBuilder, poco.{targetPropertyName});");
+                            }
+                            else if (string.Equals(targetPropertyName, "Operator", StringComparison.Ordinal))
+                            {
+                                // Operator tokens (binary, unary, conditional) need a trailing
+                                // space to separate them from the next operand. Matches the
+                                // convention used by the operator-switch dispatch path
+                                // (RuleProcessor.PatternHandlers.cs:94-95).
+                                writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});{Environment.NewLine}");
+                                writer.WriteSafeString("stringBuilder.Append(' ');");
                             }
                             else
                             {
@@ -420,7 +442,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, writerContext, stringBuilder);");
+                // The grammar's assignment property does not resolve against the target
+                // metamodel class (e.g. the OMG kebnf carries a one-off `ownedFeatureMember`
+                // vs. metamodel `ownedMemberFeature` typo for `OwnedExpressionMember`).
+                // Delegate to the HandCoded sibling per the documented convention rather
+                // than emitting a name-collision-prone `Build{Property}(poco, …)` call.
+                var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
+                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
         }
 

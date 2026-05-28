@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.CodeGenerator.Grammar.Model
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -271,6 +272,87 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
                         foreach (var groupAlternative in groupElement.Alternatives)
                         {
                             CollectAllReferencedPropertyNamesFromElements(groupAlternative.Elements, allRules, result, visited);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects the <c>+=</c> <see cref="AssignmentElement"/> items targeting
+        /// <paramref name="propertyName"/> declared by this rule and any transitively-referenced
+        /// NonTerminal rules. Used by the generator to resolve the runtime type(s) an optional
+        /// non-terminal reference will consume from the named cursor, so the caller can emit a
+        /// type-strict <c>cursor.Current is T</c> guard.
+        /// </summary>
+        /// <param name="propertyName">The property name whose <c>+=</c> consumptions are collected</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>The collected <c>+=</c> <see cref="AssignmentElement"/> items</returns>
+        public IReadOnlyList<AssignmentElement> QueryAllReferencedCollectionAssignments(string propertyName, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var result = new List<AssignmentElement>();
+            var visited = new HashSet<string>();
+            CollectAllReferencedCollectionAssignments(this, propertyName, allRules, result, visited);
+            return result;
+        }
+
+        /// <summary>
+        /// Recursively collects <c>+=</c> <see cref="AssignmentElement"/> items targeting
+        /// <paramref name="propertyName"/> from a rule and its referenced NonTerminal rules.
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="propertyName">The property name to match</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated list of <c>+=</c> assignments</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectAllReferencedCollectionAssignments(TextualNotationRule rule, string propertyName, IReadOnlyList<TextualNotationRule> allRules, List<AssignmentElement> result, HashSet<string> visited)
+        {
+            if (!visited.Add(rule.RuleName))
+            {
+                return;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectAllReferencedCollectionAssignmentsFromElements(alternative.Elements, propertyName, allRules, result, visited);
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects <c>+=</c> <see cref="AssignmentElement"/> items targeting
+        /// <paramref name="propertyName"/> from a list of <see cref="RuleElement"/>.
+        /// </summary>
+        /// <param name="elements">The elements to inspect</param>
+        /// <param name="propertyName">The property name to match</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="result">The accumulated list of <c>+=</c> assignments</param>
+        /// <param name="visited">Set of already-visited rule names to prevent infinite recursion</param>
+        private static void CollectAllReferencedCollectionAssignmentsFromElements(IEnumerable<RuleElement> elements, string propertyName, IReadOnlyList<TextualNotationRule> allRules, List<AssignmentElement> result, HashSet<string> visited)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement { Operator: "+=" } assignmentElement
+                        when string.Equals(assignmentElement.Property, propertyName, StringComparison.OrdinalIgnoreCase):
+                        result.Add(assignmentElement);
+                        break;
+
+                    case NonTerminalElement nonTerminalElement:
+                        var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+
+                        if (referencedRule != null)
+                        {
+                            CollectAllReferencedCollectionAssignments(referencedRule, propertyName, allRules, result, visited);
+                        }
+
+                        break;
+
+                    case GroupElement groupElement:
+                        foreach (var groupAlternative in groupElement.Alternatives)
+                        {
+                            CollectAllReferencedCollectionAssignmentsFromElements(groupAlternative.Elements, propertyName, allRules, result, visited);
                         }
 
                         break;

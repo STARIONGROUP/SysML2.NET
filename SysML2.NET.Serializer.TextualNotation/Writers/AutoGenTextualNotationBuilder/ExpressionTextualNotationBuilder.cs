@@ -43,6 +43,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
+            var operatorParensNeeded = writerContext.EmitOperatorParentheses && writerContext.OperatorContextStack.Count > 0 && SysML2.NET.Serializer.TextualNotation.Writers.OperatorPrecedence.NeedsParenthesesAsOperand(writerContext.OperatorContextStack.Peek(), poco);
+            if (operatorParensNeeded) { stringBuilder.Append('('); }
             switch (poco)
             {
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionConditionalExpression when pocoOperatorExpressionConditionalExpression.IsValidForConditionalExpression(writerContext):
@@ -63,13 +65,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionMetaclassificationExpression when pocoOperatorExpressionMetaclassificationExpression.IsValidForMetaclassificationExpression(writerContext):
                     OperatorExpressionTextualNotationBuilder.BuildMetaclassificationExpression(pocoOperatorExpressionMetaclassificationExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionExtentExpression when pocoOperatorExpressionExtentExpression.Operator == "all" && writerContext.CursorCache.GetOrCreateCursor(pocoOperatorExpressionExtentExpression.Id, "ownedRelationship", pocoOperatorExpressionExtentExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionExtentExpression when (pocoOperatorExpressionExtentExpression.Operator == "all" && writerContext.CursorCache.GetOrCreateCursor(pocoOperatorExpressionExtentExpression.Id, "ownedRelationship", pocoOperatorExpressionExtentExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership):
                     OperatorExpressionTextualNotationBuilder.BuildExtentExpression(pocoOperatorExpressionExtentExpression, writerContext, stringBuilder);
                     break;
                 default:
                     BuildPrimaryExpression(poco, writerContext, stringBuilder);
                     break;
             }
+            if (operatorParensNeeded) { stringBuilder.Append(')'); }
 
         }
 
@@ -84,8 +87,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureChainExpression pocoFeatureChainExpression:
-                    FeatureChainExpressionTextualNotationBuilder.BuildFeatureChainExpression(pocoFeatureChainExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureChainExpression pocoFeatureChainExpressionFeatureChainExpression when writerContext.CursorCache.GetOrCreateCursor(pocoFeatureChainExpressionFeatureChainExpression.Id, "ownedRelationship", pocoFeatureChainExpressionFeatureChainExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                    FeatureChainExpressionTextualNotationBuilder.BuildFeatureChainExpression(pocoFeatureChainExpressionFeatureChainExpression, writerContext, stringBuilder);
                     break;
                 default:
                     BuildNonFeatureChainPrimaryExpression(poco, writerContext, stringBuilder);
@@ -105,20 +108,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression pocoIndexExpression:
-                    IndexExpressionTextualNotationBuilder.BuildIndexExpression(pocoIndexExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression pocoIndexExpressionIndexExpression when writerContext.CursorCache.GetOrCreateCursor(pocoIndexExpressionIndexExpression.Id, "ownedRelationship", pocoIndexExpressionIndexExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                    IndexExpressionTextualNotationBuilder.BuildIndexExpression(pocoIndexExpressionIndexExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.ISelectExpression pocoSelectExpression:
-                    SelectExpressionTextualNotationBuilder.BuildSelectExpression(pocoSelectExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.ISelectExpression pocoSelectExpressionSelectExpression when writerContext.CursorCache.GetOrCreateCursor(pocoSelectExpressionSelectExpression.Id, "ownedRelationship", pocoSelectExpressionSelectExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                    SelectExpressionTextualNotationBuilder.BuildSelectExpression(pocoSelectExpressionSelectExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.ICollectExpression pocoCollectExpression:
-                    CollectExpressionTextualNotationBuilder.BuildCollectExpression(pocoCollectExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.ICollectExpression pocoCollectExpressionCollectExpression when writerContext.CursorCache.GetOrCreateCursor(pocoCollectExpressionCollectExpression.Id, "ownedRelationship", pocoCollectExpressionCollectExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                    CollectExpressionTextualNotationBuilder.BuildCollectExpression(pocoCollectExpressionCollectExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpression:
-                    OperatorExpressionTextualNotationBuilder.BuildBracketExpression(pocoOperatorExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionBracketExpression when (writerContext.CursorCache.GetOrCreateCursor(pocoOperatorExpressionBracketExpression.Id, "ownedRelationship", pocoOperatorExpressionBracketExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership && pocoOperatorExpressionBracketExpression.Operator == "["):
+                    OperatorExpressionTextualNotationBuilder.BuildBracketExpression(pocoOperatorExpressionBracketExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpression:
-                    InvocationExpressionTextualNotationBuilder.BuildFunctionOperationExpression(pocoInvocationExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpressionFunctionOperationExpression when writerContext.CursorCache.GetOrCreateCursor(pocoInvocationExpressionFunctionOperationExpression.Id, "ownedRelationship", pocoInvocationExpressionFunctionOperationExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                    InvocationExpressionTextualNotationBuilder.BuildFunctionOperationExpression(pocoInvocationExpressionFunctionOperationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionSequenceExpression when pocoExpressionSequenceExpression.IsValidForSequenceExpression(writerContext):
                     BuildSequenceExpression(pocoExpressionSequenceExpression, writerContext, stringBuilder);
@@ -174,10 +177,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
                     FeatureTypingTextualNotationBuilder.BuildReferenceTyping(elementAsFeatureTyping, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -245,8 +248,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             SharedTextualNotationBuilder.BuildFeaturePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("expr ");
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, writerContext, stringBuilder);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient)
             {
                 FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }

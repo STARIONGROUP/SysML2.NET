@@ -51,10 +51,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Ports.IPortConjugation elementAsPortConjugation)
                 {
                     PortConjugationTextualNotationBuilder.BuildPortConjugation(elementAsPortConjugation, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
     }

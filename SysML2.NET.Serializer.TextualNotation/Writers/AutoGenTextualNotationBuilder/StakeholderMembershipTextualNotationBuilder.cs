@@ -52,10 +52,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Parts.IPartUsage elementAsPartUsage)
                 {
                     PartUsageTextualNotationBuilder.BuildStakeholderUsage(elementAsPartUsage, writerContext, stringBuilder);
+                    ownedRelatedElementCursor.Move();
+
                 }
             }
-            ownedRelatedElementCursor.Move();
-
 
         }
     }

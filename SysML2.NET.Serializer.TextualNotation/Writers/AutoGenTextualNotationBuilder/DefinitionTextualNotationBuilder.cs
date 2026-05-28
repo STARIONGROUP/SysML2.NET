@@ -51,10 +51,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                 {
                     OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(elementAsOwningMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -91,8 +91,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public static void BuildDefinitionDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
             ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (poco.OwnedRelationship.Count != 0)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification)
             {
                 ClassifierTextualNotationBuilder.BuildSubclassificationPart(poco, writerContext, stringBuilder);
             }

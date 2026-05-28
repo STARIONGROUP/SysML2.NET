@@ -68,7 +68,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (!string.IsNullOrWhiteSpace(poco.MemberShortName))
             {
                 stringBuilder.Append("<");
-                stringBuilder.Append(poco.MemberShortName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.MemberShortName);
                 stringBuilder.Append(">");
                 stringBuilder.Append(' ');
             }
@@ -76,7 +76,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (!string.IsNullOrWhiteSpace(poco.MemberName))
             {
-                stringBuilder.Append(poco.MemberName);
+                SharedTextualNotationBuilder.AppendName(stringBuilder, poco.MemberName);
                 stringBuilder.Append(' ');
             }
 
@@ -116,10 +116,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                     {
                         FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
+                        ownedRelatedElementCursor.Move();
+
                     }
                 }
-                ownedRelatedElementCursor.Move();
-
 
             }
         }
@@ -191,10 +191,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
                     {
                         FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
+                        ownedRelatedElementCursor.Move();
+
                     }
                 }
-                ownedRelatedElementCursor.Move();
-
 
             }
         }
@@ -210,11 +210,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembership:
-                    FeatureMembershipTextualNotationBuilder.BuildMetadataBodyFeatureMember(pocoFeatureMembership, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership pocoFeatureMembershipMetadataBodyFeatureMember when pocoFeatureMembershipMetadataBodyFeatureMember.ownedMemberFeature is SysML2.NET.Core.POCO.Core.Features.IFeature:
+                    FeatureMembershipTextualNotationBuilder.BuildMetadataBodyFeatureMember(pocoFeatureMembershipMetadataBodyFeatureMember, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership pocoOwningMembership:
-                    OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(pocoOwningMembership, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership pocoOwningMembershipNonFeatureMember when writerContext.CursorCache.GetOrCreateCursor(pocoOwningMembershipNonFeatureMember.Id, "ownedRelatedElement", pocoOwningMembershipNonFeatureMember.OwnedRelatedElement).Current is SysML2.NET.Core.POCO.Root.Elements.IElement:
+                    OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(pocoOwningMembershipNonFeatureMember, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.IImport pocoImport:
                     ImportTextualNotationBuilder.BuildImport(pocoImport, writerContext, stringBuilder);

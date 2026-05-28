@@ -51,10 +51,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildFeatureValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -148,10 +148,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
                     FeatureTypingTextualNotationBuilder.BuildFeatureTyping(elementAsFeatureTyping, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -203,10 +203,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.ISubsetting elementAsSubsetting)
                 {
                     SubsettingTextualNotationBuilder.BuildOwnedSubsetting(elementAsSubsetting, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -228,10 +228,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting elementAsReferenceSubsetting)
                 {
                     ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(elementAsReferenceSubsetting, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -253,10 +253,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting elementAsCrossSubsetting)
                 {
                     CrossSubsettingTextualNotationBuilder.BuildOwnedCrossSubsetting(elementAsCrossSubsetting, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -308,10 +308,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
                 {
                     RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(elementAsRedefinition, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -332,10 +332,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining elementAsFeatureChaining)
                 {
                     FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(elementAsFeatureChaining, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
             {
@@ -384,10 +384,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
                 {
                     OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -449,10 +449,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining elementAsFeatureChaining)
                 {
                     FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(elementAsFeatureChaining, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
             stringBuilder.Append(".");
 
         }
@@ -474,10 +474,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildTriggerFeatureValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -498,10 +498,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildArgumentValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -522,10 +522,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildArgumentExpressionValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -543,29 +543,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Interactions.ISuccessionFlow pocoSuccessionFlow:
                     SuccessionFlowTextualNotationBuilder.BuildSuccessionFlow(pocoSuccessionFlow, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IInvariant pocoInvariant:
-                    InvariantTextualNotationBuilder.BuildInvariant(pocoInvariant, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Functions.IInvariant pocoInvariantInvariant when (pocoInvariantInvariant.DeclaredShortName != null || pocoInvariantInvariant.DeclaredName != null):
+                    InvariantTextualNotationBuilder.BuildInvariant(pocoInvariantInvariant, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Interactions.IFlow pocoFlow:
                     FlowTextualNotationBuilder.BuildFlow(pocoFlow, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression pocoBooleanExpression:
-                    BooleanExpressionTextualNotationBuilder.BuildBooleanExpression(pocoBooleanExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression pocoBooleanExpressionBooleanExpression when (pocoBooleanExpressionBooleanExpression.DeclaredShortName != null || pocoBooleanExpressionBooleanExpression.DeclaredName != null):
+                    BooleanExpressionTextualNotationBuilder.BuildBooleanExpression(pocoBooleanExpressionBooleanExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector pocoBindingConnector:
-                    BindingConnectorTextualNotationBuilder.BuildBindingConnector(pocoBindingConnector, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector pocoBindingConnectorBindingConnector when (pocoBindingConnectorBindingConnector.DeclaredShortName != null || pocoBindingConnectorBindingConnector.DeclaredName != null):
+                    BindingConnectorTextualNotationBuilder.BuildBindingConnector(pocoBindingConnectorBindingConnector, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession pocoSuccession:
-                    SuccessionTextualNotationBuilder.BuildSuccession(pocoSuccession, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession pocoSuccessionSuccession when (pocoSuccessionSuccession.DeclaredShortName != null || pocoSuccessionSuccession.DeclaredName != null):
+                    SuccessionTextualNotationBuilder.BuildSuccession(pocoSuccessionSuccession, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpression:
-                    ExpressionTextualNotationBuilder.BuildExpression(pocoExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionExpression when (pocoExpressionExpression.DeclaredShortName != null || pocoExpressionExpression.DeclaredName != null):
+                    ExpressionTextualNotationBuilder.BuildExpression(pocoExpressionExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnector:
-                    ConnectorTextualNotationBuilder.BuildConnector(pocoConnector, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnectorConnector when (pocoConnectorConnector.DeclaredShortName != null || pocoConnectorConnector.DeclaredName != null):
+                    ConnectorTextualNotationBuilder.BuildConnector(pocoConnectorConnector, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Behaviors.IStep pocoStep:
-                    StepTextualNotationBuilder.BuildStep(pocoStep, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Behaviors.IStep pocoStepStep when (pocoStepStep.DeclaredShortName != null || pocoStepStep.DeclaredName != null):
+                    StepTextualNotationBuilder.BuildStep(pocoStepStep, writerContext, stringBuilder);
                     break;
                 default:
                     BuildFeature(poco, writerContext, stringBuilder);
@@ -694,7 +694,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureInvertingPart when pocoFeatureInvertingPart.IsValidForInvertingPart(writerContext):
                     BuildInvertingPart(pocoFeatureInvertingPart, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureTypeFeaturingPart when writerContext.CursorCache.GetOrCreateCursor(pocoFeatureTypeFeaturingPart.Id, "ownedRelationship", pocoFeatureTypeFeaturingPart.OwnedRelationship).Current is SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing && pocoFeatureTypeFeaturingPart.ownedTypeFeaturing.OfType<SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing>().Any():
+                case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeatureTypeFeaturingPart when writerContext.CursorCache.GetOrCreateCursor(pocoFeatureTypeFeaturingPart.Id, "ownedRelationship", pocoFeatureTypeFeaturingPart.OwnedRelationship).Current is SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing:
                     BuildTypeFeaturingPart(pocoFeatureTypeFeaturingPart, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Core.Types.IType pocoType:
@@ -753,10 +753,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureInverting elementAsFeatureInverting)
                 {
                     FeatureInvertingTextualNotationBuilder.BuildOwnedFeatureInverting(elementAsFeatureInverting, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -780,10 +780,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing elementAsTypeFeaturing)
                 {
                     TypeFeaturingTextualNotationBuilder.BuildOwnedTypeFeaturing(elementAsTypeFeaturing, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedTypeFeaturingCursor.Current != null && ownedTypeFeaturingCursor.Current is SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing)
             {
@@ -820,10 +820,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining elementAsFeatureChaining)
                 {
                     FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(elementAsFeatureChaining, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
             {
@@ -860,10 +860,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildMetadataValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -884,10 +884,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping elementAsFeatureTyping)
                 {
                     FeatureTypingTextualNotationBuilder.BuildReferenceTyping(elementAsFeatureTyping, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -908,10 +908,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildPrimaryArgumentValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -932,10 +932,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -956,10 +956,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildBodyArgumentValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -980,10 +980,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildFunctionReferenceArgumentValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -1055,10 +1055,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                 {
                     ParameterMembershipTextualNotationBuilder.BuildArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
             {
@@ -1095,10 +1095,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
                 {
                     FeatureMembershipTextualNotationBuilder.BuildNamedArgumentMember(elementAsFeatureMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)
             {
@@ -1135,10 +1135,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
                 {
                     RedefinitionTextualNotationBuilder.BuildParameterRedefinition(elementAsRedefinition, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
             stringBuilder.Append("= ");
 
             if (ownedRelationshipCursor.Current != null)
@@ -1147,10 +1147,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue elementAsFeatureValue)
                 {
                     FeatureValueTextualNotationBuilder.BuildArgumentValue(elementAsFeatureValue, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
         }
 
@@ -1173,17 +1173,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition elementAsRedefinition)
                 {
                     RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(elementAsRedefinition, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
 
-
-            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || poco.IsOrdered)
+            if ((ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureTyping || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.ISubsetting || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IRedefinition || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership) || poco.IsOrdered)
             {
                 BuildFeatureSpecializationPart(poco, writerContext, stringBuilder);
             }
 
-            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient)
             {
                 BuildValuePart(poco, writerContext, stringBuilder);
             }
@@ -1204,7 +1204,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             BuildFeatureHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.Append(' ');
 
-            if (poco.OwnedRelationship.Count != 0 || poco.type.Count != 0 || poco.chainingFeature.Count != 0 || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.importedMembership.Count != 0 || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient || poco.unioningType.Count != 0 || poco.intersectingType.Count != 0 || poco.differencingType.Count != 0 || poco.featuringType.Count != 0 || poco.ownedTypeFeaturing.Count != 0)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient)
             {
                 BuildValuePart(poco, writerContext, stringBuilder);
             }

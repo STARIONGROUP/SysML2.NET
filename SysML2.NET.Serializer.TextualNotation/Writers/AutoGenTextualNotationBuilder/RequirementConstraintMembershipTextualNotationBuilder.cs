@@ -57,10 +57,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage elementAsConstraintUsage)
                 {
                     ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(elementAsConstraintUsage, writerContext, stringBuilder);
+                    ownedRelatedElementCursor.Move();
+
                 }
             }
-            ownedRelatedElementCursor.Move();
-
 
         }
 

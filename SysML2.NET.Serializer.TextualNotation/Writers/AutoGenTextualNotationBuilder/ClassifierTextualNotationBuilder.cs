@@ -52,10 +52,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification elementAsSubclassification)
                 {
                     SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(elementAsSubclassification, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification)
             {
@@ -137,10 +137,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification elementAsSubclassification)
                 {
                     SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(elementAsSubclassification, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
                 }
             }
-            ownedRelationshipCursor.Move();
-
 
             while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification)
             {

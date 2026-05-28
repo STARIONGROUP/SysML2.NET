@@ -138,6 +138,137 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Collects, in the order they will be consumed at runtime, the <c>+=</c>
+        /// <see cref="AssignmentElement" /> items that target <paramref name="targetPropertyName" />.
+        /// The collected items are: first the <c>+=</c> assignments declared inside the optional
+        /// group itself (<paramref name="optionalGroupElements" />), then the <c>+=</c>
+        /// assignments declared by the parent alternative AFTER <paramref name="optionalElementIndex" />
+        /// (<paramref name="siblingElements" />).
+        /// <para>
+        /// The tail walk stops as soon as it encounters a sibling whose own contribution to the
+        /// target cursor is not statically determinable (an optional or collection
+        /// <see cref="GroupElement" /> that nests a <c>+=</c> on the same property, or a
+        /// <see cref="NonTerminalElement" /> that could indirectly consume the cursor). When the
+        /// tail offset is uncertain, only the optional group's own consumptions are returned —
+        /// callers can then emit a guard that type-checks the optional positions without making
+        /// claims about the tail.
+        /// </para>
+        /// </summary>
+        /// <param name="optionalGroupElements">The optional group's own elements</param>
+        /// <param name="siblingElements">The parent alternative's elements</param>
+        /// <param name="optionalElementIndex">The index of the optional group within <paramref name="siblingElements" /></param>
+        /// <param name="targetPropertyName">The property name whose <c>+=</c> consumptions are collected</param>
+        /// <returns>The ordered list of cursor consumptions the optional path requires</returns>
+        private static List<AssignmentElement> CollectCursorConsumptions(IReadOnlyList<RuleElement> optionalGroupElements, IReadOnlyList<RuleElement> siblingElements, int optionalElementIndex, string targetPropertyName)
+        {
+            var consumptionAssignments = new List<AssignmentElement>();
+
+            if (optionalGroupElements != null)
+            {
+                foreach (var ruleElement in optionalGroupElements)
+                {
+                    if (ruleElement is AssignmentElement { Operator: "+=" } assignmentElement
+                        && string.Equals(assignmentElement.Property, targetPropertyName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        consumptionAssignments.Add(assignmentElement);
+                    }
+                }
+            }
+
+            if (siblingElements == null)
+            {
+                return consumptionAssignments;
+            }
+
+            for (var siblingIndex = optionalElementIndex + 1; siblingIndex < siblingElements.Count; siblingIndex++)
+            {
+                switch (siblingElements[siblingIndex])
+                {
+                    case TerminalElement:
+                    case NonParsingAssignmentElement:
+                    case ValueLiteralElement:
+                        continue;
+
+                    case AssignmentElement { Operator: "+=" } cursorAssignment
+                        when string.Equals(cursorAssignment.Property, targetPropertyName, StringComparison.OrdinalIgnoreCase):
+                        consumptionAssignments.Add(cursorAssignment);
+                        continue;
+
+                    case AssignmentElement:
+                        continue;
+
+                    case GroupElement groupElement when !GroupCanConsumeTargetCursor(groupElement, targetPropertyName):
+                        continue;
+
+                    default:
+                        return consumptionAssignments;
+                }
+            }
+
+            return consumptionAssignments;
+        }
+
+        /// <summary>
+        /// Determines whether the supplied <paramref name="groupElement" /> (recursively) contains
+        /// any <c>+=</c> <see cref="AssignmentElement" /> targeting <paramref name="targetPropertyName" />.
+        /// Used by <see cref="CollectCursorConsumptions" /> to decide whether a sibling group
+        /// could shift the runtime offset of subsequent cursor consumptions.
+        /// </summary>
+        /// <param name="groupElement">The <see cref="GroupElement" /> to inspect</param>
+        /// <param name="targetPropertyName">The property name whose consumption is detected</param>
+        /// <returns><c>true</c> if the group could consume the target cursor; <c>false</c> otherwise</returns>
+        private static bool GroupCanConsumeTargetCursor(GroupElement groupElement, string targetPropertyName)
+        {
+            foreach (var alternative in groupElement.Alternatives)
+            {
+                foreach (var element in alternative.Elements)
+                {
+                    switch (element)
+                    {
+                        case AssignmentElement { Operator: "+=" } cursorAssignment
+                            when string.Equals(cursorAssignment.Property, targetPropertyName, StringComparison.OrdinalIgnoreCase):
+                            return true;
+
+                        case GroupElement nestedGroup when GroupCanConsumeTargetCursor(nestedGroup, targetPropertyName):
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Resolves the fully-qualified runtime type name (e.g.
+        /// <c>SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership</c>) that an
+        /// <see cref="AssignmentElement" />'s consumed cursor element is expected to satisfy.
+        /// Returns <c>null</c> when the assignment's value is not a <see cref="NonTerminalElement" />
+        /// or when the referenced rule has no resolvable target class.
+        /// </summary>
+        /// <param name="assignmentElement">The <c>+=</c> assignment to resolve the target type of</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache)</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns>The fully-qualified target type name, or <c>null</c> if it cannot be resolved</returns>
+        private static string ResolveAssignmentTargetTypeName(AssignmentElement assignmentElement, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            if (assignmentElement.Value is not NonTerminalElement nonTerminalElement)
+            {
+                return null;
+            }
+
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+            var typeTarget = referencedRule?.EffectiveTarget;
+
+            if (typeTarget == null)
+            {
+                return null;
+            }
+
+            var targetClass = RuleQueryUtilities.FindClass(umlClass.Cache, typeTarget);
+            return targetClass?.QueryFullyQualifiedTypeName();
+        }
+
+        /// <summary>
         /// Processes a single alternative (no branching needed). Handles optional guard emission
         /// and iterates through the alternative's elements.
         /// </summary>
@@ -171,7 +302,39 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             var assigment = elements.OfType<AssignmentElement>().First(x => x.Property == targetPropertyName);
                             var iterator = ruleGenerationContext.DefinedCursors.FirstOrDefault(x => x.ApplicableRuleElements.Contains(assigment));
-                            ifStatementContent.Add(iterator == null ? $"BuildGroupConditionFor{assigment.TextualNotationRule.RuleName}(poco)" : property.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName));
+
+                            if (iterator == null)
+                            {
+                                ifStatementContent.Add($"BuildGroupConditionFor{assigment.TextualNotationRule.RuleName}(poco)");
+                            }
+                            else
+                            {
+                                var consumptionAssignments = CollectCursorConsumptions(elements, ruleGenerationContext.CurrentSiblingElements, ruleGenerationContext.CurrentElementIndex, targetPropertyName);
+
+                                if (consumptionAssignments.Count > 1)
+                                {
+                                    var conditionParts = new List<string>();
+
+                                    for (var consumptionIndex = 0; consumptionIndex < consumptionAssignments.Count; consumptionIndex++)
+                                    {
+                                        var cursorAccess = consumptionIndex == 0
+                                            ? $"{iterator.CursorVariableName}.Current"
+                                            : $"{iterator.CursorVariableName}.GetNext({consumptionIndex})";
+
+                                        var typeName = ResolveAssignmentTargetTypeName(consumptionAssignments[consumptionIndex], umlClass, ruleGenerationContext);
+
+                                        conditionParts.Add(typeName == null
+                                            ? $"{cursorAccess} != null"
+                                            : $"{cursorAccess} is {typeName}");
+                                    }
+
+                                    ifStatementContent.Add(string.Join(" && ", conditionParts));
+                                }
+                                else
+                                {
+                                    ifStatementContent.Add(property.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName));
+                                }
+                            }
                         }
                         else
                         {
@@ -209,7 +372,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (referencedRule != null)
                         {
-                            var condition = this.GenerateInlineOptionalCondition(referencedRule, umlClass, ruleGenerationContext.AllRules, "poco");
+                            var condition = this.GenerateInlineOptionalCondition(writer, referencedRule, umlClass, ruleGenerationContext, "poco");
 
                             if (condition != null)
                             {

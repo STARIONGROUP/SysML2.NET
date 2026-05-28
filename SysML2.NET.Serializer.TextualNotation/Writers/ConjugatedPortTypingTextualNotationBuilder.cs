@@ -30,13 +30,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     public static partial class ConjugatedPortTypingTextualNotationBuilder
     {
         /// <summary>
-        /// Build the originalPortDefinition=~[QualifiedName] rule part
+        /// Builds the Textual Notation string for the rule ConjugatedPortTyping.
+        /// <remarks>ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]</remarks>
+        /// <para>The grammar's <c>originalPortDefinition</c> property does not resolve
+        /// against <see cref="IConjugatedPortTyping"/> — the metamodel exposes
+        /// <c>portDefinition</c> (the derived port-definition reference) instead.
+        /// The leading <c>'~'</c> token is already emitted by the autogen wrapper;
+        /// this hand-coded sibling carries the <c>~[QualifiedName]</c> emission as
+        /// a stub (matches the previous empty-stub behavior of
+        /// <c>BuildOriginalPortDefinition</c>).</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping" /> from which the rule should be build</param>
         /// <param name="writerContext"> The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildOriginalPortDefinition(IConjugatedPortTyping poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildConjugatedPortTypingHandCoded(IConjugatedPortTyping poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
+            // Preserves the previous empty-stub behavior of BuildOriginalPortDefinition
+            // for this call site. Full ~[QualifiedName] emission via the
+            // conjugated-resolution rule documented in SysML-textual-bnf.kebnf
+            // lines 651-658 still requires a dedicated implementation; left as a
+            // follow-up.
         }
     }
 }
