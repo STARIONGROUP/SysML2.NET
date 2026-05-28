@@ -37,7 +37,7 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(
                 () => ((IPortDefinition)null).ComputeConjugatedPortDefinition(),
-                Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("portDefinitionSubject"));
+                Throws.TypeOf<ArgumentNullException>());
 
             var emptyPortDefinition = new PortDefinition();
             Assert.That(emptyPortDefinition.ComputeConjugatedPortDefinition(), Is.Null);

@@ -80,6 +80,31 @@ Don't use this template when:
                  fixtures that now fail get updated as part of the same PR.
 ```
 
+## Plan-mode-aware prompting (added 2026-05-28)
+
+If the orchestrator session is in plan mode when this template is used, sub-agents
+will inherit it and cannot apply edits. The Agent-tool `mode: "acceptEdits"`
+parameter does NOT override the inherited state on the current Claude Code build.
+
+Role prompts in this template are written so that the orchestrator can fall back
+to applying edits itself when this happens:
+
+- **Researcher** prompts always direct the agent to write the spec to its
+  declared `{{NOTES_FILE}}` location. In plan-mode-degraded runs the agent will
+  write to a per-agent plan file under
+  `C:\Users\<user>\.claude\plans\<plan-name>-agent-<id>.md` instead; the
+  orchestrator then copies it to `.team-notes/`.
+- **Implementer / tester** prompts must emit the verbatim production / test code
+  in their text response (or, equivalently, in their per-agent plan file) so it
+  survives a plan-mode block. The orchestrator extracts and applies it via
+  `Edit` / `Write`.
+- **Reviewer** prompts are already read-only and unaffected by plan mode.
+
+The `/implement-extensions-batch` command body documents the degraded-mode flow
+end-to-end in its "Pre-flight: detect orchestrator plan mode" section. The
+single-file `/implement-extensions` command should also adopt the same flow —
+see that file's notes section.
+
 ## Hard scope-discipline rule (v2)
 
 **Honor user-memory `feedback_scope_discipline.md`**: when the task names a single
