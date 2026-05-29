@@ -150,22 +150,29 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 
 ## Branch & PR workflow (MANDATORY)
 
-Every branch must be pushed and have an open PR against `development` before any task is reported "done". The PR is the user's review surface — the agent does NOT ask the user to review `git diff` manually before committing. Direct pushes to `development` or `master` are forbidden.
+Every branch must be pushed and have an open PR against `development` before any task is reported "done". Direct pushes to `development` or `master` are forbidden. The agent **must NOT auto-commit** — `git commit` is the user's responsibility; the user reviews `git diff` and commits manually. After the user's commit is on the branch, the agent **must** push the branch and open the PR.
 
 Operationally, at the end of any task that creates a branch (most commonly `/implement-extensions` and `/implement-extensions-batch`):
 
-1. **Stage in-scope files explicitly** — `git add <path1> <path2> …`. NEVER `git add -A` or `git add .` (sensitive files / drift can leak).
-2. **Commit** with the canonical short message: `Fix #<n>` for single-issue runs, `Fix #<n1> #<n2> …` for batches. Single line. No body, no `Co-Authored-By` trailer, no "🤖 Generated with …" footer, no `--no-verify`.
-3. **Push**: `git push -u origin <branch>`. NEVER `--force`, NEVER `--force-with-lease`.
-4. **Open PR**: `gh pr create --base development --head <branch> --title "Fix #<n>…" --body-file <pr-body-tmp>`. Capture the PR URL and surface it in the final summary.
+1. **Agent stops** with a final summary that:
+   - lists the in-scope files modified, the test counts, the reviewer verdict, etc.,
+   - surfaces a **pre-filled commit message** (`Fix #<n>` for single-issue runs, `Fix #<n1> #<n2> …` for batches — single line, no body, no `Co-Authored-By` trailer, no "🤖 Generated with …" footer),
+   - explicitly tells the user: "Review `git diff`, stage the in-scope files explicitly (NEVER `git add -A` / `.`), commit with the message above, then reply `pushed` (or `pr` / `commit done`) and I'll push + open the PR."
+2. **User reviews and commits** — entirely manual, agent does not run `git commit`.
+3. **User pings the agent** that the commit is on the branch.
+4. **Agent verifies** the commit is on the current feature branch (`git log -1` matches the pre-filled message; `git status --porcelain` reports nothing) and only then:
+   - `git push -u origin <branch>` — NEVER `--force`, NEVER `--force-with-lease`, NEVER `--no-verify`.
+   - `gh pr create --base development --head <branch> --title "Fix #<n>…" --body-file <pr-body-tmp>` — NEVER `--base master`, NEVER `--draft` unless the user asked.
+   - Capture and report the PR URL.
 5. **If the current branch is `development` or `master`**: REFUSE the workflow. Surface to the user — feature work must live on a feature branch first.
 
 Failure modes:
 - `git push` rejected (branch diverged from origin) → abort, surface, do NOT force-push.
 - `gh pr create` fails (no auth, no write permission) → leave the branch pushed, advise the user to open the PR manually.
-- Mid-task non-payload edits (e.g. instruction-file updates surfaced during a batch) → split into separate commits on the same branch so the `Fix #…` commit carries only the issue-resolving payload.
+- User's commit message deviates from the canonical short form → surface to the user, ask whether they want to amend or push as-is. Do NOT auto-amend.
+- Mid-task non-payload edits (e.g. instruction-file updates surfaced during a batch) → carry them in a separate user-made commit on the same branch so the `Fix #…` commit carries only the issue-resolving payload.
 
-This policy reverses any older slash-command snippet that says "Do NOT auto-commit; the user reviews `git diff` and commits manually" — those snippets have been superseded by Phase PR.
+**Why the split**: the user is the reviewer of record. The commit IS the review. The PR + push is just delivery. Reversing this — auto-committing on the user's behalf — bypasses the review and has been explicitly rejected as policy.
 
 ## Quality rules
 
