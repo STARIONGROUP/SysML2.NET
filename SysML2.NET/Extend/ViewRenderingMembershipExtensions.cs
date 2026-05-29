@@ -22,8 +22,10 @@ namespace SysML2.NET.Core.POCO.Systems.Views
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Extensions;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -45,25 +47,55 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRenderingUsage ComputeOwnedRendering(this IViewRenderingMembership viewRenderingMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (viewRenderingMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(viewRenderingMembershipSubject));
+            }
+
+            return viewRenderingMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IRenderingUsage>(nameof(viewRenderingMembershipSubject));
         }
 
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// referencedRendering =
+        ///     let referencedFeature : Feature =
+        ///     ownedRendering.referencedFeatureTarget() in
+        ///     if referencedFeature = null then ownedRendering
+        ///     else if referencedFeature.oclIsKindOf(RenderingUsage) then
+        ///     refrencedFeature.oclAsType(RenderingUsage)
+        ///     else null
+        ///     endif endif
+        /// </code>
+        /// </remarks>
         /// <param name="viewRenderingMembershipSubject">
         /// The subject <see cref="IViewRenderingMembership"/>
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRenderingUsage ComputeReferencedRendering(this IViewRenderingMembership viewRenderingMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (viewRenderingMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(viewRenderingMembershipSubject));
+            }
+
+            var ownedRendering = viewRenderingMembershipSubject.ownedRendering;
+
+            var referencedFeature = ownedRendering?.ReferencedFeatureTarget();
+
+            if (referencedFeature == null)
+            {
+                return ownedRendering;
+            }
+
+            return referencedFeature as IRenderingUsage;
         }
 
     }

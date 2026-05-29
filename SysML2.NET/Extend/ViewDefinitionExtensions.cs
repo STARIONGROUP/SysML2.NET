@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -29,6 +30,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -77,10 +79,11 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewDefinition viewDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewDefinitionSubject == null
+                ? throw new ArgumentNullException(nameof(viewDefinitionSubject))
+                : [..viewDefinitionSubject.ownedRequirement.OfType<IViewpointUsage>().Where(viewpointUsage => viewpointUsage.IsComposite)];
         }
 
         /// <summary>
@@ -98,10 +101,11 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IViewUsage> ComputeView(this IViewDefinition viewDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewDefinitionSubject == null
+                ? throw new ArgumentNullException(nameof(viewDefinitionSubject))
+                : [..viewDefinitionSubject.usage.OfType<IViewUsage>()];
         }
 
         /// <summary>
@@ -121,10 +125,16 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IExpression> ComputeViewCondition(this IViewDefinition viewDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewDefinitionSubject == null
+                ? throw new ArgumentNullException(nameof(viewDefinitionSubject))
+                : [
+                    ..viewDefinitionSubject.ownedMembership
+                        .OfType<IElementFilterMembership>()
+                        .Select(elementFilterMembership => elementFilterMembership.condition)
+                        .Where(condition => condition != null)
+                ];
         }
 
         /// <summary>
@@ -147,10 +157,16 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRenderingUsage ComputeViewRendering(this IViewDefinition viewDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (viewDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(viewDefinitionSubject));
+            }
+
+            var renderings = viewDefinitionSubject.featureMembership.OfType<IViewRenderingMembership>().ToList();
+
+            return renderings.Count == 0 ? null : renderings[0].referencedRendering;
         }
 
     }
