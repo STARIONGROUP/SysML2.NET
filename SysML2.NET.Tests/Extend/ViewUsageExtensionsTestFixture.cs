@@ -76,7 +76,7 @@ namespace SysML2.NET.Tests.Extend
 
             var element = new Feature();
 
-            // Case (a) — empty conditions: ViewUsage has no ElementFilterMembership in membership;
+            // Case (a) — empty conditions: ViewUsage has no ElementFilterMembership in membership =>
             // forAll over empty sequence is vacuously true → returns true.
             Assert.That(viewUsage.ComputeIncludeAsExposedOperation(element), Is.True);
 
@@ -94,7 +94,7 @@ namespace SysML2.NET.Tests.Extend
             // false → metadataFeatures.Any(cond.CheckCondition) is false → forAll fails →
             // element is excluded → returns false.
             // Note: AnnotationExtensions.ComputeAnnotatingElement remains a NotSupportedException
-            // stub (C:\CODE\SysML2.NET\SysML2.NET\Extend\AnnotationExtensions.cs), but it is not
+            // stub (SysML2.NET\SysML2.NET\Extend\AnnotationExtensions.cs), but it is not
             // reached here because element.ownedAnnotation is empty.
             var filterCondition = new BooleanExpression();
             var filterMembership = new ElementFilterMembership();
@@ -217,15 +217,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(viewUsage.ComputeViewRendering(), Is.Null);
 
-            // STUB-BLOCKER: Wiring a ViewRenderingMembership and reading its referencedRendering
-            // property dispatches to ViewRenderingMembershipExtensions.ComputeReferencedRendering,
-            // which is a NotSupportedException stub. The populated positive case cannot be tested
-            // cleanly until that upstream stub is implemented.
+            // Populated: a ViewRenderingMembership whose ownedRendering is a RenderingUsage and
+            // which has no ownedReferenceSubsetting → ViewRenderingMembership.referencedRendering
+            // falls back to ownedRendering, so the result is that same RenderingUsage.
             var renderingUsage = new RenderingUsage();
             var viewRenderingMembership = new ViewRenderingMembership();
             viewUsage.AssignOwnership(viewRenderingMembership, renderingUsage);
 
-            Assert.That(() => viewUsage.ComputeViewRendering(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewUsage.ComputeViewRendering(), Is.SameAs(renderingUsage));
         }
     }
 }

@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -72,10 +73,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IViewpointDefinition ComputeViewpointDefinition(this IViewpointUsage viewpointUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return viewpointUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewpointUsageSubject))
+                : viewpointUsageSubject.OwnedRelationship
+                    .OfType<IFeatureTyping>()
+                    .Select(featureTyping => featureTyping.Type)
+                    .OfType<IViewpointDefinition>()
+                    .FirstOrDefault();
         }
 
         /// <summary>
@@ -95,10 +101,17 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPartUsage> ComputeViewpointStakeholder(this IViewpointUsage viewpointUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            // The OCL uses "featureMemberhsip" which is a typo in the XMI source; the correct C# property is featureMembership.
+            return viewpointUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewpointUsageSubject))
+                : [
+                    ..viewpointUsageSubject.framedConcern
+                        .SelectMany(concern => concern.featureMembership)
+                        .OfType<IStakeholderMembership>()
+                        .Select(stakeholderMembership => stakeholderMembership.ownedStakeholderParameter)
+                ];
         }
 
     }
