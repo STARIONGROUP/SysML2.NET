@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -72,10 +73,15 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return calculationUsageSubject == null
+                ? throw new ArgumentNullException(nameof(calculationUsageSubject))
+                : calculationUsageSubject.OwnedRelationship
+                    .OfType<IFeatureTyping>()
+                    .Select(featureTyping => featureTyping.Type)
+                    .OfType<IFunction>()
+                    .FirstOrDefault();
         }
 
         /// <summary>
@@ -96,10 +102,14 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ICalculationUsage calculationUsageSubject, List<IFeature> visited)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (calculationUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(calculationUsageSubject));
+            }
+
+            return false;
         }
     }
 }

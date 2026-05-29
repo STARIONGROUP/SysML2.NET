@@ -1,28 +1,39 @@
 ---
-description: Spawn the 4-role team across N SysML2.NET Extend files in one run — creates a batch branch, assigns the related GitHub issues to the user, and updates each issue's checklist on completion
+description: Spawn ONE 4-role team across N SysML2.NET Extend files in one run — creates a batch branch, assigns the related GitHub issues to the user, and updates each issue's checklist on completion. One agent per role for the whole batch (NOT one team per file).
 argument-hint: <file1.cs> <file2.cs> [<file3.cs> ...]   (2–6 Extension file names; each will be normalised to SysML2.NET/Extend/<Foo>Extensions.cs)
 ---
 
 # /implement-extensions-batch
 
-Apply the **existing `/implement-extensions` 4-role team workflow** across N
-files (`$ARGUMENTS`) in one run. The team itself is unchanged — researcher,
-implementer, tester, reviewer per file. What this command adds on top of the
-single-file flow:
+Apply the **`/implement-extensions` 4-role team workflow** across N files
+(`$ARGUMENTS`) in one run — using ONE team for the entire batch. Per role:
+
+| Role | Agent count (was → now) | Scope |
+|---|---|---|
+| Researcher | N → **1** | Writes ALL N notes files in one pass. |
+| Implementer | N → **1** | Edits ALL N production files in one pass. |
+| Tester | N → **1** | Edits ALL N test fixtures in one pass. |
+| Reviewer | N → **1** | Reviews ALL N production + test pairs in one pass. |
+
+The only parallelism left is **inside Phase IT**: the single implementer and the
+single tester are spawned in parallel with each other (they read disjoint files,
+so safe). Phase R, Phase RV, and the regression sweep each run a single agent.
+
+The team template (role prompts) at `.claude/team-templates/extension-impl.md`
+(v2, repo-tracked) still defines the role behaviour — but for batch use, the
+orchestrator EXPANDS each prompt to cover the full file list rather than
+substituting a single `{{PRODUCTION_FILE}}` / `{{TEST_FILE}}` / `{{NOTES_FILE}}`.
+See "Prompt adaptation rules" below.
+
+What this command adds on top of the single-file flow:
 
 1. **Pre-flight validation** of every file + its GitHub issue, before any state
    change.
 2. **Creates a new git branch** off `development` with a deterministic name
    derived from the batch's issue numbers.
 3. **Assigns every related GitHub issue to the invoking user** (`@me`).
-4. **Parallelises agent spawns across files** wherever their target files are
-   disjoint.
-5. **Single consolidated regression sweep** instead of one per file.
-6. **Loops the issue-checklist sync** per file at the end.
-
-The team template (role prompts) at `.claude/team-templates/extension-impl.md`
-(v2, repo-tracked) is the source of truth for the per-file behaviour. This
-command body is the batch orchestration glue.
+4. **Single consolidated regression sweep** instead of one per file.
+5. **Loops the issue-checklist sync** per file at the end.
 
 ## Path conventions
 
@@ -38,7 +49,7 @@ Repo-relative with forward slashes throughout. Tools that require absolute paths
 - The researcher notes file per batch member: `.team-notes/<foo>-extensions-spec.md`.
 - Sibling test fixtures whose `Throws.TypeOf<NotSupportedException>()` assertions
   now fail because one of the batch's implementations unblocked them (consolidated
-  regression sweep, see step 10).
+  regression sweep, see step 11).
 
 **MUST NOT modify** the same things the single-file command refuses to touch:
 other production files in `SysML2.NET/Extend/` or `SysML2.NET/Core/`,
@@ -48,6 +59,37 @@ auto-generated POCOs / interfaces, code-generator templates.
 stub-blocker test pattern (see template) when an in-scope test would otherwise
 need to traverse a still-stubbed upstream method that is NOT part of the current
 batch.
+
+## Prompt adaptation rules (single-file template → batch role prompts)
+
+The v2 template at `.claude/team-templates/extension-impl.md` is written for
+ONE file per agent. For the batch command, the orchestrator adapts each role
+prompt as follows BEFORE the `Agent(...)` call:
+
+1. **File-list expansion**: replace each singular placeholder
+   (`{{PRODUCTION_FILE}}`, `{{TEST_FILE}}`, `{{NOTES_FILE}}`,
+   `{{TARGET_INTERFACE}}`, `{{TARGET_METACLASS_NAME}}`, `{{SUBJECT_PARAM}}`)
+   with a numbered list `(file 1: …, file 2: …, file N: …)` and rewrite the
+   "Goal" paragraph to iterate over all N files.
+2. **Hard-rule-on-file-edits**: rewrite the "ONE file" language to "the
+   following N file(s)" and enumerate the exact allowed paths. The agent must
+   refuse Write/Edit on any path outside that explicit list.
+3. **Methods to research / implement / test**: provide the full union of the
+   N method lists, grouped under an `## File: <PRODUCTION_FILE>` heading per
+   file so the agent can iterate file-by-file without losing the per-file
+   contract.
+4. **Verification step**: keep the in-prompt `dotnet build` invocation but
+   target only the relevant project once (production for implementer, test for
+   tester). The orchestrator runs the consolidated targeted `dotnet test` in
+   Phase V.
+5. **Parallel-mode caveat (tester only)**: unchanged. The tester is spawned
+   in parallel with the implementer, so it MUST NOT run `dotnet test` — only
+   `dotnet build` of the test project to confirm its fixture compiles.
+6. **When-done message**: ask the agent to summarise per file, not in one
+   blob, so the orchestrator can attribute findings back to the right file.
+
+The team template itself does NOT need to change. The single-file
+`/implement-extensions` command continues to use the unadapted prompts.
 
 ## Workflow
 
@@ -66,7 +108,8 @@ batch.
   and stop.
 - **Refuse the batch and ask the user to split** if there are more than 6 files
   after de-dup (`AskUserQuestion`: "split into batches of 6?"). Cap exists to
-  contain agent-spawn count in the IT phase (~24 agents at N=6).
+  contain the single-context working set of each agent (~6 production files +
+  ~6 spec files + ~6 test fixtures per agent's context).
 - **Verify each file exists** from the repo root. Fail-fast with a per-file
   status line if any are missing — do NOT proceed to branch creation.
 
@@ -83,7 +126,7 @@ step 2:
 | `TARGET_METACLASS` | `<Foo>` |
 | `SUBJECT_PARAM_NAME` | lowercase first char of `<Foo>` + `<Foo>[1..]` + `Subject` |
 | `NOTES_FILE` | `.team-notes/<foo>-extensions-spec.md` (kebab-case) |
-| `TEAM_NAME` | `<foo>-extensions-impl` |
+| `TEAM_NAME` | `batch-extensions-impl` (one team name for the whole batch) |
 | `ISSUE_NUMBER` | from `gh issue list … --search "SysML2.NET/Extend/<Foo>Extensions.cs in:body"` |
 
 `gh` discovery rule per file:
@@ -100,7 +143,11 @@ For each file in the (possibly reduced) batch:
   enclosing methods. If 0, drop the file from the batch and inform the user
   (already implemented).
 - Apply the same complexity-grading rubric from `/implement-extensions` step 3.5
-  to that file's method list. Record `(complexity, per_role_model_picks)`.
+  to that file's method list. Record `(complexity, …)`.
+
+Since the batch uses ONE agent per role, the model pick is BATCH-WIDE, not
+per-file. Take the MAX complexity across all files and use that to pick the
+model for each role.
 
 If the batch becomes empty after pruning, abort cleanly.
 
@@ -114,13 +161,14 @@ If the batch becomes empty after pruning, abort cleanly.
 
 Use `AskUserQuestion` to present:
 
-- The final batch composition (files + issues + complexity + per-role model
-  picks per file).
+- The final batch composition (files + issues + per-file complexity + the
+  batch-wide max-complexity grade).
 - The proposed branch name (see step 6).
 - Questions:
   1. **Proceed with this batch composition?** (Yes / No / drop specific files)
-  2. **Use the per-file dynamic model selection?** (Yes / override "all Sonnet"
-     / "all Opus" / custom)
+  2. **Model for the four batch agents?** (default by batch-wide max complexity:
+     Haiku trivial / Sonnet standard / Opus complex; or override "all Sonnet"
+     / "all Opus" / custom).
 
 If user picks "drop specific files" or overrides models, apply and re-confirm.
 
@@ -159,41 +207,60 @@ Idempotent — re-assigning is a no-op on `gh`. Report success/failure per issue
 on failure, log and continue (an unassignable issue is not a blocker for the
 implementation itself).
 
-### 8. Phase R — Spawn researchers in parallel
+### 8. Phase R — Spawn the batch researcher (ONE agent)
 
-**One orchestrator message containing N `Agent(...)` calls** (one per file). Each:
+**One `Agent(...)` call** for the entire batch:
 
 - `subagent_type: "general-purpose"`
-- `model: <researcher_model>` per the per-file step-3 grade (Haiku trivial /
-  Sonnet standard / Opus complex, or user override from step 5).
-- Foreground (no `run_in_background`).
-- Prompt: the v2 researcher prompt from `.claude/team-templates/extension-impl.md`
-  with that file's `{{PLACEHOLDERS}}` substituted + the file's method list.
+- `model: <researcher_model>` per the batch-wide step-5 grade.
+- Foreground.
+- Prompt: the v2 researcher prompt from `.claude/team-templates/extension-impl.md`,
+  adapted per "Prompt adaptation rules" above:
+  - Allowed-write list: ALL N notes files
+    (`.team-notes/<foo1>-extensions-spec.md`, …,
+    `.team-notes/<fooN>-extensions-spec.md`).
+  - "Methods to research" section: enumerate ALL methods across ALL N files,
+    grouped under an `## File: <PRODUCTION_FILE>` heading per file.
+  - "When done" SendMessage payload: a per-file summary (file → derivation
+    source → transitive stub-blocker flags), not a single blob.
 
-After all N return, **read each notes file** yourself to verify coverage +
-spec-text-only flags + stub-blocker flags.
+After the agent returns, **read each notes file** yourself to verify coverage,
+spec-text-only flags, and stub-blocker flags. If a notes file is missing or
+empty, re-dispatch the researcher with a focused brief naming only that file.
 
-### 9. Phase IT — Spawn implementers + testers in parallel
+### 9. Phase IT — Spawn the batch implementer + tester in parallel (TWO agents)
 
-**One orchestrator message containing 2N `Agent(...)` calls** — one implementer
-+ one tester per file. All foreground.
+**One orchestrator message containing exactly 2 `Agent(...)` calls** — ONE
+implementer and ONE tester. Both foreground. They run in parallel because the
+implementer writes only to the N production files and the tester writes only
+to the N test fixtures (disjoint sets).
 
-Each implementer prompt is the v2 implementer prompt with the file's placeholders
-+ the **parallel-mode caveat** clearly stated (see template). Each tester prompt
-is the v2 tester prompt with the same caveat — they MUST run `dotnet build` only
-and MUST NOT run `dotnet test` (production lacks parallel-turn edits in their
-disk view).
+- **Implementer prompt**: the v2 implementer prompt, adapted per "Prompt
+  adaptation rules":
+  - Allowed-write list: ALL N production files.
+  - "Methods to implement" section: enumerate ALL methods across ALL N files,
+    grouped under an `## File: <PRODUCTION_FILE>` heading per file. Order
+    files by dependency tier (file A's stubs that file B depends on come first).
+  - Reads ALL N notes files before starting.
+- **Tester prompt**: the v2 tester prompt, adapted similarly.
+  - Allowed-write list: ALL N test fixtures.
+  - "Methods to test" section: enumerate per file.
+  - **Parallel-mode caveat still applies** — tester runs only `dotnet build` of
+    the test project, NEVER `dotnet test` (production lacks the implementer's
+    parallel-turn edits in the tester's disk view).
+  - Reads ALL N notes files before starting.
 
 ### 10. Phase V — Orchestrator verification (sequential)
 
-After all 2N agents return, run sequentially in the orchestrator turn:
+After both agents return, run sequentially in the orchestrator turn:
 
 1. **One build of production**:
    ```bash
    dotnet build SysML2.NET/SysML2.NET.csproj --nologo --verbosity quiet
    ```
-   On failure, identify which file's production diff caused it, re-dispatch
-   that file's implementer. Iterate.
+   On failure, attribute the broken file(s) by reading the build diagnostics
+   and re-dispatch THE implementer with a focused brief naming only the
+   broken file(s) and the specific compile errors. Iterate.
 2. **One consolidated targeted test run**, OR-joining every fixture in the
    batch:
    ```bash
@@ -201,12 +268,15 @@ After all 2N agents return, run sequentially in the orchestrator turn:
        --filter "FullyQualifiedName~<Foo1>ExtensionsTestFixture|FullyQualifiedName~<Foo2>ExtensionsTestFixture|..." \
        --nologo --verbosity quiet
    ```
-   For each failure, attribute it to the correct file:
-   - OCL mistranslation in production → re-dispatch THAT file's implementer.
-   - Wrong test assertion → re-dispatch THAT file's tester.
+   For each failure, attribute it to the correct file and decide which role
+   to re-dispatch:
+   - OCL mistranslation in production → re-dispatch THE implementer with a
+     focused brief naming the broken method(s) and the correct OCL→C# mapping.
+   - Wrong test assertion → re-dispatch THE tester with a focused brief naming
+     the broken `Verify*` method(s).
    Iterate until 0 failures across the batch.
 
-### 11. Phase S — Consolidated regression sweep
+### 11. Phase S — Consolidated regression sweep (ONE agent)
 
 ```bash
 dotnet test SysML2.NET.sln --no-build --nologo --verbosity quiet
@@ -216,22 +286,30 @@ For each `Expected: <NotSupportedException> But was: no exception` failure,
 identify which file in the batch unblocked it (grep the failing test for `For
 Later: depends on …` references; or trace by the targeted stub's signature).
 
-Dispatch regression-sweep testers (Sonnet by default) per touched sibling
-fixture, in parallel when the sibling fixtures are disjoint. Use the
+If any sibling fixtures need expansion, dispatch **ONE regression-sweep tester**
+(not N — one agent gets the full list of touched siblings). Use the
 **expand-don't-replace** brief from `/implement-extensions` step 8 (filter
 discrimination + predicate completeness + owned vs inherited + null-projection
-guard).
+guard). The tester's allowed-write list is the set of touched sibling
+fixture files.
 
 Iterate until the full solution test run is 0 failures.
 
-### 12. Phase RV — Reviewers in parallel
+### 12. Phase RV — Spawn the batch reviewer (ONE agent)
 
-**One orchestrator message containing N `Agent(...)` calls** — one reviewer per
-file. Each scoped to ONE file's `(notes file, production file, test fixture,
-regression-swept sibling tests that this file's implementation touched)`.
+**One `Agent(...)` call** for the entire batch — the v2 reviewer prompt adapted
+per "Prompt adaptation rules":
 
-For each "NEEDS FIX" verdict, dispatch the implementer or tester for that file
-back. Other files' results are still reported in the final summary.
+- Read-only across the repo (unchanged from the template).
+- Files to review: ALL N notes files + ALL N production files + ALL N test
+  fixtures + any sibling fixtures touched in Phase S.
+- "Output format" SendMessage payload: per-file `OK / NEEDS FIX` verdicts, then
+  a batch-wide summary line. The orchestrator needs to know which files need
+  re-dispatch and which are clean.
+
+For each per-file "NEEDS FIX" verdict, dispatch THE implementer or tester back
+with a focused brief naming only the broken file(s) and the reviewer's findings.
+Other files' results are still reported in the final summary.
 
 ### 13. Phase IS — Issue checklist sync (sequential, looped)
 
@@ -295,37 +373,46 @@ Print to the user:
 | Dirty working tree | Step 4 | Abort, ask user to commit/stash. |
 | Branch already exists | Step 6 | Abort; ask user to pick a different batch or delete the stale branch. |
 | `gh issue edit --add-assignee` fails for one issue | Step 7 | Log + continue (non-blocking; implementation still proceeds). |
-| Production build fails after implementer | Step 10.1 | Attribute to the file, re-dispatch that implementer. |
-| Targeted test fails | Step 10.2 | Attribute (OCL vs test bug), re-dispatch correct role. |
-| Sibling test failure in regression sweep | Step 11 | Dispatch a regression-sweep tester per touched fixture; in scope. |
-| Reviewer NEEDS FIX | Step 12 | Re-dispatch implementer or tester for that file only; other files' results still reported. |
-| One file's implementation fails after branch + assignment | Any step ≥ 6 | Keep the branch; surface in final summary; user decides whether to retry via `/implement-extensions` for that single file or revert. |
+| Researcher's notes file missing/empty for one file | Step 8 | Re-dispatch THE researcher with a focused brief naming only that file. |
+| Production build fails | Step 10.1 | Re-dispatch THE implementer with a focused brief naming the broken file(s) + compile errors. |
+| Targeted test fails | Step 10.2 | Attribute (OCL vs test bug), re-dispatch THE implementer or THE tester with a focused brief. |
+| Sibling test failure in regression sweep | Step 11 | Dispatch ONE regression-sweep tester with the full sibling list. |
+| Reviewer NEEDS FIX for one or more files | Step 12 | Re-dispatch THE implementer or THE tester with a focused brief naming the broken file(s); other files' results still reported. |
+| Implementer's context runs out mid-batch | Any IT/V step | Re-dispatch THE implementer with a focused brief covering only the unfinished file(s). Partial progress on disk is preserved. |
+| Batch partially fails after branch + assignment | Any step ≥ 6 | Keep the branch; surface in final summary; user decides whether to retry via `/implement-extensions` for the still-broken single file or revert. |
 
 ## Parallelism caps (orchestrator self-enforced)
 
-- N ≤ 6 files per batch.
-- Phase R: N parallel agents.
-- Phase IT: 2N parallel agents (max 12 at N=6).
-- Phase RV: N parallel agents.
-- Regression sweep dispatch (step 11): batch parallel by touched fixture
-  filename; if more than 6 fixtures need expansion, serialise above 6.
+- N ≤ 6 files per batch (single-context working set limit for each agent).
+- Phase R: **1** agent.
+- Phase IT: **2** agents in parallel (1 implementer + 1 tester).
+- Phase S regression-sweep tester: **1** agent.
+- Phase RV: **1** agent.
+
+There is NO N-parallelism within any phase. The batch is sized for a single
+context per role.
 
 ## Notes for the orchestrator (you, the main agent)
 
 - The team-template role prompts at `.claude/team-templates/extension-impl.md`
-  are the **source of truth** for per-file behaviour. Substitute the
-  file-specific placeholders fresh for each agent spawn; do not let prompts
-  leak across files.
-- All paths in agent prompts must be repo-relative with forward slashes (per
-  the convention used throughout the existing single-file command).
-- Researcher is **mandatory** per file, even when the file has been seen before
-  via `/implement-extensions`. Researchers are cheap and produce the contract
-  the implementer/tester/reviewer read.
-- Reviewers are **mandatory** per file — cheap insurance against subtle OCL
-  mistranslation. Even when the file is trivial spec-text-only.
+  are the **source of truth** for per-role behaviour. The batch command
+  ADAPTS those prompts per "Prompt adaptation rules" above (file-list
+  expansion, multi-file allowed-write list, per-file method grouping).
+  Do not invent new role prompts from scratch.
+- All paths in agent prompts must be repo-relative with forward slashes.
+- Researcher is **mandatory** for the batch, even when one or more files have
+  been seen before via `/implement-extensions`. The researcher is cheap and
+  produces the contract the implementer/tester/reviewer read.
+- Reviewer is **mandatory** for the batch — cheap insurance against subtle OCL
+  mistranslation.
 - The branch and the assignments persist even on partial failure. Be explicit
   in the final summary about which files succeeded vs which need follow-up.
 - Do NOT auto-commit. The user reviews `git diff` and commits manually.
 - If the user supplies a single file, route them to `/implement-extensions`
   with the same filename rather than creating a degenerate 1-file "batch"
   branch.
+- **Context budgeting**: each batch agent (researcher, implementer, tester,
+  reviewer) handles up to N=6 files in a single context. If an agent's
+  context fills before it finishes, re-dispatch it with a focused brief
+  covering only the unfinished files — partial on-disk progress is
+  preserved across dispatches.

@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -73,10 +74,14 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAllocationDefinition> ComputeAllocationDefinition(this IAllocationUsage allocationUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return allocationUsageSubject == null
+                ? throw new ArgumentNullException(nameof(allocationUsageSubject))
+                : [..allocationUsageSubject.OwnedRelationship
+                    .OfType<IFeatureTyping>()
+                    .Select(featureTyping => featureTyping.Type)
+                    .OfType<IAllocationDefinition>()];
         }
 
     }

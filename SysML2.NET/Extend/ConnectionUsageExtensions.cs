@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -73,10 +74,14 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IAssociationStructure> ComputeConnectionDefinition(this IConnectionUsage connectionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return connectionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(connectionUsageSubject))
+                : [..connectionUsageSubject.OwnedRelationship
+                    .OfType<IFeatureTyping>()
+                    .Select(featureTyping => featureTyping.Type)
+                    .OfType<IAssociationStructure>()];
         }
 
     }
