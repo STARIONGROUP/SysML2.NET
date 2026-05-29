@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -82,10 +83,20 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IRequirementUsage> ComputeVerifiedRequirement(this IVerificationCaseDefinition verificationCaseDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (verificationCaseDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(verificationCaseDefinitionSubject));
+            }
+
+            var objective = verificationCaseDefinitionSubject.objectiveRequirement;
+
+            return objective == null
+                ? []
+                : [..objective.featureMembership
+                       .OfType<IRequirementVerificationMembership>()
+                       .Select(requirementVerificationMembership => requirementVerificationMembership.verifiedRequirement)];
         }
 
     }

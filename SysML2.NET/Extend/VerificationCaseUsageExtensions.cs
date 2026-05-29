@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -72,10 +73,15 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return verificationCaseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(verificationCaseUsageSubject))
+                : verificationCaseUsageSubject.OwnedRelationship
+                      .OfType<IFeatureTyping>()
+                      .Select(featureTyping => featureTyping.Type)
+                      .OfType<IVerificationCaseDefinition>()
+                      .FirstOrDefault();
         }
 
         /// <summary>
@@ -99,10 +105,20 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IRequirementUsage> ComputeVerifiedRequirement(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (verificationCaseUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(verificationCaseUsageSubject));
+            }
+
+            var objective = verificationCaseUsageSubject.objectiveRequirement;
+
+            return objective == null
+                ? []
+                : [..objective.featureMembership
+                       .OfType<IRequirementVerificationMembership>()
+                       .Select(requirementVerificationMembership => requirementVerificationMembership.verifiedRequirement)];
         }
 
     }
