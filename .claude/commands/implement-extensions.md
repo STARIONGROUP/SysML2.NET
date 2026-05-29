@@ -367,9 +367,9 @@ verdict.
 If the verdict is "NEEDS FIX", dispatch the implementer or tester back to
 action the findings (the reviewer never edits).
 
-### 10. Final summary + commit-ready handoff
+### 10. Final summary + commit-ready handoff (END OF RUN)
 
-After step 11 (issue checklist sync) completes, the orchestrator stops and surfaces the final summary. **The orchestrator does NOT run `git add` or `git commit`** — the user is the reviewer of record and must commit manually.
+After step 11 (issue checklist sync) completes, the orchestrator stops. **This is the end of the run.** The orchestrator does NOT run `git add`, does NOT run `git commit`, does NOT push the user's commit, does NOT open the PR. Those are entirely the user's job.
 
 Report to the user:
 - Modified files (production + test fixture + notes + any regression-sweep test fixtures).
@@ -395,9 +395,9 @@ Report to the user:
 
 - **Explicit handoff line** — the orchestrator must include this verbatim at the bottom:
 
-  > Review `git diff`, stage the in-scope files (`git add <path> …` — NEVER `-A` / `.`), commit with the message above, then reply `pushed` (or `pr` / `commit done`) and I'll push the branch and open the PR.
+  > Review `git diff`, stage the in-scope files (`git add <path> …` — NEVER `-A` / `.`), commit with the message above, then `git push` (if the remote branch ref does not yet exist, use `git push -u origin <branch>` once). Open the PR yourself via the GitHub UI or `gh pr create --base development`.
 
-See CLAUDE.md "Branch & PR workflow (MANDATORY)" and `feedback_pr_mandatory.md`.
+After the handoff line, the orchestrator stops. The run is complete. If the user explicitly asks in a follow-up turn for the agent to push their commit or open the PR, the agent does so per the CLAUDE.md "Branch & PR workflow (MANDATORY)" → "If the user does explicitly ask the agent to push or open the PR" subsection. Otherwise the user handles those steps themselves. See `feedback_pr_mandatory.md`.
 
 ### 11. Sync GitHub issue checklist
 
@@ -458,40 +458,6 @@ unresolved findings are separately surfaced in the final-summary report. The
    newly ticked items, count of newly added items, and the resulting
    `<ticked>/<total>` ratio.
 
-### 12. Phase PR — Push + open PR (MANDATORY, runs AFTER user's commit)
-
-Phase PR is non-skippable but does NOT run automatically as part of step 10/11. It runs only after the user replies to the handoff line in step 10 indicating that they have committed. The orchestrator **must NEVER** run `git commit` itself.
-
-When the user pings (`pushed` / `pr` / `commit done` / equivalent):
-
-1. **Verify the commit landed on the current feature branch**:
-   ```bash
-   git branch --show-current
-   git log -1 --oneline
-   git status --porcelain
-   ```
-   - The current branch must NOT be `development` or `master` — ABORT with a hard refusal if it is. Feature work belongs on a feature branch; the user should `git switch -c <feature-branch>` and re-commit there.
-   - `git log -1` should show a commit whose message matches the canonical `Fix #<n>` form. If it doesn't (user used a different message), surface that to the user and ask whether to push as-is or wait while they amend. Do NOT auto-amend.
-   - `git status --porcelain` should be empty. If it isn't, surface to the user — there are uncommitted changes that need to be addressed before push.
-
-2. **Push** the branch to `origin`:
-   ```bash
-   git push -u origin <branch>
-   ```
-   NEVER `--force` / `--force-with-lease` / `--no-verify`. If push is rejected because the branch diverged, surface the conflict and stop.
-
-3. **Open PR** against `development`:
-   ```bash
-   gh pr create --base development --head <branch> \
-       --title "Fix #<n>" \
-       --body-file <pr-body-tmp>
-   ```
-   PR body is the per-method test result + reviewer verdict from step 10. NEVER `--base master`. NEVER `--draft` unless the user asked.
-
-4. **Capture the PR URL** and report it back to the user.
-
-If the user replies with something other than the commit confirmation (e.g. "rerun the tests", "amend the fix"), the orchestrator stays in handoff mode and serves that request — Phase PR runs only after the user explicitly confirms commit.
-
 ## Notes for the orchestrator (you, the main agent)
 
 - Pick the model per role using the complexity-grading rubric in step 3.5.
@@ -522,8 +488,8 @@ If the user replies with something other than the commit confirmation (e.g. "rer
   implementation state of the file; unresolved findings are separately surfaced
   in the final-summary report. The `gh issue edit` push must touch ONLY the
   `### Checklist` section — verify with a re-fetch + diff before reporting "done".
-- **Commit is the user's job** — the agent NEVER runs `git commit`. Step 10 (final summary) ends with a pre-filled commit message and an explicit handoff line; the user reviews `git diff`, stages, commits, and pings the agent back. See `feedback_pr_mandatory.md` and CLAUDE.md "Branch & PR workflow (MANDATORY)".
-- **Phase PR (step 12) is MANDATORY** after the user's commit confirmation. The agent verifies the commit landed (right branch, message matches, working tree empty), then pushes the branch (`git push -u origin <branch>`) and opens the PR (`gh pr create --base development`). Refuse if the current branch is `development` or `master`.
+- **Commit is the user's job** — the agent NEVER runs `git commit`, ever. Step 10 (final summary) ends with a pre-filled commit message + handoff line, then the run is over. See `feedback_pr_mandatory.md` and CLAUDE.md "Branch & PR workflow (MANDATORY)".
+- **Push + PR are the user's job too** — the agent does NOT proactively push commits or open PRs. It only performs those if the user explicitly asks in a follow-up turn (rare; user-initiated only). Unlike `/implement-extensions-batch`, this command does NOT create a branch, so there is no empty-branch push to perform — the user owns branch creation and remote setup.
 - **Plan mode is handled by Gate 0 at the top of this file** — the orchestrator writes the proposed-execution plan to the plan file, calls `ExitPlanMode`, and proceeds on approval. The orchestrator never spawns sub-agents while plan mode is active, so the previous "degraded mode" workaround is no longer needed and has been removed.
 - **Gate R-A (step 5.5) is mandatory every run.** It is the only structural checkpoint between the researcher returning `spec ready` and the implementer + tester being spawned. Do not skip it even when the researcher reports zero ambiguities — the user explicitly asked for an unconditional gate so they can review per-method derivations before code is written.
 - **Tool-level prompts (`Bash(...)`, `Edit(...)`, `Write(...)`, `Agent(...)`) still surface per the user's `settings.json`.** Gate 0 and Gate R-A govern STRUCTURAL approval only. The user has explicitly chosen to keep handling tool-level prompts manually rather than auto-allowing them via permission rules or hooks.

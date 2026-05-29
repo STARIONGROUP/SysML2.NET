@@ -186,14 +186,18 @@ batch-impl-extensions-<dashed-issue-numbers>
 - If more than 4 issues: include the first 4 + `-plus<N-4>` suffix (e.g.
   `batch-impl-extensions-123-180-186-190-plus2` for N=6).
 
-Create:
+Create the local branch AND immediately push the empty ref to `origin`:
+
 ```bash
 git switch -c <branch-name> origin/development
+git push -u origin <branch-name>
 ```
 
-Refuse if the branch already exists locally OR on origin (`git ls-remote
---exit-code origin <branch>`) — ask the user to pick a different batch or delete
-the stale branch.
+The second push is safe: the branch tip equals `origin/development`'s tip, so no commits are pushed — just the ref is created on origin. This is the only push the orchestrator performs by default; it exists so the user's later `git push` of their own commit is a trivial fast-forward with no `-u` setup hassle.
+
+Refuse if the branch already exists locally OR on origin (`git ls-remote --exit-code origin <branch>`) — ask the user to pick a different batch or delete the stale branch.
+
+If `git push -u origin <branch-name>` fails (e.g. no GitHub auth, no write permission), surface the error and continue with the local branch only — the user will set up the remote ref themselves later.
 
 ### 7. Assign every issue to `@me`
 
@@ -327,13 +331,13 @@ step-11 logic from `/implement-extensions`:
 6. Push via `gh issue edit <num> --body-file <tmp-body-file>`.
 7. Re-fetch + diff to verify only the Checklist section changed.
 
-### 14. Final summary + commit-ready handoff
+### 14. Final summary + commit-ready handoff (END OF RUN)
 
-After Phase IS completes, the orchestrator stops and surfaces a final summary. **The orchestrator does NOT run `git add` or `git commit`** — the user is the reviewer of record and must commit manually. The summary is the handoff document.
+After Phase IS completes, the orchestrator stops. **This is the end of the batch run.** The orchestrator does NOT run `git add`, does NOT run `git commit`, does NOT push the user's commit, does NOT open the PR. Those are entirely the user's job. The agent's git involvement was bounded to step 6 (create branch locally + push empty ref).
 
 Print to the user:
 
-- **Branch**: name + base ref.
+- **Branch**: name + base ref. Note that the empty branch was already pushed to `origin/<branch-name>` in step 6, so the user's `git push` of their own commit will be a trivial fast-forward.
 - **Per-file table**:
 
   | File | Stubs impl. | Targeted tests | Reg. sweep impact | Reviewer | Issue |
@@ -358,41 +362,9 @@ Print to the user:
 
 - **Explicit handoff line** — the orchestrator must include this verbatim at the bottom:
 
-  > Review `git diff`, stage the in-scope files (`git add <path1> <path2> …` — NEVER `-A` / `.`), commit with the message above, then reply `pushed` (or `pr` / `commit done`) and I'll push the branch and open the PR.
+  > Review `git diff`, stage the in-scope files (`git add <path1> <path2> …` — NEVER `-A` / `.`), commit with the message above, then `git push` (the remote branch already exists from step 6, so this is a fast-forward — no `-u` needed). Open the PR yourself via the GitHub UI or `gh pr create --base development`.
 
-### 15. Phase PR — Push + open PR (MANDATORY, runs AFTER user's commit)
-
-Phase PR is non-skippable but does NOT run automatically as part of step 14. It runs only after the user replies to the handoff line in step 14 indicating that they have committed. The orchestrator must NEVER run `git commit` itself.
-
-When the user pings (`pushed` / `pr` / `commit done` / equivalent):
-
-1. **Verify the commit landed on the current feature branch**:
-   ```bash
-   git branch --show-current
-   git log -1 --oneline
-   git status --porcelain
-   ```
-   - The current branch must NOT be `development` or `master` — ABORT with a hard refusal if it is. Feature work belongs on a feature branch.
-   - `git log -1` should show a commit whose message matches the canonical `Fix #<n1> #<n2> …` form. If it doesn't (user used a different message), surface that to the user and ask whether to push as-is or wait while they amend. Do NOT auto-amend.
-   - `git status --porcelain` should be empty. If it isn't, surface to the user — there are uncommitted changes that shouldn't get left behind.
-
-2. **Push** the branch to `origin`:
-   ```bash
-   git push -u origin <branch-name>
-   ```
-   NEVER `--force`. NEVER `--force-with-lease`. NEVER `--no-verify`. If the push is rejected because the branch diverged from origin, surface the conflict and stop.
-
-3. **Open the PR** against `development`:
-   ```bash
-   gh pr create --base development --head <branch-name> \
-       --title "Fix #<n1> #<n2> #<n3> …" \
-       --body-file <pr-body-tmp-file>
-   ```
-   The PR body is the per-file table + branch-wide totals from step 14. NEVER use `--draft` unless the user explicitly asked. NEVER use `--base master`.
-
-4. **Capture the PR URL** from `gh pr create`'s stdout and report it back to the user.
-
-If the user replies with something other than the commit confirmation (e.g. "rerun the tests", "amend the fix"), the orchestrator stays in handoff mode and serves that request — Phase PR runs only after the user confirms commit.
+After the handoff line, the orchestrator stops. The run is complete. The user may follow up with a separate request (e.g. "rerun the tests", "amend the fix") which the orchestrator serves as a new turn — but the agent does NOT proactively push, PR, or commit. If the user explicitly asks the agent to push or open the PR, the agent does so per the CLAUDE.md "Branch & PR workflow (MANDATORY)" → "If the user does explicitly ask the agent to push or open the PR" subsection.
 
 ## Failure handling
 
@@ -411,12 +383,9 @@ If the user replies with something other than the commit confirmation (e.g. "rer
 | Reviewer NEEDS FIX for one or more files | Step 12 | Re-dispatch THE implementer or THE tester with a focused brief naming the broken file(s); other files' results still reported. |
 | Implementer's context runs out mid-batch | Any IT/V step | Re-dispatch THE implementer with a focused brief covering only the unfinished file(s). Partial progress on disk is preserved. |
 | Batch partially fails after branch + assignment | Any step ≥ 6 | Keep the branch; surface in final summary; user decides whether to retry via `/implement-extensions` for the still-broken single file or revert. |
-| `git push` rejected (branch diverged from origin) | Phase PR (step 15.2) | Abort the push, surface to user, do NOT force-push. |
-| `gh pr create` fails (no GitHub auth, repo write permission missing) | Phase PR (step 15.3) | Surface the gh error, leave the branch pushed, advise the user to open the PR manually. |
-| User's commit message doesn't match `Fix #<n>…` form | Phase PR (step 15.1) | Surface the divergence, ask whether to push as-is or wait while they amend. Do NOT auto-amend. |
-| Working tree non-empty at Phase PR (`git status --porcelain` non-empty) | Phase PR (step 15.1) | Surface to the user — there are uncommitted changes that need to be addressed before push. |
-| Current branch is `development` or `master` at Phase PR | Phase PR (defensive, step 15.1) | ABORT the workflow — feature work belongs on a feature branch. Surface to the user. |
-| User asks for follow-up work instead of confirming commit | After step 14 | Stay in handoff mode, serve the follow-up request; do NOT run Phase PR until the user explicitly confirms commit. |
+| Empty-branch push to origin fails | Step 6 | Surface the error and continue with the local branch only. The user sets up the remote ref themselves later. |
+| User explicitly asks the agent to push their commit and the commit doesn't exist on the current branch | User-initiated push request | Refuse, surface — agent only pushes commits that are already on the branch (which the user made themselves). |
+| User explicitly asks the agent to push and the current branch is `development`/`master` | User-initiated push request | REFUSE — feature work must live on a feature branch first. Surface to the user. |
 
 ## Parallelism caps (orchestrator self-enforced)
 
@@ -444,8 +413,8 @@ context per role.
   mistranslation.
 - The branch and the assignments persist even on partial failure. Be explicit
   in the final summary about which files succeeded vs which need follow-up.
-- **Commit is the user's job** — agent NEVER runs `git commit`. Step 14 (final summary) ends with a pre-filled commit message and an explicit handoff line; the user reviews `git diff`, stages, commits, and pings the agent back. See `feedback_pr_mandatory.md` and CLAUDE.md "Branch & PR workflow (MANDATORY)".
-- **Phase PR (step 15) is MANDATORY** after the user's commit confirmation. The agent verifies the commit landed, then pushes the branch (`git push -u origin <branch>`) and opens the PR (`gh pr create --base development`). Refuse if the current branch is `development` or `master`.
+- **Commit is the user's job** — agent NEVER runs `git commit`, ever. Step 14 (final summary) ends with a pre-filled commit message + handoff line, then the run is over. See `feedback_pr_mandatory.md` and CLAUDE.md "Branch & PR workflow (MANDATORY)".
+- **Push + PR are the user's job too** — the agent does NOT proactively push commits or open PRs. It only performs those if the user explicitly asks in a follow-up turn. The one push the agent does perform by default is the empty-branch push in step 6 (creating the remote ref at the same tip as `origin/development`, so the user's later push of their own commit is a trivial fast-forward).
 - If the user supplies a single file, route them to `/implement-extensions`
   with the same filename rather than creating a degenerate 1-file "batch"
   branch.
