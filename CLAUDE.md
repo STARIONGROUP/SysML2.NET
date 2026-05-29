@@ -142,11 +142,42 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 
 ## Key Conventions
 
-- Commit messages use prefix tags: `[Add]`, `[Update]`, `[Remove]`, `[Fix]`
-- Main branch: `master`. Development branch: `development`
+- Commit messages use prefix tags: `[Add]`, `[Update]`, `[Remove]`, `[Fix]` — except for issue-fixing commits produced by `/implement-extensions` and `/implement-extensions-batch`, which use the canonical short form `Fix #<n>` (single issue) or `Fix #<n1> #<n2> …` (batch) so GitHub auto-closes the issues on merge.
+- Main branch: `master`. Development branch: `development`. **All feature work targets `development`** via PR; `master` is downstream only.
 - CI: GitHub Actions (`CodeQuality.yml`) — builds, tests, and runs SonarQube analysis
 - License: Apache 2.0 (code), LGPL v3.0 (metamodel files)
 - To add a new metaclass: update the UML XMI source files, then run the code generators — do not manually create AutoGen files
+
+## Branch & PR workflow (MANDATORY)
+
+Direct pushes to `development` or `master` are forbidden. All work lives on a feature branch.
+
+**Agent boundaries are strict and minimal**:
+
+1. The agent **must NOT auto-commit, EVER.** `git commit` is the user's responsibility — no exceptions, no asking, no "for convenience". The user reviews `git diff` and commits manually.
+2. The agent **must NOT push commits, open PRs, or merge by default.** Push + PR + merge are the user's job too. The agent only performs push/PR if the user explicitly asks for them in-conversation; otherwise it stays out of git remote operations entirely.
+3. **When the agent creates a branch** (typically inside `/implement-extensions-batch` step 6), it must:
+   - create it locally with `git switch -c <branch> origin/development`, AND
+   - **immediately push the empty branch to `origin`** with `git push -u origin <branch>`, so the remote ref exists at the same commit as `origin/development` and the user's later push of the actual commit becomes a trivial fast-forward.
+   This is the only push the agent performs by default. It is safe because the branch tip equals `origin/development`'s tip — no new commits, no force flags, no risk of overwriting.
+4. **At the end of any task that creates a branch**, the agent stops with a final summary that includes:
+   - the in-scope files modified, the test counts, the reviewer verdict, etc.,
+   - a **pre-filled commit message** (`Fix #<n>` for single-issue runs, `Fix #<n1> #<n2> …` for batches — single line, no body, no `Co-Authored-By` trailer, no "🤖 Generated with …" footer),
+   - a handoff line telling the user how to stage + commit + push the resulting commit themselves. Example:
+     > Review `git diff`, stage the in-scope files (`git add <path> …` — NEVER `-A` / `.`), commit with the message above, then `git push` (the remote branch already exists, so this is a fast-forward — no `-u` needed). Open the PR yourself via the GitHub UI or `gh pr create --base development`.
+   - This is the end of the agent's involvement. **The agent does NOT proceed to push the commit, does NOT open the PR**, unless the user explicitly asks. Typical case: the user handles both.
+
+**If the user does explicitly ask the agent to push or open the PR** (rare; user-initiated only):
+- The agent verifies: current branch is not `development`/`master`, `git log -1` matches the canonical `Fix #<n>…` form, `git status --porcelain` is empty.
+- Then `git push origin <branch>` — NEVER `--force`, NEVER `--force-with-lease`, NEVER `--no-verify`.
+- Then `gh pr create --base development --head <branch> --title "Fix #<n>…" --body-file <pr-body-tmp>` — NEVER `--base master`, NEVER `--draft` unless the user asked.
+
+**Failure modes**:
+- `git push -u origin <branch>` (step 3) fails because the branch already exists on origin → abort, surface to user, do not force.
+- Branch creation requested but the current branch is `development` or `master` AND the user asked for in-place work → REFUSE. Feature work must live on a feature branch first.
+- If the user asks the agent to push a commit and that commit was made by the agent (somehow), refuse and surface the policy violation. The agent's commits are forbidden by construction; if one exists, it is a bug that needs human review.
+
+**Why this split**: the user is the reviewer of record. The commit is the review and the push is the delivery — both are the user's calls. The agent's git involvement is bounded to: (a) create the branch locally + push the empty ref (so the user's push later is frictionless), and (b) leave the rest alone. This was tightened after two failures: first the agent auto-pushed branches to `development` directly, then over-corrected by auto-committing on the user's behalf.
 
 ## Quality rules
 

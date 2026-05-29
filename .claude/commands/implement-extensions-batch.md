@@ -186,14 +186,18 @@ batch-impl-extensions-<dashed-issue-numbers>
 - If more than 4 issues: include the first 4 + `-plus<N-4>` suffix (e.g.
   `batch-impl-extensions-123-180-186-190-plus2` for N=6).
 
-Create:
+Create the local branch AND immediately push the empty ref to `origin`:
+
 ```bash
 git switch -c <branch-name> origin/development
+git push -u origin <branch-name>
 ```
 
-Refuse if the branch already exists locally OR on origin (`git ls-remote
---exit-code origin <branch>`) — ask the user to pick a different batch or delete
-the stale branch.
+The second push is safe: the branch tip equals `origin/development`'s tip, so no commits are pushed — just the ref is created on origin. This is the only push the orchestrator performs by default; it exists so the user's later `git push` of their own commit is a trivial fast-forward with no `-u` setup hassle.
+
+Refuse if the branch already exists locally OR on origin (`git ls-remote --exit-code origin <branch>`) — ask the user to pick a different batch or delete the stale branch.
+
+If `git push -u origin <branch-name>` fails (e.g. no GitHub auth, no write permission), surface the error and continue with the local branch only — the user will set up the remote ref themselves later.
 
 ### 7. Assign every issue to `@me`
 
@@ -327,11 +331,13 @@ step-11 logic from `/implement-extensions`:
 6. Push via `gh issue edit <num> --body-file <tmp-body-file>`.
 7. Re-fetch + diff to verify only the Checklist section changed.
 
-### 14. Final summary
+### 14. Final summary + commit-ready handoff (END OF RUN)
+
+After Phase IS completes, the orchestrator stops. **This is the end of the batch run.** The orchestrator does NOT run `git add`, does NOT run `git commit`, does NOT push the user's commit, does NOT open the PR. Those are entirely the user's job. The agent's git involvement was bounded to step 6 (create branch locally + push empty ref).
 
 Print to the user:
 
-- **Branch**: name + base ref + how to delete-if-aborting.
+- **Branch**: name + base ref. Note that the empty branch was already pushed to `origin/<branch-name>` in step 6, so the user's `git push` of their own commit will be a trivial fast-forward.
 - **Per-file table**:
 
   | File | Stubs impl. | Targeted tests | Reg. sweep impact | Reviewer | Issue |
@@ -340,28 +346,25 @@ Print to the user:
   | `<Foo2>Extensions.cs` | … | … | … | … | … |
 
 - **Branch-wide totals**:
-  - Files modified (sum of production + tests + notes).
+  - Files modified (sum of production + tests + sibling fixtures touched). `.team-notes/` are gitignored and stay local automatically.
   - Full solution test count (e.g. `1082/1082`).
   - Unresolved reviewer findings (if any).
   - Spec-text-only methods flagged separately (grounded in spec prose, not OCL).
-  - Out-of-scope blockers surfaced (e.g. "VerifyComputeX in <Sibling>TestFixture
-    is still stub-blocked on `<UpstreamMethod>` — consider a follow-up issue").
+  - Out-of-scope blockers surfaced.
 
-- **Pre-filled commit message** (MANDATORY — append at the very end of the
-  final-summary message in a fenced code block, ready to copy):
+- **Pre-filled commit message** (MANDATORY — append at the very end of the final-summary message in a fenced code block, ready to copy):
 
   ```
   Fix #<n1> #<n2> #<n3> …
   ```
 
-  Where the numbers are exactly the GitHub issue numbers handled by this
-  batch, in the original `$ARGUMENTS` order (or, if the user expressed a
-  preferred order in the invocation prompt, that order). Nothing else —
-  no body paragraphs, no per-file bullet list, no `Co-Authored-By` trailer,
-  no "🤖 Generated with …" footer. The single line is the entire message.
+  Single line. No body, no `Co-Authored-By` trailer, no "🤖 Generated with …" footer. The numbers are exactly the GitHub issue numbers handled by this batch, in the original `$ARGUMENTS` order (or, if the user expressed a preferred order in the invocation prompt, that order).
 
-- **Reminder**: nothing is auto-committed. User reviews `git diff`, decides
-  whether to commit / push / open PR.
+- **Explicit handoff line** — the orchestrator must include this verbatim at the bottom:
+
+  > Review `git diff`, stage the in-scope files (`git add <path1> <path2> …` — NEVER `-A` / `.`), commit with the message above, then `git push` (the remote branch already exists from step 6, so this is a fast-forward — no `-u` needed). Open the PR yourself via the GitHub UI or `gh pr create --base development`.
+
+After the handoff line, the orchestrator stops. The run is complete. The user may follow up with a separate request (e.g. "rerun the tests", "amend the fix") which the orchestrator serves as a new turn — but the agent does NOT proactively push, PR, or commit. If the user explicitly asks the agent to push or open the PR, the agent does so per the CLAUDE.md "Branch & PR workflow (MANDATORY)" → "If the user does explicitly ask the agent to push or open the PR" subsection.
 
 ## Failure handling
 
@@ -380,6 +383,9 @@ Print to the user:
 | Reviewer NEEDS FIX for one or more files | Step 12 | Re-dispatch THE implementer or THE tester with a focused brief naming the broken file(s); other files' results still reported. |
 | Implementer's context runs out mid-batch | Any IT/V step | Re-dispatch THE implementer with a focused brief covering only the unfinished file(s). Partial progress on disk is preserved. |
 | Batch partially fails after branch + assignment | Any step ≥ 6 | Keep the branch; surface in final summary; user decides whether to retry via `/implement-extensions` for the still-broken single file or revert. |
+| Empty-branch push to origin fails | Step 6 | Surface the error and continue with the local branch only. The user sets up the remote ref themselves later. |
+| User explicitly asks the agent to push their commit and the commit doesn't exist on the current branch | User-initiated push request | Refuse, surface — agent only pushes commits that are already on the branch (which the user made themselves). |
+| User explicitly asks the agent to push and the current branch is `development`/`master` | User-initiated push request | REFUSE — feature work must live on a feature branch first. Surface to the user. |
 
 ## Parallelism caps (orchestrator self-enforced)
 
@@ -407,7 +413,8 @@ context per role.
   mistranslation.
 - The branch and the assignments persist even on partial failure. Be explicit
   in the final summary about which files succeeded vs which need follow-up.
-- Do NOT auto-commit. The user reviews `git diff` and commits manually.
+- **Commit is the user's job** — agent NEVER runs `git commit`, ever. Step 14 (final summary) ends with a pre-filled commit message + handoff line, then the run is over. See `feedback_pr_mandatory.md` and CLAUDE.md "Branch & PR workflow (MANDATORY)".
+- **Push + PR are the user's job too** — the agent does NOT proactively push commits or open PRs. It only performs those if the user explicitly asks in a follow-up turn. The one push the agent does perform by default is the empty-branch push in step 6 (creating the remote ref at the same tip as `origin/development`, so the user's later push of their own commit is a trivial fast-forward).
 - If the user supplies a single file, route them to `/implement-extensions`
   with the same filename rather than creating a degenerate 1-file "batch"
   branch.
