@@ -327,11 +327,61 @@ step-11 logic from `/implement-extensions`:
 6. Push via `gh issue edit <num> --body-file <tmp-body-file>`.
 7. Re-fetch + diff to verify only the Checklist section changed.
 
-### 14. Final summary
+### 14. Phase PR — Commit, push, open PR (MANDATORY)
+
+This phase is non-skippable. Every batch run ends with a pushed branch and an open PR against `development`. See the user-memory rule `feedback_pr_mandatory.md` and the CLAUDE.md "Branch & PR workflow (MANDATORY)" section.
+
+1. **Stage in-scope files EXPLICITLY** — NEVER `git add -A` / `git add .`. Stage only:
+   - the N production files `SysML2.NET/Extend/<Foo>Extensions.cs`,
+   - the N test fixtures `SysML2.NET.Tests/Extend/<Foo>ExtensionsTestFixture.cs`,
+   - any sibling fixtures the regression sweep (step 11) touched.
+
+   ```bash
+   git add SysML2.NET/Extend/<Foo1>Extensions.cs SysML2.NET/Extend/<Foo2>Extensions.cs … \
+           SysML2.NET.Tests/Extend/<Foo1>ExtensionsTestFixture.cs … \
+           <touched-sibling-fixtures>
+   ```
+
+   `.team-notes/` is gitignored so it stays local automatically.
+
+   **If the working tree contains files outside the in-scope list** (e.g. instruction-file updates surfaced mid-run, scratch files), do NOT stage them in this commit. Either split them into a separate follow-up commit on the same branch (recommended) or surface to the user and pause.
+
+2. **Commit** with the canonical batch message — single line, no body, no trailers, no `--no-verify`:
+
+   ```bash
+   git commit -m "Fix #<n1> #<n2> #<n3> …"
+   ```
+
+   The numbers are exactly the GitHub issue numbers handled by this batch, in the original `$ARGUMENTS` order (or, if the user expressed a preferred order in the invocation prompt, that order).
+
+3. **Push** the branch to `origin`:
+
+   ```bash
+   git push -u origin <branch-name>
+   ```
+
+   NEVER `--force`. NEVER `--force-with-lease`. If the push is rejected because the branch diverged from origin (unlikely for a fresh batch branch, but possible if the user pushed manually mid-run), surface the conflict and stop.
+
+4. **Open the PR** against `development`:
+
+   ```bash
+   gh pr create --base development --head <branch-name> \
+       --title "Fix #<n1> #<n2> #<n3> …" \
+       --body-file <pr-body-tmp-file>
+   ```
+
+   The PR body is the per-file table + branch-wide totals from step 15, without the pre-filled-commit-message block (the commit has already been made). NEVER use `--draft` unless the user explicitly asked. NEVER use `--base master`.
+
+5. **Capture the PR URL** from `gh pr create`'s stdout and pass it to step 15.
+
+If the current branch is `development` or `master` at this point (defensive check; should never happen for a batch run), ABORT the workflow — feature work belongs on a feature branch. Surface to the user and do not push.
+
+### 15. Final summary
 
 Print to the user:
 
-- **Branch**: name + base ref + how to delete-if-aborting.
+- **Branch**: name + base ref.
+- **PR**: `<pr-url>` (captured from step 14.5).
 - **Per-file table**:
 
   | File | Stubs impl. | Targeted tests | Reg. sweep impact | Reviewer | Issue |
@@ -340,28 +390,20 @@ Print to the user:
   | `<Foo2>Extensions.cs` | … | … | … | … | … |
 
 - **Branch-wide totals**:
-  - Files modified (sum of production + tests + notes).
+  - Files modified (sum of production + tests + sibling fixtures touched). `.team-notes/` are gitignored and not committed.
   - Full solution test count (e.g. `1082/1082`).
   - Unresolved reviewer findings (if any).
   - Spec-text-only methods flagged separately (grounded in spec prose, not OCL).
   - Out-of-scope blockers surfaced (e.g. "VerifyComputeX in <Sibling>TestFixture
     is still stub-blocked on `<UpstreamMethod>` — consider a follow-up issue").
 
-- **Pre-filled commit message** (MANDATORY — append at the very end of the
-  final-summary message in a fenced code block, ready to copy):
+- **Commit message used** (informational — the commit is already on the branch):
 
   ```
   Fix #<n1> #<n2> #<n3> …
   ```
 
-  Where the numbers are exactly the GitHub issue numbers handled by this
-  batch, in the original `$ARGUMENTS` order (or, if the user expressed a
-  preferred order in the invocation prompt, that order). Nothing else —
-  no body paragraphs, no per-file bullet list, no `Co-Authored-By` trailer,
-  no "🤖 Generated with …" footer. The single line is the entire message.
-
-- **Reminder**: nothing is auto-committed. User reviews `git diff`, decides
-  whether to commit / push / open PR.
+- **PR is the review surface.** The user reviews the PR on GitHub — do not ask them to review `git diff` locally.
 
 ## Failure handling
 
@@ -380,6 +422,10 @@ Print to the user:
 | Reviewer NEEDS FIX for one or more files | Step 12 | Re-dispatch THE implementer or THE tester with a focused brief naming the broken file(s); other files' results still reported. |
 | Implementer's context runs out mid-batch | Any IT/V step | Re-dispatch THE implementer with a focused brief covering only the unfinished file(s). Partial progress on disk is preserved. |
 | Batch partially fails after branch + assignment | Any step ≥ 6 | Keep the branch; surface in final summary; user decides whether to retry via `/implement-extensions` for the still-broken single file or revert. |
+| `git push` rejected (branch diverged from origin) | Phase PR (step 14.3) | Abort the push, surface to user, do NOT force-push. |
+| `gh pr create` fails (no GitHub auth, repo write permission missing) | Phase PR (step 14.4) | Surface the gh error, leave the branch pushed, advise the user to open the PR manually. |
+| Working tree contains files outside the in-scope list at Phase PR | Phase PR (step 14.1) | Refuse to stage them in the `Fix #…` commit. Either split into a separate follow-up commit on the same branch or surface to the user. |
+| Current branch is `development` or `master` at Phase PR | Phase PR (defensive) | ABORT the workflow — feature work belongs on a feature branch. Surface to the user. |
 
 ## Parallelism caps (orchestrator self-enforced)
 
@@ -407,7 +453,7 @@ context per role.
   mistranslation.
 - The branch and the assignments persist even on partial failure. Be explicit
   in the final summary about which files succeeded vs which need follow-up.
-- Do NOT auto-commit. The user reviews `git diff` and commits manually.
+- **Phase PR is MANDATORY** (step 14). Commit + push + open PR at the end of every batch run. The PR is the user's review surface; do NOT ask the user to review `git diff` and commit manually. See `feedback_pr_mandatory.md` and CLAUDE.md "Branch & PR workflow (MANDATORY)".
 - If the user supplies a single file, route them to `/implement-extensions`
   with the same filename rather than creating a degenerate 1-file "batch"
   branch.

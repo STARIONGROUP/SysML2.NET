@@ -142,11 +142,30 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 
 ## Key Conventions
 
-- Commit messages use prefix tags: `[Add]`, `[Update]`, `[Remove]`, `[Fix]`
-- Main branch: `master`. Development branch: `development`
+- Commit messages use prefix tags: `[Add]`, `[Update]`, `[Remove]`, `[Fix]` — except for issue-fixing commits produced by `/implement-extensions` and `/implement-extensions-batch`, which use the canonical short form `Fix #<n>` (single issue) or `Fix #<n1> #<n2> …` (batch) so GitHub auto-closes the issues on merge.
+- Main branch: `master`. Development branch: `development`. **All feature work targets `development`** via PR; `master` is downstream only.
 - CI: GitHub Actions (`CodeQuality.yml`) — builds, tests, and runs SonarQube analysis
 - License: Apache 2.0 (code), LGPL v3.0 (metamodel files)
 - To add a new metaclass: update the UML XMI source files, then run the code generators — do not manually create AutoGen files
+
+## Branch & PR workflow (MANDATORY)
+
+Every branch must be pushed and have an open PR against `development` before any task is reported "done". The PR is the user's review surface — the agent does NOT ask the user to review `git diff` manually before committing. Direct pushes to `development` or `master` are forbidden.
+
+Operationally, at the end of any task that creates a branch (most commonly `/implement-extensions` and `/implement-extensions-batch`):
+
+1. **Stage in-scope files explicitly** — `git add <path1> <path2> …`. NEVER `git add -A` or `git add .` (sensitive files / drift can leak).
+2. **Commit** with the canonical short message: `Fix #<n>` for single-issue runs, `Fix #<n1> #<n2> …` for batches. Single line. No body, no `Co-Authored-By` trailer, no "🤖 Generated with …" footer, no `--no-verify`.
+3. **Push**: `git push -u origin <branch>`. NEVER `--force`, NEVER `--force-with-lease`.
+4. **Open PR**: `gh pr create --base development --head <branch> --title "Fix #<n>…" --body-file <pr-body-tmp>`. Capture the PR URL and surface it in the final summary.
+5. **If the current branch is `development` or `master`**: REFUSE the workflow. Surface to the user — feature work must live on a feature branch first.
+
+Failure modes:
+- `git push` rejected (branch diverged from origin) → abort, surface, do NOT force-push.
+- `gh pr create` fails (no auth, no write permission) → leave the branch pushed, advise the user to open the PR manually.
+- Mid-task non-payload edits (e.g. instruction-file updates surfaced during a batch) → split into separate commits on the same branch so the `Fix #…` commit carries only the issue-resolving payload.
+
+This policy reverses any older slash-command snippet that says "Do NOT auto-commit; the user reviews `git diff` and commits manually" — those snippets have been superseded by Phase PR.
 
 ## Quality rules
 
