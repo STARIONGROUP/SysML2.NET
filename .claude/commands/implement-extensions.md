@@ -380,6 +380,16 @@ Report to the user:
   knows the implementation is grounded in spec prose rather than OCL.
 - **Issue checklist sync**: `<issue-url>` — `<newly-ticked>` newly ticked,
   `<newly-added>` newly added, `<ticked>/<total>` total (filled in after step 11).
+- **Pre-filled commit message** (MANDATORY — append at the very end of the
+  final-summary message in a fenced code block, ready to copy):
+
+  ```
+  Fix #<n>
+  ```
+
+  Where `<n>` is the GitHub issue number handled by this run. Nothing else —
+  no body paragraphs, no per-method bullet list, no `Co-Authored-By` trailer,
+  no "🤖 Generated with …" footer. The single line is the entire message.
 
 Do NOT auto-commit. The user reviews and commits.
 

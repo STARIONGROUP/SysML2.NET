@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -72,10 +73,15 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return analysisCaseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(analysisCaseUsageSubject))
+                : analysisCaseUsageSubject.OwnedRelationship
+                      .OfType<IFeatureTyping>()
+                      .Select(featureTyping => featureTyping.Type)
+                      .OfType<IAnalysisCaseDefinition>()
+                      .FirstOrDefault();
         }
 
         /// <summary>
@@ -99,10 +105,17 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeResultExpression(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (analysisCaseUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(analysisCaseUsageSubject));
+            }
+
+            return analysisCaseUsageSubject.featureMembership
+                .OfType<IResultExpressionMembership>()
+                .FirstOrDefault()
+                ?.ownedResultExpression;
         }
 
     }

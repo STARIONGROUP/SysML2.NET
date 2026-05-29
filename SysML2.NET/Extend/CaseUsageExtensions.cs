@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -80,10 +81,11 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IPartUsage> ComputeActorParameter(this ICaseUsage caseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return caseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(caseUsageSubject))
+                : [..caseUsageSubject.featureMembership.OfType<IActorMembership>().Select(actorMembership => actorMembership.ownedActorParameter)];
         }
 
         /// <summary>
@@ -95,10 +97,15 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static ICaseDefinition ComputeCaseDefinition(this ICaseUsage caseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return caseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(caseUsageSubject))
+                : caseUsageSubject.OwnedRelationship
+                      .OfType<IFeatureTyping>()
+                      .Select(featureTyping => featureTyping.Type)
+                      .OfType<ICaseDefinition>()
+                      .FirstOrDefault();
         }
 
         /// <summary>
@@ -123,10 +130,17 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRequirementUsage ComputeObjectiveRequirement(this ICaseUsage caseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (caseUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(caseUsageSubject));
+            }
+
+            return caseUsageSubject.featureMembership
+                .OfType<IObjectiveMembership>()
+                .FirstOrDefault()
+                ?.ownedObjectiveRequirement;
         }
 
         /// <summary>
@@ -149,10 +163,18 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IUsage ComputeSubjectParameter(this ICaseUsage caseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (caseUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(caseUsageSubject));
+            }
+
+            var subjects = caseUsageSubject.featureMembership.OfType<ISubjectMembership>().ToList();
+
+            return subjects.Count == 0
+                ? null
+                : subjects[0].ownedSubjectParameter;
         }
 
     }
