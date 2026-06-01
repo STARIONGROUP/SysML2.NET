@@ -32,6 +32,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ActorMembershipExtensions"/> class provides extensions methods for
@@ -48,10 +49,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IPartUsage ComputeOwnedActorParameter(this IActorMembership actorMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (actorMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(actorMembershipSubject));
+            }
+
+            return actorMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IPartUsage>(nameof(actorMembershipSubject));
         }
 
     }

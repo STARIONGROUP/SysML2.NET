@@ -76,12 +76,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(verificationCaseUsage.ComputeVerifiedRequirement(), Is.Empty);
 
-            // For Later: populated case depends on IRequirementVerificationMembership.ComputeVerifiedRequirement, which is still a stub.
+            // Populated: a RequirementVerificationMembership inside objectiveRequirement.featureMembership,
+            // carrying a verifiedRequirement RequirementUsage with no ownedReferenceSubsetting →
+            // ComputeVerifiedRequirement falls back to ownedRequirement (the verifiedRequirement itself).
             var requirementVerificationMembership = new RequirementVerificationMembership();
             var verifiedRequirement = new RequirementUsage();
             requirementUsage.AssignOwnership(requirementVerificationMembership, verifiedRequirement);
 
-            Assert.That(() => verificationCaseUsage.ComputeVerifiedRequirement(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(verificationCaseUsage.ComputeVerifiedRequirement(), Is.EqualTo([verifiedRequirement]));
         }
     }
 }

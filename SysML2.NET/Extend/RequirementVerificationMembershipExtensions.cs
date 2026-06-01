@@ -32,6 +32,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RequirementVerificationMembershipExtensions"/> class provides extensions methods for
@@ -48,10 +49,14 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRequirementUsage ComputeOwnedRequirement(this IRequirementVerificationMembership requirementVerificationMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (requirementVerificationMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(requirementVerificationMembershipSubject));
+            }
+
+            return requirementVerificationMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IRequirementUsage>(nameof(requirementVerificationMembershipSubject));
         }
 
         /// <summary>
@@ -63,10 +68,23 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRequirementUsage ComputeVerifiedRequirement(this IRequirementVerificationMembership requirementVerificationMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (requirementVerificationMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(requirementVerificationMembershipSubject));
+            }
+
+            var ownedRequirement = requirementVerificationMembershipSubject.ownedRequirement;
+
+            var referencedFeature = ownedRequirement?.ReferencedFeatureTarget();
+
+            if (referencedFeature == null)
+            {
+                return ownedRequirement;
+            }
+
+            return referencedFeature as IRequirementUsage;
         }
 
     }

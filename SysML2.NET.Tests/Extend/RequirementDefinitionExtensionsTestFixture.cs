@@ -56,13 +56,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(requirementDefinition.ComputeActorParameter(), Is.Empty);
 
-            // Populated case: ActorMembership is present; selecting ownedActorParameter triggers an
-            // upstream stub (ActorMembershipExtensions.ComputeOwnedActorParameter is not yet implemented).
+            // Populated: an ActorMembership carrying a PartUsage → that PartUsage appears in the result.
             var actorMembership = new ActorMembership();
             var actorPartUsage = new PartUsage();
             requirementDefinition.AssignOwnership(actorMembership, actorPartUsage);
 
-            Assert.That(() => requirementDefinition.ComputeActorParameter(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(requirementDefinition.ComputeActorParameter(), Is.EqualTo([actorPartUsage]));
         }
 
         [Test]
@@ -113,13 +112,12 @@ namespace SysML2.NET.Tests.Extend
             // NotSupportedException — identical to the populated stub-blocker case below.
             // The discrimination block is omitted until upstream stubs are implemented.
 
-            // Populated case: FramedConcernMembership is present; selecting ownedConcern triggers an
-            // upstream stub (FramedConcernMembershipExtensions.ComputeOwnedConcern is not yet implemented).
+            // Populated: a FramedConcernMembership carrying a ConcernUsage → that ConcernUsage appears in the result.
             var framedMembership = new FramedConcernMembership();
             var concernUsage = new ConcernUsage();
             requirementDefinition.AssignOwnership(framedMembership, concernUsage);
 
-            Assert.That(() => requirementDefinition.ComputeFramedConcern(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(requirementDefinition.ComputeFramedConcern(), Is.EqualTo([concernUsage]));
         }
 
         [Test]
