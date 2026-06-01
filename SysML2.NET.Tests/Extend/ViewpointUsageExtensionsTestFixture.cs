@@ -76,13 +76,14 @@ namespace SysML2.NET.Tests.Extend
             // Empty: no framedConcern (no FramedConcernMembership in featureMembership) → empty result.
             Assert.That(viewpointUsage.ComputeViewpointStakeholder(), Is.Empty);
 
-            // Populated case: FramedConcernMembership is present; accessing framedConcern calls
-            // FramedConcernMembershipExtensions.ComputeOwnedConcern which is an out-of-scope stub.
+            // Populated: a FramedConcernMembership carrying a bare ConcernUsage (no StakeholderMembership
+            // inside its featureMembership) → the OCL chain framedConcern.featureMembership
+            // .selectByKind(StakeholderMembership).ownedStakeholderParameter projects to empty.
             var framedMembership = new FramedConcernMembership();
             var concernUsage = new ConcernUsage();
             viewpointUsage.AssignOwnership(framedMembership, concernUsage);
 
-            Assert.That(() => viewpointUsage.ComputeViewpointStakeholder(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewpointUsage.ComputeViewpointStakeholder(), Is.Empty);
         }
     }
 }

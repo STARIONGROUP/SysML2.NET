@@ -31,6 +31,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="FramedConcernMembershipExtensions"/> class provides extensions methods for
@@ -47,10 +48,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IConcernUsage ComputeOwnedConcern(this IFramedConcernMembership framedConcernMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (framedConcernMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(framedConcernMembershipSubject));
+            }
+
+            return framedConcernMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IConcernUsage>(nameof(framedConcernMembershipSubject));
         }
 
         /// <summary>
@@ -62,10 +67,23 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IConcernUsage ComputeReferencedConcern(this IFramedConcernMembership framedConcernMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (framedConcernMembershipSubject == null)
+            {
+                throw new ArgumentNullException(nameof(framedConcernMembershipSubject));
+            }
+
+            var ownedConcern = framedConcernMembershipSubject.ownedConcern;
+
+            var referencedFeature = ownedConcern?.ReferencedFeatureTarget();
+
+            if (referencedFeature == null)
+            {
+                return ownedConcern;
+            }
+
+            return referencedFeature as IConcernUsage;
         }
 
     }

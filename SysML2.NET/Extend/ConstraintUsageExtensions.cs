@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -72,10 +73,15 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return constraintUsageSubject == null
+                ? throw new ArgumentNullException(nameof(constraintUsageSubject))
+                : constraintUsageSubject.OwnedRelationship
+                    .OfType<IFeatureTyping>()
+                    .Select(featureTyping => featureTyping.Type)
+                    .OfType<IPredicate>()
+                    .FirstOrDefault();
         }
 
         /// <summary>
@@ -101,10 +107,22 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IConstraintUsage constraintUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (constraintUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(constraintUsageSubject));
+            }
+
+            if (constraintUsageSubject.owningFeatureMembership is IRequirementConstraintMembership
+                && constraintUsageSubject.ownedReferenceSubsetting != null)
+            {
+                return constraintUsageSubject.ownedReferenceSubsetting.ReferencedFeature?.featureTarget;
+            }
+
+            // OCL: self.oclAsType(OccurrenceUsage).namingFeature() — explicit upcast bypass.
+            // OccurrenceUsage does not override Usage::namingFeature, so dispatch resolves to Usage's body.
+            return UsageExtensions.ComputeRedefinedNamingFeatureOperation(constraintUsageSubject);
         }
 
         /// <summary>
@@ -125,10 +143,14 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IConstraintUsage constraintUsageSubject, List<IFeature> visited)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (constraintUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(constraintUsageSubject));
+            }
+
+            return false;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -31,6 +32,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -72,10 +74,24 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IRequirementUsage ComputeSatisfiedRequirement(this ISatisfyRequirementUsage satisfyRequirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (satisfyRequirementUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(satisfyRequirementUsageSubject));
+            }
+
+            // The static-extension call (rather than the POCO-instance assertedConstraint dispatch) is
+            // correct AND safe for three independent reasons:
+            // (1) Spec equivalence: "the assertedConstraint of the SatisfyRequirementUsage considered as
+            //     an AssertConstraintUsage" — the phrase "considered as" is the prose-equivalent of
+            //     oclAsType(AssertConstraintUsage), triggering the CLAUDE.md static-extension exception.
+            // (2) Leaf metaclass: SatisfyRequirementUsage has no subclasses (verified in AutoGenPoco),
+            //     so there is no redefinition for virtual dispatch to honour — bypass is observation-safe.
+            // (3) Recursion avoidance: subject.assertedConstraint dispatches via the explicit interface
+            //     implementation IAssertConstraintUsage.assertedConstraint => satisfiedRequirement, which
+            //     would re-enter this method and infinite-loop.
+            return AssertConstraintUsageExtensions.ComputeAssertedConstraint(satisfyRequirementUsageSubject) as IRequirementUsage;
         }
 
         /// <summary>
@@ -101,10 +117,29 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeSatisfyingFeature(this ISatisfyRequirementUsage satisfyRequirementUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (satisfyRequirementUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(satisfyRequirementUsageSubject));
+            }
+
+            var subjectParameter = satisfyRequirementUsageSubject.subjectParameter;
+
+            var bindings = satisfyRequirementUsageSubject.ownedMember
+                .OfType<IBindingConnector>()
+                .Where(bindingConnector => bindingConnector.relatedElement.Contains(subjectParameter))
+                .ToList();
+
+            if (bindings.Count == 0)
+            {
+                return null;
+            }
+
+            // OCL: bindings->first().relatedElement->any(r | r <> subjectParameter) — i.e. return the first
+            // related element other than subjectParameter (or null when none exists, matching the OCL "exits"
+            // typo — semantically "no other element exists" → null).
+            return bindings[0].relatedElement.FirstOrDefault(relatedElement => !ReferenceEquals(relatedElement, subjectParameter)) as IFeature;
         }
 
     }

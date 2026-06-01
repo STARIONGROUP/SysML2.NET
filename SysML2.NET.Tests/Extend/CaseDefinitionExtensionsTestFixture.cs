@@ -50,12 +50,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(caseDefinition.ComputeActorParameter(), Is.Empty);
 
-            // For Later: populated case depends on IActorMembership.ComputeOwnedActorParameter, which is still a stub.
+            // Populated: an ActorMembership carrying a PartUsage → that PartUsage appears in the result.
             var actorMembership = new ActorMembership();
             var actorPartUsage = new PartUsage();
             caseDefinition.AssignOwnership(actorMembership, actorPartUsage);
 
-            Assert.That(() => caseDefinition.ComputeActorParameter(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(caseDefinition.ComputeActorParameter(), Is.EqualTo([actorPartUsage]));
         }
 
         [Test]

@@ -83,10 +83,21 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IConstraintUsage ComputeAssertedConstraint(this IAssertConstraintUsage assertConstraintUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (assertConstraintUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(assertConstraintUsageSubject));
+            }
+
+            var referencedFeature = assertConstraintUsageSubject.ReferencedFeatureTarget();
+
+            if (referencedFeature == null)
+            {
+                return assertConstraintUsageSubject;
+            }
+
+            return referencedFeature as IConstraintUsage;
         }
 
     }
