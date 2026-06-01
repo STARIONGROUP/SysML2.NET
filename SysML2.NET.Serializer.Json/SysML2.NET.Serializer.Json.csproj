@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>12.0</LangVersion>
-        <Version>0.20.0</Version>
+        <Version>0.21.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 JSON serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Json</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -14,8 +14,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] to SysML2.NET.Extensions version 0.20.0
-            [Update] System.Text.Json to vesion 10.0.5
+            [Update] to SysML2.NET.Extensions version 0.21.0
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
