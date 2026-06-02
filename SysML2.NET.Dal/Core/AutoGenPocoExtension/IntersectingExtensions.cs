@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.IntersectingType, out lazyPoco))
             {
-                poco.IntersectingType = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.IntersectingType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {

@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.DifferencingType, out lazyPoco))
             {
-                poco.DifferencingType = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.DifferencingType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {

@@ -176,7 +176,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.ReferencedFeature, out lazyPoco))
             {
-                poco.ReferencedFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.ReferencedFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {

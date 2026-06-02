@@ -176,7 +176,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.Subclassifier, out lazyPoco))
             {
-                poco.Subclassifier = (Core.POCO.Core.Classifiers.Classifier)lazyPoco.Value;
+                poco.Subclassifier = (Core.POCO.Core.Classifiers.IClassifier)lazyPoco.Value;
             }
             else
             {
@@ -185,7 +185,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.Superclassifier, out lazyPoco))
             {
-                poco.Superclassifier = (Core.POCO.Core.Classifiers.Classifier)lazyPoco.Value;
+                poco.Superclassifier = (Core.POCO.Core.Classifiers.IClassifier)lazyPoco.Value;
             }
             else
             {

@@ -144,7 +144,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.ImportedMembership, out lazyPoco))
             {
-                poco.ImportedMembership = (Core.POCO.Root.Namespaces.Membership)lazyPoco.Value;
+                poco.ImportedMembership = (Core.POCO.Root.Namespaces.IMembership)lazyPoco.Value;
             }
             else
             {

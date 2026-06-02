@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.DisjoiningType, out lazyPoco))
             {
-                poco.DisjoiningType = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.DisjoiningType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {
@@ -185,7 +185,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.TypeDisjoined, out lazyPoco))
             {
-                poco.TypeDisjoined = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.TypeDisjoined = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {
