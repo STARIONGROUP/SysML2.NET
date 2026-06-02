@@ -176,7 +176,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.SubsettedFeature, out lazyPoco))
             {
-                poco.SubsettedFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.SubsettedFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {
@@ -185,7 +185,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.SubsettingFeature, out lazyPoco))
             {
-                poco.SubsettingFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.SubsettingFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {

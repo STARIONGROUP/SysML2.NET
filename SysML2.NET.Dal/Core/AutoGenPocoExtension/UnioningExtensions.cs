@@ -176,7 +176,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.UnioningType, out lazyPoco))
             {
-                poco.UnioningType = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.UnioningType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {

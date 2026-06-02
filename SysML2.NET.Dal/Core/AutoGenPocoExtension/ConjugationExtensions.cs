@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.ConjugatedType, out lazyPoco))
             {
-                poco.ConjugatedType = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.ConjugatedType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {
@@ -147,7 +147,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.OriginalType, out lazyPoco))
             {
-                poco.OriginalType = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.OriginalType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {

@@ -144,7 +144,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.ImportedNamespace, out lazyPoco))
             {
-                poco.ImportedNamespace = (Core.POCO.Root.Namespaces.Namespace)lazyPoco.Value;
+                poco.ImportedNamespace = (Core.POCO.Root.Namespaces.INamespace)lazyPoco.Value;
             }
             else
             {

@@ -176,7 +176,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.RedefinedFeature, out lazyPoco))
             {
-                poco.RedefinedFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.RedefinedFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {
@@ -185,7 +185,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.RedefiningFeature, out lazyPoco))
             {
-                poco.RedefiningFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.RedefiningFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {

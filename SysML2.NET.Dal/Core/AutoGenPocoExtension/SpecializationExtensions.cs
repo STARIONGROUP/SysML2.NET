@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.General, out lazyPoco))
             {
-                poco.General = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.General = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {
@@ -185,7 +185,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.Specific, out lazyPoco))
             {
-                poco.Specific = (Core.POCO.Core.Types.Type)lazyPoco.Value;
+                poco.Specific = (Core.POCO.Core.Types.IType)lazyPoco.Value;
             }
             else
             {

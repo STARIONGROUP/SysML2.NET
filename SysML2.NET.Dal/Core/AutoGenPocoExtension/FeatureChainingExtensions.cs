@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.ChainingFeature, out lazyPoco))
             {
-                poco.ChainingFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.ChainingFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {

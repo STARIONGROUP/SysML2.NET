@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.ConjugatedPortDefinition, out lazyPoco))
             {
-                poco.ConjugatedPortDefinition = (Core.POCO.Systems.Ports.ConjugatedPortDefinition)lazyPoco.Value;
+                poco.ConjugatedPortDefinition = (Core.POCO.Systems.Ports.IConjugatedPortDefinition)lazyPoco.Value;
             }
             else
             {
@@ -185,7 +185,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.TypedFeature, out lazyPoco))
             {
-                poco.TypedFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.TypedFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {

@@ -138,7 +138,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.FeatureInverted, out lazyPoco))
             {
-                poco.FeatureInverted = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.FeatureInverted = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {
@@ -147,7 +147,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.InvertingFeature, out lazyPoco))
             {
-                poco.InvertingFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
+                poco.InvertingFeature = (Core.POCO.Core.Features.IFeature)lazyPoco.Value;
             }
             else
             {
