@@ -447,6 +447,26 @@ When the generator detects an unsupported rule shape it emits a delegating call:
 Build{RuleName}HandCoded(poco, writerContext, stringBuilder);
 ```
 
+### 13.1 Polymorphic `ownedMemberFeature` access on `IFeatureMembership`
+
+Independent of the per-rule fallback, the generator transparently normalises the two runtime shapes an `IFeatureMembership` can take whenever a rule body accesses the `ownedMemberFeature` scalar property:
+
+- **Pure `IFeatureMembership` shape** — `membership.ownedMemberFeature` is directly the target feature (typically the rule's expected `IExpression` subtype). This matches the parser-direction production literally (e.g. `SequenceExpressionListMember : FeatureMembership = ownedMemberFeature = SequenceExpressionList`).
+- **`IParameterMembership` shape** — used to model the operands of every `InvocationExpression` / `OperatorExpression` per KerML §8.2.5.8.2 Notes 1-2 (`Resources/KerML-textual-bnf.kebnf:1176-1178`, "primary expressions provide additional shorthand notations for certain kinds of InvocationExpressions"). Here `ownedMemberFeature` is the parameter `Feature`; the operand expression lives one level deeper, under that feature's `FeatureValue.value`.
+
+Because `IParameterMembership : IFeatureMembership`, both shapes pass the rule's `is IFeatureMembership` test but produce structurally different `ownedMemberFeature` trees. The literal codegen produced by `RuleProcessor.ProcessAssignmentElement` would emit `poco.ownedMemberFeature is IExpression …` — a check that silently fails on the parameter-membership shape, dropping the operand.
+
+To avoid this, `RuleProcessor.ProcessAssignmentElement` (`SysML2.NET.CodeGenerator/HandleBarHelpers/RuleProcessor.ElementProcessing.cs`) detects the case `targetProperty.Name == "ownedMemberFeature"` AND `umlClass` IS-A `FeatureMembership`, and emits a local-variable declaration at the access point:
+
+```csharp
+var effectiveOwnedMemberFeature = SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
+if (effectiveOwnedMemberFeature is IExpectedExpressionType …) { … }
+```
+
+`SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature` (`SysML2.NET.Serializer.TextualNotation/Writers/SharedTextualNotationBuilder.cs`) handles the polymorphism: for an `IParameterMembership` it unwraps `ownedMemberFeature.OwnedRelationship.OfType<IFeatureValue>().value`; for the pure shape it returns `ownedMemberFeature` as-is. Downstream type tests in the generated code are unchanged.
+
+This is a structural fix — not a per-rule allowlist — so every current and future rule whose body accesses `ownedMemberFeature` (`SequenceExpressionListMember`, `OwnedExpressionMember`, `FunctionReferenceMember`, `BodyArgumentMember`, etc.) is corrected uniformly.
+
 The hand-coded partial must:
 
 1. Live in `SysML2.NET.Serializer.TextualNotation/Writers/{ClassName}TextualNotationBuilder.cs` — the file **next to** (not inside) `AutoGenTextualNotationBuilder/`.

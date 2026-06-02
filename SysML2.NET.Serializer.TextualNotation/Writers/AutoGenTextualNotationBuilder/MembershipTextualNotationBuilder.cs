@@ -136,12 +136,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.MemberElement != null)
             {
-
-                if (poco.MemberElement is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
-                {
-                    FeatureTextualNotationBuilder.BuildFeatureReference(elementAsFeature, writerContext, stringBuilder);
-                }
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext, poco);
+                stringBuilder.Append(' ');
             }
+
 
         }
 
@@ -176,10 +174,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (poco.MemberElement != null)
             {
 
-                if (poco.MemberElement is SysML2.NET.Core.POCO.Core.Types.IType elementAsType)
+                if (poco.MemberElement != null)
                 {
-                    TypeTextualNotationBuilder.BuildInstantiatedTypeReference(elementAsType, writerContext, stringBuilder);
+                    SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext, poco);
+                    stringBuilder.Append(' ');
                 }
+
             }
             else
             {

@@ -177,9 +177,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <see cref="IExpression" /> POCO; this method simply emits it as a string.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IExpression" /> that holds the real value expression</param>
-        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="_">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildRealValueHandCoded(IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildRealValueHandCoded(IExpression poco, TextualNotationWriterContext _, StringBuilder stringBuilder)
         {
             if (poco is ILiteralRational literalRational)
             {
@@ -638,6 +638,43 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             stringBuilder.Append(writerContext.NameResolutionCache.Resolve(target, sourcePoco));
+        }
+
+        /// <summary>
+        /// Returns the effective <c>ownedMemberFeature</c> of <paramref name="membership"/>,
+        /// normalising the two runtime shapes a <see cref="IFeatureMembership"/> can take.
+        /// <para>
+        /// The pure-<see cref="IFeatureMembership"/> shape stores the feature directly:
+        /// <c>membership.ownedMemberFeature</c> IS the target feature (typically an
+        /// <see cref="IExpression"/>) and is returned as-is. The <see cref="IParameterMembership"/>
+        /// shape — used to model operands of every <c>InvocationExpression</c> /
+        /// <c>OperatorExpression</c> per KerML §8.2.5.8.2 Notes 1-2
+        /// (<c>Resources/KerML-textual-bnf.kebnf:1176-1178</c>) — stores a parameter
+        /// <c>Feature</c> in <c>ownedMemberFeature</c> and carries the operand expression one
+        /// level deeper, under that feature's <c>FeatureValue.value</c>. This helper transparently
+        /// unwraps that extra indirection so every code-generated builder that consumes
+        /// <c>ownedMemberFeature</c> works uniformly against either shape.
+        /// </para>
+        /// <para>Falls back to the direct <c>ownedMemberFeature</c> when the inner unwrap fails
+        /// (missing or non-feature value), so behaviour is never worse than the literal access.</para>
+        /// </summary>
+        /// <param name="membership">The feature membership; may be <see langword="null"/>.</param>
+        /// <returns>The effective feature, or <see langword="null"/> when none is available.</returns>
+        internal static IFeature QueryEffectiveOwnedMemberFeature(IFeatureMembership membership)
+        {
+            var direct = membership?.ownedMemberFeature;
+
+            if (membership is IParameterMembership && direct != null)
+            {
+                var featureValue = direct.OwnedRelationship.OfType<IFeatureValue>().FirstOrDefault();
+
+                if (featureValue?.value is IFeature wrappedExpression)
+                {
+                    return wrappedExpression;
+                }
+            }
+
+            return direct;
         }
     }
 }

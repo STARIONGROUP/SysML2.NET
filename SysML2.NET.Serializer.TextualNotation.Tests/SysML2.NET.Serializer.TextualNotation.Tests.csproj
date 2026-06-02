@@ -36,6 +36,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SysML2.NET.Dal\SysML2.NET.Dal.csproj" />
+        <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
         <ProjectReference Include="..\SysML2.NET.Serializer.TextualNotation\SysML2.NET.Serializer.TextualNotation.csproj" />
         <ProjectReference Include="..\SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj" />
     </ItemGroup>
@@ -47,6 +49,18 @@
         <Content Include="..\SysML2.NET.Serializer.Xmi.Tests\Resources\**\*.kermlx" Link="Resources\%(RecursiveDir)%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Validation\01-Parts Tree\1d-Parts Tree with Reference.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\01-Parts Tree\1a-Parts Tree.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\01-Parts Tree\1c-Parts Tree Redefinition.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
