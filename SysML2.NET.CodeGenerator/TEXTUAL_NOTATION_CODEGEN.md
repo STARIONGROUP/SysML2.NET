@@ -447,6 +447,26 @@ When the generator detects an unsupported rule shape it emits a delegating call:
 Build{RuleName}HandCoded(poco, writerContext, stringBuilder);
 ```
 
+### 13.1 Polymorphic `ownedMemberFeature` access on `IFeatureMembership`
+
+Independent of the per-rule fallback, the generator transparently normalises the two runtime shapes an `IFeatureMembership` can take whenever a rule body accesses the `ownedMemberFeature` scalar property:
+
+- **Pure `IFeatureMembership` shape** — `membership.ownedMemberFeature` is directly the target feature (typically the rule's expected `IExpression` subtype). This matches the parser-direction production literally (e.g. `SequenceExpressionListMember : FeatureMembership = ownedMemberFeature = SequenceExpressionList`).
+- **`IParameterMembership` shape** — used to model the operands of every `InvocationExpression` / `OperatorExpression` per KerML §8.2.5.8.2 Notes 1-2 (`Resources/KerML-textual-bnf.kebnf:1176-1178`, "primary expressions provide additional shorthand notations for certain kinds of InvocationExpressions"). Here `ownedMemberFeature` is the parameter `Feature`; the operand expression lives one level deeper, under that feature's `FeatureValue.value`.
+
+Because `IParameterMembership : IFeatureMembership`, both shapes pass the rule's `is IFeatureMembership` test but produce structurally different `ownedMemberFeature` trees. The literal codegen produced by `RuleProcessor.ProcessAssignmentElement` would emit `poco.ownedMemberFeature is IExpression …` — a check that silently fails on the parameter-membership shape, dropping the operand.
+
+To avoid this, `RuleProcessor.ProcessAssignmentElement` (`SysML2.NET.CodeGenerator/HandleBarHelpers/RuleProcessor.ElementProcessing.cs`) detects the case `targetProperty.Name == "ownedMemberFeature"` AND `umlClass` IS-A `FeatureMembership`, and emits a local-variable declaration at the access point:
+
+```csharp
+var effectiveOwnedMemberFeature = SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
+if (effectiveOwnedMemberFeature is IExpectedExpressionType …) { … }
+```
+
+`SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature` (`SysML2.NET.Serializer.TextualNotation/Writers/SharedTextualNotationBuilder.cs`) handles the polymorphism: for an `IParameterMembership` it unwraps `ownedMemberFeature.OwnedRelationship.OfType<IFeatureValue>().value`; for the pure shape it returns `ownedMemberFeature` as-is. Downstream type tests in the generated code are unchanged.
+
+This is a structural fix — not a per-rule allowlist — so every current and future rule whose body accesses `ownedMemberFeature` (`SequenceExpressionListMember`, `OwnedExpressionMember`, `FunctionReferenceMember`, `BodyArgumentMember`, etc.) is corrected uniformly.
+
 The hand-coded partial must:
 
 1. Live in `SysML2.NET.Serializer.TextualNotation/Writers/{ClassName}TextualNotationBuilder.cs` — the file **next to** (not inside) `AutoGenTextualNotationBuilder/`.
@@ -459,7 +479,7 @@ Every hand-coded implementation must be reviewed against the same four invariant
 
 1. **Cursor advancement (§7)** — exactly one `Move()` per `+=` processed; never a `Move()` after a callee that already advanced the cursor.
 2. **Quantifier semantics (§12)** — `?` is a single `if`, `*` is a `while` that may execute zero times, `+` is one unconditional emission followed by the same `while`.
-3. **Type discriminator correctness (§9)** — the value pattern-matched in a `switch` must be the *actual* element on the cursor (e.g. an `ISpecialization` directly, not the `IOwningMembership` wrapping it).
+3. **Type discriminator correctness (§9)** — the value pattern-matched in a `switch` must be the *actual* element on the cursor (e.g. an `ISpecialization` directly, not the `IOwningMembership` wrapping it). The optional-group guard generator now applies this invariant automatically: when an assignment's referenced rule is a "thin owning wrapper" of shape `: OwningMembership = ownedRelatedElement += T`, the emitter narrows the bare `cursor.Current is IOwningMembership` to `(cursor.Current is IOwningMembership om && om.OwnedRelatedElement.OfType<IT>().Any())` so a sibling `EndFeatureMembership` (also `IOwningMembership`) cannot spuriously satisfy the guard. The canonical case is `OwnedMultiplicity : OwningMembership = ownedRelatedElement += MultiplicityRange`; the narrowing was added after `BuildBindingConnectorAsUsage` was found emitting a spurious `binding ` prefix because its first ownedRelationship (an `EndFeatureMembership`) was passing `is IOwningMembership`.
 4. **Grammar fidelity** — the element order, alternatives, and target metaclass of the hand-coded method must match the KEBNF rule verbatim.
 
 Bugs in any of these four areas were the dominant source of regressions during the migration from purely hand-coded builders to the generator-first approach, and they remain the costliest to diagnose because they fail silently rather than throwing.

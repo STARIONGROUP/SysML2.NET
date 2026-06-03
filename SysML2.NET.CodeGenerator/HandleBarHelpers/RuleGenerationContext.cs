@@ -107,6 +107,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         public string PendingCursorMove { get; set; }
 
         /// <summary>
+        /// Monotonically-incrementing counter used to produce unique narrowed-type-check pattern
+        /// variable names (e.g. <c>owningMembership0</c>, <c>owningMembership1</c>) across the
+        /// emission of a single rule body. Required because C# pattern-matching variables share
+        /// the enclosing method scope, so emitting more than one
+        /// <c>is IOwningMembership owningMembership</c> in distinct guards of the same generated
+        /// method would collide (CS0136). Incremented by the narrowed-type-check emitter.
+        /// </summary>
+        public int NarrowedTypeCheckCounter { get; set; }
+
+        /// <summary>
         /// Determines whether the next sibling element is a terminal that uses <c>AppendLine</c>
         /// (e.g., <c>{</c>, <c>}</c>, <c>;</c>), in which case a trailing space would be unnecessary.
         /// </summary>

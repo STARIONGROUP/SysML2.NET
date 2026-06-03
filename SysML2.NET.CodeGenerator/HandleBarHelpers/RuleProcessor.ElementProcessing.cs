@@ -198,13 +198,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             else
                             {
                                 var handCodedRuleName = groupElement.TextualNotationRule?.RuleName ?? "Unknown";
-                                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                             }
                         }
                         else
                         {
                             var handCodedRuleName = groupElement.TextualNotationRule?.RuleName ?? "Unknown";
-                            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                         }
                     }
                     else
@@ -237,7 +237,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         var handCodedRuleName = textualRuleElement.TextualNotationRule?.RuleName ?? "Unknown";
-                        this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                        EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                     }
 
                     break;
@@ -313,7 +313,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
-                        this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                        EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                     }
                 }
                 else
@@ -396,7 +396,47 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 {
                                     var previousCaller = ruleGenerationContext.CallerRule;
                                     ruleGenerationContext.CallerRule = nonTerminalElement;
-                                    ruleGenerationContext.CurrentVariableName = $"poco.{targetPropertyName}";
+
+                                    // Thin `[QualifiedName]` wrapper inlining: when the referenced rule's body is
+                                    // just `[QualifiedName]` (e.g. FeatureReference, InstantiatedTypeReference) the
+                                    // generated `Build{Wrapper}` method receives the target POCO as both target AND
+                                    // source for name resolution, which loses the reference site. Inline the
+                                    // AppendQualifiedName call here with the OUTER `poco` as the source context so
+                                    // imports declared in the source's enclosing namespace can resolve to the
+                                    // short / unqualified name.
+                                    var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+
+                                    if (IsThinQualifiedNameWrapperRule(referencedRule))
+                                    {
+                                        writer.WriteSafeString($"{Environment.NewLine}if (poco.{targetPropertyName} != null){Environment.NewLine}{{{Environment.NewLine}");
+                                        writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.{targetPropertyName}, writerContext, poco);{Environment.NewLine}");
+                                        writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+                                        writer.WriteSafeString($"}}{Environment.NewLine}");
+                                        ruleGenerationContext.CallerRule = previousCaller;
+                                        break;
+                                    }
+
+                                    // Polymorphic `ownedMemberFeature` access on IFeatureMembership: the runtime
+                                    // POCO may also be an IParameterMembership (the form used to model operands
+                                    // of every InvocationExpression / OperatorExpression per KerML §8.2.5.8.2
+                                    // Notes 1-2 — see Resources/KerML-textual-bnf.kebnf:1176-1178). In that
+                                    // shape the operand expression lives under ownedMemberFeature → FeatureValue
+                                    // → value rather than directly under ownedMemberFeature. Route the access
+                                    // through SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature
+                                    // which transparently normalises both runtime shapes into a single feature
+                                    // reference downstream code can type-test as before.
+                                    if (string.Equals(targetProperty.Name, "ownedMemberFeature", StringComparison.Ordinal)
+                                        && QueryIsAssignableToFeatureMembership(umlClass))
+                                    {
+                                        const string effectiveVariableName = "effectiveOwnedMemberFeature";
+                                        writer.WriteSafeString($"var {effectiveVariableName} = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);{Environment.NewLine}");
+                                        ruleGenerationContext.CurrentVariableName = effectiveVariableName;
+                                    }
+                                    else
+                                    {
+                                        ruleGenerationContext.CurrentVariableName = $"poco.{targetPropertyName}";
+                                    }
+
                                     this.ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, ruleGenerationContext, isPartOfMultipleAlternative);
                                     ruleGenerationContext.CurrentVariableName = "poco";
                                     ruleGenerationContext.CallerRule = previousCaller;
@@ -429,7 +469,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     break;
                                 default:
                                     var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
-                                    this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                                    EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                                     break;
                             }
                         }
@@ -448,7 +488,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 // Delegate to the HandCoded sibling per the documented convention rather
                 // than emitting a name-collision-prone `Build{Property}(poco, …)` call.
                 var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
         }
 
@@ -521,7 +561,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             writer.WriteSafeString($"{{{Environment.NewLine}");
                         }
 
-                        var emittedCondition = this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, targetClass, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
+                        var emittedCondition = TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, targetClass, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
 
                         writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);");
 
@@ -556,7 +596,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     if (NoTargetRuleResolver.IsSharedRule(referencedRule, umlClass))
                     {
-                        this.EmitSharedNoTargetRuleCall(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext);
+                        EmitSharedNoTargetRuleCall(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext);
                     }
                     else
                     {
@@ -574,7 +614,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 var variableToUse = referencedRule != null ? ruleGenerationContext.CurrentVariableName : "poco";
 
-                var emittedSameClassCondition = this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, umlClass, ruleGenerationContext, variableToUse);
+                var emittedSameClassCondition = TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, umlClass, ruleGenerationContext, variableToUse);
 
                 writer.WriteSafeString($"Build{nonTerminalElement.Name}({variableToUse}, writerContext, stringBuilder);");
 
@@ -652,7 +692,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="nonTerminalElement">The <see cref="NonTerminalElement" /> being processed</param>
         /// <param name="referencedRule">The referenced shared no-target <see cref="TextualNotationRule" /></param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        private void EmitSharedNoTargetRuleCall(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, RuleGenerationContext ruleGenerationContext)
+        private static void EmitSharedNoTargetRuleCall(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, RuleGenerationContext ruleGenerationContext)
         {
             var effectiveTarget = NoTargetRuleResolver.ResolveEffectiveTarget(referencedRule, ruleGenerationContext.AllRules, umlClass);
 
@@ -668,7 +708,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             var emittedCondition = effectiveTarget != null
-                                   && this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, effectiveTarget, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
+                                   && TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, effectiveTarget, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
 
             writer.WriteSafeString($"{RulesHelper.SharedBuilderClassName}.Build{nonTerminalElement.Name}({variableExpression}, writerContext, stringBuilder);");
 
@@ -676,6 +716,61 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 writer.WriteSafeString($"{Environment.NewLine}}}");
             }
+        }
+
+        /// <summary>
+        /// Returns <see langword="true"/> when <paramref name="umlClass"/> IS-A
+        /// <c>FeatureMembership</c> — used to gate the polymorphic <c>ownedMemberFeature</c>
+        /// access path that normalises pure <c>IFeatureMembership</c> and
+        /// <c>IParameterMembership</c> runtime shapes.
+        /// </summary>
+        /// <param name="umlClass">The <see cref="IClass"/> under test.</param>
+        /// <returns><see langword="true"/> if the class IS-A FeatureMembership.</returns>
+        private static bool QueryIsAssignableToFeatureMembership(IClass umlClass)
+        {
+            if (umlClass == null)
+            {
+                return false;
+            }
+
+            return string.Equals(umlClass.Name, "FeatureMembership", StringComparison.Ordinal)
+                   || umlClass.QueryAllGeneralClassifiers().Any(c => string.Equals(c.Name, "FeatureMembership", StringComparison.Ordinal));
+        }
+
+        /// <summary>
+        /// Returns <see langword="true"/> when <paramref name="rule"/> is a "thin
+        /// <c>[QualifiedName]</c> wrapper" — i.e. its body is a single alternative containing a
+        /// single element that is a <c>[QualifiedName]</c> resolution. Examples in the KerML
+        /// grammar (<c>Resources/KerML-textual-bnf.kebnf</c>): <c>FeatureReference : Feature =
+        /// [QualifiedName]</c> (line 1201) and <c>InstantiatedTypeReference : Type =
+        /// [QualifiedName]</c> (line 1229).
+        /// <para>
+        /// When a caller-rule's assignment-element references such a wrapper as its value, the
+        /// generated <c>Build{Wrapper}</c> method receives the target as both target AND source
+        /// for name resolution, which loses the syntactic reference site (the caller's
+        /// <c>poco</c>) needed to honour imports declared in the source's enclosing scope chain.
+        /// The codegen inlines the <c>AppendQualifiedName</c> call at the caller's emission point
+        /// instead so the OUTER <c>poco</c> serves as the resolution source.
+        /// </para>
+        /// </summary>
+        /// <param name="rule">The <see cref="TextualNotationRule"/> under test; may be <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if the rule is a thin <c>[QualifiedName]</c> wrapper.</returns>
+        private static bool IsThinQualifiedNameWrapperRule(TextualNotationRule rule)
+        {
+            if (rule == null || rule.Alternatives.Count != 1)
+            {
+                return false;
+            }
+
+            var alternative = rule.Alternatives[0];
+
+            if (alternative.Elements.Count != 1)
+            {
+                return false;
+            }
+
+            return alternative.Elements[0] is ValueLiteralElement valueLiteralElement
+                   && valueLiteralElement.QueryIsQualifiedName();
         }
     }
 }

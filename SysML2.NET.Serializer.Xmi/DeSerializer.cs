@@ -60,7 +60,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <summary>
         /// The injected <see cref="IExternalReferenceService" /> providing external reference file resolve
         /// </summary>
-        private readonly ExternalReferenceService externalReferenceService;
+        private readonly IExternalReferenceService externalReferenceService;
 
         /// <summary>
         /// The injected <see cref="IXmiDataReaderFacade" /> providing <see cref="XmiDataReader{TData}" /> resolve feature based on XMI row type
@@ -70,13 +70,30 @@ namespace SysML2.NET.Serializer.Xmi
         /// <summary>Initializes a new instance of the <see cref="DeSerializer"></see> class.</summary>
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory " /> used to set up logging</param>
         public DeSerializer(ILoggerFactory loggerFactory)
+            : this(loggerFactory, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeSerializer" /> class with a caller-supplied
+        /// <see cref="IExternalReferenceService" />. Use this overload to override how
+        /// <c>href="..."</c> values are resolved against the deserialized file's location
+        /// (for example to redirect references away from their original on-disk layout).
+        /// </summary>
+        /// <param name="loggerFactory">The injected <see cref="ILoggerFactory " /> used to set up logging</param>
+        /// <param name="externalReferenceService">
+        /// The <see cref="IExternalReferenceService" /> used to register and resolve external <c>href</c>
+        /// references. When <see langword="null" />, a default <see cref="ExternalReferenceService" /> is created.
+        /// </param>
+        public DeSerializer(ILoggerFactory loggerFactory, IExternalReferenceService externalReferenceService)
         {
             this.loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             this.logger = this.loggerFactory.CreateLogger<DeSerializer>();
-            
-            this.externalReferenceService = new ExternalReferenceService(this.loggerFactory.CreateLogger<ExternalReferenceService>());
+
+            this.externalReferenceService = externalReferenceService
+                                            ?? new ExternalReferenceService(this.loggerFactory.CreateLogger<ExternalReferenceService>());
             this.cache = new XmiDataCache(new PocoReferenceResolveExtensionsFacade(), this.loggerFactory.CreateLogger<XmiDataCache>());
-            
+
             this.xmiDataReaderFacade = new XmiDataReaderFacade();
         }
 

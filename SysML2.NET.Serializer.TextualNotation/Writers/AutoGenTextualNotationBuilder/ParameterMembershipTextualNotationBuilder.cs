@@ -300,11 +300,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeReferenceMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-
-            if (poco.ownedMemberFeature != null)
-            {
-                FeatureTextualNotationBuilder.BuildTypeReference(poco.ownedMemberFeature, writerContext, stringBuilder);
-            }
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
+            FeatureTextualNotationBuilder.BuildTypeReference(effectiveOwnedMemberFeature, writerContext, stringBuilder);
 
         }
 

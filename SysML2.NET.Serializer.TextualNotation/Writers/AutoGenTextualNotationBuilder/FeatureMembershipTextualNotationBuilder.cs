@@ -468,14 +468,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
-            if (poco.ownedMemberFeature != null)
+            if (effectiveOwnedMemberFeature is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
             {
-
-                if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
-                {
-                    ReferenceUsageTextualNotationBuilder.BuildMetadataBodyUsage(elementAsReferenceUsage, writerContext, stringBuilder);
-                }
+                ReferenceUsageTextualNotationBuilder.BuildMetadataBodyUsage(elementAsReferenceUsage, writerContext, stringBuilder);
             }
 
         }
@@ -551,14 +548,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSequenceExpressionListMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
-            if (poco.ownedMemberFeature != null)
+            if (effectiveOwnedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
             {
-
-                if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
-                {
-                    ExpressionTextualNotationBuilder.BuildSequenceExpressionList(elementAsExpression, writerContext, stringBuilder);
-                }
+                ExpressionTextualNotationBuilder.BuildSequenceExpressionList(elementAsExpression, writerContext, stringBuilder);
             }
 
         }
@@ -572,14 +566,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFunctionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
-            if (poco.ownedMemberFeature != null)
+            if (effectiveOwnedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
             {
-
-                if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
-                {
-                    ExpressionTextualNotationBuilder.BuildFunctionReference(elementAsExpression, writerContext, stringBuilder);
-                }
+                ExpressionTextualNotationBuilder.BuildFunctionReference(elementAsExpression, writerContext, stringBuilder);
             }
 
         }
@@ -593,11 +584,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamedArgumentMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-
-            if (poco.ownedMemberFeature != null)
-            {
-                FeatureTextualNotationBuilder.BuildNamedArgument(poco.ownedMemberFeature, writerContext, stringBuilder);
-            }
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
+            FeatureTextualNotationBuilder.BuildNamedArgument(effectiveOwnedMemberFeature, writerContext, stringBuilder);
 
         }
 
@@ -610,14 +598,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExpressionBodyMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
-            if (poco.ownedMemberFeature != null)
+            if (effectiveOwnedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
             {
-
-                if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
-                {
-                    ExpressionTextualNotationBuilder.BuildExpressionBody(elementAsExpression, writerContext, stringBuilder);
-                }
+                ExpressionTextualNotationBuilder.BuildExpressionBody(elementAsExpression, writerContext, stringBuilder);
             }
 
         }
@@ -655,11 +640,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
         {
-
-            if (poco.ownedMemberFeature != null)
-            {
-                FeatureTextualNotationBuilder.BuildMetadataBodyFeature(poco.ownedMemberFeature, writerContext, stringBuilder);
-            }
+            var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
+            FeatureTextualNotationBuilder.BuildMetadataBodyFeature(effectiveOwnedMemberFeature, writerContext, stringBuilder);
 
         }
     }

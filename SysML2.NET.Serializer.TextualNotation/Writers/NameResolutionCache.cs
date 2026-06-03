@@ -118,9 +118,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case null:
                     return string.Empty;
 
-                // Short-circuit 1 — IMembership targets: import declarations keep their full path.
+                // Short-circuit 1 — IMembership targets: import declarations keep the full path,
+                // but use the SHORTEST declared name available at each owner-chain segment.
+                // IElement.qualifiedName walks via EscapedName() which prefers `name` over
+                // `shortName`; that is the inverse of what import declarations need. The SysML
+                // Textual Notation tutorial and the pilot implementation consistently emit
+                // imports using shortNames where declared (e.g. `import SI::kg` not
+                // `import SI::kilogram`).
                 case IMembership membership:
-                    return membership.MemberElement?.qualifiedName ?? string.Empty;
+                    return membership.MemberElement != null
+                        ? QueryShortQualifiedName(membership.MemberElement)
+                        : string.Empty;
             }
 
             // Short-circuit 2 — no usable simple name on the target: emit the qualified name.
@@ -169,9 +177,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var rawName = target.name;
             var rawShortName = target.shortName;
 
-            var escapedShortName = string.IsNullOrWhiteSpace(rawShortName)
-                ? null
-                : (rawShortName.QueryIsValidBasicName() ? rawShortName : rawShortName.ToUnrestrictedName());
+            string escapedShortName = null;
+
+            if (!string.IsNullOrWhiteSpace(rawShortName))
+            {
+                escapedShortName = rawShortName.QueryIsValidBasicName() ? rawShortName : rawShortName.ToUnrestrictedName();
+            }
 
             // Walk the cached source-scope chain. First hit wins.
             foreach (var scope in this.GetSourceScopeChain(sourcePoco, sourceLocalScope))
@@ -286,6 +297,66 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Walks <paramref name="element" /> up via <c>owningNamespace</c> and builds the
+        /// qualified name using the SHORTEST declared name at each segment — the
+        /// <see cref="IElement.shortName" /> when non-blank, otherwise the
+        /// <see cref="IElement.name" />. Each segment is escaped through the KEBNF
+        /// unrestricted-name rules (<c>'…'</c> quoting for non-basic identifiers) so the
+        /// result is parser-roundtrip safe.
+        /// <para>
+        /// Used by the <see cref="IMembership" /> short-circuit in <see cref="Resolve" /> for
+        /// import declarations, where the pilot implementation's reference text uses short
+        /// forms (e.g. <c>SI::kg</c>) but <see cref="IElement.qualifiedName" /> returns the
+        /// long form (<c>SI::kilogram</c>) because it goes through <c>EscapedName()</c> which
+        /// prefers <c>name</c> over <c>shortName</c>.
+        /// </para>
+        /// <para>Mirrors the cycle-and-null-safety pattern of <see cref="BuildChain" />: stops
+        /// on <see langword="null" /> <c>owningNamespace</c> and swallows
+        /// <see cref="NotSupportedException" /> from unimplemented derived properties.</para>
+        /// </summary>
+        /// <param name="element">The leaf <see cref="IElement" /> to qualify; must be non-null.</param>
+        /// <returns>The short-form qualified name (e.g. <c>"SI::kg"</c>), or the empty string
+        /// when no segment carries a usable name.</returns>
+        private static string QueryShortQualifiedName(IElement element)
+        {
+            var segments = new Stack<string>();
+            var current = element;
+
+            while (current != null)
+            {
+                var preferred = !string.IsNullOrWhiteSpace(current.shortName)
+                    ? current.shortName
+                    : current.name;
+
+                if (string.IsNullOrWhiteSpace(preferred))
+                {
+                    break;
+                }
+
+                var escaped = preferred.QueryIsValidBasicName()
+                    ? preferred
+                    : preferred.ToUnrestrictedName();
+
+                segments.Push(escaped);
+
+                INamespace next;
+
+                try
+                {
+                    next = current.owningNamespace;
+                }
+                catch (NotSupportedException)
+                {
+                    break;
+                }
+
+                current = next;
+            }
+
+            return string.Join("::", segments);
+        }
+
+        /// <summary>
         /// Resolves the local scope of <paramref name="sourcePoco" />: the first
         /// <see cref="INamespace" /> reached by climbing
         /// <see cref="IRelationship.OwningRelatedElement" />, then
@@ -306,13 +377,57 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             while (current != null && visited.Add(current))
             {
-                switch (current)
+                if (current is IRelationship { OwningRelatedElement: not null } relationship)
                 {
-                    case INamespace asNamespace:
+                    current = relationship.OwningRelatedElement;
+                    continue;
+                }
+
+                if (current is INamespace asNamespace)
+                {
+                    // A Namespace is the local scope only when it has a proper upward
+                    // owningNamespace chain. Anonymous nested namespaces (e.g. an
+                    // OwnedFeatureChain Feature owned via Specialization rather than
+                    // Membership) have a null `owningNamespace`; returning such a namespace
+                    // here gives BuildChain a one-element chain that never reaches the
+                    // reference site's enclosing scope, so name resolution falls through
+                    // to qualifiedName. In that case keep walking via `owner` (which follows
+                    // the owningRelationship → OwningRelatedElement path) to find the
+                    // enclosing reference-site namespace.
+                    INamespace asNamespaceUpward = null;
+
+                    try
+                    {
+                        asNamespaceUpward = asNamespace.owningNamespace;
+                    }
+                    catch (NotSupportedException)
+                    {
+                        // owningNamespace not implemented — treat as no upward chain.
+                    }
+
+                    if (asNamespaceUpward != null || ReferenceEquals(asNamespace, this.RootNamespace))
+                    {
                         return asNamespace;
-                    case IRelationship { OwningRelatedElement: not null } relationship:
-                        current = relationship.OwningRelatedElement;
-                        continue;
+                    }
+
+                    IElement asNamespaceOwner;
+
+                    try
+                    {
+                        asNamespaceOwner = asNamespace.owner;
+                    }
+                    catch (NotSupportedException)
+                    {
+                        asNamespaceOwner = null;
+                    }
+
+                    if (asNamespaceOwner == null)
+                    {
+                        return asNamespace;
+                    }
+
+                    current = asNamespaceOwner;
+                    continue;
                 }
 
                 INamespace owningNs = null;
@@ -350,9 +465,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Tests the simple-name index of <paramref name="scope" /> for a hit on
-        /// <paramref name="target" />. Tries the raw <c>name</c> key first, then the raw
-        /// <c>shortName</c> key. On a hit, <paramref name="matchedSimpleName" /> receives the
+        /// <paramref name="target" />. Tries the raw <c>shortName</c> key first, then the raw
+        /// <c>name</c> key. On a hit, <paramref name="matchedSimpleName" /> receives the
         /// corresponding escaped form.
+        /// <para>
+        /// The short form is tried first so the emitter prefers it whenever both forms are
+        /// reachable — the SysML v2 Textual Notation tutorial consistently uses short forms in
+        /// quantity literals (<c>[kg]</c>, <c>[m/s]</c>, <c>[s]</c>) and the pilot
+        /// implementation's reference output matches that convention.
+        /// </para>
         /// </summary>
         /// <param name="scope">The scope whose index is inspected.</param>
         /// <param name="target">The element to look up.</param>
@@ -366,19 +487,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var index = this.GetSimpleNameIndex(scope);
 
-            if (!string.IsNullOrWhiteSpace(rawName)
-                && index.TryGetValue(rawName, out var elements)
-                && elements.Contains(target))
-            {
-                matchedSimpleName = escapedName;
-                return true;
-            }
-
             if (!string.IsNullOrWhiteSpace(rawShortName)
                 && index.TryGetValue(rawShortName, out var shortElements)
                 && shortElements.Contains(target))
             {
                 matchedSimpleName = escapedShortName;
+                return true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(rawName)
+                && index.TryGetValue(rawName, out var elements)
+                && elements.Contains(target))
+            {
+                matchedSimpleName = escapedName;
                 return true;
             }
 
@@ -563,10 +684,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Adds the <see cref="IMembership.MemberElement" /> of <paramref name="membership" />
-        /// to <paramref name="index" /> under both its <see cref="IMembership.MemberShortName" />
-        /// and <see cref="IMembership.MemberName" />, and enqueues the target onto
-        /// <paramref name="pending" /> if it is itself an <see cref="INamespace" /> (so nested
-        /// namespaces are indexed too).
+        /// to <paramref name="index" /> under both its short and long name and enqueues the
+        /// target onto <paramref name="pending" /> if it is itself an <see cref="INamespace" />
+        /// (so nested namespaces are indexed too).
+        /// <para>
+        /// Per the metamodel, <see cref="IMembership.MemberShortName" /> and
+        /// <see cref="IMembership.MemberName" /> are explicit overrides of the member element's
+        /// declared names within the owning namespace. When the membership does not carry an
+        /// override (the pilot implementation's XMI never emits <c>memberName</c> /
+        /// <c>memberShortName</c> on Membership elements), fall back to the target's own
+        /// <see cref="IElement.shortName" /> / <see cref="IElement.name" /> so the simple-name
+        /// index remains reachable by simple name (e.g. <c>kg</c>, <c>kilogram</c>) for
+        /// references to imported library elements.
+        /// </para>
         /// </summary>
         /// <param name="index">The destination index.</param>
         /// <param name="membership">The membership whose target is indexed.</param>
@@ -580,8 +710,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            AddIndexEntry(index, membership.MemberShortName, target);
-            AddIndexEntry(index, membership.MemberName, target);
+            var shortName = !string.IsNullOrWhiteSpace(membership.MemberShortName)
+                ? membership.MemberShortName
+                : target.shortName;
+            var longName = !string.IsNullOrWhiteSpace(membership.MemberName)
+                ? membership.MemberName
+                : target.name;
+
+            AddIndexEntry(index, shortName, target);
+            AddIndexEntry(index, longName, target);
 
             if (target is INamespace targetAsNamespace)
             {

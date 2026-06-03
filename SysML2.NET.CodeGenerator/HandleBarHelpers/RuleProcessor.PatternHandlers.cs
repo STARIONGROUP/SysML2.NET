@@ -60,14 +60,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return false;
                 }
 
-                var literals = this.ExtractLiteralAlternation(operatorAssignment.Value, ruleGenerationContext.AllRules);
+                var literals = ExtractLiteralAlternation(operatorAssignment.Value, ruleGenerationContext.AllRules);
 
                 if (literals == null || literals.Count == 0)
                 {
                     return false;
                 }
 
-                if (!this.AreAlternativeTailElementsProcessable(alternative.Elements, umlClass, ruleGenerationContext))
+                if (!AreAlternativeTailElementsProcessable(alternative.Elements, umlClass, ruleGenerationContext))
                 {
                     return false;
                 }
@@ -237,7 +237,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Pattern C: detects poco-runtime-type dispatch with compound alternatives.
         /// </summary>
-        private bool TryHandlePocoTypeDispatchWithCompoundAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        private static bool TryHandlePocoTypeDispatchWithCompoundAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
             if (alternatives.Count < 2)
             {
@@ -296,7 +296,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var orderedBranches = branches
                 .Where(branch => branch.TargetClass != umlClass)
-                .OrderByDescending(branch => branch.TargetClass.QueryAllGeneralClassifiers().Count())
+                .OrderByDescending(branch => branch.TargetClass.QueryAllGeneralClassifiers().Count)
                 .ToList();
 
             writer.WriteSafeString($"switch (poco){Environment.NewLine}");
@@ -306,14 +306,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 var caseVarName = $"poco{targetClass.Name}";
                 writer.WriteSafeString($"case {targetClass.QueryFullyQualifiedTypeName()} {caseVarName}:{Environment.NewLine}");
-                this.EmitCompoundPocoTypeBranch(writer, umlClass, leadingNonTerminal, alternative, targetClass, caseVarName, ruleGenerationContext);
+                EmitCompoundPocoTypeBranch(writer, umlClass, leadingNonTerminal, alternative, targetClass, caseVarName);
                 writer.WriteSafeString($"break;{Environment.NewLine}");
             }
 
             if (defaultBranch.NonTerminal != null)
             {
                 writer.WriteSafeString($"default:{Environment.NewLine}");
-                this.EmitCompoundPocoTypeBranch(writer, umlClass, defaultBranch.NonTerminal, defaultBranch.Alternative, defaultBranch.TargetClass, "poco", ruleGenerationContext);
+                EmitCompoundPocoTypeBranch(writer, umlClass, defaultBranch.NonTerminal, defaultBranch.Alternative, defaultBranch.TargetClass, "poco");
                 writer.WriteSafeString($"break;{Environment.NewLine}");
             }
 
@@ -428,7 +428,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Validates that tail elements of an alternative resolve to existing target classes.
         /// </summary>
-        private bool AreAlternativeTailElementsProcessable(IReadOnlyList<RuleElement> elements, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        private static bool AreAlternativeTailElementsProcessable(IReadOnlyList<RuleElement> elements, IClass umlClass, RuleGenerationContext ruleGenerationContext)
         {
             for (var elementIndex = 1; elementIndex < elements.Count; elementIndex++)
             {
@@ -462,7 +462,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Extracts literal terminal values from a grammar value element.
         /// </summary>
-        private List<string> ExtractLiteralAlternation(RuleElement value, IReadOnlyList<TextualNotationRule> allRules)
+        private static List<string> ExtractLiteralAlternation(RuleElement value, IReadOnlyList<TextualNotationRule> allRules)
         {
             switch (value)
             {
@@ -479,9 +479,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     var literals = new List<string>();
 
-                    foreach (var ruleAlternative in referencedRule.Alternatives)
+                    foreach (var ruleAlternativeElements in referencedRule.Alternatives.Select(x => x.Elements))
                     {
-                        if (ruleAlternative.Elements.Count != 1 || ruleAlternative.Elements[0] is not TerminalElement nestedTerminal)
+                        if (ruleAlternativeElements.Count != 1 || ruleAlternativeElements[0] is not TerminalElement nestedTerminal)
                         {
                             return null;
                         }
@@ -499,10 +499,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Handles alternatives targeting multiple collection properties by falling back to HandCoded.
         /// </summary>
-        private void ProcessMultiCollectionAssignment(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        private static void ProcessMultiCollectionAssignment(EncodedTextWriter writer, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
             var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
         }
 
         /// <summary>
@@ -535,11 +535,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         var elementBoolProps = new List<(NonTerminalElement RuleElement, List<string> BoolProps)>();
 
-                        foreach (var element in duplicateGroup.Value)
+                        foreach (var ruleElement in duplicateGroup.Value.Select(x => x.RuleElement))
                         {
-                            var referencedRule = ruleGenerationContext.AllRules.Single(x => x.RuleName == element.RuleElement.Name);
+                            var referencedRule = ruleGenerationContext.AllRules.Single(x => x.RuleName == ruleElement.Name);
                             var booleanProperties = RuleQueryUtilities.QueryBooleanAssignmentProperties(referencedRule, ruleGenerationContext.AllRules);
-                            elementBoolProps.Add((element.RuleElement, booleanProperties));
+                            elementBoolProps.Add((ruleElement, booleanProperties));
                         }
 
                         for (var elementIndex = 0; elementIndex < elementBoolProps.Count; elementIndex++)
@@ -793,8 +793,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             return -1;
                         }
 
-                        var depthA = a.UmlClass.QueryAllGeneralClassifiers().Count();
-                        var depthB = b.UmlClass.QueryAllGeneralClassifiers().Count();
+                        var depthA = a.UmlClass.QueryAllGeneralClassifiers().Count;
+                        var depthB = b.UmlClass.QueryAllGeneralClassifiers().Count;
 
                         return depthB.CompareTo(depthA);
                     });
@@ -821,7 +821,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule?.RuleName ?? "Unknown";
 
-                            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
+                            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
 
                             break;
                         }
@@ -1028,7 +1028,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 default:
                 {
                     var defaultHandCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                    this.EmitHandCodedFallback(writer, defaultHandCodedRuleName, ruleGenerationContext);
+                    EmitHandCodedFallback(writer, defaultHandCodedRuleName, ruleGenerationContext);
                     break;
                 }
             }
@@ -1037,7 +1037,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Emits a single type-dispatched branch body.
         /// </summary>
-        private void EmitCompoundPocoTypeBranch(EncodedTextWriter writer, IClass umlClass, NonTerminalElement leadingNonTerminal, Alternatives alternative, IClass targetClass, string variableName, RuleGenerationContext ruleGenerationContext)
+        private static void EmitCompoundPocoTypeBranch(EncodedTextWriter writer, IClass umlClass, NonTerminalElement leadingNonTerminal, Alternatives alternative, IClass targetClass, string variableName)
         {
             string builderCall;
 

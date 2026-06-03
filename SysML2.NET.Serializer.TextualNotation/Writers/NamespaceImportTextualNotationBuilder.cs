@@ -46,13 +46,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.ImportedNamespace != null)
             {
-                stringBuilder.Append(poco.ImportedNamespace.qualifiedName);
-                stringBuilder.Append("::* ");
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ImportedNamespace, writerContext, poco);
+                stringBuilder.Append("::*");
 
                 if (poco.IsRecursive)
                 {
-                    stringBuilder.Append("::** ");
+                    stringBuilder.Append("::**");
                 }
+
+                stringBuilder.Append(' ');
             }
         }
     }
