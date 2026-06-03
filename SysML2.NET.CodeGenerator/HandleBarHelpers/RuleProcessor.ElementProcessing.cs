@@ -198,13 +198,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             else
                             {
                                 var handCodedRuleName = groupElement.TextualNotationRule?.RuleName ?? "Unknown";
-                                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                             }
                         }
                         else
                         {
                             var handCodedRuleName = groupElement.TextualNotationRule?.RuleName ?? "Unknown";
-                            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                         }
                     }
                     else
@@ -237,7 +237,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         var handCodedRuleName = textualRuleElement.TextualNotationRule?.RuleName ?? "Unknown";
-                        this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                        EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                     }
 
                     break;
@@ -313,7 +313,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
-                        this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                        EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                     }
                 }
                 else
@@ -469,7 +469,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     break;
                                 default:
                                     var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
-                                    this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                                    EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                                     break;
                             }
                         }
@@ -488,7 +488,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 // Delegate to the HandCoded sibling per the documented convention rather
                 // than emitting a name-collision-prone `Build{Property}(poco, …)` call.
                 var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
         }
 

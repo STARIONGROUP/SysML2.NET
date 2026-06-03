@@ -499,7 +499,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (alternatives.ElementAt(0).Elements[0].TextualNotationRule.IsMultiCollectionAssignment)
             {
-                this.ProcessMultiCollectionAssignment(writer, umlClass, alternatives, ruleGenerationContext);
+                ProcessMultiCollectionAssignment(writer, alternatives, ruleGenerationContext);
                 return;
             }
 
