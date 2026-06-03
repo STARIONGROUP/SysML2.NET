@@ -596,7 +596,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     if (NoTargetRuleResolver.IsSharedRule(referencedRule, umlClass))
                     {
-                        this.EmitSharedNoTargetRuleCall(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext);
+                        EmitSharedNoTargetRuleCall(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext);
                     }
                     else
                     {
@@ -692,7 +692,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="nonTerminalElement">The <see cref="NonTerminalElement" /> being processed</param>
         /// <param name="referencedRule">The referenced shared no-target <see cref="TextualNotationRule" /></param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        private void EmitSharedNoTargetRuleCall(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, RuleGenerationContext ruleGenerationContext)
+        private static void EmitSharedNoTargetRuleCall(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, RuleGenerationContext ruleGenerationContext)
         {
             var effectiveTarget = NoTargetRuleResolver.ResolveEffectiveTarget(referencedRule, ruleGenerationContext.AllRules, umlClass);
 
