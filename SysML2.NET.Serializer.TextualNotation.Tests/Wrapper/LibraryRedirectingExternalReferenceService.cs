@@ -107,7 +107,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Wrapper
             }
             else
             {
-                this.logger?.LogInformation("File {FileName} already processed", new FileInfo(resolvedUri.LocalPath).Name);
+                if (this.logger?.IsEnabled(LogLevel.Information) == true)
+                {
+                    this.logger.LogInformation("File {FileName} already processed", new FileInfo(resolvedUri.LocalPath).Name);
+                }
             }
         }
 
@@ -152,7 +155,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Wrapper
             var subPath = unescapedHref.Substring(markerIndex + LibraryMarker.Length);
             var redirectedPath = Path.GetFullPath(Path.Combine(this.libraryRoot, subPath));
 
-            this.logger?.LogInformation("Redirected href '{Href}' to '{Redirected}'", unescapedHref, redirectedPath);
+            if (this.logger?.IsEnabled(LogLevel.Information) == true)
+            {
+                this.logger.LogInformation("Redirected href '{Href}' to '{Redirected}'", unescapedHref, redirectedPath);
+            }
 
             return new Uri(redirectedPath);
         }

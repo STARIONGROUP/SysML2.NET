@@ -744,7 +744,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return;
                 }
 
-                if (this.TryHandlePocoTypeDispatchWithCompoundAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+                if (TryHandlePocoTypeDispatchWithCompoundAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
                 {
                     return;
                 }

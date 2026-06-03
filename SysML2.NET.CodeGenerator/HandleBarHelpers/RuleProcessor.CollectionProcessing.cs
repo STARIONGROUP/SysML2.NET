@@ -87,7 +87,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             var allElements = referencedRule.Alternatives.SelectMany(alt => alt.Elements).ToList();
 
                             var hasNonAssignmentElements = allElements.Any(element =>
-                                element is NonTerminalElement or GroupElement) == true;
+                                element is NonTerminalElement or GroupElement);
 
                             List<string> assignmentTargetTypes = null;
 
@@ -567,7 +567,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Emits an optional condition wrapping block for an optional NonTerminal element.
         /// </summary>
-        private bool TryEmitOptionalCondition(EncodedTextWriter writer, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext, string variableName)
+        private static bool TryEmitOptionalCondition(EncodedTextWriter writer, NonTerminalElement nonTerminalElement, TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext, string variableName)
         {
             if (!nonTerminalElement.IsOptional || nonTerminalElement.IsCollection)
             {

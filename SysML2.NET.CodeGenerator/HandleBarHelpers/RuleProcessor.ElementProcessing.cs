@@ -561,7 +561,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             writer.WriteSafeString($"{{{Environment.NewLine}");
                         }
 
-                        var emittedCondition = this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, targetClass, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
+                        var emittedCondition = TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, targetClass, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
 
                         writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, writerContext, stringBuilder);");
 
@@ -614,7 +614,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 var variableToUse = referencedRule != null ? ruleGenerationContext.CurrentVariableName : "poco";
 
-                var emittedSameClassCondition = this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, umlClass, ruleGenerationContext, variableToUse);
+                var emittedSameClassCondition = TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, umlClass, ruleGenerationContext, variableToUse);
 
                 writer.WriteSafeString($"Build{nonTerminalElement.Name}({variableToUse}, writerContext, stringBuilder);");
 
@@ -708,7 +708,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             var emittedCondition = effectiveTarget != null
-                                   && this.TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, effectiveTarget, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
+                                   && TryEmitOptionalCondition(writer, nonTerminalElement, referencedRule, effectiveTarget, ruleGenerationContext, ruleGenerationContext.CurrentVariableName);
 
             writer.WriteSafeString($"{RulesHelper.SharedBuilderClassName}.Build{nonTerminalElement.Name}({variableExpression}, writerContext, stringBuilder);");
 
