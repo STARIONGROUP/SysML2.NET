@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="ReferenceUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -38,7 +37,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// PayloadParameter : ReferenceUsage =
         ///     PayloadFeature
@@ -47,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Alt 2 applies when the reference usage has identification AND a trigger-style
         /// feature value. Otherwise, delegate to PayloadFeature (Alt 1).
         /// </remarks>
-        private static void BuildPayloadParameterHandCoded(IReferenceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildPayloadParameterHandCoded(IReferenceUsage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var hasIdentification = !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName);
             var hasTriggerValue = poco.OwnedRelationship.OfType<IFeatureValue>().Any();

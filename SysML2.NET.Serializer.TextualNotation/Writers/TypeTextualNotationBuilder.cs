@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TypeTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -38,8 +37,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildActionBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildActionBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -127,8 +126,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildDefinitionBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildDefinitionBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // DefinitionBodyItem shares its body with InterfaceBodyItem; the two rules differ only in the
             // Occurrence / NonOccurrence membership builders, supplied here as method-group delegates.
@@ -146,8 +145,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildTypeDeclarationHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildTypeDeclarationHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (poco.IsSufficient)
             {
@@ -216,8 +215,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildInterfaceBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildInterfaceBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // InterfaceBodyItem shares its body with DefinitionBodyItem; the two rules differ only in the
             // Occurrence / NonOccurrence membership builders, supplied here as method-group delegates.
@@ -235,7 +234,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// StateBodyItem : Type =
         ///     NonBehaviorBodyItem
@@ -248,7 +247,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         ///   | ownedRelationship += DoActionMember
         ///   | ownedRelationship += ExitActionMember
         /// </remarks>
-        private static void BuildStateBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildStateBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 

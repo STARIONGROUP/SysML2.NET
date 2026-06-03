@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="InterfaceUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -37,7 +36,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceUsage" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// InterfaceUsageDeclaration : InterfaceUsage =
         ///     UsageDeclaration ValuePart? ( 'connect' InterfacePart )?
@@ -45,7 +44,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         ///
         /// Auto-gen delegates entirely to this method.
         /// </remarks>
-        private static void BuildInterfaceUsageDeclarationHandCoded(IInterfaceUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildInterfaceUsageDeclarationHandCoded(IInterfaceUsage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 

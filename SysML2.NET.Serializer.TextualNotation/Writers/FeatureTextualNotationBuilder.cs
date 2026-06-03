@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -38,9 +37,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>Trailing alternative of BasicFeaturePrefix: (isVariable?='var'|isConstant?='const'{isVariable=true})?. Note: 'const' implies isVariable=true, so check isConstant first.</remarks>
-        private static void BuildBasicFeaturePrefixHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildBasicFeaturePrefixHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (poco.IsConstant)
             {
@@ -57,7 +56,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// FeatureDeclaration : Feature =
         ///     ( isSufficient ?= 'all' )?    — handled by auto-gen, NOT here
@@ -68,7 +67,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         ///     FeatureRelationshipPart*
         ///
         /// </remarks>
-        private static void BuildFeatureDeclarationHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildFeatureDeclarationHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -129,7 +128,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// Feature =
         ///     ( FeaturePrefix ( 'feature' | ownedRelationship += PrefixMetadataMember ) FeatureDeclaration?
@@ -144,7 +143,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// BuildFeatureDeclaration is then called to emit the identification, specialization,
         /// conjugation, and relationship parts.
         /// </remarks>
-        private static void BuildFeatureHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildFeatureHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // Alt 1 uses FeaturePrefix (which handles abstract/variation/readonly/derived/end
             // and PrefixMetadataMember*). It applies when the feature carries modifiers that
@@ -190,9 +189,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>FeatureIdentification:Feature='&lt;'declaredShortName=NAME'&gt;'(declaredName=NAME)?|declaredName=NAME</remarks>
-        private static void BuildFeatureIdentificationHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildFeatureIdentificationHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
             {
@@ -230,8 +229,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             SharedTextualNotationBuilder.BuildFeatureSpecializationPartHandCoded(poco, writerContext, stringBuilder);
         }
@@ -242,8 +241,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMultiplicityPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildMultiplicityPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // Emit the OwnedMultiplicity if present (cursor advances on += processing)
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
@@ -273,14 +272,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// PayloadFeature : Feature =
         ///     Identification? PayloadFeatureSpecializationPart ValuePart?
         ///   | ownedRelationship += OwnedFeatureTyping ( ownedRelationship += OwnedMultiplicity )?
         ///   | ownedRelationship += OwnedMultiplicity ownedRelationship += OwnedFeatureTyping
         /// </remarks>
-        private static void BuildPayloadFeatureHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildPayloadFeatureHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -336,7 +335,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// PayloadFeatureSpecializationPart : Feature =
         ///     ( FeatureSpecialization )+ MultiplicityPart? FeatureSpecialization*
@@ -346,7 +345,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// (Alt 2 uses '+' instead of '*') is a parse-time validation concern, not a
         /// serialization difference.
         /// </remarks>
-        private static void BuildPayloadFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildPayloadFeatureSpecializationPartHandCoded(IFeature poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             SharedTextualNotationBuilder.BuildFeatureSpecializationPartHandCoded(poco, writerContext, stringBuilder);
         }

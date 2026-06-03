@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="SuccessionTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Kernel.Connectors;
 
@@ -34,7 +33,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// SuccessionDeclaration : Succession =
         ///     FeatureDeclaration ( 'first' ownedRelationship += ConnectorEndMember 'then' ownedRelationship += ConnectorEndMember )?
@@ -44,7 +43,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <see cref="SharedTextualNotationBuilder.BuildTwoEndedConnectorDeclarationHandCoded"/> helper —
         /// the rule shares its body with <c>BindingConnectorDeclaration</c> save for the two end-keyword literals.
         /// </remarks>
-        private static void BuildSuccessionDeclarationHandCoded(ISuccession poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildSuccessionDeclarationHandCoded(ISuccession poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             SharedTextualNotationBuilder.BuildTwoEndedConnectorDeclarationHandCoded(poco, "first ", "then ", writerContext, stringBuilder);
         }

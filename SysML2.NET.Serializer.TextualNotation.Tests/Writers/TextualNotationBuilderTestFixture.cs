@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="TextualNotationBuilderTestFixture.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,7 +22,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
 {
     using System;
     using System.IO;
-    using System.Text;
 
     using Microsoft.Extensions.Logging;
 
@@ -82,7 +81,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         {
             using var writerContext = new TextualNotationWriterContext(this.rootNamespace);
             writerContext.EmitOperatorParentheses = false;
-            var stringBuilder = new StringBuilder();
+            var stringBuilder = new IndentedStringBuilder();
 
             try
             {
