@@ -179,7 +179,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             string escapedShortName = null;
 
-            if (!string.IsNullOrWhiteSpace(escapedName))
+            if (!string.IsNullOrWhiteSpace(rawShortName))
             {
                 escapedShortName = rawShortName.QueryIsValidBasicName() ? rawShortName : rawShortName.ToUnrestrictedName();
             }
@@ -377,13 +377,57 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             while (current != null && visited.Add(current))
             {
-                switch (current)
+                if (current is IRelationship { OwningRelatedElement: not null } relationship)
                 {
-                    case INamespace asNamespace:
+                    current = relationship.OwningRelatedElement;
+                    continue;
+                }
+
+                if (current is INamespace asNamespace)
+                {
+                    // A Namespace is the local scope only when it has a proper upward
+                    // owningNamespace chain. Anonymous nested namespaces (e.g. an
+                    // OwnedFeatureChain Feature owned via Specialization rather than
+                    // Membership) have a null `owningNamespace`; returning such a namespace
+                    // here gives BuildChain a one-element chain that never reaches the
+                    // reference site's enclosing scope, so name resolution falls through
+                    // to qualifiedName. In that case keep walking via `owner` (which follows
+                    // the owningRelationship → OwningRelatedElement path) to find the
+                    // enclosing reference-site namespace.
+                    INamespace asNamespaceUpward = null;
+
+                    try
+                    {
+                        asNamespaceUpward = asNamespace.owningNamespace;
+                    }
+                    catch (NotSupportedException)
+                    {
+                        // owningNamespace not implemented — treat as no upward chain.
+                    }
+
+                    if (asNamespaceUpward != null || ReferenceEquals(asNamespace, this.RootNamespace))
+                    {
                         return asNamespace;
-                    case IRelationship { OwningRelatedElement: not null } relationship:
-                        current = relationship.OwningRelatedElement;
-                        continue;
+                    }
+
+                    IElement asNamespaceOwner;
+
+                    try
+                    {
+                        asNamespaceOwner = asNamespace.owner;
+                    }
+                    catch (NotSupportedException)
+                    {
+                        asNamespaceOwner = null;
+                    }
+
+                    if (asNamespaceOwner == null)
+                    {
+                        return asNamespace;
+                    }
+
+                    current = asNamespaceOwner;
+                    continue;
                 }
 
                 INamespace owningNs = null;

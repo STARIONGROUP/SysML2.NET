@@ -127,7 +127,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// When <c>true</c>, suppress duplicate emissions via
         /// <see cref="RuleGenerationContext.EmittedHandCodedCalls" />
         /// </param>
-        private void EmitHandCodedFallback(EncodedTextWriter writer, string ruleName, RuleGenerationContext ruleGenerationContext, bool deduplicate = false)
+        private static void EmitHandCodedFallback(EncodedTextWriter writer, string ruleName, RuleGenerationContext ruleGenerationContext, bool deduplicate = false)
         {
             if (deduplicate && !ruleGenerationContext.EmittedHandCodedCalls.Add(ruleName))
             {
@@ -269,6 +269,61 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Resolves the fully-qualified runtime type name of the inner element a "thin owning
+        /// wrapper" rule wraps. A thin owning wrapper is a rule whose target is
+        /// <c>OwningMembership</c> and whose body is a single
+        /// <c>ownedRelatedElement += SomeNonTerminal</c> assignment (e.g.
+        /// <c>OwnedMultiplicity : OwningMembership = ownedRelatedElement += MultiplicityRange</c>).
+        /// In such cases the wrapper type (<c>IOwningMembership</c>) is too coarse a discriminator
+        /// because every <c>OwningMembership</c> subtype (e.g. <c>EndFeatureMembership</c>) also
+        /// satisfies it; narrowing the check to the wrapped inner element type
+        /// (<c>IMultiplicityRange</c>) gives the precision the optional-group guard needs.
+        /// Returns <see langword="null"/> when the assignment's referenced rule does not match
+        /// the thin-wrapper shape.
+        /// </summary>
+        /// <param name="assignmentElement">The <c>+=</c> assignment whose referenced rule is inspected.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The fully-qualified inner-element type name, or <see langword="null" /> if the rule is not a thin wrapper.</returns>
+        private static string TryResolveWrappedInnerTypeName(AssignmentElement assignmentElement, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            if (assignmentElement.Value is not NonTerminalElement nonTerminalElement)
+            {
+                return null;
+            }
+
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+
+            if (referencedRule == null
+                || !string.Equals(referencedRule.EffectiveTarget, "OwningMembership", StringComparison.Ordinal)
+                || referencedRule.Alternatives.Count != 1)
+            {
+                return null;
+            }
+
+            var alternative = referencedRule.Alternatives[0];
+
+            if (alternative.Elements.Count != 1
+                || alternative.Elements[0] is not AssignmentElement innerAssignment
+                || !string.Equals(innerAssignment.Property, "ownedRelatedElement", StringComparison.OrdinalIgnoreCase)
+                || innerAssignment.Value is not NonTerminalElement innerNonTerminal)
+            {
+                return null;
+            }
+
+            var innerRule = ruleGenerationContext.FindRule(innerNonTerminal.Name);
+            var innerTypeTarget = innerRule?.EffectiveTarget ?? innerNonTerminal.Name;
+
+            if (string.IsNullOrWhiteSpace(innerTypeTarget))
+            {
+                return null;
+            }
+
+            var innerClass = RuleQueryUtilities.FindClass(umlClass.Cache, innerTypeTarget);
+            return innerClass?.QueryFullyQualifiedTypeName();
+        }
+
+        /// <summary>
         /// Processes a single alternative (no branching needed). Handles optional guard emission
         /// and iterates through the alternative's elements.
         /// </summary>
@@ -372,7 +427,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         if (referencedRule != null)
                         {
-                            var condition = this.GenerateInlineOptionalCondition(writer, referencedRule, umlClass, ruleGenerationContext, "poco");
+                            var condition = GenerateInlineOptionalCondition(writer, referencedRule, umlClass, ruleGenerationContext, "poco");
 
                             if (condition != null)
                             {
@@ -546,7 +601,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
 
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
             }
         }
 
@@ -568,7 +623,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (referencedAssignmentNonTerminals.Count != assignmentElements.Count)
             {
                 var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -626,7 +681,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 ? nonTerminalReferencedRule.EffectiveTarget
                 : umlClass.Name;
 
-            var nonTerminalCall = this.ResolveBuilderCall(umlClass, nonTerminalElement, nonTerminalTypeTarget, ruleGenerationContext);
+            var nonTerminalCall = ResolveBuilderCall(umlClass, nonTerminalElement, nonTerminalTypeTarget, ruleGenerationContext);
 
             if (nonTerminalCall != null)
             {
@@ -658,12 +713,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             // When all alternatives consist exclusively of terminal elements (and optionally non-parsing assignments), handle via code-gen
             if (alternatives.All(alt => alt.Elements.Count > 0 && alt.Elements.All(element => element is TerminalElement or NonParsingAssignmentElement)))
             {
-                this.EmitTerminalOnlyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
+                EmitTerminalOnlyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
                 return;
             }
 
             // Detect pattern: property=[QualifiedName] | property=NonTerminal{containment+=property}
-            if (alternatives.Count == 2 && this.TryEmitQualifiedNameOrChainAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+            if (alternatives.Count == 2 && TryEmitQualifiedNameOrChainAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
             {
                 return;
             }
@@ -701,7 +756,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var handCodedRuleName = alternatives.ElementAt(0).TextualNotationRule.RuleName;
 
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
             }
         }
 
@@ -714,7 +769,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The related <see cref="IClass" /></param>
         /// <param name="alternatives">The grammar alternatives to process</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        private void EmitTerminalOnlyAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        private static void EmitTerminalOnlyAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
             var nonParsingAssignments = alternatives
                 .SelectMany(alt => alt.Elements.OfType<NonParsingAssignmentElement>())
@@ -741,10 +796,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"switch ({ruleGenerationContext.CurrentVariableName ?? "poco"}.{targetPropertyName}){Environment.NewLine}");
                     writer.WriteSafeString($"{{{Environment.NewLine}");
 
-                    foreach (var alternative in alternatives)
+                    foreach (var alternativeElements in alternatives.Select(x => x.Elements))
                     {
-                        var nonParsingAssignment = alternative.Elements.OfType<NonParsingAssignmentElement>().Single();
-                        var terminals = alternative.Elements.OfType<TerminalElement>().ToList();
+                        var nonParsingAssignment = alternativeElements.OfType<NonParsingAssignmentElement>().Single();
+                        var terminals = alternativeElements.OfType<TerminalElement>().ToList();
                         var enumValueName = nonParsingAssignment.Value.Trim('\'').CapitalizeFirstLetter();
 
                         writer.WriteSafeString($"case {targetProperty.Type.QueryFullyQualifiedTypeName()}.{enumValueName}:{Environment.NewLine}");
@@ -781,7 +836,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="alternatives">The grammar alternatives to process</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
         /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
-        private bool TryEmitQualifiedNameOrChainAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        private static bool TryEmitQualifiedNameOrChainAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
             var qualifiedNameAlt = alternatives.FirstOrDefault(alt =>
                 alt.Elements.Count == 1
@@ -905,7 +960,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                        this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                        EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                     }
                 }
             }
@@ -943,7 +998,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             else
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
         }
 
@@ -958,7 +1013,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (nonTerminalRule == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -967,7 +1022,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (collectionPropertyNames.Count == 0)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -978,7 +1033,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (targetProperty == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -1006,7 +1061,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ? referencedRule.EffectiveTarget
                         : umlClass.Name;
 
-                    var perItemCall = this.ResolveBuilderCall(umlClass, collectionNonTerminal, typeTarget, ruleGenerationContext);
+                    var perItemCall = ResolveBuilderCall(umlClass, collectionNonTerminal, typeTarget, ruleGenerationContext);
 
                     writer.WriteSafeString($"while ({cursorVarName}.Current != null){Environment.NewLine}");
                     writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -1047,7 +1102,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (nonTerminalRule == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -1056,7 +1111,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (collectionPropertyNames.Count == 0)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -1067,7 +1122,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (targetProperty == null)
             {
                 var handCodedRuleName = firstAlt.TextualNotationRule.RuleName;
-                this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
+                EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
                 return;
             }
 
@@ -1094,7 +1149,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         ? referencedRule.EffectiveTarget
                         : umlClass.Name;
 
-                    var perItemCall = this.ResolveBuilderCall(umlClass, singleNonTerminal, typeTarget, ruleGenerationContext);
+                    var perItemCall = ResolveBuilderCall(umlClass, singleNonTerminal, typeTarget, ruleGenerationContext);
 
                     writer.WriteSafeString($"if ({cursorVarName}.Current != null){Environment.NewLine}");
                     writer.WriteSafeString($"{{{Environment.NewLine}");

@@ -72,9 +72,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             cursorVariableName = cursorDefinition.CursorVariableName;
                         }
 
-                        var perItemCall = this.ResolveBuilderCall(umlClass, nonTerminalElement, typeTarget, ruleGenerationContext);
+                        var perItemCall = ResolveBuilderCall(umlClass, nonTerminalElement, typeTarget, ruleGenerationContext);
 
-                        var whileTypeExclusion = this.ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
+                        var whileTypeExclusion = ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
 
                         string whileCondition;
 
@@ -84,23 +84,23 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else
                         {
-                            var allElements = referencedRule?.Alternatives.SelectMany(alt => alt.Elements).ToList();
+                            var allElements = referencedRule.Alternatives.SelectMany(alt => alt.Elements).ToList();
 
-                            var hasNonAssignmentElements = allElements?.Any(element =>
+                            var hasNonAssignmentElements = allElements.Any(element =>
                                 element is NonTerminalElement or GroupElement) == true;
 
                             List<string> assignmentTargetTypes = null;
 
                             if (!hasNonAssignmentElements)
                             {
-                                assignmentTargetTypes = allElements?
+                                assignmentTargetTypes = allElements
                                     .OfType<AssignmentElement>()
                                     .Where(assignmentElement => assignmentElement.Operator == "+=" && assignmentElement.Value is NonTerminalElement)
                                     .Select(assignmentElement =>
                                     {
                                         var valueNonTerminal = (NonTerminalElement)assignmentElement.Value;
                                         var refRule = ruleGenerationContext.FindRule(valueNonTerminal.Name);
-                                        var targetName = refRule != null ? refRule.EffectiveTarget : null;
+                                        var targetName = refRule?.EffectiveTarget;
 
                                         if (targetName != null)
                                         {
@@ -165,14 +165,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var handCodedRuleName = nonTerminalElement.TextualNotationRule?.RuleName ?? nonTerminalElement.Name;
 
-            this.EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
+            EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext, true);
             writer.WriteSafeString(Environment.NewLine);
         }
 
         /// <summary>
         /// Resolves the type condition for a collection while loop.
         /// </summary>
-        private string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, RuleGenerationContext ruleGenerationContext)
+        private static string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, RuleGenerationContext ruleGenerationContext)
         {
             var siblings = ruleGenerationContext.CurrentSiblingElements;
             var currentIndex = ruleGenerationContext.CurrentElementIndex;
@@ -347,7 +347,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Resolves the builder method call string for a non-terminal element.
         /// </summary>
-        private string ResolveBuilderCall(IClass umlClass, NonTerminalElement nonTerminalElement, string typeTarget, RuleGenerationContext ruleGenerationContext)
+        private static string ResolveBuilderCall(IClass umlClass, NonTerminalElement nonTerminalElement, string typeTarget, RuleGenerationContext ruleGenerationContext)
         {
             if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
             {
@@ -386,7 +386,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
         /// <param name="variableName">The variable name from which the property is accessed (typically <c>poco</c>)</param>
         /// <returns>The condition expression, or <c>null</c> when no property names are referenced</returns>
-        private string GenerateInlineOptionalCondition(EncodedTextWriter writer, TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext, string variableName)
+        private static string GenerateInlineOptionalCondition(EncodedTextWriter writer, TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext, string variableName)
         {
             var propertyNames = referencedRule.QueryAllReferencedPropertyNames(ruleGenerationContext.AllRules);
 
@@ -469,33 +469,68 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            var resolvedTypeNames = new List<string>();
+            // Each entry: (WrapperType, InnerType). InnerType is non-null when the assignment's
+            // referenced rule is a "thin owning wrapper" (target=OwningMembership wrapping a
+            // single ownedRelatedElement += T); the inner type T then provides the narrowing
+            // discriminator that distinguishes the wrapper from sibling OwningMembership
+            // subtypes (e.g. EndFeatureMembership) that share the cursor's collection.
+            var resolvedTypes = new List<(string Wrapper, string Inner)>();
 
             foreach (var assignmentElement in collectionAssignments)
             {
-                var typeName = ResolveAssignmentTargetTypeName(assignmentElement, targetClass, ruleGenerationContext);
+                var wrapperType = ResolveAssignmentTargetTypeName(assignmentElement, targetClass, ruleGenerationContext);
 
-                if (typeName == null)
+                if (wrapperType == null)
                 {
                     return null;
                 }
 
-                if (!resolvedTypeNames.Contains(typeName))
+                var innerType = TryResolveWrappedInnerTypeName(assignmentElement, targetClass, ruleGenerationContext);
+                var entry = (Wrapper: wrapperType, Inner: innerType);
+
+                if (!resolvedTypes.Contains(entry))
                 {
-                    resolvedTypeNames.Add(typeName);
+                    resolvedTypes.Add(entry);
                 }
             }
 
             var cursorVariableName = EnsureCursorDeclared(writer, property, ruleGenerationContext);
 
-            if (resolvedTypeNames.Count == 1)
+            if (resolvedTypes.Count == 1)
             {
-                return $"{cursorVariableName}.Current is {resolvedTypeNames[0]}";
+                return BuildTypeCheck(cursorVariableName, resolvedTypes[0].Wrapper, resolvedTypes[0].Inner, ruleGenerationContext);
             }
 
-            var typeChecks = resolvedTypeNames.Select(typeName => $"{cursorVariableName}.Current is {typeName}");
+            var typeChecks = resolvedTypes.Select(entry => BuildTypeCheck(cursorVariableName, entry.Wrapper, entry.Inner, ruleGenerationContext));
 
             return $"({string.Join(" || ", typeChecks)})";
+        }
+
+        /// <summary>
+        /// Builds a single cursor-typed boolean check. When <paramref name="innerType"/> is
+        /// supplied the check narrows from a bare <c>cursor.Current is Wrapper</c> to
+        /// <c>(cursor.Current is Wrapper owningMembershipN &amp;&amp; owningMembershipN.OwnedRelatedElement.OfType&lt;Inner&gt;().Any())</c>
+        /// so the discriminator is precise enough to distinguish a thin owning wrapper from
+        /// sibling subtypes of the same wrapper class. The pattern-variable suffix is drawn from
+        /// <see cref="RuleGenerationContext.NarrowedTypeCheckCounter"/> so multiple narrowed
+        /// checks in the same generated method do not collide on the C# scope (CS0136).
+        /// </summary>
+        /// <param name="cursorVariableName">The cursor variable name in scope at the emission site.</param>
+        /// <param name="wrapperType">The fully-qualified wrapper type name.</param>
+        /// <param name="innerType">The fully-qualified inner element type name when narrowing applies; otherwise <see langword="null" />.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /> providing the per-rule counter for unique pattern-variable names.</param>
+        /// <returns>The C# boolean expression to emit.</returns>
+        private static string BuildTypeCheck(string cursorVariableName, string wrapperType, string innerType, RuleGenerationContext ruleGenerationContext)
+        {
+            if (innerType == null)
+            {
+                return $"{cursorVariableName}.Current is {wrapperType}";
+            }
+
+            var patternVariableName = $"owningMembership{ruleGenerationContext.NarrowedTypeCheckCounter}";
+            ruleGenerationContext.NarrowedTypeCheckCounter++;
+
+            return $"({cursorVariableName}.Current is {wrapperType} {patternVariableName} && {patternVariableName}.OwnedRelatedElement.OfType<{innerType}>().Any())";
         }
 
         /// <summary>
@@ -544,7 +579,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            var condition = this.GenerateInlineOptionalCondition(writer, referencedRule, targetClass, ruleGenerationContext, variableName);
+            var condition = GenerateInlineOptionalCondition(writer, referencedRule, targetClass, ruleGenerationContext, variableName);
 
             if (condition == null)
             {
