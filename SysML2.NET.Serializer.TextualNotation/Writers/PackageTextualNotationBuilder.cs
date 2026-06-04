@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
-
     using SysML2.NET.Core.POCO.Kernel.Packages;
 
     /// <summary>
@@ -36,6 +35,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder"/></param>
         private static void BuildFilterPackageImport(IPackage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
+            // Placeholder for non existing rule
         }
     }
 }

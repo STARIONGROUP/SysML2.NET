@@ -48,22 +48,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         private static void BuildClassificationExpressionHandCoded(IOperatorExpression poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            stringBuilder.Append(poco.Operator);
-            stringBuilder.Append(' ');
-
-            if (ownedRelationshipCursor.Current is IParameterMembership parameterMembership)
-            {
-                ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(parameterMembership, writerContext, stringBuilder);
-            }
-
-            ownedRelationshipCursor.Move();
+            BuildCommonClassificationExpression(poco, writerContext, stringBuilder);
         }
 
         /// <summary>
         /// Builds the Textual Notation string for the <c>(…)</c> alternation inside the
-        /// <c>MetaclassificationExpression</c> rule.
+        /// <c>MetaclassificationExpression</c> and <c>ClassificationExpression</c> rule.
         /// <para><c>( operator = ClassificationTestOperator ownedRelationship += TypeReferenceMember
         /// | operator = MetaCastOperator ownedRelationship += TypeResultMember )</c></para>
         /// <para>Identical structure to <see cref="BuildClassificationExpressionHandCoded"/> — the
@@ -76,6 +66,25 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         private static void BuildMetaclassificationExpressionHandCoded(IOperatorExpression poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
+        {
+            BuildCommonClassificationExpression(poco, writerContext, stringBuilder);
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the <c>(…)</c> common alternation inside the
+        /// <c>MetaclassificationExpression</c> rule.
+        /// <para><c>( operator = ClassificationTestOperator ownedRelationship += TypeReferenceMember
+        /// | operator = MetaCastOperator ownedRelationship += TypeResultMember )</c></para>
+        /// <para>Identical structure to <see cref="BuildClassificationExpressionHandCoded"/> — the
+        /// operator literal is one of <c>'istype'</c>, <c>'hastype'</c>, <c>'@'</c>, <c>'meta'</c>.
+        /// Both membership alternatives share the same body and runtime type hierarchy, so a single
+        /// <see cref="ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember"/> call
+        /// handles both branches.</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="IOperatorExpression" /> being serialised</param>
+        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildCommonClassificationExpression(IOperatorExpression poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 

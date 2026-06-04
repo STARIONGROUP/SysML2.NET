@@ -20,8 +20,6 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
-
-    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
@@ -29,16 +27,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     /// </summary>
     public static partial  class FeatureMembershipTextualNotationBuilder
     {
-        /// <summary>
-        /// Build the memberFeature=[QualifiedName] of the rule
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMemberFeature(IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
-        {
-        }
-
         /// <summary>
         /// Builds the Textual Notation string for the rule InitialNodeMember.
         /// <remarks>InitialNodeMember:FeatureMembership=MemberPrefix'first'memberFeature=[QualifiedName]RelationshipBody</remarks>
@@ -106,6 +94,5 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 ownedRelatedElementCursor.Move();
             }
         }
-
     }
 }
