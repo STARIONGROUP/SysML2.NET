@@ -94,7 +94,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     ruleGenerationContext.AllRules.AddRange(allRules);
 
-                    var isOperatorExpressionRule = IsOperatorExpressionRule(textualRule, umlClass);
+                    var isOperatorExpressionRule = IsOperatorExpressionRule(umlClass);
                     var isOwnedExpressionRule = string.Equals(textualRule.RuleName, "OwnedExpression", StringComparison.Ordinal);
                     var isInlineBraceBodyRule = IsInlineBraceBodyRule(textualRule);
 
@@ -152,30 +152,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <c>WriteRule</c> to wrap the generated builder body with a precedence-stack
         /// push/pop so operand-rendering can decide on parens.
         /// </summary>
-        /// <param name="rule">The textual notation rule being generated.</param>
         /// <param name="umlClass">The rule's target <see cref="IClass"/>.</param>
         /// <returns><c>true</c> when the target is <c>OperatorExpression</c> or a subclass.</returns>
-        private static bool IsOperatorExpressionRule(TextualNotationRule rule, IClass umlClass)
+        private static bool IsOperatorExpressionRule(IClass umlClass)
         {
             if (umlClass == null)
             {
                 return false;
             }
 
-            if (string.Equals(umlClass.Name, "OperatorExpression", StringComparison.Ordinal))
-            {
-                return true;
-            }
-
-            foreach (var general in umlClass.QueryAllGeneralClassifiers())
-            {
-                if (string.Equals(general.Name, "OperatorExpression", StringComparison.Ordinal))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return string.Equals(umlClass.Name, "OperatorExpression", StringComparison.Ordinal) || umlClass.QueryAllGeneralClassifiers().Any(general => string.Equals(general.Name, "OperatorExpression", StringComparison.Ordinal));
         }
 
         /// <summary>
@@ -200,19 +186,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            foreach (var alternative in rule.Alternatives)
+            foreach (var alternative in rule.Alternatives.Where(alternative => alternative.Elements.Count == 3))
             {
-                if (alternative.Elements.Count != 3)
+                if (alternative.Elements[0] is not TerminalElement { Value: "{" })
                 {
                     continue;
                 }
 
-                if (alternative.Elements[0] is not TerminalElement openBrace || openBrace.Value != "{")
-                {
-                    continue;
-                }
-
-                if (alternative.Elements[2] is not TerminalElement closeBrace || closeBrace.Value != "}")
+                if (alternative.Elements[2] is not TerminalElement { Value: "}" })
                 {
                     continue;
                 }
