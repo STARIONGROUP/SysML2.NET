@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureMembershipTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -20,9 +20,6 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
-    using System.Text;
-
-    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
@@ -30,16 +27,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     /// </summary>
     public static partial  class FeatureMembershipTextualNotationBuilder
     {
-        /// <summary>
-        /// Build the memberFeature=[QualifiedName] of the rule
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
-        /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildMemberFeature(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
-        {
-        }
-
         /// <summary>
         /// Builds the Textual Notation string for the rule InitialNodeMember.
         /// <remarks>InitialNodeMember:FeatureMembership=MemberPrefix'first'memberFeature=[QualifiedName]RelationshipBody</remarks>
@@ -53,8 +40,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildInitialNodeMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildInitialNodeMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // Preserves the previous empty-stub behavior of BuildMemberFeature for this
             // call site. The full QualifiedName-emission still requires a dedicated
@@ -72,8 +59,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildOwnedExpressionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildOwnedExpressionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
             {
@@ -87,8 +74,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildEntryTransitionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildEntryTransitionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // Dispatch on cursor element type:
             //   - ITransitionUsage → GuardedTargetSuccession (no 'then' keyword)
@@ -107,6 +94,5 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 ownedRelatedElementCursor.Move();
             }
         }
-
     }
 }

@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="ExpressionTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Kernel.Functions;
 
@@ -35,8 +34,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IExpression" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSequenceExpressionListHandCoded(IExpression poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSequenceExpressionListHandCoded(IExpression poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             // Dispatch: if the poco is an OperatorExpression with operator=',', emit as SequenceOperatorExpression;
             // otherwise emit as OwnedExpression (the optional trailing comma in the grammar is not emitted)

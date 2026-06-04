@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureMembershipTextualNotationBuilder.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -25,7 +25,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -40,8 +39,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -65,8 +64,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -90,8 +89,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStructureUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildStructureUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -115,8 +114,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildBehaviorUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildBehaviorUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -140,8 +139,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSourceSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildSourceSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("then ");
@@ -165,8 +164,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildInterfaceNonOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -190,8 +189,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildInterfaceOccurrenceUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -215,8 +214,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildFlowPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
@@ -239,8 +238,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFlowFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildFlowFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
@@ -263,8 +262,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionBehaviorMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildActionBehaviorMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             switch (poco)
             {
@@ -284,8 +283,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInitialNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildInitialNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("first ");
@@ -300,8 +299,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildActionNodeMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -325,8 +324,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionTargetSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildActionTargetSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -350,8 +349,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildGuardedSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildGuardedSuccessionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -375,8 +374,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildForVariableDeclarationMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildForVariableDeclarationMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
@@ -399,8 +398,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildEntryTransitionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildEntryTransitionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -415,8 +414,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -440,8 +439,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTargetTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTargetTransitionUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -465,8 +464,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBodyUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildMetadataBodyUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
@@ -483,8 +482,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildOwnedFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
@@ -508,8 +507,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -532,8 +531,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildOwnedExpressionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildOwnedExpressionMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             BuildOwnedExpressionMemberHandCoded(poco, writerContext, stringBuilder);
 
@@ -545,8 +544,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSequenceExpressionListMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildSequenceExpressionListMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
@@ -563,8 +562,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildFunctionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
@@ -581,8 +580,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildNamedArgumentMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildNamedArgumentMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
             FeatureTextualNotationBuilder.BuildNamedArgument(effectiveOwnedMemberFeature, writerContext, stringBuilder);
@@ -595,8 +594,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildExpressionBodyMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildExpressionBodyMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
 
@@ -613,8 +612,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildPayloadFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
@@ -637,8 +636,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
             FeatureTextualNotationBuilder.BuildMetadataBodyFeature(effectiveOwnedMemberFeature, writerContext, stringBuilder);

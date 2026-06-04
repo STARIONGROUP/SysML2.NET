@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="TerminalWriter.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -52,12 +52,23 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (NewLineTerminals.Contains(terminalValue))
             {
+                if (terminalValue == "}")
+                {
+                    writer.WriteSafeString($"stringBuilder.DecreaseIndent();{Environment.NewLine}");
+                }
+
                 if (terminalValue == "{")
                 {
                     writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
                 }
 
                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");");
+
+                if (terminalValue == "{")
+                {
+                    writer.WriteSafeString($"{Environment.NewLine}stringBuilder.IncreaseIndent();");
+                }
+
                 return;
             }
 
@@ -86,7 +97,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             if (NewLineTerminals.Contains(terminalValue))
             {
+                if (terminalValue == "}")
+                {
+                    writer.WriteSafeString($"stringBuilder.DecreaseIndent();{Environment.NewLine}");
+                }
+
                 writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");");
+
+                if (terminalValue == "{")
+                {
+                    writer.WriteSafeString($"{Environment.NewLine}stringBuilder.IncreaseIndent();");
+                }
+
                 return;
             }
 

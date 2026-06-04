@@ -94,8 +94,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     ruleGenerationContext.AllRules.AddRange(allRules);
 
-                    var isOperatorExpressionRule = IsOperatorExpressionRule(textualRule, umlClass);
+                    var isOperatorExpressionRule = IsOperatorExpressionRule(umlClass);
                     var isOwnedExpressionRule = string.Equals(textualRule.RuleName, "OwnedExpression", StringComparison.Ordinal);
+                    var isInlineBraceBodyRule = IsInlineBraceBodyRule(textualRule);
 
                     if (isOwnedExpressionRule)
                     {
@@ -109,7 +110,28 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         writer.WriteSafeString("try" + Environment.NewLine + "{" + Environment.NewLine);
                     }
 
+                    // Inline-brace-body rules — rules whose body alternative has the exact
+                    // shape `'{' SingleNonTerminal '}'` with no quantifier and no `+=`
+                    // accumulator — render their <c>{ … }</c> wrapper on a single line per
+                    // the SST tutorial convention (e.g. constraint and expression bodies).
+                    // The three rules that match in the KEBNF are
+                    // <c>FunctionBody</c>, <c>ExpressionBody</c>, and <c>CalculationBody</c>;
+                    // every other brace-bounded rule uses a <c>*</c>-quantified list and
+                    // renders multi-line. The wrapping suppresses AppendLine newlines inside
+                    // the rule body and re-terminates the logical line on exit so the next
+                    // owning statement starts on its own line.
+                    if (isInlineBraceBodyRule)
+                    {
+                        writer.WriteSafeString("stringBuilder.EnterInlineBlock();" + Environment.NewLine);
+                        writer.WriteSafeString("try" + Environment.NewLine + "{" + Environment.NewLine);
+                    }
+
                     processor.ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
+
+                    if (isInlineBraceBodyRule)
+                    {
+                        writer.WriteSafeString("}" + Environment.NewLine + "finally" + Environment.NewLine + "{" + Environment.NewLine + "stringBuilder.ExitInlineBlock();" + Environment.NewLine + "stringBuilder.AppendLine();" + Environment.NewLine + "}" + Environment.NewLine);
+                    }
 
                     if (isOperatorExpressionRule)
                     {
@@ -130,27 +152,68 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <c>WriteRule</c> to wrap the generated builder body with a precedence-stack
         /// push/pop so operand-rendering can decide on parens.
         /// </summary>
-        /// <param name="rule">The textual notation rule being generated.</param>
         /// <param name="umlClass">The rule's target <see cref="IClass"/>.</param>
         /// <returns><c>true</c> when the target is <c>OperatorExpression</c> or a subclass.</returns>
-        private static bool IsOperatorExpressionRule(TextualNotationRule rule, IClass umlClass)
+        private static bool IsOperatorExpressionRule(IClass umlClass)
         {
             if (umlClass == null)
             {
                 return false;
             }
 
-            if (string.Equals(umlClass.Name, "OperatorExpression", StringComparison.Ordinal))
+            return string.Equals(umlClass.Name, "OperatorExpression", StringComparison.Ordinal) || umlClass.QueryAllGeneralClassifiers().Any(general => string.Equals(general.Name, "OperatorExpression", StringComparison.Ordinal));
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="rule"/> has any alternative of the exact shape
+        /// <c>'{' SingleNonTerminal '}'</c> with no quantifier and no <c>+=</c> accumulator
+        /// on the inner non-terminal. The KEBNF grammar uses this shape exclusively for
+        /// expression-body wrappers — <c>FunctionBody</c>, <c>ExpressionBody</c> and
+        /// <c>CalculationBody</c> — whose canonical SST rendering is a single inline line
+        /// <c>{ expr }</c>. Every other brace-bounded rule uses a <c>*</c>-quantified list
+        /// (e.g. <c>'{' PackageBodyElement* '}'</c>) and renders multi-line.
+        /// </summary>
+        /// <param name="rule">The textual notation rule being generated.</param>
+        /// <returns>
+        /// <c>true</c> when the rule contains the inline brace-body shape and therefore
+        /// needs its braced alternative wrapped with
+        /// <c>stringBuilder.EnterInlineBlock()</c> / <c>stringBuilder.ExitInlineBlock()</c>.
+        /// </returns>
+        private static bool IsInlineBraceBodyRule(TextualNotationRule rule)
+        {
+            if (rule == null)
             {
-                return true;
+                return false;
             }
 
-            foreach (var general in umlClass.QueryAllGeneralClassifiers())
+            foreach (var alternative in rule.Alternatives.Where(alternative => alternative.Elements.Count == 3))
             {
-                if (string.Equals(general.Name, "OperatorExpression", StringComparison.Ordinal))
+                if (alternative.Elements[0] is not TerminalElement { Value: "{" })
                 {
-                    return true;
+                    continue;
                 }
+
+                if (alternative.Elements[2] is not TerminalElement { Value: "}" })
+                {
+                    continue;
+                }
+
+                if (alternative.Elements[1] is not NonTerminalElement nonTerminal)
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(nonTerminal.Suffix))
+                {
+                    continue;
+                }
+
+                if (nonTerminal.Container is AssignmentElement)
+                {
+                    continue;
+                }
+
+                return true;
             }
 
             return false;

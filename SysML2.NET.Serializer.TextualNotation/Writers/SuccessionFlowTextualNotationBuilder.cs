@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="SuccessionFlowTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Kernel.Interactions;
 
@@ -34,7 +33,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.ISuccessionFlow" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// FlowDeclaration : Flow =
         ///     FeatureDeclaration ValuePart?
@@ -47,7 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Same grammar as Flow's FlowDeclaration; ISuccessionFlow extends IFlow. Body delegates to the
         /// shared <see cref="SharedTextualNotationBuilder.BuildFlowDeclarationHandCoded"/> helper.
         /// </remarks>
-        private static void BuildFlowDeclarationHandCoded(ISuccessionFlow poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        private static void BuildFlowDeclarationHandCoded(ISuccessionFlow poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             SharedTextualNotationBuilder.BuildFlowDeclarationHandCoded(poco, writerContext, stringBuilder);
         }

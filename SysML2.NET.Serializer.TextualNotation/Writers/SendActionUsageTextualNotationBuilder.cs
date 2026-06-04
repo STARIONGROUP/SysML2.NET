@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="SendActionUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 // 
 //        http://www.apache.org/licenses/LICENSE-2.0
 // 
@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Systems.Actions;
@@ -43,8 +42,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="ISendActionUsage" /> being serialised</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSendNodeHandCoded(ISendActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSendNodeHandCoded(ISendActionUsage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -79,8 +78,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="ISendActionUsage" /> being serialised</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildSenderReceiverPartHandCoded(ISendActionUsage poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        private static void BuildSenderReceiverPartHandCoded(ISendActionUsage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 

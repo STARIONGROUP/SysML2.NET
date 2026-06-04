@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TypeTextualNotationBuilder.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2026 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -25,7 +25,6 @@
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
-    using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -40,8 +39,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildDefinitionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -51,11 +50,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildDefinitionBodyItem(poco, writerContext, stringBuilder);
                 }
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -67,8 +68,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDefinitionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildDefinitionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             BuildDefinitionBodyItemHandCoded(poco, writerContext, stringBuilder);
         }
@@ -79,8 +80,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildInterfaceBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -90,11 +91,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildInterfaceBodyItem(poco, writerContext, stringBuilder);
                 }
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -106,8 +109,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInterfaceBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildInterfaceBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             BuildInterfaceBodyItemHandCoded(poco, writerContext, stringBuilder);
         }
@@ -118,8 +121,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildActionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -129,11 +132,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildActionBodyItem(poco, writerContext, stringBuilder);
                 }
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -145,8 +150,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildActionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildActionBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             BuildActionBodyItemHandCoded(poco, writerContext, stringBuilder);
         }
@@ -157,8 +162,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildStateBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildStateBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             BuildStateBodyItemHandCoded(poco, writerContext, stringBuilder);
         }
@@ -169,23 +174,34 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCalculationBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildCalculationBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            stringBuilder.EnterInlineBlock();
+            try
             {
-                stringBuilder.AppendLine(";");
-            }
-            else
-            {
-                stringBuilder.Append(' ');
-                stringBuilder.AppendLine("{");
-                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-                if (ownedRelationshipCursor.Current != null)
+                if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
                 {
-                    BuildCalculationBodyPart(poco, writerContext, stringBuilder);
+                    stringBuilder.AppendLine(";");
                 }
-                stringBuilder.AppendLine("}");
+                else
+                {
+                    stringBuilder.Append(' ');
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.IncreaseIndent();
+                    var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                    if (ownedRelationshipCursor.Current != null)
+                    {
+                        BuildCalculationBodyPart(poco, writerContext, stringBuilder);
+                    }
+                    stringBuilder.DecreaseIndent();
+                    stringBuilder.AppendLine("}");
+                }
+            }
+            finally
+            {
+                stringBuilder.ExitInlineBlock();
+                stringBuilder.AppendLine();
             }
 
         }
@@ -196,8 +212,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCalculationBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildCalculationBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
@@ -230,8 +246,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership returnParameterMembership)
@@ -252,8 +268,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildRequirementBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -263,11 +279,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildRequirementBodyItem(poco, writerContext, stringBuilder);
                 }
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -279,8 +297,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership subjectMembership)
@@ -326,8 +344,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCaseBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildCaseBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -338,6 +356,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildCaseBodyItem(poco, writerContext, stringBuilder);
@@ -360,6 +379,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     stringBuilder.Append(' ');
                 }
 
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -371,8 +391,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership subjectMembership)
@@ -403,8 +423,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildMetadataBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildMetadataBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -415,6 +435,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 while (ownedRelationshipCursor.Current != null)
                 {
                     switch (ownedRelationshipCursor.Current)
@@ -435,6 +456,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     ownedRelationshipCursor.Move();
                 }
 
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -446,8 +468,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypePrefix(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTypePrefix(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -481,8 +503,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeDeclaration(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTypeDeclaration(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
@@ -526,8 +548,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildSpecializationPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildSpecializationPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append(" :> ");
@@ -567,8 +589,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildConjugationPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildConjugationPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append(" ~");
@@ -592,8 +614,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeRelationshipPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTypeRelationshipPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             switch (poco)
             {
@@ -619,8 +641,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDisjoiningPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildDisjoiningPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("disjoint ");
@@ -661,8 +683,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildUnioningPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildUnioningPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("unions ");
@@ -702,8 +724,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildIntersectingPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildIntersectingPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("intersects ");
@@ -743,8 +765,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildDifferencingPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildDifferencingPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("differences ");
@@ -784,8 +806,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTypeBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
             {
@@ -795,11 +817,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
                     BuildTypeBodyElement(poco, writerContext, stringBuilder);
                 }
+                stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
             }
 
@@ -811,8 +835,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             switch (ownedRelationshipCursor.Current)
@@ -846,23 +870,34 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildFunctionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            stringBuilder.EnterInlineBlock();
+            try
             {
-                stringBuilder.AppendLine(";");
-            }
-            else
-            {
-                stringBuilder.Append(' ');
-                stringBuilder.AppendLine("{");
-                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-                if (ownedRelationshipCursor.Current != null)
+                if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
                 {
-                    BuildFunctionBodyPart(poco, writerContext, stringBuilder);
+                    stringBuilder.AppendLine(";");
                 }
-                stringBuilder.AppendLine("}");
+                else
+                {
+                    stringBuilder.Append(' ');
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.IncreaseIndent();
+                    var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                    if (ownedRelationshipCursor.Current != null)
+                    {
+                        BuildFunctionBodyPart(poco, writerContext, stringBuilder);
+                    }
+                    stringBuilder.DecreaseIndent();
+                    stringBuilder.AppendLine("}");
+                }
+            }
+            finally
+            {
+                stringBuilder.ExitInlineBlock();
+                stringBuilder.AppendLine();
             }
 
         }
@@ -873,8 +908,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildFunctionBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildFunctionBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current != null)
@@ -913,8 +948,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildInstantiatedTypeReference(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildInstantiatedTypeReference(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco, writerContext, poco);
             stringBuilder.Append(' ');
@@ -927,8 +962,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
-        public static void BuildType(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, StringBuilder stringBuilder)
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildType(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             BuildTypePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("type ");
