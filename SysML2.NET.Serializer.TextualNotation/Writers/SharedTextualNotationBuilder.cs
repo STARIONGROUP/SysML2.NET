@@ -576,10 +576,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> to append to</param>
         /// <param name="body">The body text to format as a REGULAR_COMMENT</param>
-        internal static void AppendRegularComment(IndentedStringBuilder stringBuilder, string body)
+        /// <param name="surroundWithBlankLines">
+        /// When <c>true</c>, emits a blank line immediately before <c>/*</c> and immediately
+        /// after <c>*/</c> (only meaningful for multi-line comment bodies). Used by the
+        /// <c>Documentation</c> rule so <c>doc /* … */</c> blocks are visually separated
+        /// from surrounding members. When <c>false</c> (the default), the comment body is
+        /// emitted adjacent to its neighbouring statements — the SST convention for
+        /// non-doc-prefixed comments.
+        /// </param>
+        internal static void AppendRegularComment(IndentedStringBuilder stringBuilder, string body, bool surroundWithBlankLines = false)
         {
-            stringBuilder.AppendLine();
-            
+            if (surroundWithBlankLines)
+            {
+                stringBuilder.AppendLine();
+            }
+
             if (string.IsNullOrWhiteSpace(body))
             {
                 stringBuilder.AppendLine("/* */");
@@ -606,7 +617,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             stringBuilder.AppendLine(" */");
-            stringBuilder.AppendLine();
+
+            if (surroundWithBlankLines)
+            {
+                stringBuilder.AppendLine();
+            }
         }
 
         /// <summary>

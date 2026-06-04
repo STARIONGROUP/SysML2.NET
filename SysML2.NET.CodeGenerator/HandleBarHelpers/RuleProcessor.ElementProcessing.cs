@@ -342,7 +342,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             if (assignmentElement.Value is NonTerminalElement { Name: "REGULAR_COMMENT" })
                             {
-                                writer.WriteSafeString($"SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.{targetPropertyName});");
+                                // Documentation rule (`doc /* … */`) surrounds the comment with
+                                // blank lines so doc blocks are visually separated from their
+                                // owning members. Every other rule that assigns a REGULAR_COMMENT
+                                // body (currently only `Comment`) renders adjacent to its
+                                // neighbouring statements per the SST convention.
+                                var surroundWithBlankLines = string.Equals(ruleGenerationContext.NamedElementToGenerate?.Name, "Documentation", StringComparison.Ordinal);
+                                writer.WriteSafeString($"SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.{targetPropertyName}, surroundWithBlankLines: {(surroundWithBlankLines ? "true" : "false")});");
                             }
                             else if (assignmentElement.Value is NonTerminalElement { Name: "NAME" })
                             {

@@ -228,12 +228,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildExpressionBody(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            stringBuilder.Append(' ');
-            stringBuilder.AppendLine("{");
-            stringBuilder.IncreaseIndent();
-            TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, writerContext, stringBuilder);
-            stringBuilder.DecreaseIndent();
-            stringBuilder.AppendLine("}");
+            stringBuilder.EnterInlineBlock();
+            try
+            {
+                stringBuilder.Append(' ');
+                stringBuilder.AppendLine("{");
+                stringBuilder.IncreaseIndent();
+                TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, writerContext, stringBuilder);
+                stringBuilder.DecreaseIndent();
+                stringBuilder.AppendLine("}");
+            }
+            finally
+            {
+                stringBuilder.ExitInlineBlock();
+                stringBuilder.AppendLine();
+            }
 
         }
 

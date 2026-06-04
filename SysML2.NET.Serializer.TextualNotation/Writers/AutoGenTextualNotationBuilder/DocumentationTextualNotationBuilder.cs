@@ -52,7 +52,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.Append(' ');
             }
 
-            SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.Body);
+            SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.Body, surroundWithBlankLines: true);
 
         }
     }

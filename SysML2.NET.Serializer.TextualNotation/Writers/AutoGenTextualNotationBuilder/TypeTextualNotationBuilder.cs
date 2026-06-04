@@ -177,22 +177,31 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildCalculationBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            stringBuilder.EnterInlineBlock();
+            try
             {
-                stringBuilder.AppendLine(";");
-            }
-            else
-            {
-                stringBuilder.Append(' ');
-                stringBuilder.AppendLine("{");
-                stringBuilder.IncreaseIndent();
-                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-                if (ownedRelationshipCursor.Current != null)
+                if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
                 {
-                    BuildCalculationBodyPart(poco, writerContext, stringBuilder);
+                    stringBuilder.AppendLine(";");
                 }
-                stringBuilder.DecreaseIndent();
-                stringBuilder.AppendLine("}");
+                else
+                {
+                    stringBuilder.Append(' ');
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.IncreaseIndent();
+                    var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                    if (ownedRelationshipCursor.Current != null)
+                    {
+                        BuildCalculationBodyPart(poco, writerContext, stringBuilder);
+                    }
+                    stringBuilder.DecreaseIndent();
+                    stringBuilder.AppendLine("}");
+                }
+            }
+            finally
+            {
+                stringBuilder.ExitInlineBlock();
+                stringBuilder.AppendLine();
             }
 
         }
@@ -864,22 +873,31 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildFunctionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            stringBuilder.EnterInlineBlock();
+            try
             {
-                stringBuilder.AppendLine(";");
-            }
-            else
-            {
-                stringBuilder.Append(' ');
-                stringBuilder.AppendLine("{");
-                stringBuilder.IncreaseIndent();
-                var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-                if (ownedRelationshipCursor.Current != null)
+                if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
                 {
-                    BuildFunctionBodyPart(poco, writerContext, stringBuilder);
+                    stringBuilder.AppendLine(";");
                 }
-                stringBuilder.DecreaseIndent();
-                stringBuilder.AppendLine("}");
+                else
+                {
+                    stringBuilder.Append(' ');
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.IncreaseIndent();
+                    var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+                    if (ownedRelationshipCursor.Current != null)
+                    {
+                        BuildFunctionBodyPart(poco, writerContext, stringBuilder);
+                    }
+                    stringBuilder.DecreaseIndent();
+                    stringBuilder.AppendLine("}");
+                }
+            }
+            finally
+            {
+                stringBuilder.ExitInlineBlock();
+                stringBuilder.AppendLine();
             }
 
         }
