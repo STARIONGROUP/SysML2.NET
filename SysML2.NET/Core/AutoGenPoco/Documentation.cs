@@ -331,8 +331,8 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />

@@ -70,12 +70,13 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// OCL2.0:
         /// <code>
         /// referent =
-        ///                             let unownedFeatures : Sequence(Feature) = ownedMembership-&gt;
-        ///                             reject(oclIsKindOf(FeatureMembership)).memberElement-&gt;
-        ///                             selectByKind(Feature) in
-        ///                             if unownedFeatures-&gt;isEmpty() then null
-        ///                             else unownedFeatures-&gt;first().oclAsType(Feature)
-        ///                             endif
+        ///     let unownedFeatures : Sequence(Feature) = ownedMembership-&gt;
+        ///         reject(oclIsKindOf(FeatureMembership)).memberElement-&gt;
+        ///         select(oclIsKindOf(Feature) and
+        ///                not oclIsKindOf(MetadataFeature)) in
+        ///     if unownedFeatures-&gt;isEmpty() then null
+        ///     else unownedFeatures-&gt;first().oclAsType(Feature)
+        ///     endif
         /// </code>
         /// </remarks>
         /// <param name="assignmentActionUsageSubject">

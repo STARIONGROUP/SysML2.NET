@@ -67,9 +67,8 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     /// AttributeDefinition, an AttributeUsage is a usage of a AttributeDefinition to represent the value of
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
     /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
-    /// nested features must be referential (non-composite).                        An AttributeUsage must
-    /// specialize, directly or indirectly, the base Feature Base::dataValues from the Kernel Semantic
-    /// Library.
+    /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
+    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic Library.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565471291545_950196_20762", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -416,11 +415,11 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.                            (A Type gives conditions that must be met by whatever it
-        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
-        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
-        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
-        /// the Type Car were sufficient, it would classify all four-wheeled things.)
+        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
+        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
+        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -458,9 +457,9 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
         /// owningType, rather than being featured by the owningType itself). However, if isConstant is also
         /// true, then the value of the Usage is nevertheless constant over the entire duration of an instance
-        /// of its owningType (that is, it has the same value on all snapshots).                            The
-        /// property mayTimeVary redefines the KerML property Feature::isVariable, making it derived. The
-        /// property isConstant is inherited from Feature.
+        /// of its owningType (that is, it has the same value on all snapshots).The property mayTimeVary
+        /// redefines the KerML property Feature::isVariable, making it derived. The property isConstant is
+        /// inherited from Feature.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
@@ -561,8 +560,8 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
 
         /// <summary>
         /// The ConnectorAsUsages that are nestedUsages of this Usage. Note that this list includes
-        /// BindingConnectorAsUsages, SuccessionAsUsages, and FlowConnectionUsages because these are
-        /// ConnectorAsUsages even though they are not ConnectionUsages.
+        /// BindingConnectorAsUsages, SuccessionAsUsages, and FlowUsages because these are ConnectorAsUsages
+        /// even though they are not ConnectionUsages.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591479754895_422988_1242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
@@ -610,7 +609,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         public List<IItemUsage> nestedItem => this.ComputeNestedItem();
 
         /// <summary>
-        /// The MetadataUsages that are nestedUsages of this of this Usage.
+        /// The MetadataUsages that are ownedMembers of this of this Usage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661488589862_120785_2970", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
@@ -1190,9 +1189,8 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         public FeatureDirectionKind? DirectionOfExcluding(IFeature feature, List<IType> excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
 
         /// <summary>
-        /// If a Feature has no declaredName or declaredShortName                            , then its
-        /// effective name is given by the effective name of the Feature returned by the namingFeature()
-        /// operation, if any.
+        /// If a Feature has no declaredName or declaredShortName, then its effective name is given by the
+        /// effective name of the Feature returned by the namingFeature() operation, if any.
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />
@@ -1297,11 +1295,10 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
 
         /// <summary>
         /// A Feature is compatible with an otherType if it either directly or indirectly specializes the
-        /// otherType or if the otherType is also a Feature and all of the following are true.                  
-        ///          <ol>                            <li>Neither this Feature or the otherType have any
-        /// ownedFeatures.</li>                            <li>This Feature directly or indirectly redefines a
-        /// Feature that is also directly or indirectly redefined by the otherType.</li>                        
-        /// <li>This Feature can access the otherType.                            </li></ol>
+        /// otherType or if the otherType is also a Feature and all of the following are true.<ol>	<li>Neither
+        /// this Feature or the otherType have any ownedFeatures.</li>	<li>This Feature directly or indirectly
+        /// redefines a Feature that is also directly or indirectly redefined by the otherType.</li>	<li>This
+        /// Feature can access the otherType.</li></ol>
         /// </summary>
         /// <param name="otherType">
         /// No documentation provided
@@ -1459,8 +1456,8 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />
@@ -1514,13 +1511,12 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
 
         /// <summary>
         /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
-        /// which either of the following two conditions holds:                            <ol>                 
-        ///           <li>The memberElement of the Membership is included in redefined Features of another
-        /// Membership in memberships.</li>                            <li>One of the redefined Features of the
-        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>                     
-        ///       </ol>                            For this purpose, the redefined Features of a Membership
-        /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
-        /// redefined by the memberElement.
+        /// which either of the following two conditions holds:<ol>	<li>The memberElement of the Membership is
+        /// included in redefined Features of another Membership in memberships.</li>	<li>One of the redefined
+        /// Features of the Membership is a directly redefinedFeature of an ownedFeature of this
+        /// Type.</li></ol>For this purpose, the redefined Features of a Membership whose memberElement is a
+        /// Feature includes the memberElement and all Features directly or indirectly redefined by the
+        /// memberElement.
         /// </summary>
         /// <param name="memberships">
         /// No documentation provided
@@ -1647,11 +1643,11 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// Return the Features used to determine the types of this Feature (other than this Feature itself). If
         /// this Feature is not conjugated, then the typingFeatures consist of all subsetted Features, except
         /// from CrossSubsetting, and the last chainingFeature (if any). If this Feature is conjugated, then the
-        /// typingFeatures are only its originalType (if the originalType is a Feature).                        
-        ///    <strong>Note.</strong> CrossSubsetting is excluded from the determination of the type of a
-        /// Feature in order to avoid circularity in the construction of implied CrossSubsetting relationships.
-        /// The validateFeatureCrossFeatureType requires that the crossFeature of a Feature have the same type
-        /// as the Feature.
+        /// typingFeatures are only its originalType (if the originalType is a Feature).<strong>Note.</strong>
+        /// CrossSubsetting is excluded from the determination of the type of a Feature in order to avoid
+        /// circularity in the construction of implied CrossSubsetting relationships. The
+        /// validateFeatureCrossFeatureType requires that the crossFeature of a Feature have the same type as
+        /// the Feature.
         /// </summary>
         /// <returns>
         /// The expected collection of <see cref="IFeature" />

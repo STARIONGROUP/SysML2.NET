@@ -33,15 +33,15 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
 
     /// <summary>
     /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model
-    /// are given by the subclasses of Definition (possibly as extended with user-defined SemanticMetadata).
-    ///                        Normally, a Definition has owned Usages that model features of the thing
-    /// being defined. A Definition may also have other Definitions nested in it, but this has no semantic
+    /// are given by the subclasses of Definition (possibly as extended with user-defined
+    /// SemanticMetadata).Normally, a Definition has owned Usages that model features of the thing being
+    /// defined. A Definition may also have other Definitions nested in it, but this has no semantic
     /// significance, other than the nested scoping resulting from the Definition being considered as a
-    /// Namespace for any nested Definitions.                        However, if a Definition has
-    /// isVariation = true, then it represents a variation point Definition. In this case, all of its
-    /// members must be variant Usages, related to the Definition by VariantMembership Relationships. Rather
-    /// than being features of the Definition, variant Usages model different concrete alternatives that can
-    /// be chosen to fill in for an abstract Usage of the variation point Definition.
+    /// Namespace for any nested Definitions.However, if a Definition has isVariation = true, then it
+    /// represents a variation point Definition. In this case, all of its members must be variant Usages,
+    /// related to the Definition by VariantMembership Relationships. Rather than being features of the
+    /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
+    /// an abstract Usage of the variation point Definition.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565479032244_336549_22524", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -155,7 +155,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         List<Guid> ownedItem { get; }
 
         /// <summary>
-        /// The MetadataUsages that are ownedUsages of this Definition.
+        /// The MetadataUsages that are ownedMembers of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661488358064_457109_2881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]

@@ -37,9 +37,9 @@ namespace SysML2.NET.Core.DTO.Systems.States
     /// A TransitionUsage is an ActionUsage representing a triggered transition between ActionUsages or
     /// StateUsages. When triggered by a triggerAction, when its guardExpression is true, the
     /// TransitionUsage asserts that its source is exited, then its effectAction (if any) is performed, and
-    /// then its target is entered.                        A TransitionUsage can be related to some of its
-    /// ownedFeatures using TransitionFeatureMembership Relationships, corresponding to the triggerAction,
-    /// guardExpression and effectAction of the TransitionUsage.
+    /// then its target is entered.A TransitionUsage can be related to some of its ownedFeatures using
+    /// TransitionFeatureMembership Relationships, corresponding to the triggerAction, guardExpression and
+    /// effectAction of the TransitionUsage.
     /// </summary>
     [Class(xmiId: "_19_0_2_12e503d9_1575672078353_626298_450", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

@@ -47,8 +47,8 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// <summary>
         /// An Expression whose result is bound to the payload input parameter of this SendActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1612814399422_336683_143", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid payloadArgument { get; }
+        [Property(xmiId: "_19_0_4_12e503d9_1612814399422_336683_143", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid? payloadArgument { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the receiver input parameter of this SendActionUsage.

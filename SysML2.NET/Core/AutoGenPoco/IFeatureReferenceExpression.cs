@@ -55,12 +55,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         IFeature referent { get; }
 
         /// <summary>
-        /// A FeatureReferenceExpression is model-level evaluable if it&#39;s referent                          
-        ///  <ul>                            <li>conforms to the self-reference feature Anything::self;</li>    
-        ///                        <li>is an Expression that is model-level evaluable;</li>                     
-        ///       <li>has an owningType that is a Metaclass or MetadataFeature; or</li>                         
-        ///   <li>has no featuringTypes and, if it has a FeatureValue, the value Expression is model-level
-        /// evaluable.</li>                            </ul>
+        /// A FeatureReferenceExpression is model-level evaluable if it&#39;s referent<ul>	<li>conforms to the
+        /// self-reference feature Anything::self;</li>	<li>is an Expression that is model-level
+        /// evaluable;</li>	<li>has an owningType that is a Metaclass or MetadataFeature; or</li>	<li>has no
+        /// featuringTypes and, if it has a FeatureValue, the value Expression is model-level
+        /// evaluable.</li></ul>
         /// </summary>
         /// <param name="visited">
         /// No documentation provided
@@ -71,15 +70,13 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         new bool ModelLevelEvaluable(List<IFeature> visited);
 
         /// <summary>
-        /// First, determine a value Expression for the referent:                            <ul>               
-        ///             <li>If the target Element is a Type that has a feature that is the referent or (directly
-        /// or indirectly) redefines it, then the value Expression of the FeatureValue for that feature (if
-        /// any).</li>                            <li>Else, if the referent has no featuringTypes, the value
-        /// Expression of the FeatureValue for the referent (if any).</li>                            </ul>     
-        ///                       Then:                            <ul>                            <li>If such a
-        /// value Expression exists, return the result of evaluating that Expression on the target.</li>        
-        ///                    <li>Else, if the referent is not an Expression, return the referent.</li>        
-        /// <li>Else return the empty sequence.</li>                            </ul>
+        /// First, determine a value Expression for the referent:<ul>	<li>If the target Element is a Type that
+        /// has a feature that is the referent or (directly or indirectly) redefines it, then the value
+        /// Expression of the FeatureValue for that feature (if any).</li>	<li>Else, if the referent has no
+        /// featuringTypes, the value Expression of the FeatureValue for the referent (if
+        /// any).</li></ul>Then:<ul>	<li>If such a value Expression exists, return the result of evaluating that
+        /// Expression on the target.</li>	<li>Else, if the referent is not an Expression, return the
+        /// referent.</li>	<li>Else return the empty sequence.</li></ul>
         /// </summary>
         /// <param name="target">
         /// No documentation provided

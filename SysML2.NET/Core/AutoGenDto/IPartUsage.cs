@@ -35,8 +35,8 @@ namespace SysML2.NET.Core.DTO.Systems.Parts
 
     /// <summary>
     /// A PartUsage is a usage of a PartDefinition to represent a system or a part of a system. At least one
-    /// of the itemDefinitions of the PartUsage must be a PartDefinition.                        A PartUsage
-    /// must subset, directly or indirectly, the base PartUsage parts from the Systems Model Library.
+    /// of the itemDefinitions of the PartUsage must be a PartDefinition.A PartUsage must subset, directly
+    /// or indirectly, the base PartUsage parts from the Systems Model Library.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565471239590_312157_20701", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

@@ -38,14 +38,13 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// <summary>
     /// A Namespace is an Element that contains other Elements, known as its members, via Membership
     /// Relationships with those Elements. The members of a Namespace may be owned by the Namespace, aliased
-    /// in the Namespace, or imported into the Namespace via Import Relationships.                        A
-    /// Namespace can provide names for its members via the memberNames and memberShortNames specified by
-    /// the Memberships in the Namespace. If a Membership specifies a memberName and/or memberShortName,
-    /// then those are names of the corresponding memberElement relative to the Namespace. For an
-    /// OwningMembership, the ownedMemberName and ownedMemberShortName are given by the Element name and
-    /// shortName. Note that the same Element may be the memberElement of multiple Memberships in a
-    /// Namespace (though it may be owned at most once), each of which may define a separate alias for the
-    /// Element relative to the Namespace.
+    /// in the Namespace, or imported into the Namespace via Import Relationships.A Namespace can provide
+    /// names for its members via the memberNames and memberShortNames specified by the Memberships in the
+    /// Namespace. If a Membership specifies a memberName and/or memberShortName, then those are names of
+    /// the corresponding memberElement relative to the Namespace. For an OwningMembership, the
+    /// ownedMemberName and ownedMemberShortName are given by the Element name and shortName. Note that the
+    /// same Element may be the memberElement of multiple Memberships in a Namespace (though it may be owned
+    /// at most once), each of which may define a separate alias for the Element relative to the Namespace.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1533160651694_110063_42176", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -374,8 +373,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />

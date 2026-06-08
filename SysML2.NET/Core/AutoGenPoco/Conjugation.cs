@@ -41,9 +41,9 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// with a direction in relative to the originalType are considered to have an effective direction of
     /// out relative to the conjugatedType and, similarly, Features with direction out in the originalType
     /// are considered to have an effective direction of in in the conjugatedType. Features with direction
-    /// inout, or with no direction, in the originalType, are inherited without change.                     
-    ///   A Type may participate as a conjugatedType in at most one Conjugation relationship, and such a
-    /// Type may not also be the specific Type in any Specialization relationship.
+    /// inout, or with no direction, in the originalType, are inherited without change.A Type may
+    /// participate as a conjugatedType in at most one Conjugation relationship, and such a Type may not
+    /// also be the specific Type in any Specialization relationship.
     /// </summary>
     [Class(xmiId: "_19_0_2_12e503d9_1575482328287_696279_181", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -401,8 +401,8 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />

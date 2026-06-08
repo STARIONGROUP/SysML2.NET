@@ -83,7 +83,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         List<Guid> requiredConstraint { get; }
 
         /// <summary>
-        /// The parameters of this RequirementDefinition that represent stakeholders for th requirement.
+        /// The parameters of this RequirementDefinition that represent stakeholders for the requirement.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624033010374_29375_40166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]

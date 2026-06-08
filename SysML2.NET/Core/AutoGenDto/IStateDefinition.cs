@@ -33,9 +33,9 @@ namespace SysML2.NET.Core.DTO.Systems.States
 
     /// <summary>
     /// A StateDefinition is the Definition of the Behavior of a system or part of a system in a certain
-    /// state condition.                        A StateDefinition may be related to up to three of its
-    /// ownedFeatures by StateBehaviorMembership Relationships, all of different kinds, corresponding to the
-    /// entry, do and exit actions of the StateDefinition.
+    /// state condition.A StateDefinition may be related to up to three of its ownedFeatures by
+    /// StateBehaviorMembership Relationships, all of different kinds, corresponding to the entry, do and
+    /// exit actions of the StateDefinition.
     /// </summary>
     [Class(xmiId: "_19_0_2_12e503d9_1575587534200_898246_600", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

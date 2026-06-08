@@ -158,7 +158,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <code>
         /// featuringType =
         ///     let featuringTypes : OrderedSet(Type) =
-        ///     featuring.type-&gt;asOrderedSet() in
+        ///     typeFeaturing.type-&gt;asOrderedSet() in
         ///     if chainingFeature-&gt;isEmpty() then featuringTypes
         ///     else
         ///     featuringTypes-&gt;

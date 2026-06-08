@@ -101,14 +101,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// OCL2.0:
         /// <code>
         /// satisfyingFeature =
-        ///                             let bindings: BindingConnector = ownedMember-&gt;
-        ///                             selectByKind(BindingConnector)-&gt;
-        ///                             select(b | b.relatedElement-&gt;includes(subjectParameter)) in
-        ///                             if bindings-&gt;isEmpty() or
-        ///                             bindings-&gt;first().relatedElement-&gt;exits(r | r &lt;&gt; subjectParameter)
-        ///                             then null
-        ///                             else bindings-&gt;first().relatedElement-&gt;any(r | r &lt;&gt; subjectParameter)
-        ///                             endif
+        ///     let bindings: BindingConnector = ownedMember-&gt;
+        ///         selectByKind(BindingConnector)-&gt;
+        ///         select(b | b.relatedElement-&gt;includes(subjectParameter)) in
+        ///     if bindings-&gt;isEmpty() or
+        ///        not bindings-&gt;first().relatedElement-&gt;exits(r | r &lt;&gt; subjectParameter)
+        ///     then null
+        ///     else bindings-&gt;first().relatedElement-&gt;any(r | r &lt;&gt; subjectParameter)
+        ///     endif
         /// </code>
         /// </remarks>
         /// <param name="satisfyRequirementUsageSubject">
@@ -137,8 +137,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
             }
 
             // OCL: bindings->first().relatedElement->any(r | r <> subjectParameter) — i.e. return the first
-            // related element other than subjectParameter (or null when none exists, matching the OCL "exits"
-            // typo — semantically "no other element exists" → null).
+            // related element other than subjectParameter (or null when none exists, per the corrected OCL
+            // `not bindings->first().relatedElement->exits(r | r <> subjectParameter)` branch).
             return bindings[0].relatedElement.FirstOrDefault(relatedElement => !ReferenceEquals(relatedElement, subjectParameter)) as IFeature;
         }
 

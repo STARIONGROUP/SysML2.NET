@@ -318,9 +318,9 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// Whether this Function can be used as the function of a model-level evaluable InvocationExpression.
         /// Certain Functions from the Kernel Functions Library are considered to have isModelLevelEvaluable =
-        /// true. For all other Functions it is false.                            <strong>Note:</strong> See the
-        /// specification of the KerML concrete syntax notation for Expressions for an identification of which
-        /// library Functions are model-level evaluable.
+        /// true. For all other Functions it is false.<strong>Note:</strong> See the specification of the KerML
+        /// concrete syntax notation for Expressions for an identification of which library Functions are
+        /// model-level evaluable.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617395221463_139517_26381", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFunction.IsModelLevelEvaluable")]
@@ -328,11 +328,11 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.                            (A Type gives conditions that must be met by whatever it
-        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
-        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
-        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
-        /// the Type Car were sufficient, it would classify all four-wheeled things.)
+        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
+        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
+        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -610,7 +610,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         public List<IMembership> ownedMembership => this.ComputeOwnedMembership();
 
         /// <summary>
-        /// The MetadataUsages that are ownedUsages of this Definition.
+        /// The MetadataUsages that are ownedMembers of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661488358064_457109_2881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
@@ -858,7 +858,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         public string shortName => this.ComputeShortName();
 
         /// <summary>
-        /// The parameters of this RequirementDefinition that represent stakeholders for th requirement.
+        /// The parameters of this RequirementDefinition that represent stakeholders for the requirement.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624033010374_29375_40166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
@@ -1147,8 +1147,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />
@@ -1170,13 +1170,12 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 
         /// <summary>
         /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
-        /// which either of the following two conditions holds:                            <ol>                 
-        ///           <li>The memberElement of the Membership is included in redefined Features of another
-        /// Membership in memberships.</li>                            <li>One of the redefined Features of the
-        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>                     
-        ///       </ol>                            For this purpose, the redefined Features of a Membership
-        /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
-        /// redefined by the memberElement.
+        /// which either of the following two conditions holds:<ol>	<li>The memberElement of the Membership is
+        /// included in redefined Features of another Membership in memberships.</li>	<li>One of the redefined
+        /// Features of the Membership is a directly redefinedFeature of an ownedFeature of this
+        /// Type.</li></ol>For this purpose, the redefined Features of a Membership whose memberElement is a
+        /// Feature includes the memberElement and all Features directly or indirectly redefined by the
+        /// memberElement.
         /// </summary>
         /// <param name="memberships">
         /// No documentation provided

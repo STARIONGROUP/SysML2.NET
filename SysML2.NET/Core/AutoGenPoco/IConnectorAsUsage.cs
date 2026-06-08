@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     /// <summary>
     /// A ConnectorAsUsage is both a Connector and a Usage. ConnectorAsUsage cannot itself be instantiated
     /// in a SysML model, but it is a base class for the concrete classes BindingConnectorAsUsage,
-    /// SuccessionAsUsage, ConnectionUsage and FlowConnectionUsage.
+    /// SuccessionAsUsage, ConnectionUsage and FlowUsage.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1624053320057_820842_471", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

@@ -556,7 +556,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         ///     let memberships : Membership = membership-&gt;select(memberShortName = name or memberName = name)
         ///     in
         ///     if memberships-&gt;notEmpty() then memberships-&gt;first()
-        ///     else owningNamspace.resolveLocal(name)
+        ///     else owningNamespace.resolveLocal(name)
         ///     endif
         /// endif
         /// </code>
