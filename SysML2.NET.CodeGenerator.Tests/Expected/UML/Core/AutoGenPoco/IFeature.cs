@@ -40,19 +40,18 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// A Feature is a Type that classifies relations between multiple things (in the universe). The domain
     /// of the relation is the intersection of the featuringTypes of the Feature. (The domain of a Feature
     /// with no featuringTyps is implicitly the most general Type Base::Anything from the Kernel Semantic
-    /// Library.) The co-domain of the relation is the intersection of the types of the Feature.            
-    ///            In the simplest cases, the featuringTypes and types are Classifiers and the Feature
-    /// relates two things, one from the domain and one from the range. Examples include cars paired with
-    /// wheels, people paired with other people, and cars paired with numbers representing the car length.  
-    ///                      Since Features are Types, their featuringTypes and types can be Features. In
-    /// this case, the Feature effectively classifies relations between relations, which can be interpreted
-    /// as the sequence of things related by the domain Feature concatenated with the sequence of things
-    /// related by the co-domain Feature.                        The values of a Feature for a given
-    /// instance of its domain are all the instances of its co-domain that are related to that domain
-    /// instance by the Feature. The values of a Feature with chainingFeatures are the same as values of the
-    /// last Feature in the chain, which can be found by starting with values of the first Feature, then
-    /// using those values as domain instances to obtain valus of the second Feature, and so on, to values
-    /// of the last Feature.
+    /// Library.) The co-domain of the relation is the intersection of the types of the Feature.In the
+    /// simplest cases, the featuringTypes and types are Classifiers and the Feature relates two things, one
+    /// from the domain and one from the range. Examples include cars paired with wheels, people paired with
+    /// other people, and cars paired with numbers representing the car length.Since Features are Types,
+    /// their featuringTypes and types can be Features. In this case, the Feature effectively classifies
+    /// relations between relations, which can be interpreted as the sequence of things related by the
+    /// domain Feature concatenated with the sequence of things related by the co-domain Feature.The values
+    /// of a Feature for a given instance of its domain are all the instances of its co-domain that are
+    /// related to that domain instance by the Feature. The values of a Feature with chainingFeatures are
+    /// the same as values of the last Feature in the chain, which can be found by starting with values of
+    /// the first Feature, then using those values as domain instances to obtain valus of the second
+    /// Feature, and so on, to values of the last Feature.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1533160651684_893483_42160", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -284,9 +283,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
         new string EffectiveShortName();
 
         /// <summary>
-        /// If a Feature has no declaredName or declaredShortName                            , then its
-        /// effective name is given by the effective name of the Feature returned by the namingFeature()
-        /// operation, if any.
+        /// If a Feature has no declaredName or declaredShortName, then its effective name is given by the
+        /// effective name of the Feature returned by the namingFeature() operation, if any.
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />
@@ -352,11 +350,10 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
         /// <summary>
         /// A Feature is compatible with an otherType if it either directly or indirectly specializes the
-        /// otherType or if the otherType is also a Feature and all of the following are true.                  
-        ///          <ol>                            <li>Neither this Feature or the otherType have any
-        /// ownedFeatures.</li>                            <li>This Feature directly or indirectly redefines a
-        /// Feature that is also directly or indirectly redefined by the otherType.</li>                        
-        /// <li>This Feature can access the otherType.                            </li></ol>
+        /// otherType or if the otherType is also a Feature and all of the following are true.<ol>	<li>Neither
+        /// this Feature or the otherType have any ownedFeatures.</li>	<li>This Feature directly or indirectly
+        /// redefines a Feature that is also directly or indirectly redefined by the otherType.</li>	<li>This
+        /// Feature can access the otherType.</li></ol>
         /// </summary>
         /// <param name="otherType">
         /// No documentation provided
@@ -370,11 +367,11 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Return the Features used to determine the types of this Feature (other than this Feature itself). If
         /// this Feature is not conjugated, then the typingFeatures consist of all subsetted Features, except
         /// from CrossSubsetting, and the last chainingFeature (if any). If this Feature is conjugated, then the
-        /// typingFeatures are only its originalType (if the originalType is a Feature).                        
-        ///    <strong>Note.</strong> CrossSubsetting is excluded from the determination of the type of a
-        /// Feature in order to avoid circularity in the construction of implied CrossSubsetting relationships.
-        /// The validateFeatureCrossFeatureType requires that the crossFeature of a Feature have the same type
-        /// as the Feature.
+        /// typingFeatures are only its originalType (if the originalType is a Feature).<strong>Note.</strong>
+        /// CrossSubsetting is excluded from the determination of the type of a Feature in order to avoid
+        /// circularity in the construction of implied CrossSubsetting relationships. The
+        /// validateFeatureCrossFeatureType requires that the crossFeature of a Feature have the same type as
+        /// the Feature.
         /// </summary>
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
