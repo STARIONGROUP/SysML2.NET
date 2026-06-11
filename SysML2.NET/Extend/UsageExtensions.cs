@@ -402,7 +402,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <remarks>
         /// OCL2.0:
         /// <code>
-        /// nestedFlow = nestedUsage-&gt;selectByKind(FlowConnectionUsage)
+        /// nestedFlow = nestedUsage-&gt;selectByKind(FlowUsage)
         /// </code>
         /// </remarks>
         /// <param name="usageSubject">

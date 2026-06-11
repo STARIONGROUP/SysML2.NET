@@ -35,8 +35,8 @@ namespace SysML2.NET.Core.DTO.Core.Features
     /// distinguished from other Features subsetted by the referencingFeature. ReferenceSubsetting has the
     /// same semantics as Subsetting, but the referencedFeature may have a special purpose relative to the
     /// referencingFeature. For instance, ReferenceSubsetting is used to identify the relatedFeatures of a
-    /// Connector.                        ReferenceSubsetting is always an ownedRelationship of its
-    /// referencingFeature. A Feature can have at most one ownedReferenceSubsetting.
+    /// Connector.ReferenceSubsetting is always an ownedRelationship of its referencingFeature. A Feature
+    /// can have at most one ownedReferenceSubsetting.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1661554793960_500657_60", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

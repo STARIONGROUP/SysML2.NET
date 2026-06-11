@@ -115,6 +115,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Flows.SuccessionFlowUsage dtoInstance, JsonElement jsonElement, ILogger logger)
         {
+            if (jsonElement.TryGetProperty("actionDefinition"u8, out var actionDefinitionProperty))
+            {
+                foreach (var arrayItem in actionDefinitionProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var actionDefinitionExternalIdProperty))
+                    {
+                        var propertyValue = actionDefinitionExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.actionDefinition.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the actionDefinition Json property was not found in the SuccessionFlowUsage: {Id}", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
@@ -1409,6 +1429,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the nestedViewpoint Json property was not found in the SuccessionFlowUsage: {Id}", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
+            {
+                foreach (var arrayItem in occurrenceDefinitionProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var occurrenceDefinitionExternalIdProperty))
+                    {
+                        var propertyValue = occurrenceDefinitionExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.occurrenceDefinition.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the occurrenceDefinition Json property was not found in the SuccessionFlowUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))

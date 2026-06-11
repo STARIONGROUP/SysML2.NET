@@ -34,9 +34,9 @@ namespace SysML2.NET.Core.DTO.Systems.Items
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An ItemUsage is a ItemUsage whose definition is a Structure. Nominally, if the definition is an
-    /// ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However, other
-    /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
+    /// An ItemUsage is an OccurrenceUsage whose definition is a Structure. Nominally, if the definition is
+    /// an ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However,
+    /// other kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
     /// Libraries.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565480460114_846184_24270", isAbstract: false, isFinalSpecialization: false, isActive: false)]

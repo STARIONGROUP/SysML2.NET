@@ -65,9 +65,9 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     /// An EventOccurrenceUsage is an OccurrenceUsage that represents another OccurrenceUsage occurring as a
     /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. Unless it is the
     /// EventOccurrenceUsage itself, the referenced OccurrenceUsage is related to the EventOccurrenceUsage
-    /// by a ReferenceSubsetting Relationship.                        If the EventOccurrenceUsage is owned
-    /// by an OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences
-    /// property of the Class Occurrence from the Kernel Semantic Library model Occurrences.
+    /// by a ReferenceSubsetting Relationship.If the EventOccurrenceUsage is owned by an
+    /// OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences property
+    /// of the Class Occurrence from the Kernel Semantic Library model Occurrences.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1622831611763_442921_132", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

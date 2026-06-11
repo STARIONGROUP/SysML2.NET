@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// </summary>
     [Class(xmiId: "_18_5_3_b9102da_1536782424772_574530_21292", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IInteraction : IAssociation, IBehavior
+    public partial interface IInteraction : IBehavior, IAssociation
     {
     }
 }

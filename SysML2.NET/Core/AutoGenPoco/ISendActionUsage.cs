@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// An Expression whose result is bound to the payload input parameter of this SendActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1612814399422_336683_143", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1612814399422_336683_143", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IExpression payloadArgument { get; }
 
         /// <summary>

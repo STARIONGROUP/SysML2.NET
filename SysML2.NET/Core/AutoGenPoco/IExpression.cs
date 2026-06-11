@@ -77,11 +77,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Return whether this Expression is model-level evaluable. The visited parameter is used to track
         /// possible circular Feature references made from FeatureReferenceExpressions (see the redefinition of
         /// this operation for FeatureReferenceExpression). Such circular references are not allowed in
-        /// model-level evaluable expressions.                            An Expression that is not otherwise
-        /// specialized is model-level evaluable if it has no (non-implied) ownedSpecializations and all its
-        /// ownedFeatures are either in parameters, the result parameter or a result Expression owned via a
-        /// ResultExpressionMembership. The parameters  must not have any ownedFeatures or a FeatureValue, and
-        /// the result Expression must be model-level evaluable.
+        /// model-level evaluable expressions.An Expression that is not otherwise specialized is model-level
+        /// evaluable if it has no (non-implied) ownedSpecializations and all its ownedFeatures are either in
+        /// parameters, the result parameter or a result Expression owned via a ResultExpressionMembership. The
+        /// parameters  must not have any ownedFeatures or a FeatureValue, and the result Expression must be
+        /// model-level evaluable.
         /// </summary>
         /// <param name="visited">
         /// No documentation provided

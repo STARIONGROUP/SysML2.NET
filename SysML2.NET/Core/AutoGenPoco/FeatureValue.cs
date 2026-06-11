@@ -42,14 +42,13 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
     /// A FeatureValue is a Membership that identifies a particular member Expression that provides the
     /// value of the Feature that owns the FeatureValue. The value is specified as either a bound value or
     /// an initial value, and as either a concrete or default value. A Feature can have at most one
-    /// FeatureValue.                        The result of the value Expression is bound to the
-    /// featureWithValue using a BindingConnector. If isInitial = false, then the featuringType of the
-    /// BindingConnector is the same as the featuringType of the featureWithValue. If isInitial = true, then
-    /// the featuringType of the BindingConnector is restricted to its startShot.                        If
-    /// isDefault = false, then the above semantics of the FeatureValue are realized for the given
-    /// featureWithValue. Otherwise, the semantics are realized for any individual of the featuringType of
-    /// the featureWithValue, unless another value is explicitly given for the featureWithValue for that
-    /// individual.
+    /// FeatureValue.The result of the value Expression is bound to the featureWithValue using a
+    /// BindingConnector. If isInitial = false, then the featuringType of the BindingConnector is the same
+    /// as the featuringType of the featureWithValue. If isInitial = true, then the featuringType of the
+    /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
+    /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
+    /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
+    /// given for the featureWithValue for that individual.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1543180279304_499907_20659", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -530,8 +529,8 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />

@@ -38,9 +38,8 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
     /// <summary>
     /// A Dependency is a Relationship that indicates that one or more client Elements require one more
     /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.     
-    ///                   Note that a Dependency is entirely a model-level Relationship, without
-    /// instance-level semantics.
+    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
+    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
     /// </summary>
     [Class(xmiId: "_19_0_2_12e503d9_1594006219028_628649_74", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -383,8 +382,8 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />

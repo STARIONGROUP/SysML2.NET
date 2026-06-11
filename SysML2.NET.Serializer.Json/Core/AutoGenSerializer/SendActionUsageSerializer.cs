@@ -1218,10 +1218,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteEndArray();
 
             writer.WritePropertyName("payloadArgument"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iSendActionUsage.payloadArgument);
-            writer.WriteEndObject();
+
+            if (iSendActionUsage.payloadArgument.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iSendActionUsage.payloadArgument.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
 
             writer.WritePropertyName("portionKind"u8);
 

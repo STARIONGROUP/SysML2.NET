@@ -56,7 +56,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
-        /// The <> that is conjugate to this PortDefinition.
+        /// The ConjugatedPortDefinition that is conjugate to this PortDefinition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575484364015_206236_989", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
@@ -239,11 +239,11 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.                            (A Type gives conditions that must be met by whatever it
-        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
-        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
-        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
-        /// the Type Car were sufficient, it would classify all four-wheeled things.)
+        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
+        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
+        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -521,7 +521,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         public List<Guid> ownedMembership { get; internal set; } = [];
 
         /// <summary>
-        /// The MetadataUsages that are ownedUsages of this Definition.
+        /// The MetadataUsages that are ownedMembers of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661488358064_457109_2881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]

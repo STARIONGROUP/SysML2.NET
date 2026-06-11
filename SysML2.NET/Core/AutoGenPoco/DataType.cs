@@ -43,11 +43,10 @@ namespace SysML2.NET.Core.POCO.Kernel.DataTypes
     /// <summary>
     /// A DataType is a Classifier of things (in the universe) that can only be distinguished by how they
     /// are related to other things (via Features). This means multiple things classified by the same
-    /// DataType                        <ul>                        <li>Cannot be distinguished when they
-    /// are related to other things in exactly the same way, even when they are intended to be about
-    /// different things.</li>                        <li>Can be distinguished when they are related to
-    /// other things in different ways, even when they are intended to be about the same thing.</li>        
-    /// </ul>
+    /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the same
+    /// way, even when they are intended to be about different things.</li>	<li>Can be distinguished when
+    /// they are related to other things in different ways, even when they are intended to be about the same
+    /// thing.</li></ul>
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1557527599533_240072_110321", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -239,11 +238,11 @@ namespace SysML2.NET.Core.POCO.Kernel.DataTypes
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.                            (A Type gives conditions that must be met by whatever it
-        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
-        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
-        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
-        /// the Type Car were sufficient, it would classify all four-wheeled things.)
+        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
+        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
+        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -735,8 +734,8 @@ namespace SysML2.NET.Core.POCO.Kernel.DataTypes
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.                            (Note that this operation is overridden for Relationships
-        /// to use owningRelatedElement when appropriate.)
+        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// when appropriate.)
         /// </summary>
         /// <returns>
         /// The expected <see cref="string" />
@@ -758,13 +757,12 @@ namespace SysML2.NET.Core.POCO.Kernel.DataTypes
 
         /// <summary>
         /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
-        /// which either of the following two conditions holds:                            <ol>                 
-        ///           <li>The memberElement of the Membership is included in redefined Features of another
-        /// Membership in memberships.</li>                            <li>One of the redefined Features of the
-        /// Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>                     
-        ///       </ol>                            For this purpose, the redefined Features of a Membership
-        /// whose memberElement is a Feature includes the memberElement and all Features directly or indirectly
-        /// redefined by the memberElement.
+        /// which either of the following two conditions holds:<ol>	<li>The memberElement of the Membership is
+        /// included in redefined Features of another Membership in memberships.</li>	<li>One of the redefined
+        /// Features of the Membership is a directly redefinedFeature of an ownedFeature of this
+        /// Type.</li></ol>For this purpose, the redefined Features of a Membership whose memberElement is a
+        /// Feature includes the memberElement and all Features directly or indirectly redefined by the
+        /// memberElement.
         /// </summary>
         /// <param name="memberships">
         /// No documentation provided

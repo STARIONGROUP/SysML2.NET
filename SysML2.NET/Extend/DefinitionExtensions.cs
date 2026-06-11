@@ -300,7 +300,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <remarks>
         /// OCL2.0:
         /// <code>
-        /// ownedFlow = ownedUsage-&gt;selectByKind(FlowConnectionUsage)
+        /// ownedFlow = ownedUsage-&gt;selectByKind(FlowUsage)
         /// </code>
         /// </remarks>
         /// <param name="definitionSubject">
@@ -366,7 +366,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <remarks>
         /// OCL2.0:
         /// <code>
-        /// ownedMetadata = ownedUsage-&gt;selectByKind(MetadataUsage)
+        /// ownedMetadata = ownedMember-&gt;selectByKind(MetadataUsage)
         /// </code>
         /// </remarks>
         /// <param name="definitionSubject">
@@ -379,7 +379,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         {
             return definitionSubject == null
                 ? throw new ArgumentNullException(nameof(definitionSubject))
-                : [..definitionSubject.ownedUsage.OfType<IMetadataUsage>()];
+                : [..definitionSubject.ownedMember.OfType<IMetadataUsage>()];
         }
 
         /// <summary>
