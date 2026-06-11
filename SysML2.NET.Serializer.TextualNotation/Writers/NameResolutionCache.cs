@@ -23,6 +23,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -164,8 +165,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// First-time resolution: walks the cached source-scope chain and probes each scope's
-        /// simple-name index. Falls back to <see cref="IElement.qualifiedName" />.
+        /// First-time resolution: emits the SHORTEST unambiguous qualified-name suffix for
+        /// <paramref name="target" /> at <paramref name="sourcePoco" />'s reference site.
+        /// Walks the target's owner chain outward (innermost ancestor first) and, at each
+        /// step, tries to resolve the anchor's simple name uniquely in the source-scope
+        /// chain. The first anchor that resolves uniquely produces the emission anchor; the
+        /// suffix from the anchor down to <paramref name="target" /> is then appended via
+        /// <c>"::"</c>. Falls back to <see cref="IElement.qualifiedName" /> when no anchor in
+        /// the owner chain resolves.
+        /// <para>
+        /// For the bare <paramref name="target" /> itself (anchor depth 0), the two lexical
+        /// forms (<c>shortName</c> and <c>name</c>) are tried in turn — short first per the
+        /// SST tutorial / pilot convention. Inner ancestors are tried using whichever single
+        /// lexical form is declared on them.
+        /// </para>
         /// </summary>
         /// <param name="target">The referenced element.</param>
         /// <param name="sourcePoco">The reference site's source POCO.</param>
@@ -174,27 +187,167 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>The resolved emission string.</returns>
         private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName)
         {
-            var rawName = target.name;
-            var rawShortName = target.shortName;
+            var chain = this.GetSourceScopeChain(sourcePoco, sourceLocalScope);
 
+            // Depth 0 — try the target's own simple names. shortName first (the SST tutorial
+            // / pilot reference output consistently uses short forms for quantity literals
+            // like `[kg]` over `[kilogram]`), then long.
+            var rawShortName = target.shortName;
             string escapedShortName = null;
 
             if (!string.IsNullOrWhiteSpace(rawShortName))
             {
                 escapedShortName = rawShortName.QueryIsValidBasicName() ? rawShortName : rawShortName.ToUnrestrictedName();
+
+                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, out var matchedShort))
+                {
+                    return matchedShort;
+                }
             }
 
-            // Walk the cached source-scope chain. First hit wins.
-            foreach (var scope in this.GetSourceScopeChain(sourcePoco, sourceLocalScope))
+            var rawName = target.name;
+
+            if (!string.IsNullOrWhiteSpace(rawName)
+                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, out var matchedLong))
             {
-                if (this.TryResolveSimpleNameInScope(scope, target, rawName, escapedName, rawShortName, escapedShortName, out var matched))
+                return matchedLong;
+            }
+
+            // Depth ≥ 1 — walk owner-chain ancestors outward and look for the first one that
+            // itself resolves uniquely in the source-scope chain. Once found, emit it as the
+            // anchor followed by the owner-chain segments down to the target.
+            var segmentsDownToTarget = new Stack<string>();
+
+            segmentsDownToTarget.Push(QueryPreferredEscapedSegment(target) ?? string.Empty);
+
+            var ancestor = QueryOwningContainer(target);
+            var visitedAncestors = new HashSet<IElement>();
+
+            while (ancestor != null && visitedAncestors.Add(ancestor))
+            {
+                var ancestorSegment = QueryPreferredEscapedSegment(ancestor);
+
+                if (string.IsNullOrWhiteSpace(ancestorSegment))
                 {
-                    return matched;
+                    // An unnamed namespace in the owner chain cannot appear inside a
+                    // QualifiedName — emitting `<anchor>::<down-segments>` while skipping the
+                    // unnamed gap would produce an unparseable result. Stop the walk and let
+                    // the fallback (target.qualifiedName) take over.
+                    break;
                 }
+
+                var rawAncestorShort = ancestor.shortName;
+                var rawAncestorLong = ancestor.name;
+
+                var ancestorRawName = !string.IsNullOrWhiteSpace(rawAncestorShort) ? rawAncestorShort : rawAncestorLong;
+
+                if (!string.IsNullOrWhiteSpace(ancestorRawName)
+                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, out var matchedAnchor))
+                {
+                    var builder = new StringBuilder(matchedAnchor);
+
+                    foreach (var segment in segmentsDownToTarget)
+                    {
+                        builder.Append("::");
+                        builder.Append(segment);
+                    }
+
+                    return builder.ToString();
+                }
+
+                segmentsDownToTarget.Push(ancestorSegment);
+
+                ancestor = QueryOwningContainer(ancestor);
             }
 
             // Fall back to the fully-qualified name.
             return target.qualifiedName ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Returns <paramref name="element" />'s <c>owningNamespace</c> when reachable,
+        /// otherwise <see langword="null" />. Owner-chain traversal stops on
+        /// <see cref="NotSupportedException" /> from unimplemented derived properties — the
+        /// same convention used by <see cref="BuildChain" />.
+        /// </summary>
+        /// <param name="element">The element whose owner is requested; may be <see langword="null" />.</param>
+        /// <returns>The owning namespace or <see langword="null" />.</returns>
+        private static IElement QueryOwningContainer(IElement element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return element.owningNamespace;
+            }
+            catch (NotSupportedException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns <paramref name="element" />'s shortest escaped name segment — preferring
+        /// <see cref="IElement.shortName" /> over <see cref="IElement.name" />, with KEBNF
+        /// unrestricted-name escaping when the chosen segment is not a basic name. Returns
+        /// <see langword="null" /> when neither form is available.
+        /// </summary>
+        /// <param name="element">The element to name; must be non-null.</param>
+        /// <returns>The escaped segment, or <see langword="null" />.</returns>
+        private static string QueryPreferredEscapedSegment(IElement element)
+        {
+            var preferred = !string.IsNullOrWhiteSpace(element.shortName)
+                ? element.shortName
+                : element.name;
+
+            if (string.IsNullOrWhiteSpace(preferred))
+            {
+                return null;
+            }
+
+            return preferred.QueryIsValidBasicName() ? preferred : preferred.ToUnrestrictedName();
+        }
+
+        /// <summary>
+        /// Walks <paramref name="chain" /> from innermost to outermost looking for a scope
+        /// whose simple-name index binds <paramref name="rawName" /> uniquely to
+        /// <paramref name="target" />. Stops the walk on the first scope that binds the name
+        /// to anything else — the parser's resolution would already have claimed the name in
+        /// that scope, so outer scopes are unreachable.
+        /// </summary>
+        /// <param name="chain">The pre-built source-scope chain (innermost first).</param>
+        /// <param name="target">The referenced element.</param>
+        /// <param name="rawName">The simple-name lexical form to probe (may be <see langword="null" /> / whitespace).</param>
+        /// <param name="escapedName">The escaped form to emit on a hit.</param>
+        /// <param name="matched">On a unique-binding hit, the simple-name string to emit.</param>
+        /// <returns><see langword="true" /> when the simple name resolves uniquely to the target somewhere in the chain.</returns>
+        private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, out string matched)
+        {
+            matched = null;
+
+            if (string.IsNullOrWhiteSpace(rawName))
+            {
+                return false;
+            }
+
+            foreach (var scope in chain)
+            {
+                var resolution = this.ResolveSimpleNameInScope(scope, target, rawName);
+
+                switch (resolution)
+                {
+                    case SimpleNameResolution.Matched:
+                        matched = escapedName;
+                        return true;
+                    case SimpleNameResolution.Shadowed:
+                        return false;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -464,47 +617,89 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Tests the simple-name index of <paramref name="scope" /> for a hit on
-        /// <paramref name="target" />. Tries the raw <c>shortName</c> key first, then the raw
-        /// <c>name</c> key. On a hit, <paramref name="matchedSimpleName" /> receives the
-        /// corresponding escaped form.
-        /// <para>
-        /// The short form is tried first so the emitter prefers it whenever both forms are
-        /// reachable — the SysML v2 Textual Notation tutorial consistently uses short forms in
-        /// quantity literals (<c>[kg]</c>, <c>[m/s]</c>, <c>[s]</c>) and the pilot
-        /// implementation's reference output matches that convention.
-        /// </para>
+        /// Tri-state result of probing a single scope's simple-name index for a single lexical
+        /// form. Drives the <see cref="TryResolveSimpleNameAcrossChain" /> walk:
+        /// <see cref="Matched" /> stops the walk with a hit; <see cref="Shadowed" /> stops the
+        /// walk without a hit (outer scopes are unreachable — the parser's resolution per
+        /// KerML §8.2.3.5 stops at the first scope binding the name, and that scope's binding
+        /// is not uniquely the target); <see cref="NotBound" /> continues the walk.
+        /// </summary>
+        private enum SimpleNameResolution
+        {
+            /// <summary>The simple name is not present in this scope's index — keep walking.</summary>
+            NotBound,
+
+            /// <summary>The simple name is bound uniquely to the target in this scope — emit the simple name.</summary>
+            Matched,
+
+            /// <summary>The simple name is bound at this scope but not uniquely to the target — fall back to the qualified name.</summary>
+            Shadowed,
+        }
+
+        /// <summary>
+        /// Returns the resolution state for <paramref name="rawName" /> in
+        /// <paramref name="scope" />'s simple-name index. The index intentionally indexes BOTH
+        /// the leaf inherited member AND its redefined ancestors (so a <c>:&gt; ancestor</c>
+        /// reference can still reach them); the parser however applies the
+        /// <c>RemoveRedefinedFeatures</c> filter (KerML §8.2.3.5.3 — "in a well-formed
+        /// Namespace, there is at most one Membership for any given name") so its local
+        /// resolution sees only the LEAF (the most-derived feature in the redefinition
+        /// chain). We mirror that filter here: an index entry is reduced to its leaves
+        /// (elements not transitively redefined by any other element in the entry), and the
+        /// simple name is emitted only when that leaf set is exactly <c>{target}</c>.
         /// </summary>
         /// <param name="scope">The scope whose index is inspected.</param>
         /// <param name="target">The element to look up.</param>
-        /// <param name="rawName">The target's raw <c>name</c>; may be <see langword="null" /> / whitespace.</param>
-        /// <param name="escapedName">The escaped form emitted on a long-form hit.</param>
-        /// <param name="rawShortName">The target's raw <c>shortName</c>; may be <see langword="null" /> / whitespace.</param>
-        /// <param name="escapedShortName">The escaped form emitted on a short-form hit.</param>
-        /// <param name="matchedSimpleName">On <see langword="true" />, the simple name to emit.</param>
-        /// <returns><see langword="true" /> when a hit was found.</returns>
-        private bool TryResolveSimpleNameInScope(INamespace scope, IElement target, string rawName, string escapedName, string rawShortName, string escapedShortName, out string matchedSimpleName)
+        /// <param name="rawName">The simple-name lexical form to probe; must be non-blank.</param>
+        /// <returns>The resolution state.</returns>
+        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName)
         {
             var index = this.GetSimpleNameIndex(scope);
 
-            if (!string.IsNullOrWhiteSpace(rawShortName)
-                && index.TryGetValue(rawShortName, out var shortElements)
-                && shortElements.Contains(target))
+            if (!index.TryGetValue(rawName, out var elements))
             {
-                matchedSimpleName = escapedShortName;
-                return true;
+                return SimpleNameResolution.NotBound;
             }
 
-            if (!string.IsNullOrWhiteSpace(rawName)
-                && index.TryGetValue(rawName, out var elements)
-                && elements.Contains(target))
+            if (elements.Count == 1)
             {
-                matchedSimpleName = escapedName;
-                return true;
+                return elements.Contains(target)
+                    ? SimpleNameResolution.Matched
+                    : SimpleNameResolution.Shadowed;
             }
 
-            matchedSimpleName = null;
-            return false;
+            // Reduce to the leaf set: drop any element that is transitively redefined by
+            // another element in `elements`. The shadow set is the union of each candidate's
+            // `AllRedefinedFeatures()` closure (excluding the candidate itself, which the
+            // operation includes as the seed of the closure).
+            var shadowed = new HashSet<IFeature>();
+
+            foreach (var candidate in elements.OfType<IFeature>())
+            {
+                foreach (var redefined in candidate.AllRedefinedFeatures().Where(redefined => !ReferenceEquals(redefined, candidate)))
+                {
+                    shadowed.Add(redefined);
+                }
+            }
+
+            IElement onlyLeaf = null;
+            var leafCount = 0;
+
+            foreach (var element in elements.Where(element => element is not IFeature feature || !shadowed.Contains(feature)))
+            {
+                leafCount++;
+
+                if (leafCount > 1)
+                {
+                    return SimpleNameResolution.Shadowed;
+                }
+
+                onlyLeaf = element;
+            }
+
+            return leafCount == 1 && ReferenceEquals(onlyLeaf, target)
+                ? SimpleNameResolution.Matched
+                : SimpleNameResolution.Shadowed;
         }
 
         /// <summary>
