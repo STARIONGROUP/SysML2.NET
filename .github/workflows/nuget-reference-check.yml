@@ -29,30 +29,37 @@ jobs:
         id: outdated
         run: |
           set -e
-          
+
           IGNORE_PACKAGES="Microsoft\.NETCore\.Platforms|Microsoft\.NETCore\.Targets"
-          
-          dotnet list SysML2.NET.sln package --outdated --include-transitive > outdated-raw.log
-          
+
+          # Full report for the workflow logs only, including transitive packages
+          dotnet list SysML2.NET.sln package --outdated --include-transitive > outdated-full-raw.log
+          grep -v -E "$IGNORE_PACKAGES" outdated-full-raw.log > outdated-full.log || true
+
+          echo "=== Full outdated packages report including transitive packages ==="
+          cat outdated-full.log
+
+          # Direct/top-level outdated packages only, used for GitHub issue creation
+          dotnet list SysML2.NET.sln package --outdated > outdated-raw.log
           grep -v -E "$IGNORE_PACKAGES" outdated-raw.log > outdated.log || true
-          
-          echo "=== Full outdated packages report ==="
+
+          echo "=== Direct outdated packages report used for issue detection ==="
           cat outdated.log
-          
+
           awk '
             /^Project .*.Tests/ { skip=1; next }
             /^Project / { skip=0 }
             !skip { print }
           ' outdated.log > outdated-issue.log
-          
+
           if grep -q "^ *>" outdated-issue.log; then
-            echo "Outdated packages found in non-test projects"
+            echo "Outdated direct packages found in non-test projects"
             echo "outdated=true" >> $GITHUB_OUTPUT
           else
-            echo "No outdated packages found in non-test projects"
+            echo "No outdated direct packages found in non-test projects"
             echo "outdated=false" >> $GITHUB_OUTPUT
           fi
-
+          
       - name: Check for deprecated packages
         id: deprecated
         run: |
