@@ -16,11 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-      # Use cached CRL data only for cert revocation checks. Works around
-      # NU3012 ("certificate revoked") for transitive ReactiveUI / Splat 19.3.1
-      # packages whose author certificate was revoked at the CA in 2026-Q2.
-      # Revert this env var once the affected packages are re-signed.
-      NUGET_CERT_REVOCATION_MODE: offline
       
     steps:
       - uses: actions/checkout@v6.0.2
