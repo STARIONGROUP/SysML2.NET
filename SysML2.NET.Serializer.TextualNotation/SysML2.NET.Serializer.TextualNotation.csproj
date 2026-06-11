@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>12.0</LangVersion>
-        <Version>0.21.1</Version>
+        <Version>0.22.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 Textual Notation serializer.</Description>
         <PackageId>SysML2.NET.Serializer.TextualNotation</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -16,7 +16,11 @@
         <Authors>Sam Gerené, Antoine Théate</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Fix] Referencing Extensions instead of SysML.NET project
+            [Add] Indentation support in the textual-notation writer (#284)
+            [Add] Validation of textual notation against larger models, including library-redirecting external-reference resolution via LibraryRedirectingExternalReferenceService (#272, #283)
+            [Fix] Qualified-name resolution on the redefinition case in NameResolutionCache (significantly rewritten)
+            [Fix] Numerous TextualNotationBuilder corrections: FeatureMembership, ParameterMembership, Membership, NamespaceImport, ActionUsage, SendActionUsage, EventOccurrenceUsage, TransitionUsage, ReferenceUsage, ViewUsage, ConnectorAsUsage, BindingConnectorAsUsage, SuccessionAsUsage, AssertConstraintUsage, SatisfyRequirementUsage, AcceptActionUsage, PerformActionUsage, TerminateActionUsage, ExhibitStateUsage, IncludeUseCaseUsage, Feature, Usage, Connector
+            [Update] Aligned with SysML2.NET.Extensions 0.22.0
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
