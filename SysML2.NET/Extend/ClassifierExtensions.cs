@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -53,10 +54,13 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        /// [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<ISubclassification> ComputeOwnedSubclassification(this IClassifier classifierSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return classifierSubject == null
+                ? throw new ArgumentNullException(nameof(classifierSubject))
+                : [..classifierSubject.ownedSpecialization.OfType<ISubclassification>()];
+            //throw new NotSupportedException("Create a GitHub issue when this method is required");
         }
 
     }
