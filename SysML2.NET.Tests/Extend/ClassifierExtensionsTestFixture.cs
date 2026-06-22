@@ -53,7 +53,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subject.ComputeOwnedSubclassification(), Is.EquivalentTo([subclassification]));
 
-            //Assert.That(() => ((IClassifier)null).ComputeOwnedSubclassification(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }
