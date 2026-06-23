@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     /// <summary>
     /// The <see cref="BooleanExpressionExtensions" /> class provides extensions methods for
@@ -41,11 +42,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [ExcludeFromCodeCoverage]
         internal static IPredicate ComputePredicate(this IBooleanExpression booleanExpressionSubject)
         {
-            // this method is a specialization of the method function from ExpressionExtensions.cs;
-            // therefore, just return the function as a predicate; if no function, will return null;
             return booleanExpressionSubject == null
                 ? throw new ArgumentNullException(nameof(booleanExpressionSubject))
-                : booleanExpressionSubject.ComputeFunction() as IPredicate;
+                : booleanExpressionSubject.type.OfType<IPredicate>().FirstOrDefault();
         }
     }
 }
