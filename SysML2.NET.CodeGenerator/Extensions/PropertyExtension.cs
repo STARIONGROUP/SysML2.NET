@@ -141,6 +141,62 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
+        /// Finds the minimal set of subclasses of <paramref name="rootClass"/> (including <paramref name="rootClass"/>
+        /// itself) that <b>directly</b> redefine <paramref name="property"/> with a <c>&lt;defaultValue&gt;</c>
+        /// equal to <paramref name="literalTriggerValue"/>. Used by the textual-notation codegen to suppress
+        /// emission of a <c>?= 'literal'</c> keyword when the property's runtime value matches the
+        /// metamodel default for the concrete subtype.
+        /// <para>"Minimal" means: if a class C is in the set and any of C's ancestors is also in the set, C
+        /// is removed (the C# <c>is</c> check on the ancestor already matches C at runtime).</para>
+        /// <para>Comparison of <paramref name="literalTriggerValue"/> to the property's <c>defaultValue</c> is
+        /// done via <see cref="QueryDefaultValueAsString"/>, which already normalises booleans
+        /// (<c>"true"</c> / <c>"false"</c>), enum literals, integers, and strings.</para>
+        /// </summary>
+        /// <param name="property">The base property whose redefinitions are being scanned (e.g. <c>Usage::isReference</c>).</param>
+        /// <param name="rootClass">The metaclass under which to scan (typically the textual rule's effective target).</param>
+        /// <param name="literalTriggerValue">The default-value string that should trigger inclusion in the exclusion set (e.g. <c>"true"</c>).</param>
+        /// <returns>The minimal list of redefining classes; empty when no subclass redefines with the matching default.</returns>
+        public static IReadOnlyList<IClass> QuerySubclassesWithMatchingDefault(this IProperty property, IClass rootClass, string literalTriggerValue)
+        {
+            ArgumentNullException.ThrowIfNull(property);
+            ArgumentNullException.ThrowIfNull(rootClass);
+            ArgumentException.ThrowIfNullOrWhiteSpace(literalTriggerValue);
+
+            var allClasses = rootClass.Cache.Values.OfType<IClass>();
+            var introducers = new List<IClass>();
+
+            foreach (var candidateClass in allClasses)
+            {
+                if (candidateClass != rootClass && !candidateClass.QueryAllGeneralClassifiers().Contains(rootClass))
+                {
+                    continue;
+                }
+
+                foreach (var ownedAttribute in candidateClass.OwnedAttribute)
+                {
+                    if (!string.Equals(ownedAttribute.Name, property.Name, StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    var defaultValueAsString = ownedAttribute.QueryDefaultValueAsString();
+
+                    if (string.Equals(defaultValueAsString, literalTriggerValue, StringComparison.OrdinalIgnoreCase))
+                    {
+                        introducers.Add(candidateClass);
+                        break;
+                    }
+                }
+            }
+
+            // Reduce to the minimal set: drop any class whose ancestor is already present, because the
+            // C# `poco is not IAncestor` check at runtime already covers the descendant.
+            return introducers
+                .Where(candidate => !introducers.Any(other => other != candidate && candidate.QueryAllGeneralClassifiers().Contains(other)))
+                .ToList();
+        }
+
+        /// <summary>
         /// Returns every <see cref="IConstraint"/> from the owning class's <c>OwnedRule</c> that
         /// applies to the given derived <see cref="IProperty"/>. The XMI shipped with this
         /// project links derivation rules to the owning class (not the specific attribute) and uses

@@ -42,7 +42,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildDefinitionBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current is not SysML2.NET.Core.POCO.Root.Elements.IRelationship emptyBodyCandidate || !emptyBodyCandidate.IsValidForDefinitionBodyItem(writerContext))
             {
                 stringBuilder.AppendLine(";");
             }
@@ -52,7 +52,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.AppendLine("{");
                 stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-                while (ownedRelationshipCursor.Current != null)
+                while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship loopBodyItem && loopBodyItem.IsValidForDefinitionBodyItem(writerContext))
                 {
                     BuildDefinitionBodyItem(poco, writerContext, stringBuilder);
                 }
@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildInterfaceBody(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current == null)
+            if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship).Current is not SysML2.NET.Core.POCO.Root.Elements.IRelationship emptyBodyCandidate || !emptyBodyCandidate.IsValidForInterfaceBodyItem(writerContext))
             {
                 stringBuilder.AppendLine(";");
             }
@@ -93,7 +93,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.AppendLine("{");
                 stringBuilder.IncreaseIndent();
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-                while (ownedRelationshipCursor.Current != null)
+                while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship loopBodyItem && loopBodyItem.IsValidForInterfaceBodyItem(writerContext))
                 {
                     BuildInterfaceBodyItem(poco, writerContext, stringBuilder);
                 }
@@ -508,7 +508,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (poco.IsSufficient)
+            if (poco.IsSufficient && poco is not (SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition))
             {
                 stringBuilder.Append(" all ");
                 stringBuilder.Append(' ');

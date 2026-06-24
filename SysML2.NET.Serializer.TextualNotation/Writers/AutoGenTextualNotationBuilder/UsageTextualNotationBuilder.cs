@@ -107,7 +107,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             BuildRefPrefix(poco, writerContext, stringBuilder);
 
-            if (poco.isReference)
+            if (poco.isReference && poco is not (SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage or SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage or SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage))
             {
                 stringBuilder.Append(" ref ");
             }

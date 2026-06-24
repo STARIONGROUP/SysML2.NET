@@ -31,6 +31,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
+    using SysML2.NET.Core.POCO.Kernel.Packages;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Dependencies;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
@@ -866,26 +869,135 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> has valid element types for StructureUsageMember
-        /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the StructureUsageMember rule.
+        /// <para><c>StructureUsageMember : FeatureMembership = MemberPrefix ownedRelatedElement += StructureUsageElement</c></para>
+        /// <para><c>StructureUsageElement : Usage =
+        /// OccurrenceUsage | IndividualUsage | PortionUsage | EventOccurrenceUsage
+        /// | ItemUsage | PartUsage | ViewUsage | RenderingUsage | PortUsage
+        /// | ConnectionUsage | InterfaceUsage | AllocationUsage | Message
+        /// | FlowUsage | SuccessionFlowUsage</c></para>
+        /// <para>Encoded as the disjunction of the <c>StructureUsageElement</c> union expressed via
+        /// the corresponding metamodel interfaces. Because the metamodel inheritance chain has
+        /// <c>IFlowUsage : IActionUsage</c> (a <c>FlowUsage</c> is structurally an action), but the
+        /// KEBNF places <c>FlowUsage</c> under <c>StructureUsageElement</c> and <c>ActionUsage</c>
+        /// under <c>BehaviorUsageElement</c>, the simple supertype check
+        /// <c>e is IOccurrenceUsage</c> is paired with two exclusion clauses:</para>
+        /// <list type="bullet">
+        ///   <item><description><c>!(e is IActionUsage and not IFlowUsage)</c> — every
+        ///   <see cref="IActionUsage"/> that is NOT an <see cref="IFlowUsage"/> belongs to
+        ///   <c>BehaviorUsageElement</c> (ActionUsage, CalculationUsage, StateUsage, CaseUsage,
+        ///   AnalysisCaseUsage, VerificationCaseUsage, UseCaseUsage).</description></item>
+        ///   <item><description><c>!(e is IConstraintUsage)</c> — <see cref="IConstraintUsage"/>
+        ///   and its descendants (RequirementUsage, ConcernUsage) belong to
+        ///   <c>BehaviorUsageElement</c>.</description></item>
+        /// </list>
+        /// <para>Interfaces (not concrete POCO classes) are used so the guard is robust to
+        /// alternate <see cref="IOccurrenceUsage"/> implementations (extensions, test doubles)
+        /// — the POCO classes in this model do not inherit from each other (only via interface
+        /// chains), so an <c>OfType{ConcreteClass}</c> check would silently miss any instance
+        /// supplied through a different concrete class but the same interface.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if contains any of the required element types</returns>
+        /// <returns>True if any <see cref="IRelationship.OwnedRelatedElement"/> matches the <c>StructureUsageElement</c> union</returns>
         internal static bool IsValidForStructureUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership.OwnedRelatedElement.OfType<OccurrenceUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<EventOccurrenceUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<ItemUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<PartUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<ViewUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<RenderingUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<PortUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<ConnectionUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<InterfaceUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<AllocationUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<FlowUsage>().Any()
-                   || featureMembership.OwnedRelatedElement.OfType<SuccessionFlowUsage>().Any();
+            return featureMembership.OwnedRelatedElement.Any(element =>
+                element is IOccurrenceUsage
+                && !(element is IActionUsage && element is not IFlowUsage)
+                && element is not IConstraintUsage);
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IOwningMembership"/> is valid for the DefinitionMember rule.
+        /// <para><c>DefinitionMember : OwningMembership = MemberPrefix ownedRelatedElement += DefinitionElement</c></para>
+        /// <para><c>DefinitionElement : Element = Package | LibraryPackage | AnnotatingElement | Dependency
+        /// | AttributeDefinition | EnumerationDefinition | OccurrenceDefinition | IndividualDefinition
+        /// | ItemDefinition | PartDefinition | ConnectionDefinition | FlowDefinition | InterfaceDefinition
+        /// | PortDefinition | ActionDefinition | CalculationDefinition | StateDefinition | ConstraintDefinition
+        /// | RequirementDefinition | ConcernDefinition | CaseDefinition | AnalysisCaseDefinition
+        /// | VerificationCaseDefinition | UseCaseDefinition | ViewDefinition | ViewpointDefinition
+        /// | RenderingDefinition | MetadataDefinition | ExtendedDefinition</c></para>
+        /// <para>The four covering supertypes of the union are <see cref="IDefinition"/>, <see cref="IPackage"/>,
+        /// <see cref="IAnnotatingElement"/>, <see cref="IDependency"/>. <see cref="IConjugatedPortDefinition"/>
+        /// IS-A <see cref="IDefinition"/> but is NOT in the <c>DefinitionElement</c> union — it is only ever the
+        /// inner element of a <c>ConjugatedPortDefinitionMember</c> consumed by the parent <c>PortDefinition</c>
+        /// rule and is therefore excluded explicitly.</para>
+        /// </summary>
+        /// <param name="owningMembership">The <see cref="IOwningMembership"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if at least one <see cref="IRelationship.OwnedRelatedElement"/> is a <c>DefinitionElement</c></returns>
+        internal static bool IsValidForDefinitionMember(this IOwningMembership owningMembership, TextualNotationWriterContext writerContext)
+        {
+            foreach (var ownedRelatedElement in owningMembership.OwnedRelatedElement)
+            {
+                switch (ownedRelatedElement)
+                {
+                    case IConjugatedPortDefinition:
+                        continue;
+                    case IDefinition or IPackage or IAnnotatingElement or IDependency:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IRelationship"/> currently positioned by the cursor matches any
+        /// alternative of the <c>DefinitionBodyItem</c> rule.
+        /// <para><c>DefinitionBodyItem : Type =
+        /// ownedRelationship += DefinitionMember
+        /// | ownedRelationship += VariantUsageMember
+        /// | ownedRelationship += NonOccurrenceUsageMember
+        /// | ( ownedRelationship += SourceSuccessionMember )? ownedRelationship += OccurrenceUsageMember
+        /// | ownedRelationship += AliasMember
+        /// | ownedRelationship += Import</c></para>
+        /// <para>Used by <c>BuildDefinitionBody</c> to bound the KEBNF <c>*</c> quantifier and the
+        /// <c>';' | '{' DefinitionBodyItem* '}'</c> choice. Returns false for relationships that the body
+        /// must not consume — notably the synthetic <c>ConjugatedPortDefinitionMember</c> (which carries an
+        /// <see cref="IConjugatedPortDefinition"/> and is consumed by the parent <c>PortDefinition</c> rule).</para>
+        /// </summary>
+        /// <param name="relationship">The <see cref="IRelationship"/> at the cursor</param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the relationship matches a <c>DefinitionBodyItem</c> alternative</returns>
+        internal static bool IsValidForDefinitionBodyItem(this IRelationship relationship, TextualNotationWriterContext writerContext)
+        {
+            return relationship switch
+            {
+                IImport => true,
+                IVariantMembership => true,
+                IFeatureMembership featureMembership =>
+                    featureMembership.IsValidForSourceSuccessionMember(writerContext)
+                    || featureMembership.IsValidForOccurrenceUsageMember(writerContext)
+                    || featureMembership.IsValidForNonOccurrenceUsageMember(writerContext),
+                IOwningMembership owningMembership => owningMembership.IsValidForDefinitionMember(writerContext),
+                IMembership => true,
+                _ => false,
+            };
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IRelationship"/> currently positioned by the cursor matches any
+        /// alternative of the <c>InterfaceBodyItem</c> rule.
+        /// <para><c>InterfaceBodyItem : Type =
+        /// ownedRelationship += DefinitionMember
+        /// | ownedRelationship += VariantUsageMember
+        /// | ownedRelationship += InterfaceNonOccurrenceUsageMember
+        /// | ( ownedRelationship += SourceSuccessionMember )? ownedRelationship += InterfaceOccurrenceUsageMember
+        /// | ownedRelationship += AliasMember
+        /// | ownedRelationship += Import</c></para>
+        /// <para>The shape is identical to <c>DefinitionBodyItem</c> except for the
+        /// <c>InterfaceOccurrenceUsageMember</c> / <c>InterfaceNonOccurrenceUsageMember</c> specialisations
+        /// — for the boolean-only guard, they share the same underlying
+        /// <c>IsValidForOccurrenceUsageMember</c> / <c>IsValidForNonOccurrenceUsageMember</c> predicates.</para>
+        /// </summary>
+        /// <param name="relationship">The <see cref="IRelationship"/> at the cursor</param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True if the relationship matches an <c>InterfaceBodyItem</c> alternative</returns>
+        internal static bool IsValidForInterfaceBodyItem(this IRelationship relationship, TextualNotationWriterContext writerContext)
+        {
+            return relationship.IsValidForDefinitionBodyItem(writerContext);
         }
     }
 }

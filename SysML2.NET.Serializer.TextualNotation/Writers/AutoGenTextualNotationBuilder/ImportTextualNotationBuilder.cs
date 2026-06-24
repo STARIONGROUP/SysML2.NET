@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             stringBuilder.Append(' ');
             stringBuilder.Append("import ");
 
-            if (poco.IsImportAll)
+            if (poco.IsImportAll && poco is not (SysML2.NET.Core.POCO.Systems.Views.IExpose))
             {
                 stringBuilder.Append(" all ");
                 stringBuilder.Append(' ');

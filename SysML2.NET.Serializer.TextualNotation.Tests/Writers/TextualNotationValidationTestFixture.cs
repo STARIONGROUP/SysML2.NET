@@ -22,8 +22,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
 {
     using System;
     using System.IO;
-    using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
 
     using Microsoft.Extensions.Logging;
@@ -41,6 +39,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("01-Parts Tree", "1a-Parts Tree.sysmlx")]
         [TestCase("01-Parts Tree", "1c-Parts Tree Redefinition.sysmlx")]
         [TestCase("01-Parts Tree", "1d-Parts Tree with Reference.sysmlx")]
+        [TestCase("02-Parts Interconnection", "2a-Parts Interconnection.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
@@ -80,6 +79,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             TestContext.WriteLine("=== Textual Notation Output ===");
             TestContext.WriteLine(textualNotation);
             TestContext.WriteLine("=== End ===");
+            
+            var expectedFilePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Expected", folderName, fileName.Replace(".sysmlx", ".sysml"));
+
+            var expectedContent = await File.ReadAllTextAsync(expectedFilePath);
+            Assert.That(expectedContent, Is.EqualTo(textualNotation));
         }
     }
 }

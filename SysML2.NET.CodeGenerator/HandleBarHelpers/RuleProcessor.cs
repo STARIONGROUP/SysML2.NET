@@ -393,7 +393,25 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else
                         {
-                            ifStatementContent.Add(property.QueryIfStatementContentForNonEmpty("poco"));
+                            var condition = property.QueryIfStatementContentForNonEmpty("poco");
+
+                            // For `Prop ?= 'literal'` keyword assignments inside an optional `(...)?`
+                            // group, exclude concrete subtypes whose metamodel default for the
+                            // assigned property already equals the literal-trigger value — the
+                            // keyword is structurally redundant for those subtypes and the
+                            // canonical source omits it (e.g. `attribute X` rather than
+                            // `ref attribute X` because AttributeUsage::isReference defaults to true).
+                            if (property.QueryIsBool())
+                            {
+                                var exclusionTypes = property.QuerySubclassesWithMatchingDefault(umlClass, "true");
+
+                                if (exclusionTypes.Count > 0)
+                                {
+                                    condition += $" && poco is not ({string.Join(" or ", exclusionTypes.Select(c => c.QueryFullyQualifiedTypeName()))})";
+                                }
+                            }
+
+                            ifStatementContent.Add(condition);
                         }
                     }
 
@@ -1039,7 +1057,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-            writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+            // KEBNF `XBody : Type = ';' | '{' XBodyItem* '}'` — both the choice and the `*` loop
+            // are bounded by "does the current cursor element match an XBodyItem alternative?".
+            // For body item rules whose dispatcher can encounter unrecognised elements legitimately
+            // belonging to a parent rule (notably PortDefinition's trailing
+            // ConjugatedPortDefinitionMember, which appears in OwnedRelationship but is NOT a
+            // DefinitionBodyItem alternative), the body rule must defer to an
+            // `IsValidFor{XBodyItem}` predicate. Other body rules retain the simple
+            // `cursor.Current != null` semantics; we promote rules into the guarded form by name.
+            var requiresIsValidForGuard = IsGuardedBodyItemRule(collectionNonTerminals[0].Name);
+            var guardCallSuffix = requiresIsValidForGuard
+                ? $".IsValidFor{collectionNonTerminals[0].Name}(writerContext)"
+                : string.Empty;
+
+            if (requiresIsValidForGuard)
+            {
+                writer.WriteSafeString($"if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current is not SysML2.NET.Core.POCO.Root.Elements.IRelationship emptyBodyCandidate || !emptyBodyCandidate{guardCallSuffix}){Environment.NewLine}");
+            }
+            else
+            {
+                writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
+            }
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -1063,7 +1101,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     var perItemCall = ResolveBuilderCall(umlClass, collectionNonTerminal, typeTarget, ruleGenerationContext);
 
-                    writer.WriteSafeString($"while ({cursorVarName}.Current != null){Environment.NewLine}");
+                    if (requiresIsValidForGuard)
+                    {
+                        writer.WriteSafeString($"while ({cursorVarName}.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship loopBodyItem && loopBodyItem{guardCallSuffix}){Environment.NewLine}");
+                    }
+                    else
+                    {
+                        writer.WriteSafeString($"while ({cursorVarName}.Current != null){Environment.NewLine}");
+                    }
+
                     writer.WriteSafeString($"{{{Environment.NewLine}");
 
                     if (perItemCall != null)
@@ -1177,6 +1223,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             writer.WriteSafeString($"}}{Environment.NewLine}");
+        }
+
+        /// <summary>
+        /// Returns true when the KEBNF body-item rule named <paramref name="bodyItemRuleName"/> can have
+        /// elements ahead of the cursor that legitimately belong to a parent rule (and therefore must
+        /// NOT be consumed by the body's <c>*</c> loop). For these rules, <see cref="EmitTerminalVsBodyWithCollectionNonTerminals"/>
+        /// emits the <c>;</c> / <c>{ … }</c> choice and the <c>*</c> loop as
+        /// <c>IsValidFor{XBodyItem}</c>-guarded code rather than a raw <c>cursor.Current != null</c>
+        /// check, faithfully implementing the KEBNF <c>*</c> quantifier semantics ("iterate while
+        /// the current element matches an alternative") for the affected rules.
+        /// <para>Allowlist (rather than allow-all) keeps the codegen change scoped: only rules whose
+        /// dispatcher can encounter foreign elements need the guard. Currently this is the two
+        /// rules whose body item includes the <c>DefinitionMember</c> alternative — <c>DefinitionBodyItem</c>
+        /// (consumed by <c>PortDefinition</c>'s trailing <c>ConjugatedPortDefinitionMember</c> that
+        /// the body must skip) and <c>InterfaceBodyItem</c> (same shape). All other body item rules
+        /// retain the existing <c>cursor.Current != null</c> semantics.</para>
+        /// </summary>
+        /// <param name="bodyItemRuleName">The KEBNF rule name of the body item (e.g. <c>DefinitionBodyItem</c>)</param>
+        /// <returns><c>true</c> if the codegen should emit the guarded form</returns>
+        private static bool IsGuardedBodyItemRule(string bodyItemRuleName)
+        {
+            return string.Equals(bodyItemRuleName, "DefinitionBodyItem", StringComparison.Ordinal)
+                || string.Equals(bodyItemRuleName, "InterfaceBodyItem", StringComparison.Ordinal);
         }
     }
 }

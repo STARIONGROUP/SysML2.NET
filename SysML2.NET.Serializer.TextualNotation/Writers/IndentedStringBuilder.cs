@@ -340,6 +340,33 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Emits the current indent prefix (if positioned at the start of a new logical line)
+        /// and then appends <paramref name="literal"/> verbatim — bypassing the leading-space
+        /// strip, the consecutive-space collapse, and the tight-token normalisation that
+        /// <see cref="Append(string)"/> applies. The wrapper is left in mid-line state, so
+        /// subsequent <see cref="Append(string)"/> / <see cref="AppendLine(string)"/> calls
+        /// continue to normalise their payloads as usual.
+        /// <para>Use this for the rare case where the canonical SST form preserves leading
+        /// whitespace inside a line prefix — notably the alignment space inside a multi-line
+        /// regular comment (<c>" * "</c> aligns the body asterisks with the asterisk in the
+        /// opening <c>/*</c>). The normal <see cref="Append(string)"/> path strips that
+        /// leading space at line start, which collapses <c>" * "</c> to <c>"* "</c>.</para>
+        /// </summary>
+        /// <param name="literal">The literal text to append after the indent prefix; <c>null</c> or empty is a no-op.</param>
+        /// <returns>The current <see cref="IndentedStringBuilder"/> instance, to allow chaining.</returns>
+        public IndentedStringBuilder AppendIndentedLiteral(string literal)
+        {
+            if (string.IsNullOrEmpty(literal))
+            {
+                return this;
+            }
+
+            this.EmitIndentIfNeeded();
+            this.builder.Append(literal);
+            return this;
+        }
+
+        /// <summary>
         /// Converts the accumulated content of the underlying <see cref="StringBuilder"/> to
         /// a <see cref="string"/>.
         /// </summary>

@@ -86,6 +86,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             = new ();
 
         /// <summary>
+        /// Reverse index from a canonical-owning <see cref="INamespace" /> to the set of
+        /// "facade" namespaces that DIRECTLY re-export it via a <see cref="INamespaceImport" />.
+        /// Populated during the eager <see cref="BuildSimpleNameIndices"/> pass alongside the
+        /// per-scope simple-name indices. Single-hop only — no transitive walk.
+        /// <para>Used by <see cref="ResolveFresh"/> to shorten library references like
+        /// <c>ISQBase::mass</c> to the OMG SST idiomatic facade form <c>ISQ::mass</c>: when a
+        /// reference targets an element owned by <c>ISQBase</c>, and a namespace <c>ISQ</c>
+        /// directly imports <c>ISQBase</c>, AND <c>ISQ</c> is reachable from the source scope
+        /// chain, the writer emits <c>ISQ::simpleName</c> instead of <c>ISQBase::simpleName</c>.
+        /// The SST tutorial (Release 2026-03) uses the facade form 17:1 over the implementation
+        /// form (<c>ISQ::</c> vs <c>ISQBase::</c>), establishing the canonical idiom.</para>
+        /// </summary>
+        private readonly Dictionary<INamespace, HashSet<INamespace>> directFacadeIndex = new();
+
+        /// <summary>
         /// Initializes a new <see cref="NameResolutionCache" /> rooted at
         /// <paramref name="rootNamespace" /> and eagerly populates the per-namespace simple-name
         /// index for every namespace reachable from the root.
@@ -94,7 +109,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public NameResolutionCache(INamespace rootNamespace)
         {
             this.RootNamespace = rootNamespace ?? throw new ArgumentNullException(nameof(rootNamespace));
-            this.simpleNameIndices = BuildSimpleNameIndices(rootNamespace);
+            this.simpleNameIndices = this.BuildSimpleNameIndices(rootNamespace);
         }
 
         /// <summary>
@@ -152,6 +167,30 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             // Memoised path — look up by (target.Id, sourceLocalScope.Id).
             var sourceLocalScope = this.GetSourceLocalScope(sourcePoco);
+
+            // Redefinition-context: when the source is an OwnedRedefinition and the target is its
+            // RedefinedFeature, the LOCAL redefining feature must not shadow the redefined target
+            // during simple-name lookup. The parser resolves `:>> name` against the type's
+            // INHERITED members (the redefining feature isn't a member of the type yet — it's the
+            // very feature being defined), so the writer mirrors that by filtering the local
+            // redefiner out of every candidate bucket. Bypasses the memo because the redefinition
+            // context is per-call, not per (target, sourceLocalScope).
+            // <para>EXCEPTION: when the local redefining feature has a DECLARED name equal to the
+            // target's name, emitting the bare simple-name form would re-resolve at parse time to
+            // the local redefiner itself (the post-parse local member shadows the inherited one),
+            // not to the redefined target. KerML §8.2.3.5 requires the qualified form in that
+            // case so the round-trip resolves to the SAME element. We detect this collision and
+            // fall through to the normal cached path, which produces the qualified form.</para>
+            if (sourcePoco is IRedefinition redefinition && ReferenceEquals(target, redefinition.RedefinedFeature))
+            {
+                var localRedefiner = redefinition.RedefiningFeature;
+
+                if (localRedefiner != null && !RedefinerDeclaredNameCollidesWith(localRedefiner, target))
+                {
+                    return this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner);
+                }
+            }
+
             var cacheKey = (target.Id, sourceLocalScope?.Id ?? Guid.Empty);
 
             if (this.resolvedReferences.TryGetValue(cacheKey, out var cached))
@@ -159,7 +198,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return cached;
             }
 
-            var resolved = this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName);
+            var resolved = this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner: null);
             this.resolvedReferences[cacheKey] = resolved;
             return resolved;
         }
@@ -185,7 +224,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="sourceLocalScope">The previously-computed local scope (may be <see langword="null" />).</param>
         /// <param name="escapedName">The target's escaped raw <c>name</c>.</param>
         /// <returns>The resolved emission string.</returns>
-        private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName)
+        private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName, IFeature localRedefiner)
         {
             var chain = this.GetSourceScopeChain(sourcePoco, sourceLocalScope);
 
@@ -199,7 +238,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 escapedShortName = rawShortName.QueryIsValidBasicName() ? rawShortName : rawShortName.ToUnrestrictedName();
 
-                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, out var matchedShort))
+                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, localRedefiner, out var matchedShort))
                 {
                     return matchedShort;
                 }
@@ -208,9 +247,22 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var rawName = target.name;
 
             if (!string.IsNullOrWhiteSpace(rawName)
-                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, out var matchedLong))
+                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, localRedefiner, out var matchedLong))
             {
                 return matchedLong;
+            }
+
+            // Facade re-export pass — when the target's owningNamespace is DIRECTLY re-exported
+            // by another namespace via NamespaceImport AND that facade is reachable from the
+            // source scope chain, prefer the OMG SST canonical form `facade::simpleName` over
+            // the implementation-owning form `owner::simpleName`. The SST tutorial (Release
+            // 2026-03) uses the facade form 17:1 over the implementation form (e.g.
+            // `ISQ::mass` 17 times vs `ISQBase::mass` once), establishing this as the canonical
+            // textual idiom. KerML §8.2.3.5.4 leaves the choice between the two formally
+            // undetermined, so both forms parse to the same element.
+            if (this.TryResolveViaDirectFacade(chain, target, escapedShortName, escapedName, out var matchedFacade))
+            {
+                return matchedFacade;
             }
 
             // Depth ≥ 1 — walk owner-chain ancestors outward and look for the first one that
@@ -242,7 +294,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ancestorRawName = !string.IsNullOrWhiteSpace(rawAncestorShort) ? rawAncestorShort : rawAncestorLong;
 
                 if (!string.IsNullOrWhiteSpace(ancestorRawName)
-                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, out var matchedAnchor))
+                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, localRedefiner, out var matchedAnchor))
                 {
                     var builder = new StringBuilder(matchedAnchor);
 
@@ -290,6 +342,194 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Determines whether the <paramref name="localRedefiner"/>'s DECLARED name (the
+        /// modeller-typed identifier, NOT the effective name derived from the redefinition
+        /// chain) equals the <paramref name="target"/>'s effective name. When this returns
+        /// <see langword="true"/>, the writer must emit the redefined target as a qualified
+        /// name — emitting the bare simple-name form would re-resolve at parse time to the
+        /// local redefiner (because the local member, once parsed, shadows the inherited one)
+        /// instead of to the redefined target. Per KerML §8.2.3.5 the qualified form
+        /// guarantees that the textual round-trip resolves back to the SAME element.
+        /// <para>An anonymous redefining feature (e.g. <c>ref :&gt;&gt; driveshaft = …</c>) has
+        /// both <c>DeclaredName</c> and <c>DeclaredShortName</c> empty — its effective name is
+        /// derived from the redefinition. Such a redefiner cannot collide and the writer can
+        /// safely emit the shortened form.</para>
+        /// </summary>
+        /// <param name="localRedefiner">The redefining feature; must be non-null.</param>
+        /// <param name="target">The redefined target.</param>
+        /// <returns><see langword="true"/> when the declared simple-name of the redefiner equals the target's effective name.</returns>
+        private static bool RedefinerDeclaredNameCollidesWith(IFeature localRedefiner, IElement target)
+        {
+            var redefinerDeclaredName = localRedefiner.DeclaredName;
+            var redefinerDeclaredShortName = localRedefiner.DeclaredShortName;
+
+            if (string.IsNullOrWhiteSpace(redefinerDeclaredName) && string.IsNullOrWhiteSpace(redefinerDeclaredShortName))
+            {
+                return false;
+            }
+
+            var targetName = target.name;
+            var targetShortName = target.shortName;
+
+            return (!string.IsNullOrWhiteSpace(redefinerDeclaredName) && string.Equals(redefinerDeclaredName, targetName, StringComparison.Ordinal))
+                || (!string.IsNullOrWhiteSpace(redefinerDeclaredName) && string.Equals(redefinerDeclaredName, targetShortName, StringComparison.Ordinal))
+                || (!string.IsNullOrWhiteSpace(redefinerDeclaredShortName) && string.Equals(redefinerDeclaredShortName, targetName, StringComparison.Ordinal))
+                || (!string.IsNullOrWhiteSpace(redefinerDeclaredShortName) && string.Equals(redefinerDeclaredShortName, targetShortName, StringComparison.Ordinal));
+        }
+
+        /// <summary>
+        /// Attempts to emit a "facade re-export" form for <paramref name="target"/> — i.e.
+        /// <c>facade::simpleName</c> where <c>facade</c> is a namespace that DIRECTLY imports
+        /// the target's owning namespace via <see cref="INamespaceImport"/> and is reachable
+        /// from the source scope <paramref name="chain"/>. This matches the OMG SST canonical
+        /// idiom of <c>ISQ::mass</c> over <c>ISQBase::mass</c> (KerML §8.2.3.5.4 leaves the
+        /// choice formally undetermined; the SST tutorial uses the facade form 17:1).
+        /// <para>Single-hop only — the SST does not use deep-chain facade names like
+        /// <c>SI::mass</c> (SI imports ISQ which imports ISQBase, two hops away).</para>
+        /// <para>Tie-break order when multiple facades are reachable: (1) facade whose simple
+        /// name resolves uniquely to ITSELF in the scope chain (i.e. a clean anchor); (2)
+        /// innermost scope-chain proximity (the facade reachable at the innermost scope wins);
+        /// (3) shorter facade name; (4) stable alphabetical.</para>
+        /// </summary>
+        /// <param name="chain">The source scope chain (innermost first).</param>
+        /// <param name="target">The element being referenced.</param>
+        /// <param name="escapedShortName">Pre-escaped target shortName (may be <see langword="null"/>).</param>
+        /// <param name="escapedName">Pre-escaped target name.</param>
+        /// <param name="matched">On a hit, the emitted <c>facade::simpleName</c> string.</param>
+        /// <returns><see langword="true"/> when a reachable facade was found and the emission was assembled.</returns>
+        private bool TryResolveViaDirectFacade(IReadOnlyList<INamespace> chain, IElement target, string escapedShortName, string escapedName, out string matched)
+        {
+            matched = null;
+
+            var canonicalOwner = QueryOwningContainer(target) as INamespace;
+
+            if (canonicalOwner == null || !this.directFacadeIndex.TryGetValue(canonicalOwner, out var facades) || facades.Count == 0)
+            {
+                return false;
+            }
+
+            // Prefer the target's shortest emission form, mirroring the depth-0 walk above.
+            var targetSimpleName = !string.IsNullOrWhiteSpace(escapedShortName) ? escapedShortName : escapedName;
+
+            if (string.IsNullOrWhiteSpace(targetSimpleName))
+            {
+                return false;
+            }
+
+            INamespace bestFacade = null;
+            var bestScopeDepth = int.MaxValue;
+
+            // First pass — prefer facades reachable via a scope in the source chain (their
+            // simple name resolves directly in some chain scope's index). This is the
+            // strictest reachability and matches the lexical-resolution model.
+            for (var scopeDepth = 0; scopeDepth < chain.Count; scopeDepth++)
+            {
+                var scope = chain[scopeDepth];
+                var scopeIndex = this.GetSimpleNameIndex(scope);
+
+                foreach (var facade in facades)
+                {
+                    var facadeName = !string.IsNullOrWhiteSpace(facade.shortName) ? facade.shortName : facade.name;
+
+                    if (string.IsNullOrWhiteSpace(facadeName) || !scopeIndex.TryGetValue(facadeName, out var facadeBucket) || !facadeBucket.Contains(facade))
+                    {
+                        continue;
+                    }
+
+                    // Innermost-scope win takes priority; within the same scope depth, prefer
+                    // the shorter facade name, then stable alphabetical.
+                    if (bestFacade == null
+                        || scopeDepth < bestScopeDepth
+                        || (scopeDepth == bestScopeDepth && CompareFacades(facade, bestFacade) < 0))
+                    {
+                        bestFacade = facade;
+                        bestScopeDepth = scopeDepth;
+                    }
+                }
+
+                if (bestFacade != null)
+                {
+                    break;
+                }
+            }
+
+            // Second pass — KerML §8.2.3.5.4 says name resolution walks all the way out to
+            // the global namespace, which contains all loaded library root namespaces. A
+            // facade indexed by the cache (even one not lexically owned by a source-chain
+            // scope) is therefore reachable for the parser via the global resolution step,
+            // and `facade::simpleName` round-trips to the same target element.
+            // <para>Restrict to facades whose name is MEANINGFULLY shorter than the canonical
+            // owner's — i.e. at most 70% of the owner's length. This matches the OMG SST
+            // convention: ISBase (7 chars) → ISQ (3 chars, 43% of ISBase) is a meaningful
+            // shortening; but ScalarValues (12 chars) → Collections (11 chars, 92%) is NOT
+            // — Collections is structurally a parent wrapper, not a user-facing facade for
+            // ScalarValues. Without semantic understanding the canonical owner is preferred
+            // in the latter case.</para>
+            if (bestFacade == null)
+            {
+                var canonicalNameForCompare = QueryPreferredEscapedSegment(canonicalOwner);
+                var canonicalLength = canonicalNameForCompare?.Length ?? int.MaxValue;
+                var meaningfulShorterMax = (int)(canonicalLength * 0.7);
+
+                foreach (var facade in facades)
+                {
+                    if (!this.simpleNameIndices.ContainsKey(facade))
+                    {
+                        continue;
+                    }
+
+                    var facadeNameForCompare = QueryPreferredEscapedSegment(facade);
+
+                    if (string.IsNullOrWhiteSpace(facadeNameForCompare) || facadeNameForCompare.Length > meaningfulShorterMax)
+                    {
+                        continue;
+                    }
+
+                    if (bestFacade == null || CompareFacades(facade, bestFacade) < 0)
+                    {
+                        bestFacade = facade;
+                    }
+                }
+            }
+
+            if (bestFacade == null)
+            {
+                return false;
+            }
+
+            var bestFacadeSegment = QueryPreferredEscapedSegment(bestFacade);
+
+            if (string.IsNullOrWhiteSpace(bestFacadeSegment))
+            {
+                return false;
+            }
+
+            matched = bestFacadeSegment + "::" + targetSimpleName;
+            return true;
+        }
+
+        /// <summary>
+        /// Stable ordering for facade candidates at the SAME scope depth: shorter name first,
+        /// then ordinal alphabetical. Ensures the writer's output is deterministic across runs
+        /// when multiple facades re-export the same owning namespace from the same scope.
+        /// </summary>
+        /// <param name="left">First candidate.</param>
+        /// <param name="right">Second candidate.</param>
+        /// <returns>Negative if <paramref name="left"/> sorts first, positive if right, zero if tied.</returns>
+        private static int CompareFacades(INamespace left, INamespace right)
+        {
+            var leftName = !string.IsNullOrWhiteSpace(left.shortName) ? left.shortName : left.name;
+            var rightName = !string.IsNullOrWhiteSpace(right.shortName) ? right.shortName : right.name;
+
+            leftName ??= string.Empty;
+            rightName ??= string.Empty;
+
+            var lengthCompare = leftName.Length.CompareTo(rightName.Length);
+
+            return lengthCompare != 0 ? lengthCompare : string.CompareOrdinal(leftName, rightName);
+        }
+
+        /// <summary>
         /// Returns <paramref name="element" />'s shortest escaped name segment — preferring
         /// <see cref="IElement.shortName" /> over <see cref="IElement.name" />, with KEBNF
         /// unrestricted-name escaping when the chosen segment is not a basic name. Returns
@@ -324,7 +564,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="escapedName">The escaped form to emit on a hit.</param>
         /// <param name="matched">On a unique-binding hit, the simple-name string to emit.</param>
         /// <returns><see langword="true" /> when the simple name resolves uniquely to the target somewhere in the chain.</returns>
-        private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, out string matched)
+        private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, IFeature localRedefiner, out string matched)
         {
             matched = null;
 
@@ -335,7 +575,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             foreach (var scope in chain)
             {
-                var resolution = this.ResolveSimpleNameInScope(scope, target, rawName);
+                var resolution = this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner);
 
                 switch (resolution)
                 {
@@ -651,8 +891,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="scope">The scope whose index is inspected.</param>
         /// <param name="target">The element to look up.</param>
         /// <param name="rawName">The simple-name lexical form to probe; must be non-blank.</param>
+        /// <param name="localRedefiner">
+        /// Optional feature to filter OUT of the scope's name bucket before leaf reduction —
+        /// used by the redefinition-resolution path so the local redefining feature does not
+        /// shadow the redefined target. Pass <see langword="null"/> for the normal resolution
+        /// path. KerML §8.2.3.5: a redefining feature is not yet a resolvable member of its
+        /// owning Type at the redefinition site, so it must not participate in name resolution
+        /// when emitting <c>:&gt;&gt; name</c>.
+        /// </param>
         /// <returns>The resolution state.</returns>
-        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName)
+        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName, IFeature localRedefiner)
         {
             var index = this.GetSimpleNameIndex(scope);
 
@@ -661,9 +909,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return SimpleNameResolution.NotBound;
             }
 
-            if (elements.Count == 1)
+            // Filter out the local redefining feature so it doesn't shadow the redefined target
+            // it points to. When the bucket contains only the local redefiner, treat the name as
+            // unbound in this scope and continue the chain walk outward.
+            var hasLocalRedefiner = localRedefiner != null && elements.Contains(localRedefiner);
+            var effectiveCount = hasLocalRedefiner ? elements.Count - 1 : elements.Count;
+
+            if (effectiveCount == 0)
             {
-                return elements.Contains(target)
+                return SimpleNameResolution.NotBound;
+            }
+
+            if (effectiveCount == 1)
+            {
+                var only = hasLocalRedefiner
+                    ? elements.First(e => !ReferenceEquals(e, localRedefiner))
+                    : elements.First();
+
+                return ReferenceEquals(only, target)
                     ? SimpleNameResolution.Matched
                     : SimpleNameResolution.Shadowed;
             }
@@ -671,10 +934,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             // Reduce to the leaf set: drop any element that is transitively redefined by
             // another element in `elements`. The shadow set is the union of each candidate's
             // `AllRedefinedFeatures()` closure (excluding the candidate itself, which the
-            // operation includes as the seed of the closure).
+            // operation includes as the seed of the closure). The local redefiner — when
+            // present — is excluded from this computation entirely so it neither participates
+            // in shadow accumulation nor in the final leaf count.
             var shadowed = new HashSet<IFeature>();
 
-            foreach (var candidate in elements.OfType<IFeature>())
+            foreach (var candidate in elements.OfType<IFeature>().Where(candidate => !ReferenceEquals(candidate, localRedefiner)))
             {
                 foreach (var redefined in candidate.AllRedefinedFeatures().Where(redefined => !ReferenceEquals(redefined, candidate)))
                 {
@@ -685,7 +950,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             IElement onlyLeaf = null;
             var leafCount = 0;
 
-            foreach (var element in elements.Where(element => element is not IFeature feature || !shadowed.Contains(feature)))
+            foreach (var element in elements.Where(element => !ReferenceEquals(element, localRedefiner) && (element is not IFeature feature || !shadowed.Contains(feature))))
             {
                 leafCount++;
 
@@ -741,7 +1006,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="rootNamespace">The root namespace.</param>
         /// <returns>The full structural cache.</returns>
-        private static Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> BuildSimpleNameIndices(INamespace rootNamespace)
+        private Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> BuildSimpleNameIndices(INamespace rootNamespace)
         {
             var result = new Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>>();
             var pending = new Queue<INamespace>();
@@ -760,7 +1025,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 var index = new Dictionary<string, HashSet<IElement>>(StringComparer.Ordinal);
 
-                BuildOwnedAndImportedEntries(scope, index, pending);
+                this.BuildOwnedAndImportedEntries(scope, index, pending);
 
                 if (scope is IType type)
                 {
@@ -781,7 +1046,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="scope">The namespace whose entries are populated.</param>
         /// <param name="index">The destination index.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed.</param>
-        private static void BuildOwnedAndImportedEntries(INamespace scope, Dictionary<string, HashSet<IElement>> index, Queue<INamespace> pending)
+        private void BuildOwnedAndImportedEntries(INamespace scope, Dictionary<string, HashSet<IElement>> index, Queue<INamespace> pending)
         {
             try
             {
@@ -803,10 +1068,35 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     {
                         case IMembershipImport { ImportedMembership: { } importedMembership }:
                             AddMembershipEntry(index, importedMembership, pending);
+                            // Enqueue the imported member's owning namespace too — for SI::kg
+                            // this walks SI, whose own ownedImport chain reaches ISQ and
+                            // ISQBase, populating directFacadeIndex so facade-form shortening
+                            // (e.g. `ISQ::mass`) becomes available at resolve time.
+                            // Isolated try/catch so a NotSupportedException on
+                            // MemberElement.owningNamespace doesn't unwind the outer
+                            // ownedImport loop and lose every remaining import for this scope.
+                            try
+                            {
+                                if (importedMembership.MemberElement?.owningNamespace is { } memberOwner)
+                                {
+                                    pending.Enqueue(memberOwner);
+                                }
+                            }
+                            catch (NotSupportedException)
+                            {
+                                // owningNamespace not implemented for this imported member; skip the owner enqueue.
+                            }
                             break;
                         case INamespaceImport { ImportedNamespace: not null } namespaceImport:
                         {
                             pending.Enqueue(namespaceImport.ImportedNamespace);
+
+                            // Record `scope` as a direct (single-hop) facade re-exporter of
+                            // `namespaceImport.ImportedNamespace`. Used by ResolveFresh to emit
+                            // the OMG SST canonical form `facade::simpleName` instead of
+                            // `canonicalOwner::simpleName` when the target lives in the
+                            // imported namespace (e.g. `ISQ::mass` over `ISQBase::mass`).
+                            this.RecordDirectFacade(namespaceImport.ImportedNamespace, scope);
 
                             // Isolate the inner ownedMembership walk in its own try/catch so a
                             // NotSupportedException from one imported namespace does not abort
@@ -832,6 +1122,25 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 // ownedImport may not be implemented; skip.
             }
+        }
+
+        /// <summary>
+        /// Records <paramref name="facade"/> as a direct (single-hop) re-exporter of
+        /// <paramref name="canonicalOwner"/>. Called once per <see cref="INamespaceImport"/>
+        /// encountered in the eager build pass.
+        /// </summary>
+        /// <param name="canonicalOwner">The namespace being directly imported.</param>
+        /// <param name="facade">The namespace whose <c>ownedImport</c> contains the
+        /// <see cref="INamespaceImport"/> targeting <paramref name="canonicalOwner"/>.</param>
+        private void RecordDirectFacade(INamespace canonicalOwner, INamespace facade)
+        {
+            if (!this.directFacadeIndex.TryGetValue(canonicalOwner, out var facades))
+            {
+                facades = [];
+                this.directFacadeIndex[canonicalOwner] = facades;
+            }
+
+            facades.Add(facade);
         }
 
         /// <summary>
