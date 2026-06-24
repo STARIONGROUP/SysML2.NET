@@ -47,11 +47,14 @@ namespace SysML2.NET.Tests.Extend
             var subject = new Behavior();
             var parameter = new Feature { Direction = FeatureDirectionKind.In };
             var plainFeature = new Feature();
-
             subject.AssignOwnership(new FeatureMembership(), parameter);
             subject.AssignOwnership(new FeatureMembership(), plainFeature);
-            Assert.That(subject.ComputeParameter(), Does.Contain(parameter));
-            Assert.That(subject.ComputeParameter(), Does.Not.Contain(plainFeature));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeParameter(), Does.Contain(parameter));
+                Assert.That(subject.ComputeParameter(), Does.Not.Contain(plainFeature));
+            }
         }
 
         [Test]
@@ -68,11 +71,14 @@ namespace SysML2.NET.Tests.Extend
             var subject = new Behavior();
             var step = new Step();
             var plainFeature = new Feature();
-
             subject.AssignOwnership(new FeatureMembership(), step);
             subject.AssignOwnership(new FeatureMembership(), plainFeature);
-            Assert.That(subject.ComputeStep(), Does.Contain(step));
-            Assert.That(subject.ComputeStep(), Does.Not.Contain(plainFeature));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subject.ComputeStep(), Does.Contain(step));
+                Assert.That(subject.ComputeStep(), Does.Not.Contain(plainFeature));
+            }
         }
     }
 }
