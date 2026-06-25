@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
 {
     using System;
     using System.Collections.Generic;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -68,10 +70,16 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IPortDefinition ComputeOriginalPortDefinition(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (conjugatedPortDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(conjugatedPortDefinitionSubject));
+            }
+
+            return conjugatedPortDefinitionSubject.owningMembership?.membershipOwningNamespace as IPortDefinition
+                   ?? throw new IncompleteModelException(
+                       $"{nameof(conjugatedPortDefinitionSubject)} must have an owning namespace of type {nameof(IPortDefinition)}");
         }
 
         /// <summary>
@@ -83,10 +91,15 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IPortConjugation ComputeOwnedPortConjugator(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (conjugatedPortDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(conjugatedPortDefinitionSubject));
+            }
+
+            return conjugatedPortDefinitionSubject.OwnedRelationship
+                .RequireSingleOfType<IPortConjugation>(nameof(conjugatedPortDefinitionSubject));
         }
 
         /// <summary>
