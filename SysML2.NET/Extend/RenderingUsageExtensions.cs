@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
                 throw new ArgumentNullException(nameof(renderingUsageSubject));
             }
 
-            return renderingUsageSubject.type.SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
+            return renderingUsageSubject.definition.SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
         }
 
     }

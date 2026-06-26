@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
                 throw new ArgumentNullException(nameof(calculationUsageSubject));
             }
 
-            return calculationUsageSubject.type.SingleOrDefaultStrict<IFunction>(nameof(calculationUsageSubject));
+            return calculationUsageSubject.definition.SingleOrDefaultStrict<IFunction>(nameof(calculationUsageSubject));
         }
 
         /// <summary>

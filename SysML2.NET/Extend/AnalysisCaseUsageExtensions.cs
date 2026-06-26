@@ -92,7 +92,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
                 throw new ArgumentNullException(nameof(analysisCaseUsageSubject));
             }
 
-            return analysisCaseUsageSubject.type.SingleOrDefaultStrict<IAnalysisCaseDefinition>(nameof(analysisCaseUsageSubject));
+            return analysisCaseUsageSubject.definition.SingleOrDefaultStrict<IAnalysisCaseDefinition>(nameof(analysisCaseUsageSubject));
         }
 
         /// <summary>

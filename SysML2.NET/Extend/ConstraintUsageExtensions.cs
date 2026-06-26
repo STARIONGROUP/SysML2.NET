@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
                 throw new ArgumentNullException(nameof(constraintUsageSubject));
             }
 
-            return constraintUsageSubject.type.SingleOrDefaultStrict<IPredicate>(nameof(constraintUsageSubject));
+            return constraintUsageSubject.definition.SingleOrDefaultStrict<IPredicate>(nameof(constraintUsageSubject));
         }
 
         /// <summary>

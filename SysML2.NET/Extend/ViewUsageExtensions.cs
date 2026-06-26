@@ -153,7 +153,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
                 throw new ArgumentNullException(nameof(viewUsageSubject));
             }
 
-            return viewUsageSubject.type.SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
+            return viewUsageSubject.definition.SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
         }
 
         /// <summary>

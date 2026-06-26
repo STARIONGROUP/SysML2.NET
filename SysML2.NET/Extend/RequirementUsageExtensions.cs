@@ -170,7 +170,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(requirementUsageSubject));
             }
 
-            return requirementUsageSubject.type.SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
+            return requirementUsageSubject.definition.SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
         }
 
         /// <summary>
