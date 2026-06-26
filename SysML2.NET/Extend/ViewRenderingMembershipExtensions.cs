@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
                 throw new ArgumentNullException(nameof(viewRenderingMembershipSubject));
             }
 
-            return viewRenderingMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IRenderingUsage>(nameof(viewRenderingMembershipSubject));
+            return viewRenderingMembershipSubject.OwnedRelatedElement.SingleStrict<IRenderingUsage>(nameof(viewRenderingMembershipSubject));
         }
 
         /// <summary>

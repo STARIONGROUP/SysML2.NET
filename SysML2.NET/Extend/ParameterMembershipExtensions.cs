@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
                 throw new ArgumentNullException(nameof(parameterMembershipSubject));
             }
 
-            return parameterMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IFeature>(nameof(parameterMembershipSubject));
+            return parameterMembershipSubject.OwnedRelatedElement.SingleStrict<IFeature>(nameof(parameterMembershipSubject));
         }
 
         /// <summary>

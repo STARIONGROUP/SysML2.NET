@@ -54,7 +54,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(stakeholderMembership.ComputeOwnedStakeholderParameter(), Is.SameAs(stakeholderPartUsage));
 
-            // Two IPartUsages in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IPartUsages in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoPartMembership = new StakeholderMembership();
             var firstPart = new PartUsage();
             var secondPart = new PartUsage();
@@ -62,10 +62,10 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoPartMembership).OwnedRelatedElement.Add(firstPart);
             ((IContainedRelationship)twoPartMembership).OwnedRelatedElement.Add(secondPart);
 
-            Assert.That(() => twoPartMembership.ComputeOwnedStakeholderParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoPartMembership.ComputeOwnedStakeholderParameter(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IPartUsage alongside a non-IPartUsage (Namespace).
-            // The RequireSingleOfType<IPartUsage> projection MUST pick out the IPartUsage regardless of position
+            // The SingleStrict<IPartUsage> projection MUST pick out the IPartUsage regardless of position
             // (this is the core robustness guarantee — never positionally index the unfiltered collection).
             var mixedMembership = new StakeholderMembership();
             var siblingNonPart = new Namespace();

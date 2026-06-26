@@ -33,6 +33,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.Systems.Requirements;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -177,12 +178,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.EqualTo(requirementDefinition));
 
-            // Multiple typings: add a second RequirementDefinition; FirstOrDefault returns the first match.
+            // Two FeatureTypings whose Type is a RequirementDefinition → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property).
             var secondRequirementDefinition = new RequirementDefinition();
             var typingToSecond = new FeatureTyping { Type = secondRequirementDefinition };
             requirementUsage.AssignOwnership(typingToSecond);
 
-            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.EqualTo(requirementDefinition));
+            Assert.That(requirementUsage.ComputeRequirementDefinition, Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

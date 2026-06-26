@@ -57,6 +57,8 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="CalculationUsageExtensions"/> class provides extensions methods for
@@ -65,23 +67,31 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     internal static class CalculationUsageExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>calculationDefinition</c> property: the <see cref="IFunction"/>
+        /// targeted by the single <see cref="IFeatureTyping"/> owned by
+        /// <paramref name="calculationUsageSubject"/>.
         /// </summary>
         /// <param name="calculationUsageSubject">
         /// The subject <see cref="ICalculationUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IFunction"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="calculationUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an <see cref="IFunction"/>
+        /// (upper-bound violation against the derived <c>[0..1]</c> property).
+        /// </exception>
         internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsageSubject)
         {
-            return calculationUsageSubject == null
-                ? throw new ArgumentNullException(nameof(calculationUsageSubject))
-                : calculationUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IFunction>()
-                    .FirstOrDefault();
+            if (calculationUsageSubject is null)
+            {
+                throw new ArgumentNullException(nameof(calculationUsageSubject));
+            }
+
+            return calculationUsageSubject.type.SingleOrDefaultStrict<IFunction>(nameof(calculationUsageSubject));
         }
 
         /// <summary>

@@ -63,14 +63,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(framedMembership.ComputeOwnedConcern(), Is.SameAs(concernUsage));
 
-            // Two IConcernUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IConcernUsage in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoConcernMembership = new FramedConcernMembership();
             var firstConcern = new ConcernUsage();
             var secondConcern = new ConcernUsage();
             ((IContainedRelationship)twoConcernMembership).OwnedRelatedElement.Add(firstConcern);
             ((IContainedRelationship)twoConcernMembership).OwnedRelatedElement.Add(secondConcern);
 
-            Assert.That(() => twoConcernMembership.ComputeOwnedConcern(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoConcernMembership.ComputeOwnedConcern(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed: non-IConcernUsage (Namespace) alongside a single IConcernUsage — the type filter
             // picks out the ConcernUsage regardless of its position.

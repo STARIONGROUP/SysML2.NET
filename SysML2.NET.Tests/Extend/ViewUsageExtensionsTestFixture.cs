@@ -31,6 +31,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -60,7 +61,7 @@ namespace SysML2.NET.Tests.Extend
             var membershipExpose = new MembershipExpose();
             viewUsage.AssignOwnership(membershipExpose);
 
-            Assert.That(() => viewUsage.ComputeExposedElement(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewUsage.ComputeExposedElement, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -192,12 +193,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition1));
 
-            // Multiple: two ViewDefinition typings → first returned (FirstOrDefault).
+            // Two FeatureTypings whose Type is a ViewDefinition → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property).
             var viewDefinition2 = new ViewDefinition();
             var typingToViewDefinition2 = new FeatureTyping { Type = viewDefinition2 };
             viewUsage.AssignOwnership(typingToViewDefinition2);
 
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition1));
+            Assert.That(viewUsage.ComputeViewDefinition, Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

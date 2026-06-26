@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
             {
                 if (ownedRelationship is IOwningMembership owningMembership and not IFeatureMembership)
                 {
-                    return owningMembership.OwnedRelatedElement.RequireSingleOfType<IElement>(nameof(owningMembership));
+                    return owningMembership.OwnedRelatedElement.SingleStrict<IElement>(nameof(owningMembership));
                 }
             }
 

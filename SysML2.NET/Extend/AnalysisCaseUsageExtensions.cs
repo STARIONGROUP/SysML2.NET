@@ -57,6 +57,8 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="AnalysisCaseUsageExtensions"/> class provides extensions methods for
@@ -65,23 +67,32 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     internal static class AnalysisCaseUsageExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>analysisCaseDefinition</c> property: the
+        /// <see cref="IAnalysisCaseDefinition"/> targeted by the single
+        /// <see cref="IFeatureTyping"/> owned by <paramref name="analysisCaseUsageSubject"/>.
         /// </summary>
         /// <param name="analysisCaseUsageSubject">
         /// The subject <see cref="IAnalysisCaseUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IAnalysisCaseDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="analysisCaseUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="IAnalysisCaseDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
-            return analysisCaseUsageSubject == null
-                ? throw new ArgumentNullException(nameof(analysisCaseUsageSubject))
-                : analysisCaseUsageSubject.OwnedRelationship
-                      .OfType<IFeatureTyping>()
-                      .Select(featureTyping => featureTyping.Type)
-                      .OfType<IAnalysisCaseDefinition>()
-                      .FirstOrDefault();
+            if (analysisCaseUsageSubject is null)
+            {
+                throw new ArgumentNullException(nameof(analysisCaseUsageSubject));
+            }
+
+            return analysisCaseUsageSubject.type.SingleOrDefaultStrict<IAnalysisCaseDefinition>(nameof(analysisCaseUsageSubject));
         }
 
         /// <summary>

@@ -69,7 +69,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
                 throw new ArgumentNullException(nameof(featureValueSubject));
             }
 
-            return featureValueSubject.OwnedRelatedElement.RequireSingleOfType<IExpression>(nameof(featureValueSubject));
+            return featureValueSubject.OwnedRelatedElement.SingleStrict<IExpression>(nameof(featureValueSubject));
         }
     }
 }

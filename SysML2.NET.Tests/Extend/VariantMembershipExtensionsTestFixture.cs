@@ -53,7 +53,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(variantMembership.ComputeOwnedVariantUsage(), Is.SameAs(variantUsage));
 
-            // Two IUsages in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IUsages in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoUsageMembership = new VariantMembership();
             var firstUsage = new Usage();
             var secondUsage = new Usage();
@@ -61,7 +61,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoUsageMembership).OwnedRelatedElement.Add(firstUsage);
             ((IContainedRelationship)twoUsageMembership).OwnedRelatedElement.Add(secondUsage);
 
-            Assert.That(() => twoUsageMembership.ComputeOwnedVariantUsage(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoUsageMembership.ComputeOwnedVariantUsage(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IUsage alongside a non-IUsage (Namespace).
             // The OfType<IUsage>() projection MUST pick out the IUsage regardless of its position

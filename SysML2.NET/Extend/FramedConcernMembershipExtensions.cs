@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(framedConcernMembershipSubject));
             }
 
-            return framedConcernMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IConcernUsage>(nameof(framedConcernMembershipSubject));
+            return framedConcernMembershipSubject.OwnedRelatedElement.SingleStrict<IConcernUsage>(nameof(framedConcernMembershipSubject));
         }
 
         /// <summary>

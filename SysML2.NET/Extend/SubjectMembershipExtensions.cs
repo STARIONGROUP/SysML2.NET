@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(subjectMembershipSubject));
             }
 
-            return subjectMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IUsage>(nameof(subjectMembershipSubject));
+            return subjectMembershipSubject.OwnedRelatedElement.SingleStrict<IUsage>(nameof(subjectMembershipSubject));
         }
 
     }

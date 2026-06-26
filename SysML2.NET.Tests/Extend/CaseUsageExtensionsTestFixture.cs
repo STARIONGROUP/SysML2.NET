@@ -30,6 +30,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -81,6 +82,14 @@ namespace SysML2.NET.Tests.Extend
             caseUsage.AssignOwnership(caseDefinitionTyping);
 
             Assert.That(caseUsage.ComputeCaseDefinition(), Is.SameAs(caseDefinition));
+
+            // Two FeatureTypings whose Type is a CaseDefinition → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property).
+            var twoTypingUsage = new CaseUsage();
+            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new CaseDefinition() });
+            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new CaseDefinition() });
+
+            Assert.That(() => twoTypingUsage.ComputeCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

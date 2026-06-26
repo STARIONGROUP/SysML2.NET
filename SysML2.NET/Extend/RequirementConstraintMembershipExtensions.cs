@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(requirementConstraintMembershipSubject));
             }
 
-            return requirementConstraintMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IConstraintUsage>(nameof(requirementConstraintMembershipSubject));
+            return requirementConstraintMembershipSubject.OwnedRelatedElement.SingleStrict<IConstraintUsage>(nameof(requirementConstraintMembershipSubject));
         }
 
         /// <summary>

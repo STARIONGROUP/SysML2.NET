@@ -26,6 +26,7 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -54,6 +55,13 @@ namespace SysML2.NET.Tests.Extend
             var predicateTyping = new FeatureTyping { Type = predicate };
             predicateBooleanExpression.AssignOwnership(predicateTyping);
             Assert.That(predicateBooleanExpression.ComputePredicate(), Is.SameAs(predicate));
+
+            // Two FeatureTypings whose Type is a Predicate → MultiplicityViolationException (upper-bound
+            // violation of the derived [0..1] property).
+            var twoPredicateBooleanExpression = new BooleanExpression();
+            twoPredicateBooleanExpression.AssignOwnership(new FeatureTyping { Type = new Predicate() });
+            twoPredicateBooleanExpression.AssignOwnership(new FeatureTyping { Type = new Predicate() });
+            Assert.That(() => twoPredicateBooleanExpression.ComputePredicate(), Throws.TypeOf<MultiplicityViolationException>());
         }
     }
 }

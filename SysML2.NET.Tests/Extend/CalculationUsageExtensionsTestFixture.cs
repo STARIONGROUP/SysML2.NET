@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -66,6 +67,14 @@ namespace SysML2.NET.Tests.Extend
             functionSubject.AssignOwnership(new FeatureTyping { Type = kernelFunction });
 
             Assert.That(functionSubject.ComputeCalculationDefinition(), Is.SameAs(kernelFunction));
+
+            // Two FeatureTypings whose Type satisfies the IFunction filter → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property).
+            var twoTypingSubject = new CalculationUsage();
+            twoTypingSubject.AssignOwnership(new FeatureTyping { Type = new Function() });
+            twoTypingSubject.AssignOwnership(new FeatureTyping { Type = new CalculationDefinition() });
+
+            Assert.That(() => twoTypingSubject.ComputeCalculationDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

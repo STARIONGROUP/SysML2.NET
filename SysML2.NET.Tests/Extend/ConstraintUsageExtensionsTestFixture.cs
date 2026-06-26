@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -67,6 +68,24 @@ namespace SysML2.NET.Tests.Extend
             constraintDefUsage.AssignOwnership(constraintDefTyping);
 
             Assert.That(constraintDefUsage.ComputeConstraintDefinition(), Is.SameAs(constraintDefinition));
+
+            // Two FeatureTypings whose Type is a Predicate → MultiplicityViolationException (upper-bound violation
+            // of the derived [0..1] property). Strictness applies only to the final filter; intermediate FeatureTypings
+            // may legitimately be many.
+            var twoTypingUsage = new ConstraintUsage();
+            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new Predicate() });
+            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new Predicate() });
+
+            Assert.That(() => twoTypingUsage.ComputeConstraintDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+
+            // Two FeatureTypings BUT only one targets a Predicate (the other targets a non-Predicate) →
+            // the final filter yields a single match → returns it. Demonstrates restriction-on-final-filter only.
+            var mixedTypingUsage = new ConstraintUsage();
+            var solePredicate = new Predicate();
+            mixedTypingUsage.AssignOwnership(new FeatureTyping { Type = new PartDefinition() });
+            mixedTypingUsage.AssignOwnership(new FeatureTyping { Type = solePredicate });
+
+            Assert.That(mixedTypingUsage.ComputeConstraintDefinition(), Is.SameAs(solePredicate));
         }
 
         [Test]

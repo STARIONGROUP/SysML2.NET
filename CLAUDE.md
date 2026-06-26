@@ -194,28 +194,50 @@ Direct pushes to `development` or `master` are forbidden. All work lives on a fe
 - Prefer C# property patterns ('x is IType { Prop: value }') over declared-variable-plus-predicate form ('x is IType name && name.Prop == value') when the narrowed variable is only consulted once; the property-pattern form is more concise and intent-revealing
 - **Always use C# auto-properties** (`public T Foo { get; private set; }`, `public T Foo { get; init; }`, `public T Foo { get; }`) — NEVER pair a private backing field with an expression-bodied or full-getter property when there is no non-trivial logic (validation, normalisation, lazy init, event firing). Mere storage is never a justification for a backing field; the compiler collapses auto-properties to the same IL.
 - **For test fixtures: default to ONE `[Test]` method per class / method-under-test** packing every scenario (happy path, edge cases, null guards, alternate inputs) into multiple `Assert.That` calls inside that one test — per `TESTING.md` §2. Do NOT write one `[Test]` per scenario when the setup is shared; that produces a bloated test list and duplicated arrange boilerplate. Split into separate `[Test]` methods only when each scenario has a genuinely distinct, complex setup.
+- **Prefer method-group syntax over lambda when the lambda merely invokes a no-arg method.** Both in production code and in tests, write `Assert.That(subject.ComputeFoo, Throws.TypeOf<X>())` rather than `Assert.That(() => subject.ComputeFoo(), Throws.TypeOf<X>())`; pass `subject.Handle` rather than `x => subject.Handle(x)` when wiring up an event handler; pass `string.IsNullOrWhiteSpace` rather than `s => string.IsNullOrWhiteSpace(s)` to a LINQ predicate. The method group is more concise, allocates no closure, and reads as the action itself rather than as a delegate that calls the action. Fall back to a lambda only when (a) the lambda's body does more than the bare call (transforms args, captures locals, adds null-handling), (b) the target method is overloaded and the compiler can't infer which overload to bind, or (c) the call needs explicit type arguments the method-group form cannot supply.
 - Surround every braced block (`if`, `else if`, `while`, `for`, `foreach`, `switch`, `using`, `try`/`catch`/`finally`, `lock`, `do…while`, anonymous `{ }`) with a blank line on both sides — the rule does NOT apply at the very start/end of a method body, nor between a `}` and a continuation keyword (`else`, `catch`, `finally`, `while` of `do…while`) that belongs to the same control flow
 - When invoking an operation or derived property on a POCO from inside an extension method, call the POCO's instance member (e.g. `subject.IsDistinguishableFrom(other)`, `subject.qualifiedName`), NOT the static `ComputeXxxOperation` / `ComputeXxx` extension method. Virtual dispatch on the POCO honors operation/property REDEFINITION in subclass POCOs; calling the static extension directly bypasses dispatch and silently skips overrides. The static-extension form is reserved EXCLUSIVELY for the C# translation of OCL `self.oclAsType(SuperType).method()` — an explicit upcast that mandates targeting the SuperType's body (e.g. `Usage::namingFeature()` → `FeatureExtensions.ComputeNamingFeatureOperation(usage)`; `OwningMembership::path()` → `RelationshipExtensions.ComputeRedefinedPathOperation(owningMembership)`)
-- **`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` storage collections are `[0..*]` — NEVER cardinality-limited.** The [1..1] / [0..1] multiplicities that appear in the metamodel apply to *derived* / *redefined* properties (e.g. `OwningMembership::ownedMemberElement`, `FeatureMembership::ownedMemberFeature`, `SubjectMembership::ownedSubjectParameter`), NOT to the underlying storage. When implementing such a derivation, **project from the collection — do not assume positional indexing**. For the common case of a `[1..1]` derived property, use the canonical shared helper `ElementExtensions.RequireSingleOfType<T>(this IReadOnlyList<IElement>, string)` from `SysML2.NET/Extensions/ElementExtensions.cs` — it does a zero-allocation index-based scan, early-exits on the second match, and throws `IncompleteModelException` with distinct "missing" vs "more than one" diagnostics:
+- **`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` storage collections are `[0..*]` — NEVER cardinality-limited.** The [1..1] / [0..1] multiplicities that appear in the metamodel apply to *derived* / *redefined* properties (e.g. `OwningMembership::ownedMemberElement`, `FeatureMembership::ownedMemberFeature`, `SubjectMembership::ownedSubjectParameter`), NOT to the underlying storage. When implementing such a derivation, **project from the collection — do not assume positional indexing**. Two canonical shared helpers in `SysML2.NET/Extensions/ElementExtensions.cs` cover the common cases (all early-exit on the second match, no full materialisation), each with two overloads:
+
+  - **`SingleStrict<T>`** — `[1..1]` semantics. Empty → `throw IncompleteModelException` (lower-bound violation, missing required). Single → return. 2+ → `throw MultiplicityViolationException` (upper-bound violation).
+    - `SingleStrict<T>(this IEnumerable<T>, string)` — homogeneous: source is already typed `T`.
+    - `SingleStrict<TResult>(this IEnumerable, string)` — heterogeneous: source is wider; bundles a `OfType<TResult>()` filter before the strict-single check.
+  - **`SingleOrDefaultStrict<T>`** — `[0..1]` semantics. Empty → `return null`. Single → return. 2+ → `throw MultiplicityViolationException`.
+    - `SingleOrDefaultStrict<T>(this IEnumerable<T>, string)` — homogeneous.
+    - `SingleOrDefaultStrict<TResult>(this IEnumerable, string)` — heterogeneous with implicit `OfType<TResult>()`.
 
   ```csharp
   // [1..1] type-narrowed redefinition (e.g. SubjectMembership::ownedSubjectParameter : IUsage)
-  return subject.OwnedRelatedElement.RequireSingleOfType<ITargetType>(nameof(subject));
+  return subject.OwnedRelatedElement.SingleStrict<ITargetType>(nameof(subject));
 
   // [1..1] non-narrowing redefinition (e.g. OwningMembership::ownedMemberElement : IElement)
-  return subject.OwnedRelatedElement.RequireSingleOfType<IElement>(nameof(subject));
+  return subject.OwnedRelatedElement.SingleStrict<IElement>(nameof(subject));
+
+  // [0..1] type-narrowed projection over a storage collection (e.g. ConstraintUsage::constraintDefinition : IPredicate)
+  return subject.type.SingleOrDefaultStrict<IPredicate>(nameof(subject));
+
+  // [0..1] over an already-projected stream (multi-hop chain ending in a Select/predicate)
+  return subject.OwnedRelationship.OfType<ISomeRelationship>().Select(r => r.something).SingleOrDefaultStrict(nameof(subject));
   ```
 
-  The helper signature is `internal static T RequireSingleOfType<T>(this IReadOnlyList<IElement> elements, string subjectName) where T : class, IElement`. Because `IReadOnlyList<T>` is covariant, the same helper works on `IElement.OwnedRelationship` (whose element type is `IRelationship : IElement`) without an additional overload.
+  All four signatures accept `IEnumerable` / `IEnumerable<T>`; storage collections (`IElement.OwnedRelationship`, `IRelationship.OwnedRelatedElement`) and derived enumerables (e.g. `Feature::type`) bind directly — no `IReadOnlyList` overload needed.
 
-  The failure mode the helper produces matches the **derived property's declared multiplicity** as recorded in the `[Property(lowerValue:…, upperValue:…)]` attribute on the generated POCO interface (or in the UML XMI):
+  The failure mode each helper produces matches the **derived property's declared multiplicity** as recorded in the `[Property(lowerValue:…, upperValue:…)]` attribute on the generated POCO interface (or in the UML XMI):
 
   | Multiplicity | Empty projection | Single-match projection | 2+ match projection |
   |---|---|---|---|
-  | `[1..1]` (lowerValue=1, upperValue=1) | `throw IncompleteModelException` | return the match | `throw IncompleteModelException` |
-  | `[0..1]` (lowerValue=0, upperValue=1) | `return null` (do NOT use the helper — write inline) | return the match | `throw IncompleteModelException` (inline) |
+  | `[1..1]` (lowerValue=1, upperValue=1) | `throw IncompleteModelException` (lower-bound violation, missing required) | return the match | `throw MultiplicityViolationException` (upper-bound violation) |
+  | `[0..1]` (lowerValue=0, upperValue=1) | `return null` (use `SingleOrDefaultStrict<TResult>` for direct `OfType<TResult>` over a storage collection or derived enumerable; chain explicit projections then `SingleOrDefaultStrict()` for multi-hop / predicate-filtered) | return the match | `throw MultiplicityViolationException` |
   | `[0..*]` / `[1..*]` | (use `List<T>` projection; not this pattern) | n/a | n/a |
 
-  `IncompleteModelException` is the loud signal to SDK users that the model is malformed — DO NOT swallow it as `null` when the multiplicity is `[1..1]`, and DO NOT raise it for the empty case when the multiplicity is `[0..1]` (a legitimately-optional property).
+  Strictness applies **only to the final filter** of the projection chain. Intermediate filters (e.g. `OwnedRelationship.OfType<IFeatureTyping>()` in a `FeatureTyping → Type → IXxxDefinition` chain) may legitimately match many elements; the upper-bound check applies to the last `.OfType<T>()` whose result is the `[0..1]` / `[1..1]` derived value.
+
+  **OCL gate (overrides the table for `[0..1]`):** when the OCL derivation body in the property's `<remarks><code>` block explicitly elects the first of many (`->first()`, `->at(1)`), the spec contract is "pick the first if multiple" — keep `FirstOrDefault`. The strict `[0..1]` rule applies only when the OCL has no first-picking call (or no OCL body at all), in which case the multiplicity `[0..1]` is the only contract and 2+ must surface as `MultiplicityViolationException`.
+
+  `IncompleteModelException` and `MultiplicityViolationException` are the loud signals to SDK users that the model is malformed:
+  - `IncompleteModelException` — lower-bound violation: the model is missing a required element (0 matches against a `[1..1]` property).
+  - `MultiplicityViolationException` — upper-bound violation: the model carries more elements than the upper bound allows (2+ matches against a `[0..1]` or `[1..1]` property).
+
+  DO NOT swallow them as `null` when the multiplicity demands a throw, and DO NOT raise them for the empty case when the multiplicity is `[0..1]` (a legitimately-optional property).
 
   Do NOT use `.Count != 1 → throw` followed by `OwnedRelatedElement[0] as ITargetType` — that pattern (a) silently drops the correctly-typed element when it does not sit at index 0 (`AssignOwnership` allows owned related elements for both `IOwningMembership` AND `IAnnotation`, so a Membership can carry annotation targets alongside the member element), and (b) always allocates a `List<T>` via `OfType<T>().ToList()` even when the answer is decidable after the first two elements.

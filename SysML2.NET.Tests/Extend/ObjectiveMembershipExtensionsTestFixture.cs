@@ -54,7 +54,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(objectiveMembership.ComputeOwnedObjectiveRequirement(), Is.SameAs(objectiveRequirement));
 
-            // Two IRequirementUsages in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IRequirementUsages in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoRequirementMembership = new ObjectiveMembership();
             var firstRequirement = new RequirementUsage();
             var secondRequirement = new RequirementUsage();
@@ -62,7 +62,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoRequirementMembership).OwnedRelatedElement.Add(firstRequirement);
             ((IContainedRelationship)twoRequirementMembership).OwnedRelatedElement.Add(secondRequirement);
 
-            Assert.That(() => twoRequirementMembership.ComputeOwnedObjectiveRequirement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoRequirementMembership.ComputeOwnedObjectiveRequirement(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IRequirementUsage alongside a non-IRequirementUsage (Namespace).
             // The OfType<IRequirementUsage>() projection MUST pick out the IRequirementUsage regardless of its position

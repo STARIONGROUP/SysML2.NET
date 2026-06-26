@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
                 throw new ArgumentNullException(nameof(transitionFeatureMembershipSubject));
             }
 
-            return transitionFeatureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IStep>(nameof(transitionFeatureMembershipSubject));
+            return transitionFeatureMembershipSubject.OwnedRelatedElement.SingleStrict<IStep>(nameof(transitionFeatureMembershipSubject));
         }
     }
 }

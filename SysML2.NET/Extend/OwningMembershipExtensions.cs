@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(owningMembershipSubject));
             }
 
-            return owningMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IElement>(nameof(owningMembershipSubject));
+            return owningMembershipSubject.OwnedRelatedElement.SingleStrict<IElement>(nameof(owningMembershipSubject));
         }
 
         /// <summary>

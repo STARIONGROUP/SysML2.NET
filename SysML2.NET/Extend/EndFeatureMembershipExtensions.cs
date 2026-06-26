@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(endFeatureMembershipSubject));
             }
 
-            return endFeatureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IFeature>(nameof(endFeatureMembershipSubject));
+            return endFeatureMembershipSubject.OwnedRelatedElement.SingleStrict<IFeature>(nameof(endFeatureMembershipSubject));
         }
     }
 }

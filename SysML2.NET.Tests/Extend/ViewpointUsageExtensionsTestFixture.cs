@@ -25,10 +25,9 @@ namespace SysML2.NET.Tests.Extend
     using NUnit.Framework;
 
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -58,12 +57,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.SameAs(viewpointDefinition));
 
-            // Multiple typings: second ViewpointDefinition present; FirstOrDefault returns the first match.
+            // Two FeatureTypings whose Type is a ViewpointDefinition → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property).
             var viewpointDefinition2 = new ViewpointDefinition();
             var typingToViewpointDefinition2 = new FeatureTyping { Type = viewpointDefinition2 };
             viewpointUsage.AssignOwnership(typingToViewpointDefinition2);
 
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.SameAs(viewpointDefinition));
+            Assert.That(viewpointUsage.ComputeViewpointDefinition, Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

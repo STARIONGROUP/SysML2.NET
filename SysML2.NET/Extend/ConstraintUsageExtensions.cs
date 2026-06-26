@@ -57,6 +57,8 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ConstraintUsageExtensions"/> class provides extensions methods for
@@ -65,23 +67,31 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     internal static class ConstraintUsageExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>constraintDefinition</c> property: the <see cref="IPredicate"/>
+        /// targeted by the single <see cref="IFeatureTyping"/> owned by
+        /// <paramref name="constraintUsageSubject"/>.
         /// </summary>
         /// <param name="constraintUsageSubject">
         /// The subject <see cref="IConstraintUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IPredicate"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="constraintUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an <see cref="IPredicate"/>
+        /// (upper-bound violation against the derived <c>[0..1]</c> property).
+        /// </exception>
         internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsageSubject)
         {
-            return constraintUsageSubject == null
-                ? throw new ArgumentNullException(nameof(constraintUsageSubject))
-                : constraintUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IPredicate>()
-                    .FirstOrDefault();
+            if (constraintUsageSubject is null)
+            {
+                throw new ArgumentNullException(nameof(constraintUsageSubject));
+            }
+
+            return constraintUsageSubject.type.SingleOrDefaultStrict<IPredicate>(nameof(constraintUsageSubject));
         }
 
         /// <summary>

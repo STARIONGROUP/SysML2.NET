@@ -76,7 +76,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(featureValue.ComputeValue(), Is.SameAs(literalBoolean));
 
-            // Two IExpressions in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IExpressions in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoExprFeatureValue = new FeatureValue();
             var firstExpression = new LiteralBoolean();
             var secondExpression = new LiteralBoolean();
@@ -84,7 +84,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoExprFeatureValue).OwnedRelatedElement.Add(firstExpression);
             ((IContainedRelationship)twoExprFeatureValue).OwnedRelatedElement.Add(secondExpression);
 
-            Assert.That(() => twoExprFeatureValue.ComputeValue(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoExprFeatureValue.ComputeValue(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IExpression alongside a non-IExpression (Namespace).
             // The OfType<IExpression>() projection MUST pick out the IExpression regardless of its position

@@ -27,6 +27,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -56,12 +57,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
 
-            // Multiple: second RenderingDefinition typing present; FirstOrDefault returns the first match.
+            // Two FeatureTypings whose Type is a RenderingDefinition → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property).
             var renderingDefinition2 = new RenderingDefinition();
             var typingToRenderingDefinition2 = new FeatureTyping { Type = renderingDefinition2 };
             renderingUsage.AssignOwnership(typingToRenderingDefinition2);
 
-            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
+            Assert.That(renderingUsage.ComputeRenderingDefinition, Throws.TypeOf<MultiplicityViolationException>());
         }
     }
 }

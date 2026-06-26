@@ -56,7 +56,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
                 throw new ArgumentNullException(nameof(requirementVerificationMembershipSubject));
             }
 
-            return requirementVerificationMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IRequirementUsage>(nameof(requirementVerificationMembershipSubject));
+            return requirementVerificationMembershipSubject.OwnedRelatedElement.SingleStrict<IRequirementUsage>(nameof(requirementVerificationMembershipSubject));
         }
 
         /// <summary>

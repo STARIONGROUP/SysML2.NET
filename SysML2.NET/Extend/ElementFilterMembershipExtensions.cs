@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
                 throw new ArgumentNullException(nameof(elementFilterMembershipSubject));
             }
 
-            return elementFilterMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IExpression>(nameof(elementFilterMembershipSubject));
+            return elementFilterMembershipSubject.OwnedRelatedElement.SingleStrict<IExpression>(nameof(elementFilterMembershipSubject));
         }
     }
 }

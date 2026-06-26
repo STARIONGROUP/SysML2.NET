@@ -56,6 +56,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RenderingUsageExtensions"/> class provides extensions methods for
@@ -64,23 +66,32 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     internal static class RenderingUsageExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>renderingDefinition</c> property: the
+        /// <see cref="IRenderingDefinition"/> targeted by the single <see cref="IFeatureTyping"/>
+        /// owned by <paramref name="renderingUsageSubject"/>.
         /// </summary>
         /// <param name="renderingUsageSubject">
         /// The subject <see cref="IRenderingUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IRenderingDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="renderingUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="IRenderingDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static IRenderingDefinition ComputeRenderingDefinition(this IRenderingUsage renderingUsageSubject)
         {
-            return renderingUsageSubject == null
-                ? throw new ArgumentNullException(nameof(renderingUsageSubject))
-                : renderingUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IRenderingDefinition>()
-                    .FirstOrDefault();
+            if (renderingUsageSubject is null)
+            {
+                throw new ArgumentNullException(nameof(renderingUsageSubject));
+            }
+
+            return renderingUsageSubject.type.SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
         }
 
     }

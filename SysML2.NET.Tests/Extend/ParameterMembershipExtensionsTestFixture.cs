@@ -56,14 +56,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(parameterMembership.ComputeOwnedMemberParameter(), Is.SameAs(feature));
 
-            // Two IFeatures in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IFeatures in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoFeatureMembership = new ParameterMembership();
             var secondFeature = new Feature();
 
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(feature);
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(secondFeature);
 
-            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IFeature alongside a non-IFeature (Namespace).
             // The OfType<IFeature>() projection MUST pick out the IFeature regardless of its position
