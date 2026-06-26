@@ -148,12 +148,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </exception>
         internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsageSubject)
         {
-            if (viewUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(viewUsageSubject));
-            }
-
-            return viewUsageSubject.definition.SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
+            return viewUsageSubject is null ? throw new ArgumentNullException(nameof(viewUsageSubject)) : viewUsageSubject.definition.SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
         }
 
         /// <summary>

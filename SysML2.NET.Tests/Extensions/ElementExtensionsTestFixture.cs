@@ -44,6 +44,10 @@ namespace SysML2.NET.Tests.Extensions
     [TestFixture]
     public class ElementExtensionsTestFixture
     {
+        private static readonly string[] OneElementSequence = ["only"];
+        private static readonly string[] TwoElementSequence = ["first", "second"];
+        private static readonly string[] ThreeElementSequence = ["a", "b", "c"];
+
         private PartDefinition source;
         private FeatureMembership bridgeRelationship;
         private Specialization referenceBridgeRelationship;
@@ -384,16 +388,16 @@ namespace SysML2.NET.Tests.Extensions
                 Throws.TypeOf<IncompleteModelException>());
 
             // Exactly one element → returns it.
-            Assert.That(new[] { "only" }.SingleStrict("subject"), Is.EqualTo("only"));
+            Assert.That(OneElementSequence.SingleStrict("subject"), Is.EqualTo("only"));
 
             // Two elements → MultiplicityViolationException (upper-bound violation).
             Assert.That(
-                () => new[] { "first", "second" }.SingleStrict("subject"),
+                () => TwoElementSequence.SingleStrict("subject"),
                 Throws.TypeOf<MultiplicityViolationException>());
 
             // Three elements → MultiplicityViolationException (early-exit not regressed).
             Assert.That(
-                () => new[] { "a", "b", "c" }.SingleStrict("subject"),
+                () => ThreeElementSequence.SingleStrict("subject"),
                 Throws.TypeOf<MultiplicityViolationException>());
 
             // Explicit OfType<T>() chain — same contract as the IEnumerable overload SingleStrict<TResult>.
@@ -411,16 +415,16 @@ namespace SysML2.NET.Tests.Extensions
             Assert.That(Enumerable.Empty<string>().SingleOrDefaultStrict("subject"), Is.Null);
 
             // Exactly one element → returns it.
-            Assert.That(new[] { "only" }.SingleOrDefaultStrict("subject"), Is.EqualTo("only"));
+            Assert.That(OneElementSequence.SingleOrDefaultStrict("subject"), Is.EqualTo("only"));
 
             // Two elements → MultiplicityViolationException (upper-bound violation against the [0..1] property).
             Assert.That(
-                () => new[] { "first", "second" }.SingleOrDefaultStrict("subject"),
+                () => TwoElementSequence.SingleOrDefaultStrict("subject"),
                 Throws.TypeOf<MultiplicityViolationException>());
 
             // Three elements → MultiplicityViolationException (early-exit not regressed).
             Assert.That(
-                () => new[] { "a", "b", "c" }.SingleOrDefaultStrict("subject"),
+                () => ThreeElementSequence.SingleOrDefaultStrict("subject"),
                 Throws.TypeOf<MultiplicityViolationException>());
 
             // Explicit OfType<T>() chain — same contract as the IEnumerable overload SingleOrDefaultStrict<TResult>.

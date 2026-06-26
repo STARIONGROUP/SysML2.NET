@@ -23,6 +23,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System;
     using System.Linq;
 
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
