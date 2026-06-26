@@ -40,6 +40,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("01-Parts Tree", "1c-Parts Tree Redefinition.sysmlx")]
         [TestCase("01-Parts Tree", "1d-Parts Tree with Reference.sysmlx")]
         [TestCase("02-Parts Interconnection", "2a-Parts Interconnection.sysmlx")]
+        [TestCase("02-Parts Interconnection", "2c-Parts Interconnection-Multiple Decompositions.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
