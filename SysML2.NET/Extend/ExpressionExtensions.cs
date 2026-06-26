@@ -57,12 +57,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// </exception>
         internal static IFunction ComputeFunction(this IExpression expressionSubject)
         {
-            if (expressionSubject is null)
-            {
-                throw new ArgumentNullException(nameof(expressionSubject));
-            }
-
-            return expressionSubject.type.SingleOrDefaultStrict<IFunction>(nameof(expressionSubject));
+            return expressionSubject == null
+                ? throw new ArgumentNullException(nameof(expressionSubject))
+                : expressionSubject.type.SingleOrDefaultStrict<IFunction>(nameof(expressionSubject));
         }
 
         /// <summary>

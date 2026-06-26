@@ -86,12 +86,9 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </exception>
         internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsageSubject)
         {
-            if (calculationUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(calculationUsageSubject));
-            }
-
-            return calculationUsageSubject.definition.SingleOrDefaultStrict<IFunction>(nameof(calculationUsageSubject));
+            return calculationUsageSubject == null
+                ? throw new ArgumentNullException(nameof(calculationUsageSubject))
+                : calculationUsageSubject.definition.SingleOrDefaultStrict<IFunction>(nameof(calculationUsageSubject));
         }
 
         /// <summary>

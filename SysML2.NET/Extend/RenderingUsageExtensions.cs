@@ -86,12 +86,9 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </exception>
         internal static IRenderingDefinition ComputeRenderingDefinition(this IRenderingUsage renderingUsageSubject)
         {
-            if (renderingUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(renderingUsageSubject));
-            }
-
-            return renderingUsageSubject.definition.SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
+            return renderingUsageSubject == null
+                ? throw new ArgumentNullException(nameof(renderingUsageSubject))
+                : renderingUsageSubject.definition.SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
         }
 
     }

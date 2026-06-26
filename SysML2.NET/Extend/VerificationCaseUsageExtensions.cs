@@ -87,12 +87,9 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// </exception>
         internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
-            if (verificationCaseUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(verificationCaseUsageSubject));
-            }
-
-            return verificationCaseUsageSubject.definition.SingleOrDefaultStrict<IVerificationCaseDefinition>(nameof(verificationCaseUsageSubject));
+            return verificationCaseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(verificationCaseUsageSubject))
+                : verificationCaseUsageSubject.definition.SingleOrDefaultStrict<IVerificationCaseDefinition>(nameof(verificationCaseUsageSubject));
         }
 
         /// <summary>

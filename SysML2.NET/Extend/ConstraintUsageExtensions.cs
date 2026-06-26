@@ -86,12 +86,9 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// </exception>
         internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsageSubject)
         {
-            if (constraintUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(constraintUsageSubject));
-            }
-
-            return constraintUsageSubject.definition.SingleOrDefaultStrict<IPredicate>(nameof(constraintUsageSubject));
+            return constraintUsageSubject == null
+                ? throw new ArgumentNullException(nameof(constraintUsageSubject))
+                : constraintUsageSubject.definition.SingleOrDefaultStrict<IPredicate>(nameof(constraintUsageSubject));
         }
 
         /// <summary>

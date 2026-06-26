@@ -165,12 +165,9 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </exception>
         internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsageSubject)
         {
-            if (requirementUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(requirementUsageSubject));
-            }
-
-            return requirementUsageSubject.definition.SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
+            return requirementUsageSubject == null
+                ? throw new ArgumentNullException(nameof(requirementUsageSubject))
+                : requirementUsageSubject.definition.SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
         }
 
         /// <summary>

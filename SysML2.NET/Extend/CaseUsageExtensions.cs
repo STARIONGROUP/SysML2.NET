@@ -111,12 +111,9 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// </exception>
         internal static ICaseDefinition ComputeCaseDefinition(this ICaseUsage caseUsageSubject)
         {
-            if (caseUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(caseUsageSubject));
-            }
-
-            return caseUsageSubject.definition.SingleOrDefaultStrict<ICaseDefinition>(nameof(caseUsageSubject));
+            return caseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(caseUsageSubject))
+                : caseUsageSubject.definition.SingleOrDefaultStrict<ICaseDefinition>(nameof(caseUsageSubject));
         }
 
         /// <summary>

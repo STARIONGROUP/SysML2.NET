@@ -87,12 +87,9 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// </exception>
         internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
-            if (analysisCaseUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(analysisCaseUsageSubject));
-            }
-
-            return analysisCaseUsageSubject.definition.SingleOrDefaultStrict<IAnalysisCaseDefinition>(nameof(analysisCaseUsageSubject));
+            return analysisCaseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(analysisCaseUsageSubject))
+                : analysisCaseUsageSubject.definition.SingleOrDefaultStrict<IAnalysisCaseDefinition>(nameof(analysisCaseUsageSubject));
         }
 
         /// <summary>

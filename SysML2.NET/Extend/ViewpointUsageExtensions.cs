@@ -87,12 +87,9 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </exception>
         internal static IViewpointDefinition ComputeViewpointDefinition(this IViewpointUsage viewpointUsageSubject)
         {
-            if (viewpointUsageSubject is null)
-            {
-                throw new ArgumentNullException(nameof(viewpointUsageSubject));
-            }
-
-            return viewpointUsageSubject.definition.SingleOrDefaultStrict<IViewpointDefinition>(nameof(viewpointUsageSubject));
+            return viewpointUsageSubject == null
+                ? throw new ArgumentNullException(nameof(viewpointUsageSubject))
+                : viewpointUsageSubject.definition.SingleOrDefaultStrict<IViewpointDefinition>(nameof(viewpointUsageSubject));
         }
 
         /// <summary>

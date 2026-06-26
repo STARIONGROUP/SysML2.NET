@@ -51,12 +51,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// </exception>
         internal static IPredicate ComputePredicate(this IBooleanExpression booleanExpressionSubject)
         {
-            if (booleanExpressionSubject is null)
-            {
-                throw new ArgumentNullException(nameof(booleanExpressionSubject));
-            }
-
-            return booleanExpressionSubject.type.SingleOrDefaultStrict<IPredicate>(nameof(booleanExpressionSubject));
+            return booleanExpressionSubject == null
+                ? throw new ArgumentNullException(nameof(booleanExpressionSubject))
+                : booleanExpressionSubject.type.SingleOrDefaultStrict<IPredicate>(nameof(booleanExpressionSubject));
         }
     }
 }
