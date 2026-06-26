@@ -26,8 +26,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ExpressionExtensions"/> class provides extensions methods for
@@ -36,19 +39,27 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     internal static class ExpressionExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>function</c> property: the <see cref="IFunction"/> that is the
+        /// single type of this <see cref="IExpression"/>.
         /// </summary>
         /// <param name="expressionSubject">
         /// The subject <see cref="IExpression"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IFunction"/>, or <c>null</c> when no such type exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="expressionSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IType"/> on the subject is an <see cref="IFunction"/>
+        /// (upper-bound violation against the derived <c>[0..1]</c> property).
+        /// </exception>
         internal static IFunction ComputeFunction(this IExpression expressionSubject)
         {
             return expressionSubject == null
                 ? throw new ArgumentNullException(nameof(expressionSubject))
-                : expressionSubject.type.OfType<IFunction>().FirstOrDefault();
+                : expressionSubject.type.SingleOrDefaultStrict<IFunction>(nameof(expressionSubject));
         }
 
         /// <summary>

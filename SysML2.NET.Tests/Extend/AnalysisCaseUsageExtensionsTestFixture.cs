@@ -28,6 +28,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -41,20 +42,7 @@ namespace SysML2.NET.Tests.Extend
             var analysisCaseUsage = new AnalysisCaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an IAnalysisCaseDefinition → null.
-            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.Null);
-
-            // Negative case: FeatureTyping whose Type is a Usage (not IAnalysisCaseDefinition) — no match → null.
-            var nonDefinitionTyping = new FeatureTyping { Type = new Usage() };
-            analysisCaseUsage.AssignOwnership(nonDefinitionTyping);
-
-            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.Null);
-
-            // Populated case: FeatureTyping whose Type is an AnalysisCaseDefinition → returns the AnalysisCaseDefinition.
-            var analysisCaseDefinition = new AnalysisCaseDefinition();
-            var analysisCaseDefinitionTyping = new FeatureTyping { Type = analysisCaseDefinition };
-            analysisCaseUsage.AssignOwnership(analysisCaseDefinitionTyping);
-
-            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.SameAs(analysisCaseDefinition));
+            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

@@ -26,10 +26,13 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 
     using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RequirementUsageExtensions"/> class provides extensions methods for
@@ -142,23 +145,29 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         }
 
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>requirementDefinition</c> property: the
+        /// <see cref="IRequirementDefinition"/> targeted by the single <see cref="IFeatureTyping"/>
+        /// owned by <paramref name="requirementUsageSubject"/>.
         /// </summary>
         /// <param name="requirementUsageSubject">
         /// The subject <see cref="IRequirementUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IRequirementDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requirementUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="IRequirementDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
                 ? throw new ArgumentNullException(nameof(requirementUsageSubject))
-                : requirementUsageSubject.OwnedRelationship
-                      .OfType<IFeatureTyping>()
-                      .Select(featureTyping => featureTyping.Type)
-                      .OfType<IRequirementDefinition>()
-                      .FirstOrDefault();
+                : requirementUsageSubject.definition.SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
         }
 
         /// <summary>

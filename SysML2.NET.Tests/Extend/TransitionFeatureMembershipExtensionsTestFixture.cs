@@ -54,7 +54,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(transitionFeatureMembership.ComputeTransitionFeature(), Is.SameAs(acceptActionUsage));
 
-            // Two AcceptActionUsage instances in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two AcceptActionUsage instances in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoStepMembership = new TransitionFeatureMembership();
             var firstStep = new AcceptActionUsage();
             var secondStep = new AcceptActionUsage();
@@ -62,7 +62,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoStepMembership).OwnedRelatedElement.Add(firstStep);
             ((IContainedRelationship)twoStepMembership).OwnedRelatedElement.Add(secondStep);
 
-            Assert.That(() => twoStepMembership.ComputeTransitionFeature(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoStepMembership.ComputeTransitionFeature(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IStep alongside a non-IStep (Namespace).
             // The OfType<IStep>() projection MUST pick out the IStep regardless of its position

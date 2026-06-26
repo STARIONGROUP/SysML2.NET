@@ -21,8 +21,11 @@
 namespace SysML2.NET.Core.POCO.Kernel.Functions
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="BooleanExpressionExtensions" /> class provides extensions methods for
@@ -31,20 +34,27 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     internal static class BooleanExpressionExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>predicate</c> property: the <see cref="IPredicate"/> that is the
+        /// single type of this <see cref="IBooleanExpression"/>.
         /// </summary>
         /// <param name="booleanExpressionSubject">
         /// The subject <see cref="IBooleanExpression" />
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IPredicate"/>, or <c>null</c> when no such type exists.
         /// </returns>
-        [ExcludeFromCodeCoverage]
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="booleanExpressionSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IType"/> on the subject is an
+        /// <see cref="IPredicate"/> (upper-bound violation against the derived <c>[0..1]</c> property).
+        /// </exception>
         internal static IPredicate ComputePredicate(this IBooleanExpression booleanExpressionSubject)
         {
             return booleanExpressionSubject == null
                 ? throw new ArgumentNullException(nameof(booleanExpressionSubject))
-                : booleanExpressionSubject.type.OfType<IPredicate>().FirstOrDefault();
+                : booleanExpressionSubject.type.SingleOrDefaultStrict<IPredicate>(nameof(booleanExpressionSubject));
         }
     }
 }

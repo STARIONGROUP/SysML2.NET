@@ -223,71 +223,185 @@ namespace SysML2.NET.Extensions
         }
 
         /// <summary>
-        /// Returns the single element of type <typeparamref name="T"/> from <paramref name="elements"/>.
+        /// Returns the single element from <paramref name="source"/>, throwing
+        /// <see cref="IncompleteModelException"/> if the source is empty and
+        /// <see cref="MultiplicityViolationException"/> if it contains more than one element.
         /// </summary>
-        /// <typeparam name="T">
-        /// The narrowed element type the caller is interested in (e.g. <c>IUsage</c>, <c>IFeature</c>,
-        /// <c>IStep</c>, <c>IExpression</c>). Pass <see cref="IElement"/> for non-narrowing
-        /// single-element extraction (e.g. <c>OwningMembership::ownedMemberElement</c>).
-        /// </typeparam>
-        /// <param name="elements">
-        /// The source <c>[0..*]</c> storage collection — typically
-        /// <see cref="IRelationship.OwnedRelatedElement"/> or <see cref="IElement.OwnedRelationship"/>
-        /// (assignable thanks to <see cref="IReadOnlyList{T}"/> covariance).
+        /// <typeparam name="T">The element type of the sequence (reference type).</typeparam>
+        /// <param name="source">
+        /// The (already-projected) sequence of candidate matches — typically the tail of a LINQ chain
+        /// such as <c>subject.OwnedRelationship.OfType&lt;IFeatureTyping&gt;().Select(t => t.Type).OfType&lt;TFinal&gt;()</c>.
         /// </param>
         /// <param name="subjectName">
         /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
         /// embedded in the diagnostic message produced on a multiplicity violation.
         /// </param>
-        /// <returns>The single element of type <typeparamref name="T"/></returns>
+        /// <returns>The single element of the sequence.</returns>
         /// <exception cref="IncompleteModelException">
-        /// Thrown when no element of type <typeparamref name="T"/> is present (missing case), or when
-        /// more than one is present (multiplicity violation). The exception message distinguishes the
-        /// two cases so SDK consumers can act on the precise model defect.
+        /// Thrown when <paramref name="source"/> is empty (lower-bound violation — the model is missing
+        /// the required element).
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when <paramref name="source"/> contains more than one element (upper-bound violation
+        /// against the derived <c>[1..1]</c> property).
         /// </exception>
         /// <remarks>
         /// <para>
-        /// Canonical helper for derived <c>[1..1]</c> composite properties that subset a <c>[0..*]</c>
-        /// storage collection (e.g. <c>SubjectMembership::ownedSubjectParameter</c>,
-        /// <c>FeatureMembership::ownedMemberFeature</c>,
-        /// <c>ParameterMembership::ownedMemberParameter</c>,
-        /// <c>TransitionFeatureMembership::transitionFeature</c>,
-        /// <c>FeatureValue::value</c>,
-        /// <c>OwningMembership::ownedMemberElement</c> with <typeparamref name="T"/> = <see cref="IElement"/>).
-        /// </para>
-        /// <para>
-        /// The implementation is zero-allocation (index-based iteration over the
-        /// <see cref="IReadOnlyList{T}"/>; no LINQ materialisation, no intermediate list) and
-        /// early-exits on the second match. The storage collection is structurally <c>[0..*]</c>;
-        /// the <c>[1..1]</c> invariant lives on the derived property and is enforced here at the
-        /// point of access.
+        /// Canonical helper for derived <c>[1..1]</c> properties whose projection ends with a final
+        /// type-filter or predicate over a structurally <c>[0..*]</c> storage collection. The helper
+        /// iterates the sequence once with early-exit on the second match; no full materialisation.
         /// </para>
         /// </remarks>
-        internal static T RequireSingleOfType<T>(this IReadOnlyList<IElement> elements, string subjectName)
-            where T : class, IElement
+        internal static T SingleStrict<T>(this IEnumerable<T> source, string subjectName)
+            where T : class
         {
             T found = null;
 
-            for (var index = 0; index < elements.Count; index++)
+            foreach (var item in source)
             {
-                if (elements[index] is not T match)
-                {
-                    continue;
-                }
-
                 if (found is not null)
                 {
-                    throw new IncompleteModelException(
-                        $"{subjectName} contains more than one element of type {typeof(T).Name}");
+                    throw new MultiplicityViolationException($"{subjectName} contains more than one element of type {typeof(T).Name}");
                 }
 
-                found = match;
+                found = item;
             }
 
-            return found
-                ?? throw new IncompleteModelException(
-                    $"{subjectName} must have an element of type {typeof(T).Name}");
+            return found ?? throw new IncompleteModelException($"{subjectName} must have an element of type {typeof(T).Name}");
         }
+
+        /// <summary>
+        /// Filters <paramref name="source"/> to elements of type <typeparamref name="TResult"/> and
+        /// returns the single match, throwing <see cref="IncompleteModelException"/> if none is
+        /// present and <see cref="MultiplicityViolationException"/> if more than one is present.
+        /// </summary>
+        /// <typeparam name="TResult">The narrowed type to filter to (reference type).</typeparam>
+        /// <param name="source">
+        /// The source sequence — typically a <c>[0..*]</c> storage collection such as
+        /// <see cref="IRelationship.OwnedRelatedElement"/>, <see cref="IElement.OwnedRelationship"/>,
+        /// or a derived enumerable such as <c>Feature::type</c>.
+        /// </param>
+        /// <param name="subjectName">
+        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
+        /// embedded in the diagnostic message produced on a multiplicity violation.
+        /// </param>
+        /// <returns>The single element of type <typeparamref name="TResult"/>.</returns>
+        /// <exception cref="IncompleteModelException">
+        /// Thrown when no element of type <typeparamref name="TResult"/> is present (lower-bound
+        /// violation — the model is missing the required element).
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one element of type <typeparamref name="TResult"/> is present
+        /// (upper-bound violation against the derived <c>[1..1]</c> property).
+        /// </exception>
+        /// <remarks>
+        /// Convenience overload that bundles a <c>OfType&lt;TResult&gt;()</c> filter before delegating
+        /// to <see cref="SingleStrict{T}(IEnumerable{T}, string)"/>. Use this form when the source is
+        /// a heterogeneous storage collection and the caller wants the single element of a particular
+        /// narrowed type (e.g. <c>FeatureMembership::ownedMemberFeature</c> = the single <c>IFeature</c>
+        /// in <c>OwnedRelatedElement</c>).
+        /// </remarks>
+        internal static TResult SingleStrict<TResult>(this System.Collections.IEnumerable source, string subjectName)
+            where TResult : class
+            => source.OfType<TResult>().SingleStrict(subjectName);
+
+        /// <summary>
+        /// Returns the at-most-one element from <paramref name="source"/>, throwing
+        /// <see cref="MultiplicityViolationException"/> if the source contains more than one element.
+        /// </summary>
+        /// <typeparam name="T">The element type of the sequence (reference type).</typeparam>
+        /// <param name="source">
+        /// The (already-projected) sequence of candidate matches — typically the tail of a LINQ chain
+        /// such as <c>subject.OwnedRelationship.OfType&lt;IFeatureTyping&gt;().Select(t => t.Type).OfType&lt;TFinal&gt;()</c>.
+        /// </param>
+        /// <param name="subjectName">
+        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
+        /// embedded in the diagnostic message produced on a multiplicity violation.
+        /// </param>
+        /// <returns>
+        /// <c>null</c> when <paramref name="source"/> is empty; the single element when it contains
+        /// exactly one.
+        /// </returns>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when <paramref name="source"/> contains more than one element (upper-bound violation
+        /// against the derived <c>[0..1]</c> property).
+        /// </exception>
+        /// <remarks>
+        /// <para>
+        /// Canonical helper for derived <c>[0..1]</c> properties whose projection ends with a final
+        /// type-filter or predicate. The helper iterates the sequence once with early-exit on the
+        /// second match; no full materialisation.
+        /// </para>
+        /// <para>
+        /// Sibling of <see cref="SingleStrict{T}(IEnumerable{T}, string)"/> — same shape, but with
+        /// <c>[0..1]</c> semantics: the empty case returns <c>null</c> rather than throwing, because
+        /// the lower bound is 0.
+        /// </para>
+        /// <para>
+        /// Do NOT use this helper when the OCL derivation body explicitly elects the first of many
+        /// (<c>->first()</c>, <c>->at(1)</c>); the spec contract is "pick the first if multiple",
+        /// not "0 or 1". For those sites, keep <c>FirstOrDefault</c>.
+        /// </para>
+        /// </remarks>
+        internal static T SingleOrDefaultStrict<T>(this IEnumerable<T> source, string subjectName)
+            where T : class
+        {
+            T found = null;
+
+            foreach (var item in source)
+            {
+                if (found is not null)
+                {
+                    throw new MultiplicityViolationException($"{subjectName} contains more than one element of type {typeof(T).Name}");
+                }
+
+                found = item;
+            }
+
+            return found;
+        }
+
+        /// <summary>
+        /// Filters <paramref name="source"/> to elements of type <typeparamref name="TResult"/> and
+        /// returns the at-most-one match, throwing <see cref="MultiplicityViolationException"/> if
+        /// more than one is present.
+        /// </summary>
+        /// <typeparam name="TResult">The narrowed type to filter to (reference type).</typeparam>
+        /// <param name="source">
+        /// The source sequence — typically a <c>[0..*]</c> storage collection such as
+        /// <see cref="IRelationship.OwnedRelatedElement"/>, <see cref="IElement.OwnedRelationship"/>,
+        /// or a derived enumerable such as <c>Feature::type</c>.
+        /// </param>
+        /// <param name="subjectName">
+        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
+        /// embedded in the diagnostic message produced on a multiplicity violation.
+        /// </param>
+        /// <returns>
+        /// <c>null</c> when no element of type <typeparamref name="TResult"/> is present; the single
+        /// match when exactly one is present.
+        /// </returns>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one element of type <typeparamref name="TResult"/> is present
+        /// (upper-bound violation against the derived <c>[0..1]</c> property).
+        /// </exception>
+        /// <remarks>
+        /// <para>
+        /// Convenience overload that bundles a <c>OfType&lt;TResult&gt;()</c> filter before delegating
+        /// to <see cref="SingleOrDefaultStrict{T}(IEnumerable{T}, string)"/>. Use this form when the
+        /// source is a heterogeneous storage collection and the caller wants the optional single
+        /// element of a particular narrowed type (e.g.
+        /// <c>ConstraintUsage::constraintDefinition</c> = the single <c>IPredicate</c> in
+        /// <c>type</c>).
+        /// </para>
+        /// <para>
+        /// Do NOT use this helper when the OCL derivation body explicitly elects the first of many
+        /// (<c>->first()</c>, <c>->at(1)</c>); the spec contract is "pick the first if multiple",
+        /// not "0 or 1". For those sites, keep <c>FirstOrDefault</c>.
+        /// </para>
+        /// </remarks>
+        internal static TResult SingleOrDefaultStrict<TResult>(this System.Collections.IEnumerable source, string subjectName)
+            where TResult : class
+            => source.OfType<TResult>().SingleOrDefaultStrict(subjectName);
 
         /// <summary>
         /// Determines whether <paramref name="element"/> is currently — directly or transitively — contained by

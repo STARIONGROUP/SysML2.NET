@@ -61,14 +61,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(renderingMembership.ComputeOwnedRendering(), Is.SameAs(renderingUsage));
 
-            // Two IRenderingUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IRenderingUsage in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoRenderingMembership = new ViewRenderingMembership();
             var firstRendering = new RenderingUsage();
             var secondRendering = new RenderingUsage();
             ((IContainedRelationship)twoRenderingMembership).OwnedRelatedElement.Add(firstRendering);
             ((IContainedRelationship)twoRenderingMembership).OwnedRelatedElement.Add(secondRendering);
 
-            Assert.That(() => twoRenderingMembership.ComputeOwnedRendering(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoRenderingMembership.ComputeOwnedRendering(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed: annotation (Namespace) alongside a single IRenderingUsage — the type filter
             // picks out the RenderingUsage regardless of its position.

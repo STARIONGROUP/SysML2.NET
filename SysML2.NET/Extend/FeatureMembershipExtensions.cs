@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(featureMembershipSubject));
             }
 
-            return featureMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IFeature>(nameof(featureMembershipSubject));
+            return featureMembershipSubject.OwnedRelatedElement.SingleStrict<IFeature>(nameof(featureMembershipSubject));
         }
 
         /// <summary>
@@ -70,6 +70,5 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 ? throw new ArgumentNullException(nameof(featureMembershipSubject))
                 : featureMembershipSubject.OwningRelatedElement as IType;
         }
-
     }
 }

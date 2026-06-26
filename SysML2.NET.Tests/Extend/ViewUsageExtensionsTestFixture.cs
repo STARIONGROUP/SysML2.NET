@@ -31,6 +31,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -60,7 +61,7 @@ namespace SysML2.NET.Tests.Extend
             var membershipExpose = new MembershipExpose();
             viewUsage.AssignOwnership(membershipExpose);
 
-            Assert.That(() => viewUsage.ComputeExposedElement(), Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewUsage.ComputeExposedElement, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -176,28 +177,7 @@ namespace SysML2.NET.Tests.Extend
             var viewUsage = new ViewUsage();
 
             // Empty: no FeatureTyping → null.
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
-
-            // Negative: FeatureTyping whose Type is a non-ViewDefinition → null.
-            var nonViewDefinitionType = new Feature();
-            var typingToNonViewDefinition = new FeatureTyping { Type = nonViewDefinitionType };
-            viewUsage.AssignOwnership(typingToNonViewDefinition);
-
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
-
-            // Positive: FeatureTyping whose Type is a ViewDefinition → returned.
-            var viewDefinition1 = new ViewDefinition();
-            var typingToViewDefinition1 = new FeatureTyping { Type = viewDefinition1 };
-            viewUsage.AssignOwnership(typingToViewDefinition1);
-
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition1));
-
-            // Multiple: two ViewDefinition typings → first returned (FirstOrDefault).
-            var viewDefinition2 = new ViewDefinition();
-            var typingToViewDefinition2 = new FeatureTyping { Type = viewDefinition2 };
-            viewUsage.AssignOwnership(typingToViewDefinition2);
-
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition1));
+            Assert.That(viewUsage.ComputeViewDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

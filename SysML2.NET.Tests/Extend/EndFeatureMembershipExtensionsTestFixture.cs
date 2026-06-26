@@ -53,7 +53,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(endFeatureMembership.ComputeOwnedMemberFeature(), Is.SameAs(feature));
 
-            // Two IFeatures in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IFeatures in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoFeatureMembership = new EndFeatureMembership();
             var firstFeature = new Feature();
             var secondFeature = new Feature();
@@ -61,10 +61,10 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(firstFeature);
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(secondFeature);
 
-            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IFeature alongside a non-IFeature (Namespace).
-            // The RequireSingleOfType<IFeature> projection MUST pick out the IFeature regardless of its position
+            // The SingleStrict<IFeature> projection MUST pick out the IFeature regardless of its position
             // (this is the core robustness guarantee — never positionally index the unfiltered collection).
             var mixedMembership = new EndFeatureMembership();
             var siblingNonFeature = new Namespace();

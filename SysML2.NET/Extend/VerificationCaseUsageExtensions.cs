@@ -57,6 +57,8 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="VerificationCaseUsageExtensions"/> class provides extensions methods for
@@ -65,23 +67,29 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     internal static class VerificationCaseUsageExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>verificationCaseDefinition</c> property: the
+        /// <see cref="IVerificationCaseDefinition"/> targeted by the single
+        /// <see cref="IFeatureTyping"/> owned by <paramref name="verificationCaseUsageSubject"/>.
         /// </summary>
         /// <param name="verificationCaseUsageSubject">
         /// The subject <see cref="IVerificationCaseUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IVerificationCaseDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="verificationCaseUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="IVerificationCaseDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
             return verificationCaseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(verificationCaseUsageSubject))
-                : verificationCaseUsageSubject.OwnedRelationship
-                      .OfType<IFeatureTyping>()
-                      .Select(featureTyping => featureTyping.Type)
-                      .OfType<IVerificationCaseDefinition>()
-                      .FirstOrDefault();
+                : verificationCaseUsageSubject.definition.SingleOrDefaultStrict<IVerificationCaseDefinition>(nameof(verificationCaseUsageSubject));
         }
 
         /// <summary>

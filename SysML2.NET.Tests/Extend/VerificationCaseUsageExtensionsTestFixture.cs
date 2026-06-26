@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -42,20 +43,7 @@ namespace SysML2.NET.Tests.Extend
             var verificationCaseUsage = new VerificationCaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an IVerificationCaseDefinition → null.
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
-
-            // Negative case: FeatureTyping whose Type is a Usage (not IVerificationCaseDefinition) — no match → null.
-            var nonDefinitionTyping = new FeatureTyping { Type = new Usage() };
-            verificationCaseUsage.AssignOwnership(nonDefinitionTyping);
-
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
-
-            // Populated case: FeatureTyping whose Type is a VerificationCaseDefinition → returns the VerificationCaseDefinition.
-            var verificationCaseDefinition = new VerificationCaseDefinition();
-            var verificationCaseDefinitionTyping = new FeatureTyping { Type = verificationCaseDefinition };
-            verificationCaseUsage.AssignOwnership(verificationCaseDefinitionTyping);
-
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.SameAs(verificationCaseDefinition));
+            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

@@ -25,12 +25,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ViewUsageExtensions"/> class provides extensions methods for
@@ -125,23 +128,27 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         }
 
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>viewDefinition</c> property: the <see cref="IViewDefinition"/>
+        /// targeted by the single <see cref="IFeatureTyping"/> owned by
+        /// <paramref name="viewUsageSubject"/>.
         /// </summary>
         /// <param name="viewUsageSubject">
         /// The subject <see cref="IViewUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IViewDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="viewUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="IViewDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsageSubject)
         {
-            return viewUsageSubject == null
-                ? throw new ArgumentNullException(nameof(viewUsageSubject))
-                : viewUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IViewDefinition>()
-                    .FirstOrDefault();
+            return viewUsageSubject is null ? throw new ArgumentNullException(nameof(viewUsageSubject)) : viewUsageSubject.definition.SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
         }
 
         /// <summary>

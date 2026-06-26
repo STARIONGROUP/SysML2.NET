@@ -57,6 +57,8 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="CaseUsageExtensions"/> class provides extensions methods for
@@ -89,23 +91,29 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         }
 
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>caseDefinition</c> property: the <see cref="ICaseDefinition"/>
+        /// targeted by the single <see cref="IFeatureTyping"/> owned by
+        /// <paramref name="caseUsageSubject"/>.
         /// </summary>
         /// <param name="caseUsageSubject">
         /// The subject <see cref="ICaseUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="ICaseDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="caseUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="ICaseDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static ICaseDefinition ComputeCaseDefinition(this ICaseUsage caseUsageSubject)
         {
             return caseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(caseUsageSubject))
-                : caseUsageSubject.OwnedRelationship
-                      .OfType<IFeatureTyping>()
-                      .Select(featureTyping => featureTyping.Type)
-                      .OfType<ICaseDefinition>()
-                      .FirstOrDefault();
+                : caseUsageSubject.definition.SingleOrDefaultStrict<ICaseDefinition>(nameof(caseUsageSubject));
         }
 
         /// <summary>

@@ -57,6 +57,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ViewpointUsageExtensions"/> class provides extensions methods for
@@ -65,23 +67,29 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     internal static class ViewpointUsageExtensions
     {
         /// <summary>
-        /// Computes the derived property.
+        /// Computes the derived <c>viewpointDefinition</c> property: the
+        /// <see cref="IViewpointDefinition"/> targeted by the single <see cref="IFeatureTyping"/>
+        /// owned by <paramref name="viewpointUsageSubject"/>.
         /// </summary>
         /// <param name="viewpointUsageSubject">
         /// The subject <see cref="IViewpointUsage"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// The matching <see cref="IViewpointDefinition"/>, or <c>null</c> when no such typing exists.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="viewpointUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="MultiplicityViolationException">
+        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
+        /// <see cref="IViewpointDefinition"/> (upper-bound violation against the derived
+        /// <c>[0..1]</c> property).
+        /// </exception>
         internal static IViewpointDefinition ComputeViewpointDefinition(this IViewpointUsage viewpointUsageSubject)
         {
             return viewpointUsageSubject == null
                 ? throw new ArgumentNullException(nameof(viewpointUsageSubject))
-                : viewpointUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IViewpointDefinition>()
-                    .FirstOrDefault();
+                : viewpointUsageSubject.definition.SingleOrDefaultStrict<IViewpointDefinition>(nameof(viewpointUsageSubject));
         }
 
         /// <summary>

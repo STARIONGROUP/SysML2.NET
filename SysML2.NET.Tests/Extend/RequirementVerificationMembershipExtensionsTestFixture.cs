@@ -64,14 +64,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(membership.ComputeOwnedRequirement(), Is.SameAs(requirementUsage));
 
-            // Two IRequirementUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IRequirementUsage in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoRequirementMembership = new RequirementVerificationMembership();
             var firstReq = new RequirementUsage();
             var secondReq = new RequirementUsage();
             ((IContainedRelationship)twoRequirementMembership).OwnedRelatedElement.Add(firstReq);
             ((IContainedRelationship)twoRequirementMembership).OwnedRelatedElement.Add(secondReq);
 
-            Assert.That(() => twoRequirementMembership.ComputeOwnedRequirement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoRequirementMembership.ComputeOwnedRequirement(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed: non-IRequirementUsage (Namespace) alongside a single IRequirementUsage —
             // the type filter picks out the RequirementUsage regardless of its position.

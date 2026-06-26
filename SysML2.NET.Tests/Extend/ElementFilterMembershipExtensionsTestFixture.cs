@@ -53,7 +53,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(membership.ComputeCondition(), Is.SameAs(literalBoolean));
 
-            // Two IExpressions in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IExpressions in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoExprMembership = new ElementFilterMembership();
             var firstExpression = new LiteralBoolean();
             var secondExpression = new LiteralBoolean();
@@ -61,7 +61,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoExprMembership).OwnedRelatedElement.Add(firstExpression);
             ((IContainedRelationship)twoExprMembership).OwnedRelatedElement.Add(secondExpression);
 
-            Assert.That(() => twoExprMembership.ComputeCondition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoExprMembership.ComputeCondition(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IExpression alongside a non-IExpression (Namespace).
             // The OfType<IExpression>() projection MUST pick out the IExpression regardless of its position

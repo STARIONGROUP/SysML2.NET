@@ -30,6 +30,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -119,12 +120,14 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(expression.ComputeFunction(), Is.SameAs(function1));
 
-            // Multiple function typings (pathological but must not throw) → first returned.
+            // Two FeatureTypings whose Type is a Function → MultiplicityViolationException
+            // (upper-bound violation of the derived [0..1] property). Strictness applies only to the final
+            // filter; intermediate FeatureTypings (whose Types are non-Functions) may legitimately be many.
             var function2 = new Function();
             var typingToFunction2 = new FeatureTyping { Type = function2 };
             expression.AssignOwnership(typingToFunction2);
 
-            Assert.That(expression.ComputeFunction(), Is.SameAs(function1));
+            Assert.That(expression.ComputeFunction, Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

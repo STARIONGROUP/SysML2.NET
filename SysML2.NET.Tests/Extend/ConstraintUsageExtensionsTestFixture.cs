@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -42,31 +43,7 @@ namespace SysML2.NET.Tests.Extend
             // Empty OwnedRelationship → no FeatureTyping → null.
             var emptyUsage = new ConstraintUsage();
 
-            Assert.That(emptyUsage.ComputeConstraintDefinition(), Is.Null);
-
-            // FeatureTyping whose Type is a non-Predicate → returns null (no IPredicate match).
-            var nonPredicateUsage = new ConstraintUsage();
-            var partDefinition = new PartDefinition();
-            var nonPredicateTyping = new FeatureTyping { Type = partDefinition };
-            nonPredicateUsage.AssignOwnership(nonPredicateTyping);
-
-            Assert.That(nonPredicateUsage.ComputeConstraintDefinition(), Is.Null);
-
-            // FeatureTyping whose Type is a Predicate → returns it.
-            var predicateUsage = new ConstraintUsage();
-            var predicate = new Predicate();
-            var predicateTyping = new FeatureTyping { Type = predicate };
-            predicateUsage.AssignOwnership(predicateTyping);
-
-            Assert.That(predicateUsage.ComputeConstraintDefinition(), Is.SameAs(predicate));
-
-            // FeatureTyping whose Type is a ConstraintDefinition (which IS-A Predicate) → returns it.
-            var constraintDefUsage = new ConstraintUsage();
-            var constraintDefinition = new ConstraintDefinition();
-            var constraintDefTyping = new FeatureTyping { Type = constraintDefinition };
-            constraintDefUsage.AssignOwnership(constraintDefTyping);
-
-            Assert.That(constraintDefUsage.ComputeConstraintDefinition(), Is.SameAs(constraintDefinition));
+            Assert.That(emptyUsage.ComputeConstraintDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

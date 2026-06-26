@@ -49,11 +49,11 @@ namespace SysML2.NET.Tests.Extend
             container.AssignOwnership(singleMembership, ownedElement);
             Assert.That(singleMembership.ComputeOwnedMemberElement(), Is.SameAs(ownedElement));
 
-            // OwnedRelatedElement.Count > 1 → IncompleteModelException
+            // OwnedRelatedElement.Count > 1 → MultiplicityViolationException (upper-bound)
             var multiMembership = new OwningMembership();
             ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(new Definition());
             ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(new Definition());
-            Assert.That(() => multiMembership.ComputeOwnedMemberElement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => multiMembership.ComputeOwnedMemberElement(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

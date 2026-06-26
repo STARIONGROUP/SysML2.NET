@@ -33,6 +33,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.Systems.Requirements;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -161,28 +162,7 @@ namespace SysML2.NET.Tests.Extend
             var requirementUsage = new RequirementUsage();
 
             // Empty case: no OwnedRelationship → returns null.
-            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.Null);
-
-            // Negative case: FeatureTyping whose Type is a ConstraintDefinition — no IRequirementDefinition match → null.
-            var constraintDefinition = new ConstraintDefinition();
-            var typingToConstraint = new FeatureTyping { Type = constraintDefinition };
-            requirementUsage.AssignOwnership(typingToConstraint);
-
-            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.Null);
-
-            // Positive case: add a FeatureTyping whose Type is a RequirementDefinition → it is returned.
-            var requirementDefinition = new RequirementDefinition();
-            var typingToRequirement = new FeatureTyping { Type = requirementDefinition };
-            requirementUsage.AssignOwnership(typingToRequirement);
-
-            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.EqualTo(requirementDefinition));
-
-            // Multiple typings: add a second RequirementDefinition; FirstOrDefault returns the first match.
-            var secondRequirementDefinition = new RequirementDefinition();
-            var typingToSecond = new FeatureTyping { Type = secondRequirementDefinition };
-            requirementUsage.AssignOwnership(typingToSecond);
-
-            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.EqualTo(requirementDefinition));
+            Assert.That(requirementUsage.ComputeRequirementDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

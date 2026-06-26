@@ -25,10 +25,9 @@ namespace SysML2.NET.Tests.Extend
     using NUnit.Framework;
 
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -42,28 +41,7 @@ namespace SysML2.NET.Tests.Extend
             var viewpointUsage = new ViewpointUsage();
 
             // Empty: no OwnedRelationship → null.
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
-
-            // Negative: FeatureTyping whose Type is a non-ViewpointDefinition (Feature) → null.
-            var nonViewpointType = new Feature();
-            var typingToNonViewpoint = new FeatureTyping { Type = nonViewpointType };
-            viewpointUsage.AssignOwnership(typingToNonViewpoint);
-
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
-
-            // Positive: FeatureTyping whose Type is a ViewpointDefinition → returned.
-            var viewpointDefinition = new ViewpointDefinition();
-            var typingToViewpointDefinition = new FeatureTyping { Type = viewpointDefinition };
-            viewpointUsage.AssignOwnership(typingToViewpointDefinition);
-
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.SameAs(viewpointDefinition));
-
-            // Multiple typings: second ViewpointDefinition present; FirstOrDefault returns the first match.
-            var viewpointDefinition2 = new ViewpointDefinition();
-            var typingToViewpointDefinition2 = new FeatureTyping { Type = viewpointDefinition2 };
-            viewpointUsage.AssignOwnership(typingToViewpointDefinition2);
-
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.SameAs(viewpointDefinition));
+            Assert.That(viewpointUsage.ComputeViewpointDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

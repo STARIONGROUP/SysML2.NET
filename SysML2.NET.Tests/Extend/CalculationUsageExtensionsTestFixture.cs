@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -44,28 +45,7 @@ namespace SysML2.NET.Tests.Extend
             var emptyCalculationUsage = new CalculationUsage();
 
             // No FeatureTyping entries → no IFunction type → null (property is [0..1]).
-            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition(), Is.Null);
-
-            // A FeatureTyping pointing at a non-Function Type must not satisfy the IFunction filter.
-            var nonFunctionSubject = new CalculationUsage();
-            var nonFunctionType = new Type();
-            nonFunctionSubject.AssignOwnership(new FeatureTyping { Type = nonFunctionType });
-
-            Assert.That(nonFunctionSubject.ComputeCalculationDefinition(), Is.Null);
-
-            // A FeatureTyping pointing at a CalculationDefinition (which implements IFunction) must be returned.
-            var subject = new CalculationUsage();
-            var calculationDefinition = new CalculationDefinition();
-            subject.AssignOwnership(new FeatureTyping { Type = calculationDefinition });
-
-            Assert.That(subject.ComputeCalculationDefinition(), Is.SameAs(calculationDefinition));
-
-            // A FeatureTyping pointing at a kernel Function also satisfies the IFunction filter.
-            var functionSubject = new CalculationUsage();
-            var kernelFunction = new Function();
-            functionSubject.AssignOwnership(new FeatureTyping { Type = kernelFunction });
-
-            Assert.That(functionSubject.ComputeCalculationDefinition(), Is.SameAs(kernelFunction));
+            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

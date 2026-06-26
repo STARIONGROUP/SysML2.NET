@@ -54,7 +54,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(singleMembership.ComputeAction(), Is.SameAs(singleAction));
 
-            // Two IActionUsages in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IActionUsages in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoActionMembership = new StateSubactionMembership();
             var firstAction = new ActionUsage();
             var secondAction = new ActionUsage();
@@ -62,7 +62,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoActionMembership).OwnedRelatedElement.Add(firstAction);
             ((IContainedRelationship)twoActionMembership).OwnedRelatedElement.Add(secondAction);
 
-            Assert.That(() => twoActionMembership.ComputeAction(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoActionMembership.ComputeAction(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IActionUsage alongside a non-IActionUsage (Namespace).
             // The OfType<IActionUsage>() projection MUST pick out the IActionUsage regardless of its position

@@ -55,7 +55,7 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(membership.ComputeOwnedConstraint(), Is.SameAs(constraintUsage));
 
-            // Two IConstraintUsage elements in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
+            // Two IConstraintUsage elements in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoConstraintMembership = new RequirementConstraintMembership();
             var firstConstraint = new ConstraintUsage();
             var secondConstraint = new ConstraintUsage();
@@ -63,7 +63,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoConstraintMembership).OwnedRelatedElement.Add(firstConstraint);
             ((IContainedRelationship)twoConstraintMembership).OwnedRelatedElement.Add(secondConstraint);
 
-            Assert.That(() => twoConstraintMembership.ComputeOwnedConstraint(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(() => twoConstraintMembership.ComputeOwnedConstraint(), Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed-type owned related elements: exactly one IConstraintUsage alongside a non-IConstraintUsage (Namespace).
             // The OfType<IConstraintUsage>() projection MUST pick out the IConstraintUsage regardless of its position

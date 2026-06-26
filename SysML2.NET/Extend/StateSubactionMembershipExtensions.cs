@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
                 throw new ArgumentNullException(nameof(stateSubactionMembershipSubject));
             }
 
-            return stateSubactionMembershipSubject.OwnedRelatedElement.RequireSingleOfType<IActionUsage>(nameof(stateSubactionMembershipSubject));
+            return stateSubactionMembershipSubject.OwnedRelatedElement.SingleStrict<IActionUsage>(nameof(stateSubactionMembershipSubject));
         }
     }
 }

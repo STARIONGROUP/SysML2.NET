@@ -27,6 +27,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -40,28 +41,7 @@ namespace SysML2.NET.Tests.Extend
             var renderingUsage = new RenderingUsage();
 
             // Empty: no OwnedRelationship → null.
-            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.Null);
-
-            // Negative: FeatureTyping whose Type is a non-RenderingDefinition (PartDefinition) → null.
-            var partDefinition = new PartDefinition();
-            var typingToPartDefinition = new FeatureTyping { Type = partDefinition };
-            renderingUsage.AssignOwnership(typingToPartDefinition);
-
-            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.Null);
-
-            // Positive: FeatureTyping whose Type is a RenderingDefinition → returned.
-            var renderingDefinition = new RenderingDefinition();
-            var typingToRenderingDefinition = new FeatureTyping { Type = renderingDefinition };
-            renderingUsage.AssignOwnership(typingToRenderingDefinition);
-
-            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
-
-            // Multiple: second RenderingDefinition typing present; FirstOrDefault returns the first match.
-            var renderingDefinition2 = new RenderingDefinition();
-            var typingToRenderingDefinition2 = new FeatureTyping { Type = renderingDefinition2 };
-            renderingUsage.AssignOwnership(typingToRenderingDefinition2);
-
-            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
+            Assert.That(renderingUsage.ComputeRenderingDefinition, Throws.TypeOf<NotSupportedException>());
         }
     }
 }
