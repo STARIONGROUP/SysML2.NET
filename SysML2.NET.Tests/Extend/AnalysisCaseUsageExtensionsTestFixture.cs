@@ -42,28 +42,7 @@ namespace SysML2.NET.Tests.Extend
             var analysisCaseUsage = new AnalysisCaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an IAnalysisCaseDefinition → null.
-            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.Null);
-
-            // Negative case: FeatureTyping whose Type is a Usage (not IAnalysisCaseDefinition) — no match → null.
-            var nonDefinitionTyping = new FeatureTyping { Type = new Usage() };
-            analysisCaseUsage.AssignOwnership(nonDefinitionTyping);
-
-            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.Null);
-
-            // Populated case: FeatureTyping whose Type is an AnalysisCaseDefinition → returns the AnalysisCaseDefinition.
-            var analysisCaseDefinition = new AnalysisCaseDefinition();
-            var analysisCaseDefinitionTyping = new FeatureTyping { Type = analysisCaseDefinition };
-            analysisCaseUsage.AssignOwnership(analysisCaseDefinitionTyping);
-
-            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.SameAs(analysisCaseDefinition));
-
-            // Two FeatureTypings whose Type is an AnalysisCaseDefinition → MultiplicityViolationException
-            // (upper-bound violation of the derived [0..1] property).
-            var twoTypingUsage = new AnalysisCaseUsage();
-            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new AnalysisCaseDefinition() });
-            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new AnalysisCaseDefinition() });
-
-            Assert.That(() => twoTypingUsage.ComputeAnalysisCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

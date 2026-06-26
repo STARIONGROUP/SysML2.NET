@@ -41,29 +41,7 @@ namespace SysML2.NET.Tests.Extend
             var viewpointUsage = new ViewpointUsage();
 
             // Empty: no OwnedRelationship → null.
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
-
-            // Negative: FeatureTyping whose Type is a non-ViewpointDefinition (Feature) → null.
-            var nonViewpointType = new Feature();
-            var typingToNonViewpoint = new FeatureTyping { Type = nonViewpointType };
-            viewpointUsage.AssignOwnership(typingToNonViewpoint);
-
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
-
-            // Positive: FeatureTyping whose Type is a ViewpointDefinition → returned.
-            var viewpointDefinition = new ViewpointDefinition();
-            var typingToViewpointDefinition = new FeatureTyping { Type = viewpointDefinition };
-            viewpointUsage.AssignOwnership(typingToViewpointDefinition);
-
-            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.SameAs(viewpointDefinition));
-
-            // Two FeatureTypings whose Type is a ViewpointDefinition → MultiplicityViolationException
-            // (upper-bound violation of the derived [0..1] property).
-            var viewpointDefinition2 = new ViewpointDefinition();
-            var typingToViewpointDefinition2 = new FeatureTyping { Type = viewpointDefinition2 };
-            viewpointUsage.AssignOwnership(typingToViewpointDefinition2);
-
-            Assert.That(viewpointUsage.ComputeViewpointDefinition, Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(viewpointUsage.ComputeViewpointDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

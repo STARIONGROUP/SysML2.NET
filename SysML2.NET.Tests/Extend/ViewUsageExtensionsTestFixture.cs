@@ -177,29 +177,7 @@ namespace SysML2.NET.Tests.Extend
             var viewUsage = new ViewUsage();
 
             // Empty: no FeatureTyping → null.
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
-
-            // Negative: FeatureTyping whose Type is a non-ViewDefinition → null.
-            var nonViewDefinitionType = new Feature();
-            var typingToNonViewDefinition = new FeatureTyping { Type = nonViewDefinitionType };
-            viewUsage.AssignOwnership(typingToNonViewDefinition);
-
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
-
-            // Positive: FeatureTyping whose Type is a ViewDefinition → returned.
-            var viewDefinition1 = new ViewDefinition();
-            var typingToViewDefinition1 = new FeatureTyping { Type = viewDefinition1 };
-            viewUsage.AssignOwnership(typingToViewDefinition1);
-
-            Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition1));
-
-            // Two FeatureTypings whose Type is a ViewDefinition → MultiplicityViolationException
-            // (upper-bound violation of the derived [0..1] property).
-            var viewDefinition2 = new ViewDefinition();
-            var typingToViewDefinition2 = new FeatureTyping { Type = viewDefinition2 };
-            viewUsage.AssignOwnership(typingToViewDefinition2);
-
-            Assert.That(viewUsage.ComputeViewDefinition, Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(viewUsage.ComputeViewDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

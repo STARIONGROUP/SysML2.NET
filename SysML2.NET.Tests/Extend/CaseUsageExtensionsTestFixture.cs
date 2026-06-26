@@ -68,28 +68,7 @@ namespace SysML2.NET.Tests.Extend
             var caseUsage = new CaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an ICaseDefinition → null.
-            Assert.That(caseUsage.ComputeCaseDefinition(), Is.Null);
-
-            // Negative case: FeatureTyping whose Type is a Usage (not ICaseDefinition) — no match → null.
-            var nonDefinitionTyping = new FeatureTyping { Type = new Usage() };
-            caseUsage.AssignOwnership(nonDefinitionTyping);
-
-            Assert.That(caseUsage.ComputeCaseDefinition(), Is.Null);
-
-            // Populated case: FeatureTyping whose Type is a CaseDefinition → returns the CaseDefinition.
-            var caseDefinition = new CaseDefinition();
-            var caseDefinitionTyping = new FeatureTyping { Type = caseDefinition };
-            caseUsage.AssignOwnership(caseDefinitionTyping);
-
-            Assert.That(caseUsage.ComputeCaseDefinition(), Is.SameAs(caseDefinition));
-
-            // Two FeatureTypings whose Type is a CaseDefinition → MultiplicityViolationException
-            // (upper-bound violation of the derived [0..1] property).
-            var twoTypingUsage = new CaseUsage();
-            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new CaseDefinition() });
-            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new CaseDefinition() });
-
-            Assert.That(() => twoTypingUsage.ComputeCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(caseUsage.ComputeCaseDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

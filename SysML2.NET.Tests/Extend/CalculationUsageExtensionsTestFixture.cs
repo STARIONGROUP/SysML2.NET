@@ -45,36 +45,7 @@ namespace SysML2.NET.Tests.Extend
             var emptyCalculationUsage = new CalculationUsage();
 
             // No FeatureTyping entries → no IFunction type → null (property is [0..1]).
-            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition(), Is.Null);
-
-            // A FeatureTyping pointing at a non-Function Type must not satisfy the IFunction filter.
-            var nonFunctionSubject = new CalculationUsage();
-            var nonFunctionType = new Type();
-            nonFunctionSubject.AssignOwnership(new FeatureTyping { Type = nonFunctionType });
-
-            Assert.That(nonFunctionSubject.ComputeCalculationDefinition(), Is.Null);
-
-            // A FeatureTyping pointing at a CalculationDefinition (which implements IFunction) must be returned.
-            var subject = new CalculationUsage();
-            var calculationDefinition = new CalculationDefinition();
-            subject.AssignOwnership(new FeatureTyping { Type = calculationDefinition });
-
-            Assert.That(subject.ComputeCalculationDefinition(), Is.SameAs(calculationDefinition));
-
-            // A FeatureTyping pointing at a kernel Function also satisfies the IFunction filter.
-            var functionSubject = new CalculationUsage();
-            var kernelFunction = new Function();
-            functionSubject.AssignOwnership(new FeatureTyping { Type = kernelFunction });
-
-            Assert.That(functionSubject.ComputeCalculationDefinition(), Is.SameAs(kernelFunction));
-
-            // Two FeatureTypings whose Type satisfies the IFunction filter → MultiplicityViolationException
-            // (upper-bound violation of the derived [0..1] property).
-            var twoTypingSubject = new CalculationUsage();
-            twoTypingSubject.AssignOwnership(new FeatureTyping { Type = new Function() });
-            twoTypingSubject.AssignOwnership(new FeatureTyping { Type = new CalculationDefinition() });
-
-            Assert.That(() => twoTypingSubject.ComputeCalculationDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

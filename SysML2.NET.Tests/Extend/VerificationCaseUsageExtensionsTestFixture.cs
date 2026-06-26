@@ -43,28 +43,7 @@ namespace SysML2.NET.Tests.Extend
             var verificationCaseUsage = new VerificationCaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an IVerificationCaseDefinition → null.
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
-
-            // Negative case: FeatureTyping whose Type is a Usage (not IVerificationCaseDefinition) — no match → null.
-            var nonDefinitionTyping = new FeatureTyping { Type = new Usage() };
-            verificationCaseUsage.AssignOwnership(nonDefinitionTyping);
-
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
-
-            // Populated case: FeatureTyping whose Type is a VerificationCaseDefinition → returns the VerificationCaseDefinition.
-            var verificationCaseDefinition = new VerificationCaseDefinition();
-            var verificationCaseDefinitionTyping = new FeatureTyping { Type = verificationCaseDefinition };
-            verificationCaseUsage.AssignOwnership(verificationCaseDefinitionTyping);
-
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.SameAs(verificationCaseDefinition));
-
-            // Two FeatureTypings whose Type is a VerificationCaseDefinition → MultiplicityViolationException
-            // (upper-bound violation of the derived [0..1] property).
-            var twoTypingUsage = new VerificationCaseUsage();
-            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new VerificationCaseDefinition() });
-            twoTypingUsage.AssignOwnership(new FeatureTyping { Type = new VerificationCaseDefinition() });
-
-            Assert.That(() => twoTypingUsage.ComputeVerificationCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

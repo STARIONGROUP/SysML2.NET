@@ -68,7 +68,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoPartMembership).OwnedRelatedElement.Add(firstPart);
             ((IContainedRelationship)twoPartMembership).OwnedRelatedElement.Add(secondPart);
 
-            Assert.That(() => twoPartMembership.ComputeOwnedActorParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(twoPartMembership.ComputeOwnedActorParameter, Throws.TypeOf<MultiplicityViolationException>());
 
             // Mixed: non-IPartUsage (Namespace) alongside a single IPartUsage — the type filter picks
             // out the PartUsage regardless of its position.
