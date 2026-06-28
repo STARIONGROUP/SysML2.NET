@@ -27,6 +27,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Extensions;
+    using SysML2.NET.Exceptions;
 
     [TestFixture]
     public class ConcernUsageExtensionsTestFixture
@@ -54,11 +55,10 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(concernUsage.ComputeConcernDefinition(), Is.SameAs(concernDefinition));
 
             // Multiple matching typings: FirstOrDefault is used so even breaking the multiplicity, it works;
-            // *not sure if this test step should be removed or not*:
             var secondConcernDefinition = new ConcernDefinition();
             var typingToSecondConcern = new FeatureTyping { Type = secondConcernDefinition };
             concernUsage.AssignOwnership(typingToSecondConcern);
-            Assert.That(concernUsage.ComputeConcernDefinition(), Is.SameAs(concernDefinition));
+            Assert.That(() => concernUsage.ComputeConcernDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
     }
 }
