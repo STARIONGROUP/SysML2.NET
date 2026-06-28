@@ -26,8 +26,8 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Extensions;
     using SysML2.NET.Exceptions;
+    using SysML2.NET.Extensions;
 
     [TestFixture]
     public class ConcernUsageExtensionsTestFixture

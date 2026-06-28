@@ -22,7 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Linq;
-    
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Extensions;
 
