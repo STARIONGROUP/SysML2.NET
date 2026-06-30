@@ -91,6 +91,23 @@ The XMI files (`Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml`) d
 
 These text files are large (PDF-converted, up to 1.3 MB) and the conversion is not always clean. Read them with `Read` `offset`/`limit` and use `Grep` to jump to chapter/section anchors (e.g. `^7\.\d+`, `Clause 8\.`, or a metaclass name) rather than loading whole files into context.
 
+### Grounding SysML v2 / KerML work with the Hypha plugin
+
+If the **Hypha** plugin is installed, treat it as the grounding step **before** implementing or reviewing anything that depends on the SysML v2 / KerML metamodel — do not rely on a sibling analogue, the doc-comment OCL, or prior knowledge as the source of truth. The metamodel is large and precise; a plausible prior is exactly what produces confident-but-wrong derivations.
+
+This applies whenever you are about to:
+- implement or modify a `Compute*` derived-property / OCL computation under `SysML2.NET/Extend/`,
+- reason about a metaclass's features, multiplicities, ordering, redefinitions/subsettings, or constraints,
+- implement or review a textual-notation / lexical rule, or
+- make a claim about what the SysML v2 / KerML specification requires.
+
+Use:
+- **`hypha:metamodel-lookup`** — structure: a metaclass's type, multiplicity, **ordering**, redefinitions/subsettings, supertypes/subtypes, and the derivation/constraint OCL. (For cross-cutting fan-out questions spanning many metaclasses, the `hypha:metamodel-navigator` agent.)
+- **`hypha:spec-citation`** — the normative wording and intent/semantics behind a metaclass or constraint, with an exact clause reference.
+- **`hypha:sysml-validation`** — validate `.sysml` / `.kerml` textual notation against the grammar and metamodel.
+
+Ground first, then implement against the verified contract. Concrete example of why: a derived property such as `ActionDefinition::action` is declared `ordered` in the metamodel — a fact the OCL comment alone does not surface and a sibling analogue may only satisfy by accident. Confirm such contracts via `hypha:metamodel-lookup` rather than inferring them.
+
 ### Project Dependency Graph
 
 ```
