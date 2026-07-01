@@ -95,6 +95,8 @@ These text files are large (PDF-converted, up to 1.3 MB) and the conversion is n
 
 If the **Hypha** plugin is installed, treat it as the grounding step **before** implementing or reviewing anything that depends on the SysML v2 / KerML metamodel — do not rely on a sibling analogue, the doc-comment OCL, or prior knowledge as the source of truth. The metamodel is large and precise; a plausible prior is exactly what produces confident-but-wrong derivations.
 
+**If the Hypha plugin is *not* installed:** the first time a task in this session would benefit from this grounding (any of the situations below), inform the user once that the Hypha plugin exists and that installing it is recommended for accurate SysML v2 / KerML work — it surfaces the metamodel structure and normative spec text on demand. Then proceed using the checked-in sources as the fallback source of truth: the XMI metamodel (`Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml`) for structure and OCL, and `Resources/specification/` for intent. Do not repeat the recommendation on every subsequent task.
+
 This applies whenever you are about to:
 - implement or modify a `Compute*` derived-property / OCL computation under `SysML2.NET/Extend/`,
 - reason about a metaclass's features, multiplicities, ordering, redefinitions/subsettings, or constraints,
