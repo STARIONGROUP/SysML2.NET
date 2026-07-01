@@ -101,12 +101,15 @@ This applies whenever you are about to:
 - implement or review a textual-notation / lexical rule, or
 - make a claim about what the SysML v2 / KerML specification requires.
 
-Use:
-- **`hypha:metamodel-lookup`** — structure: a metaclass's type, multiplicity, **ordering**, redefinitions/subsettings, supertypes/subtypes, and the derivation/constraint OCL. (For cross-cutting fan-out questions spanning many metaclasses, the `hypha:metamodel-navigator` agent.)
-- **`hypha:spec-citation`** — the normative wording and intent/semantics behind a metaclass or constraint, with an exact clause reference.
+Ground on **two axes** — structure *and* intent — because the metamodel gives you the *what* but not the *why*:
+
+- **`hypha:metamodel-lookup` — structure (always).** A metaclass's type, multiplicity, **ordering**, redefinitions/subsettings, supertypes/subtypes, and the derivation/constraint OCL. This is the default, always-on step. (For cross-cutting fan-out questions spanning many metaclasses, the `hypha:metamodel-navigator` agent.)
+- **`hypha:spec-citation` — intent (when the derivation involves interpretation).** The OCL is a *formalization, not an explanation*: it says what to compute, not why the concept exists, what a defined term means, or how an underspecified edge case should behave. Consult the specification for the rationale and semantics whenever the OCL is terse, ambiguous, leans on a defined term (e.g. `namingFeature`, `redefinedFeature`, connector `end`, feature typing/inheritance resolution), or otherwise needs interpretation beyond a mechanical filter — so the C# translation is not merely syntactically faithful but semantically correct. Skip it only when the OCL is genuinely mechanical (e.g. a plain `selectByKind`) and unambiguous.
 - **`hypha:sysml-validation`** — validate `.sysml` / `.kerml` textual notation against the grammar and metamodel.
 
-Ground first, then implement against the verified contract. Concrete example of why: a derived property such as `ActionDefinition::action` is declared `ordered` in the metamodel — a fact the OCL comment alone does not surface and a sibling analogue may only satisfy by accident. Confirm such contracts via `hypha:metamodel-lookup` rather than inferring them.
+Ground first, then implement against the verified contract. Two concrete examples of why:
+- **Structure the OCL comment hides:** `ActionDefinition::action` is declared `ordered` in the metamodel — a fact the OCL comment alone does not surface and a sibling analogue may satisfy only by accident. Confirm via `hypha:metamodel-lookup`.
+- **Intent the OCL comment cannot express:** an OCL body that reads `->first()` or `->at(1)` is picking *one* of many, but only the spec prose says *on what basis* (e.g. the most specific redefinition) — translate it faithfully to that intent, not as an arbitrary first-element grab. Confirm via `hypha:spec-citation`.
 
 ### Project Dependency Graph
 
