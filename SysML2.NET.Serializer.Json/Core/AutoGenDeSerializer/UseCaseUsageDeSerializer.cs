@@ -115,26 +115,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.UseCases.UseCaseUsage dtoInstance, JsonElement jsonElement, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("actionDefinition"u8, out var actionDefinitionProperty))
-            {
-                foreach (var arrayItem in actionDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var actionDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = actionDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.actionDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the actionDefinition Json property was not found in the UseCaseUsage: {Id}", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("actorParameter"u8, out var actorParameterProperty))
             {
                 foreach (var arrayItem in actorParameterProperty.EnumerateArray())
@@ -1429,26 +1409,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the objectiveRequirement Json property was not found in the UseCaseUsage: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
-            {
-                foreach (var arrayItem in occurrenceDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var occurrenceDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = occurrenceDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.occurrenceDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the occurrenceDefinition Json property was not found in the UseCaseUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))

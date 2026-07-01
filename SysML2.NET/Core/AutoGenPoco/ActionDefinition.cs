@@ -94,6 +94,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565500809065_170841_30688", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_b9102da_1536346067212_587255_17343")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         [Implements(implementation: "IActionDefinition.Action")]
         public List<IActionUsage> action => this.ComputeAction();
 
@@ -148,6 +149,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565495064714_974634_26150", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         [Implements(implementation: "IDefinition.DirectedUsage")]
         public List<IUsage> directedUsage => this.ComputeDirectedUsage();
 
@@ -678,6 +680,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686637_967933_23236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         [Implements(implementation: "IDefinition.OwnedUsage")]
         public List<IUsage> ownedUsage => this.ComputeOwnedUsage();
 

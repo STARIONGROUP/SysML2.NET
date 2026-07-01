@@ -104,8 +104,10 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        [RedefinedByProperty("IFlowUsage.FlowDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        public List<IBehavior> actionDefinition => this.ComputeActionDefinition();
+        List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => [.. this.flowDefinition];
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
@@ -199,7 +201,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -228,6 +230,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
         public List<IUsage> directedUsage => this.ComputeDirectedUsage();
 
@@ -315,6 +318,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// Model Libraries.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661892878973_977062_185", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1661900477937_518125_727")]
         [Implements(implementation: "IFlowUsage.FlowDefinition")]
         public List<IInteraction> flowDefinition => this.ComputeFlowDefinition();
@@ -773,6 +777,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
         public List<IUsage> nestedUsage => this.ComputeNestedUsage();
 
@@ -815,8 +820,9 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
+        [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<IClass> occurrenceDefinition => this.ComputeOccurrenceDefinition();
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1070,6 +1076,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
         public IDefinition owningDefinition => this.ComputeOwningDefinition();
 

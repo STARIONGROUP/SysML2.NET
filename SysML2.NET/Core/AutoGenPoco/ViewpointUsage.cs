@@ -95,6 +95,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621564075474_350859_2735", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IRequirementUsage.ActorParameter")]
         public List<IPartUsage> actorParameter => this.ComputeActorParameter();
 
@@ -220,6 +221,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
         public List<IUsage> directedUsage => this.ComputeDirectedUsage();
 
@@ -753,6 +755,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
         public List<IUsage> nestedUsage => this.ComputeNestedUsage();
 
@@ -1039,6 +1042,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
         public IDefinition owningDefinition => this.ComputeOwningDefinition();
 
@@ -1191,6 +1195,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624032823963_328647_40107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IRequirementUsage.StakeholderParameter")]
         public List<IPartUsage> stakeholderParameter => this.ComputeStakeholderParameter();
 
@@ -1199,6 +1204,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595189397261_941898_844", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IRequirementUsage.SubjectParameter")]
         public IUsage subjectParameter => this.ComputeSubjectParameter();
 

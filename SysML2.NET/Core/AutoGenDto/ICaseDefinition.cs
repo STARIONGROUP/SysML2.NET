@@ -45,6 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.Cases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621464609772_382176_1612", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<Guid> actorParameter { get; }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace SysML2.NET.Core.DTO.Systems.Cases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595189932946_106647_973", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         Guid subjectParameter { get; }
 
     }

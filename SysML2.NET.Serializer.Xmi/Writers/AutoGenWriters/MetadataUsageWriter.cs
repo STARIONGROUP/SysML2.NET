@@ -591,17 +591,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
-                if (poco.itemDefinition != null)
-                {
-                    foreach (var item in poco.itemDefinition)
-                    {
-                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "itemDefinition", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
                 if (poco.member != null)
                 {
                     foreach (var item in poco.member)
@@ -1822,17 +1811,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                     foreach (var item in poco.intersectingType)
                     {
                         await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "intersectingType", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
-                if (poco.itemDefinition != null)
-                {
-                    foreach (var item in poco.itemDefinition)
-                    {
-                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "itemDefinition", elementOriginMap, currentFileUri);
                     }
                 }
             }

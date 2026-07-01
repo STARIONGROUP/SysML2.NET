@@ -55,6 +55,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// base AcceptActionUsage AcceptAction from the Systems Model Library.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1642701018287_478584_4462", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591477541360_47573_933")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         Guid payloadParameter { get; }
 

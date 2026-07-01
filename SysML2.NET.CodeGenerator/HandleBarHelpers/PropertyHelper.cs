@@ -258,7 +258,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (!isRedefinedPropertyInContext)
                 {
-                    if (property.QueryIsDefaultValueDifferentThanDefault())
+                    if (property.QueryIsEnumPropertyWithDefaultValue())
+                    {
+                        sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
+                    }
+                    else if (property.QueryIsDefaultValueDifferentThanDefault())
                     {
                         if (property.QueryIsString())
                         {
@@ -268,10 +272,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             sb.Append($" = {property.QueryDefaultValueAsString()};");
                         }
-                    }
-                    else if (property.QueryIsEnumPropertyWithDefaultValue())
-                    {
-                        sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
                     }
                 }
 
@@ -486,7 +486,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if ((!property.IsDerived || property.IsDerivedUnion) && !isRedefinedPropertyInContext)
                 {
-                    if (property.QueryIsDefaultValueDifferentThanDefault())
+                    if (property.QueryIsEnumPropertyWithDefaultValue())
+                    {
+                        sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
+                    }
+                    else if (property.QueryIsDefaultValueDifferentThanDefault())
                     {
                         if (property.QueryIsString())
                         {
@@ -496,10 +500,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             sb.Append($" = {property.QueryDefaultValueAsString()};");
                         }
-                    }
-                    else if (property.QueryIsEnumPropertyWithDefaultValue())
-                    {
-                        sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
                     }
                 }
 
