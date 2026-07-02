@@ -150,7 +150,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => [.. this.associationEnd];
+        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -542,7 +542,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedType];
+        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the

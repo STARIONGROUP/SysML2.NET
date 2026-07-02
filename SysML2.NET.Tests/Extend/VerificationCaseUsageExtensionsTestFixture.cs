@@ -43,7 +43,7 @@ namespace SysML2.NET.Tests.Extend
             var verificationCaseUsage = new VerificationCaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an IVerificationCaseDefinition → null.
-            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
         }
 
         [Test]

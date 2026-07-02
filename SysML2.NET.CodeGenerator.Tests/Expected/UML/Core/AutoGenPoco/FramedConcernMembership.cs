@@ -179,7 +179,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
+        string Root.Namespaces.IMembership.memberElementId => this.ComputeMemberElementId();
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -202,7 +202,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [RedefinedByProperty("IFeatureMembership.OwningType")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
-        INamespace Root.Namespaces.IMembership.membershipOwningNamespace => this.owningType;
+        INamespace Root.Namespaces.IMembership.membershipOwningNamespace => this.ComputeMembershipOwningNamespace();
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
@@ -251,7 +251,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         [RedefinedByProperty("IFramedConcernMembership.OwnedConcern")]
         [Implements(implementation: "IRequirementConstraintMembership.OwnedConstraint")]
-        IConstraintUsage IRequirementConstraintMembership.ownedConstraint => this.ownedConcern;
+        IConstraintUsage IRequirementConstraintMembership.ownedConstraint => this.ComputeOwnedConstraint();
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -270,7 +270,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [RedefinedByProperty("IFeatureMembership.OwnedMemberFeature")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
-        IElement Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)this).ownedMemberFeature;
+        IElement Root.Namespaces.IOwningMembership.ownedMemberElement => this.ComputeOwnedMemberElement();
 
         /// <summary>
         /// The elementId of the ownedMemberElement.
@@ -288,7 +288,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         [RedefinedByProperty("IRequirementConstraintMembership.OwnedConstraint")]
         [Implements(implementation: "IFeatureMembership.OwnedMemberFeature")]
-        IFeature Core.Types.IFeatureMembership.ownedMemberFeature => ((SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership)this).ownedConstraint;
+        IFeature Core.Types.IFeatureMembership.ownedMemberFeature => this.ComputeOwnedMemberFeature();
 
         /// <summary>
         /// The name of the ownedMemberElement.
@@ -415,7 +415,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [Property(xmiId: "_19_0_4_12e503d9_1617118807597_77864_3544", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IFramedConcernMembership.ReferencedConcern")]
         [Implements(implementation: "IRequirementConstraintMembership.ReferencedConstraint")]
-        IConstraintUsage IRequirementConstraintMembership.referencedConstraint => this.referencedConcern;
+        IConstraintUsage IRequirementConstraintMembership.referencedConstraint => this.ComputeReferencedConstraint();
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target

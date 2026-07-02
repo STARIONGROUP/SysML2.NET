@@ -36,6 +36,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A ConjugatedPortTyping is a FeatureTyping whose type is a ConjugatedPortDefinition. (This
@@ -225,7 +226,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_13273_21101")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [Implements(implementation: "IFeatureTyping.OwningFeature")]
-        public IFeature owningFeature => this.ComputeOwningFeature();
+        public IFeature owningFeature => ((SysML2.NET.Core.POCO.Core.Types.ISpecialization)this).owningType as IFeature;
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -275,7 +276,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("IFeatureTyping.OwningFeature")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => this.owningFeature;
+        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The originalPortDefinition of the conjugatedPortDefinition of this ConjugatedPortTyping.

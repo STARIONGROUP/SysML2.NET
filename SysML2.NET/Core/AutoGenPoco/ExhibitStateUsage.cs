@@ -64,6 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An ExhibitStateUsage is a StateUsage that represents the exhibiting of a StateUsage. Unless it is
@@ -103,7 +104,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("IStateUsage.StateDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => [.. this.stateDefinition];
+        List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => [.. ((SysML2.NET.Core.POCO.Kernel.Behaviors.IStep)this).behavior];
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
@@ -119,7 +120,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IStep.Behavior")]
-        List<IBehavior> Kernel.Behaviors.IStep.behavior => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => this.ComputeBehavior();
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -169,7 +170,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -191,7 +192,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
+        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -271,7 +272,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IPerformActionUsage.PerformedAction")]
         [Implements(implementation: "IEventOccurrenceUsage.EventOccurrence")]
-        IOccurrenceUsage Systems.Occurrences.IEventOccurrenceUsage.eventOccurrence => ((SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage)this).performedAction;
+        IOccurrenceUsage Systems.Occurrences.IEventOccurrenceUsage.eventOccurrence => this.ComputeEventOccurrence();
 
         /// <summary>
         /// The StateUsage to be exhibited by the ExhibitStateUsage. It is the performedAction of the
@@ -280,7 +281,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_19_0_2_12e503d9_1577070999039_688794_260", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
         [Implements(implementation: "IExhibitStateUsage.ExhibitedState")]
-        public IStateUsage exhibitedState => this.ComputeExhibitedState();
+        public IStateUsage exhibitedState => ((SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage)this).performedAction as IStateUsage;
 
         /// <summary>
         /// The ActionUsage of this StateUsage to be performed on exit to the state defined by the
@@ -488,7 +489,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IEventOccurrenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
+        bool Systems.DefinitionAndUsage.IUsage.isReference => this.ComputeIsReference();
 
         /// <summary>
         /// Always true for an EventOccurrenceUsage.
@@ -496,7 +497,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1672526906017_786343_306", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         [Implements(implementation: "IEventOccurrenceUsage.IsReference")]
-        public bool isReference => this.ComputeIsReference();
+        public bool isReference => ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).isReference;
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -549,7 +550,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => this.ComputeMayTimeVary();
+        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -815,7 +816,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition.OfType<IClass>()];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1124,7 +1125,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => this.ComputeParameter();
+        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
 
         /// <summary>
         /// The ActionUsage to be performed by this PerformedActionUsage. It is the eventOccurrence of the
@@ -1134,7 +1135,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
         [RedefinedByProperty("IExhibitStateUsage.ExhibitedState")]
         [Implements(implementation: "IPerformActionUsage.PerformedAction")]
-        IActionUsage Systems.Actions.IPerformActionUsage.performedAction => this.exhibitedState;
+        IActionUsage Systems.Actions.IPerformActionUsage.performedAction => ((SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage)this).eventOccurrence as IActionUsage;
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
@@ -1174,7 +1175,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_19_0_2_12e503d9_1575588456737_49200_1438", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         [Implements(implementation: "IStateUsage.StateDefinition")]
-        public List<IBehavior> stateDefinition => this.ComputeStateDefinition();
+        public List<IBehavior> stateDefinition => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -1194,7 +1195,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
+        List<IType> Core.Features.IFeature.type => this.ComputeType();
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

@@ -64,6 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A ForLoopActionUsage is a LoopActionUsage that specifies that its bodyAction ActionUsage should be
@@ -101,7 +102,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        public List<IBehavior> actionDefinition => this.ComputeActionDefinition();
+        public List<IBehavior> actionDefinition => [.. ((SysML2.NET.Core.POCO.Kernel.Behaviors.IStep)this).behavior];
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
@@ -117,7 +118,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IStep.Behavior")]
-        List<IBehavior> Kernel.Behaviors.IStep.behavior => [.. this.actionDefinition];
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => this.ComputeBehavior();
 
         /// <summary>
         /// The ActionUsage to be performed repeatedly by the LoopActionUsage. It is the second parameter of the
@@ -175,7 +176,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -197,7 +198,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
+        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -500,7 +501,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => this.ComputeMayTimeVary();
+        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -766,7 +767,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. this.actionDefinition];
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition.OfType<IClass>()];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1075,7 +1076,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => this.ComputeParameter();
+        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
@@ -1135,7 +1136,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
+        List<IType> Core.Features.IFeature.type => this.ComputeType();
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

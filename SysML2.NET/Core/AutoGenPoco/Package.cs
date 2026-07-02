@@ -36,6 +36,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Package is a Namespace used to group Elements, without any instance-level semantics. It may have

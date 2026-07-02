@@ -162,7 +162,7 @@ namespace SysML2.NET.Tests.Extend
             var requirementUsage = new RequirementUsage();
 
             // Empty case: no OwnedRelationship → returns null.
-            Assert.That(requirementUsage.ComputeRequirementDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.Null);
         }
 
         [Test]

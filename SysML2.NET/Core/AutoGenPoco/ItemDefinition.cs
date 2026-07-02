@@ -61,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Items
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An ItemDefinition is an OccurrenceDefinition of the Structure of things that may themselves be

@@ -61,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An InterfaceDefinition is a ConnectionDefinition all of whose ends are PortUsages, defining an
@@ -108,7 +109,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [RedefinedByProperty("IConnectionDefinition.ConnectionEnd")]
         [Implements(implementation: "IAssociation.AssociationEnd")]
-        List<IFeature> Kernel.Associations.IAssociation.associationEnd => [.. ((SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition)this).connectionEnd];
+        List<IFeature> Kernel.Associations.IAssociation.associationEnd => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).endFeature];
 
         /// <summary>
         /// The Usages that define the things related by the ConnectionDefinition.
@@ -117,7 +118,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
         [RedefinedByProperty("IInterfaceDefinition.InterfaceEnd")]
         [Implements(implementation: "IConnectionDefinition.ConnectionEnd")]
-        List<IUsage> Systems.Connections.IConnectionDefinition.connectionEnd => [.. this.interfaceEnd];
+        List<IUsage> Systems.Connections.IConnectionDefinition.connectionEnd => [.. ((SysML2.NET.Core.POCO.Kernel.Associations.IAssociation)this).associationEnd.OfType<IUsage>()];
 
         /// <summary>
         /// The declared name of this Element.
@@ -190,7 +191,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => [.. ((SysML2.NET.Core.POCO.Kernel.Associations.IAssociation)this).associationEnd];
+        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -248,7 +249,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_12e503d9_1565496234915_779221_26664", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591476421094_685440_682")]
         [Implements(implementation: "IInterfaceDefinition.InterfaceEnd")]
-        public List<IPortUsage> interfaceEnd => this.ComputeInterfaceEnd();
+        public List<IPortUsage> interfaceEnd => [.. ((SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition)this).connectionEnd.OfType<IPortUsage>()];
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -840,7 +841,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedType];
+        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -849,7 +850,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IAssociation.RelatedType")]
-        public List<IType> relatedType => this.ComputeRelatedType();
+        public List<IType> relatedType => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).relatedElement.OfType<IType>()];
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -881,7 +882,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IAssociation.SourceType")]
-        public IType sourceType => this.ComputeSourceType();
+        public IType sourceType => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IType>().SingleOrDefaultStrict(nameof(InterfaceDefinition));
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -904,7 +905,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IAssociation.TargetType")]
-        public List<IType> targetType => this.ComputeTargetType();
+        public List<IType> targetType => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Target.OfType<IType>()];
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

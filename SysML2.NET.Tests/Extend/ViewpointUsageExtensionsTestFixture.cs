@@ -41,7 +41,7 @@ namespace SysML2.NET.Tests.Extend
             var viewpointUsage = new ViewpointUsage();
 
             // Empty: no OwnedRelationship → null.
-            Assert.That(viewpointUsage.ComputeViewpointDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
         }
 
         [Test]

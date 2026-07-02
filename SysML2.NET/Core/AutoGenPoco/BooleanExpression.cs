@@ -39,6 +39,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
@@ -80,7 +81,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => this.ComputeBehavior();
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -141,7 +142,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
+        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -227,7 +228,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("IBooleanExpression.Predicate")]
         [Implements(implementation: "IExpression.Function")]
-        IFunction IExpression.function => this.predicate;
+        IFunction IExpression.function => ((SysML2.NET.Core.POCO.Kernel.Behaviors.IStep)this).behavior.OfType<IFunction>().SingleOrDefaultStrict(nameof(BooleanExpression));
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -722,7 +723,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => this.ComputeParameter();
+        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
 
         /// <summary>
         /// The Predicate that types the Expression.
@@ -730,7 +731,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [Property(xmiId: "_19_0_2_12e503d9_1578025035149_386_969", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
         [Implements(implementation: "IBooleanExpression.Predicate")]
-        public IPredicate predicate => this.ComputePredicate();
+        public IPredicate predicate => ((IExpression)this).function as IPredicate;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

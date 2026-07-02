@@ -64,6 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A ConstraintUsage is an OccurrenceUsage that is also a BooleanExpression, and, so, is typed by a
@@ -107,7 +108,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => this.ComputeBehavior();
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -129,7 +130,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
         [Implements(implementation: "IConstraintUsage.ConstraintDefinition")]
-        public IPredicate constraintDefinition => this.ComputeConstraintDefinition();
+        public IPredicate constraintDefinition => ((SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression)this).predicate;
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -167,7 +168,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -189,7 +190,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
+        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -284,7 +285,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("IBooleanExpression.Predicate")]
         [Implements(implementation: "IExpression.Function")]
-        IFunction Kernel.Functions.IExpression.function => ((SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression)this).predicate;
+        IFunction Kernel.Functions.IExpression.function => ((SysML2.NET.Core.POCO.Kernel.Behaviors.IStep)this).behavior.OfType<IFunction>().SingleOrDefaultStrict(nameof(ConstraintUsage));
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -500,7 +501,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => this.ComputeMayTimeVary();
+        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -765,7 +766,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<IClass> occurrenceDefinition => this.ComputeOccurrenceDefinition();
+        public List<IClass> occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition.OfType<IClass>()];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1074,7 +1075,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => this.ComputeParameter();
+        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
@@ -1092,7 +1093,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
         [RedefinedByProperty("IConstraintUsage.ConstraintDefinition")]
         [Implements(implementation: "IBooleanExpression.Predicate")]
-        IPredicate Kernel.Functions.IBooleanExpression.predicate => this.constraintDefinition;
+        IPredicate Kernel.Functions.IBooleanExpression.predicate => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function as IPredicate;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -1145,7 +1146,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
+        List<IType> Core.Features.IFeature.type => this.ComputeType();
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

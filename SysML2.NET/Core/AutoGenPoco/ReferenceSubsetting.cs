@@ -35,6 +35,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// ReferenceSubsetting is a kind of Subsetting in which the referencedFeature is syntactically
@@ -222,7 +223,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [RedefinedByProperty("IReferenceSubsetting.ReferencingFeature")]
         [Implements(implementation: "ISubsetting.OwningFeature")]
-        IFeature ISubsetting.owningFeature => this.referencingFeature;
+        IFeature ISubsetting.owningFeature => ((SysML2.NET.Core.POCO.Core.Types.ISpecialization)this).owningType as IFeature;
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -272,7 +273,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("ISubsetting.OwningFeature")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => ((SysML2.NET.Core.POCO.Core.Features.ISubsetting)this).owningFeature;
+        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -301,7 +302,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674987_236250_43311")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
         [Implements(implementation: "IReferenceSubsetting.ReferencingFeature")]
-        public IFeature referencingFeature => this.ComputeReferencingFeature();
+        public IFeature referencingFeature => ((ISubsetting)this).owningFeature;
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target

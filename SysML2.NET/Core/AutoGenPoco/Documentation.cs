@@ -33,6 +33,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Documentation is a Comment that specifically documents a documentedElement, which must be its owner.
@@ -74,7 +75,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IDocumentation.DocumentedElement")]
         [Implements(implementation: "IAnnotatingElement.AnnotatedElement")]
-        List<IElement> IAnnotatingElement.annotatedElement => this.documentedElement != null ? [this.documentedElement] : [];
+        List<IElement> IAnnotatingElement.annotatedElement => this.ComputeAnnotatedElement();
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the
@@ -125,7 +126,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_744477_17277")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594145755058_99428_86")]
         [Implements(implementation: "IDocumentation.DocumentedElement")]
-        public IElement documentedElement => this.ComputeDocumentedElement();
+        public IElement documentedElement => ((IAnnotatingElement)this).annotatedElement.SingleOrDefaultStrict<IElement>(nameof(Documentation));
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must

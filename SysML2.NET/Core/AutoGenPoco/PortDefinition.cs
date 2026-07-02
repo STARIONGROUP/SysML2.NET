@@ -61,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A PortDefinition defines a point at which external entities can connect to and interact with a

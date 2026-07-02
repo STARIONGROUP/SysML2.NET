@@ -38,6 +38,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A PayloadFeature is the ownedFeature of a Flow that identifies the things carried by the kinds of

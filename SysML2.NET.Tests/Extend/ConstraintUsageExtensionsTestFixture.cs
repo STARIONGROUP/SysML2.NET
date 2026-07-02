@@ -43,7 +43,7 @@ namespace SysML2.NET.Tests.Extend
             // Empty OwnedRelationship → no FeatureTyping → null.
             var emptyUsage = new ConstraintUsage();
 
-            Assert.That(emptyUsage.ComputeConstraintDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(emptyUsage.ComputeConstraintDefinition(), Is.Null);
         }
 
         [Test]

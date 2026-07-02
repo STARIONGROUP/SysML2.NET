@@ -39,6 +39,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An Association is a Relationship and a Classifier to enable classification of links between things
@@ -86,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [Property(xmiId: "_18_5_3_12e503d9_1562477648742_24204_22901", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [Implements(implementation: "IAssociation.AssociationEnd")]
-        public List<IFeature> associationEnd => this.ComputeAssociationEnd();
+        public List<IFeature> associationEnd => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).endFeature];
 
         /// <summary>
         /// The declared name of this Element.
@@ -150,7 +151,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => [.. this.associationEnd];
+        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -542,7 +543,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedType];
+        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -551,7 +552,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IAssociation.RelatedType")]
-        public List<IType> relatedType => this.ComputeRelatedType();
+        public List<IType> relatedType => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).relatedElement.OfType<IType>()];
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -583,7 +584,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IAssociation.SourceType")]
-        public IType sourceType => this.ComputeSourceType();
+        public IType sourceType => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IType>().SingleOrDefaultStrict(nameof(Association));
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -606,7 +607,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IAssociation.TargetType")]
-        public List<IType> targetType => this.ComputeTargetType();
+        public List<IType> targetType => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Target.OfType<IType>()];
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

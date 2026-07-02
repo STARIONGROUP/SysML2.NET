@@ -34,6 +34,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Conjugation is a Relationship between two types in which the conjugatedType inherits all the

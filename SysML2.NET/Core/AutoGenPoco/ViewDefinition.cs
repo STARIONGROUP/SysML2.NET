@@ -61,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A ViewDefinition is a PartDefinition that specifies how a view artifact is constructed to satisfy a

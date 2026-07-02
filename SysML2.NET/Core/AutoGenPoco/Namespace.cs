@@ -34,6 +34,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Namespace is an Element that contains other Elements, known as its members, via Membership

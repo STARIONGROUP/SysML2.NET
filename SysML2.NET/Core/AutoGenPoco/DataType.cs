@@ -39,6 +39,7 @@ namespace SysML2.NET.Core.POCO.Kernel.DataTypes
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A DataType is a Classifier of things (in the universe) that can only be distinguished by how they

@@ -40,6 +40,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Function is a Behavior that has an out parameter that is identified as its result. A Function
@@ -112,7 +113,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
+        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
 
         /// <summary>
         /// The Documentation owned by this Element.
@@ -506,7 +507,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [Property(xmiId: "_18_5_3_12e503d9_1543948010065_362066_20413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IBehavior.Parameter")]
-        public List<IFeature> parameter => this.ComputeParameter();
+        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

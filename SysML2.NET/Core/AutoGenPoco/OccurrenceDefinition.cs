@@ -61,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An OccurrenceDefinition is a Definition of a Class of individuals that have an independent life over

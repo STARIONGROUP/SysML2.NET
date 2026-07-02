@@ -60,6 +60,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A RenderingDefinition is a PartDefinition that defines a specific rendering of the content of a

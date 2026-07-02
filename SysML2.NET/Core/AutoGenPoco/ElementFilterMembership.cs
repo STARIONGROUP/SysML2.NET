@@ -36,6 +36,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// ElementFilterMembership is a Membership between a Namespace and a model-level evaluable
@@ -83,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Property(xmiId: "_19_0_4_12e503d9_1605762464250_876969_157", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         [Implements(implementation: "IElementFilterMembership.Condition")]
-        public IExpression condition => this.ComputeCondition();
+        public IExpression condition => ((SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)this).ownedMemberElement as IExpression;
 
         /// <summary>
         /// The declared name of this Element.
@@ -164,7 +165,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
+        string Root.Namespaces.IMembership.memberElementId => this.ComputeMemberElementId();
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -186,7 +187,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
-        public INamespace membershipOwningNamespace => this.ComputeMembershipOwningNamespace();
+        public INamespace membershipOwningNamespace => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<INamespace>().SingleOrDefaultStrict(nameof(ElementFilterMembership));
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
@@ -237,7 +238,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [RedefinedByProperty("IElementFilterMembership.Condition")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
-        IElement Root.Namespaces.IOwningMembership.ownedMemberElement => this.condition;
+        IElement Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).MemberElement;
 
         /// <summary>
         /// The elementId of the ownedMemberElement.
@@ -245,7 +246,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Property(xmiId: "_19_0_4_12e503d9_1651721234828_904219_244", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721199802_246768_242")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElementId")]
-        public string ownedMemberElementId => this.ComputeOwnedMemberElementId();
+        public string ownedMemberElementId => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).memberElementId;
 
         /// <summary>
         /// The name of the ownedMemberElement.
@@ -253,7 +254,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Property(xmiId: "_19_0_4_12e503d9_1648181616390_323441_387", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_35293_43192")]
         [Implements(implementation: "IOwningMembership.OwnedMemberName")]
-        public string ownedMemberName => this.ComputeOwnedMemberName();
+        public string ownedMemberName => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).MemberName;
 
         /// <summary>
         /// The shortName of the ownedMemberElement.
@@ -261,7 +262,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         [Property(xmiId: "_19_0_4_12e503d9_1651721262092_909505_246", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         [Implements(implementation: "IOwningMembership.OwnedMemberShortName")]
-        public string ownedMemberShortName => this.ComputeOwnedMemberShortName();
+        public string ownedMemberShortName => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).MemberShortName;
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.

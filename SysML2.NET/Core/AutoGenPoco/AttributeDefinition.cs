@@ -61,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An AttributeDefinition is a Definition and a DataType of information about a quality or

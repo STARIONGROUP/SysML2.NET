@@ -68,7 +68,7 @@ namespace SysML2.NET.Tests.Extend
             var caseUsage = new CaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an ICaseDefinition → null.
-            Assert.That(caseUsage.ComputeCaseDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(caseUsage.ComputeCaseDefinition(), Is.Null);
         }
 
         [Test]

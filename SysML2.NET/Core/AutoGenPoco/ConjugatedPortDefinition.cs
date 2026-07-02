@@ -60,6 +60,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A ConjugatedPortDefinition is a PortDefinition that is a PortDefinition of its original
@@ -345,7 +346,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_19_0_2_12e503d9_1575484364017_387810_990", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [Implements(implementation: "IConjugatedPortDefinition.OriginalPortDefinition")]
-        public IPortDefinition originalPortDefinition => this.ComputeOriginalPortDefinition();
+        public IPortDefinition originalPortDefinition => ((SysML2.NET.Core.POCO.Root.Elements.IElement)this).owningNamespace as IPortDefinition;
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -429,7 +430,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [RedefinedByProperty("IConjugatedPortDefinition.OwnedPortConjugator")]
         [Implements(implementation: "IType.OwnedConjugator")]
-        IConjugation Core.Types.IType.ownedConjugator => this.ownedPortConjugator;
+        IConjugation Core.Types.IType.ownedConjugator => this.ComputeOwnedConjugator();
 
         /// <summary>
         /// The ConnectorAsUsages that are ownedUsages of this Definition. Note that this list includes
@@ -614,7 +615,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_19_0_2_12e503d9_1575484344901_850046_947", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_280165_440")]
         [Implements(implementation: "IConjugatedPortDefinition.OwnedPortConjugator")]
-        public IPortConjugation ownedPortConjugator => this.ComputeOwnedPortConjugator();
+        public IPortConjugation ownedPortConjugator => ((SysML2.NET.Core.POCO.Core.Types.IType)this).ownedConjugator as IPortConjugation;
 
         /// <summary>
         /// The ReferenceUsages that are ownedUsages of this Definition.
@@ -761,7 +762,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [RedefinedByProperty("IConjugatedPortDefinition.OriginalPortDefinition")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        INamespace Root.Elements.IElement.owningNamespace => this.originalPortDefinition;
+        INamespace Root.Elements.IElement.owningNamespace => this.ComputeOwningNamespace();
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.

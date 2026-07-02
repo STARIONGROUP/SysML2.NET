@@ -41,7 +41,7 @@ namespace SysML2.NET.Tests.Extend
             var renderingUsage = new RenderingUsage();
 
             // Empty: no OwnedRelationship → null.
-            Assert.That(renderingUsage.ComputeRenderingDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.Null);
         }
     }
 }

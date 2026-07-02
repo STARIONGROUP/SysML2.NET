@@ -45,7 +45,7 @@ namespace SysML2.NET.Tests.Extend
             var emptyCalculationUsage = new CalculationUsage();
 
             // No FeatureTyping entries → no IFunction type → null (property is [0..1]).
-            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition(), Is.Null);
         }
 
         [Test]

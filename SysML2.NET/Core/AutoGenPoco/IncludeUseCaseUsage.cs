@@ -64,6 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An IncludeUseCaseUsage is a UseCaseUsage that represents the inclusion of a UseCaseUsage by a
@@ -103,7 +104,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => ((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition != null ? [((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition] : [];
+        List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => [.. ((SysML2.NET.Core.POCO.Kernel.Behaviors.IStep)this).behavior];
 
         /// <summary>
         /// The parameters of this CaseUsage that represent actors involved in the case.
@@ -128,7 +129,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => this.ComputeBehavior();
 
         /// <summary>
         /// The <ode>Function that is the type of this CalculationUsage. Nominally, this would be a
@@ -140,7 +141,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         [RedefinedByProperty("ICaseUsage.CaseDefinition")]
         [Implements(implementation: "ICalculationUsage.CalculationDefinition")]
-        IFunction Systems.Calculations.ICalculationUsage.calculationDefinition => ((SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage)this).caseDefinition;
+        IFunction Systems.Calculations.ICalculationUsage.calculationDefinition => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function;
 
         /// <summary>
         /// The CaseDefinition that is the type of this CaseUsage.
@@ -149,7 +150,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1588213526305_899324_302")]
         [RedefinedByProperty("IUseCaseUsage.UseCaseDefinition")]
         [Implements(implementation: "ICaseUsage.CaseDefinition")]
-        ICaseDefinition Systems.Cases.ICaseUsage.caseDefinition => this.useCaseDefinition;
+        ICaseDefinition Systems.Cases.ICaseUsage.caseDefinition => ((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition as ICaseDefinition;
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -199,7 +200,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -221,7 +222,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
+        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -283,7 +284,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IPerformActionUsage.PerformedAction")]
         [Implements(implementation: "IEventOccurrenceUsage.EventOccurrence")]
-        IOccurrenceUsage Systems.Occurrences.IEventOccurrenceUsage.eventOccurrence => ((SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage)this).performedAction;
+        IOccurrenceUsage Systems.Occurrences.IEventOccurrenceUsage.eventOccurrence => this.ComputeEventOccurrence();
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -326,7 +327,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
         [Implements(implementation: "IExpression.Function")]
-        IFunction Kernel.Functions.IExpression.function => ((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition;
+        IFunction Kernel.Functions.IExpression.function => ((SysML2.NET.Core.POCO.Kernel.Behaviors.IStep)this).behavior.OfType<IFunction>().SingleOrDefaultStrict(nameof(IncludeUseCaseUsage));
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -498,7 +499,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IEventOccurrenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
+        bool Systems.DefinitionAndUsage.IUsage.isReference => this.ComputeIsReference();
 
         /// <summary>
         /// Always true for an EventOccurrenceUsage.
@@ -506,7 +507,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_19_0_4_12e503d9_1672526906017_786343_306", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         [Implements(implementation: "IEventOccurrenceUsage.IsReference")]
-        public bool isReference => this.ComputeIsReference();
+        public bool isReference => ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).isReference;
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -559,7 +560,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => this.ComputeMayTimeVary();
+        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -833,7 +834,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition.OfType<IClass>()];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1142,7 +1143,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => this.ComputeParameter();
+        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
 
         /// <summary>
         /// The ActionUsage to be performed by this PerformedActionUsage. It is the eventOccurrence of the
@@ -1152,7 +1153,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
         [RedefinedByProperty("IIncludeUseCaseUsage.UseCaseIncluded")]
         [Implements(implementation: "IPerformActionUsage.PerformedAction")]
-        IActionUsage Systems.Actions.IPerformActionUsage.performedAction => this.useCaseIncluded;
+        IActionUsage Systems.Actions.IPerformActionUsage.performedAction => ((SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage)this).eventOccurrence as IActionUsage;
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
@@ -1223,7 +1224,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
+        List<IType> Core.Features.IFeature.type => this.ComputeType();
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
@@ -1250,7 +1251,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_19_0_4_12e503d9_1621460964889_804779_881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
         [Implements(implementation: "IUseCaseUsage.UseCaseDefinition")]
-        public IUseCaseDefinition useCaseDefinition => this.ComputeUseCaseDefinition();
+        public IUseCaseDefinition useCaseDefinition => ((SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage)this).caseDefinition as IUseCaseDefinition;
 
         /// <summary>
         /// The UseCaseUsage to be included by this IncludeUseCaseUsage. It is the performedAction of the
@@ -1259,7 +1260,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_19_0_4_12e503d9_1621532149711_865323_1172", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
         [Implements(implementation: "IIncludeUseCaseUsage.UseCaseIncluded")]
-        public IUseCaseUsage useCaseIncluded => this.ComputeUseCaseIncluded();
+        public IUseCaseUsage useCaseIncluded => ((SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage)this).performedAction as IUseCaseUsage;
 
         /// <summary>
         /// The Usages which represent the variants of this Usage as a variation point Usage, if isVariation =

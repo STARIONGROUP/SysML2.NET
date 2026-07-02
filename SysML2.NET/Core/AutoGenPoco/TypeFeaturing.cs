@@ -35,6 +35,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A TypeFeaturing is a Featuring Relationship in which the featureOfType is the source and the

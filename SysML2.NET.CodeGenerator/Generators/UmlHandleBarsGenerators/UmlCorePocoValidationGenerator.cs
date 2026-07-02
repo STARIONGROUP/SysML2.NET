@@ -127,8 +127,49 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <returns>The payload with the two ordered rule lists.</returns>
         private static ContainmentRulePayload QueryContainmentRulePayload(XmiReaderResult xmiReaderResult)
         {
-            var (_, ownedRelatedElementXmiId, owningRelatedElementXmiId, elementXmiId) =
+            var (relationshipClass, ownedRelatedElementXmiId, owningRelatedElementXmiId, elementXmiId) =
                 QueryRootContainmentMeta(xmiReaderResult);
+
+            // Relationship's target-side branch (relatedElement + target + source) shares a common
+            // ancestor with the ownedRelatedElement / owningRelatedElement branch: Relationship::relatedElement
+            // (a derivedUnion). Some uml4net versions populate SubsettedProperty collections at query time
+            // with reverse-subsetters (i.e. properties that subset the current property), causing the chain
+            // walker to cross between the target-side and owner-side branches via this shared ancestor.
+            // Collecting the xmiIds of relatedElement and its two immediate subsetters (target, source) and
+            // passing them as "avoid" nodes makes the walker dead-end there, so a candidate property is
+            // picked only when its declared subset/redefinition chain LEADS DIRECTLY to the requested root
+            // without crossing over.
+            var walkAvoidXmiIds = new HashSet<string>();
+            var ownedRelatedElementSubsets = relationshipClass.OwnedAttribute
+                .Where(a => a.XmiId == ownedRelatedElementXmiId)
+                .SelectMany(a => a.SubsettedProperty.Select(s => s.XmiId))
+                .ToHashSet();
+            var owningRelatedElementSubsets = relationshipClass.OwnedAttribute
+                .Where(a => a.XmiId == owningRelatedElementXmiId)
+                .SelectMany(a => a.SubsettedProperty.Select(s => s.XmiId))
+                .ToHashSet();
+            var relatedElementXmiId = ownedRelatedElementSubsets
+                .Intersect(owningRelatedElementSubsets)
+                .FirstOrDefault();
+
+            if (relatedElementXmiId != null)
+            {
+                walkAvoidXmiIds.Add(relatedElementXmiId);
+
+                // target and source are Relationship's non-composite ownedAttributes typed Element that
+                // subset relatedElement (they are the target-side memberEnds of the source/target
+                // associations). Add them so a candidate whose redefined chain hits target/source does not
+                // then cross into owningRelatedElement via uml4net's bidirectional subset expansion.
+                foreach (var relationshipEnd in relationshipClass.OwnedAttribute
+                             .Where(a => !a.IsComposite
+                                         && a.XmiId != owningRelatedElementXmiId
+                                         && a.XmiId != relatedElementXmiId
+                                         && a.Type is IClass end && end.XmiId == elementXmiId
+                                         && a.SubsettedProperty.Any(s => s.XmiId == relatedElementXmiId)))
+                {
+                    walkAvoidXmiIds.Add(relationshipEnd.XmiId);
+                }
+            }
 
             var seenClassXmiIds = new HashSet<string>();
             var targetRows = new List<(IClass UmlClass, IProperty TypedProperty, int InheritanceDepth)>();
@@ -145,8 +186,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
                     var inheritanceDepth = QueryInheritanceDepth(umlClass);
 
-                    var typedTarget = QueryTypedSubsettingProperty(umlClass, ownedRelatedElementXmiId, requireComposite: true);
-                    
+                    var typedTarget = QueryTypedSubsettingProperty(umlClass, ownedRelatedElementXmiId, requireComposite: true, avoidXmiIds: walkAvoidXmiIds);
+
                     if (typedTarget != null)
                     {
                         targetRows.Add((umlClass, typedTarget, inheritanceDepth));
@@ -155,8 +196,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                     // Owner-side narrowing is meaningful only when the typed property's type is strictly
                     // narrower than Element — otherwise the arm would be equivalent to 'source is not null'
                     // which is exactly what the '_ => true' default already returns.
-                    var typedOwner = QueryTypedSubsettingProperty(umlClass, owningRelatedElementXmiId, requireComposite: false);
-                    
+                    var typedOwner = QueryTypedSubsettingProperty(umlClass, owningRelatedElementXmiId, requireComposite: false, avoidXmiIds: walkAvoidXmiIds);
+
                     if (typedOwner != null && typedOwner.Type.XmiId != elementXmiId)
                     {
                         ownerRows.Add((umlClass, typedOwner, inheritanceDepth));
@@ -271,8 +312,15 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                         {
                             composite = attribute;
                         }
-                        else if (!attribute.IsComposite && backRef == null)
+                        else if (!attribute.IsComposite && backRef == null && HasCompositePairedMemberEnd(attribute))
                         {
+                            // Relationship declares MULTIPLE non-composite Element-typed ownedAttributes
+                            // (owningRelatedElement, target, source). Only owningRelatedElement is paired
+                            // with a COMPOSITE property on Element (via the ownedRelationship /
+                            // owningRelatedElement association whose Element-side end is composite). The
+                            // other candidates (target, source) pair with non-composite reference back-refs
+                            // (targetRelationship, sourceRelationship). Requiring the paired end to be
+                            // composite selects the true containment back-reference.
                             backRef = attribute;
                         }
                     }
@@ -301,6 +349,27 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             var match = matches[0];
             return (match.Class, match.Composite.XmiId, match.BackRef.XmiId, ((IClass)match.Composite.Type).XmiId);
+        }
+
+        /// <summary>
+        /// Returns true when the given property's association has a memberEnd on the OTHER side of the
+        /// relationship that is composite. Used to distinguish the true owner-side back-reference
+        /// (<c>owningRelatedElement</c>, whose paired end <c>Element::ownedRelationship</c> is composite)
+        /// from other non-composite Element-typed ownedAttributes on Relationship
+        /// (<c>target</c>, <c>source</c>) whose paired ends are non-composite references.
+        /// </summary>
+        /// <param name="property">The non-composite property whose association is inspected.</param>
+        /// <returns><c>true</c> if a memberEnd distinct from <paramref name="property"/> exists on the
+        /// association and is composite; otherwise <c>false</c>.</returns>
+        private static bool HasCompositePairedMemberEnd(IProperty property)
+        {
+            if (property.Association == null)
+            {
+                return false;
+            }
+
+            return property.Association.MemberEnd
+                .Any(end => end != null && end.XmiId != property.XmiId && end.IsComposite);
         }
 
         /// <summary>
@@ -354,10 +423,15 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <param name="umlClass">The candidate class.</param>
         /// <param name="rootPropertyXmiId">The xmi id of the root property in the subsetting chain.</param>
         /// <param name="requireComposite">When true, only composite-aggregation attributes are considered
-        /// (target-side <c>OwnedRelatedElement</c> chain). When false, any aggregation is accepted
-        /// (owner-side <c>OwningRelatedElement</c> chain, which is not composite).</param>
+        /// (target-side <c>OwnedRelatedElement</c> chain). When false, only non-composite attributes are
+        /// considered (owner-side <c>OwningRelatedElement</c> chain, which is not composite).</param>
+        /// <param name="avoidXmiIds">Optional set of "shared-ancestor" property xmiIds that the walker
+        /// must treat as dead-ends. Used to prevent chain walks from crossing between the owned-side and
+        /// owner-side branches via <c>Relationship::relatedElement</c> and its immediate target-side
+        /// subsetters (<c>target</c>, <c>source</c>), whose subsetted-by collections may be populated
+        /// bidirectionally by some uml4net versions.</param>
         /// <returns>The typed property, or null.</returns>
-        private static IProperty QueryTypedSubsettingProperty(IClass umlClass, string rootPropertyXmiId, bool requireComposite)
+        private static IProperty QueryTypedSubsettingProperty(IClass umlClass, string rootPropertyXmiId, bool requireComposite, HashSet<string> avoidXmiIds = null)
         {
             IProperty bestMatch = null;
             var bestDepth = int.MinValue;
@@ -369,7 +443,12 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                     continue;
                 }
 
-                var depth = QueryDepthToRootProperty(attribute, rootPropertyXmiId);
+                if (!requireComposite && attribute.IsComposite)
+                {
+                    continue;
+                }
+
+                var depth = QueryDepthToRootProperty(attribute, rootPropertyXmiId, avoidXmiIds);
 
                 if (depth < 0)
                 {
@@ -393,8 +472,13 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// </summary>
         /// <param name="property">The starting property.</param>
         /// <param name="rootPropertyXmiId">The xmi id of the root property in the subsetting chain.</param>
+        /// <param name="avoidXmiIds">Optional set of xmi ids treated as dead-ends: if the walker visits
+        /// one of these properties, it is not expanded (its subsets / redefinitions are not enqueued).
+        /// Used to prevent walks from crossing between the target-side and owner-side branches via the
+        /// shared <c>Relationship::relatedElement</c> ancestor and its immediate target-side subsetters
+        /// (<c>target</c>, <c>source</c>).</param>
         /// <returns>The chain depth, or -1.</returns>
-        private static int QueryDepthToRootProperty(IProperty property, string rootPropertyXmiId)
+        private static int QueryDepthToRootProperty(IProperty property, string rootPropertyXmiId, HashSet<string> avoidXmiIds = null)
         {
             var visited = new HashSet<string>();
             var queue = new Queue<(IProperty Property, int Depth)>();
@@ -408,6 +492,11 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                 if (current.XmiId == rootPropertyXmiId)
                 {
                     return depth;
+                }
+
+                if (avoidXmiIds != null && avoidXmiIds.Contains(current.XmiId))
+                {
+                    continue;
                 }
 
                 foreach (var redefined in current.RedefinedProperty.Where(redefined => visited.Add(redefined.XmiId)))

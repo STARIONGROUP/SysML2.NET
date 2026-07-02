@@ -35,6 +35,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Subclassification is Specialization in which both the specific and general Types are Classifier.
@@ -216,7 +217,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         [Property(xmiId: "_18_5_3_12e503d9_1543189170642_857401_25506", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [Implements(implementation: "ISubclassification.OwningClassifier")]
-        public IClassifier owningClassifier => this.ComputeOwningClassifier();
+        public IClassifier owningClassifier => ((SysML2.NET.Core.POCO.Core.Types.ISpecialization)this).owningType as IClassifier;
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -266,7 +267,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("ISubclassification.OwningClassifier")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => this.owningClassifier;
+        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

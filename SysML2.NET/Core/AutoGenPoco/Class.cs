@@ -39,6 +39,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Classes
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Class is a Classifier of things (in the universe) that can be distinguished without regard to how

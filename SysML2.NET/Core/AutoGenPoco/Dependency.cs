@@ -34,6 +34,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Dependency is a Relationship that indicates that one or more client Elements require one more

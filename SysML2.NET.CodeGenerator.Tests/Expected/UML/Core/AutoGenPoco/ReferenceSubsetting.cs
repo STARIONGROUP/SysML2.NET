@@ -222,7 +222,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [RedefinedByProperty("IReferenceSubsetting.ReferencingFeature")]
         [Implements(implementation: "ISubsetting.OwningFeature")]
-        IFeature ISubsetting.owningFeature => this.referencingFeature;
+        IFeature ISubsetting.owningFeature => this.ComputeOwningFeature();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -272,7 +272,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("ISubsetting.OwningFeature")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => ((SysML2.NET.Core.POCO.Core.Features.ISubsetting)this).owningFeature;
+        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

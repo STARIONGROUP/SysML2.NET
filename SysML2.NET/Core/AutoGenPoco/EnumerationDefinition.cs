@@ -60,6 +60,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An EnumerationDefinition is an AttributeDefinition all of whose instances are given by an explicit
@@ -174,7 +175,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [Property(xmiId: "_19_0_4_12e503d9_1606946634788_959145_265", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1590979457191_746167_951")]
         [Implements(implementation: "IEnumerationDefinition.EnumeratedValue")]
-        public List<IEnumerationUsage> enumeratedValue => this.ComputeEnumeratedValue();
+        public List<IEnumerationUsage> enumeratedValue => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition)this).variant.OfType<IEnumerationUsage>()];
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -819,7 +820,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [RedefinedByProperty("IEnumerationDefinition.EnumeratedValue")]
         [Implements(implementation: "IDefinition.Variant")]
-        List<IUsage> Systems.DefinitionAndUsage.IDefinition.variant => [.. this.enumeratedValue];
+        List<IUsage> Systems.DefinitionAndUsage.IDefinition.variant => this.ComputeVariant();
 
         /// <summary>
         /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then

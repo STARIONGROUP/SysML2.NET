@@ -33,6 +33,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
@@ -86,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_18_5_3_12e503d9_1543094212714_638255_18408", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IAnnotation.AnnotatingElement")]
-        public IAnnotatingElement annotatingElement => this.ComputeAnnotatingElement();
+        public IAnnotatingElement annotatingElement => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IAnnotatingElement>().SingleOrDefaultStrict(nameof(Annotation));
 
         /// <summary>
         /// The declared name of this Element.

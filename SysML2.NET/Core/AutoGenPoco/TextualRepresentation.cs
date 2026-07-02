@@ -33,6 +33,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A TextualRepresentation is an AnnotatingElement whose body represents the representedElement in a
@@ -97,7 +98,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("ITextualRepresentation.RepresentedElement")]
         [Implements(implementation: "IAnnotatingElement.AnnotatedElement")]
-        List<IElement> IAnnotatingElement.annotatedElement => this.representedElement != null ? [this.representedElement] : [];
+        List<IElement> IAnnotatingElement.annotatedElement => this.ComputeAnnotatedElement();
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the
@@ -288,7 +289,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_744477_17277")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594145755058_99428_86")]
         [Implements(implementation: "ITextualRepresentation.RepresentedElement")]
-        public IElement representedElement => this.ComputeRepresentedElement();
+        public IElement representedElement => ((IAnnotatingElement)this).annotatedElement.SingleOrDefaultStrict<IElement>(nameof(TextualRepresentation));
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This

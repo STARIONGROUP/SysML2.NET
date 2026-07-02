@@ -36,6 +36,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A LibraryPackage is a Package that is the container for a model library. A LibraryPackage is itself

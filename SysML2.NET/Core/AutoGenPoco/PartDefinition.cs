@@ -60,6 +60,7 @@ namespace SysML2.NET.Core.POCO.Systems.Parts
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A PartDefinition is an ItemDefinition of a Class of systems or parts of systems. Note that all parts

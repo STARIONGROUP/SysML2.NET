@@ -177,7 +177,7 @@ namespace SysML2.NET.Tests.Extend
             var viewUsage = new ViewUsage();
 
             // Empty: no FeatureTyping → null.
-            Assert.That(viewUsage.ComputeViewDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
         }
 
         [Test]

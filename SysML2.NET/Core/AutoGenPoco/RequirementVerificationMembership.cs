@@ -40,6 +40,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A RequirementVerificationMembership is a RequirementConstraintMembership  used in the objective of a
@@ -180,7 +181,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
+        string Root.Namespaces.IMembership.memberElementId => this.ComputeMemberElementId();
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -203,7 +204,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [RedefinedByProperty("IFeatureMembership.OwningType")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
-        INamespace Root.Namespaces.IMembership.membershipOwningNamespace => this.owningType;
+        INamespace Root.Namespaces.IMembership.membershipOwningNamespace => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<INamespace>().SingleOrDefaultStrict(nameof(RequirementVerificationMembership));
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
@@ -244,7 +245,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         [RedefinedByProperty("IRequirementVerificationMembership.OwnedRequirement")]
         [Implements(implementation: "IRequirementConstraintMembership.OwnedConstraint")]
-        IConstraintUsage Systems.Requirements.IRequirementConstraintMembership.ownedConstraint => this.ownedRequirement;
+        IConstraintUsage Systems.Requirements.IRequirementConstraintMembership.ownedConstraint => ((SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)this).ownedMemberFeature as IConstraintUsage;
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -263,7 +264,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [RedefinedByProperty("IFeatureMembership.OwnedMemberFeature")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
-        IElement Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)this).ownedMemberFeature;
+        IElement Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).MemberElement;
 
         /// <summary>
         /// The elementId of the ownedMemberElement.
@@ -271,7 +272,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1651721234828_904219_244", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721199802_246768_242")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElementId")]
-        public string ownedMemberElementId => this.ComputeOwnedMemberElementId();
+        public string ownedMemberElementId => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).memberElementId;
 
         /// <summary>
         /// The Feature that this FeatureMembership relates to its owningType, making it an ownedFeature of the
@@ -281,7 +282,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         [RedefinedByProperty("IRequirementConstraintMembership.OwnedConstraint")]
         [Implements(implementation: "IFeatureMembership.OwnedMemberFeature")]
-        IFeature Core.Types.IFeatureMembership.ownedMemberFeature => ((SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership)this).ownedConstraint;
+        IFeature Core.Types.IFeatureMembership.ownedMemberFeature => ((SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)this).ownedMemberElement as IFeature;
 
         /// <summary>
         /// The name of the ownedMemberElement.
@@ -289,7 +290,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1648181616390_323441_387", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_35293_43192")]
         [Implements(implementation: "IOwningMembership.OwnedMemberName")]
-        public string ownedMemberName => this.ComputeOwnedMemberName();
+        public string ownedMemberName => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).MemberName;
 
         /// <summary>
         /// The shortName of the ownedMemberElement.
@@ -297,7 +298,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1651721262092_909505_246", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         [Implements(implementation: "IOwningMembership.OwnedMemberShortName")]
-        public string ownedMemberShortName => this.ComputeOwnedMemberShortName();
+        public string ownedMemberShortName => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).MemberShortName;
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -329,7 +330,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1603921329650_612380_147", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
         [Implements(implementation: "IRequirementVerificationMembership.OwnedRequirement")]
-        public IRequirementUsage ownedRequirement => this.ComputeOwnedRequirement();
+        public IRequirementUsage ownedRequirement => ((SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership)this).ownedConstraint as IRequirementUsage;
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -386,7 +387,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866524_738482_486")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
         [Implements(implementation: "IFeatureMembership.OwningType")]
-        public IType owningType => this.ComputeOwningType();
+        public IType owningType => ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)this).membershipOwningNamespace as IType;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -408,7 +409,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1617118807597_77864_3544", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IRequirementVerificationMembership.VerifiedRequirement")]
         [Implements(implementation: "IRequirementConstraintMembership.ReferencedConstraint")]
-        IConstraintUsage Systems.Requirements.IRequirementConstraintMembership.referencedConstraint => this.verifiedRequirement;
+        IConstraintUsage Systems.Requirements.IRequirementConstraintMembership.referencedConstraint => this.ComputeReferencedConstraint();
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target
@@ -477,7 +478,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1603921870169_98378_309", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
         [Implements(implementation: "IRequirementVerificationMembership.VerifiedRequirement")]
-        public IRequirementUsage verifiedRequirement => this.ComputeVerifiedRequirement();
+        public IRequirementUsage verifiedRequirement => ((SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership)this).referencedConstraint as IRequirementUsage;
 
         /// <summary>
         /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly

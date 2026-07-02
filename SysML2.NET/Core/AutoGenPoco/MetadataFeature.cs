@@ -38,6 +38,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A MetadataFeature is a Feature that is an AnnotatingElement used to annotate another Element with

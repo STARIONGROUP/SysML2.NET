@@ -62,6 +62,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A BindingConnectorAsUsage is both a BindingConnector and a ConnectorAsUsage.
@@ -105,7 +106,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1533160674983_471497_43284", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [Implements(implementation: "IConnector.Association")]
-        public List<IAssociation> association => this.ComputeAssociation();
+        public List<IAssociation> association => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IAssociation>()];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -127,7 +128,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1556735067666_827798_21922", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [Implements(implementation: "IConnector.ConnectorEnd")]
-        public List<IFeature> connectorEnd => this.ComputeConnectorEnd();
+        public List<IFeature> connectorEnd => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).endFeature];
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -173,7 +174,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> definition => this.ComputeDefinition();
+        public List<IClassifier> definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -237,7 +238,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => [.. this.connectorEnd];
+        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -481,7 +482,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => this.ComputeMayTimeVary();
+        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -1079,7 +1080,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
+        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -1088,7 +1089,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1533160674968_916334_43210", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IConnector.RelatedFeature")]
-        public List<IFeature> relatedFeature => this.ComputeRelatedFeature();
+        public List<IFeature> relatedFeature => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).relatedElement.OfType<IFeature>()];
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -1120,7 +1121,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IConnector.SourceFeature")]
-        public IFeature sourceFeature => this.ComputeSourceFeature();
+        public IFeature sourceFeature => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IFeature>().SingleOrDefaultStrict(nameof(BindingConnectorAsUsage));
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -1143,7 +1144,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IConnector.TargetFeature")]
-        public List<IFeature> targetFeature => this.ComputeTargetFeature();
+        public List<IFeature> targetFeature => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Target.OfType<IFeature>()];
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -1163,7 +1164,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IConnector.Association")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => [.. this.association];
+        List<IType> Core.Features.IFeature.type => this.ComputeType();
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
