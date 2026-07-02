@@ -21,7 +21,6 @@
 namespace SysML2.NET.Core.POCO.Systems.Ports
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
@@ -92,10 +91,18 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [ExcludeFromCodeCoverage]
         internal static string ComputeRedefinedEffectiveNameOperation(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (conjugatedPortDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(conjugatedPortDefinitionSubject));
+            }
+
+            var originalName = conjugatedPortDefinitionSubject.originalPortDefinition.name;
+
+            return originalName is null
+                ? null
+                : $"~{originalName}";
         }
     }
 }

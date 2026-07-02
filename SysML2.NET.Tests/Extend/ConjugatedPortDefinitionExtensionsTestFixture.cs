@@ -78,5 +78,29 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedElement)conjugatedWithMultiplePortConjugations).OwnedRelationship.Add(new PortConjugation());
             Assert.That(() => conjugatedWithMultiplePortConjugations.ComputeOwnedPortConjugator(), Throws.TypeOf<MultiplicityViolationException>());
         }
+        
+        [Test]
+        public void VerifyComputeRedefinedEffectiveNameOperation()
+        {
+            // Null subject:
+            Assert.That(() => ((IConjugatedPortDefinition)null).ComputeRedefinedEffectiveNameOperation(), Throws.TypeOf<ArgumentNullException>());
+
+            // Missing original port definition:
+            var emptyConjugatedPortDefinition = new ConjugatedPortDefinition();
+            Assert.That(() => emptyConjugatedPortDefinition.ComputeRedefinedEffectiveNameOperation(), Throws.TypeOf<IncompleteModelException>());
+
+            // Original name is null:
+            var originalPortDefinitionWithoutName = new PortDefinition();
+            var conjugatedPortDefinitionWithoutOriginalName = new ConjugatedPortDefinition();
+            originalPortDefinitionWithoutName.AssignOwnership(new OwningMembership(), conjugatedPortDefinitionWithoutOriginalName);
+            Assert.That(conjugatedPortDefinitionWithoutOriginalName.ComputeRedefinedEffectiveNameOperation(), Is.Null);
+
+            // Original name exists:
+            var originalPortDefinition = new PortDefinition { DeclaredName = "port" };
+            var conjugatedPortDefinition = new ConjugatedPortDefinition();
+            originalPortDefinition.AssignOwnership(new OwningMembership(), conjugatedPortDefinition);
+            Assert.That(conjugatedPortDefinition.ComputeRedefinedEffectiveNameOperation(), Is.EqualTo("~port"));
+        }
+        
     }
 }
