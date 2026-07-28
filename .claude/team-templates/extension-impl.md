@@ -49,42 +49,66 @@ Don't use this template when:
 | `{{REFERENCE_PRODUCTION_FILE}}` | Working reference (repo-relative) | `SysML2.NET/Extend/NamespaceExtensions.cs` |
 | `{{REFERENCE_TEST_FILE}}` | Working test reference (repo-relative) | `SysML2.NET.Tests/Extend/NamespaceExtensionsTestFixture.cs` |
 | `{{INTERFACE_FILE}}` | Auto-gen POCO interface (repo-relative) | `SysML2.NET/Core/AutoGenPoco/IFeature.cs` |
-| `{{NOTES_FILE}}` | Researcher's contract notes (repo-relative, optional) | `.team-notes/feature-extensions-spec.md` |
+| `{{NOTES_FILE}}` | Researcher's contract notes (repo-relative) | `.team-notes/feature-extensions-spec.md` |
+| `{{GROUNDING_MODE}}` | `hypha` when the Hypha plugin is installed (detected at pre-flight), else `xmi` | `hypha` |
 | `{{METHOD_LIST}}` | Bullet list of methods to implement, in dependency order | (per-task) |
 | `{{ORCHESTRATOR_NAME}}` | Team-lead name for SendMessage | `team-lead` |
 
 ## Workflow
 
 ```
-1. Researcher  → writes contract notes to {{NOTES_FILE}}: per method, the OCL
-                 (or, if absent, the spec-text derivation), prose, dependencies,
-                 suggested implementation, and test plan. ALWAYS RUN — it covers
-                 the case where a method has no OCL body (e.g. Type::isConjugated
-                 in the recent TypeExtensions task) and surfaces transitive
-                 stub-blockers before the implementer hits them.
+1. Researcher       → writes contract notes to {{NOTES_FILE}}.
+                      Grounding depends on {{GROUNDING_MODE}}:
+                      - hypha: hypha:metamodel-lookup + hypha:spec-citation
+                        (+ hypha:metamodel-navigator agent for fan-out,
+                        hypha:sysml-validation when useful)
+                      - xmi:   Resources/KerML_only_xmi.uml +
+                               Resources/SysML_only_xmi.uml only
 
-2. Implementer → implements all methods in {{PRODUCTION_FILE}}, sliced by
-                 dependency tier (Tier 1: direct OfType filters; Tier 2:
-                 chains over Tier 1; Tier 3: depends on operations; Tier 4:
-                 closures with cycle protection). Reads {{NOTES_FILE}} first.
+2. Implementer      → implements all methods in {{PRODUCTION_FILE}}, sliced by
+                      dependency tier. Reads {{NOTES_FILE}} first.
 
-3. Tester      → rewrites {{TEST_FILE}} with one [Test] per method-under-test,
-                 multiple Assert.That covering null + empty + populated. Reads
-                 {{NOTES_FILE}} first for each method's test plan.
+3. Tester           → rewrites {{TEST_FILE}} with one [Test] per
+                      method-under-test, multiple Assert.That covering
+                      null + empty + populated. Reads {{NOTES_FILE}}
+                      first for each method's test plan.
 
-4. Reviewer    → READ-ONLY verdict against the OCL <remarks> blocks AND the
-                 researcher's notes; flags any mistranslation; never edits.
+4. Reviewer         → READ-ONLY verdict against the OCL <remarks> blocks AND
+                      {{NOTES_FILE}}; flags any mistranslation; never edits.
 
-5. Orchestrator → dotnet build, targeted dotnet test, REGRESSION SWEEP
-                 (full solution test). Stub-blocker assertions in sibling
-                 fixtures that now fail get updated as part of the same PR.
+5. Orchestrator     → dotnet build, targeted dotnet test, REGRESSION SWEEP
+                      (full solution test). Stub-blocker assertions in sibling
+                      fixtures that now fail get updated as part of the same PR.
 ```
 
-## Plan-mode-aware prompting (added 2026-05-28)
+## Sub-agent spawn mode (primary path — added 2026-07-01)
+
+The orchestrator MUST pass `mode: "acceptEdits"` explicitly on every
+`Agent(...)` spawn that uses this template. Reason: sub-agents inherit the
+parent's plan-mode state at spawn time; plan mode's built-in pre-tool-use
+hook blocks `Skill(...)` calls, which makes the researcher's Hypha grounding
+path (when `{{GROUNDING_MODE}} == hypha`) unreachable AND blocks the
+sub-agent's `Write` of its notes/production/test file. `mode: "acceptEdits"`
+overrides the inheritance for that specific sub-agent, letting it use
+`Skill(hypha:*)` and `Write` its allowed-write file freely. The role prompts
+themselves are unchanged — this is a spawn-time concern, not a prompt-time one.
+
+If a `Skill(hypha:*)` call is still denied inside the sub-agent, the
+researcher must NOT fall back to reading raw sources on its own — it messages
+the orchestrator, which performs the Hypha lookup from its own context and
+returns the result via SendMessage (or, if the researcher is wedged, writes
+the notes file itself).
+
+The section below ("Plan-mode-aware prompting") documents the FALLBACK path
+used when the orchestrator itself is in plan mode and cannot bypass the
+sub-agent's inherited restriction. That fallback stays as insurance but is
+no longer the primary flow.
+
+## Plan-mode-aware prompting (FALLBACK — added 2026-05-28)
 
 If the orchestrator session is in plan mode when this template is used, sub-agents
-will inherit it and cannot apply edits. The Agent-tool `mode: "acceptEdits"`
-parameter does NOT override the inherited state on the current Claude Code build.
+will inherit it and cannot apply edits. On some Claude Code builds the Agent-tool
+`mode: "acceptEdits"` parameter may not override the inherited state.
 
 Role prompts in this template are written so that the orchestrator can fall back
 to applying edits itself when this happens:
@@ -141,8 +165,8 @@ the agent to refuse or escalate when a tool call would violate it.
 - **Tester**: read-only everywhere except `{{TEST_FILE}}`. MUST read
   `{{NOTES_FILE}}` before starting.
 - **Reviewer**: read-only everywhere — no Write/Edit at all. Cross-checks both
-  `{{PRODUCTION_FILE}}` against `{{NOTES_FILE}}` and `{{TEST_FILE}}` against the
-  test plans in `{{NOTES_FILE}}`.
+  `{{PRODUCTION_FILE}}` against `{{NOTES_FILE}}` and `{{TEST_FILE}}`
+  against the test plans in `{{NOTES_FILE}}`.
 
 No `>` redirects, `tee`, `sed -i`, `cp`, or `mv` into files outside the allowed
 target. If a tool call would violate the rule, the agent must abort and message
@@ -237,7 +261,11 @@ hand-reformat of `FeatureExtensions.cs`. All four roles must enforce these.
 
 ---
 
-## Role prompt: researcher (DEFAULT — always run)
+## Role prompt: researcher
+
+One researcher per run. The orchestrator includes exactly ONE of the two
+"Grounding" sections below, selected by `{{GROUNDING_MODE}}` from the
+pre-flight detection (`hypha` when the Hypha plugin is installed, else `xmi`).
 
 ```
 You are the **spec-researcher** on the `{{TEAM_NAME}}` team.
@@ -263,17 +291,69 @@ so be specific about types, navigation, edge cases, and the derivation source.
 **Order of preference for the derivation source** (use the first that exists):
 
 1. **OCL body in the XMI** — `<defaultValue language="OCL">` for derived properties,
-   `<ownedRule>` body for operations. This is the canonical source.
+   `<ownedRule>` body for operations. This is the canonical source. In `hypha`
+   mode, retrieve it via `hypha:metamodel-lookup` (do not open the XMI unless a
+   lookup fails); in `xmi` mode, grep the XMI directly.
 2. **OCL block in the method's `<remarks>` XML doc** in `{{PRODUCTION_FILE}}`.
    These are mirrored from the XMI by the codegen — quote them in the notes.
-3. **Spec-text-only methods** — when neither (1) nor (2) carries an OCL body
+3. **Methods with no OCL body** — when neither (1) nor (2) carries an OCL body
    (e.g. `Type::isConjugated` says only "Indicates whether this Type has an
-   ownedConjugator"), record a short prose derivation rule plus a citation to
-   the spec PDF/text. EXPLICITLY FLAG these in the notes so the implementer
-   doesn't search for OCL that isn't there.
+   ownedConjugator"): in `hypha` mode, record a short prose derivation rule
+   grounded in `hypha:spec-citation` and tag it with the clause; in `xmi` mode,
+   ground the prose rule in the XMI `ownedComment` / interface doc-comment
+   prose, EXPLICITLY FLAG it as `prose-only (no OCL; Hypha not installed)`,
+   and note it deserves extra scrutiny at Gate R-A. Either way, FLAG these in
+   the notes so the implementer doesn't search for OCL that isn't there.
 
-Do not skip the spec-text-only case — that's the failure mode this researcher
-role exists to prevent.
+Do not skip the no-OCL case — that's the failure mode this researcher role
+exists to prevent.
+
+## Grounding — hypha mode (orchestrator includes this section when {{GROUNDING_MODE}} == hypha)
+
+This is the CLAUDE.md "Grounding SysML v2 / KerML work with the Hypha plugin"
+section applied to a researcher role:
+
+- **Structure (always)** — `hypha:metamodel-lookup` for each metaclass's:
+  - features (type, multiplicity, ordering, redefinitions, subsettings)
+  - supertypes and subtypes
+  - OCL derivation body (`<defaultValue language="OCL">` equivalent)
+  - OCL constraint bodies (`<ownedRule>` equivalent)
+  - primitive types and enumerations referenced by the property
+  For cross-cutting fan-out (a chain that hops across several metaclasses,
+  e.g. "which metaclasses have a feature typed by Expression?"), delegate
+  to the `hypha:metamodel-navigator` agent so the bulk file reading stays
+  out of your context.
+
+- **Intent (when the OCL is not mechanical)** — `hypha:spec-citation` for
+  the normative spec prose whenever the OCL:
+  - is terse (`->first()` / `->at(1)` without a stated ordering)
+  - leans on a defined term (`namingFeature`, `redefinedFeature`, connector
+    `end`, feature typing/inheritance resolution)
+  - has an underspecified edge case
+  - otherwise needs interpretation beyond a mechanical filter
+  Skip only when the OCL is a plain `selectByKind(T)` / trivial filter.
+
+- **Validation (when useful)** — `hypha:sysml-validation` when you want to
+  confirm the C# translation you'd suggest matches the metamodel constraint
+  on a sample snippet.
+
+The checked-in XMI files (`Resources/KerML_only_xmi.uml`,
+`Resources/SysML_only_xmi.uml`) remain available as a cross-check, but Hypha
+is the primary source: prefer its answers, and FLAG any conflict between a
+Hypha lookup and the raw XMI / `<remarks>` block in the notes rather than
+silently resolving it yourself.
+
+If a `Skill(hypha:*)` call is denied by the harness, do NOT silently fall
+back to file reads — message `{{ORCHESTRATOR_NAME}}`, who will run the lookup
+from the orchestrator context and return the result.
+
+## Grounding — xmi mode (orchestrator includes this section when {{GROUNDING_MODE}} == xmi)
+
+`Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` are the ONLY
+source of truth — structure, OCL bodies, and the `ownedComment` prose they
+carry. Do NOT invent spec citations from prior knowledge of KerML/SysML v2 —
+if the intent of a derivation cannot be established from the XMI, flag the
+ambiguity in the notes instead of resolving it from memory.
 
 ## Methods to research
 {{METHOD_LIST}}
@@ -283,12 +363,13 @@ role exists to prevent.
   metaclasses). Search for the property/operation name, then for the nearby
   `<defaultValue ... language="OCL">` or `<ownedRule>` containing the body.
 - `Resources/SysML_only_xmi.uml` — for SysML-specific metaclasses.
-- `Resources/specification/1-Kernel_Modeling_Language.pdf.txt` —
-  natural-language description of the same constraints.
 - `{{INTERFACE_FILE}}` — already-generated interface; doc-comments often contain
   the OCL prose.
 - `{{REFERENCE_PRODUCTION_FILE}}` — example of how derived properties are
   implemented in this codebase.
+
+(In `hypha` mode the XMI bullets are cross-check only — the primary lookups go
+through the Hypha skills.)
 
 ## Implementation-readiness notes (per method)
 - Whether the implementation can use a sibling derived property that is itself
@@ -305,15 +386,25 @@ role exists to prevent.
   discipline). The tester will assert `Throws.TypeOf<NotSupportedException>()` for
   the populated case of any test whose populated path hits the blocker.
 
+## Derivation-source tags
+Tag every entry with exactly one of:
+- `OCL in XMI`
+- `OCL in <remarks>`
+- `hypha:metamodel-lookup(<metaclass>::<property>)`
+- `hypha:spec-citation(<clause>)`
+- `prose-only (no OCL; Hypha not installed)`
+
 ## Output format
 Append to `{{NOTES_FILE}}` (do NOT overwrite — the file may already contain entries
 from prior phases of this task). One section per method. See the v1 template for the
-exact section structure.
+exact section structure. Every section carries its derivation-source tag, the
+suggested C# code block, a dependencies summary, a stub-blocker flag when
+applicable, and any "not found" / ambiguity flag encountered.
 
 ## When done
 Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with summary `spec ready` and a list
-of methods where the OCL is ambiguous, missing, or transitively depends on other
-stubbed extensions.
+of methods where the derivation is ambiguous, missing, or transitively depends on
+other stubbed extensions (and, in hypha mode, any lookup that returned "not found").
 
 Begin.
 ```
@@ -355,10 +446,10 @@ on operations like `DirectionOf`; Tier 4 = closures with cycle protection. Imple
 in tier order.)
 
 ## Implementation rules
-1. **Read `{{NOTES_FILE}}` first** — the researcher has already extracted the
-   derivation source for each method (OCL body when present, prose + spec
-   citation when not). Then cross-check against the method's `<remarks>` block
-   in `{{PRODUCTION_FILE}}`.
+1. **Read `{{NOTES_FILE}}` first** — the researcher has already
+   extracted the derivation source for each method (OCL body when present,
+   prose + spec citation when not). Then cross-check against the method's
+   `<remarks>` block in `{{PRODUCTION_FILE}}`.
 2. **Match the canonical coding style** (see template's "Coding conventions" section
    above).
 3. **Null-check uniformly**: every method must throw
@@ -398,8 +489,8 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with:
   whose OCL referenced a still-stubbed sibling (and how you handled it), and any
   build warnings you introduced.
 
-Begin by reading `{{NOTES_FILE}}`, then the method `<remarks>` blocks in
-{{PRODUCTION_FILE}}, then the reference template ({{REFERENCE_PRODUCTION_FILE}}),
+Begin by reading `{{NOTES_FILE}}`, then the method `<remarks>` blocks
+in {{PRODUCTION_FILE}}, then the reference template ({{REFERENCE_PRODUCTION_FILE}}),
 then making the edits.
 ```
 
@@ -509,8 +600,8 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with:
   upstream stub is the blocker), any methods where the populated case is weaker
   than ideal because a richer fixture is needed, and any anticipated test failures.
 
-Begin by reading `{{NOTES_FILE}}` (each method has a "Test plan" section), the
-production methods you need to test, the reference fixture
+Begin by reading `{{NOTES_FILE}}` (each method has a "Test plan"
+section), the production methods you need to test, the reference fixture
 (`{{REFERENCE_TEST_FILE}}`), the current `{{TEST_FILE}}`, then making the edits.
 ```
 
@@ -532,13 +623,13 @@ You are FULLY READ-ONLY. No Edit, no Write, no NotebookEdit, no Bash with `>` /
 If a tool call would violate this, do NOT make it.
 
 ## Files to review
-1. `{{NOTES_FILE}}` — researcher's contract notes. This is the contract you
-   verify the implementation and tests against. For each method, note whether
-   the derivation source is OCL or spec-text-only.
+1. `{{NOTES_FILE}}` — the researcher's contract notes. This is the contract
+   you verify the implementation and tests against. For each method, note
+   whether the derivation source is OCL or a prose-only derivation.
 2. `{{PRODUCTION_FILE}}` — newly implemented `Compute*` methods. Each method
    should faithfully implement either (a) the OCL body in its `<remarks>` block
-   or (b) the prose derivation in `{{NOTES_FILE}}` (for spec-text-only
-   methods). Use the conventions in `{{REFERENCE_PRODUCTION_FILE}}`.
+   or (b) the prose derivation in `{{NOTES_FILE}}` (for methods with no OCL
+   body). Use the conventions in `{{REFERENCE_PRODUCTION_FILE}}`.
 3. `{{TEST_FILE}}` — newly written/updated tests. Verify per-test that
    null-guard + empty + populated coverage matches the test plan in
    `{{NOTES_FILE}}` for the method-under-test.
@@ -631,6 +722,36 @@ re-dispatched by the orchestrator) will action your findings.
 ```
 
 ---
+
+## How Hypha grounding plugs in
+
+**Activation**: the orchestrator detects the Hypha plugin at pre-flight (by
+checking whether the `hypha:metamodel-lookup` skill / `hypha:metamodel-navigator`
+agent is present in the current session's toolset) and sets
+`{{GROUNDING_MODE}}` accordingly: `hypha` when installed, `xmi` otherwise.
+
+**One researcher**: the single researcher role's prompt carries the grounding
+section selected by `{{GROUNDING_MODE}}` — Hypha skills when installed, the
+checked-in XMI metamodel otherwise.
+
+**When Hypha is not installed**: the orchestrator tells the user once, in one
+or two lines, that installing the Hypha plugin is recommended for accurate
+SysML v2 / KerML grounding, then proceeds in `xmi` mode without blocking.
+
+**Mid-run Hypha failure**: if a Hypha skill starts erroring partway through,
+the researcher finishes the remaining methods in `xmi` mode, flags each
+affected method in `{{NOTES_FILE}}`, and the orchestrator surfaces the
+downgrade in the final summary.
+
+**Skill denied inside the sub-agent**: the researcher does not silently fall
+back to file reads — it messages the orchestrator, which runs the Hypha
+lookups from its own context and returns the results (or writes the notes
+file itself). See "Sub-agent spawn mode" above.
+
+**Notes location**: `.team-notes/` (already gitignored at `.gitignore` line
+`/.team-notes/*`); one file per run: `<foo>-extensions-spec.md`. Historical
+`<foo>-extensions-spec-hypha.md` / `<foo>-extensions-comparison.md` files
+from the retired A/B-comparison era are inert — leave them alone.
 
 ## How to instantiate
 

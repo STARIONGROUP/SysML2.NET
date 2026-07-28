@@ -79,17 +79,29 @@ Generator classes in `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerator
 - Extension methods (Extend) → `SysML2.NET/Extend/`
 - DAL factories → `SysML2.NET.Dal/Core/`
 
-### Formal specification references
+### Grounding SysML v2 / KerML work with the Hypha plugin
 
-The XMI files (`Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml`) define the **structure** of the metamodel and the OCL constraints. The KEBNF files (`Resources/SysML-textual-bnf.kebnf`, `Resources/KerML-textual-bnf.kebnf`) define the **concrete textual syntax**. Neither narrates the *semantics* or *intent* of a metaclass, the rationale behind an OCL constraint, the contract of the REST API, or the idiomatic use of a notation construct. For that, this repo carries the formal OMG specification texts (PDF→text) under `Resources/specification/`. Treat them as cross-references — not as a generation input.
+If the **Hypha** plugin is installed, it is the **preferred grounding source for every SysML v2 / KerML semantic question** — metamodel structure (`hypha:metamodel-lookup`, or the `hypha:metamodel-navigator` agent for cross-cutting fan-out), normative specification intent (`hypha:spec-citation`), and textual-notation validity (`hypha:sysml-validation`). Use it **before** implementing or reviewing anything that depends on the SysML v2 / KerML metamodel — do not rely on a sibling analogue, the doc-comment OCL, or prior knowledge as the source of truth. The metamodel is large and precise; a plausible prior is exactly what produces confident-but-wrong derivations.
 
-- `Resources/specification/1-Kernel_Modeling_Language.pdf.txt` — *Kernel Modeling Language (KerML) Version 1.0* (OMG formal/2026-03-01). Consult when working with metaclasses in the `Root.*`, `Core.*`, and `Kernel.*` namespaces (under `SysML2.NET/Core/AutoGenDto/` and `AutoGenPoco/`), when an OCL constraint is unclear, or when reasoning about element/relationship/feature/classification semantics that the XMI does not spell out.
-- `Resources/specification/2a-OMG_Systems_Modeling_Language.pdf.txt` — *OMG Systems Modeling Language (SysML) Version 2.0, Part 1: Language Specification* (OMG formal/2026-03-02). Consult when working with the systems-engineering-specific metaclasses in `Systems.*` namespaces — Parts, Ports, Connections, Interfaces, Actions, States, Interactions, Requirements, Constraints, Use Cases, Analysis/Verification Cases, Views, Metadata — and to ground the Definition/Usage pattern.
-- `Resources/specification/3-Systems_Modeling_API_and_Services.pdf.txt` — *Systems Modeling API and Services Version 1.0* (OMG formal/2026-03-04). Consult when working in `SysML2.NET.REST/`, `SysML2.NET/PIM/`, `SysML2.NET.Serializer.Dictionary/`, or `SysML2.NET/ModelInterchange/`. Defines the Platform-Independent Model (ProjectService, ElementNavigationService, ProjectDataVersioningService, QueryService, ExternalRelationshipService, ProjectUsageService) and the REST/HTTP and OSLC PSMs.
-- `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt` — SST tutorial, Release 2026-03. Informative companion to the KEBNF grammar; consult for canonical examples and idioms when implementing or reviewing rules under `SysML2.NET.Serializer.TextualNotation/Writers/` and `SysML2.NET/LexicalRules/`.
-- `Resources/specification/Intro to the SysML v2 Language-Graphical Notation.pdf.txt` — SST tutorial, Release 2026-03. Consult when working on `SysML2.NET.Viewer/` (Blazor) for the visual-rendering conventions of each metaclass family.
+This repository does **not** carry the OMG specification texts. Spec-intent lookups go through `hypha:spec-citation`; cite spec content by document name and clause (e.g. "OMG SysML v2 spec, Clause 8.2.2.1.1"), never by a file path.
 
-These text files are large (PDF-converted, up to 1.3 MB) and the conversion is not always clean. Read them with `Read` `offset`/`limit` and use `Grep` to jump to chapter/section anchors (e.g. `^7\.\d+`, `Clause 8\.`, or a metaclass name) rather than loading whole files into context.
+**If the Hypha plugin is *not* installed:** the fallback source of truth is the XMI metamodel only — `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` — for structure, OCL bodies, and the `ownedComment` prose they carry. The first time a task in the session would have benefited from Hypha grounding (any of the situations below), tell the user once, in one or two lines, that installing the Hypha plugin is recommended for accurate SysML v2 / KerML work; then proceed with the XMI. Do not repeat the recommendation on every subsequent task.
+
+This applies whenever you are about to:
+- implement or modify a `Compute*` derived-property / OCL computation under `SysML2.NET/Extend/`,
+- reason about a metaclass's features, multiplicities, ordering, redefinitions/subsettings, or constraints,
+- implement or review a textual-notation / lexical rule, or
+- make a claim about what the SysML v2 / KerML specification requires.
+
+Ground on **two axes** — structure *and* intent — because the metamodel gives you the *what* but not the *why*:
+
+- **`hypha:metamodel-lookup` — structure (always).** A metaclass's type, multiplicity, **ordering**, redefinitions/subsettings, supertypes/subtypes, and the derivation/constraint OCL. This is the default, always-on step. (For cross-cutting fan-out questions spanning many metaclasses, the `hypha:metamodel-navigator` agent.)
+- **`hypha:spec-citation` — intent (when the derivation involves interpretation).** The OCL is a *formalization, not an explanation*: it says what to compute, not why the concept exists, what a defined term means, or how an underspecified edge case should behave. Consult the specification for the rationale and semantics whenever the OCL is terse, ambiguous, leans on a defined term (e.g. `namingFeature`, `redefinedFeature`, connector `end`, feature typing/inheritance resolution), or otherwise needs interpretation beyond a mechanical filter — so the C# translation is not merely syntactically faithful but semantically correct. Skip it only when the OCL is genuinely mechanical (e.g. a plain `selectByKind`) and unambiguous.
+- **`hypha:sysml-validation`** — validate `.sysml` / `.kerml` textual notation against the grammar and metamodel.
+
+Ground first, then implement against the verified contract. Two concrete examples of why:
+- **Structure the OCL comment hides:** `ActionDefinition::action` is declared `ordered` in the metamodel — a fact the OCL comment alone does not surface and a sibling analogue may satisfy only by accident. Confirm via `hypha:metamodel-lookup`.
+- **Intent the OCL comment cannot express:** an OCL body that reads `->first()` or `->at(1)` is picking *one* of many, but only the spec prose says *on what basis* (e.g. the most specific redefinition) — translate it faithfully to that intent, not as an arbitrary first-element grab. Confirm via `hypha:spec-citation`.
 
 ### Project Dependency Graph
 
