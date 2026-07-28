@@ -78,10 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
         {
             return allocationUsageSubject == null
                 ? throw new ArgumentNullException(nameof(allocationUsageSubject))
-                : [..allocationUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IAllocationDefinition>()];
+                : [..FeatureExtensions.ComputeType(allocationUsageSubject).OfType<IAllocationDefinition>()];
         }
 
     }

@@ -961,17 +961,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
-                if (poco.occurrenceDefinition != null)
-                {
-                    foreach (var item in poco.occurrenceDefinition)
-                    {
-                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "occurrenceDefinition", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
                 if (poco.output != null)
                 {
                     foreach (var item in poco.output)
@@ -2221,17 +2210,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                     foreach (var item in poco.nestedViewpoint)
                     {
                         await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "nestedViewpoint", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
-                if (poco.occurrenceDefinition != null)
-                {
-                    foreach (var item in poco.occurrenceDefinition)
-                    {
-                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "occurrenceDefinition", elementOriginMap, currentFileUri);
                     }
                 }
             }

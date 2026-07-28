@@ -194,6 +194,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
         public List<IUsage> directedUsage => this.ComputeDirectedUsage();
 
@@ -476,8 +477,9 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        [RedefinedByProperty("IMetadataUsage.MetadataDefinition")]
         [Implements(implementation: "IItemUsage.ItemDefinition")]
-        public List<IStructure> itemDefinition => this.ComputeItemDefinition();
+        List<IStructure> Systems.Items.IItemUsage.itemDefinition => this.metadataDefinition != null ? [this.metadataDefinition] : [];
 
         /// <summary>
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
@@ -521,6 +523,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// The MetadataDefinition that is the definition of this MetadataUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1647727047674_847094_2563", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1606345564958_925589_327")]
         [Implements(implementation: "IMetadataUsage.MetadataDefinition")]
         public IMetaclass metadataDefinition => this.ComputeMetadataDefinition();
@@ -728,6 +731,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
         public List<IUsage> nestedUsage => this.ComputeNestedUsage();
 
@@ -1033,6 +1037,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
         public IDefinition owningDefinition => this.ComputeOwningDefinition();
 

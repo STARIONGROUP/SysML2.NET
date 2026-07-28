@@ -26,6 +26,7 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
     using SysML2.NET.Core.POCO.Systems.Cases;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
@@ -68,7 +69,23 @@ namespace SysML2.NET.Tests.Extend
             var caseUsage = new CaseUsage();
 
             // Empty case: no FeatureTyping whose Type is an ICaseDefinition → null.
-            Assert.That(caseUsage.ComputeCaseDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(caseUsage.ComputeCaseDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a CalculationDefinition, which is a superclass of
+            // ICaseDefinition and therefore NOT an ICaseDefinition — filtered out → still null.
+            var calculationDefinition = new CalculationDefinition();
+            caseUsage.AssignOwnership(new FeatureTyping { Type = calculationDefinition });
+            Assert.That(caseUsage.ComputeCaseDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an ICaseDefinition → returned.
+            var caseDefinition = new CaseDefinition();
+            caseUsage.AssignOwnership(new FeatureTyping { Type = caseDefinition });
+            Assert.That(caseUsage.ComputeCaseDefinition(), Is.SameAs(caseDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondCaseDefinition = new CaseDefinition();
+            caseUsage.AssignOwnership(new FeatureTyping { Type = secondCaseDefinition });
+            Assert.That(() => caseUsage.ComputeCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

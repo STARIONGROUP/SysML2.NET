@@ -75,6 +75,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621564041941_652319_2722", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<IPartUsage> actorParameter { get; }
 
         /// <summary>
@@ -117,6 +118,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624033010374_29375_40166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<IPartUsage> stakeholderParameter { get; }
 
         /// <summary>
@@ -124,6 +126,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595189007408_784255_586", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         IUsage subjectParameter { get; }
 
         /// <summary>

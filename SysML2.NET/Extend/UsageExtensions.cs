@@ -65,13 +65,13 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </returns>
         internal static List<IClassifier> ComputeDefinition(this IUsage usageSubject)
         {
-            // Walk OwnedRelationship → IFeatureTyping → Type directly. Cannot use
-            // usageSubject.type because the Usage POCO's IFeature.type explicitly delegates
-            // to .definition (the redefining property), which calls back into this method
+            // Route through the shared static ComputeType (Pilot-style shared computation).
+            // Cannot use usageSubject.type: under strict-UML delegation the POCO's IFeature.type
+            // delegates to the narrowest redefinition, whose getter calls back into this method
             // → infinite recursion + stack overflow.
             return usageSubject == null
                 ? throw new ArgumentNullException(nameof(usageSubject))
-                : [..usageSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IClassifier>()];
+                : [.. FeatureExtensions.ComputeType(usageSubject).OfType<IClassifier>()];
         }
 
         /// <summary>

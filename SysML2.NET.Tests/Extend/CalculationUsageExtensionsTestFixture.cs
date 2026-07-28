@@ -28,6 +28,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.Calculations;
     using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
@@ -42,10 +43,26 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((ICalculationUsage)null).ComputeCalculationDefinition(), Throws.TypeOf<ArgumentNullException>());
 
-            var emptyCalculationUsage = new CalculationUsage();
+            var calculationUsage = new CalculationUsage();
 
             // No FeatureTyping entries → no IFunction type → null (property is [0..1]).
-            Assert.That(emptyCalculationUsage.ComputeCalculationDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(calculationUsage.ComputeCalculationDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets an ActionDefinition (a Behavior, NOT an
+            // IFunction) — filtered out → still null.
+            var actionDefinition = new ActionDefinition();
+            calculationUsage.AssignOwnership(new FeatureTyping { Type = actionDefinition });
+            Assert.That(calculationUsage.ComputeCalculationDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IFunction (CalculationDefinition) → returned.
+            var calculationDefinition = new CalculationDefinition();
+            calculationUsage.AssignOwnership(new FeatureTyping { Type = calculationDefinition });
+            Assert.That(calculationUsage.ComputeCalculationDefinition(), Is.SameAs(calculationDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondCalculationDefinition = new CalculationDefinition();
+            calculationUsage.AssignOwnership(new FeatureTyping { Type = secondCalculationDefinition });
+            Assert.That(() => calculationUsage.ComputeCalculationDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

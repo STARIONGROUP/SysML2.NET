@@ -403,17 +403,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
             // Reference/containment properties as child elements (sorted alphabetically)
             if (writerOptions.IncludeDerivedProperties)
             {
-                if (poco.actionDefinition != null)
-                {
-                    foreach (var item in poco.actionDefinition)
-                    {
-                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "actionDefinition", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
                 if (poco.actorParameter != null)
                 {
                     foreach (var item in poco.actorParameter)
@@ -958,17 +947,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                     if (!writerOptions.WriteIdRefAsAttribute || !poco.objectiveRequirement.QueryIsValidIdRef(elementOriginMap, currentFileUri))
                     {
                         this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.objectiveRequirement, "objectiveRequirement", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
-                if (poco.occurrenceDefinition != null)
-                {
-                    foreach (var item in poco.occurrenceDefinition)
-                    {
-                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "occurrenceDefinition", elementOriginMap, currentFileUri);
                     }
                 }
             }
@@ -1683,17 +1661,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
             // Reference/containment properties as child elements (sorted alphabetically)
             if (writerOptions.IncludeDerivedProperties)
             {
-                if (poco.actionDefinition != null)
-                {
-                    foreach (var item in poco.actionDefinition)
-                    {
-                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "actionDefinition", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
                 if (poco.actorParameter != null)
                 {
                     foreach (var item in poco.actorParameter)
@@ -2238,17 +2205,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                     if (!writerOptions.WriteIdRefAsAttribute || !poco.objectiveRequirement.QueryIsValidIdRef(elementOriginMap, currentFileUri))
                     {
                         await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, poco.objectiveRequirement, "objectiveRequirement", elementOriginMap, currentFileUri);
-                    }
-                }
-            }
-
-            if (writerOptions.IncludeDerivedProperties)
-            {
-                if (poco.occurrenceDefinition != null)
-                {
-                    foreach (var item in poco.occurrenceDefinition)
-                    {
-                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "occurrenceDefinition", elementOriginMap, currentFileUri);
                     }
                 }
             }

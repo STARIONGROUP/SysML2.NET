@@ -153,11 +153,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         {
             return stateUsageSubject == null
                 ? throw new ArgumentNullException(nameof(stateUsageSubject))
-                : [
-                    .. stateUsageSubject.OwnedRelationship.OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IBehavior>()
-                ];
+                : [.. FeatureExtensions.ComputeType(stateUsageSubject).OfType<IBehavior>()];
         }
 
         /// <summary>

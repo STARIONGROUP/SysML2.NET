@@ -265,7 +265,6 @@ namespace SysML2.NET.Dal
                 dto.nestedVerificationCase = poco.nestedVerificationCase.Select(x => x.Id).ToList();
                 dto.nestedView = poco.nestedView.Select(x => x.Id).ToList();
                 dto.nestedViewpoint = poco.nestedViewpoint.Select(x => x.Id).ToList();
-                dto.occurrenceDefinition = poco.occurrenceDefinition.Select(x => x.Id).ToList();
                 dto.output = poco.output.Select(x => x.Id).ToList();
                 dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
                 dto.ownedConjugator = poco.ownedConjugator?.Id;
@@ -297,7 +296,7 @@ namespace SysML2.NET.Dal
                 dto.owningType = poco.owningType?.Id;
                 dto.owningUsage = poco.owningUsage?.Id;
                 dto.parameter = poco.parameter.Select(x => x.Id).ToList();
-                dto.payloadArgument = poco.payloadArgument.Id;
+                dto.payloadArgument = poco.payloadArgument?.Id;
                 dto.qualifiedName = poco.qualifiedName;
                 dto.receiverArgument = poco.receiverArgument?.Id;
                 dto.senderArgument = poco.senderArgument?.Id;

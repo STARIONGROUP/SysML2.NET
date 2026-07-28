@@ -162,7 +162,23 @@ namespace SysML2.NET.Tests.Extend
             var requirementUsage = new RequirementUsage();
 
             // Empty case: no OwnedRelationship → returns null.
-            Assert.That(requirementUsage.ComputeRequirementDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a ConstraintDefinition, which is a superclass of
+            // IRequirementDefinition and therefore NOT an IRequirementDefinition — filtered out → still null.
+            var constraintDefinition = new ConstraintDefinition();
+            requirementUsage.AssignOwnership(new FeatureTyping { Type = constraintDefinition });
+            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IRequirementDefinition → returned.
+            var requirementDefinition = new RequirementDefinition();
+            requirementUsage.AssignOwnership(new FeatureTyping { Type = requirementDefinition });
+            Assert.That(requirementUsage.ComputeRequirementDefinition(), Is.SameAs(requirementDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondRequirementDefinition = new RequirementDefinition();
+            requirementUsage.AssignOwnership(new FeatureTyping { Type = secondRequirementDefinition });
+            Assert.That(() => requirementUsage.ComputeRequirementDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

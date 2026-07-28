@@ -41,7 +41,23 @@ namespace SysML2.NET.Tests.Extend
             var renderingUsage = new RenderingUsage();
 
             // Empty: no OwnedRelationship → null.
-            Assert.That(renderingUsage.ComputeRenderingDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a PartDefinition, which is a superclass of
+            // IRenderingDefinition and therefore NOT an IRenderingDefinition — filtered out → still null.
+            var partDefinition = new PartDefinition();
+            renderingUsage.AssignOwnership(new FeatureTyping { Type = partDefinition });
+            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IRenderingDefinition → returned.
+            var renderingDefinition = new RenderingDefinition();
+            renderingUsage.AssignOwnership(new FeatureTyping { Type = renderingDefinition });
+            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondRenderingDefinition = new RenderingDefinition();
+            renderingUsage.AssignOwnership(new FeatureTyping { Type = secondRenderingDefinition });
+            Assert.That(() => renderingUsage.ComputeRenderingDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
     }
 }

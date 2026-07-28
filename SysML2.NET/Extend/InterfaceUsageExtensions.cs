@@ -45,13 +45,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         {
             return interfaceUsageSubject == null
                 ? throw new ArgumentNullException(nameof(interfaceUsageSubject))
-                :
-                [
-                    ..interfaceUsageSubject.OwnedRelationship
-                        .OfType<IFeatureTyping>()
-                        .Select(featureTyping => featureTyping.Type)
-                        .OfType<IInterfaceDefinition>()
-                ];
+                : [.. FeatureExtensions.ComputeType(interfaceUsageSubject).OfType<IInterfaceDefinition>()];
         }
     }
 }

@@ -59,6 +59,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         List<Guid> directedUsage { get; }
 
         /// <summary>
@@ -247,6 +248,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         List<Guid> nestedUsage { get; }
 
         /// <summary>
@@ -282,6 +284,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         Guid? owningDefinition { get; }
 
         /// <summary>

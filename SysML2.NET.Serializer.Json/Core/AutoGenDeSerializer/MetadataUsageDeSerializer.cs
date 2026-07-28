@@ -770,26 +770,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the isVariation Json property was not found in the MetadataUsage: {Id}", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("itemDefinition"u8, out var itemDefinitionProperty))
-            {
-                foreach (var arrayItem in itemDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var itemDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = itemDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.itemDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the itemDefinition Json property was not found in the MetadataUsage: {Id}", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("mayTimeVary"u8, out var mayTimeVaryProperty))
             {
                 if (mayTimeVaryProperty.ValueKind != JsonValueKind.Null)

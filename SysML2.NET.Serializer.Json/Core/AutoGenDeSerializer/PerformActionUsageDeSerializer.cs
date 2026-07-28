@@ -1355,26 +1355,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the nestedViewpoint Json property was not found in the PerformActionUsage: {Id}", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
-            {
-                foreach (var arrayItem in occurrenceDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var occurrenceDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = occurrenceDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.occurrenceDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the occurrenceDefinition Json property was not found in the PerformActionUsage: {Id}", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
             {
                 foreach (var arrayItem in outputProperty.EnumerateArray())

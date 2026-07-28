@@ -72,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         {
             return flowSubject == null
                 ? throw new ArgumentNullException(nameof(flowSubject))
-                : [..flowSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IInteraction>()];
+                : [.. FeatureExtensions.ComputeType(flowSubject).OfType<IInteraction>()];
         }
 
         /// <summary>
