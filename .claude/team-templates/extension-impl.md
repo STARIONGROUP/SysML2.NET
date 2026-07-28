@@ -49,42 +49,32 @@ Don't use this template when:
 | `{{REFERENCE_PRODUCTION_FILE}}` | Working reference (repo-relative) | `SysML2.NET/Extend/NamespaceExtensions.cs` |
 | `{{REFERENCE_TEST_FILE}}` | Working test reference (repo-relative) | `SysML2.NET.Tests/Extend/NamespaceExtensionsTestFixture.cs` |
 | `{{INTERFACE_FILE}}` | Auto-gen POCO interface (repo-relative) | `SysML2.NET/Core/AutoGenPoco/IFeature.cs` |
-| `{{NOTES_FILE}}` | Legacy researcher's contract notes (repo-relative) | `.team-notes/feature-extensions-spec.md` |
-| `{{HYPHA_NOTES_FILE}}` | Hypha researcher's contract notes (repo-relative, only when Hypha plugin installed) | `.team-notes/feature-extensions-spec-hypha.md` |
-| `{{COMPARISON_FILE}}` | Comparator's diff report between legacy and Hypha notes (repo-relative, only when Hypha plugin installed) | `.team-notes/feature-extensions-comparison.md` |
-| `{{ACTIVE_NOTES_FILE}}` | Whichever of `{{NOTES_FILE}}` / `{{HYPHA_NOTES_FILE}}` the user picked at Gate R-C (in Hypha-available runs) — or `{{NOTES_FILE}}` in legacy-only runs | `.team-notes/feature-extensions-spec-hypha.md` |
+| `{{NOTES_FILE}}` | Researcher's contract notes (repo-relative) | `.team-notes/feature-extensions-spec.md` |
+| `{{GROUNDING_MODE}}` | `hypha` when the Hypha plugin is installed (detected at pre-flight), else `xmi` | `hypha` |
 | `{{METHOD_LIST}}` | Bullet list of methods to implement, in dependency order | (per-task) |
 | `{{ORCHESTRATOR_NAME}}` | Team-lead name for SendMessage | `team-lead` |
 
 ## Workflow
 
 ```
-1. Researcher       → writes contract notes to {{NOTES_FILE}}, grounded in
-(legacy)              Resources/KerML_only_xmi.uml + Resources/SysML_only_xmi.uml
-                      + Resources/specification/*.pdf.txt. ALWAYS RUN.
-
-1b. Hypha-researcher → writes parallel contract notes to {{HYPHA_NOTES_FILE}},
-(only when Hypha       grounded in hypha:metamodel-lookup + hypha:spec-citation
- plugin installed)     ONLY (must NOT touch raw XMI or PDF-text files).
-                       Spawned in parallel with (1). Independent — does NOT read
-                       (1)'s output.
-
-1c. Comparator       → READ-ONLY. Diffs {{NOTES_FILE}} vs {{HYPHA_NOTES_FILE}}
-(only when Hypha       per method; writes a report to {{COMPARISON_FILE}} and
- plugin installed)     surfaces a summary. The user picks which notes drive
-                       downstream (Gate R-C).
+1. Researcher       → writes contract notes to {{NOTES_FILE}}.
+                      Grounding depends on {{GROUNDING_MODE}}:
+                      - hypha: hypha:metamodel-lookup + hypha:spec-citation
+                        (+ hypha:metamodel-navigator agent for fan-out,
+                        hypha:sysml-validation when useful)
+                      - xmi:   Resources/KerML_only_xmi.uml +
+                               Resources/SysML_only_xmi.uml only
 
 2. Implementer      → implements all methods in {{PRODUCTION_FILE}}, sliced by
-                      dependency tier. Reads {{ACTIVE_NOTES_FILE}} first
-                      (the user-picked notes file — legacy or Hypha).
+                      dependency tier. Reads {{NOTES_FILE}} first.
 
 3. Tester           → rewrites {{TEST_FILE}} with one [Test] per
                       method-under-test, multiple Assert.That covering
-                      null + empty + populated. Reads {{ACTIVE_NOTES_FILE}}
+                      null + empty + populated. Reads {{NOTES_FILE}}
                       first for each method's test plan.
 
 4. Reviewer         → READ-ONLY verdict against the OCL <remarks> blocks AND
-                      {{ACTIVE_NOTES_FILE}}; flags any mistranslation; never edits.
+                      {{NOTES_FILE}}; flags any mistranslation; never edits.
 
 5. Orchestrator     → dotnet build, targeted dotnet test, REGRESSION SWEEP
                       (full solution test). Stub-blocker assertions in sibling
@@ -96,23 +86,29 @@ Don't use this template when:
 The orchestrator MUST pass `mode: "acceptEdits"` explicitly on every
 `Agent(...)` spawn that uses this template. Reason: sub-agents inherit the
 parent's plan-mode state at spawn time; plan mode's built-in pre-tool-use
-hook blocks `Skill(...)` calls, which makes the Hypha researcher's grounding
-path unreachable AND blocks the sub-agent's `Write` of its notes/production/
-test file. `mode: "acceptEdits"` overrides the inheritance for that specific
-sub-agent, letting it use `Skill(hypha:*)` and `Write` its allowed-write file
-freely. The role prompts themselves are unchanged — this is a spawn-time
-concern, not a prompt-time one.
+hook blocks `Skill(...)` calls, which makes the researcher's Hypha grounding
+path (when `{{GROUNDING_MODE}} == hypha`) unreachable AND blocks the
+sub-agent's `Write` of its notes/production/test file. `mode: "acceptEdits"`
+overrides the inheritance for that specific sub-agent, letting it use
+`Skill(hypha:*)` and `Write` its allowed-write file freely. The role prompts
+themselves are unchanged — this is a spawn-time concern, not a prompt-time one.
+
+If a `Skill(hypha:*)` call is still denied inside the sub-agent, the
+researcher must NOT fall back to reading raw sources on its own — it messages
+the orchestrator, which performs the Hypha lookup from its own context and
+returns the result via SendMessage (or, if the researcher is wedged, writes
+the notes file itself).
 
 The section below ("Plan-mode-aware prompting") documents the FALLBACK path
 used when the orchestrator itself is in plan mode and cannot bypass the
 sub-agent's inherited restriction. That fallback stays as insurance but is
 no longer the primary flow.
 
-## Plan-mode-aware prompting (added 2026-05-28)
+## Plan-mode-aware prompting (FALLBACK — added 2026-05-28)
 
 If the orchestrator session is in plan mode when this template is used, sub-agents
-will inherit it and cannot apply edits. The Agent-tool `mode: "acceptEdits"`
-parameter does NOT override the inherited state on the current Claude Code build.
+will inherit it and cannot apply edits. On some Claude Code builds the Agent-tool
+`mode: "acceptEdits"` parameter may not override the inherited state.
 
 Role prompts in this template are written so that the orchestrator can fall back
 to applying edits itself when this happens:
@@ -163,21 +159,14 @@ Out-of-scope changes (refuse and surface):
 The Agent SDK has no per-file ACL, so each role's prompt restates the rule and tells
 the agent to refuse or escalate when a tool call would violate it.
 
-- **Researcher (legacy)**: read-only everywhere except `{{NOTES_FILE}}`.
-- **Hypha-researcher** (only when Hypha plugin installed): read-only
-  everywhere except `{{HYPHA_NOTES_FILE}}`. MUST NOT read
-  `Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml`, or
-  `Resources/specification/*.pdf.txt` — that would collapse the two
-  grounding paths into one and defeat the A/B comparison.
-- **Comparator** (only when Hypha plugin installed): FULLY READ-ONLY across
-  the repo — except for `{{COMPARISON_FILE}}` (the ONLY file it may Write).
+- **Researcher**: read-only everywhere except `{{NOTES_FILE}}`.
 - **Implementer**: read-only everywhere except `{{PRODUCTION_FILE}}`. MUST read
-  `{{ACTIVE_NOTES_FILE}}` before starting.
+  `{{NOTES_FILE}}` before starting.
 - **Tester**: read-only everywhere except `{{TEST_FILE}}`. MUST read
-  `{{ACTIVE_NOTES_FILE}}` before starting.
+  `{{NOTES_FILE}}` before starting.
 - **Reviewer**: read-only everywhere — no Write/Edit at all. Cross-checks both
-  `{{PRODUCTION_FILE}}` against `{{ACTIVE_NOTES_FILE}}` and `{{TEST_FILE}}`
-  against the test plans in `{{ACTIVE_NOTES_FILE}}`.
+  `{{PRODUCTION_FILE}}` against `{{NOTES_FILE}}` and `{{TEST_FILE}}`
+  against the test plans in `{{NOTES_FILE}}`.
 
 No `>` redirects, `tee`, `sed -i`, `cp`, or `mv` into files outside the allowed
 target. If a tool call would violate the rule, the agent must abort and message
@@ -272,15 +261,14 @@ hand-reformat of `FeatureExtensions.cs`. All four roles must enforce these.
 
 ---
 
-## Role prompt: researcher — legacy (DEFAULT — always run)
+## Role prompt: researcher
 
-Grounded in the raw XMI + `Resources/specification/*.pdf.txt` files that live in
-the repo. Runs unconditionally on every invocation. When the Hypha plugin is
-installed, this researcher runs in parallel with the `hypha-researcher` role
-below (independent contexts, no cross-contamination).
+One researcher per run. The orchestrator includes exactly ONE of the two
+"Grounding" sections below, selected by `{{GROUNDING_MODE}}` from the
+pre-flight detection (`hypha` when the Hypha plugin is installed, else `xmi`).
 
 ```
-You are the **legacy spec-researcher** on the `{{TEAM_NAME}}` team.
+You are the **spec-researcher** on the `{{TEAM_NAME}}` team.
 
 ## Hard rule on file edits
 You are READ-ONLY across the entire repository EXCEPT for ONE file:
@@ -303,127 +291,27 @@ so be specific about types, navigation, edge cases, and the derivation source.
 **Order of preference for the derivation source** (use the first that exists):
 
 1. **OCL body in the XMI** — `<defaultValue language="OCL">` for derived properties,
-   `<ownedRule>` body for operations. This is the canonical source.
+   `<ownedRule>` body for operations. This is the canonical source. In `hypha`
+   mode, retrieve it via `hypha:metamodel-lookup` (do not open the XMI unless a
+   lookup fails); in `xmi` mode, grep the XMI directly.
 2. **OCL block in the method's `<remarks>` XML doc** in `{{PRODUCTION_FILE}}`.
    These are mirrored from the XMI by the codegen — quote them in the notes.
-3. **Spec-text-only methods** — when neither (1) nor (2) carries an OCL body
+3. **Methods with no OCL body** — when neither (1) nor (2) carries an OCL body
    (e.g. `Type::isConjugated` says only "Indicates whether this Type has an
-   ownedConjugator"), record a short prose derivation rule plus a citation to
-   the spec PDF/text. EXPLICITLY FLAG these in the notes so the implementer
-   doesn't search for OCL that isn't there.
+   ownedConjugator"): in `hypha` mode, record a short prose derivation rule
+   grounded in `hypha:spec-citation` and tag it with the clause; in `xmi` mode,
+   ground the prose rule in the XMI `ownedComment` / interface doc-comment
+   prose, EXPLICITLY FLAG it as `prose-only (no OCL; Hypha not installed)`,
+   and note it deserves extra scrutiny at Gate R-A. Either way, FLAG these in
+   the notes so the implementer doesn't search for OCL that isn't there.
 
-Do not skip the spec-text-only case — that's the failure mode this researcher
-role exists to prevent.
+Do not skip the no-OCL case — that's the failure mode this researcher role
+exists to prevent.
 
-## Methods to research
-{{METHOD_LIST}}
+## Grounding — hypha mode (orchestrator includes this section when {{GROUNDING_MODE}} == hypha)
 
-## Where to look (paths are repo-relative; resolve against the working directory)
-- `Resources/KerML_only_xmi.uml` — primary OCL source (KerML
-  metaclasses). Search for the property/operation name, then for the nearby
-  `<defaultValue ... language="OCL">` or `<ownedRule>` containing the body.
-- `Resources/SysML_only_xmi.uml` — for SysML-specific metaclasses.
-- `Resources/specification/1-Kernel_Modeling_Language.pdf.txt` —
-  natural-language description of the same constraints.
-- `{{INTERFACE_FILE}}` — already-generated interface; doc-comments often contain
-  the OCL prose.
-- `{{REFERENCE_PRODUCTION_FILE}}` — example of how derived properties are
-  implemented in this codebase.
-
-## Implementation-readiness notes (per method)
-- Whether the implementation can use a sibling derived property that is itself
-  stubbed (in which case the dev should bypass and filter `OwnedRelationship`
-  directly).
-- Whether `[..subject.OwnedRelationship.OfType<X>()]` is the correct pattern, or
-  whether a `Where(...)` predicate is needed.
-- Return-type quirks (`List<T>`, `T?`, single `T`).
-- The null-check rule (every method takes `{{TARGET_INTERFACE}} {{SUBJECT_PARAM}}`
-  and must throw `ArgumentNullException(nameof({{SUBJECT_PARAM}}))` when null).
-- **Stub-blocker awareness**: if an OCL chain transitively reads a property that
-  resolves to a still-stubbed `Compute*` method in another extension file, FLAG it
-  in the notes (do not propose to fix the upstream stub — that violates scope
-  discipline). The tester will assert `Throws.TypeOf<NotSupportedException>()` for
-  the populated case of any test whose populated path hits the blocker.
-
-## Output format
-Append to `{{NOTES_FILE}}` (do NOT overwrite — the file may already contain entries
-from prior phases of this task). One section per method. See the v1 template for the
-exact section structure.
-
-## When done
-Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with summary `spec ready` and a list
-of methods where the OCL is ambiguous, missing, or transitively depends on other
-stubbed extensions.
-
-Begin.
-```
-
----
-
-## Role prompt: hypha-researcher (ONLY when Hypha plugin installed)
-
-Mirror of the legacy researcher's contract, but grounded exclusively via the
-Hypha plugin skills / agents (`hypha:metamodel-lookup`, `hypha:spec-citation`,
-`hypha:metamodel-navigator`). Runs in parallel with the legacy researcher —
-independent contexts, no cross-contamination.
-
-```
-You are the **hypha spec-researcher** on the `{{TEAM_NAME}}` team.
-
-## Hard rule on file edits
-You are READ-ONLY across the entire repository EXCEPT for ONE file:
-
-  `{{HYPHA_NOTES_FILE}}`
-
-You may use Write/Edit ONLY on that notes file. Do not Edit, Write, or
-NotebookEdit any .cs, .uml, .xmi, .json, .csproj, .md, or any other file in the
-repo. Do not use Bash to create or modify any other file (no `>` redirects, no
-`tee`, no `sed -i`, no `cp`/`mv` into source). If a tool call would violate
-this, do NOT make it — instead message `{{ORCHESTRATOR_NAME}}` via SendMessage
-and ask.
-
-## Hard rule on grounding sources
-You MUST ground exclusively in the Hypha plugin's outputs. This is the whole
-point of the role — you are the A/B counterpart to the legacy researcher, and
-the comparison is meaningless if you also read the same raw sources.
-
-**Forbidden reads** (any of these collapses the two paths into one):
-- `Resources/KerML_only_xmi.uml`
-- `Resources/SysML_only_xmi.uml`
-- `Resources/specification/1-Kernel_Modeling_Language.pdf.txt`
-- `Resources/specification/2a-OMG_Systems_Modeling_Language.pdf.txt`
-- `Resources/specification/3-Systems_Modeling_API_and_Services.pdf.txt`
-- `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt`
-- `Resources/specification/Intro to the SysML v2 Language-Graphical Notation.pdf.txt`
-- Any other `.pdf.txt` / `.pdf` / `.uml` / `.xmi` under `Resources/`.
-
-**Allowed reads**:
-- Every Hypha skill and Hypha agent: `hypha:metamodel-lookup`,
-  `hypha:spec-citation`, `hypha:sysml-validation`, and the deep agents
-  `hypha:metamodel-navigator`, `hypha:spec-citation`, `hypha:sysml-validator`.
-- The production file `{{PRODUCTION_FILE}}` — but ONLY for the C# signatures
-  of the methods listed below. The `<remarks>` OCL block that appears in that
-  file is a codegen artifact of the same XMI you are forbidden to read
-  directly; treat it as informational (you can see it because you must read
-  the signature) but do NOT use it as your derivation source. Every claim in
-  your notes must be traceable back to a Hypha lookup, not the `<remarks>`
-  block.
-- The reference production file `{{REFERENCE_PRODUCTION_FILE}}` — for
-  canonical C# style / null-check patterns only. Do NOT copy OCL from there.
-- The auto-generated interface `{{INTERFACE_FILE}}` — for the property
-  signature and return type. Do NOT use its doc-comment OCL as derivation.
-
-If a Hypha lookup returns "not found" or is ambiguous, EXPLICITLY FLAG that
-in the notes rather than silently falling back to the forbidden sources.
-
-## Goal
-For each method in the list below, produce a contract entry in
-`{{HYPHA_NOTES_FILE}}` that mirrors the legacy researcher's output format
-exactly (same section layout, same fields), so the comparator agent can diff
-them structurally.
-
-**Grounding methodology** — this is the CLAUDE.md "Grounding SysML v2 / KerML
-work with the Hypha plugin" section applied to a researcher role:
+This is the CLAUDE.md "Grounding SysML v2 / KerML work with the Hypha plugin"
+section applied to a researcher role:
 
 - **Structure (always)** — `hypha:metamodel-lookup` for each metaclass's:
   - features (type, multiplicity, ordering, redefinitions, subsettings)
@@ -445,169 +333,85 @@ work with the Hypha plugin" section applied to a researcher role:
   - otherwise needs interpretation beyond a mechanical filter
   Skip only when the OCL is a plain `selectByKind(T)` / trivial filter.
 
-- **Validation (when useful)** — `hypha:sysml-validation` (or the
-  `hypha:sysml-validator` agent) when you want to confirm the C# translation
-  you'd suggest matches the metamodel constraint on a sample snippet.
+- **Validation (when useful)** — `hypha:sysml-validation` when you want to
+  confirm the C# translation you'd suggest matches the metamodel constraint
+  on a sample snippet.
+
+The checked-in XMI files (`Resources/KerML_only_xmi.uml`,
+`Resources/SysML_only_xmi.uml`) remain available as a cross-check, but Hypha
+is the primary source: prefer its answers, and FLAG any conflict between a
+Hypha lookup and the raw XMI / `<remarks>` block in the notes rather than
+silently resolving it yourself.
+
+If a `Skill(hypha:*)` call is denied by the harness, do NOT silently fall
+back to file reads — message `{{ORCHESTRATOR_NAME}}`, who will run the lookup
+from the orchestrator context and return the result.
+
+## Grounding — xmi mode (orchestrator includes this section when {{GROUNDING_MODE}} == xmi)
+
+`Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` are the ONLY
+source of truth — structure, OCL bodies, and the `ownedComment` prose they
+carry. Do NOT invent spec citations from prior knowledge of KerML/SysML v2 —
+if the intent of a derivation cannot be established from the XMI, flag the
+ambiguity in the notes instead of resolving it from memory.
 
 ## Methods to research
 {{METHOD_LIST}}
 
+## Where to look (paths are repo-relative; resolve against the working directory)
+- `Resources/KerML_only_xmi.uml` — primary OCL source (KerML
+  metaclasses). Search for the property/operation name, then for the nearby
+  `<defaultValue ... language="OCL">` or `<ownedRule>` containing the body.
+- `Resources/SysML_only_xmi.uml` — for SysML-specific metaclasses.
+- `{{INTERFACE_FILE}}` — already-generated interface; doc-comments often contain
+  the OCL prose.
+- `{{REFERENCE_PRODUCTION_FILE}}` — example of how derived properties are
+  implemented in this codebase.
+
+(In `hypha` mode the XMI bullets are cross-check only — the primary lookups go
+through the Hypha skills.)
+
+## Implementation-readiness notes (per method)
+- Whether the implementation can use a sibling derived property that is itself
+  stubbed (in which case the dev should bypass and filter `OwnedRelationship`
+  directly).
+- Whether `[..subject.OwnedRelationship.OfType<X>()]` is the correct pattern, or
+  whether a `Where(...)` predicate is needed.
+- Return-type quirks (`List<T>`, `T?`, single `T`).
+- The null-check rule (every method takes `{{TARGET_INTERFACE}} {{SUBJECT_PARAM}}`
+  and must throw `ArgumentNullException(nameof({{SUBJECT_PARAM}}))` when null).
+- **Stub-blocker awareness**: if an OCL chain transitively reads a property that
+  resolves to a still-stubbed `Compute*` method in another extension file, FLAG it
+  in the notes (do not propose to fix the upstream stub — that violates scope
+  discipline). The tester will assert `Throws.TypeOf<NotSupportedException>()` for
+  the populated case of any test whose populated path hits the blocker.
+
+## Derivation-source tags
+Tag every entry with exactly one of:
+- `OCL in XMI`
+- `OCL in <remarks>`
+- `hypha:metamodel-lookup(<metaclass>::<property>)`
+- `hypha:spec-citation(<clause>)`
+- `prose-only (no OCL; Hypha not installed)`
+
 ## Output format
-Append to `{{HYPHA_NOTES_FILE}}` (do NOT overwrite — same rule as the legacy
-researcher). One section per method, using EXACTLY the same section layout as
-the legacy researcher so the comparator can align them side-by-side:
-
-- Method signature line.
-- **Derivation source tag** — `hypha:metamodel-lookup(<metaclass>::<property>)`,
-  `hypha:spec-citation(<clause>)`, or `spec-text only via hypha` when the
-  Hypha spec-citation is what carries the definition. NEVER `OCL in XMI` or
-  `OCL in <remarks>` — those are legacy-researcher-only tags.
-- Suggested C# code block.
-- Dependencies summary (sibling derived properties used; upstream stubs hit).
-- Stub-blocker flag if applicable.
-- Any Hypha "not found" / ambiguity flag encountered.
-
-If a Hypha lookup returns something that conflicts with what you'd expect
-from your prior knowledge of KerML/SysML v2, prefer Hypha's answer and FLAG
-the conflict in the notes — the comparator + user will judge whose grounding
-is right.
+Append to `{{NOTES_FILE}}` (do NOT overwrite — the file may already contain entries
+from prior phases of this task). One section per method. See the v1 template for the
+exact section structure. Every section carries its derivation-source tag, the
+suggested C# code block, a dependencies summary, a stub-blocker flag when
+applicable, and any "not found" / ambiguity flag encountered.
 
 ## When done
-Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with summary `hypha spec ready`
-and a list of:
-- methods where Hypha returned "not found" or an ambiguous answer,
-- methods where you had to fall back to a spec-citation because the metamodel
-  lookup was insufficient,
-- methods where Hypha's answer differs from what the `<remarks>` OCL block
-  suggests (flag WITHOUT resolving — the comparator surfaces this).
+Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with summary `spec ready` and a list
+of methods where the derivation is ambiguous, missing, or transitively depends on
+other stubbed extensions (and, in hypha mode, any lookup that returned "not found").
 
 Begin.
 ```
 
 ---
 
-## Role prompt: comparator (ONLY when Hypha plugin installed)
-
-READ-ONLY diff agent. Runs after both the legacy researcher and the
-`hypha-researcher` return. Produces a per-method delta report and a batch-wide
-summary; the user picks which notes drive downstream at Gate R-C.
-
-```
-You are the **comparator** on the `{{TEAM_NAME}}` team.
-
-## Hard rule on file edits
-You are READ-ONLY across the entire repository EXCEPT for ONE file:
-
-  `{{COMPARISON_FILE}}`
-
-You may use Write/Edit ONLY on that comparison file. Do not Edit, Write, or
-NotebookEdit any other file. No `>` redirects, no `tee`, no `sed -i`, no
-`cp`/`mv` into other locations. If a tool call would violate this, do NOT
-make it — instead message `{{ORCHESTRATOR_NAME}}` via SendMessage and ask.
-
-You may freely Read, Grep, Glob across the repo — but the only files you NEED
-to read are the two notes files listed under "Files to compare" below.
-
-## Goal
-Diff the two researcher outputs per method and produce a structured report
-that lets the user pick which notes drive downstream implementation at
-Gate R-C. You do NOT grade correctness yourself — you surface deltas so the
-user can grade. If asked to pick a winner in your report, refuse and defer to
-the user.
-
-## Files to compare
-- `{{NOTES_FILE}}` — legacy researcher output, grounded in raw XMI + PDF-text.
-- `{{HYPHA_NOTES_FILE}}` — Hypha researcher output, grounded in
-  `hypha:metamodel-lookup` + `hypha:spec-citation`.
-
-Both files use the same per-method section layout — use that structure to
-align the entries.
-
-## Per-method verdict schema
-For each method, pick exactly ONE of:
-
-- **agree** — both researchers reached the same derivation, same dependencies,
-  same stub-blocker flags, same return-type shape. Minor prose wording
-  differences are fine.
-- **disagree** — both cover the method but propose different derivations,
-  different C# code, different dependency sets, different stub-blocker
-  flags, or one flags an ambiguity the other resolved. One-line concern
-  required.
-- **legacy-only** — the method appears in `{{NOTES_FILE}}` but not in
-  `{{HYPHA_NOTES_FILE}}` (or is empty on the Hypha side).
-- **hypha-only** — the method appears in `{{HYPHA_NOTES_FILE}}` but not in
-  `{{NOTES_FILE}}` (or is empty on the legacy side).
-
-For **disagree** entries, add a one-line reason describing the specific delta:
-- "different OCL translation: legacy uses `.Union(...)`, Hypha uses `SelectMany`"
-- "different stub-blocker flag: legacy says upstream `X` is a stub, Hypha
-  doesn't mention it"
-- "different spec citation: legacy cites clause 7.4.2, Hypha cites 7.4.3"
-- "different dependency set: legacy includes `ownedMember`, Hypha uses
-  `OwnedRelationship.OfType<IMembership>()`"
-
-## Overall verdict schema
-Roll the per-method verdicts up into ONE of:
-
-- **hypha stronger** — more coverage, tighter dependency sets, sharper spec
-  citations, fewer "not found" flags.
-- **legacy stronger** — mirror of the above.
-- **equivalent** — same conclusions across the board (most methods `agree`).
-- **mixed** — some methods favor Hypha, others favor legacy; no clear winner.
-
-Back the overall verdict with counts:
-`agree: N, disagree: N, legacy-only: N, hypha-only: N`.
-
-## Output format
-Write to `{{COMPARISON_FILE}}` (overwrite is fine — this file is regenerated
-per run). Structure:
-
-```markdown
-# Comparison: {{PRODUCTION_FILE}}
-
-## Summary
-- Overall verdict: <hypha stronger | legacy stronger | equivalent | mixed>
-- Counts: agree=N, disagree=N, legacy-only=N, hypha-only=N
-- Legacy notes: {{NOTES_FILE}}
-- Hypha notes: {{HYPHA_NOTES_FILE}}
-
-## Per-method deltas
-
-### <method signature line>
-- Verdict: <agree | disagree | legacy-only | hypha-only>
-- Concern (if disagree): <one line>
-- Legacy derivation: <one-line paraphrase>
-- Hypha derivation: <one-line paraphrase>
-```
-
-Cap the whole file at ~200 lines. If two researchers wrote lengthy
-per-method sections, distill each to the ONE-LINE derivation paraphrase for
-the report — the full text lives in the two source notes files.
-
-## When done
-Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with summary `comparison ready`
-and a compact payload:
-- Overall verdict + counts.
-- Top 3 disagreements by concern severity (materiality — flag anything that
-  would produce measurably different C# code or test coverage).
-- Any "researcher missing entire methods" flags.
-
-Do NOT include a recommendation on which notes to pick. The user chooses at
-Gate R-C.
-
-Begin by reading `{{NOTES_FILE}}` and `{{HYPHA_NOTES_FILE}}`, then writing
-the report.
-```
-
----
-
 ## Role prompt: implementer
-
-The `{{ACTIVE_NOTES_FILE}}` placeholder resolves to either `{{NOTES_FILE}}`
-(legacy researcher's notes) or `{{HYPHA_NOTES_FILE}}` (Hypha researcher's notes),
-based on the user's Gate R-C pick when Hypha is installed. In legacy-only runs
-(no Hypha plugin) it is always `{{NOTES_FILE}}`. The orchestrator substitutes
-the concrete path before spawning the implementer.
 
 ```
 You are the **implementer** on the `{{TEAM_NAME}}` team.
@@ -642,7 +446,7 @@ on operations like `DirectionOf`; Tier 4 = closures with cycle protection. Imple
 in tier order.)
 
 ## Implementation rules
-1. **Read `{{ACTIVE_NOTES_FILE}}` first** — the researcher has already
+1. **Read `{{NOTES_FILE}}` first** — the researcher has already
    extracted the derivation source for each method (OCL body when present,
    prose + spec citation when not). Then cross-check against the method's
    `<remarks>` block in `{{PRODUCTION_FILE}}`.
@@ -685,7 +489,7 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with:
   whose OCL referenced a still-stubbed sibling (and how you handled it), and any
   build warnings you introduced.
 
-Begin by reading `{{ACTIVE_NOTES_FILE}}`, then the method `<remarks>` blocks
+Begin by reading `{{NOTES_FILE}}`, then the method `<remarks>` blocks
 in {{PRODUCTION_FILE}}, then the reference template ({{REFERENCE_PRODUCTION_FILE}}),
 then making the edits.
 ```
@@ -796,7 +600,7 @@ Send a SendMessage to `{{ORCHESTRATOR_NAME}}` with:
   upstream stub is the blocker), any methods where the populated case is weaker
   than ideal because a richer fixture is needed, and any anticipated test failures.
 
-Begin by reading `{{ACTIVE_NOTES_FILE}}` (each method has a "Test plan"
+Begin by reading `{{NOTES_FILE}}` (each method has a "Test plan"
 section), the production methods you need to test, the reference fixture
 (`{{REFERENCE_TEST_FILE}}`), the current `{{TEST_FILE}}`, then making the edits.
 ```
@@ -819,17 +623,16 @@ You are FULLY READ-ONLY. No Edit, no Write, no NotebookEdit, no Bash with `>` /
 If a tool call would violate this, do NOT make it.
 
 ## Files to review
-1. `{{ACTIVE_NOTES_FILE}}` — the picked researcher's contract notes (legacy
-   or Hypha, depending on Gate R-C). This is the contract you verify the
-   implementation and tests against. For each method, note whether the
-   derivation source is OCL or spec-text-only.
+1. `{{NOTES_FILE}}` — the researcher's contract notes. This is the contract
+   you verify the implementation and tests against. For each method, note
+   whether the derivation source is OCL or a prose-only derivation.
 2. `{{PRODUCTION_FILE}}` — newly implemented `Compute*` methods. Each method
    should faithfully implement either (a) the OCL body in its `<remarks>` block
-   or (b) the prose derivation in `{{ACTIVE_NOTES_FILE}}` (for spec-text-only
-   methods). Use the conventions in `{{REFERENCE_PRODUCTION_FILE}}`.
+   or (b) the prose derivation in `{{NOTES_FILE}}` (for methods with no OCL
+   body). Use the conventions in `{{REFERENCE_PRODUCTION_FILE}}`.
 3. `{{TEST_FILE}}` — newly written/updated tests. Verify per-test that
    null-guard + empty + populated coverage matches the test plan in
-   `{{ACTIVE_NOTES_FILE}}` for the method-under-test.
+   `{{NOTES_FILE}}` for the method-under-test.
 
 ## OCL → C# translation checklist (per implemented method)
 
@@ -920,59 +723,35 @@ re-dispatched by the orchestrator) will action your findings.
 
 ---
 
-## How Hypha comparison plugs in
-
-Added on top of the v2 four-role core (researcher / implementer / tester /
-reviewer) to A/B-validate the WIP Hypha plugin against the legacy
-XMI-grounded researcher. Nothing about the four core roles changes when Hypha
-is off — the two new roles are purely additive.
+## How Hypha grounding plugs in
 
 **Activation**: the orchestrator detects the Hypha plugin at pre-flight (by
 checking whether the `hypha:metamodel-lookup` skill / `hypha:metamodel-navigator`
-agent is present in the current session's toolset). If installed, both
-researchers run every invocation. If NOT installed, the orchestrator
-recommends installing it once per invocation and, on refusal, falls back to
-the legacy-only flow (no `hypha-researcher`, no `comparator`, no Gate R-C).
+agent is present in the current session's toolset) and sets
+`{{GROUNDING_MODE}}` accordingly: `hypha` when installed, `xmi` otherwise.
 
-**Two new roles**:
+**One researcher**: the single researcher role's prompt carries the grounding
+section selected by `{{GROUNDING_MODE}}` — Hypha skills when installed, the
+checked-in XMI metamodel otherwise.
 
-- `hypha-researcher` — mirror of the legacy researcher's contract, grounded
-  EXCLUSIVELY via the Hypha plugin (`hypha:metamodel-lookup` +
-  `hypha:spec-citation` + `hypha:metamodel-navigator`). Prohibited from
-  reading `Resources/*.uml` and `Resources/specification/*.pdf.txt` — that
-  would collapse the two grounding paths into one and defeat the A/B
-  comparison. Notes-file target: `{{HYPHA_NOTES_FILE}}`
-  (`.team-notes/<foo>-extensions-spec-hypha.md`).
-- `comparator` — read-only diff agent. Aligns the per-method sections of
-  `{{NOTES_FILE}}` and `{{HYPHA_NOTES_FILE}}`, emits a `agree` /
-  `disagree` / `legacy-only` / `hypha-only` verdict per method plus an
-  overall verdict, and writes a compact report to `{{COMPARISON_FILE}}`
-  (`.team-notes/<foo>-extensions-comparison.md`). Does NOT recommend a
-  winner — the user picks at Gate R-C.
+**When Hypha is not installed**: the orchestrator tells the user once, in one
+or two lines, that installing the Hypha plugin is recommended for accurate
+SysML v2 / KerML grounding, then proceeds in `xmi` mode without blocking.
 
-**No cross-contamination rule** (enforced in both new role prompts):
+**Mid-run Hypha failure**: if a Hypha skill starts erroring partway through,
+the researcher finishes the remaining methods in `xmi` mode, flags each
+affected method in `{{NOTES_FILE}}`, and the orchestrator surfaces the
+downgrade in the final summary.
 
-- Legacy MUST NOT use the Hypha plugin skills.
-- Hypha MUST NOT read raw XMI (`Resources/*.uml`) or the PDF-text files
-  (`Resources/specification/*.pdf.txt`).
+**Skill denied inside the sub-agent**: the researcher does not silently fall
+back to file reads — it messages the orchestrator, which runs the Hypha
+lookups from its own context and returns the results (or writes the notes
+file itself). See "Sub-agent spawn mode" above.
 
-Both may read `{{PRODUCTION_FILE}}` (the C# signature is unavoidable), the
-`{{INTERFACE_FILE}}`, and the `{{REFERENCE_PRODUCTION_FILE}}`.
-
-**Downstream driver — `{{ACTIVE_NOTES_FILE}}`**: at Gate R-C, the user picks
-Hypha or legacy. The orchestrator substitutes the picked file's path for the
-`{{ACTIVE_NOTES_FILE}}` placeholder before spawning implementer, tester,
-and reviewer. The other-side notes file is kept on disk regardless — that is
-the comparison corpus.
-
-**Corpus location**: `.team-notes/` (already gitignored at `.gitignore`
-line `/.team-notes/*`). The three per-run files are:
-- `<foo>-extensions-spec.md` (legacy)
-- `<foo>-extensions-spec-hypha.md` (Hypha)
-- `<foo>-extensions-comparison.md` (comparator)
-
-**Rationale**: this lets us build up an A/B corpus so the user can eventually
-retire the legacy researcher once Hypha is proven end-to-end.
+**Notes location**: `.team-notes/` (already gitignored at `.gitignore` line
+`/.team-notes/*`); one file per run: `<foo>-extensions-spec.md`. Historical
+`<foo>-extensions-spec-hypha.md` / `<foo>-extensions-comparison.md` files
+from the retired A/B-comparison era are inert — leave them alone.
 
 ## How to instantiate
 
