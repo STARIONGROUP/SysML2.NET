@@ -96,9 +96,10 @@ The team template itself does NOT need to change. The single-file
 Every `Agent(...)` call in this command MUST pass `mode: "acceptEdits"`
 explicitly. Same rule as the single-file command — see the "Sub-agent spawn
 mode" section in `.claude/commands/implement-extensions.md` for the
-rationale. Applies to: legacy researcher (8a), Hypha researcher (8b),
-comparator (8.5), implementer (9), tester (9), regression-sweep tester (11),
-reviewer (12).
+rationale (including the Skill-denied fallback: if a `Skill(hypha:*)` call is
+denied inside the sub-agent, the researcher messages the orchestrator, which
+runs the lookup itself and returns the result). Applies to: researcher (8),
+implementer (9), tester (9), regression-sweep tester (11), reviewer (12).
 
 ## Pre-flight: Hypha plugin detection (runs before step 1)
 
@@ -106,17 +107,18 @@ Identical semantics to the single-file command's Hypha pre-flight (see
 `.claude/commands/implement-extensions.md` → "Pre-flight: Hypha plugin
 detection"). Summary:
 
-- Record `hypha_available: bool` at the very start of the invocation.
-- When `hypha_available == true`, both researchers run in parallel at Phase R
-  (step 8), followed by the comparator (step 8.5), followed by the new
-  Gate B-C (batch-scoped, one pick across all N files).
-- When `hypha_available == false`, surface a one-line install recommendation
-  once and continue with the legacy-only flow — steps 8, 9, ..., 14 as
-  written. Skip step 8b, step 8.5, and Gate B-C entirely.
-- On mid-run downgrade (Hypha errors between 8b and 8.5), stop dispatching
-  Hypha work, skip 8.5 + Gate B-C, proceed with `active_notes_file` per
-  file = its legacy `NOTES_FILE`. Surface the downgrade in step 14's final
-  summary.
+- Record `hypha_available: bool` at the very start of the invocation and
+  derive `{{GROUNDING_MODE}}`: `hypha` when installed, else `xmi`.
+- When `hypha_available == true`, the single batch researcher at Phase R
+  (step 8) gets the hypha-mode grounding section of the template's
+  researcher prompt.
+- When `hypha_available == false`, surface the short install recommendation
+  once (same wording as the single-file command) and continue — the batch
+  researcher gets the xmi-mode grounding section instead.
+- On mid-run downgrade (a Hypha skill errors during step 8), the researcher
+  completes the remaining methods grounded in the XMI and flags each
+  affected method in the corresponding `NOTES_FILE`. Surface the downgrade
+  in step 14's final summary.
 
 ## Workflow
 
@@ -152,10 +154,7 @@ step 2:
 | `TARGET_INTERFACE` | `I<Foo>` — find via Glob `SysML2.NET/Core/AutoGenPoco/**/I<Foo>.cs` |
 | `TARGET_METACLASS` | `<Foo>` |
 | `SUBJECT_PARAM_NAME` | lowercase first char of `<Foo>` + `<Foo>[1..]` + `Subject` |
-| `NOTES_FILE` | `.team-notes/<foo>-extensions-spec.md` (kebab-case) — legacy researcher output |
-| `HYPHA_NOTES_FILE` | `.team-notes/<foo>-extensions-spec-hypha.md` — only when `hypha_available == true` |
-| `COMPARISON_FILE` | `.team-notes/<foo>-extensions-comparison.md` — only when `hypha_available == true` |
-| `ACTIVE_NOTES_FILE` | per-file, computed at Gate B-C (or defaulted to the legacy `NOTES_FILE` when Hypha is off). Substituted into implementer/tester/reviewer prompts. |
+| `NOTES_FILE` | `.team-notes/<foo>-extensions-spec.md` (kebab-case) — researcher output |
 | `TEAM_NAME` | `batch-extensions-impl` (one team name for the whole batch) |
 | `ISSUE_NUMBER` | from `gh issue list … --search "SysML2.NET/Extend/<Foo>Extensions.cs in:body"` |
 
@@ -241,128 +240,33 @@ Idempotent — re-assigning is a no-op on `gh`. Report success/failure per issue
 on failure, log and continue (an unassignable issue is not a blocker for the
 implementation itself).
 
-### 8. Phase R — Spawn the batch researcher(s)
-
-Split into 8a + 8b based on `hypha_available` from the pre-flight.
-
-#### 8a. Legacy batch researcher (ALWAYS run)
+### 8. Phase R — Spawn the batch researcher (ONE agent)
 
 **One `Agent(...)` call** for the entire batch:
 
 - `subagent_type: "general-purpose"`
 - `model: <researcher_model>` per the batch-wide step-5 grade.
 - Foreground.
-- Prompt: the v2 legacy researcher prompt from
-  `.claude/team-templates/extension-impl.md`, adapted per "Prompt adaptation
-  rules" above:
+- Prompt: the v2 researcher prompt from
+  `.claude/team-templates/extension-impl.md`, with the grounding section
+  selected by `{{GROUNDING_MODE}}` from the pre-flight (`hypha` when the
+  plugin is installed, else `xmi`), adapted per "Prompt adaptation rules"
+  above:
   - Allowed-write list: ALL N notes files
     (`.team-notes/<foo1>-extensions-spec.md`, …,
     `.team-notes/<fooN>-extensions-spec.md`).
   - "Methods to research" section: enumerate ALL methods across ALL N files,
     grouped under an `## File: <PRODUCTION_FILE>` heading per file.
   - "When done" SendMessage payload: a per-file summary (file → derivation
-    source → transitive stub-blocker flags), not a single blob.
+    source → transitive stub-blocker flags), not a single blob. In hypha
+    mode, also flag methods where a lookup returned "not found" or the
+    derivation needed a spec citation.
 
-#### 8b. Hypha batch researcher (ONLY when `hypha_available == true`)
-
-**Spawn 8a and 8b in the SAME orchestrator message** — one message, two
-`Agent(...)` calls, both foreground. They run in parallel with completely
-independent contexts.
-
-- `subagent_type: "general-purpose"`
-- `model: <researcher_model>` — same tier as legacy.
-- Foreground.
-- Prompt: the v2 `hypha-researcher` prompt, adapted per "Prompt adaptation
-  rules":
-  - Allowed-write list: ALL N Hypha notes files
-    (`.team-notes/<foo1>-extensions-spec-hypha.md`, …,
-    `.team-notes/<fooN>-extensions-spec-hypha.md`).
-  - "Methods to research" enumeration: same as legacy (identical union of
-    all N method lists, grouped per file).
-  - The forbidden-reads list is UNCHANGED from the single-file prompt —
-    the batch still MUST NOT touch `Resources/*.uml` or
-    `Resources/specification/*.pdf.txt` regardless of file count.
-  - Same per-file summary payload shape as 8a, plus explicit flags on
-    methods where Hypha returned "not found" or had to fall back to a
-    spec citation.
-
-#### 8c. Post-researcher coverage check
-
-After BOTH agents return (or just 8a in a legacy-only run), read each notes
-file yourself to verify coverage. Re-dispatch the individual researcher whose
-file(s) are empty / missing sections. Do NOT proceed until all files
-(N legacy + N Hypha, or just N legacy) are complete.
-
-If `hypha_available == false`, skip 8b + 8c-Hypha, skip step 8.5 + Gate B-C,
-and proceed directly to step 9 (Phase IT) with each file's `ACTIVE_NOTES_FILE`
-defaulted to its legacy `NOTES_FILE`.
-
-### 8.5. Phase C — Spawn the batch comparator (ONLY when `hypha_available == true`)
-
-**One `Agent(...)` call** for the whole batch:
-
-- `subagent_type: "general-purpose"`
-- `model: <researcher_model>` — same tier as the researchers.
-- Foreground.
-- Prompt: the v2 `comparator` prompt, adapted per "Prompt adaptation rules":
-  - Allowed-write list: ALL N comparison files
-    (`.team-notes/<foo1>-extensions-comparison.md`, …,
-    `.team-notes/<fooN>-extensions-comparison.md`).
-  - Input pairs: for each of the N files, the pair
-    (`.team-notes/<foo>-extensions-spec.md`,
-    `.team-notes/<foo>-extensions-spec-hypha.md`).
-  - "When done" SendMessage payload: per-file overall verdict + counts,
-    followed by a top-level batch verdict roll-up (majority-verdict wins,
-    with the count of files in each bucket surfaced).
-
-After it returns, read each `COMPARISON_FILE` yourself to build the batch-wide
-inline preview for Gate B-C.
-
-### 8.7. Gate B-C — Batch-Comparison gate (ONLY when `hypha_available == true`)
-
-Before Phase IT, present the batch-wide comparison inline and ask for a
-**single batch-wide pick** (Hypha vs. legacy) that applies to ALL N files.
-This intentionally differs from the single-file Gate R-C: at N=6, per-file
-picking is unusable — the gate would become 6 sequential
-`AskUserQuestion` calls. A single batch-wide pick is the pragmatic tradeoff;
-the per-file comparison files remain on disk regardless so the user can
-audit each file's fit after the run.
-
-1. **Render** an inline preview:
-   - Batch-wide verdict roll-up (e.g. "Hypha stronger for 4/6 files, legacy
-     stronger for 1/6, equivalent for 1/6").
-   - Per-file table:
-
-     | File | Verdict | Counts (agree/disagree/legacy-only/hypha-only) | Top concern |
-     |---|---|---|---|
-     | `<Foo1>Extensions.cs` | hypha stronger | 6/1/0/0 | — |
-     | `<Foo2>Extensions.cs` | mixed | 3/2/1/0 | `ComputeX` — different OCL translation |
-     | … | … | … | … |
-
-   - Paths to all N `COMPARISON_FILE`s so the user can dive in per file.
-   - Cap at ~120 lines (higher than single-file since the table scales with N).
-
-2. **Ask** via `AskUserQuestion` (single question, 3 options):
-   - **Use Hypha notes across the batch** — every file's
-     `ACTIVE_NOTES_FILE` = its `HYPHA_NOTES_FILE`.
-   - **Use legacy notes across the batch** — every file's
-     `ACTIVE_NOTES_FILE` = its `NOTES_FILE`.
-   - **Abort — re-research with feedback** — free-form `Other` text is
-     forwarded to the still-addressable researcher(s) via `SendMessage`;
-     after they return, re-run 8.5 and this gate.
-
-3. **On pick**, record the per-file `ACTIVE_NOTES_FILE` map on orchestrator
-   state (the pick is batch-wide but the map is per-file so downstream can
-   substitute the correct path per file). Proceed to Phase IT (step 9).
-
-4. **On abort without re-research**, stop the orchestration. All
-   `.team-notes/*.md` files remain for the user's reference. The branch
-   created in step 6 stays; no Phase IT edits happen.
-
-Rationale: Gate B-C is the batch analogue of the single-file Gate R-C, with
-a single-question shape because per-file picking at N=6 is impractical. The
-per-file `COMPARISON_FILE`s stay on disk regardless of the pick so a mixed
-verdict is still auditable file-by-file after the run.
+**Post-researcher coverage check**: after the agent returns, read each notes
+file yourself to verify coverage. Re-dispatch the researcher with a focused
+brief naming only the file(s) whose notes are empty / missing sections. Do
+NOT proceed until all N notes files are complete. Then proceed to Phase IT
+(step 9).
 
 ### 9. Phase IT — Spawn the batch implementer + tester in parallel (TWO agents)
 
@@ -377,16 +281,14 @@ to the N test fixtures (disjoint sets).
   - "Methods to implement" section: enumerate ALL methods across ALL N files,
     grouped under an `## File: <PRODUCTION_FILE>` heading per file. Order
     files by dependency tier (file A's stubs that file B depends on come first).
-  - Reads ALL N `ACTIVE_NOTES_FILE`s before starting (per-file, from the
-    Gate B-C pick — either legacy or Hypha; in a legacy-only run, all
-    files' `ACTIVE_NOTES_FILE` = their legacy `NOTES_FILE`).
+  - Reads ALL N `NOTES_FILE`s before starting.
 - **Tester prompt**: the v2 tester prompt, adapted similarly.
   - Allowed-write list: ALL N test fixtures.
   - "Methods to test" section: enumerate per file.
   - **Parallel-mode caveat still applies** — tester runs only `dotnet build` of
     the test project, NEVER `dotnet test` (production lacks the implementer's
     parallel-turn edits in the tester's disk view).
-  - Reads ALL N `ACTIVE_NOTES_FILE`s before starting.
+  - Reads ALL N `NOTES_FILE`s before starting.
 
 ### 10. Phase V — Orchestrator verification (sequential)
 
@@ -439,11 +341,8 @@ Iterate until the full solution test run is 0 failures.
 per "Prompt adaptation rules":
 
 - Read-only across the repo (unchanged from the template).
-- Files to review: ALL N `ACTIVE_NOTES_FILE`s (per-file, from Gate B-C) +
-  ALL N production files + ALL N test fixtures + any sibling fixtures
-  touched in Phase S. The Hypha notes file / legacy notes file that was
-  NOT picked at Gate B-C is not part of the reviewer's contract for that
-  file, but is still preserved on disk for the A/B corpus.
+- Files to review: ALL N `NOTES_FILE`s + ALL N production files + ALL N
+  test fixtures + any sibling fixtures touched in Phase S.
 - "Output format" SendMessage payload: per-file `OK / NEEDS FIX` verdicts, then
   a batch-wide summary line. The orchestrator needs to know which files need
   re-dispatch and which are clean.
@@ -486,21 +385,13 @@ Print to the user:
   - Files modified (sum of production + tests + sibling fixtures touched). `.team-notes/` are gitignored and stay local automatically.
   - Full solution test count (e.g. `1082/1082`).
   - Unresolved reviewer findings (if any).
-  - Spec-text-only methods flagged separately (grounded in spec prose, not OCL).
+  - No-OCL (prose-derived) methods flagged separately (grounded in spec
+    prose via `hypha:spec-citation`, or XMI comment prose, not OCL).
   - Out-of-scope blockers surfaced.
 
-- **Hypha comparison block** (ONLY when `hypha_available == true`):
-  - Batch-wide verdict roll-up from the N `COMPARISON_FILE`s
-    (e.g. "Hypha stronger for 4/6 files, legacy stronger for 1/6,
-    equivalent for 1/6").
-  - Which notes path drove implementation (batch-wide: Hypha or legacy,
-    per Gate B-C).
-  - Repo-relative paths to all N `.team-notes/<foo>-extensions-comparison.md`
-    files for the user to inspect after the run — the A/B corpus lives on
-    disk regardless of the Gate B-C pick.
-  - If the run downgraded mid-flight (Hypha errored between 8b and 8.5),
-    a short note saying "Hypha comparison unavailable for the batch —
-    downgraded to legacy-only at step X" and skip the rest of the block.
+- **Grounding**: which mode the batch researcher ran in (`hypha` / `xmi` /
+  `downgraded to xmi at method <M>` on mid-run Hypha failure, listing the
+  affected files and methods).
 
 - **Pre-filled commit message** (MANDATORY — append at the very end of the final-summary message in a fenced code block, ready to copy):
 
@@ -526,9 +417,8 @@ After the handoff line, the orchestrator stops. The run is complete. The user ma
 | Dirty working tree | Step 4 | Abort, ask user to commit/stash. |
 | Branch already exists | Step 6 | Abort; ask user to pick a different batch or delete the stale branch. |
 | `gh issue edit --add-assignee` fails for one issue | Step 7 | Log + continue (non-blocking; implementation still proceeds). |
-| Researcher's notes file missing/empty for one file | Step 8a / 8b | Re-dispatch THE affected researcher (legacy or Hypha) with a focused brief naming only that file. |
-| Hypha plugin errors mid-run (between 8b and 8.5) | Step 8 / 8.5 | Skip step 8.5 + Gate B-C. Set every file's `ACTIVE_NOTES_FILE` = its legacy `NOTES_FILE`. Surface downgrade in step 14. |
-| Comparator's report missing/empty for one file | Step 8.5 | Re-dispatch THE comparator with a focused brief naming only that file's pair. |
+| Researcher's notes file missing/empty for one file | Step 8 | Re-dispatch THE researcher with a focused brief naming only that file. |
+| Hypha skill errors mid-run | Step 8 | Researcher completes the remaining methods grounded in the XMI and flags each affected method in its notes file. Surface the downgrade in step 14. |
 | Production build fails | Step 10.1 | Re-dispatch THE implementer with a focused brief naming the broken file(s) + compile errors. |
 | Targeted test fails | Step 10.2 | Attribute (OCL vs test bug), re-dispatch THE implementer or THE tester with a focused brief. |
 | Sibling test failure in regression sweep | Step 11 | Dispatch ONE regression-sweep tester with the full sibling list. |
@@ -542,13 +432,8 @@ After the handoff line, the orchestrator stops. The run is complete. The user ma
 ## Parallelism caps (orchestrator self-enforced)
 
 - N ≤ 6 files per batch (single-context working set limit for each agent).
-- Phase R:
-  - Legacy-only run (`hypha_available == false`): **1** agent.
-  - Hypha run (`hypha_available == true`): **2** agents in parallel
-    (1 legacy researcher + 1 Hypha researcher). Same-message dual
-    `Agent(...)` calls; disjoint output paths (legacy → `NOTES_FILE`,
-    Hypha → `HYPHA_NOTES_FILE`).
-- Phase C (comparator, only in Hypha runs): **1** agent.
+- Phase R: **1** agent (regardless of `hypha_available` — only the grounding
+  section of its prompt changes).
 - Phase IT: **2** agents in parallel (1 implementer + 1 tester).
 - Phase S regression-sweep tester: **1** agent.
 - Phase RV: **1** agent.
@@ -564,18 +449,13 @@ context per role.
   expansion, multi-file allowed-write list, per-file method grouping).
   Do not invent new role prompts from scratch.
 - All paths in agent prompts must be repo-relative with forward slashes.
-- Legacy researcher is **mandatory** for the batch, even when one or more
+- The researcher is **mandatory** for the batch, even when one or more
   files have been seen before via `/implement-extensions`. It is cheap and
-  produces the contract the implementer/tester/reviewer read (when Gate B-C
-  picks legacy, or the run is legacy-only).
-- **Hypha researcher + comparator + Gate B-C run when `hypha_available == true`.**
-  Both researchers spawn in the same orchestrator message (parallel,
-  disjoint outputs), the comparator diffs their N pairs, and Gate B-C
-  presents a single batch-wide pick to the user. Neither researcher may
-  cross-contaminate: legacy MUST NOT use Hypha, Hypha MUST NOT read raw
-  `Resources/*.uml` or `Resources/specification/*.pdf.txt`. See the
-  pre-flight section at the top of this file and the template's "How Hypha
-  comparison plugs in" section.
+  produces the contract the implementer/tester/reviewer read.
+- **Hypha-first grounding**: the pre-flight sets the researcher's grounding
+  mode — Hypha skills when the plugin is installed, the checked-in XMI
+  metamodel otherwise. See the pre-flight section at the top of this file
+  and the template's "How Hypha grounding plugs in" section.
 - Reviewer is **mandatory** for the batch — cheap insurance against subtle OCL
   mistranslation.
 - The branch and the assignments persist even on partial failure. Be explicit

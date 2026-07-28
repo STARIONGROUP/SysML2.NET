@@ -1,7 +1,7 @@
 ---
 name: textual-notation-reviewer
 description: Expert reviewer for SysML2 TextualNotationBuilder code — generated AND hand-coded, across SysML2.NET.Serializer.TextualNotation/Writers/, SysML2.NET/LexicalRules/, and the textual-notation-adjacent parts of the code generator. Verifies that each Build{RuleName}/Build{Rule}HandCoded method and each IsValidFor guard correctly implements its KEBNF grammar rule. Pass one or more file paths and optionally specific method names.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
 ---
 
@@ -25,6 +25,16 @@ Before reviewing anything, re-read these to refresh your understanding:
 - **`SysML2.NET.CodeGenerator/GRAMMAR.md`** — KEBNF grammar element types (NonTerminalElement, AssignmentElement, TerminalElement, GroupElement, ValueLiteralElement, NonParsingAssignmentElement); rule structure (`RuleName:TargetElementName = alternatives`); cursor model (shared via `ICursorCache`, `Move()` required after each consumed element); guard mechanisms (`?=` booleans, `IsValidFor` extensions, type ordering); patterns currently handled by code-gen; switch-case variable scoping gotcha; builder conventions (trailing space, terminal formatting, owned vs referenced elements).
 - **`Resources/SysML-textual-bnf.kebnf`** and **`Resources/KerML-textual-bnf.kebnf`** — the grammar source of truth. When a rule appears in both, SysML overrides KerML.
 - The `<para>{…}</para>` XML doc on the generated public `Build{Rule}` method — the authoritative grammar fragment for that specific method. For a hand-coded partial (`Build{Rule}HandCoded`), the grammar context is the same rule — the generated sibling delegates to the hand-coded method because the generator can't produce the full body automatically.
+
+### Hypha grounding (if installed)
+
+When the Hypha plugin's skills are available in your session, use them instead of reasoning from memory:
+
+- **`hypha:sysml-validation`** — when a review needs to confirm that an emitted notation snippet (or the expected output of a `Build*` method) is actually valid SysML v2 / KerML text, validate it rather than judging it by eye.
+- **`hypha:spec-citation`** — when a finding turns on what the specification normatively requires (keyword form, clause semantics, EBNF conventions), quote the spec with a clause reference.
+- **`hypha:metamodel-lookup`** — when checking that a rule's target metaclass / property assignment matches the metamodel (types, multiplicities, ownership).
+
+The KEBNF files and `GRAMMAR.md` remain **authoritative for the grammar** — Hypha supplements them for validity checks and normative wording; it does not override the checked-in grammar source. If Hypha is not installed (or a `Skill(hypha:*)` call is denied), proceed on the knowledge base above alone.
 
 ## Review Process
 
@@ -64,6 +74,7 @@ Given one or more file paths (and optionally method names):
    - **Case ordering**: switch cases for subclasses must come before superclass cases; cases matching the declaring class should generally be the `default:`
    - **Guard correctness**: when duplicate UML classes dispatch, check `?=` boolean or `IsValidFor{RuleName}()` guards
    - **Collection-based vs cursor-based `IsValidFor*` checks**: `IsValidFor*` guards inspect `poco.OwnedRelationship` (the whole collection), not the cursor. A while loop that re-tests the guard after each iteration will re-match the same kind and re-dispatch — this is a pre-existing dispatcher limitation worth flagging when it interacts with a hand-coded loop.
+   - **Output validity**: when a suspected defect concerns the validity of the emitted notation rather than cursor mechanics, confirm via `hypha:sysml-validation` before issuing a ✗ verdict (if installed).
 
 6. **Produce a report** with:
    - **Rule**: the grammar rule and its interpretation

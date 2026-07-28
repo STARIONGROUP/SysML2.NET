@@ -2,7 +2,7 @@
 
 This document describes, end-to-end and in technical detail, how the **textual notation builders** (`Build{Rule}` methods that turn a POCO into KerML/SysML v2 source text) are generated from the **UML metamodel** and the **KEBNF grammar files**. It is intended for engineers extending or debugging the generator, hand-coding `Build{Rule}HandCoded` partials, or reviewing emitted output.
 
-It does **not** teach KEBNF or SysML v2; for those see `Resources/SysML-textual-bnf.kebnf`, `Resources/KerML-textual-bnf.kebnf`, and the OMG SysML v2 Textual Notation tutorial in `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt`.
+It does **not** teach KEBNF or SysML v2; for those see `Resources/SysML-textual-bnf.kebnf`, `Resources/KerML-textual-bnf.kebnf`, and the *Intro to the SysML v2 Language — Textual Notation* tutorial (SST).
 
 ## 1. Inputs
 
@@ -27,7 +27,7 @@ Identification : Element =
     ( declaredName = NAME )?
 ```
 
-For the notation legend (terminals, non-terminals, quantifiers, assignment operators, KEBNF extensions) the authoritative source is **Clause 8.2.2.1.1 — EBNF Conventions** of the OMG SysML v2 specification (`Resources/specification/2a-OMG_Systems_Modeling_Language.pdf.txt`).
+For the notation legend (terminals, non-terminals, quantifiers, assignment operators, KEBNF extensions) the authoritative source is **Clause 8.2.2.1.1 — EBNF Conventions** of the OMG SysML v2 specification (query via `hypha:spec-citation` when the Hypha plugin is installed).
 
 ---
 
@@ -581,9 +581,11 @@ The count should trend down as patterns expand.
 
 - `Resources/SysML-textual-bnf.kebnf`, `Resources/KerML-textual-bnf.kebnf` — KEBNF grammar source of truth.
 - `Resources/KerML_only_xmi.uml`, `Resources/SysML_only_xmi.uml` — UML metamodel source of truth (metaclasses, properties, inheritance, OCL constraints).
-- `Resources/specification/2a-OMG_Systems_Modeling_Language.pdf.txt` — *OMG SysML v2, Part 1: Language Specification*. **Clause 8.2.2.1.1 (EBNF Conventions)** is the authoritative notation legend.
-- `Resources/specification/1-Kernel_Modeling_Language.pdf.txt` — *OMG KerML 1.0*. Semantics of metaclasses referenced by KerML rules.
-- `Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt` — SST tutorial; canonical worked examples (informative).
+- *OMG Systems Modeling Language (SysML) v2, Part 1: Language Specification* — **Clause 8.2.2.1.1 (EBNF Conventions)** is the authoritative notation legend.
+- *Kernel Modeling Language (KerML) 1.0* — semantics of metaclasses referenced by KerML rules.
+- *Intro to the SysML v2 Language — Textual Notation* (SST tutorial) — canonical worked examples (informative).
+
+Specification text is not checked into the repo; query it via the `hypha:spec-citation` skill when the Hypha plugin is installed.
 
 ## 19. Historical & Open Technical Debt
 

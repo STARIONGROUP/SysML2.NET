@@ -84,7 +84,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// The unit of indentation prepended once per <see cref="IndentLevel"/> at the start
         /// of each new logical line. Four spaces, per the SysML v2 textual-notation tutorial
-        /// in <c>Resources/specification/Intro to the SysML v2 Language-Textual Notation.pdf.txt</c>.
+        /// (<i>Intro to the SysML v2 Language — Textual Notation</i>, SST).
         /// </summary>
         private const string IndentUnit = "    ";
 
