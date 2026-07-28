@@ -44,6 +44,22 @@ namespace SysML2.NET.Tests.Extend
 
             // Empty case: no FeatureTyping whose Type is an IVerificationCaseDefinition → null.
             Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a plain CaseDefinition, which is a superclass of
+            // IVerificationCaseDefinition and therefore NOT an IVerificationCaseDefinition — filtered out → still null.
+            var caseDefinition = new CaseDefinition();
+            verificationCaseUsage.AssignOwnership(new FeatureTyping { Type = caseDefinition });
+            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IVerificationCaseDefinition → returned.
+            var verificationCaseDefinition = new VerificationCaseDefinition();
+            verificationCaseUsage.AssignOwnership(new FeatureTyping { Type = verificationCaseDefinition });
+            Assert.That(verificationCaseUsage.ComputeVerificationCaseDefinition(), Is.SameAs(verificationCaseDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondVerificationCaseDefinition = new VerificationCaseDefinition();
+            verificationCaseUsage.AssignOwnership(new FeatureTyping { Type = secondVerificationCaseDefinition });
+            Assert.That(() => verificationCaseUsage.ComputeVerificationCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

@@ -26,6 +26,7 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
@@ -41,9 +42,25 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(() => ((IConstraintUsage)null).ComputeConstraintDefinition(), Throws.TypeOf<ArgumentNullException>());
 
             // Empty OwnedRelationship → no FeatureTyping → null.
-            var emptyUsage = new ConstraintUsage();
+            var constraintUsage = new ConstraintUsage();
 
-            Assert.That(emptyUsage.ComputeConstraintDefinition(), Is.Null);
+            Assert.That(constraintUsage.ComputeConstraintDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a CalculationDefinition (a Function, NOT an
+            // IPredicate) — filtered out → still null.
+            var calculationDefinition = new CalculationDefinition();
+            constraintUsage.AssignOwnership(new FeatureTyping { Type = calculationDefinition });
+            Assert.That(constraintUsage.ComputeConstraintDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IPredicate (ConstraintDefinition) → returned.
+            var constraintDefinition = new ConstraintDefinition();
+            constraintUsage.AssignOwnership(new FeatureTyping { Type = constraintDefinition });
+            Assert.That(constraintUsage.ComputeConstraintDefinition(), Is.SameAs(constraintDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondConstraintDefinition = new ConstraintDefinition();
+            constraintUsage.AssignOwnership(new FeatureTyping { Type = secondConstraintDefinition });
+            Assert.That(() => constraintUsage.ComputeConstraintDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

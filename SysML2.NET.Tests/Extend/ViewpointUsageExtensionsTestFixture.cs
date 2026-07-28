@@ -42,6 +42,22 @@ namespace SysML2.NET.Tests.Extend
 
             // Empty: no OwnedRelationship → null.
             Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a RequirementDefinition, which is a superclass of
+            // IViewpointDefinition and therefore NOT an IViewpointDefinition — filtered out → still null.
+            var requirementDefinition = new RequirementDefinition();
+            viewpointUsage.AssignOwnership(new FeatureTyping { Type = requirementDefinition });
+            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IViewpointDefinition → returned.
+            var viewpointDefinition = new ViewpointDefinition();
+            viewpointUsage.AssignOwnership(new FeatureTyping { Type = viewpointDefinition });
+            Assert.That(viewpointUsage.ComputeViewpointDefinition(), Is.SameAs(viewpointDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondViewpointDefinition = new ViewpointDefinition();
+            viewpointUsage.AssignOwnership(new FeatureTyping { Type = secondViewpointDefinition });
+            Assert.That(() => viewpointUsage.ComputeViewpointDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]

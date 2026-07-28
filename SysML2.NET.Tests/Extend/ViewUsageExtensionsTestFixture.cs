@@ -29,6 +29,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Exceptions;
@@ -178,6 +179,22 @@ namespace SysML2.NET.Tests.Extend
 
             // Empty: no FeatureTyping → null.
             Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
+
+            // Discrimination: FeatureTyping targets a PartDefinition, which is a superclass of
+            // IViewDefinition and therefore NOT an IViewDefinition — filtered out → still null.
+            var partDefinition = new PartDefinition();
+            viewUsage.AssignOwnership(new FeatureTyping { Type = partDefinition });
+            Assert.That(viewUsage.ComputeViewDefinition(), Is.Null);
+
+            // Populated case: FeatureTyping whose Type is an IViewDefinition → returned.
+            var viewDefinition = new ViewDefinition();
+            viewUsage.AssignOwnership(new FeatureTyping { Type = viewDefinition });
+            Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition));
+
+            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
+            var secondViewDefinition = new ViewDefinition();
+            viewUsage.AssignOwnership(new FeatureTyping { Type = secondViewDefinition });
+            Assert.That(() => viewUsage.ComputeViewDefinition(), Throws.TypeOf<MultiplicityViolationException>());
         }
 
         [Test]
