@@ -47,10 +47,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         {
             return connectorSubject == null
                 ? throw new ArgumentNullException(nameof(connectorSubject))
-                : [..connectorSubject.OwnedRelationship
-                      .OfType<IFeatureTyping>()
-                      .Select(featureTyping => featureTyping.Type)
-                      .OfType<IAssociation>()];
+                : [.. FeatureExtensions.ComputeType(connectorSubject).OfType<IAssociation>()];
         }
 
         /// <summary>

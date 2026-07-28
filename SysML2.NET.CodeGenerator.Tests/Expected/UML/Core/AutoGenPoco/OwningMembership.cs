@@ -151,7 +151,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        string IMembership.memberElementId => this.ComputeMemberElementId();
+        string IMembership.memberElementId => this.ownedMemberElementId;
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.

@@ -89,7 +89,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         {
             return verificationCaseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(verificationCaseUsageSubject))
-                : verificationCaseUsageSubject.definition.SingleOrDefaultStrict<IVerificationCaseDefinition>(nameof(verificationCaseUsageSubject));
+                : FeatureExtensions.ComputeType(verificationCaseUsageSubject).SingleOrDefaultStrict<IVerificationCaseDefinition>(nameof(verificationCaseUsageSubject));
         }
 
         /// <summary>

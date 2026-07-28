@@ -34,7 +34,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Differencing is a Relationship that makes its differencingType one of the differencingTypes of its
@@ -319,7 +318,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IDifferencing.TypeDifferenced")]
-        public IType typeDifferenced => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IType>().SingleOrDefaultStrict(nameof(Differencing));
+        public IType typeDifferenced => this.ComputeTypeDifferenced();
 
 
         /// <summary>

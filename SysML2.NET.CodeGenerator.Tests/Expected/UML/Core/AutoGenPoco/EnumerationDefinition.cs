@@ -819,7 +819,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [RedefinedByProperty("IEnumerationDefinition.EnumeratedValue")]
         [Implements(implementation: "IDefinition.Variant")]
-        List<IUsage> Systems.DefinitionAndUsage.IDefinition.variant => this.ComputeVariant();
+        List<IUsage> Systems.DefinitionAndUsage.IDefinition.variant => [.. this.enumeratedValue];
 
         /// <summary>
         /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then

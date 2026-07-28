@@ -42,7 +42,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An Flow is a Step that represents the transfer of values from one Feature to another. Flows can take
@@ -88,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IFlow.Interaction")]
         [Implements(implementation: "IConnector.Association")]
-        List<IAssociation> Kernel.Connectors.IConnector.association => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IAssociation>()];
+        List<IAssociation> Kernel.Connectors.IConnector.association => [.. this.interaction];
 
         /// <summary>
         /// The Behaviors that type this Step.
@@ -97,7 +96,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IFlow.Interaction")]
         [Implements(implementation: "IStep.Behavior")]
-        List<IBehavior> Kernel.Behaviors.IStep.behavior => this.ComputeBehavior();
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => [.. this.interaction];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -119,7 +118,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1556735067666_827798_21922", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [Implements(implementation: "IConnector.ConnectorEnd")]
-        public List<IFeature> connectorEnd => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).endFeature];
+        public List<IFeature> connectorEnd => this.ComputeConnectorEnd();
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -177,7 +176,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -211,7 +210,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
+        List<IFeature> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -306,7 +305,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674983_471497_43284")]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [Implements(implementation: "IFlow.Interaction")]
-        public List<IInteraction> interaction => [.. ((SysML2.NET.Core.POCO.Kernel.Connectors.IConnector)this).association.OfType<IInteraction>()];
+        public List<IInteraction> interaction => this.ComputeInteraction();
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -790,7 +789,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
+        public List<IFeature> parameter => this.ComputeParameter();
 
         /// <summary>
         /// The ownedFeature of the Flow that is a PayloadFeature (if any).
@@ -826,7 +825,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
+        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -835,7 +834,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674968_916334_43210", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IConnector.RelatedFeature")]
-        public List<IFeature> relatedFeature => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).relatedElement.OfType<IFeature>()];
+        public List<IFeature> relatedFeature => this.ComputeRelatedFeature();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -867,7 +866,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IConnector.SourceFeature")]
-        public IFeature sourceFeature => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IFeature>().SingleOrDefaultStrict(nameof(Flow));
+        public IFeature sourceFeature => this.ComputeSourceFeature();
 
         /// <summary>
         /// The Feature that provides the items carried by the Flow. It must be a feature of the source of the
@@ -898,7 +897,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IConnector.TargetFeature")]
-        public List<IFeature> targetFeature => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Target.OfType<IFeature>()];
+        public List<IFeature> targetFeature => this.ComputeTargetFeature();
 
         /// <summary>
         /// The Feature that receives the values carried by the Flow. It must be a feature of the target of the
@@ -926,7 +925,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IConnector.Association")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Kernel.Connectors.IConnector)this).association];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

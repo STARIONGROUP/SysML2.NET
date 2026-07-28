@@ -113,7 +113,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         {
             return caseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(caseUsageSubject))
-                : caseUsageSubject.definition.SingleOrDefaultStrict<ICaseDefinition>(nameof(caseUsageSubject));
+                : FeatureExtensions.ComputeType(caseUsageSubject).SingleOrDefaultStrict<ICaseDefinition>(nameof(caseUsageSubject));
         }
 
         /// <summary>

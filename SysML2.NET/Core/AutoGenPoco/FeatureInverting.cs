@@ -34,7 +34,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A FeatureInverting is a Relationship between Features asserting that their interpretations

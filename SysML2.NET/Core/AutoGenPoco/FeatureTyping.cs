@@ -35,7 +35,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// FeatureTyping is Specialization in which the specific Type is a Feature. This means the set of
@@ -217,7 +216,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_13273_21101")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [Implements(implementation: "IFeatureTyping.OwningFeature")]
-        public IFeature owningFeature => ((SysML2.NET.Core.POCO.Core.Types.ISpecialization)this).owningType as IFeature;
+        public IFeature owningFeature => this.ComputeOwningFeature();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -267,7 +266,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("IFeatureTyping.OwningFeature")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
+        IType Core.Types.ISpecialization.owningType => this.owningFeature;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

@@ -60,7 +60,6 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A ReferenceUsage is a Usage that specifies a non-compositional (isComposite = false) reference to
@@ -145,7 +144,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
+        public List<IClassifier> definition => this.ComputeDefinition();
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -392,7 +391,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1624035133434_200283_41434", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         [Implements(implementation: "IReferenceUsage.IsReference")]
-        public bool isReference => ((IUsage)this).isReference;
+        public bool isReference => this.ComputeIsReference();
 
         /// <summary>
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
@@ -400,7 +399,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IReferenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool IUsage.isReference => this.ComputeIsReference();
+        bool IUsage.isReference => this.isReference;
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -453,7 +452,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
+        public bool mayTimeVary => this.ComputeMayTimeVary();
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -1050,7 +1049,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. this.definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

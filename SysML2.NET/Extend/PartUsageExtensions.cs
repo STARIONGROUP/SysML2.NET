@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.Parts
         {
             return partUsageSubject == null
                 ? throw new ArgumentNullException(nameof(partUsageSubject))
-                : [..partUsageSubject.itemDefinition.OfType<IPartDefinition>()];
+                : [.. FeatureExtensions.ComputeType(partUsageSubject).OfType<IPartDefinition>()];
         }
 
     }

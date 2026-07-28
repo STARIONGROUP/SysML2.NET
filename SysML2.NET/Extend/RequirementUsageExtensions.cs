@@ -167,7 +167,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         {
             return requirementUsageSubject == null
                 ? throw new ArgumentNullException(nameof(requirementUsageSubject))
-                : requirementUsageSubject.definition.SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
+                : FeatureExtensions.ComputeType(requirementUsageSubject).SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
         }
 
         /// <summary>

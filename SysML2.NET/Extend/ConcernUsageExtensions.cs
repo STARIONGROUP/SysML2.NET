@@ -45,11 +45,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         {
             return concernUsageSubject == null
                 ? throw new ArgumentNullException(nameof(concernUsageSubject))
-                : concernUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IConcernDefinition>()
-                    .SingleOrDefaultStrict(nameof(concernUsageSubject));
+                : FeatureExtensions.ComputeType(concernUsageSubject).SingleOrDefaultStrict<IConcernDefinition>(nameof(concernUsageSubject));
         }
     }
 }

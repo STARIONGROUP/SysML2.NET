@@ -34,7 +34,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Unioning is a Relationship that makes its unioningType one of the unioningTypes of its typeUnioned.
@@ -308,7 +307,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IUnioning.TypeUnioned")]
-        public IType typeUnioned => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IType>().SingleOrDefaultStrict(nameof(Unioning));
+        public IType typeUnioned => this.ComputeTypeUnioned();
 
         /// <summary>
         /// Type that partly determines interpretations of typeUnioned, as described in Type::unioningType.

@@ -38,7 +38,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A FlowEnd is a Feature that is one of the connectorEnds giving the source or target of a Flow. For

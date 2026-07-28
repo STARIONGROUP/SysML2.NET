@@ -37,7 +37,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Feature is a Type that classifies relations between multiple things (in the universe). The domain

@@ -266,7 +266,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("ISubclassification.OwningClassifier")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
+        IType Core.Types.ISpecialization.owningType => this.owningClassifier;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

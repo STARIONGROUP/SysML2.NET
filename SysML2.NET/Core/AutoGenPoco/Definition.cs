@@ -60,7 +60,6 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model

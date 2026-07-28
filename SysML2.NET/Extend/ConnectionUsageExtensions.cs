@@ -78,10 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         {
             return connectionUsageSubject == null
                 ? throw new ArgumentNullException(nameof(connectionUsageSubject))
-                : [..connectionUsageSubject.OwnedRelationship
-                    .OfType<IFeatureTyping>()
-                    .Select(featureTyping => featureTyping.Type)
-                    .OfType<IAssociationStructure>()];
+                : [.. FeatureExtensions.ComputeType(connectionUsageSubject).OfType<IAssociationStructure>()];
         }
 
     }

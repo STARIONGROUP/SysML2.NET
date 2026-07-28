@@ -62,7 +62,6 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An EventOccurrenceUsage is an OccurrenceUsage that represents another OccurrenceUsage occurring as a
@@ -149,7 +148,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IClassifier>()];
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -421,7 +420,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         [Property(xmiId: "_19_0_4_12e503d9_1672526906017_786343_306", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         [Implements(implementation: "IEventOccurrenceUsage.IsReference")]
-        public bool isReference => ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).isReference;
+        public bool isReference => this.ComputeIsReference();
 
         /// <summary>
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
@@ -429,7 +428,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IEventOccurrenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool Systems.DefinitionAndUsage.IUsage.isReference => this.ComputeIsReference();
+        bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -482,7 +481,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool mayTimeVary => ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).IsVariable;
+        public bool mayTimeVary => this.ComputeMayTimeVary();
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -747,7 +746,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<IClass> occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition.OfType<IClass>()];
+        public List<IClass> occurrenceDefinition => this.ComputeOccurrenceDefinition();
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1098,7 +1097,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

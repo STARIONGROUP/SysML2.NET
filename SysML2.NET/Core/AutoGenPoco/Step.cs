@@ -38,7 +38,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Step is a Feature that is typed by one or more Behaviors. Steps may be used by one Behavior to
@@ -142,7 +141,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -706,7 +705,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
+        public List<IFeature> parameter => this.ComputeParameter();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

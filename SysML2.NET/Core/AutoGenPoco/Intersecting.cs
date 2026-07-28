@@ -34,7 +34,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Intersecting is a Relationship that makes its intersectingType one of the intersectingTypes of its
@@ -319,7 +318,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IIntersecting.TypeIntersected")]
-        public IType typeIntersected => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IType>().SingleOrDefaultStrict(nameof(Intersecting));
+        public IType typeIntersected => this.ComputeTypeIntersected();
 
 
         /// <summary>

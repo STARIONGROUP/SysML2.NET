@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         {
             return attributeUsageSubject == null
                 ? throw new ArgumentNullException(nameof(attributeUsageSubject))
-                : [..attributeUsageSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IDataType>()];
+                : [.. FeatureExtensions.ComputeType(attributeUsageSubject).OfType<IDataType>()];
         }
 
         /// <summary>

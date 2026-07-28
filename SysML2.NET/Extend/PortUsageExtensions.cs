@@ -45,13 +45,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         {
             return portUsageSubject == null
                 ? throw new ArgumentNullException(nameof(portUsageSubject))
-                :
-                [
-                    ..portUsageSubject.OwnedRelationship
-                        .OfType<IFeatureTyping>()
-                        .Select(featureTyping => featureTyping.Type)
-                        .OfType<IPortDefinition>()
-                ];
+                : [.. FeatureExtensions.ComputeType(portUsageSubject).OfType<IPortDefinition>()];
         }
     }
 }

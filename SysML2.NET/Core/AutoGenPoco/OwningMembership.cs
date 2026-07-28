@@ -34,7 +34,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
@@ -152,7 +151,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        string IMembership.memberElementId => this.ComputeMemberElementId();
+        string IMembership.memberElementId => this.ownedMemberElementId;
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -174,7 +173,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
-        public INamespace membershipOwningNamespace => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<INamespace>().SingleOrDefaultStrict(nameof(OwningMembership));
+        public INamespace membershipOwningNamespace => this.ComputeMembershipOwningNamespace();
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
@@ -224,7 +223,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_59873_43302")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
-        public IElement ownedMemberElement => ((IMembership)this).MemberElement;
+        public IElement ownedMemberElement => this.ComputeOwnedMemberElement();
 
         /// <summary>
         /// The elementId of the ownedMemberElement.
@@ -232,7 +231,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_4_12e503d9_1651721234828_904219_244", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721199802_246768_242")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElementId")]
-        public string ownedMemberElementId => ((IMembership)this).memberElementId;
+        public string ownedMemberElementId => this.ComputeOwnedMemberElementId();
 
         /// <summary>
         /// The name of the ownedMemberElement.
@@ -240,7 +239,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_4_12e503d9_1648181616390_323441_387", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_35293_43192")]
         [Implements(implementation: "IOwningMembership.OwnedMemberName")]
-        public string ownedMemberName => ((IMembership)this).MemberName;
+        public string ownedMemberName => this.ComputeOwnedMemberName();
 
         /// <summary>
         /// The shortName of the ownedMemberElement.
@@ -248,7 +247,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_4_12e503d9_1651721262092_909505_246", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         [Implements(implementation: "IOwningMembership.OwnedMemberShortName")]
-        public string ownedMemberShortName => ((IMembership)this).MemberShortName;
+        public string ownedMemberShortName => this.ComputeOwnedMemberShortName();
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.

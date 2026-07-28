@@ -35,7 +35,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Redefinition is a kind of Subsetting that requires the redefinedFeature and the redefiningFeature to
@@ -228,7 +227,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [Implements(implementation: "ISubsetting.OwningFeature")]
-        public IFeature owningFeature => ((SysML2.NET.Core.POCO.Core.Types.ISpecialization)this).owningType as IFeature;
+        public IFeature owningFeature => this.ComputeOwningFeature();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -278,7 +277,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("ISubsetting.OwningFeature")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        IType Core.Types.ISpecialization.owningType => this.ComputeOwningType();
+        IType Core.Types.ISpecialization.owningType => this.owningFeature;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         {
             return actionUsageSubject == null
                 ? throw new ArgumentNullException(nameof(actionUsageSubject))
-                : [.. actionUsageSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(featureTyping => featureTyping.Type).OfType<IBehavior>()];
+                : [.. FeatureExtensions.ComputeType(actionUsageSubject).OfType<IBehavior>()];
         }
 
         /// <summary>

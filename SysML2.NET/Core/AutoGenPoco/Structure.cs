@@ -40,7 +40,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Structures
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Structure is a Class of objects in the modeled universe that are primarily structural in nature.

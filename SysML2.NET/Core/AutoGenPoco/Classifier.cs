@@ -38,7 +38,6 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Classifier is a Type that classifies:<ul>	<li>Things (in the universe) regardless of how Features

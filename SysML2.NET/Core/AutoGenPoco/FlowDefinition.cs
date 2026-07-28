@@ -63,7 +63,6 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A FlowDefinition is an ActionDefinition that is also an Interaction (which is both a KerML Behavior
@@ -121,7 +120,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [RedefinedByProperty("IFlowDefinition.FlowEnd")]
         [Implements(implementation: "IAssociation.AssociationEnd")]
-        List<IFeature> Kernel.Associations.IAssociation.associationEnd => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).endFeature];
+        List<IFeature> Kernel.Associations.IAssociation.associationEnd => [.. this.flowEnd];
 
         /// <summary>
         /// The declared name of this Element.
@@ -160,7 +159,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<IFeature> Core.Types.IType.directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Definition that are directedFeatures.
@@ -195,7 +194,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
+        List<IFeature> Core.Types.IType.endFeature => [.. ((SysML2.NET.Core.POCO.Kernel.Associations.IAssociation)this).associationEnd];
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -220,7 +219,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [Property(xmiId: "_2022x_2_12e503d9_1733008492358_136366_19515", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
         [Implements(implementation: "IFlowDefinition.FlowEnd")]
-        public List<IUsage> flowEnd => [.. ((SysML2.NET.Core.POCO.Kernel.Associations.IAssociation)this).associationEnd.OfType<IUsage>()];
+        public List<IUsage> flowEnd => this.ComputeFlowEnd();
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -817,7 +816,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [Property(xmiId: "_18_5_3_12e503d9_1543948010065_362066_20413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IBehavior.Parameter")]
-        public List<IFeature> parameter => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).directedFeature];
+        public List<IFeature> parameter => this.ComputeParameter();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -838,7 +837,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
+        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedType];
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -847,7 +846,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IAssociation.RelatedType")]
-        public List<IType> relatedType => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).relatedElement.OfType<IType>()];
+        public List<IType> relatedType => this.ComputeRelatedType();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -879,7 +878,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IAssociation.SourceType")]
-        public IType sourceType => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IType>().SingleOrDefaultStrict(nameof(FlowDefinition));
+        public IType sourceType => this.ComputeSourceType();
 
         /// <summary>
         /// The Steps that make up this Behavior.
@@ -910,7 +909,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IAssociation.TargetType")]
-        public List<IType> targetType => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Target.OfType<IType>()];
+        public List<IType> targetType => this.ComputeTargetType();
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

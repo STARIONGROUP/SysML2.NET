@@ -33,7 +33,6 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// An AnnotatingElement is an Element that provides additional description of or metadata on some other

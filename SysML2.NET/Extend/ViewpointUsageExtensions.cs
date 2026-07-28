@@ -89,7 +89,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         {
             return viewpointUsageSubject == null
                 ? throw new ArgumentNullException(nameof(viewpointUsageSubject))
-                : viewpointUsageSubject.definition.SingleOrDefaultStrict<IViewpointDefinition>(nameof(viewpointUsageSubject));
+                : FeatureExtensions.ComputeType(viewpointUsageSubject).SingleOrDefaultStrict<IViewpointDefinition>(nameof(viewpointUsageSubject));
         }
 
         /// <summary>

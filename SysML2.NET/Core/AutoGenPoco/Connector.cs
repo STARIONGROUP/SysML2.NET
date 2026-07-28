@@ -39,7 +39,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
@@ -86,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1533160674983_471497_43284", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [Implements(implementation: "IConnector.Association")]
-        public List<IAssociation> association => [.. ((SysML2.NET.Core.POCO.Core.Features.IFeature)this).type.OfType<IAssociation>()];
+        public List<IAssociation> association => this.ComputeAssociation();
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -108,7 +107,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1556735067666_827798_21922", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [Implements(implementation: "IConnector.ConnectorEnd")]
-        public List<IFeature> connectorEnd => [.. ((SysML2.NET.Core.POCO.Core.Types.IType)this).endFeature];
+        public List<IFeature> connectorEnd => this.ComputeConnectorEnd();
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -199,7 +198,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<IFeature> Core.Types.IType.endFeature => this.ComputeEndFeature();
+        List<IFeature> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -772,7 +771,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<IElement> Root.Elements.IRelationship.relatedElement => this.ComputeRelatedElement();
+        List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -781,7 +780,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1533160674968_916334_43210", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IConnector.RelatedFeature")]
-        public List<IFeature> relatedFeature => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).relatedElement.OfType<IFeature>()];
+        public List<IFeature> relatedFeature => this.ComputeRelatedFeature();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -813,7 +812,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IConnector.SourceFeature")]
-        public IFeature sourceFeature => ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Source.OfType<IFeature>().SingleOrDefaultStrict(nameof(Connector));
+        public IFeature sourceFeature => this.ComputeSourceFeature();
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -836,7 +835,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IConnector.TargetFeature")]
-        public List<IFeature> targetFeature => [.. ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)this).Target.OfType<IFeature>()];
+        public List<IFeature> targetFeature => this.ComputeTargetFeature();
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -856,7 +855,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IConnector.Association")]
         [Implements(implementation: "IFeature.Type")]
-        List<IType> Core.Features.IFeature.type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. this.association];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

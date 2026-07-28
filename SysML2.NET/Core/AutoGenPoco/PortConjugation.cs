@@ -35,7 +35,6 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// A PortConjugation is a Conjugation Relationship between a PortDefinition and its corresponding
@@ -83,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_19_0_2_12e503d9_1575484344899_880331_946", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_778895_441")]
         [Implements(implementation: "IPortConjugation.ConjugatedPortDefinition")]
-        public IConjugatedPortDefinition conjugatedPortDefinition => ((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).owningType as IConjugatedPortDefinition;
+        public IConjugatedPortDefinition conjugatedPortDefinition => this.ComputeConjugatedPortDefinition();
 
         /// <summary>
         /// The Type that is the result of applying Conjugation to the originalType.
@@ -286,7 +285,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedByProperty("IPortConjugation.ConjugatedPortDefinition")]
         [Implements(implementation: "IConjugation.OwningType")]
-        IType Core.Types.IConjugation.owningType => this.ComputeOwningType();
+        IType Core.Types.IConjugation.owningType => this.conjugatedPortDefinition;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
