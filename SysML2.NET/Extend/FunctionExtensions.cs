@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -48,10 +49,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IExpression> ComputeExpression(this IFunction functionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return functionSubject == null
+                ? throw new ArgumentNullException(nameof(functionSubject))
+                : [.. functionSubject.feature.OfType<IExpression>()];
         }
 
         /// <summary>
@@ -91,10 +93,19 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeResult(this IFunction functionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (functionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(functionSubject));
+            }
+
+            var resultParams = functionSubject.featureMembership
+                .OfType<IReturnParameterMembership>()
+                .Select(returnParameterMembership => returnParameterMembership.ownedMemberParameter)
+                .ToList();
+
+            return resultParams.Count == 0 ? null : resultParams[0];
         }
 
     }

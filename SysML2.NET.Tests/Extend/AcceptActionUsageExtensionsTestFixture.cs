@@ -36,6 +36,8 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.Systems.States;
     using SysML2.NET.Extensions;
 
+     using PocoFeature = SysML2.NET.Core.POCO.Core.Features.Feature;
+
     [TestFixture]
     public class AcceptActionUsageExtensionsTestFixture
     {
@@ -85,10 +87,47 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IAcceptActionUsage)null).ComputePayloadParameter(), Throws.TypeOf<ArgumentNullException>());
 
-            var accept = new AcceptActionUsage();
+            // OCL: payloadParameter = if parameter->isEmpty() then null else parameter->first() endif
+            // where parameter = the directed owned features (Step::parameter → Type::directedFeature).
+            using (Assert.EnterMultipleScope())
+            {
+                // Branch 1 — bare AcceptActionUsage: no owned features → parameter is empty → null.
+                var emptyAccept = new AcceptActionUsage();
 
-            // For Later: populated case depends on StepExtensions.ComputeParameter at SysML2.NET/Extend/StepExtensions.cs:71, which is still a stub.
-            Assert.That(() => accept.ComputePayloadParameter(), Throws.TypeOf<NotSupportedException>());
+                Assert.That(emptyAccept.ComputePayloadParameter(), Is.Null);
+
+                // Branch 2 — direction filter: a single owned ReferenceUsage with NO Direction is not a
+                // directed feature (DirectionOf == null) → parameter is empty → null.
+                var nonDirectedAccept = new AcceptActionUsage();
+                var nonDirectedParameter = new ReferenceUsage();
+                nonDirectedAccept.AssignOwnership(new FeatureMembership(), nonDirectedParameter);
+
+                Assert.That(nonDirectedAccept.ComputePayloadParameter(), Is.Null);
+
+                // Branch 3 — populated: a single directed ReferenceUsage parameter → parameter->first() is it.
+                var populatedAccept = new AcceptActionUsage();
+                var payloadParameter = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+                populatedAccept.AssignOwnership(new FeatureMembership(), payloadParameter);
+
+                Assert.That(populatedAccept.ComputePayloadParameter(), Is.SameAs(payloadParameter));
+
+                // Branch 4 — `as IReferenceUsage` discrimination: the first directed parameter is a plain
+                // Feature (not an IReferenceUsage) → parameter->first() as IReferenceUsage is null.
+                var wrongTypeAccept = new AcceptActionUsage();
+                var directedNonReference = new PocoFeature { Direction = FeatureDirectionKind.In };
+                wrongTypeAccept.AssignOwnership(new FeatureMembership(), directedNonReference);
+
+                Assert.That(wrongTypeAccept.ComputePayloadParameter(), Is.Null);
+
+                // Branch 5 — ordering: two directed ReferenceUsage parameters → parameter->first() is the first.
+                var orderedAccept = new AcceptActionUsage();
+                var firstParameter = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+                var secondParameter = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+                orderedAccept.AssignOwnership(new FeatureMembership(), firstParameter);
+                orderedAccept.AssignOwnership(new FeatureMembership(), secondParameter);
+
+                Assert.That(orderedAccept.ComputePayloadParameter(), Is.SameAs(firstParameter));
+            }
         }
 
         [Test]

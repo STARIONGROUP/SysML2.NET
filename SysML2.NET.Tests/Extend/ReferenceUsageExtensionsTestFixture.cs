@@ -25,6 +25,7 @@ namespace SysML2.NET.Tests.Extend
     using NUnit.Framework;
 
     using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
@@ -91,10 +92,10 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(secondParamNoTrigger.ComputeRedefinedNamingFeatureOperation(), Is.Null);
 
-            // Branch 5: owningType is an ITransitionUsage, self IS InputParameter(2), and
-            // triggerAction is non-empty → TriggerPayloadParameter() accesses triggerAction[0].payloadParameter
-            // → AcceptActionUsage.parameter → StepExtensions.ComputeParameter, which is still a stub.
-            // Assert the stub propagates rather than silently returning the wrong value.
+            // Branch 5: owningType is an ITransitionUsage, self IS InputParameter(2), and triggerAction is
+            // non-empty → TriggerPayloadParameter() = triggerAction->first().payloadParameter. The trigger
+            // AcceptActionUsage owns a directed ReferenceUsage as its (payload) parameter → that ReferenceUsage
+            // is returned.
             var transitionUsageWithTrigger = new TransitionUsage();
             var firstParamWithTrigger = new ReferenceUsage { Direction = FeatureDirectionKind.In };
             var secondParamWithTrigger = new ReferenceUsage { Direction = FeatureDirectionKind.In };
@@ -103,11 +104,22 @@ namespace SysML2.NET.Tests.Extend
 
             var triggerFeatureMembership = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
             var triggerAcceptAction = new AcceptActionUsage();
+            var triggerPayloadParameter = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+            triggerAcceptAction.AssignOwnership(new FeatureMembership(), triggerPayloadParameter);
             transitionUsageWithTrigger.AssignOwnership(triggerFeatureMembership, triggerAcceptAction);
 
             Assert.That(
-                () => secondParamWithTrigger.ComputeRedefinedNamingFeatureOperation(),
-                Throws.TypeOf<NotSupportedException>());
+                secondParamWithTrigger.ComputeRedefinedNamingFeatureOperation(),
+                Is.SameAs(triggerPayloadParameter));
+
+            // Branch 6 (else path, positive): owningType is null so the transition branch is skipped and the
+            // result is self.oclAsType(Usage).namingFeature() = the redefinedFeature of the first owned
+            // Redefinition. Wire a Redefinition so the else branch surfaces a non-null naming Feature.
+            var redefiningSubject = new ReferenceUsage();
+            var namingFeature = new ReferenceUsage();
+            redefiningSubject.AssignOwnership(new Redefinition { RedefinedFeature = namingFeature });
+
+            Assert.That(redefiningSubject.ComputeRedefinedNamingFeatureOperation(), Is.SameAs(namingFeature));
         }
     }
 }
