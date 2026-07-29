@@ -72,10 +72,18 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IStateUsage ComputeExhibitedState(this IExhibitStateUsage exhibitStateUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (exhibitStateUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(exhibitStateUsageSubject));
+            }
+
+            var referencedFeatureTarget = exhibitStateUsageSubject.ReferencedFeatureTarget();
+
+            return referencedFeatureTarget == null
+                ? exhibitStateUsageSubject
+                : referencedFeatureTarget as IStateUsage;
         }
 
     }

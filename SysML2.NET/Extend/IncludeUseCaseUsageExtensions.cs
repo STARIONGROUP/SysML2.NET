@@ -72,10 +72,18 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IUseCaseUsage ComputeUseCaseIncluded(this IIncludeUseCaseUsage includeUseCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (includeUseCaseUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(includeUseCaseUsageSubject));
+            }
+
+            var referencedFeatureTarget = includeUseCaseUsageSubject.ReferencedFeatureTarget();
+
+            return referencedFeatureTarget == null
+                ? includeUseCaseUsageSubject
+                : referencedFeatureTarget as IUseCaseUsage;
         }
 
     }
