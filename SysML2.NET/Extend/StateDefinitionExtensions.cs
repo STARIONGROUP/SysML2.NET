@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -53,6 +54,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Core.Systems.States;
 
     /// <summary>
     /// The <see cref="StateDefinitionExtensions"/> class provides extensions methods for
@@ -82,10 +84,17 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputeDoAction(this IStateDefinition stateDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (stateDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(stateDefinitionSubject));
+            }
+
+            return stateDefinitionSubject.ownedMembership
+                .OfType<IStateSubactionMembership>()
+                .FirstOrDefault(membership => membership.Kind == StateSubactionKind.Do)
+                ?.action;
         }
 
         /// <summary>
@@ -110,10 +119,17 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputeEntryAction(this IStateDefinition stateDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (stateDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(stateDefinitionSubject));
+            }
+
+            return stateDefinitionSubject.ownedMembership
+                .OfType<IStateSubactionMembership>()
+                .FirstOrDefault(membership => membership.Kind == StateSubactionKind.Entry)
+                ?.action;
         }
 
         /// <summary>
@@ -138,10 +154,17 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputeExitAction(this IStateDefinition stateDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (stateDefinitionSubject == null)
+            {
+                throw new ArgumentNullException(nameof(stateDefinitionSubject));
+            }
+
+            return stateDefinitionSubject.ownedMembership
+                .OfType<IStateSubactionMembership>()
+                .FirstOrDefault(membership => membership.Kind == StateSubactionKind.Exit)
+                ?.action;
         }
 
         /// <summary>
@@ -159,10 +182,11 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IStateUsage> ComputeState(this IStateDefinition stateDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return stateDefinitionSubject == null
+                ? throw new ArgumentNullException(nameof(stateDefinitionSubject))
+                : [.. stateDefinitionSubject.action.OfType<IStateUsage>()];
         }
 
     }

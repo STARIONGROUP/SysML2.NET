@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -78,10 +79,13 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUseCaseUsage> ComputeIncludedUseCase(this IUseCaseDefinition useCaseDefinitionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return useCaseDefinitionSubject == null
+                ? throw new ArgumentNullException(nameof(useCaseDefinitionSubject))
+                : [.. useCaseDefinitionSubject.ownedUseCase
+                    .OfType<IIncludeUseCaseUsage>()
+                    .Select(includeUseCaseUsage => includeUseCaseUsage.useCaseIncluded)];
         }
 
     }

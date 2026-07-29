@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -56,6 +57,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="UseCaseUsageExtensions"/> class provides extensions methods for
@@ -80,10 +82,13 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IUseCaseUsage> ComputeIncludedUseCase(this IUseCaseUsage useCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return useCaseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(useCaseUsageSubject))
+                : [.. useCaseUsageSubject.nestedUseCase
+                    .OfType<IIncludeUseCaseUsage>()
+                    .Select(includeUseCaseUsage => includeUseCaseUsage.useCaseIncluded)];
         }
 
         /// <summary>
@@ -95,10 +100,11 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IUseCaseDefinition ComputeUseCaseDefinition(this IUseCaseUsage useCaseUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return useCaseUsageSubject == null
+                ? throw new ArgumentNullException(nameof(useCaseUsageSubject))
+                : FeatureExtensions.ComputeType(useCaseUsageSubject).SingleOrDefaultStrict<IUseCaseDefinition>(nameof(useCaseUsageSubject));
         }
 
     }
