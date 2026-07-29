@@ -24,6 +24,7 @@ namespace SysML2.NET.Tests.Extend
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Connectors;
@@ -308,19 +309,69 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((ITransitionUsage)null).ComputeTriggerPayloadParameterOperation(), Throws.TypeOf<ArgumentNullException>());
 
-            var transitionUsage = new TransitionUsage();
+            // OCL: if triggerAction->isEmpty() then null else triggerAction->first().payloadParameter endif
+            using (Assert.EnterMultipleScope())
+            {
+                // No Trigger TFMs → triggerAction is empty → null.
+                var emptyTransition = new TransitionUsage();
 
-            // No Trigger TFMs → triggerAction is empty → null.
-            Assert.That(transitionUsage.ComputeTriggerPayloadParameterOperation(), Is.Null);
+                Assert.That(emptyTransition.ComputeTriggerPayloadParameterOperation(), Is.Null);
 
-            // Trigger TFM wired; triggerAction now resolves (ComputeTransitionFeature is implemented).
-            // The NotSupportedException is now thrown by AcceptActionUsage.payloadParameter → StepExtensions.ComputeParameter,
-            // which is still a stub. Expand this test when StepExtensions.ComputeParameter is implemented.
-            var triggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
-            var acceptAction = new AcceptActionUsage();
-            transitionUsage.AssignOwnership(triggerTfm, acceptAction);
+                // Kind-filter discrimination — only an Effect-kind TFM (no Trigger) → triggerAction is empty → null.
+                var effectOnlyTransition = new TransitionUsage();
+                var effectTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Effect };
+                var effectAccept = new AcceptActionUsage();
+                effectOnlyTransition.AssignOwnership(effectTfm, effectAccept);
 
-            Assert.That(() => transitionUsage.ComputeTriggerPayloadParameterOperation(), Throws.TypeOf<NotSupportedException>());
+                Assert.That(effectOnlyTransition.ComputeTriggerPayloadParameterOperation(), Is.Null);
+
+                // Type-filter discrimination — a Trigger TFM whose transitionFeature is a plain ActionUsage
+                // (not an IAcceptActionUsage) → selectByKind(AcceptActionUsage) excludes it → triggerAction
+                // is empty → null.
+                var wrongTypeTransition = new TransitionUsage();
+                var wrongTypeTriggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+                var plainActionUsage = new ActionUsage();
+                wrongTypeTransition.AssignOwnership(wrongTypeTriggerTfm, plainActionUsage);
+
+                Assert.That(wrongTypeTransition.ComputeTriggerPayloadParameterOperation(), Is.Null);
+
+                // Trigger TFM present but the AcceptActionUsage has no directed parameter → its payloadParameter
+                // is null → result is null.
+                var noPayloadTransition = new TransitionUsage();
+                var noPayloadTriggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+                var bareAccept = new AcceptActionUsage();
+                noPayloadTransition.AssignOwnership(noPayloadTriggerTfm, bareAccept);
+
+                Assert.That(noPayloadTransition.ComputeTriggerPayloadParameterOperation(), Is.Null);
+
+                // POSITIVE — a Trigger TFM whose transitionFeature is an AcceptActionUsage that owns a directed
+                // ReferenceUsage parameter → triggerAction->first().payloadParameter is that ReferenceUsage.
+                var payloadTransition = new TransitionUsage();
+                var triggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+                var acceptAction = new AcceptActionUsage();
+                var payloadParameter = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+                acceptAction.AssignOwnership(new FeatureMembership(), payloadParameter);
+                payloadTransition.AssignOwnership(triggerTfm, acceptAction);
+
+                Assert.That(payloadTransition.ComputeTriggerPayloadParameterOperation(), Is.SameAs(payloadParameter));
+
+                // Ordering — two Trigger TFMs each with a distinct payload → triggerAction->first() picks the
+                // first AcceptActionUsage → its payloadParameter is returned.
+                var twoTriggerTransition = new TransitionUsage();
+                var firstTriggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+                var firstAccept = new AcceptActionUsage();
+                var firstPayload = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+                firstAccept.AssignOwnership(new FeatureMembership(), firstPayload);
+                twoTriggerTransition.AssignOwnership(firstTriggerTfm, firstAccept);
+
+                var secondTriggerTfm = new TransitionFeatureMembership { Kind = TransitionFeatureKind.Trigger };
+                var secondAccept = new AcceptActionUsage();
+                var secondPayload = new ReferenceUsage { Direction = FeatureDirectionKind.In };
+                secondAccept.AssignOwnership(new FeatureMembership(), secondPayload);
+                twoTriggerTransition.AssignOwnership(secondTriggerTfm, secondAccept);
+
+                Assert.That(twoTriggerTransition.ComputeTriggerPayloadParameterOperation(), Is.SameAs(firstPayload));
+            }
         }
 
         [Test]

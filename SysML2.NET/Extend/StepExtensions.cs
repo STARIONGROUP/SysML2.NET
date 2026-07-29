@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -52,10 +53,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IBehavior> ComputeBehavior(this IStep stepSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return stepSubject == null
+                ? throw new ArgumentNullException(nameof(stepSubject))
+                : [.. stepSubject.type.OfType<IBehavior>()];
         }
 
         /// <summary>
@@ -67,10 +69,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IFeature> ComputeParameter(this IStep stepSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return stepSubject == null
+                ? throw new ArgumentNullException(nameof(stepSubject))
+                : [.. TypeExtensions.ComputeDirectedFeature(stepSubject)];
         }
 
     }
