@@ -86,7 +86,7 @@ namespace SysML2.NET.Tests.Extend
             {
                 Assert.That(falseSubject.ComputeRedefinedModelLevelEvaluableOperation([]), Is.False);
 
-                // TODO: reaches function.isModelLevelEvaluable, deferred (GitHub #322).
+                // For later: reaches function.isModelLevelEvaluable, deferred (GitHub #322).
                 Assert.That(
                     () => stubSubject.ComputeRedefinedModelLevelEvaluableOperation([]),
                     Throws.TypeOf<NotSupportedException>());
