@@ -194,6 +194,10 @@ Direct pushes to `development` or `master` are forbidden. All work lives on a fe
 
 ## Quality rules
 
+- **OCL index base is 1-based; translate positional access accordingly and NEVER mix the two forms.** OCL collections are 1-based (`->at(1)` is the first element; `->first()` ≡ `->at(1)`). Two correct C# forms, applied by target:
+  - **Metamodel positional OPERATIONS** — `IActionUsage.Argument(int)` and `IActionUsage.InputParameter(int)` are themselves **1-based** (the C# operation does the `-1` + bounds-check internally, mirroring the OMG metamodel and the pilot). So OCL `argument(N)` / `inputParameter(N)` → `subject.Argument(N)` / `subject.InputParameter(N)` with **N passed through UNCHANGED**. Subtracting 1 here re-introduces the off-by-one it looks like it avoids. (Documented in `README.md` → "API conventions".)
+  - **Direct 0-based `List<T>` indexing** — when translating `->at(N)` into a raw list index, convert to **`[N-1]`** (`->at(2)` → `list[1]`); `->first()` → `list[0]` / `FirstOrDefault()`. Guard the count first (`Count >= N ? list[N-1] : null`) to honor the OCL's implicit null.
+  Do not translate a 1-based operation call as if it were a 0-based indexer, and do not index a 0-based list with the raw OCL N. Both conventions coexist in the codebase; keep each call site internally consistent.
 - Prefer comparing 'Count' to 0 rather than using 'Any()', both for clarity and for performance
 - Use 'StringBuilder.Append(char)' instead of 'StringBuilder.Append(string)' when the input is a constant unit string
 - Prefer 'string.IsNullOrWhiteSpace' over 'string.IsNullOrEmpty' when checking the non-nullable value of a string

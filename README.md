@@ -44,6 +44,16 @@ Branch | Build Status
 Master | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
 Development | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
+## API conventions
+
+### 1-based positional operations
+
+A small number of metaclass **operations** that take a positional index — notably `IActionUsage.Argument(int)` and `IActionUsage.InputParameter(int)` — are **1-based**, not 0-based. `Argument(1)` returns the *first* argument, and an index outside `1..count` returns `null`.
+
+This is intentional: these methods are the C# realization of normative OMG SysML v2 metamodel operations (`ActionUsage::argument(i)`, `ActionUsage::inputParameter(i)`), which are 1-based per the specification and the [pilot implementation](https://github.com/Systems-Modeling/SysML-v2-Pilot-Implementation). The SDK is generated as a faithful mirror of the metamodel, so these operations preserve the specification's indexing rather than adopting the C# 0-based convention.
+
+For idiomatic 0-based access, use the underlying collections directly (e.g. `InputParameters()`), which are ordinary 0-based `List<T>`. The 1-based operations are a specification-aligned convenience on top of those lists.
+
 # Software Bill of Materials (SBOM) and Provenance
 
 As part of our commitment to security, transparency, and traceability the docker images and nuget packaves Software Bill of Materials (SBOM), the docker containers also contain Provenance information. These are automatically generated during the build process, providing detailed insights into the components, their licenses, versions, and the integrity of the nugets and docker images. What is Included:
