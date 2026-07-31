@@ -84,10 +84,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeUntilArgument(this IWhileLoopActionUsage whileLoopActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return whileLoopActionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(whileLoopActionUsageSubject))
+                : whileLoopActionUsageSubject.InputParameter(3) as IExpression;
         }
 
         /// <summary>
@@ -111,10 +112,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeWhileArgument(this IWhileLoopActionUsage whileLoopActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return whileLoopActionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(whileLoopActionUsageSubject))
+                : whileLoopActionUsageSubject.InputParameter(1) as IExpression;
         }
 
     }

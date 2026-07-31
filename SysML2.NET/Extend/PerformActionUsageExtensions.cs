@@ -72,10 +72,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputePerformedAction(this IPerformActionUsage performActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (performActionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(performActionUsageSubject));
+            }
+
+            var referencedFeatureTarget = performActionUsageSubject.ReferencedFeatureTarget();
+
+            return referencedFeatureTarget == null
+                ? performActionUsageSubject
+                : referencedFeatureTarget as IActionUsage;
         }
 
         /// <summary>
@@ -97,10 +105,18 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IPerformActionUsage performActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (performActionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(performActionUsageSubject));
+            }
+
+            var performedAction = performActionUsageSubject.performedAction;
+
+            return !ReferenceEquals(performedAction, performActionUsageSubject)
+                ? performedAction
+                : UsageExtensions.ComputeRedefinedNamingFeatureOperation(performActionUsageSubject);
         }
     }
 }

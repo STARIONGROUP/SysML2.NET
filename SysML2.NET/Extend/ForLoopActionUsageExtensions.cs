@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -84,10 +85,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IReferenceUsage ComputeLoopVariable(this IForLoopActionUsage forLoopActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (forLoopActionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(forLoopActionUsageSubject));
+            }
+
+            return forLoopActionUsageSubject.ownedFeature.FirstOrDefault() as IReferenceUsage;
         }
 
         /// <summary>
@@ -105,10 +110,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IExpression ComputeSeqArgument(this IForLoopActionUsage forLoopActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return forLoopActionUsageSubject == null
+                ? throw new ArgumentNullException(nameof(forLoopActionUsageSubject))
+                : forLoopActionUsageSubject.Argument(1);
         }
 
     }

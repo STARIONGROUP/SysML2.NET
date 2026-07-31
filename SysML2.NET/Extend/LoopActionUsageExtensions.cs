@@ -84,10 +84,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IActionUsage ComputeBodyAction(this ILoopActionUsage loopActionUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (loopActionUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(loopActionUsageSubject));
+            }
+
+            return loopActionUsageSubject.InputParameter(2) as IActionUsage;
         }
 
     }
