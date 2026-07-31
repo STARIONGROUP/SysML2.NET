@@ -22,10 +22,12 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Kernel.Multiplicities;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -95,10 +97,17 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeMultiplicityHasBoundsOperation(this IControlNode controlNodeSubject, IMultiplicity mult, int lower, string upper)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (controlNodeSubject == null)
+            {
+                throw new ArgumentNullException(nameof(controlNodeSubject));
+            }
+
+            return mult != null
+                && (mult is IMultiplicityRange multiplicityRange
+                    ? multiplicityRange.HasBounds(lower, upper)
+                    : mult.AllSupertypes().OfType<IMultiplicityRange>().Any(rangeSupertype => rangeSupertype.HasBounds(lower, upper)));
         }
     }
 }
