@@ -54,15 +54,19 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(viewUsage.ComputeExposedElement(), Is.Empty);
 
-            // STUB-BLOCKER: adding a MembershipExpose dispatches ComputeExposedElement to
-            // MembershipExpose.ImportedMemberships(excluded), which calls
-            // MembershipImportExtensions.ComputeRedefinedImportedMembershipsOperation — a
-            // NotSupportedException stub. The populated positive case cannot be tested until that
-            // upstream stub is implemented.
-            var membershipExpose = new MembershipExpose();
-            viewUsage.AssignOwnership(membershipExpose);
+            // Positive: a valid MembershipExpose (ImportedMembership wired to a real membership whose
+            // memberElement is exposable) routes through the now-implemented
+            // MembershipImport.importedMemberships. Non-recursive → [importedMembership]; its
+            // memberElement surfaces and, with no ElementFilterMembership conditions, passes
+            // includeAsExposed → the exposed element is returned. Uses a fresh ViewUsage so the
+            // positive path is not contaminated by the deliberately-minimal discrimination import above.
+            var positiveViewUsage = new ViewUsage();
+            var exposedElement = new Feature();
+            var exposeImportedMembership = new Membership { MemberElement = exposedElement };
+            var membershipExpose = new MembershipExpose { ImportedMembership = exposeImportedMembership, IsRecursive = false };
+            positiveViewUsage.AssignOwnership(membershipExpose);
 
-            Assert.That(viewUsage.ComputeExposedElement, Throws.TypeOf<NotSupportedException>());
+            Assert.That(positiveViewUsage.ComputeExposedElement(), Does.Contain(exposedElement));
         }
 
         [Test]
