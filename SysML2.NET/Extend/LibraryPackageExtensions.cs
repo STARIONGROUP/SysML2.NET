@@ -50,10 +50,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this ILibraryPackage libraryPackageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (libraryPackageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(libraryPackageSubject));
+            }
+
+            return libraryPackageSubject;
         }
     }
 }

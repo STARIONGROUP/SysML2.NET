@@ -89,15 +89,23 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(package.ComputeRedefinedImportedMembershipsOperation([]), Is.Empty);
 
-            var importMember = new MembershipImport();
+            // Valid MembershipImport (ImportedMembership wired to a real membership) with no
+            // filterConditions: MembershipImport.importedMemberships is non-recursive, so it yields
+            // [importedMembership]; Package.importedMemberships aggregates it and, absent any
+            // ElementFilterMembership, ComputeRedefinedImportedMembershipsOperation returns it as-is.
+            var importedMemberNamespace = new Namespace();
+            var importedMembership = new Membership { MemberElement = importedMemberNamespace };
+            var importMember = new MembershipImport { ImportedMembership = importedMembership, IsRecursive = false };
 
             package.AssignOwnership(importMember);
-            Assert.That(() => package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
+            Assert.That(package.ComputeRedefinedImportedMembershipsOperation([]), Does.Contain(importedMembership));
 
+            // Discrimination: a bare BooleanExpression filterCondition evaluates to [] → CheckCondition
+            // returns false → the imported membership fails the filter and is excluded → empty result.
             var membership = new ElementFilterMembership();
             var expression = new BooleanExpression();
             package.AssignOwnership(membership, expression);
-            Assert.That(() => package.ComputeRedefinedImportedMembershipsOperation([]), Throws.InstanceOf<NotSupportedException>());
+            Assert.That(package.ComputeRedefinedImportedMembershipsOperation([]), Is.Empty);
         }
     }
 }

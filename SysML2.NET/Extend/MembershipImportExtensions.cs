@@ -60,10 +60,23 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IMembershipImport membershipImportSubject, List<INamespace> excluded)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (membershipImportSubject == null)
+            {
+                throw new ArgumentNullException(nameof(membershipImportSubject));
+            }
+
+            if (!membershipImportSubject.IsRecursive
+                || membershipImportSubject.importedElement is not INamespace importedNamespace
+                || excluded.Contains(importedNamespace))
+            {
+                return [membershipImportSubject.ImportedMembership];
+            }
+
+            var visibleMemberships = importedNamespace.VisibleMemberships(excluded, true, membershipImportSubject.IsImportAll);
+
+            return [membershipImportSubject.ImportedMembership, .. visibleMemberships];
         }
     }
 }
