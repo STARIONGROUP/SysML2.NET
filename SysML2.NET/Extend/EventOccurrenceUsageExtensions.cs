@@ -81,10 +81,18 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IOccurrenceUsage ComputeEventOccurrence(this IEventOccurrenceUsage eventOccurrenceUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            if (eventOccurrenceUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(eventOccurrenceUsageSubject));
+            }
+
+            var referencedFeatureTarget = eventOccurrenceUsageSubject.ReferencedFeatureTarget();
+
+            return referencedFeatureTarget == null
+                ? eventOccurrenceUsageSubject
+                : referencedFeatureTarget as IOccurrenceUsage;
         }
 
         /// <summary>
@@ -96,10 +104,12 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static bool ComputeIsReference(this IEventOccurrenceUsage eventOccurrenceUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            // EventOccurrenceUsage::isReference is always true (SysML 2.0 spec, Clause 8.3.9.2).
+            return eventOccurrenceUsageSubject == null
+                ? throw new ArgumentNullException(nameof(eventOccurrenceUsageSubject))
+                : true;
         }
 
     }

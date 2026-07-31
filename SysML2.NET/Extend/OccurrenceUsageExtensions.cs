@@ -22,6 +22,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
@@ -82,10 +83,13 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IOccurrenceDefinition ComputeIndividualDefinition(this IOccurrenceUsage occurrenceUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return occurrenceUsageSubject == null
+                ? throw new ArgumentNullException(nameof(occurrenceUsageSubject))
+                : occurrenceUsageSubject.occurrenceDefinition
+                    .OfType<IOccurrenceDefinition>()
+                    .FirstOrDefault(occurrenceDefinition => occurrenceDefinition.IsIndividual);
         }
 
         /// <summary>
@@ -97,10 +101,13 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static List<IClass> ComputeOccurrenceDefinition(this IOccurrenceUsage occurrenceUsageSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            // occurrenceDefinition redefines Usage::definition -> Feature::type: reading subject.type
+            // would delegate to the narrowest redefinition (this property) -> stack overflow.
+            return occurrenceUsageSubject == null
+                ? throw new ArgumentNullException(nameof(occurrenceUsageSubject))
+                : [.. FeatureExtensions.ComputeType(occurrenceUsageSubject).OfType<IClass>()];
         }
 
     }

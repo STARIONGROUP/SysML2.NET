@@ -25,6 +25,7 @@ namespace SysML2.NET.Tests.Extend
     using NUnit.Framework;
 
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Kernel.Classes;
     using SysML2.NET.Core.POCO.Kernel.Structures;
     using SysML2.NET.Core.POCO.Systems.Items;
     using SysML2.NET.Extensions;
@@ -37,17 +38,26 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IItemUsage)null).ComputeItemDefinition(), Throws.TypeOf<ArgumentNullException>());
 
-            // ComputeItemDefinition faithfully implements the OCL itemDefinition = occurrenceDefinition->selectByKind(Structure),
-            // reading the subsetted occurrenceDefinition property directly. occurrenceDefinition resolves to
-            // OccurrenceUsageExtensions.ComputeOccurrenceDefinition, which is still a stub, so any non-null subject throws
-            // NotSupportedException (stub-blocker pattern).
-            // For later: once OccurrenceUsageExtensions.ComputeOccurrenceDefinition is implemented, replace the assertion below with a
-            // real one: a subject whose occurrenceDefinition includes a Structure plus a non-Structure Class → ComputeItemDefinition
-            // returns only the Structure(s).
-            var subject = new ItemUsage();
-            subject.AssignOwnership(new FeatureTyping { Type = new Structure() });
+            // Empty: no typings → empty list. itemDefinition = occurrenceDefinition->selectByKind(Structure),
+            // occurrenceDefinition = type->selectByKind(Class).
+            var emptySubject = new ItemUsage();
 
-            Assert.That(subject.ComputeItemDefinition, Throws.TypeOf<NotSupportedException>());
+            Assert.That(emptySubject.ComputeItemDefinition(), Is.Empty);
+
+            // Populated: a Structure (which is a Class → surfaces in occurrenceDefinition, and is a Structure → kept in
+            // itemDefinition) plus a plain Class (surfaces in occurrenceDefinition but is NOT a Structure → excluded).
+            var subject = new ItemUsage();
+            var structure = new Structure();
+            subject.AssignOwnership(new FeatureTyping { Type = structure });
+            subject.AssignOwnership(new FeatureTyping { Type = new Class() });
+
+            var result = subject.ComputeItemDefinition();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(result, Has.Count.EqualTo(1));
+                Assert.That(result, Does.Contain(structure));
+            }
         }
     }
 }
