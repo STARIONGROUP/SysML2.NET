@@ -54,10 +54,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static FeatureDirectionKind ComputeRedefinedParameterDirectionOperation(this IReturnParameterMembership returnParameterMembershipSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return returnParameterMembershipSubject == null
+                ? throw new ArgumentNullException(nameof(returnParameterMembershipSubject))
+                : FeatureDirectionKind.Out;
         }
     }
 }

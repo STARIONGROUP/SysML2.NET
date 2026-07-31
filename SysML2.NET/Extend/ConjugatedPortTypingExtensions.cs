@@ -50,10 +50,11 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static IPortDefinition ComputePortDefinition(this IConjugatedPortTyping conjugatedPortTypingSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return conjugatedPortTypingSubject == null
+                ? throw new ArgumentNullException(nameof(conjugatedPortTypingSubject))
+                : conjugatedPortTypingSubject.ConjugatedPortDefinition?.originalPortDefinition;
         }
 
     }
