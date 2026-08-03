@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (poco.IsSufficient)
+            if (poco.IsSufficient && poco is not (SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition))
             {
                 stringBuilder.Append(" all ");
                 stringBuilder.Append(' ');

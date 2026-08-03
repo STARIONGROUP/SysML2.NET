@@ -468,13 +468,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         ownedRelationshipCursor.Move();
                         break;
 
-                    case IOwningMembership owningMembership:
+                    case IOwningMembership owningMembership when owningMembership.IsValidForDefinitionMember(writerContext):
                         OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IMembership membership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
 
@@ -483,9 +478,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         ownedRelationshipCursor.Move();
                         break;
 
-                    default:
+                    case IMembership membership when membership is not IOwningMembership and not IFeatureMembership:
+                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
                         break;
+
+                    default:
+                        // KEBNF DefinitionBodyItem* / InterfaceBodyItem* semantics: terminate the body
+                        // loop when the cursor's current element matches no alternative — this leaves
+                        // the element for the parent rule to consume (e.g. PortDefinition's trailing
+                        // ownedRelationship += ConjugatedPortDefinitionMember). The outer body loop is
+                        // also guarded by IsValidForDefinitionBodyItem / IsValidForInterfaceBodyItem,
+                        // so no caller reaches the dispatcher with an unrecognised element.
+                        return;
                 }
             }
         }
@@ -612,11 +617,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             foreach (var rawLine in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
             {
                 var line = rawLine.TrimEnd('\r');
-                stringBuilder.Append(" * ");
+                                stringBuilder.AppendIndentedLiteral(" * ");
                 stringBuilder.AppendLine(line);
             }
 
-            stringBuilder.AppendLine(" */");
+            stringBuilder.AppendIndentedLiteral(" */");
+            stringBuilder.AppendLine();
 
             if (surroundWithBlankLines)
             {

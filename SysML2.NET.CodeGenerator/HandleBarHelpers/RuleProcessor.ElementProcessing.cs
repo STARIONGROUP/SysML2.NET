@@ -374,7 +374,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             {
                                 if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsOptional: true })
                                 {
-                                    writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
+                                    // KEBNF `Prop ?= 'literal'` — emit the literal when the runtime
+                                    // value is truthy, but suppress it for concrete subtypes whose
+                                    // metamodel default already equals the literal-trigger value.
+                                    // For those subtypes the keyword is structurally redundant and
+                                    // the canonical idiomatic source omits it (see e.g. SysML
+                                    // `attribute X` rather than `ref attribute X` because
+                                    // AttributeUsage's `isReference` default is `true`).
+                                    var exclusionTypes = targetProperty.QuerySubclassesWithMatchingDefault(umlClass, "true");
+                                    var exclusionClause = exclusionTypes.Count == 0
+                                        ? string.Empty
+                                        : $" && poco is not ({string.Join(" or ", exclusionTypes.Select(c => c.QueryFullyQualifiedTypeName()))})";
+
+                                    writer.WriteSafeString($"if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}{exclusionClause}){Environment.NewLine}");
                                     writer.WriteSafeString($"{{{Environment.NewLine}");
                                     writer.WriteSafeString($"stringBuilder.Append(\" {terminalElement.Value} \");{Environment.NewLine}");
                                     writer.WriteSafeString('}');

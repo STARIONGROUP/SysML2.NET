@@ -99,28 +99,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-
-            if (poco.MemberElement != null)
+            if (poco is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership0)
+            {
+                OwningMembershipTextualNotationBuilder.BuildOwnedFeatureChainMember(owningMembership0, writerContext, stringBuilder);
+            }
+            else if (poco.MemberElement != null)
             {
                 SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.MemberElement, writerContext, poco);
                 stringBuilder.Append(' ');
             }
-            else
-            {
-                var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (ownedRelatedElementCursor.Current != null)
-                {
-
-                    if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
-                    {
-                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
-                        ownedRelatedElementCursor.Move();
-
-                    }
-                }
-
-            }
         }
 
         /// <summary>
@@ -169,8 +157,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildInstantiatedTypeMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-
-            if (poco.MemberElement != null)
+            if (poco is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership0)
+            {
+                OwningMembershipTextualNotationBuilder.BuildOwnedFeatureChainMember(owningMembership0, writerContext, stringBuilder);
+            }
+            else
             {
 
                 if (poco.MemberElement != null)
@@ -180,22 +171,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
 
             }
-            else
-            {
-                var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-                if (ownedRelatedElementCursor.Current != null)
-                {
-
-                    if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
-                    {
-                        FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
-                        ownedRelatedElementCursor.Move();
-
-                    }
-                }
-
-            }
         }
 
         /// <summary>

@@ -61,6 +61,27 @@
       <None Update="Validation\01-Parts Tree\1c-Parts Tree Redefinition.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Validation\02-Parts Interconnection\2a-Parts Interconnection.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\01-Parts Tree\1a-Parts Tree.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\01-Parts Tree\1c-Parts Tree Redefinition.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\01-Parts Tree\1d-Parts Tree with Reference.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\02-Parts Interconnection\2a-Parts Interconnection.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\02-Parts Interconnection\2c-Parts Interconnection-Multiple Decompositions.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\02-Parts Interconnection\2c-Parts Interconnection-Multiple Decompositions.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
