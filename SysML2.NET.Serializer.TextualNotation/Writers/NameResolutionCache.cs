@@ -223,6 +223,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="sourcePoco">The reference site's source POCO.</param>
         /// <param name="sourceLocalScope">The previously-computed local scope (may be <see langword="null" />).</param>
         /// <param name="escapedName">The target's escaped raw <c>name</c>.</param>
+        /// <param name="localRedefiner">The local <see cref="IFeature"/> that acts like redefiner</param>
         /// <returns>The resolved emission string.</returns>
         private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName, IFeature localRedefiner)
         {
@@ -562,6 +563,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="target">The referenced element.</param>
         /// <param name="rawName">The simple-name lexical form to probe (may be <see langword="null" /> / whitespace).</param>
         /// <param name="escapedName">The escaped form to emit on a hit.</param>
+        /// <param name="localRedefiner">The local <see cref="IFeature"/> that acts as redefiner</param>
         /// <param name="matched">On a unique-binding hit, the simple-name string to emit.</param>
         /// <returns><see langword="true" /> when the simple name resolves uniquely to the target somewhere in the chain.</returns>
         private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, IFeature localRedefiner, out string matched)
