@@ -33,7 +33,7 @@ package '2c-Parts Interconnection-Multiple Decompositions' {
             part c1: C1;
             part c2: C2;
             connect c1.pa to c2.pc;
-            ref port :>> pe = c1. {
+            ref port :>> pe = c1.pb {
                 doc
                 /*
                  * This combines the definition of a port with a binding
@@ -47,7 +47,7 @@ package '2c-Parts Interconnection-Multiple Decompositions' {
         part b12: B12 {
             part c3: C3;
             part c4: C4;
-            ref port :>> pf = c3.;
+            ref port :>> pf = c3.pd;
         }
         connect b11.pe to b12.pf;
     }
@@ -62,15 +62,15 @@ package '2c-Parts Interconnection-Multiple Decompositions' {
              * The c-level entities are already composite parts within
              * a11, so they cannot also be composite parts within a12.
              */
-            ref c1: C1 = a11.;
-            ref c3: C3 = a11.;
+            ref c1: C1 = a11.b11.c1;
+            ref c3: C3 = a11.b12.c3;
             connect c1.pb to c3.pd;
-            ref port :>> pg = c1.;
+            ref port :>> pg = c1.pa;
         }
         part b22: B22 {
-            ref c2: C2 = a11.;
-            ref c4: C4 = a11.;
-            ref port :>> ph = c2.;
+            ref c2: C2 = a11.b11.c2;
+            ref c4: C4 = a11.b12.c4;
+            ref port :>> ph = c2.pc;
         }
     }
 }

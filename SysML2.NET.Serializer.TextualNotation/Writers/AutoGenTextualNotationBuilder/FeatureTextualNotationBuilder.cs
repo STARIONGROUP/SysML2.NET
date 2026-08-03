@@ -714,22 +714,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("chains ");
-            if (ownedRelationshipCursor.Current != null)
+            if (poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IFeatureChaining>().Count() == 1 && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining elementAsFeatureChaining)
             {
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining elementAsFeatureChaining)
-                    {
-                        FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(elementAsFeatureChaining, writerContext, stringBuilder);
-                    }
-                }
+                FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(elementAsFeatureChaining, writerContext, stringBuilder);
+                ownedRelationshipCursor.Move();
             }
             else
             {
                 BuildFeatureChain(poco, writerContext, stringBuilder);
             }
+
 
         }
 

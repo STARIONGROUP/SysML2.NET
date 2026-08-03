@@ -544,6 +544,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="types">The distinct element types across all alternatives</param>
         private void ProcessMixedTypeSingleElementAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext, List<Type> types)
         {
+            if (this.TryEmitSubclassRuleDispatchAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+            {
+                return;
+            }
+
+            if (this.TryEmitSingleElementOrSameClassRuleAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
+            {
+                return;
+            }
+
             if (types.SequenceEqual([typeof(AssignmentElement), typeof(NonTerminalElement)]))
             {
                 foreach (var alternative in alternatives)
@@ -929,6 +939,206 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext, poco);{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Attempts to emit code for the subclass-rule dispatch pattern:
+        /// <c>property = X | SubclassRule</c>, where <c>SubclassRule</c> targets a strict
+        /// specialization of the current rule's target metaclass (e.g.
+        /// <c>FeatureChainMember : Membership = memberElement = [QualifiedName] | OwnedFeatureChainMember</c>
+        /// with <c>OwnedFeatureChainMember : OwningMembership</c>). The runtime subtype is the
+        /// discriminator: only an instance of the subclass can be the subclass-rule alternative,
+        /// so the emitted code dispatches on the POCO's runtime type FIRST and only falls back to
+        /// the assignment alternative for base-class instances. Emitting the alternatives in
+        /// grammar order instead would put a derived-property null check (e.g.
+        /// <c>MemberElement != null</c>, never null on an <c>OwningMembership</c>) in front,
+        /// rendering the subclass alternative unreachable.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="umlClass">The related <see cref="IClass" /></param>
+        /// <param name="alternatives">The grammar alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
+        private bool TryEmitSubclassRuleDispatchAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            if (alternatives.Count != 2)
+            {
+                return false;
+            }
+
+            var assignmentAlt = alternatives.FirstOrDefault(alt =>
+                alt.Elements.Count == 1
+                && alt.Elements[0] is AssignmentElement { Operator: "=" });
+
+            var subclassRuleAlt = alternatives.FirstOrDefault(alt =>
+                alt.Elements.Count == 1
+                && alt.Elements[0] is NonTerminalElement);
+
+            if (assignmentAlt == null || subclassRuleAlt == null)
+            {
+                return false;
+            }
+
+            var assignmentElement = (AssignmentElement)assignmentAlt.Elements[0];
+            var nonTerminalElement = (NonTerminalElement)subclassRuleAlt.Elements[0];
+
+            var targetProperty = umlClass.QueryAllProperties().SingleOrDefault(x =>
+                string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
+
+            if (targetProperty == null || targetProperty.QueryIsEnumerable())
+            {
+                return false;
+            }
+
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+
+            if (referencedRule == null)
+            {
+                return false;
+            }
+
+            var subclass = RuleQueryUtilities.FindClass(umlClass.Cache, referencedRule.EffectiveTarget);
+
+            if (subclass == null || subclass == umlClass || !subclass.QueryAllGeneralClassifiers().Contains(umlClass))
+            {
+                return false;
+            }
+
+            var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
+            var subclassTypeName = subclass.QueryFullyQualifiedTypeName();
+            var patternVariableName = $"{subclass.Name.LowerCaseFirstLetter()}{ruleGenerationContext.NarrowedTypeCheckCounter}";
+            ruleGenerationContext.NarrowedTypeCheckCounter++;
+
+            writer.WriteSafeString($"if ({variableName} is {subclassTypeName} {patternVariableName}){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            writer.WriteSafeString($"{subclass.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({patternVariableName}, writerContext, stringBuilder);{Environment.NewLine}");
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+
+            // A NonTerminal-valued assignment emits its own null guard inside ProcessAssignmentElement;
+            // only a value-literal assignment (e.g. [QualifiedName]) needs the guard supplied here.
+            if (assignmentElement.Value is ValueLiteralElement)
+            {
+                writer.WriteSafeString($"else if ({targetProperty.QueryIfStatementContentForNonEmpty(variableName)}){Environment.NewLine}");
+            }
+            else
+            {
+                writer.WriteSafeString($"else{Environment.NewLine}");
+            }
+
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            this.ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
+            writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Attempts to emit code for the single-element-or-same-class-rule pattern:
+        /// <c>collection += X | SameClassRule</c>, where <c>SameClassRule</c> targets the current
+        /// rule's own metaclass and re-consumes the same collection property (e.g.
+        /// <c>ChainingPart : Feature = 'chains' (ownedRelationship += OwnedFeatureChaining | FeatureChain)</c>
+        /// with <c>FeatureChain : Feature = ownedRelationship += OwnedFeatureChaining ('.' ownedRelationship += OwnedFeatureChaining)+</c>).
+        /// Because the same-class rule consumes two or more elements of the <c>+=</c> value type,
+        /// the discriminator is the element count: exactly one matching element selects the single
+        /// <c>+=</c> alternative (with its Golden-Rule <c>Move()</c>), otherwise the same-class
+        /// rule is delegated to and manages the shared cursor itself. A bare
+        /// <c>cursor.Current != null</c> discriminator would make the same-class alternative
+        /// unreachable and, without the <c>Move()</c>, stall the caller's dispatch loop.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="umlClass">The related <see cref="IClass" /></param>
+        /// <param name="alternatives">The grammar alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns><c>true</c> if the pattern matched and code was emitted; <c>false</c> otherwise</returns>
+        private bool TryEmitSingleElementOrSameClassRuleAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            if (alternatives.Count != 2)
+            {
+                return false;
+            }
+
+            var collectionAlt = alternatives.FirstOrDefault(alt =>
+                alt.Elements.Count == 1
+                && alt.Elements[0] is AssignmentElement { Operator: "+=", Value: NonTerminalElement });
+
+            var sameClassRuleAlt = alternatives.FirstOrDefault(alt =>
+                alt.Elements.Count == 1
+                && alt.Elements[0] is NonTerminalElement);
+
+            if (collectionAlt == null || sameClassRuleAlt == null)
+            {
+                return false;
+            }
+
+            var assignmentElement = (AssignmentElement)collectionAlt.Elements[0];
+            var nonTerminalElement = (NonTerminalElement)sameClassRuleAlt.Elements[0];
+
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+
+            if (referencedRule == null || !string.Equals(referencedRule.EffectiveTarget, umlClass.Name, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            // The same-class rule must re-consume the same collection property THROUGH THE SAME
+            // sub-rule (e.g. FeatureChain re-consumes ownedRelationship += OwnedFeatureChaining):
+            // only then do the two alternatives compete for the same element type and need the
+            // count discriminator. Disjoint element types (e.g. CalculationBodyItem's
+            // ReturnParameterMember vs ActionBodyItem) stay with the plain type dispatch.
+            var elementValueNonTerminal = (NonTerminalElement)assignmentElement.Value;
+
+            var reconsumesSameElements = referencedRule.Alternatives
+                .SelectMany(alt => alt.Elements)
+                .OfType<AssignmentElement>()
+                .Any(innerAssignment => innerAssignment is { Operator: "+=", Value: NonTerminalElement innerNonTerminal }
+                    && string.Equals(innerAssignment.Property, assignmentElement.Property, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(innerNonTerminal.Name, elementValueNonTerminal.Name, StringComparison.Ordinal));
+
+            if (!reconsumesSameElements)
+            {
+                return false;
+            }
+
+            var targetProperty = umlClass.QueryAllProperties().SingleOrDefault(x =>
+                string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
+
+            if (targetProperty == null || !targetProperty.QueryIsEnumerable())
+            {
+                return false;
+            }
+
+            var elementTypeName = ResolveAssignmentTargetTypeName(assignmentElement, umlClass, ruleGenerationContext);
+            var elementRule = ruleGenerationContext.FindRule(elementValueNonTerminal.Name);
+            var elementTypeTarget = elementRule?.EffectiveTarget;
+            var sameClassRuleCall = ResolveBuilderCall(umlClass, nonTerminalElement, referencedRule.EffectiveTarget, ruleGenerationContext);
+
+            if (elementTypeName == null || elementTypeTarget == null || sameClassRuleCall == null)
+            {
+                return false;
+            }
+
+            this.DeclareAllRequiredCursors(writer, umlClass, collectionAlt, ruleGenerationContext);
+            var cursor = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+
+            var variableName = ruleGenerationContext.CurrentVariableName ?? "poco";
+            var propertyAccessor = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+            var elementVariableName = $"elementAs{elementTypeTarget}";
+
+            var singleElementBuilderCall = elementTypeTarget == ruleGenerationContext.NamedElementToGenerate.Name
+                ? $"Build{elementValueNonTerminal.Name}({elementVariableName}, writerContext, stringBuilder);"
+                : $"{elementTypeTarget}TextualNotationBuilder.Build{elementValueNonTerminal.Name}({elementVariableName}, writerContext, stringBuilder);";
+
+            writer.WriteSafeString($"if ({variableName}.{propertyAccessor}.OfType<{elementTypeName}>().Count() == 1 && {cursor.CursorVariableName}.Current is {elementTypeName} {elementVariableName}){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            writer.WriteSafeString($"{singleElementBuilderCall}{Environment.NewLine}");
+            writer.WriteSafeString($"{cursor.CursorVariableName}.Move();{Environment.NewLine}");
+            writer.WriteSafeString($"}}{Environment.NewLine}");
+            writer.WriteSafeString($"else{Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            writer.WriteSafeString($"{sameClassRuleCall}{Environment.NewLine}");
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
             return true;

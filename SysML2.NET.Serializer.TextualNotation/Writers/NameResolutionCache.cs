@@ -994,7 +994,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var siblings = chainOwner.OwnedRelationship.OfType<IFeatureChaining>().ToList();
             var index = siblings.IndexOf(chaining);
-            return index > 0;
+
+            if (index > 0)
+            {
+                return true;
+            }
+
+            // The FIRST chaining segment is also a chain accessor when the owned chain Feature
+            // itself is the target member of a FeatureChainExpression (grammar rule
+            // OwnedFeatureChainMember): the parser resolves even the first segment against the
+            // argument expression's result, not the lexical scope, so the bare simple name is
+            // the correct emission. A chain owned by a Specialization / ReferenceSubsetting
+            // (e.g. a connect end) keeps lexical resolution for its first segment.
+            return chainOwner.OwningRelationship is IMembership { OwningRelatedElement: IFeatureChainExpression } and not IParameterMembership;
         }
 
         /// <summary>
