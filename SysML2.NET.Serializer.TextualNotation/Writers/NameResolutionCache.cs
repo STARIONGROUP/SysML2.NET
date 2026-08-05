@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="NameResolutionCache.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -29,8 +29,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
+    using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
 
     /// <summary>
@@ -101,14 +103,55 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private readonly Dictionary<INamespace, HashSet<INamespace>> directFacadeIndex = new();
 
         /// <summary>
+        /// Reverse index of ALIAS bindings: scope → (aliased element → the alias names declared for it
+        /// in that scope). Populated during the eager <see cref="BuildSimpleNameIndices"/> pass from every
+        /// <see cref="IMembership"/> that carries an explicit <see cref="IMembership.MemberName"/> /
+        /// <see cref="IMembership.MemberShortName"/> override differing from the target's own names — i.e.
+        /// an <c>alias X for Y;</c> declaration.
+        /// <para>The forward index already maps <c>"Torque" → TorqueValue</c>, but
+        /// <see cref="ResolveFresh"/> probes only the TARGET's own lexical forms, so an alias could never
+        /// be found. This reverse map lets a reference to <c>TorqueValue</c> emit the in-scope alias
+        /// <c>Torque</c> instead of the qualified <c>ISQMechanics::TorqueValue</c>, matching how the model
+        /// was written.</para>
+        /// </summary>
+        private readonly Dictionary<INamespace, Dictionary<IElement, List<string>>> aliasIndex = new();
+
+        /// <summary>
+        /// The root <see cref="INamespace" />s forming the global <see cref="INamespace" /> (KerML 1.0
+        /// §8.2.3.5.2), excluding <see cref="RootNamespace" /> itself. Indexed like any other scope, but
+        /// only their VISIBLE memberships are admitted — see <see cref="BuildSimpleNameIndices" />.
+        /// </summary>
+        private readonly List<INamespace> globalNamespaces;
+
+        /// <summary>
         /// Initializes a new <see cref="NameResolutionCache" /> rooted at
         /// <paramref name="rootNamespace" /> and eagerly populates the per-namespace simple-name
         /// index for every namespace reachable from the root.
         /// </summary>
         /// <param name="rootNamespace">The root <see cref="INamespace" /> being serialized.</param>
-        public NameResolutionCache(INamespace rootNamespace)
+        /// <param name="globalNamespaces">
+        /// The other root <see cref="INamespace" />s available to <paramref name="rootNamespace" /> — the
+        /// model libraries and any other loaded resource. Per KerML 1.0 §8.2.3.5.2 a root
+        /// <see cref="INamespace" /> has an implicit containing <i>global</i> <see cref="INamespace" />
+        /// that "includes all the visible Memberships of all other root Namespaces that are available to
+        /// the first Namespace", and §8.2.3.5.4 makes resolution in that scope the final step once the
+        /// containment chain is exhausted. Supplying them lets the writer emit a name that resolves through
+        /// a library root which the model does not itself import (e.g. <c>ISQ::TorqueValue</c> for an
+        /// element owned by <c>ISQMechanics</c> and publicly re-exported by <c>ISQ</c>).
+        /// <para>Optional: when <see langword="null" /> or empty, resolution is limited to the containment
+        /// and import graph of <paramref name="rootNamespace" />, which is always safe — it can only yield
+        /// a longer, equally valid name. Obtain the roots from
+        /// <c>IDeSerializer.QueryRootNamespaces()</c>.</para>
+        /// </summary>
+        public NameResolutionCache(INamespace rootNamespace, IEnumerable<INamespace> globalNamespaces = null)
         {
             this.RootNamespace = rootNamespace ?? throw new ArgumentNullException(nameof(rootNamespace));
+
+            this.globalNamespaces = globalNamespaces?
+                .Where(candidate => candidate != null && !ReferenceEquals(candidate, rootNamespace))
+                .Distinct()
+                .ToList() ?? [];
+
             this.simpleNameIndices = this.BuildSimpleNameIndices(rootNamespace);
         }
 
@@ -187,7 +230,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 if (localRedefiner != null && !RedefinerDeclaredNameCollidesWith(localRedefiner, target))
                 {
-                    return this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner);
+                    return this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner, QuerySelfBindingScope(sourcePoco));
                 }
             }
 
@@ -198,9 +241,39 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return cached;
             }
 
-            var resolved = this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner: null);
+            var resolved = this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner: null, QuerySelfBindingScope(sourcePoco));
             this.resolvedReferences[cacheKey] = resolved;
             return resolved;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="INamespace" /> in which <paramref name="sourcePoco" /> is itself the
+        /// name binding for the element being referenced, or <see langword="null" /> when the source is
+        /// not a referencing <see cref="IMembership" />.
+        /// <para>A non-owning <see cref="IMembership" /> under an expression (e.g. the
+        /// <c>FeatureReferenceMember</c> of a <see cref="IFeatureReferenceExpression" />) IS the reference
+        /// being emitted — the parser resolves the name against the ENCLOSING lexical scope and only then
+        /// creates this membership. Counting it as a binding in its own owner's scope is circular: the
+        /// target would always appear uniquely resolvable at depth 0, so a bare simple name is emitted even
+        /// when an intervening declaration shadows it (<c>in fuelCmd = fuelCmd</c> instead of
+        /// <c>in fuelCmd = 'provide power'::fuelCmd</c>, which would re-parse to the local parameter).</para>
+        /// <para>Restricted to memberships with NO explicit name override. Such a membership contributes
+        /// the target's OWN name to its scope's index, which is exactly the binding to ignore. A
+        /// membership that DOES carry an override is an <c>alias X for Y;</c> declaration: it contributes
+        /// only the alias name, so the scope's binding of the target's own name comes from a different
+        /// membership and stays valid (<c>alias ThreeDVectorQuantityValue for '3dVectorQuantityValue';</c>
+        /// must not degrade to the qualified <c>Quantities::'3dVectorQuantityValue'</c>). The circular
+        /// alias-for-itself case is handled separately by <see cref="DeclaresAlias"/>.</para>
+        /// </summary>
+        /// <param name="sourcePoco">The source POCO at the reference site.</param>
+        /// <returns>The scope whose binding for the target must be ignored, or <see langword="null" />.</returns>
+        private static INamespace QuerySelfBindingScope(IElement sourcePoco)
+        {
+            return sourcePoco is IMembership membership and not IOwningMembership
+                   && string.IsNullOrWhiteSpace(membership.MemberName)
+                   && string.IsNullOrWhiteSpace(membership.MemberShortName)
+                ? membership.OwningRelatedElement as INamespace
+                : null;
         }
 
         /// <summary>
@@ -224,8 +297,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="sourceLocalScope">The previously-computed local scope (may be <see langword="null" />).</param>
         /// <param name="escapedName">The target's escaped raw <c>name</c>.</param>
         /// <param name="localRedefiner">The local <see cref="IFeature"/> that acts like redefiner</param>
+        /// <param name="selfBindingScope">
+        /// The <see cref="INamespace" /> whose binding of <paramref name="target" /> is contributed by the
+        /// reference being emitted itself and must therefore be ignored during the scope walk, or
+        /// <see langword="null" /> when the source is not a self-binding membership. See
+        /// <see cref="QuerySelfBindingScope" />.
+        /// </param>
         /// <returns>The resolved emission string.</returns>
-        private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName, IFeature localRedefiner)
+        private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName, IFeature localRedefiner, INamespace selfBindingScope)
         {
             var chain = this.GetSourceScopeChain(sourcePoco, sourceLocalScope);
 
@@ -239,7 +318,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 escapedShortName = rawShortName.QueryIsValidBasicName() ? rawShortName : rawShortName.ToUnrestrictedName();
 
-                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, localRedefiner, out var matchedShort))
+                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, localRedefiner, selfBindingScope, out var matchedShort))
                 {
                     return matchedShort;
                 }
@@ -248,9 +327,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var rawName = target.name;
 
             if (!string.IsNullOrWhiteSpace(rawName)
-                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, localRedefiner, out var matchedLong))
+                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, localRedefiner, selfBindingScope, out var matchedLong))
             {
                 return matchedLong;
+            }
+
+            // Alias pass — an `alias X for Y;` declared in a reachable scope binds the target under a
+            // name it does not carry itself, so the target's own lexical forms above can never find it.
+            // Preferred over the facade / qualified forms because it is how the model names the element
+            // at this site (e.g. `Torque` rather than `ISQMechanics::TorqueValue`).
+            if (this.TryResolveViaAlias(chain, target, sourcePoco, localRedefiner, selfBindingScope, out var matchedAlias))
+            {
+                return matchedAlias;
             }
 
             // Facade re-export pass — when the target's owningNamespace is DIRECTLY re-exported
@@ -295,7 +383,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ancestorRawName = !string.IsNullOrWhiteSpace(rawAncestorShort) ? rawAncestorShort : rawAncestorLong;
 
                 if (!string.IsNullOrWhiteSpace(ancestorRawName)
-                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, localRedefiner, out var matchedAnchor))
+                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, localRedefiner, selfBindingScope, out var matchedAnchor))
                 {
                     var builder = new StringBuilder(matchedAnchor);
 
@@ -564,9 +652,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="rawName">The simple-name lexical form to probe (may be <see langword="null" /> / whitespace).</param>
         /// <param name="escapedName">The escaped form to emit on a hit.</param>
         /// <param name="localRedefiner">The local <see cref="IFeature"/> that acts as redefiner</param>
+        /// <param name="selfBindingScope">
+        /// The <see cref="INamespace" /> whose binding of <paramref name="target" /> is contributed by the
+        /// reference being emitted itself and must therefore be skipped, or <see langword="null" /> when the
+        /// source is not a self-binding membership. See <see cref="QuerySelfBindingScope" />.
+        /// </param>
         /// <param name="matched">On a unique-binding hit, the simple-name string to emit.</param>
         /// <returns><see langword="true" /> when the simple name resolves uniquely to the target somewhere in the chain.</returns>
-        private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, IFeature localRedefiner, out string matched)
+        private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, IFeature localRedefiner, INamespace selfBindingScope, out string matched)
         {
             matched = null;
 
@@ -577,7 +670,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             foreach (var scope in chain)
             {
-                var resolution = this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner);
+                var resolution = this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner, selfBindingScope);
 
                 switch (resolution)
                 {
@@ -901,14 +994,39 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// owning Type at the redefinition site, so it must not participate in name resolution
         /// when emitting <c>:&gt;&gt; name</c>.
         /// </param>
+        /// <param name="selfBindingScope">
+        /// Optional <see cref="INamespace" /> in which the reference being emitted is itself the
+        /// membership binding <paramref name="target" />. In that scope the target's own entry is
+        /// excluded (it does not exist at parse time): <see cref="SimpleNameResolution.NotBound" /> when
+        /// nothing else binds the name there, <see cref="SimpleNameResolution.Shadowed" /> when another
+        /// element does. Pass <see langword="null"/> when the source is not a self-binding membership.
+        /// See <see cref="QuerySelfBindingScope" />.
+        /// </param>
         /// <returns>The resolution state.</returns>
-        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName, IFeature localRedefiner)
+        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName, IFeature localRedefiner, INamespace selfBindingScope)
         {
             var index = this.GetSimpleNameIndex(scope);
 
             if (!index.TryGetValue(rawName, out var elements))
             {
                 return SimpleNameResolution.NotBound;
+            }
+
+            // In the scope where the reference itself is the binding, the target's entry must be
+            // ignored: per KerML §8.2.3.5.3 local resolution is membership-based, and the reference's
+            // own membership does not exist yet when the parser resolves the written name — honouring
+            // it would make every reference trivially resolvable at depth 0 and hide a shadowing
+            // declaration further out. Only the TARGET's binding is excluded (mirroring the
+            // localRedefiner filter): any other element bound under the same name in that scope still
+            // shadows and forces the qualified form. See QuerySelfBindingScope.
+            if (selfBindingScope != null && ReferenceEquals(scope, selfBindingScope))
+            {
+                var isBoundToOtherElement = elements.Any(element =>
+                    !ReferenceEquals(element, target) && !ReferenceEquals(element, localRedefiner));
+
+                return isBoundToOtherElement
+                    ? SimpleNameResolution.Shadowed
+                    : SimpleNameResolution.NotBound;
             }
 
             // Filter out the local redefining feature so it doesn't shadow the redefined target
@@ -972,12 +1090,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Determines whether <paramref name="sourcePoco" /> is the right-hand side of a chain
         /// accessor — see grammar rules <c>FeatureChainExpression</c> (KerML §8.2.4.X) and
-        /// <c>FeatureChain</c> (KerML §8.2.4.3.5). Two patterns match:
+        /// <c>FeatureChain</c> (KerML §8.2.4.3.5). Three patterns match:
         /// <list type="bullet">
         ///   <item><description>An <see cref="IMembership" /> sitting as the chain-accessor RHS
         ///   of a <see cref="IFeatureChainExpression" />.</description></item>
         ///   <item><description>An <see cref="IFeatureChaining" /> at any index after the FIRST
         ///   in its container's <c>OwnedRelationship</c> list.</description></item>
+        ///   <item><description>The <see cref="IRedefinition" /> of a flow feature whose
+        ///   <see cref="IFlowEnd" /> carries a FlowEndSubsetting — see
+        ///   <see cref="IsFlowFeatureAccessor" />.</description></item>
         /// </list>
         /// </summary>
         /// <param name="sourcePoco">The source POCO at the reference site.</param>
@@ -985,6 +1106,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private static bool IsChainAccessor(IElement sourcePoco)
         {
             if (sourcePoco is IMembership { OwningRelatedElement: IFeatureChainExpression } and not IParameterMembership)
+            {
+                return true;
+            }
+
+            if (IsFlowFeatureAccessor(sourcePoco))
             {
                 return true;
             }
@@ -1012,6 +1138,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Determines whether <paramref name="sourcePoco" /> is the <c>redefinedFeature</c> reference of a
+        /// FlowFeatureRedefinition whose owning <see cref="IFlowEnd" /> also carries a FlowEndSubsetting.
+        /// <para>Per <c>FlowEnd = ( ownedRelationship += FlowEndSubsetting )? ownedRelationship += FlowFeatureMember</c>
+        /// (SysML 2.0 §8.2.2.16 Flows Textual Notation), the subsetting is the notational prefix — the flow
+        /// end reads <c>'generate torque'.engineTorque</c>. The parser resolves the flow feature against the
+        /// prefix's type, exactly as for a feature-chain accessor, so the writer must emit the bare simple
+        /// name rather than a lexically-qualified one. When the optional subsetting is ABSENT the flow
+        /// feature stands alone and keeps ordinary lexical resolution.</para>
+        /// </summary>
+        /// <param name="sourcePoco">The source POCO at the reference site.</param>
+        /// <returns><see langword="true" /> when the source is a prefixed flow-feature accessor.</returns>
+        private static bool IsFlowFeatureAccessor(IElement sourcePoco)
+        {
+            if (sourcePoco is not IRedefinition { OwningRelatedElement: IFeature flowFeature })
+            {
+                return false;
+            }
+
+            return flowFeature.OwningRelationship is IFeatureMembership { OwningRelatedElement: IFlowEnd flowEnd }
+                && flowEnd.OwnedRelationship.OfType<IReferenceSubsetting>().Any();
+        }
+
+        /// <summary>
         /// Eagerly walks the model rooted at <paramref name="rootNamespace" /> and builds the
         /// simple-name index for every reachable <see cref="INamespace" />. Reachability follows
         /// <see cref="INamespace.ownedMembership" />.<see cref="IMembership.MemberElement" /> for
@@ -1023,14 +1172,22 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> BuildSimpleNameIndices(INamespace rootNamespace)
         {
             var result = new Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>>();
-            var pending = new Queue<INamespace>();
+            var pending = new Queue<(INamespace Scope, bool IsGlobal)>();
             var visited = new HashSet<INamespace>();
 
-            pending.Enqueue(rootNamespace);
+            pending.Enqueue((rootNamespace, false));
+
+            // The other available root Namespaces form the global Namespace (KerML §8.2.3.5.2). They are
+            // indexed as ordinary scopes so their members can be named, and enqueued AFTER the model's own
+            // root so containment/import scopes are always visited first.
+            foreach (var globalNamespace in this.globalNamespaces)
+            {
+                pending.Enqueue((globalNamespace, true));
+            }
 
             while (pending.Count != 0)
             {
-                var scope = pending.Dequeue();
+                var (scope, isGlobal) = pending.Dequeue();
 
                 if (scope == null || !visited.Add(scope))
                 {
@@ -1039,11 +1196,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 var index = new Dictionary<string, HashSet<IElement>>(StringComparer.Ordinal);
 
-                this.BuildOwnedAndImportedEntries(scope, index, pending);
+                this.BuildOwnedAndImportedEntries(scope, index, pending, isGlobal);
 
                 if (scope is IType type)
                 {
-                    BuildInheritedEntries(type, index, pending);
+                    BuildInheritedEntries(type, index, pending, isGlobal);
                 }
 
                 result[scope] = index;
@@ -1059,14 +1216,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="scope">The namespace whose entries are populated.</param>
         /// <param name="index">The destination index.</param>
-        /// <param name="pending">Queue of namespaces yet to be indexed.</param>
-        private void BuildOwnedAndImportedEntries(INamespace scope, Dictionary<string, HashSet<IElement>> index, Queue<INamespace> pending)
+        /// <param name="pending">Queue of namespaces yet to be indexed, each paired with its global flag.</param>
+        /// <param name="isGlobal">
+        /// <see langword="true" /> when <paramref name="scope" /> is reached through the global
+        /// <see cref="INamespace" /> rather than through the serialized model's own containment / import
+        /// graph. KerML §8.2.3.5.2 admits only the VISIBLE memberships of other root namespaces into the
+        /// global scope, so non-public entries are excluded there — naming an element bound only by a
+        /// private membership would emit text the parser cannot resolve. Scopes within the model itself are
+        /// resolved from the inside and therefore see all of their members.
+        /// </param>
+        private void BuildOwnedAndImportedEntries(INamespace scope, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
             try
             {
-                foreach (var ownedMember in scope.ownedMembership)
+                foreach (var ownedMember in scope.ownedMembership.Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal)))
                 {
-                    AddMembershipEntry(index, ownedMember, pending);
+                    AddMembershipEntry(index, ownedMember, pending, isGlobal);
+                    this.RecordAliasIfDeclared(scope, ownedMember);
                 }
             }
             catch (NotSupportedException)
@@ -1076,12 +1242,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             try
             {
-                foreach (var ownedImport in scope.ownedImport)
+                foreach (var ownedImport in scope.ownedImport.Where(ownedImport => IsVisibleWhenGlobal(ownedImport, isGlobal)))
                 {
                     switch (ownedImport)
                     {
                         case IMembershipImport { ImportedMembership: { } importedMembership }:
-                            AddMembershipEntry(index, importedMembership, pending);
+                            AddMembershipEntry(index, importedMembership, pending, isGlobal);
+                            this.RecordAliasIfDeclared(scope, importedMembership);
                             // Enqueue the imported member's owning namespace too — for SI::kg
                             // this walks SI, whose own ownedImport chain reaches ISQ and
                             // ISQBase, populating directFacadeIndex so facade-form shortening
@@ -1093,7 +1260,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             {
                                 if (importedMembership.MemberElement?.owningNamespace is { } memberOwner)
                                 {
-                                    pending.Enqueue(memberOwner);
+                                    pending.Enqueue((memberOwner, isGlobal));
                                 }
                             }
                             catch (NotSupportedException)
@@ -1103,7 +1270,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             break;
                         case INamespaceImport { ImportedNamespace: not null } namespaceImport:
                         {
-                            pending.Enqueue(namespaceImport.ImportedNamespace);
+                            pending.Enqueue((namespaceImport.ImportedNamespace, isGlobal));
 
                             // Record `scope` as a direct (single-hop) facade re-exporter of
                             // `namespaceImport.ImportedNamespace`. Used by ResolveFresh to emit
@@ -1117,9 +1284,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             // the outer ownedImport loop and lose every remaining import.
                             try
                             {
-                                foreach (var importedMember in namespaceImport.ImportedNamespace.ownedMembership)
+                                foreach (var importedMember in namespaceImport.ImportedNamespace.ownedMembership.Where(importedMember => IsVisibleWhenGlobal(importedMember, isGlobal)))
                                 {
-                                    AddMembershipEntry(index, importedMember, pending);
+                                    AddMembershipEntry(index, importedMember, pending, isGlobal);
+
+                                    // An imported `alias X for Y;` is reachable by its alias name in the
+                                    // IMPORTING scope too, so record it against `scope`, not the source.
+                                    this.RecordAliasIfDeclared(scope, importedMember);
                                 }
                             }
                             catch (NotSupportedException)
@@ -1136,6 +1307,108 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 // ownedImport may not be implemented; skip.
             }
+        }
+
+        /// <summary>
+        /// Records an <c>alias X for Y;</c> binding into <see cref="aliasIndex"/>. A membership declares an
+        /// alias when it carries an explicit <see cref="IMembership.MemberName"/> /
+        /// <see cref="IMembership.MemberShortName"/> that differs from the member element's own
+        /// <see cref="IElement.name"/> / <see cref="IElement.shortName"/> — a membership without an override
+        /// merely re-exposes the element under its own name and is not an alias.
+        /// </summary>
+        /// <param name="scope">The <see cref="INamespace"/> declaring the membership.</param>
+        /// <param name="membership">The candidate alias <see cref="IMembership"/>; may be <see langword="null"/>.</param>
+        private void RecordAliasIfDeclared(INamespace scope, IMembership membership)
+        {
+            var target = membership?.MemberElement;
+
+            if (target == null)
+            {
+                return;
+            }
+
+            var aliasNames = new[] { membership.MemberName, membership.MemberShortName }
+                .Where(aliasName => !string.IsNullOrWhiteSpace(aliasName)
+                    && !string.Equals(aliasName, target.name, StringComparison.Ordinal)
+                    && !string.Equals(aliasName, target.shortName, StringComparison.Ordinal))
+                .ToList();
+
+            if (aliasNames.Count == 0)
+            {
+                return;
+            }
+
+            if (!this.aliasIndex.TryGetValue(scope, out var scopeAliases))
+            {
+                scopeAliases = [];
+                this.aliasIndex[scope] = scopeAliases;
+            }
+
+            if (!scopeAliases.TryGetValue(target, out var existingAliases))
+            {
+                existingAliases = [];
+                scopeAliases[target] = existingAliases;
+            }
+
+            existingAliases.AddRange(aliasNames.Where(aliasName => !existingAliases.Contains(aliasName)));
+        }
+
+        /// <summary>
+        /// Attempts to emit an in-scope ALIAS for <paramref name="target"/> — the name introduced by an
+        /// <c>alias X for Y;</c> declaration reachable from the source scope <paramref name="chain"/>. Each
+        /// candidate alias name is validated through the SAME first-binding-wins scope walk as an ordinary
+        /// simple name (<see cref="TryResolveSimpleNameAcrossChain"/>, per KerML §8.2.3.5.4): a scope closer
+        /// to the reference site that binds the alias string to a DIFFERENT element shadows the alias, and
+        /// the candidate is rejected — so the emitted text always round-trips to the same element.
+        /// </summary>
+        /// <param name="chain">The source scope chain (innermost first).</param>
+        /// <param name="target">The element being referenced.</param>
+        /// <param name="sourcePoco">The reference site's source POCO — used to reject the alias DECLARATION itself.</param>
+        /// <param name="localRedefiner">Optional feature to exclude from the scope buckets.</param>
+        /// <param name="selfBindingScope">Optional scope whose own binding of the target must be ignored.</param>
+        /// <param name="matched">On a hit, the escaped alias name to emit.</param>
+        /// <returns><see langword="true"/> when an unambiguous in-scope alias was found.</returns>
+        private bool TryResolveViaAlias(IReadOnlyList<INamespace> chain, IElement target, IElement sourcePoco, IFeature localRedefiner, INamespace selfBindingScope, out string matched)
+        {
+            matched = null;
+
+            var candidateAliasNames = chain
+                .Where(scope => this.aliasIndex.ContainsKey(scope))
+                .SelectMany(scope => this.aliasIndex[scope].TryGetValue(target, out var aliasNames) ? aliasNames : Enumerable.Empty<string>())
+                .Distinct(StringComparer.Ordinal)
+                .Where(aliasName => !DeclaresAlias(sourcePoco, target, aliasName));
+
+            foreach (var aliasName in candidateAliasNames)
+            {
+                var escapedAliasName = aliasName.QueryIsValidBasicName() ? aliasName : aliasName.ToUnrestrictedName();
+
+                if (this.TryResolveSimpleNameAcrossChain(chain, target, aliasName, escapedAliasName, localRedefiner, selfBindingScope, out matched))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="sourcePoco"/> is the very <c>alias</c> declaration that
+        /// introduces <paramref name="aliasName"/> for <paramref name="target"/>. Such a declaration must
+        /// emit the target's own (qualified) name — resolving it through its own alias would produce the
+        /// circular <c>alias Torque for Torque;</c>. The exclusion is needed in addition to
+        /// <see cref="QuerySelfBindingScope"/> because an importing scope further out re-exports the same
+        /// alias, and that scope is not the declaration's own.
+        /// </summary>
+        /// <param name="sourcePoco">The reference site's source POCO.</param>
+        /// <param name="target">The element being referenced.</param>
+        /// <param name="aliasName">The candidate alias name.</param>
+        /// <returns><see langword="true"/> when the source is the declaration of this alias.</returns>
+        private static bool DeclaresAlias(IElement sourcePoco, IElement target, string aliasName)
+        {
+            return sourcePoco is IMembership sourceMembership
+                && ReferenceEquals(sourceMembership.MemberElement, target)
+                && (string.Equals(sourceMembership.MemberName, aliasName, StringComparison.Ordinal)
+                    || string.Equals(sourceMembership.MemberShortName, aliasName, StringComparison.Ordinal));
         }
 
         /// <summary>
@@ -1158,6 +1431,37 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Determines whether <paramref name="relationship" /> may contribute a name binding to a scope that
+        /// is being indexed as part of the global <see cref="INamespace" />.
+        /// <para>KerML 1.0 §8.2.3.5.2 states that the global <see cref="INamespace" /> "includes all the
+        /// <i>visible</i> Memberships of all other root Namespaces", and §8.2.3.5.3 defines those as the
+        /// public owned memberships, the memberships imported through public <c>Import</c>s and — for a
+        /// <see cref="IType" /> — the public inherited memberships. A non-public membership of a library is
+        /// therefore NOT reachable from the model being written, so indexing it could shorten a reference to
+        /// a name the parser will not resolve.</para>
+        /// <para>Within the model's own containment / import graph resolution happens from the INSIDE, where
+        /// private and protected members are visible, so the filter applies only when
+        /// <paramref name="isGlobal" /> is <see langword="true" />.</para>
+        /// </summary>
+        /// <param name="relationship">The <see cref="IMembership" /> or <see cref="IImport" /> being considered.</param>
+        /// <param name="isGlobal">Whether the owning scope is reached through the global <see cref="INamespace" />.</param>
+        /// <returns><see langword="true" /> when the relationship may contribute a binding.</returns>
+        private static bool IsVisibleWhenGlobal(IRelationship relationship, bool isGlobal)
+        {
+            if (!isGlobal)
+            {
+                return true;
+            }
+
+            return relationship switch
+            {
+                IMembership membership => membership.Visibility == VisibilityKind.Public,
+                IImport import => import.Visibility == VisibilityKind.Public,
+                _ => true,
+            };
+        }
+
+        /// <summary>
         /// Indexes the entries inherited from the transitive supertypes of
         /// <paramref name="type" />. Bypasses the <c>RemoveRedefinedFeatures</c> filter so
         /// references such as <c>:&gt;&gt; elements</c> remain reachable.
@@ -1166,7 +1470,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="index">The destination index.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed (so supertypes that are
         /// also namespaces get their own index built).</param>
-        private static void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<INamespace> pending)
+        private static void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
             List<IType> supertypes;
 
@@ -1183,14 +1487,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 if (supertype is INamespace supertypeAsNamespace)
                 {
-                    pending.Enqueue(supertypeAsNamespace);
+                    pending.Enqueue((supertypeAsNamespace, isGlobal));
                 }
 
                 try
                 {
-                    foreach (var ownedMember in supertype.ownedMembership)
+                    foreach (var ownedMember in supertype.ownedMembership.Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal)))
                     {
-                        AddMembershipEntry(index, ownedMember, pending);
+                        AddMembershipEntry(index, ownedMember, pending, isGlobal);
                     }
                 }
                 catch (NotSupportedException)
@@ -1219,7 +1523,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="index">The destination index.</param>
         /// <param name="membership">The membership whose target is indexed.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed.</param>
-        private static void AddMembershipEntry(Dictionary<string, HashSet<IElement>> index, IMembership membership, Queue<INamespace> pending)
+        private static void AddMembershipEntry(Dictionary<string, HashSet<IElement>> index, IMembership membership, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
             var target = membership?.MemberElement;
 
@@ -1240,7 +1544,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (target is INamespace targetAsNamespace)
             {
-                pending.Enqueue(targetAsNamespace);
+                pending.Enqueue((targetAsNamespace, isGlobal));
             }
         }
 

@@ -699,16 +699,44 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ActionTargetSuccessionMember rule (ActionBodyItem).
         /// <para><c>ActionTargetSuccessionMember : FeatureMembership = MemberPrefix ownedRelatedElement += ActionTargetSuccession</c></para>
         /// <para><c>ActionTargetSuccession : Usage = (TargetSuccession:SuccessionAsUsage | GuardedTargetSuccession:TransitionUsage | DefaultTargetSuccession:TransitionUsage) UsageBody</c></para>
-        /// <para><b>Limitation:</b> <c>SourceSuccessionMember</c> also wraps <see cref="ISuccessionAsUsage"/>;
-        /// the broader dispatch relies on switch-case ordering (SourceSuccessionMember's guard is
-        /// checked first, then ActionTargetSuccessionMember).</para>
+        /// <para><c>TargetSuccession : SuccessionAsUsage = ownedRelationship += SourceEndMember 'then' ownedRelationship += ConnectorEndMember</c>,
+        /// and <c>ConnectorEnd : ReferenceUsage = … ownedRelationship += OwnedReferenceSubsetting</c> — the target
+        /// end therefore ALWAYS names its target. <c>SourceSuccession : SuccessionAsUsage = ownedRelationship += SourceEndMember</c>
+        /// has no such end: its target is the body item that follows the <c>then</c>.</para>
+        /// <para>Both forms wrap an <see cref="ISuccessionAsUsage"/>, so the presence of a target end carrying an
+        /// <see cref="IReferenceSubsetting"/> is what separates them. Without this check the trailing
+        /// <c>( ownedRelationship += ActionTargetSuccessionMember )*</c> loop of <c>ActionBodyItem</c> greedily
+        /// swallows the SourceSuccessionMember belonging to the NEXT item, emitting a bare <c>then;</c> and
+        /// detaching the action it was meant to precede.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns a succession or transition usage</returns>
+        /// <returns>True if the membership owns a transition usage, or a succession whose target end names a feature</returns>
         internal static bool IsValidForActionTargetSuccessionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership?.OwnedRelatedElement.Any(element => element is ISuccessionAsUsage or ITransitionUsage) == true;
+            return featureMembership?.OwnedRelatedElement.Any(element => element switch
+            {
+                ISuccessionAsUsage succession => HasNamedTargetEnd(succession),
+                ITransitionUsage => true,
+                _ => false,
+            }) == true;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="succession"/> carries a <c>ConnectorEndMember</c> target end —
+        /// that is, an end beyond the leading <c>SourceEndMember</c> whose feature owns an
+        /// <see cref="IReferenceSubsetting"/> naming the succession target. This is the structural marker of
+        /// the <c>TargetSuccession</c> form against the <c>SourceSuccession</c> form.
+        /// </summary>
+        /// <param name="succession">The <see cref="ISuccessionAsUsage"/> to inspect</param>
+        /// <returns>True when a named target end is present</returns>
+        private static bool HasNamedTargetEnd(ISuccessionAsUsage succession)
+        {
+            return succession.OwnedRelationship
+                .OfType<IEndFeatureMembership>()
+                .Skip(1)
+                .SelectMany(endMembership => endMembership.OwnedRelatedElement.OfType<IFeature>())
+                .Any(endFeature => endFeature.OwnedRelationship.OfType<IReferenceSubsetting>().Any());
         }
 
         /// <summary>
@@ -718,13 +746,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// AssignmentNode / TerminateNode / IfNode / WhileLoopNode / ForLoopNode — all <see cref="IActionUsage"/>
         /// descendants). BehaviorUsageMember wraps a BehaviorUsageElement (also mostly <see cref="IActionUsage"/>
         /// or its descendants). The broadest accurate predicate is "owns an <see cref="IActionUsage"/>".</para>
+        /// <para><see cref="IFlowUsage"/> (and its <see cref="ISuccessionFlowUsage"/> subtype) IS-A
+        /// <see cref="IActionUsage"/> in the metamodel, but appears in NEITHER alternative of this rule —
+        /// <c>BehaviorUsageElement</c> and <c>ActionNode</c> both exclude it. A flow reaches the body through
+        /// <c>NonBehaviorBodyItem → StructureUsageMember → StructureUsageElement</c> instead, so it must be
+        /// rejected here or it is emitted as an empty <c>action { }</c> and its declaration is lost. This
+        /// mirrors the complementary carve-out in <see cref="IsValidForStructureUsageMember"/>.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns an <see cref="IActionUsage"/></returns>
+        /// <returns>True if the membership owns an <see cref="IActionUsage"/> that is not an <see cref="IFlowUsage"/></returns>
         internal static bool IsValidForActionBehaviorMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any() == true;
+            return featureMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any(actionUsage => actionUsage is not IFlowUsage) == true;
         }
 
         /// <summary>

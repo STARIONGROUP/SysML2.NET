@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             else if (poco.ReferencedFeature != null)
             {
                 SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.ReferencedFeature, writerContext, poco);
-                stringBuilder.Append(' ');
+                stringBuilder.Append(".");
             }
 
         }

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualNotationBuilderTestFixture.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -63,7 +63,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
 
             // DeSerialize automatically follows href references to kernel libraries,
             // resolving all cross-file references so qualifiedName properties are populated
-            this.rootNamespace = deSerializer.DeSerialize(fileUri);
+            this.rootNamespace = deSerializer.DeSerialize(fileUri).RootNamespace;
         }
 
         [Test]

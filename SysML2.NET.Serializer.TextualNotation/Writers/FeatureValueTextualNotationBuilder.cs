@@ -40,7 +40,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             if (poco.IsDefault)
             {
-                stringBuilder.Append("default ");
+                stringBuilder.Append(" default ");
 
                 if (poco.IsInitial)
                 {
@@ -53,11 +53,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (poco.IsInitial)
             {
-                stringBuilder.Append(":= ");
+                stringBuilder.Append(" := ");
             }
             else
             {
-                stringBuilder.Append("= ");
+                stringBuilder.Append(" = ");
             }
 
             // OwnedExpression consumption is handled by the auto-gen caller (BuildFeatureValue),

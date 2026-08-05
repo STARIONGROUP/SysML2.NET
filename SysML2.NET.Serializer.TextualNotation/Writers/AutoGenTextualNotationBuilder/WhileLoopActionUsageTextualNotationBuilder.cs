@@ -44,22 +44,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, writerContext, stringBuilder);
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership { OwnedRelatedElement.Count: 0 })
-            {
-                stringBuilder.Append("loop ");
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
-                }
-            }
-            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership parameterMembershipPayload0 && parameterMembershipPayload0.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any())
             {
                 stringBuilder.Append("while ");
 
@@ -69,6 +54,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
                     {
                         ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+
+                    }
+                }
+            }
+            else if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
+            {
+                stringBuilder.Append("loop ");
+
+                if (ownedRelationshipCursor.Current != null)
+                {
+
+                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
+                    {
+                        ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
                     }

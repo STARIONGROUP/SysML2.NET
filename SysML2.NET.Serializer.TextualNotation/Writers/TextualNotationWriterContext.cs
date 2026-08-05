@@ -46,11 +46,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// upward-walk in qualified name resolution per KerML §8.2.3.5 and as the fallback
         /// local scope when a source POCO has no <c>owningNamespace</c>.
         /// </param>
-        public TextualNotationWriterContext(INamespace contextNamespace)
+        /// <param name="globalNamespaces">
+        /// The other root <see cref="INamespace"/>s available to <paramref name="contextNamespace"/> —
+        /// typically <c>XmiReadResult.ReferencedNamespaces</c>, i.e. the model libraries and any other
+        /// resource read alongside it. Per KerML §8.2.3.5.2 these form the global <see cref="INamespace"/>
+        /// that terminates qualified-name resolution, so supplying them lets the writer emit a name routed
+        /// through a library the model does not itself import.
+        /// <para>Optional: when omitted, resolution is confined to <paramref name="contextNamespace"/>'s own
+        /// containment and import graph, which can only yield a longer — never an invalid — name.</para>
+        /// </param>
+        public TextualNotationWriterContext(INamespace contextNamespace, IEnumerable<INamespace> globalNamespaces = null)
         {
             this.CursorCache = new CursorCache();
             this.ContextNamespace = contextNamespace ?? throw new ArgumentNullException(nameof(contextNamespace));
-            this.NameResolutionCache = new NameResolutionCache(contextNamespace);
+            this.NameResolutionCache = new NameResolutionCache(contextNamespace, globalNamespaces);
             this.OperatorContextStack = new Stack<IExpression>();
             this.EmitOperatorParentheses = true;
         }

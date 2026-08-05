@@ -41,6 +41,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("01-Parts Tree", "1d-Parts Tree with Reference.sysmlx")]
         [TestCase("02-Parts Interconnection", "2a-Parts Interconnection.sysmlx")]
         [TestCase("02-Parts Interconnection", "2c-Parts Interconnection-Multiple Decompositions.sysmlx")]
+        [TestCase("03-Function-based Behavior", "3a-Function-based Behavior-3.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
@@ -59,9 +60,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
 
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Validation", folderName, fileName);
 
-            var rootNamespace = await deSerializer.DeSerializeAsync(new Uri(filePath));
+            var readResult = await deSerializer.DeSerializeAsync(new Uri(filePath));
+            var rootNamespace = readResult.RootNamespace;
 
-            using var writerContext = new TextualNotationWriterContext(rootNamespace);
+            // The referenced namespaces are the roots of the model libraries pulled in while resolving the
+            // file's external references. They form the global Namespace (KerML §8.2.3.5.2), so the writer
+            // needs them to shorten a reference routed through a library the model does not itself import.
+            using var writerContext = new TextualNotationWriterContext(rootNamespace, readResult.ReferencedNamespaces);
             writerContext.EmitOperatorParentheses = false;
             var stringBuilder = new IndentedStringBuilder();
 
