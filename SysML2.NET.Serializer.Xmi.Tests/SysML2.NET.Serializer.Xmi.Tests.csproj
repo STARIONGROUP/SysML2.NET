@@ -168,6 +168,24 @@
         <None Update="Resources\Domain Libraries\Quantities and Units\ISQChemistryMolecular.sysmlx">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\BooleanFunctions.kermlx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\NaturalFunctions.kermlx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\OccurrenceFunctions.kermlx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\StringFunctions.kermlx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\TrigFunctions.kermlx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\VectorFunctions.kermlx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
