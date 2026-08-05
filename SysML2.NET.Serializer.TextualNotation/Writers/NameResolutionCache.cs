@@ -32,6 +32,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
 
@@ -1105,7 +1106,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns><see langword="true" /> when the source is a chain accessor.</returns>
         private static bool IsChainAccessor(IElement sourcePoco)
         {
-            if (sourcePoco is IMembership { OwningRelatedElement: IFeatureChainExpression } and not IParameterMembership)
+            if (sourcePoco is IMembership { OwningRelatedElement: { } membershipOwner } and not IParameterMembership
+                && EstablishesRelativeNamespace(membershipOwner))
             {
                 return true;
             }
@@ -1128,13 +1130,62 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return true;
             }
 
-            // The FIRST chaining segment is also a chain accessor when the owned chain Feature
-            // itself is the target member of a FeatureChainExpression (grammar rule
-            // OwnedFeatureChainMember): the parser resolves even the first segment against the
-            // argument expression's result, not the lexical scope, so the bare simple name is
-            // the correct emission. A chain owned by a Specialization / ReferenceSubsetting
-            // (e.g. a connect end) keeps lexical resolution for its first segment.
-            return chainOwner.OwningRelationship is IMembership { OwningRelatedElement: IFeatureChainExpression } and not IParameterMembership;
+            // The FIRST chaining segment is also a chain accessor when the owned chain Feature is the
+            // target member of a construct that establishes a RELATIVE namespace from a preceding
+            // expression — the parser resolves even that first segment against the preceding result
+            // rather than the lexical scope, so the bare simple name is the correct emission. Two
+            // constructs do this, matching the reference implementation's
+            // NamespaceUtil.getRelativeNamespaceFor:
+            //   - FeatureChainExpression, relative to its argument expression's result (`= a11.b11.c1`);
+            //   - AssignmentActionUsage, relative to its targetArgument, per
+            //     AssignmentTargetParameter = ( AssignmentTargetBinding '.' )? followed by
+            //     FeatureChainMember (`assign trailer.trailerFrame.coupler.hitch := …`). The pilot
+            //     guards on a non-null targetArgument, so an assignment WITHOUT a target binding
+            //     (`assign a.b := …`) keeps lexical resolution for its first segment; that guard is
+            //     mirrored here.
+            // A chain owned by a Specialization / ReferenceSubsetting (e.g. a connect end) is not
+            // relative and keeps lexical resolution for its first segment.
+            return chainOwner.OwningRelationship is IMembership { OwningRelatedElement: { } chainMemberOwner } and not IParameterMembership
+                   && EstablishesRelativeNamespace(chainMemberOwner);
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="owner" /> establishes a RELATIVE namespace — a scope taken
+        /// from the result of a preceding expression instead of from lexical containment. A name resolved
+        /// against such a scope is written as a bare simple name.
+        /// <para>This mirrors the reference implementation's single decision point,
+        /// <c>NamespaceUtil.getRelativeNamespaceFor</c>, which recognises exactly two constructs:</para>
+        /// <list type="bullet">
+        ///   <item><description><see cref="IFeatureChainExpression" /> — relative to the result of its
+        ///   argument expression (<c>a11.b11.c1</c>).</description></item>
+        ///   <item><description><see cref="IAssignmentActionUsage" /> — relative to the result of its
+        ///   <c>targetArgument</c>, per <c>AssignmentTargetParameter = ( AssignmentTargetBinding '.' )?</c>
+        ///   followed by <c>FeatureChainMember</c> (<c>assign trailer.trailerFrame.coupler.hitch := …</c>).
+        ///   The reference implementation guards on a non-null target, so an assignment without a binding
+        ///   (<c>assign a.b := …</c>) keeps lexical resolution.</description></item>
+        /// </list>
+        /// <para>The reference implementation additionally guards each arm on the preceding expression being
+        /// present. The <see cref="IAssignmentActionUsage" /> guard is reproduced. Its
+        /// <see cref="IFeatureChainExpression" /> counterpart (<c>!getArgument().isEmpty()</c>) is NOT: our
+        /// <c>argument</c> is derived by matching the instantiated type's inputs against redefining owned
+        /// features, and for a FeatureChainExpression the instantiated type is the library function
+        /// <c>ControlFunctions::'.'</c>, for which that match yields an empty list — so the guard would
+        /// reject every feature-chain expression and regress <c>a11.b11.c1</c> style output. The structural
+        /// test alone is safe here: a FeatureChainExpression exists only to chain onto a preceding operand.</para>
+        /// <para>Both forms of <c>FeatureChainMember</c> — the owned chain AND the plain
+        /// <c>memberElement = [QualifiedName]</c> reference — go through this test, matching the reference
+        /// implementation, which routes every <c>Membership</c> through the same relative-namespace lookup.</para>
+        /// </summary>
+        /// <param name="owner">The element owning the membership at the reference site.</param>
+        /// <returns><see langword="true" /> when the owner establishes a relative namespace.</returns>
+        private static bool EstablishesRelativeNamespace(IElement owner)
+        {
+            return owner switch
+            {
+                IFeatureChainExpression => true,
+                IAssignmentActionUsage assignmentActionUsage => assignmentActionUsage.targetArgument != null,
+                _ => false,
+            };
         }
 
         /// <summary>
