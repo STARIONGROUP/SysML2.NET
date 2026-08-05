@@ -42,7 +42,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("02-Parts Interconnection", "2a-Parts Interconnection.sysmlx")]
         [TestCase("02-Parts Interconnection", "2c-Parts Interconnection-Multiple Decompositions.sysmlx")]
         [TestCase("03-Function-based Behavior", "3a-Function-based Behavior-3.sysmlx")]
-         [TestCase("03-Function-based Behavior", "3c-Function-based Behavior-structure mod-1.sysmlx")]
+        [TestCase("03-Function-based Behavior", "3c-Function-based Behavior-structure mod-1.sysmlx")]
+        [TestCase("03-Function-based Behavior", "3c-Function-based Behavior-structure mod-2.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
