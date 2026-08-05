@@ -425,7 +425,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Core.Features.IFeatureChaining)
             {
 
                 if (ownedRelationshipCursor.Current != null)

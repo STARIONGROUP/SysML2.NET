@@ -115,6 +115,12 @@
       <None Update="Validation\03-Function-based Behavior\3c-Function-based Behavior-structure mod-2.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Validation\03-Function-based Behavior\3c-Function-based Behavior-structure mod-3.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3d-Function-based Behavior-item.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
