@@ -9,7 +9,7 @@ package '3c-Function-based Behavior-structure mod-2' {
         end ref hitch: HitchBall;
         end ref coupler: TrailerCoupler;
     }
-    ref part 'vehicle-trailer system' {
+    part 'vehicle-trailer system' {
         part vehicle: Vehicle {
             part vehicleFrame: VehicleFrame {
                 part hitch: HitchBall;

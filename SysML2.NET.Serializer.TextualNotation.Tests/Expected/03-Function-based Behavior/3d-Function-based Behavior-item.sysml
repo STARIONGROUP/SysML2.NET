@@ -5,28 +5,28 @@ package '3d-Function-based Behavior-item' {
     package Definitions {
         item def Fuel;
         port def FuelPort {
-            out ref item fuel: Fuel;
+            out item fuel: Fuel;
         }
         part def Pump {
-            ref port fuelInPort: ~FuelPort;
-            ref port fuelOutPort: FuelPort;
+            port fuelInPort: ~FuelPort;
+            port fuelOutPort: FuelPort;
         }
         part def StorageTank {
-            ref port fuelOutPort: FuelPort;
+            port fuelOutPort: FuelPort;
         }
         part def FuelTank {
-            ref port fuelInPort: ~FuelPort;
+            port fuelInPort: ~FuelPort;
         }
         part def Vehicle {
-            ref port fuelInPort: ~FuelPort;
+            port fuelInPort: ~FuelPort;
         }
         action def PumpFuel {
-            in ref fuelIn: Fuel;
-            out ref fuelOut: Fuel;
+            in fuelIn: Fuel;
+            out fuelOut: Fuel;
         }
     }
     package Usages {
-        ref part context {
+        part context {
             /* Storage Element */
             part storageTank: StorageTank;
             flow of fuel: Fuel from storageTank.fuelOutPort.fuel to pump.fuelInPort.fuel {
@@ -36,8 +36,8 @@ package '3d-Function-based Behavior-item' {
             }
             part pump: Pump {
                 perform action pumpFuel: PumpFuel {
-                    in ref fuelIn = fuelInPort.fuel;
-                    out ref fuelOut = fuelOutPort.fuel;
+                    in fuelIn = fuelInPort.fuel;
+                    out fuelOut = fuelOutPort.fuel;
                 }
             }
             flow of fuel: Fuel from pump.fuelOutPort.fuel to vehicle.fuelInPort.fuel;

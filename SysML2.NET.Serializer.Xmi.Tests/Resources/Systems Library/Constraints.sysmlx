@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sysml:Namespace xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sysml="https://www.omg.org/spec/SysML/20250201" xmi:id="2aa799a3-fd88-5ee9-ab86-da947055e8c3" elementId="2aa799a3-fd88-5ee9-ab86-da947055e8c3">
+  <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="e77af252-4bd9-562e-b60f-8a041d16bf9a" elementId="e77af252-4bd9-562e-b60f-8a041d16bf9a">
+    <ownedRelatedElement xsi:type="sysml:LibraryPackage" xmi:id="a1655928-875c-5094-8d44-a8a10f354eb4" declaredName="Constraints" elementId="a1655928-875c-5094-8d44-a8a10f354eb4" isStandard="true">
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="fe89a416-1620-5720-9a74-b2434fcfb958" elementId="fe89a416-1620-5720-9a74-b2434fcfb958">
+        <ownedRelatedElement xsi:type="sysml:Documentation" xmi:id="1305f405-be06-51a4-bae4-26da45499116" elementId="1305f405-be06-51a4-bae4-26da45499116" body="This package defines the base types for constraints and related elements in the&#xA;SysML language.&#xA;"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:MembershipImport" xmi:id="d276478d-0426-5964-ab11-2eaacf5d41d3" elementId="d276478d-0426-5964-ab11-2eaacf5d41d3">
+        <importedMembership href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#6b95c684-069b-5a0e-8bbf-10cfedd37434"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:MembershipImport" xmi:id="5b58d8f2-7958-5c44-bc15-1d248f1ed965" elementId="5b58d8f2-7958-5c44-bc15-1d248f1ed965">
+        <importedMembership href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#9c434d33-d573-574a-9d8c-a15613154bd2"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:MembershipImport" xmi:id="9edc9dde-3442-54b2-8a55-031561f6d59d" elementId="9edc9dde-3442-54b2-8a55-031561f6d59d">
+        <importedMembership href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#01b9305f-40b0-5b62-b670-f99c066d6b43"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:MembershipImport" xmi:id="9c36ae82-a72a-56d3-bc8c-16caf537be15" elementId="9c36ae82-a72a-56d3-bc8c-16caf537be15">
+        <importedMembership href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#1f85ba66-7b72-5b3f-8039-b3053d38a79b"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="24203e5a-3d83-567c-badf-186772d101ae" elementId="24203e5a-3d83-567c-badf-186772d101ae">
+        <ownedRelatedElement xsi:type="sysml:ConstraintDefinition" xmi:id="88ee1ede-4630-50fc-bbee-4d6e6eed7bf5" declaredName="ConstraintCheck" elementId="88ee1ede-4630-50fc-bbee-4d6e6eed7bf5" isAbstract="true">
+          <ownedRelationship xsi:type="sysml:Subclassification" xmi:id="884ee976-6e77-5380-8d24-865d2d622b1d" elementId="884ee976-6e77-5380-8d24-865d2d622b1d" subclassifier="88ee1ede-4630-50fc-bbee-4d6e6eed7bf5">
+            <superclassifier href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#b75bfbb5-0e73-52a8-8d27-617d953c9bcd"/>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="85dd7d41-3b98-508d-9f34-a2cbb7abc38c" elementId="85dd7d41-3b98-508d-9f34-a2cbb7abc38c">
+            <ownedRelatedElement xsi:type="sysml:Documentation" xmi:id="dc6c544a-3ae2-526e-aa20-8ff37afe92b5" elementId="dc6c544a-3ae2-526e-aa20-8ff37afe92b5" body="ConstraintCheck is the most general class for constraint checking. ConstraintCheck is the base&#xA;type of all ConstraintDefinitions.&#xA;"/>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:FeatureMembership" xmi:id="8c653856-a61f-5c10-a8d2-617504827453" elementId="8c653856-a61f-5c10-a8d2-617504827453">
+            <ownedRelatedElement xsi:type="sysml:ConstraintUsage" xmi:id="2956b7f4-93db-509a-9fba-32e8f5f7958c" declaredName="self" elementId="2956b7f4-93db-509a-9fba-32e8f5f7958c">
+              <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="ceae6033-eafe-5c37-ba91-96996890106f" elementId="ceae6033-eafe-5c37-ba91-96996890106f" type="88ee1ede-4630-50fc-bbee-4d6e6eed7bf5" typedFeature="2956b7f4-93db-509a-9fba-32e8f5f7958c"/>
+              <ownedRelationship xsi:type="sysml:Redefinition" xmi:id="9aa25fc8-4810-554e-987a-682d4ff90042" elementId="9aa25fc8-4810-554e-987a-682d4ff90042" redefiningFeature="2956b7f4-93db-509a-9fba-32e8f5f7958c">
+                <redefinedFeature href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#1ed8521c-8e1f-5447-98b2-3834d625e318"/>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+        </ownedRelatedElement>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="a14f899d-4ca3-5b73-bd8d-8d84d5ad4f60" elementId="a14f899d-4ca3-5b73-bd8d-8d84d5ad4f60">
+        <ownedRelatedElement xsi:type="sysml:ConstraintUsage" xmi:id="3b0c0d16-aab5-59ed-a8a5-e288ca685609" declaredName="constraintChecks" elementId="3b0c0d16-aab5-59ed-a8a5-e288ca685609" isAbstract="true" isUnique="false">
+          <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="a314557b-536f-5824-9ae4-4d619f084a47" elementId="a314557b-536f-5824-9ae4-4d619f084a47" type="88ee1ede-4630-50fc-bbee-4d6e6eed7bf5" typedFeature="3b0c0d16-aab5-59ed-a8a5-e288ca685609"/>
+          <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="f4fca2de-75f1-5616-b46c-85fcb94a527b" elementId="f4fca2de-75f1-5616-b46c-85fcb94a527b">
+            <ownedRelatedElement xsi:type="sysml:MultiplicityRange" xmi:id="6e00cf80-2992-5c29-a628-e8dc66559f83" elementId="6e00cf80-2992-5c29-a628-e8dc66559f83">
+              <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="33690d5c-f506-5383-b0ad-4467ff438c34" elementId="33690d5c-f506-5383-b0ad-4467ff438c34">
+                <ownedRelatedElement xsi:type="sysml:LiteralInteger" xmi:id="84c6b69f-e5a3-563e-bdc7-319beab9e03b" elementId="84c6b69f-e5a3-563e-bdc7-319beab9e03b"/>
+              </ownedRelationship>
+              <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="732a8e74-72de-5db2-8b33-1fa74a805003" elementId="732a8e74-72de-5db2-8b33-1fa74a805003">
+                <ownedRelatedElement xsi:type="sysml:LiteralInfinity" xmi:id="b06e94e3-10f8-584e-a75a-6023444133c6" elementId="b06e94e3-10f8-584e-a75a-6023444133c6"/>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:Subsetting" xmi:id="e6fefd94-c189-5d43-9582-0f558d698785" elementId="e6fefd94-c189-5d43-9582-0f558d698785" subsettingFeature="3b0c0d16-aab5-59ed-a8a5-e288ca685609">
+            <subsettedFeature href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#de3f8eb6-72e3-5efe-a33e-d9347535e60c"/>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="2c2ed411-42ad-5bb6-a6c1-b689f252ef67" elementId="2c2ed411-42ad-5bb6-a6c1-b689f252ef67">
+            <ownedRelatedElement xsi:type="sysml:Documentation" xmi:id="be836a72-003d-5217-bf69-26caeb108eb4" elementId="be836a72-003d-5217-bf69-26caeb108eb4" body="constraintChecks is the base feature of all ConstraintUsages.&#xA;"/>
+          </ownedRelationship>
+        </ownedRelatedElement>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="28610ea7-8895-5467-b800-98df76318814" elementId="28610ea7-8895-5467-b800-98df76318814">
+        <ownedRelatedElement xsi:type="sysml:ConstraintUsage" xmi:id="8ef3ce8b-9d7c-5b4c-a683-66668f5a2f61" declaredName="assertedConstraintChecks" elementId="8ef3ce8b-9d7c-5b4c-a683-66668f5a2f61" isAbstract="true">
+          <ownedRelationship xsi:type="sysml:Subsetting" xmi:id="c7bbcf02-217a-5ac9-bdac-efa4c6b0bf83" elementId="c7bbcf02-217a-5ac9-bdac-efa4c6b0bf83" subsettedFeature="3b0c0d16-aab5-59ed-a8a5-e288ca685609" subsettingFeature="8ef3ce8b-9d7c-5b4c-a683-66668f5a2f61"/>
+          <ownedRelationship xsi:type="sysml:Subsetting" xmi:id="3f80772c-3899-5e62-9794-b08c099bc068" elementId="3f80772c-3899-5e62-9794-b08c099bc068" subsettingFeature="8ef3ce8b-9d7c-5b4c-a683-66668f5a2f61">
+            <subsettedFeature href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#49158069-6a8a-50d9-8d31-28533873a623"/>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="2ece3998-c70d-555f-a8f3-0453fbed786d" elementId="2ece3998-c70d-555f-a8f3-0453fbed786d">
+            <ownedRelatedElement xsi:type="sysml:Documentation" xmi:id="017b8370-a5db-56dd-80ec-daef7e8c3804" elementId="017b8370-a5db-56dd-80ec-daef7e8c3804" body="assertedConstraintChecks is the subset of constraintChecks for ConstraintChecks asserted to be true.&#xA;"/>
+          </ownedRelationship>
+        </ownedRelatedElement>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="625020ad-b1b3-58c4-bd37-d6c03f1483d9" elementId="625020ad-b1b3-58c4-bd37-d6c03f1483d9">
+        <ownedRelatedElement xsi:type="sysml:ConstraintUsage" xmi:id="fa171792-c1ae-5ddd-aeee-d4ee4695d321" declaredName="negatedConstraintChecks" elementId="fa171792-c1ae-5ddd-aeee-d4ee4695d321" isAbstract="true">
+          <ownedRelationship xsi:type="sysml:Subsetting" xmi:id="f43a1c01-7f42-5244-8d8e-abd8be46f1aa" elementId="f43a1c01-7f42-5244-8d8e-abd8be46f1aa" subsettedFeature="3b0c0d16-aab5-59ed-a8a5-e288ca685609" subsettingFeature="fa171792-c1ae-5ddd-aeee-d4ee4695d321"/>
+          <ownedRelationship xsi:type="sysml:Subsetting" xmi:id="46eddeaa-99fb-53ee-9c14-c7390b2e0641" elementId="46eddeaa-99fb-53ee-9c14-c7390b2e0641" subsettingFeature="fa171792-c1ae-5ddd-aeee-d4ee4695d321">
+            <subsettedFeature href="../Kernel%20Libraries/Kernel%20Semantic%20Library/Performances.kermlx#16073ffc-230c-54c3-b1fd-433458d0dbda"/>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="e7ad792c-8e49-5f3e-954a-cff089013d05" elementId="e7ad792c-8e49-5f3e-954a-cff089013d05">
+            <ownedRelatedElement xsi:type="sysml:Documentation" xmi:id="892b2498-ac91-5189-a5ab-c3e8d0b37032" elementId="892b2498-ac91-5189-a5ab-c3e8d0b37032" body="negatedConstraintChecks is the subset of constraintChecks for ConstraintChecks asserted to be false.&#xA;"/>
+          </ownedRelationship>
+        </ownedRelatedElement>
+      </ownedRelationship>
+    </ownedRelatedElement>
+  </ownedRelationship>
+</sysml:Namespace>

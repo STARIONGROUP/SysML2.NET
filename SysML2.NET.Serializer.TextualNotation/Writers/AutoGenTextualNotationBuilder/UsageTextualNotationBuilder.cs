@@ -107,7 +107,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             BuildRefPrefix(poco, writerContext, stringBuilder);
 
-            if (poco.isReference && poco is not (SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage or SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage or SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage))
+            if (poco.isReference && poco is not (SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage or SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage or SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage) && poco.IsValidForUsageIsReference(writerContext))
             {
                 stringBuilder.Append(" ref ");
             }
@@ -130,7 +130,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.Append(" end ");
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)

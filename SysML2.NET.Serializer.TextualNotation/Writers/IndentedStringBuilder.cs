@@ -261,6 +261,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return this;
             }
 
+            this.EnsureWordSeparation(value);
+
             var isTightBoth = this.ApplyTightTokenNormalisation(ref value);
 
             foreach (var character in value)
@@ -316,6 +318,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 return this.AppendLine();
             }
+
+            this.EnsureWordSeparation(value);
 
             var isTightBoth = this.ApplyTightTokenNormalisation(ref value);
 
@@ -406,6 +410,44 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Inserts a separating space when <paramref name="value"/> would otherwise merge with the token
+        /// already in the buffer to form a single, different token.
+        /// <para>Keyword terminals are emitted with a trailing space but no leading one, so a keyword that
+        /// follows a NAME collides with it: <c>action engineStarted</c> + <c>accept </c> produced
+        /// <c>engineStartedaccept</c>. That is not a cosmetic issue — per KerML §8.2.2.1 white space is the
+        /// token separator, so the merged form lexes as one identifier and the text no longer parses.</para>
+        /// <para>The rule is deliberately narrow: it fires only when the last buffered character and the
+        /// first character of the payload are both word constituents (letter, digit, underscore) or the
+        /// unrestricted-name quote, which is exactly the situation where omitting the space changes the
+        /// token stream. Punctuation is unaffected, so it composes with the tight-token rules rather than
+        /// fighting them, and it is a no-op whenever a separator is already present.</para>
+        /// </summary>
+        /// <param name="value">The payload about to be appended.</param>
+        private void EnsureWordSeparation(string value)
+        {
+            if (value.Length == 0 || !IsTokenConstituent(value[0]) || this.atLineStart || this.builder.Length == 0)
+            {
+                return;
+            }
+
+            if (IsTokenConstituent(this.builder[this.builder.Length - 1]))
+            {
+                this.builder.Append(' ');
+            }
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="character"/> can be part of a NAME token — a letter, digit or
+        /// underscore, or the quote that delimits an unrestricted name.
+        /// </summary>
+        /// <param name="character">The character to classify.</param>
+        /// <returns><see langword="true"/> when the character constitutes part of a name token.</returns>
+        private static bool IsTokenConstituent(char character)
+        {
+            return char.IsLetterOrDigit(character) || character == '_' || character == '\'';
         }
 
         /// <summary>

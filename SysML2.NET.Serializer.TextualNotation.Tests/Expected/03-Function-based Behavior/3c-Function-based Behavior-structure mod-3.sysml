@@ -5,19 +5,19 @@ package '3c-Function-based Behavior-structure mod-3' {
     part def Trailer;
     part def TrailerFrame;
     part def TrailerCoupler;
-    ref part vehicle: Vehicle {
+    part vehicle: Vehicle {
         part vehicleFrame: VehicleFrame {
             part hitch: HitchBall;
         }
     }
-    ref part trailer: Trailer {
+    part trailer: Trailer {
         part trailerFrame: TrailerFrame {
             part coupler: TrailerCoupler {
                 ref part hitch: HitchBall;
             }
         }
     }
-    ref action {
+    action {
         action 'connect trailer to vehicle' assign trailer.trailerFrame.coupler.hitch := vehicle.vehicleFrame.hitch;
         then action 'disconnect trailer from vehicle' assign trailer.trailerFrame.coupler.hitch := null;
     }

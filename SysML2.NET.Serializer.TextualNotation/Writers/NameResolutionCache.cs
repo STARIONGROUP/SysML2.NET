@@ -1033,34 +1033,31 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             // Filter out the local redefining feature so it doesn't shadow the redefined target
             // it points to. When the bucket contains only the local redefiner, treat the name as
             // unbound in this scope and continue the chain walk outward.
-            var hasLocalRedefiner = localRedefiner != null && elements.Contains(localRedefiner);
-            var effectiveCount = hasLocalRedefiner ? elements.Count - 1 : elements.Count;
+            var candidates = elements.Where(element => !ReferenceEquals(element, localRedefiner)).ToList();
 
-            if (effectiveCount == 0)
+            if (candidates.Count == 0)
             {
                 return SimpleNameResolution.NotBound;
             }
 
-            if (effectiveCount == 1)
+            if (candidates.Count == 1)
             {
-                var only = hasLocalRedefiner
-                    ? elements.First(e => !ReferenceEquals(e, localRedefiner))
-                    : elements.First();
-
-                return ReferenceEquals(only, target)
+                return ReferenceEquals(candidates[0], target)
                     ? SimpleNameResolution.Matched
                     : SimpleNameResolution.Shadowed;
             }
 
+            candidates = PreferDirectlyOwnedOverInherited(scope, candidates);
+
             // Reduce to the leaf set: drop any element that is transitively redefined by
-            // another element in `elements`. The shadow set is the union of each candidate's
+            // another element in `candidates`. The shadow set is the union of each candidate's
             // `AllRedefinedFeatures()` closure (excluding the candidate itself, which the
             // operation includes as the seed of the closure). The local redefiner — when
             // present — is excluded from this computation entirely so it neither participates
             // in shadow accumulation nor in the final leaf count.
             var shadowed = new HashSet<IFeature>();
 
-            foreach (var candidate in elements.OfType<IFeature>().Where(candidate => !ReferenceEquals(candidate, localRedefiner)))
+            foreach (var candidate in candidates.OfType<IFeature>())
             {
                 foreach (var redefined in candidate.AllRedefinedFeatures().Where(redefined => !ReferenceEquals(redefined, candidate)))
                 {
@@ -1071,7 +1068,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             IElement onlyLeaf = null;
             var leafCount = 0;
 
-            foreach (var element in elements.Where(element => !ReferenceEquals(element, localRedefiner) && (element is not IFeature feature || !shadowed.Contains(feature))))
+            foreach (var element in candidates.Where(element => element is not IFeature feature || !shadowed.Contains(feature)))
             {
                 leafCount++;
 
@@ -1086,6 +1083,83 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             return leafCount == 1 && ReferenceEquals(onlyLeaf, target)
                 ? SimpleNameResolution.Matched
                 : SimpleNameResolution.Shadowed;
+        }
+
+        /// <summary>
+        /// Narrows <paramref name="candidates" /> to those declared DIRECTLY in
+        /// <paramref name="scope" /> when every other candidate is reachable only by INHERITANCE
+        /// into that scope.
+        /// <para>Per KerML §8.2.3.5.3 a well-formed <see cref="INamespace" /> has at most one
+        /// <see cref="IMembership" /> as the local resolution of a given name, and
+        /// <c>Type::inheritedMembership</c> is <c>removeRedefinedFeatures(inheritableMemberships(…))</c>.
+        /// So when a scope binds one name to both an owned and an inherited feature, the owned one
+        /// redefines the inherited one and the inherited membership is not in scope under that name.</para>
+        /// <para>That redefinition is frequently IMPLIED rather than materialised. The OMG SysML v2
+        /// spec, Clause 7.17.2 states that "if the required redefinitions are not explicitly declared
+        /// for a parameter, then the parameter is considered to implicitly have redefinitions
+        /// sufficient to meet the stated requirements", and the pilot's XMI export does not write those
+        /// implied Relationships — so <c>action 'provide power' : 'Provide Power' { in fuelCmd; … }</c>
+        /// arrives with no <see cref="IRedefinition"/> and the explicit-redefinition leaf reduction
+        /// below cannot see the shadowing. Without this step the name looked ambiguous and degraded to
+        /// <c>'provide power'::fuelCmd</c> where the canonical source writes <c>fuelCmd</c>.</para>
+        /// <para>Applied as a resolution-time preference rather than by dropping inherited entries from
+        /// the index: a redefined feature must stay nameable from the redefining declaration itself
+        /// (<c>part frontAxleAssembly_c1 :&gt;&gt; frontAxleAssembly</c>, <c>port :&gt;&gt; pe = c1.pb</c>),
+        /// where the two names differ so no collision arises and nothing may be shadowed.</para>
+        /// </summary>
+        /// <param name="scope">The namespace whose index produced <paramref name="candidates" />.</param>
+        /// <param name="candidates">The candidates bound to the name being resolved.</param>
+        /// <returns>The owned candidates when the preference applies, otherwise <paramref name="candidates" />.</returns>
+        private static List<IElement> PreferDirectlyOwnedOverInherited(INamespace scope, List<IElement> candidates)
+        {
+            if (scope is not IType scopeAsType)
+            {
+                return candidates;
+            }
+
+            List<IType> supertypes;
+
+            try
+            {
+                supertypes = scopeAsType.AllSupertypes();
+            }
+            catch (NotSupportedException)
+            {
+                return candidates;
+            }
+
+            var owned = candidates.Where(candidate => IsDirectlyOwnedBy(scope, candidate)).ToList();
+
+            if (owned.Count == 0 || owned.Count == candidates.Count)
+            {
+                return candidates;
+            }
+
+            var inheritedOnly = candidates
+                .Where(candidate => !owned.Contains(candidate))
+                .All(candidate => candidate is IFeature { owningType: { } declaringType } && supertypes.Contains(declaringType));
+
+            return inheritedOnly ? owned : candidates;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="element" /> is the member element of one of
+        /// <paramref name="scope" />'s own memberships — that is, declared in the scope rather than
+        /// imported into or inherited by it.
+        /// </summary>
+        /// <param name="scope">The namespace to test.</param>
+        /// <param name="element">The candidate member element.</param>
+        /// <returns><see langword="true" /> when the scope declares the element itself.</returns>
+        private static bool IsDirectlyOwnedBy(INamespace scope, IElement element)
+        {
+            try
+            {
+                return scope.ownedMembership.Any(membership => ReferenceEquals(membership.MemberElement, element));
+            }
+            catch (NotSupportedException)
+            {
+                return false;
+            }
         }
 
         /// <summary>

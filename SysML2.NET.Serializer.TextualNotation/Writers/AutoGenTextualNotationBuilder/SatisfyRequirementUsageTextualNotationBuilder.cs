@@ -84,7 +84,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership)
             {
                 stringBuilder.Append("by ");
 

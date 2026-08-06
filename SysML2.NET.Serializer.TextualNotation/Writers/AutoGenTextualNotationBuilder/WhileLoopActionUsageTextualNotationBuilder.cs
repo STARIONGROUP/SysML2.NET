@@ -88,7 +88,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
             {
                 stringBuilder.Append("until ");
 

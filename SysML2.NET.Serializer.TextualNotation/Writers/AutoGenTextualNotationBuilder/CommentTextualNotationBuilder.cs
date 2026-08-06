@@ -49,7 +49,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.Append("comment ");
                 ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Annotations.IAnnotation)
                 {
                     stringBuilder.Append("about ");
 

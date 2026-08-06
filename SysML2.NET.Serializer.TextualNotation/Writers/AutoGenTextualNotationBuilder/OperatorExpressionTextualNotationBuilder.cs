@@ -273,7 +273,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
                 {
 
                     if (ownedRelationshipCursor.Current != null)
