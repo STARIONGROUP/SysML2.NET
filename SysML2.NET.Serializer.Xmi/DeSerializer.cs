@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -24,6 +24,7 @@ namespace SysML2.NET.Serializer.Xmi
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Xml;
@@ -98,6 +99,23 @@ namespace SysML2.NET.Serializer.Xmi
         }
 
         /// <summary>
+        /// Assembles the <see cref="XmiReadResult" /> for a completed read: the requested
+        /// <paramref name="rootNamespace" /> plus the roots of every OTHER resource that had to be read to
+        /// resolve its external references. Per KerML 1.0 §8.2.3.5.2 the latter constitute the <i>global</i>
+        /// <see cref="INamespace" /> available to the model.
+        /// </summary>
+        /// <param name="rootNamespace">The root <see cref="INamespace" /> that was requested</param>
+        /// <returns>The assembled <see cref="XmiReadResult" /></returns>
+        private XmiReadResult BuildReadResult(INamespace rootNamespace)
+        {
+            var referencedNamespaces = this.cache.QueryRootNamespaces()
+                .Where(candidate => !ReferenceEquals(candidate, rootNamespace))
+                .ToList();
+
+            return new XmiReadResult(rootNamespace, referencedNamespaces);
+        }
+
+        /// <summary>
         /// Deserializes the XMI file to a read <see cref="INamespace" />
         /// </summary>
         /// <param name="fileLocation">
@@ -106,11 +124,12 @@ namespace SysML2.NET.Serializer.Xmi
         /// <exception cref="ArgumentNullException">If the <see cref="Uri" /> is null</exception>
         /// <exception cref="FileNotFoundException">If the <see cref="Uri" /> does not locate an existing file</exception>
         /// <returns>
-        /// The read <see cref="INamespace" />
+        /// The <see cref="XmiReadResult" /> holding the read <see cref="INamespace" /> and the roots of every
+        /// resource read to resolve its external references
         /// </returns>
-        public INamespace DeSerialize(Uri fileLocation)
+        public XmiReadResult DeSerialize(Uri fileLocation)
         {
-            return this.DeSerialize(fileLocation, true, null);
+            return this.BuildReadResult(this.DeSerialize(fileLocation, true, null));
         }
 
         /// <summary>
@@ -125,16 +144,17 @@ namespace SysML2.NET.Serializer.Xmi
         /// <exception cref="ArgumentNullException">If the <see cref="Uri" /> or <see cref="IXmiElementOriginMap" /> is null</exception>
         /// <exception cref="FileNotFoundException">If the <see cref="Uri" /> does not locate an existing file</exception>
         /// <returns>
-        /// The read <see cref="INamespace" />
+        /// The <see cref="XmiReadResult" /> holding the read <see cref="INamespace" /> and the roots of every
+        /// resource read to resolve its external references
         /// </returns>
-        public INamespace DeSerialize(Uri fileLocation, IXmiElementOriginMap elementOriginMap)
+        public XmiReadResult DeSerialize(Uri fileLocation, IXmiElementOriginMap elementOriginMap)
         {
             if (elementOriginMap == null)
             {
                 throw new ArgumentNullException(nameof(elementOriginMap));
             }
 
-            return this.DeSerialize(fileLocation, true, elementOriginMap);
+            return this.BuildReadResult(this.DeSerialize(fileLocation, true, elementOriginMap));
         }
 
         /// <summary>
@@ -147,11 +167,12 @@ namespace SysML2.NET.Serializer.Xmi
         /// <exception cref="ArgumentNullException">If the <see cref="Uri" /> is null</exception>
         /// <exception cref="FileNotFoundException">If the <see cref="Uri" /> does not locate an existing file</exception>
         /// <returns>
-        /// An awaitable <see cref="Task{TResult}" /> with the read <see cref="INamespace" />
+        /// An awaitable <see cref="Task{TResult}" /> with the <see cref="XmiReadResult" /> holding the read
+        /// <see cref="INamespace" /> and the roots of every resource read to resolve its external references
         /// </returns>
-        public Task<INamespace> DeSerializeAsync(Uri fileLocation, CancellationToken cancellationToken = default)
+        public async Task<XmiReadResult> DeSerializeAsync(Uri fileLocation, CancellationToken cancellationToken = default)
         {
-            return this.DeSerializeAsync(fileLocation, true, null, cancellationToken);
+            return this.BuildReadResult(await this.DeSerializeAsync(fileLocation, true, null, cancellationToken));
         }
 
         /// <summary>
@@ -167,16 +188,17 @@ namespace SysML2.NET.Serializer.Xmi
         /// <exception cref="ArgumentNullException">If the <see cref="Uri" /> or <see cref="IXmiElementOriginMap" /> is null</exception>
         /// <exception cref="FileNotFoundException">If the <see cref="Uri" /> does not locate an existing file</exception>
         /// <returns>
-        /// An awaitable <see cref="Task{TResult}" /> with the read <see cref="INamespace" />
+        /// An awaitable <see cref="Task{TResult}" /> with the <see cref="XmiReadResult" /> holding the read
+        /// <see cref="INamespace" /> and the roots of every resource read to resolve its external references
         /// </returns>
-        public Task<INamespace> DeSerializeAsync(Uri fileLocation, IXmiElementOriginMap elementOriginMap, CancellationToken cancellationToken = default)
+        public async Task<XmiReadResult> DeSerializeAsync(Uri fileLocation, IXmiElementOriginMap elementOriginMap, CancellationToken cancellationToken = default)
         {
             if (elementOriginMap == null)
             {
                 throw new ArgumentNullException(nameof(elementOriginMap));
             }
 
-            return this.DeSerializeAsync(fileLocation, true, elementOriginMap, cancellationToken);
+            return this.BuildReadResult(await this.DeSerializeAsync(fileLocation, true, elementOriginMap, cancellationToken));
         }
 
         /// <summary>

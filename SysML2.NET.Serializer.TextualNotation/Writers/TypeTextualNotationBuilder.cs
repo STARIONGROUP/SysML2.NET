@@ -46,10 +46,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 switch (ownedRelationshipCursor.Current)
                 {
-                    // Action-specific cases
-                    case IFeatureMembership featureMembershipForInitialNode when featureMembershipForInitialNode.IsValidForInitialNodeMember(writerContext):
+                    // Action-specific cases.
+                    // Matched on IMembership, not IFeatureMembership: InitialNodeMember cross-references an
+                    // element owned elsewhere (`first start` names Actions::Action::start), which an
+                    // OwningMembership such as FeatureMembership cannot express, so the construct arrives as
+                    // a plain Membership. See IsValidForInitialNodeMember for the full reasoning.
+                    case IMembership membershipForInitialNode when membershipForInitialNode.IsValidForInitialNodeMember(writerContext):
                     {
-                        FeatureMembershipTextualNotationBuilder.BuildInitialNodeMember(featureMembershipForInitialNode, writerContext, stringBuilder);
+                        MembershipTextualNotationBuilder.BuildInitialNodeMemberFromReference(membershipForInitialNode, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
                         while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))

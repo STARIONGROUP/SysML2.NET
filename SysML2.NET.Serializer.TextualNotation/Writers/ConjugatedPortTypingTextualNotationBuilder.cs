@@ -31,24 +31,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Builds the Textual Notation string for the rule ConjugatedPortTyping.
         /// <remarks>ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]</remarks>
-        /// <para>The grammar's <c>originalPortDefinition</c> property does not resolve
-        /// against <see cref="IConjugatedPortTyping"/> — the metamodel exposes
-        /// <c>portDefinition</c> (the derived port-definition reference) instead.
-        /// The leading <c>'~'</c> token is already emitted by the autogen wrapper;
-        /// this hand-coded sibling carries the <c>~[QualifiedName]</c> emission as
-        /// a stub (matches the previous empty-stub behavior of
-        /// <c>BuildOriginalPortDefinition</c>).</para>
+        /// <para>The grammar names the referenced property <c>originalPortDefinition</c>, which does not
+        /// resolve against <see cref="IConjugatedPortTyping"/>. The metamodel exposes the same value as the
+        /// derived <c>portDefinition</c>, documented as "the originalPortDefinition of the
+        /// conjugatedPortDefinition of this ConjugatedPortTyping" and derived by
+        /// <c>portDefinition = conjugatedPortDefinition.originalPortDefinition</c> — so that property is the
+        /// faithful source for the <c>[QualifiedName]</c>.</para>
+        /// <para>The leading <c>'~'</c> token is emitted by the generated wrapper; this method contributes
+        /// only the qualified name, giving <c>~FuelPort</c>.</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping" /> from which the rule should be build</param>
         /// <param name="writerContext"> The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         private static void BuildConjugatedPortTypingHandCoded(IConjugatedPortTyping poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            // Preserves the previous empty-stub behavior of BuildOriginalPortDefinition
-            // for this call site. Full ~[QualifiedName] emission via the
-            // conjugated-resolution rule documented in SysML-textual-bnf.kebnf
-            // lines 651-658 still requires a dedicated implementation; left as a
-            // follow-up.
+            if (poco.portDefinition != null)
+            {
+                SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder, poco.portDefinition, writerContext, poco);
+            }
         }
     }
 }

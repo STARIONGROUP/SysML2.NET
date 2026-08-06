@@ -49,7 +49,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, writerContext, stringBuilder);
             }
 
-            if (poco.IsIndividual && ownedRelationshipCursor.Current != null)
+            if (poco.IsIndividual && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
                 stringBuilder.Append(" individual ");
 

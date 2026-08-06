@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualNotationValidationExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -29,6 +29,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
+    using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Kernel.Packages;
@@ -138,7 +139,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Asserts that the <see cref="IFeature"/> is valid for the PositionalArgumentList rule.
-        /// <para><c>PositionalArgumentList : Feature = e.ownedRelationship += ArgumentMember (',' e.ownedRelationship += ArgumentMember)*</c></para>
+        /// <para><c>PositionalArgumentList : Feature = ownedRelationship += ArgumentMember (',' ownedRelationship += ArgumentMember)*</c></para>
         /// <para>Matches when the cursor is positioned at an <see cref="IParameterMembership"/>
         /// (positional arguments) — the alternative <c>NamedArgumentList</c> uses plain
         /// <see cref="IFeatureMembership"/> members.</para>
@@ -305,15 +306,74 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para><c>ReferenceUsage = ( EndUsagePrefix | RefPrefix ) 'ref' Usage</c> — the form
         /// WITH the <c>'ref'</c> keyword, which sets <see cref="IUsage.IsReference"/> to <c>true</c>
         /// via <c>BasicUsagePrefix</c>'s <c>isReference ?= 'ref'</c>.</para>
-        /// <para>Distinguishes the two by the <see cref="IUsage.IsReference"/> property:
-        /// <c>!IsReference</c> means no <c>'ref'</c> keyword → default form.</para>
+        /// <para><c>isReference</c> CANNOT discriminate the two: it is derived as
+        /// <c>not isComposite</c>, and per the OMG SysML v2 spec, Clause 7.6.4 a reference usage
+        /// "is always, by definition, referential" — so the property is vacuously <c>true</c> for
+        /// every <see cref="IReferenceUsage"/> and the guard would never select the default form,
+        /// forcing a spurious <c>ref</c> onto every parameter and reference member. The same clause
+        /// states the declaration "may, but is not required, to include the <c>ref</c> keyword",
+        /// which makes the <c>'ref'</c>-less form the canonical one.</para>
+        /// <para>What genuinely separates the alternatives is what each can EXPRESS:</para>
+        /// <list type="number">
+        /// <item><description>only <c>ReferenceUsage</c> opens with <c>EndUsagePrefix</c>, so an end
+        /// feature must take that alternative;</description></item>
+        /// <item><description>the <c>'ref'</c>-less form is only ever chosen where the OMG SysML v2
+        /// spec, Clause 7.6.3 says the keyword adds nothing: "a directed usage is always referential,
+        /// whether or not the keyword <c>ref</c> is also given explicitly in its declaration". No such
+        /// statement covers the other <c>RefPrefix</c> flags, and the pilot sources bear that out —
+        /// <c>in fuelCmd : FuelCmd;</c> drops the keyword while <c>abstract ref :&gt;&gt; trailerHitch[1];</c>
+        /// keeps it — so <c>direction</c> is the sole discriminator.</description></item>
+        /// </list>
         /// </summary>
         /// <param name="referenceUsage">The <see cref="IReferenceUsage"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the reference usage has no <c>'ref'</c> keyword (i.e. default form)</returns>
+        /// <returns>True if the reference usage renders through the <c>'ref'</c>-less default form</returns>
         internal static bool IsValidForDefaultReferenceUsage(this IReferenceUsage referenceUsage, TextualNotationWriterContext writerContext)
         {
-            return !referenceUsage.isReference;
+            return !referenceUsage.IsEnd && referenceUsage.Direction.HasValue;
+        }
+
+        /// <summary>
+        /// Asserts that the <c>isReference ?= 'ref'</c> keyword of the BasicUsagePrefix rule carries
+        /// information for the supplied <see cref="IUsage"/>.
+        /// <para><c>BasicUsagePrefix : Usage = RefPrefix ( isReference ?= 'ref' )?</c></para>
+        /// <para><see cref="IUsage.isReference"/> is DERIVED (<c>isReference = not isComposite</c>),
+        /// so a <c>true</c> value does not imply the keyword was written. The metamodel constraint
+        /// <c>validateUsageIsReferential</c> — <c>direction &lt;&gt; null or isEnd or
+        /// featuringType-&gt;isEmpty() implies isReference</c> — forces the value in three contexts,
+        /// and the OMG SysML v2 spec, Clause 7.6.3 confirms the notation stays silent in them: "a
+        /// directed usage is always referential, whether or not the keyword <c>ref</c> is also given
+        /// explicitly in its declaration".</para>
+        /// <para>A fourth context follows from the OMG SysML v2 spec, Clause 7.9.1: "If an
+        /// occurrence definition or usage has nested composite features, then those features must
+        /// also be usages of occurrence definitions". Only an <see cref="IOccurrenceUsage"/> can
+        /// therefore be composite, which makes every other kind of usage — attributes, reference
+        /// usages, binding connectors, successions — necessarily referential and the keyword
+        /// redundant.</para>
+        /// <para><see cref="IPortUsage"/> narrows it once more via <c>validatePortUsageIsReference</c>
+        /// — <c>owningType = null or not owningType.oclIsKindOf(PortDefinition) and not
+        /// owningType.oclIsKindOf(PortUsage) implies isReference</c> — so a port is referential unless
+        /// it is a subport, and the pilot sources accordingly notate <c>port fuelCmdPort : FuelCmdPort;</c>
+        /// with no <c>ref</c>. Together with <c>validateEventOccurrenceUsageIsReference</c> (handled by
+        /// the generated type-level exclusion, since <c>EventOccurrenceUsage::isReference</c> defaults
+        /// to <c>true</c>) these are the ONLY constraints in the metamodel that force
+        /// <c>isReference</c>.</para>
+        /// <para>The featuring test uses <see cref="IFeature.owningType"/> rather than
+        /// <see cref="IFeature.featuringType"/>: a Usage acquires a featuringType only by being an
+        /// owned feature (its owning <c>FeatureMembership</c> IS the <c>TypeFeaturing</c>), which is
+        /// exactly what <see cref="IFeature.owningType"/> reports.</para>
+        /// </summary>
+        /// <param name="usage">The <see cref="IUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True when <c>ref</c> distinguishes this usage from the composite default</returns>
+        internal static bool IsValidForUsageIsReference(this IUsage usage, TextualNotationWriterContext writerContext)
+        {
+            if (usage is not IOccurrenceUsage || usage.Direction.HasValue || usage.IsEnd || usage.owningType == null)
+            {
+                return false;
+            }
+
+            return usage is not IPortUsage || usage.owningType is IPortDefinition or IPortUsage;
         }
 
         /// <summary>
@@ -610,14 +670,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Asserts that the <see cref="IOperatorExpression"/> is valid for the MetaclassificationExpression rule.
         /// <para><c>MetaclassificationExpression : OperatorExpression = ownedRelationship += MetadataArgumentMember
-        /// ( operator = ClassificationTestOperator ownedRelationship += TypeReferenceMember
+        /// ( operator = MetaclassificationTestOperator ownedRelationship += TypeReferenceMember
         /// | operator = MetaCastOperator ownedRelationship += TypeResultMember )
         /// ownedRelationship += EmptyResultMember</c></para>
-        /// <para>Matches when the operator is uniquely Metaclassification (<c>'meta'</c> or <c>'@@'</c>).
-        /// Operators shared with <c>ClassificationExpression</c> (<c>'istype'</c>, <c>'hastype'</c>, <c>'@'</c>)
-        /// are left to <c>ClassificationExpression</c>, which appears earlier in the switch dispatch.
-        /// True structural disambiguation (inspecting the <c>MetadataArgumentMember</c>'s contents) is
-        /// deferred.</para>
+        /// <para>Matches when the operator is <c>'@@'</c> (<c>MetaclassificationTestOperator</c>) or
+        /// <c>'meta'</c> (<c>MetaCastOperator</c>). Those sets are DISJOINT from
+        /// <c>ClassificationExpression</c>'s (<c>'istype' | 'hastype' | '@'</c> and <c>'as'</c>), so the
+        /// operator alone discriminates the two rules exactly — no structural inspection of the
+        /// <c>MetadataArgumentMember</c> is required, and the switch-dispatch order between them does not
+        /// matter.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
@@ -680,35 +741,102 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Asserts that the <see cref="IFeatureMembership"/> is valid for the InitialNodeMember rule (ActionBodyItem).
         /// <para><c>InitialNodeMember : FeatureMembership = MemberPrefix 'first' memberFeature = [QualifiedName] RelationshipBody</c></para>
-        /// <para><b>Limitation:</b> the rule is identified by the combination "<c>MemberElement</c>
-        /// set via cross-reference (no owned related element)". Other FeatureMembership rules that
-        /// also set <c>MemberElement</c> by cross-reference without owning any related element
-        /// would match this predicate. In practice InitialNodeMember is the only such case inside
-        /// an <c>ActionBodyItem</c> dispatch, which is the only caller.</para>
+        /// <para>The receiver is <see cref="IMembership"/>, NOT <see cref="IFeatureMembership"/> as the
+        /// rule's declared target suggests. The rule cannot be satisfied by a
+        /// <see cref="IFeatureMembership"/>: that metaclass specializes <c>OwningMembership</c> and so
+        /// OWNS its member, whereas <c>memberFeature = [QualifiedName]</c> is a CROSS-REFERENCE to an
+        /// element owned elsewhere (<c>first start</c> names <c>Actions::Action::start</c> in the Systems
+        /// Library). A plain <see cref="IMembership"/> carrying <see cref="IMembership.MemberElement"/> is
+        /// therefore the only metamodel-valid encoding, and it is what the pilot exports. Note also that
+        /// <c>memberFeature</c> does not exist as a property anywhere in the metamodel — the rule names a
+        /// property the abstract syntax does not define (still true in release 2026-05).</para>
+        /// <para>Discriminated from the sibling <c>AliasMember : Membership = MemberPrefix 'alias'
+        /// ( '&lt;' memberShortName = NAME '&gt;' )? ( memberName = NAME )? 'for'
+        /// memberElement = [QualifiedName] RelationshipBody</c>, which has the same runtime shape, by the
+        /// ABSENCE of a member name: an alias exists solely to bind a new name, so a nameless membership
+        /// cannot be one. Without that test <c>first start;</c> was emitted as
+        /// <c>alias for Actions::Action::start;</c>.</para>
         /// </summary>
-        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="membership">The <see cref="IMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership references its target via cross-reference only</returns>
-        internal static bool IsValidForInitialNodeMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
+        /// <returns>True if the membership references its target via cross-reference and binds no name</returns>
+        internal static bool IsValidForInitialNodeMember(this IMembership membership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership is { MemberElement: not null }
-                && featureMembership.OwnedRelatedElement.Count == 0;
+            return membership is { MemberElement: not null }
+                && membership.OwnedRelatedElement.Count == 0
+                && string.IsNullOrWhiteSpace(membership.MemberName)
+                && string.IsNullOrWhiteSpace(membership.MemberShortName);
         }
 
         /// <summary>
         /// Asserts that the <see cref="IFeatureMembership"/> is valid for the ActionTargetSuccessionMember rule (ActionBodyItem).
         /// <para><c>ActionTargetSuccessionMember : FeatureMembership = MemberPrefix ownedRelatedElement += ActionTargetSuccession</c></para>
         /// <para><c>ActionTargetSuccession : Usage = (TargetSuccession:SuccessionAsUsage | GuardedTargetSuccession:TransitionUsage | DefaultTargetSuccession:TransitionUsage) UsageBody</c></para>
-        /// <para><b>Limitation:</b> <c>SourceSuccessionMember</c> also wraps <see cref="ISuccessionAsUsage"/>;
-        /// the broader dispatch relies on switch-case ordering (SourceSuccessionMember's guard is
-        /// checked first, then ActionTargetSuccessionMember).</para>
+        /// <para><c>TargetSuccession : SuccessionAsUsage = ownedRelationship += SourceEndMember 'then' ownedRelationship += ConnectorEndMember</c>,
+        /// and <c>ConnectorEnd : ReferenceUsage = … ownedRelationship += OwnedReferenceSubsetting</c> — the target
+        /// end therefore ALWAYS names its target. <c>SourceSuccession : SuccessionAsUsage = ownedRelationship += SourceEndMember</c>
+        /// has no such end: its target is the body item that follows the <c>then</c>.</para>
+        /// <para>Both forms wrap an <see cref="ISuccessionAsUsage"/>, so the presence of a target end carrying an
+        /// <see cref="IReferenceSubsetting"/> is what separates them. Without this check the trailing
+        /// <c>( ownedRelationship += ActionTargetSuccessionMember )*</c> loop of <c>ActionBodyItem</c> greedily
+        /// swallows the SourceSuccessionMember belonging to the NEXT item, emitting a bare <c>then;</c> and
+        /// detaching the action it was meant to precede.</para>
+        /// <para>A named target end is necessary but NOT sufficient: <c>TargetSuccession</c> leads with a
+        /// <c>SourceEndMember</c>, and <c>SourceEnd : ReferenceUsage = ( ownedRelationship += OwnedMultiplicity )?</c>
+        /// carries no <see cref="IReferenceSubsetting"/> — its source is IMPLICITLY the preceding body item, which
+        /// is precisely why the notation writes only <c>then target;</c>. The standalone
+        /// <c>SuccessionAsUsage = … 'first' ConnectorEndMember 'then' ConnectorEndMember</c> names BOTH ends. So a
+        /// succession whose source end names a feature must be rendered <c>first source then target;</c> and must
+        /// be rejected here; otherwise the loop absorbs it and the explicit source is silently lost
+        /// (<c>first continue then engineStarted;</c> collapsed to <c>then engineStarted;</c>).</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns a succession or transition usage</returns>
+        /// <returns>True if the membership owns a transition usage, or a succession with a named target end and an implicit source</returns>
         internal static bool IsValidForActionTargetSuccessionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership?.OwnedRelatedElement.Any(element => element is ISuccessionAsUsage or ITransitionUsage) == true;
+            return featureMembership?.OwnedRelatedElement.Any(element => element switch
+            {
+                ISuccessionAsUsage succession => HasNamedTargetEnd(succession) && !HasNamedSourceEnd(succession),
+                ITransitionUsage => true,
+                _ => false,
+            }) == true;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="succession"/> leads with a <c>ConnectorEndMember</c> source end —
+        /// an end feature owning an <see cref="IReferenceSubsetting"/> that names where the succession starts.
+        /// <para>Its absence is the structural marker of <c>SourceEnd : ReferenceUsage =
+        /// ( ownedRelationship += OwnedMultiplicity )?</c>, the anonymous leading end shared by
+        /// <c>SourceSuccession</c> and <c>TargetSuccession</c>, whose source is the preceding body item rather
+        /// than a named feature.</para>
+        /// </summary>
+        /// <param name="succession">The <see cref="ISuccessionAsUsage"/> to inspect</param>
+        /// <returns>True when the leading end names a feature</returns>
+        private static bool HasNamedSourceEnd(ISuccessionAsUsage succession)
+        {
+            return succession.OwnedRelationship
+                .OfType<IEndFeatureMembership>()
+                .Take(1)
+                .SelectMany(endMembership => endMembership.OwnedRelatedElement.OfType<IFeature>())
+                .Any(endFeature => endFeature.OwnedRelationship.OfType<IReferenceSubsetting>().Any());
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="succession"/> carries a <c>ConnectorEndMember</c> target end —
+        /// that is, an end beyond the leading <c>SourceEndMember</c> whose feature owns an
+        /// <see cref="IReferenceSubsetting"/> naming the succession target. This is the structural marker of
+        /// the <c>TargetSuccession</c> form against the <c>SourceSuccession</c> form.
+        /// </summary>
+        /// <param name="succession">The <see cref="ISuccessionAsUsage"/> to inspect</param>
+        /// <returns>True when a named target end is present</returns>
+        private static bool HasNamedTargetEnd(ISuccessionAsUsage succession)
+        {
+            return succession.OwnedRelationship
+                .OfType<IEndFeatureMembership>()
+                .Skip(1)
+                .SelectMany(endMembership => endMembership.OwnedRelatedElement.OfType<IFeature>())
+                .Any(endFeature => endFeature.OwnedRelationship.OfType<IReferenceSubsetting>().Any());
         }
 
         /// <summary>
@@ -718,13 +846,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// AssignmentNode / TerminateNode / IfNode / WhileLoopNode / ForLoopNode — all <see cref="IActionUsage"/>
         /// descendants). BehaviorUsageMember wraps a BehaviorUsageElement (also mostly <see cref="IActionUsage"/>
         /// or its descendants). The broadest accurate predicate is "owns an <see cref="IActionUsage"/>".</para>
+        /// <para><see cref="IFlowUsage"/> (and its <see cref="ISuccessionFlowUsage"/> subtype) IS-A
+        /// <see cref="IActionUsage"/> in the metamodel, but appears in NEITHER alternative of this rule —
+        /// <c>BehaviorUsageElement</c> and <c>ActionNode</c> both exclude it. A flow reaches the body through
+        /// <c>NonBehaviorBodyItem → StructureUsageMember → StructureUsageElement</c> instead, so it must be
+        /// rejected here or it is emitted as an empty <c>action { }</c> and its declaration is lost. This
+        /// mirrors the complementary carve-out in <see cref="IsValidForStructureUsageMember"/>.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns an <see cref="IActionUsage"/></returns>
+        /// <returns>True if the membership owns an <see cref="IActionUsage"/> that is not an <see cref="IFlowUsage"/></returns>
         internal static bool IsValidForActionBehaviorMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any() == true;
+            return featureMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any(actionUsage => actionUsage is not IFlowUsage) == true;
         }
 
         /// <summary>
@@ -833,15 +967,25 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Asserts that the <see cref="IFeatureMembership"/> contains at least one <see cref="ISuccessionAsUsage"/>
-        /// inside the <see cref="IRelationship.OwnedRelatedElement"/> collection
+        /// Asserts that the <see cref="IFeatureMembership"/> is valid for the SourceSuccessionMember rule.
+        /// <para><c>SourceSuccessionMember : FeatureMembership = 'then' ownedRelatedElement += SourceSuccession</c>,
+        /// and <c>SourceSuccession : SuccessionAsUsage = ownedRelationship += SourceEndMember</c> — a single,
+        /// ANONYMOUS end whose target is the body item that follows the <c>then</c>.</para>
+        /// <para>A succession whose target end NAMES its target is a different construct: the standalone
+        /// <c>SuccessionAsUsage</c> (<c>'first' ConnectorEndMember 'then' ConnectorEndMember</c>), which reaches
+        /// an action body through <c>NonBehaviorBodyItem → VariantUsageMember → VariantUsageElement</c>. Both
+        /// forms own an <see cref="ISuccessionAsUsage"/>, so without the <see cref="HasNamedTargetEnd"/> test
+        /// this guard claimed BOTH — and the enclosing dispatch in <c>BuildActionBodyItemHandCoded</c> then
+        /// dropped the standalone form silently, because its lookahead finds neither an ActionBehaviorMember
+        /// nor a StructureUsageMember after it and falls through to a bare <c>cursor.Move()</c>. That lost
+        /// every <c>first X then Y;</c> statement in the model.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if it contains one <see cref="ISuccessionAsUsage"/></returns>
+        /// <returns>True if it owns a succession whose target end is implicit (not named)</returns>
         internal static bool IsValidForSourceSuccessionMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership.OwnedRelatedElement.OfType<ISuccessionAsUsage>().Any();
+            return featureMembership.OwnedRelatedElement.OfType<ISuccessionAsUsage>().Any(succession => !HasNamedTargetEnd(succession));
         }
 
         /// <summary>

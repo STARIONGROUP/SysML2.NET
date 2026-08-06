@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             stringBuilder.Append("terminate ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)

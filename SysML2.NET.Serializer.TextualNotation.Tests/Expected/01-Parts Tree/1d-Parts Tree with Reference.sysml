@@ -8,7 +8,7 @@ package '1d-Parts Tree with Reference' {
     }
     package Usages {
         private import Definitions::*;
-        ref part vehicle_trailer_system {
+        part vehicle_trailer_system {
             part vehicle1_c1: Vehicle {
                 ref hitchBall: HitchBall {
                     /*
@@ -19,7 +19,7 @@ package '1d-Parts Tree with Reference' {
                      */
                 }
             }
-            ref bind vehicle1_c1.hitchBall = trailerHitch.hitchBall {
+            bind vehicle1_c1.hitchBall = trailerHitch.hitchBall {
                 /*
                  * This is a binding connector between the 'hitchBall' in 'vehicle1_c1'
                  * and the 'hitchBall' in 'trailerHitch'.

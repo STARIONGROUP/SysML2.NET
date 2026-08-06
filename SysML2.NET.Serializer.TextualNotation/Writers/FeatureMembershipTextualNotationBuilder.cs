@@ -34,18 +34,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <see cref="IFeatureMembership"/> — the metamodel only exposes
         /// <c>ownedMemberFeature</c> on <c>IFeatureMembership</c> and <c>MemberElement</c>
         /// on its parent <c>IMembership</c>. This hand-coded sibling carries the
-        /// remaining <c>[QualifiedName]</c> emission as a stub; the surrounding
+        /// remaining <c>[QualifiedName]</c> emission; the surrounding
         /// <c>MemberPrefix</c>, <c>'first'</c>, and <c>RelationshipBody</c> tokens are
         /// already emitted by the autogen wrapper.</para>
+        /// <para>In practice a conforming model never reaches this overload: the construct
+        /// cross-references an element owned elsewhere, which an <c>OwningMembership</c> such as
+        /// <see cref="IFeatureMembership"/> cannot express, so the pilot exports a plain
+        /// <c>Membership</c> handled by
+        /// <see cref="MembershipTextualNotationBuilder.BuildInitialNodeMemberFromReference"/>. The
+        /// emission is shared with that path rather than left as a stub, so a model that does type the
+        /// membership as a <see cref="IFeatureMembership"/> still round-trips instead of silently
+        /// dropping the referenced feature.</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         private static void BuildInitialNodeMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            // Preserves the previous empty-stub behavior of BuildMemberFeature for this
-            // call site. The full QualifiedName-emission still requires a dedicated
-            // implementation; left as a follow-up.
+            MembershipTextualNotationBuilder.AppendInitialNodeMemberFeature(poco, writerContext, stringBuilder);
         }
 
         /// <summary>

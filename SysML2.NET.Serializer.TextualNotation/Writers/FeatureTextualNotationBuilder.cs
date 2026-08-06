@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureTextualNotationBuilder.cs" company="Starion Group S.A.">
 // 
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -318,7 +318,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             else if (ownedRelationshipCursor.Current is IOwningMembership multiplicityMember
                      && multiplicityMember.OwnedRelatedElement.OfType<IMultiplicity>().Any())
             {
-                // Alt 3: OwnedMultiplicity OwnedFeatureTyping
+                // Alt 3: OwnedMultiplicity OwnedFeatureTyping — the typing is MANDATORY, but a
+                // writer can only emit what the model carries, so it stays guarded: a model missing it
+                // yields invalid text that no writer-side default could repair.
                 OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(multiplicityMember, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
 
@@ -338,7 +340,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         /// <remarks>
         /// PayloadFeatureSpecializationPart : Feature =
-        ///     ( FeatureSpecialization )+ MultiplicityPart? FeatureSpecialization*
+        ///     FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
         ///   | MultiplicityPart FeatureSpecialization+
         ///
         /// Structurally identical to FeatureSpecializationPart; the only grammar difference

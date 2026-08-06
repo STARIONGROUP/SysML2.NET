@@ -35,7 +35,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule AnnotatingMember
-        /// <para>AnnotatingMember:OwningMembership=ownedRelatedElement+=AnnotatingElement</para>
+        /// <para>AnnotatingMember:OwningMembership=MemberPrefixownedRelatedElement+=AnnotatingElement</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
@@ -43,6 +43,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public static void BuildAnnotatingMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, writerContext, stringBuilder);
 
             if (ownedRelatedElementCursor.Current != null)
             {

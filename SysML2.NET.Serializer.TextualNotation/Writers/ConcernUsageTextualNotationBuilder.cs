@@ -36,15 +36,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Builds the Textual Notation string for the <c>FramedConcernUsage</c> rule.
         /// <para><c>FramedConcernUsage : ConcernUsage =
-        /// ownedRelationship += OwnedReferenceSubsetting FeatureSpecializationPart? CalculationBody
+        /// ownedRelationship += OwnedReferenceSubsetting FeatureSpecializationPart? RequirementBody
         /// | ( UsageExtensionKeyword* 'concern' | UsageExtensionKeyword+ )
-        /// CalculationUsageDeclaration CalculationBody</c></para>
+        /// ConstraintUsageDeclaration RequirementBody</c></para>
         /// <para>Alt 1 consumes one <see cref="IReferenceSubsetting"/>; if any further
         /// <see cref="ISpecialization"/> follows the cursor, the optional <c>FeatureSpecializationPart?</c>
         /// is emitted via a single call to <c>BuildFeatureSpecialization</c>. Alt 2 consumes a run
-        /// of <c>UsageExtensionKeyword</c>, then the <c>'concern'</c> keyword, then the inline
-        /// usage declaration (the grammar references a <c>CalculationUsageDeclaration</c> that is
-        /// not separately defined — the reusable <c>UsageDeclaration</c> rule covers it).</para>
+        /// of <c>UsageExtensionKeyword</c>, then the <c>'concern'</c> keyword, then
+        /// <c>ConstraintUsageDeclaration</c>.</para>
+        /// <para>BOTH alternatives close with <c>RequirementBody</c>, so the body is emitted once
+        /// after the alternation — unlike the sibling <c>RequirementConstraintUsage</c>, whose
+        /// alternatives end in <c>RequirementBody</c> and <c>CalculationBody</c> respectively and
+        /// therefore emit their own. This matches the generated sibling <c>BuildConcernUsage</c>
+        /// (<c>ConcernUsage = OccurrenceUsagePrefix 'concern' ConstraintUsageDeclaration
+        /// RequirementBody</c>).</para>
         /// </summary>
         /// <param name="poco">The <see cref="IConcernUsage"/> being serialised</param>
         /// <param name="writerContext">The <see cref="ICursorCache"/> used to get access to CursorCollection for the current <paramref name="poco"/></param>
@@ -69,7 +74,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else
             {
-                // Alt 2: UsageExtensionKeyword* 'concern' CalculationUsageDeclaration
+                // Alt 2: UsageExtensionKeyword* 'concern' ConstraintUsageDeclaration
                 while (ownedRelationshipCursor.Current is IOwningMembership membership
                        && membership.OwnedRelatedElement.OfType<IMetadataUsage>().Any())
                 {
@@ -77,10 +82,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
 
                 stringBuilder.Append("concern ");
-                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
+                ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, writerContext, stringBuilder);
             }
 
-            TypeTextualNotationBuilder.BuildCalculationBody(poco, writerContext, stringBuilder);
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, writerContext, stringBuilder);
         }
     }
 }

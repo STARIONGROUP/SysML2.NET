@@ -500,7 +500,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// also reused by <c>PayloadFeatureSpecializationPart</c>.
         /// <para><c>FeatureSpecializationPart : Feature = FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
         /// | MultiplicityPart FeatureSpecialization*</c></para>
-        /// <para><c>PayloadFeatureSpecializationPart : Feature = ( FeatureSpecialization )+ MultiplicityPart? FeatureSpecialization*
+        /// <para><c>PayloadFeatureSpecializationPart : Feature = FeatureSpecialization+ MultiplicityPart? FeatureSpecialization*
         /// | MultiplicityPart FeatureSpecialization+</c></para>
         /// <para>The only grammar difference between the two rules (Alt 2's <c>+</c> vs <c>*</c>) is a
         /// parse-time validation concern, not a serialization difference, so a single helper serves

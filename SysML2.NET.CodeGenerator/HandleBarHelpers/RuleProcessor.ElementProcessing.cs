@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.ElementProcessing.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -105,14 +105,23 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                             }
 
+                            // A repeated group followed by a MANDATORY consumption of the same element type
+                            // from the same cursor — the `( X )+ X` shape of e.g.
+                            // FeatureChainPrefix = ( ownedRelationship += OwnedFeatureChaining '.' )+
+                            //                        ownedRelationship += OwnedFeatureChaining '.'
+                            // — must leave one element for that trailing consumption. Without the
+                            // reservation the loop eats every element and the mandatory tail emits its
+                            // terminals against an exhausted cursor (`a.b.` became `a.b..`).
+                            var reservationGuard = ResolveTrailingConsumptionReservation(cursorToUse, umlClass, ruleGenerationContext);
+
                             if (groupTypeGuard.StartsWith("__FULL_GUARD__"))
                             {
                                 var fullGuard = groupTypeGuard.Substring("__FULL_GUARD__".Length);
-                                writer.WriteSafeString($"{Environment.NewLine}while({fullGuard}){Environment.NewLine}");
+                                writer.WriteSafeString($"{Environment.NewLine}while({fullGuard}{reservationGuard}){Environment.NewLine}");
                             }
                             else
                             {
-                                writer.WriteSafeString($"{Environment.NewLine}while({cursorToUse.CursorVariableName}.Current != null{groupTypeGuard}){Environment.NewLine}");
+                                writer.WriteSafeString($"{Environment.NewLine}while({cursorToUse.CursorVariableName}.Current != null{groupTypeGuard}{reservationGuard}){Environment.NewLine}");
                             }
                         }
 
@@ -246,6 +255,45 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             writer.WriteSafeString(Environment.NewLine);
+        }
+
+        /// <summary>
+        /// Builds the extra <c>while</c> clause that reserves one element for a MANDATORY consumption
+        /// following a repeated group, or an empty string when no reservation is needed.
+        /// <para>KEBNF rules of the shape <c>( prop += X )+ prop += X</c> — <c>FeatureChainPrefix</c> being
+        /// the canonical case — consume from a single shared cursor. Emitted naively the loop is greedy: it
+        /// takes every element, and the mandatory trailing assignment then emits its terminals with nothing
+        /// left to consume, duplicating them. The guard <c>cursor.GetNext(1) is T</c> stops the loop one
+        /// element short, which is exactly the arity the grammar asks for.</para>
+        /// <para>Applies only when the element immediately following the group in the SAME alternative is a
+        /// non-optional <c>+=</c> assignment drawing on the same cursor and the same sub-rule; any other
+        /// successor consumes different elements and needs no reservation.</para>
+        /// </summary>
+        /// <param name="cursorDefinition">The cursor the group consumes from.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The additional guard clause, or an empty string.</returns>
+        private static string ResolveTrailingConsumptionReservation(CursorDefinition cursorDefinition, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            var siblings = ruleGenerationContext.CurrentSiblingElements;
+
+            if (siblings == null || ruleGenerationContext.CurrentElementIndex + 1 >= siblings.Count)
+            {
+                return string.Empty;
+            }
+
+            if (siblings[ruleGenerationContext.CurrentElementIndex + 1] is not AssignmentElement { Operator: "+=", IsOptional: false, IsCollection: false } trailingAssignment
+                || !cursorDefinition.IsCursorValidForProperty(cursorDefinition.DefinedForProperty)
+                || !string.Equals(trailingAssignment.Property, cursorDefinition.DefinedForProperty.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                return string.Empty;
+            }
+
+            var trailingTypeName = ResolveAssignmentTargetTypeName(trailingAssignment, umlClass, ruleGenerationContext);
+
+            return trailingTypeName == null
+                ? string.Empty
+                : $" && {cursorDefinition.CursorVariableName}.GetNext(1) is {trailingTypeName}";
         }
 
         /// <summary>

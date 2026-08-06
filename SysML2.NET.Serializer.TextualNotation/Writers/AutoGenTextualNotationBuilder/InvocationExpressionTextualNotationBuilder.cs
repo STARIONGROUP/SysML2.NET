@@ -35,7 +35,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule FunctionOperationExpression
-        /// <para>FunctionOperationExpression:InvocationExpression=ownedRelationship+=PrimaryArgumentMember'-&gt;'ownedRelationship+=InvocationTypeMember(ownedRelationship+=BodyArgumentMember|ownedRelationship+=FunctionReferenceArgumentMember|ArgumentList)ownedRelationship+=EmptyResultMember</para>
+        /// <para>FunctionOperationExpression:InvocationExpression=ownedRelationship+=PrimaryArgumentMember'-&gt;'ownedRelationship+=InstantiatedTypeMember(ownedRelationship+=BodyArgumentMember|ownedRelationship+=FunctionReferenceArgumentMember|ArgumentList)ownedRelationship+=EmptyResultMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
@@ -58,9 +58,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (ownedRelationshipCursor.Current != null)
             {
-                BuildInvocationTypeMember(poco, writerContext, stringBuilder);
-                ownedRelationshipCursor.Move();
 
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
+                {
+                    MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(elementAsMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+
+                }
             }
             if (ownedRelationshipCursor.Current != null)
             {

@@ -15,7 +15,7 @@ package '1c-Parts Tree Redefinition' {
     }
     package Usages {
         private import Definitions::*;
-        ref part vehicle1: Vehicle {
+        part vehicle1: Vehicle {
             attribute mass :>> Vehicle::mass default = 1750[kg] {
                 doc
                 /*
@@ -32,7 +32,7 @@ package '1c-Parts Tree Redefinition' {
                 part rearWheel: Wheel[2] ordered;
             }
         }
-        ref part vehicle1_c1 :> vehicle1 {
+        part vehicle1_c1 :> vehicle1 {
             /*
              * 'vehicle1_c1' is a specialization of 'vehicle1' (technically
              * a subset). It inherits all the parts of 'vehicle1' and

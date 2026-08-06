@@ -29,6 +29,7 @@ namespace SysML2.NET.Serializer.Xmi
     using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
     using SysML2.NET.Serializer.Xmi.Extensions;
 
@@ -159,6 +160,41 @@ namespace SysML2.NET.Serializer.Xmi
         {
             data = null;
             return this.cache.TryGetValue(dataId, out data);
+        }
+
+        /// <summary>
+        /// Queries the cached root <see cref="INamespace"/>s — those without an <c>owningNamespace</c>.
+        /// <para>Because a de-serialization transitively reads every referenced resource, this returns the
+        /// root of EVERY loaded resource, which per KerML 1.0 §8.2.3.5.2 is what constitutes the global
+        /// <see cref="INamespace"/> available to the model being read.</para>
+        /// </summary>
+        /// <returns>The cached root <see cref="INamespace"/>s; empty when nothing has been read</returns>
+        public IReadOnlyCollection<INamespace> QueryRootNamespaces()
+        {
+            return this.cache.Values
+                .OfType<INamespace>()
+                .Where(IsRootNamespace)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="candidate"/> is a root <see cref="INamespace"/>, i.e. it has no
+        /// <c>owningNamespace</c>. The derived property is not implemented for every metaclass, so a
+        /// <see cref="NotSupportedException"/> is treated as "cannot be established as a root" rather than
+        /// being allowed to escape a query over the whole cache.
+        /// </summary>
+        /// <param name="candidate">The <see cref="INamespace"/> to test</param>
+        /// <returns>True when the candidate has no owning namespace</returns>
+        private static bool IsRootNamespace(INamespace candidate)
+        {
+            try
+            {
+                return candidate.owningNamespace == null;
+            }
+            catch (NotSupportedException)
+            {
+                return false;
+            }
         }
 
         /// <summary>

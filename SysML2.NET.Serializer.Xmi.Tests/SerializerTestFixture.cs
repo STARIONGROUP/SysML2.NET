@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SerializerTestFixture.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -147,7 +147,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
         private void ReadAndAssemblePopulationFromXmiFile()
         {
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
-            this.anonymouseNameSpace = this.deSerializer.DeSerialize(new Uri(filePath));
+            this.anonymouseNameSpace = this.deSerializer.DeSerialize(new Uri(filePath)).RootNamespace;
         }
     }
 }

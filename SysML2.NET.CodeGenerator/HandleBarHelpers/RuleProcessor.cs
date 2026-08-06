@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -387,7 +387,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                                 else
                                 {
-                                    ifStatementContent.Add(property.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName));
+                                    // Guard on the TYPE the assignment consumes, not merely on the cursor being
+                                    // non-empty. An optional group is entered only when the element it would
+                                    // consume is actually present; a bare non-null test also passes for the next
+                                    // UNRELATED relationship, emitting the group's terminals spuriously — e.g.
+                                    // AcceptParameterPart's ( 'via' ownedRelationship += NodeParameterMember )?
+                                    // emitted `via` whenever the accept action merely had a body to follow.
+                                    var singleTypeName = ResolveAssignmentTargetTypeName(assigment, umlClass, ruleGenerationContext);
+
+                                    ifStatementContent.Add(singleTypeName == null
+                                        ? property.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName)
+                                        : $"{iterator.CursorVariableName}.Current is {singleTypeName}");
                                 }
                             }
                         }
@@ -408,6 +418,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 if (exclusionTypes.Count > 0)
                                 {
                                     condition += $" && poco is not ({string.Join(" or ", exclusionTypes.Select(c => c.QueryFullyQualifiedTypeName()))})";
+                                }
+
+                                // A DERIVED property cannot record whether the keyword was written: its runtime
+                                // value is COMPUTED from other state, so it is routinely true for reasons that
+                                // have nothing to do with the notation. `Usage::isReference` derives as
+                                // `not isComposite`, and every context in which the metamodel FORCES a Usage to
+                                // be referential (validateUsageIsReferential — directed, end feature, or no
+                                // featuringType) makes it true while the canonical source carries no `ref` at
+                                // all. The type-level exclusion above cannot see that: the redundancy is
+                                // per-INSTANCE, not per-subclass. Delegate the instance-level decision to a
+                                // hand-coded guard companion, reusing the `IsValidFor…` convention that the
+                                // rule-alternative dispatch already relies on.
+                                if (property.IsDerived || property.IsDerivedUnion)
+                                {
+                                    condition += $" && poco.IsValidFor{ruleGenerationContext.NamedElementToGenerate?.Name}{property.Name.CapitalizeFirstLetter()}(writerContext)";
                                 }
                             }
 
@@ -938,10 +963,64 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"else if ({variableName}.{resolvedPropertyName} != null){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext, poco);{Environment.NewLine}");
-            writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+
+            // The two alternatives denote the SAME notational prefix, so the reference form must be
+            // terminated the same way the chain form is. When the chain rule ends in a terminal — as
+            // FeatureChainPrefix does with its trailing '.' — that terminal belongs to the prefix notation
+            // rather than to the chain, so the [QualifiedName] branch has to emit it too.
+            //
+            // Ground truth is the reference parser, whose FlowEndSubsetting spells the terminal out on BOTH
+            // alternatives (org.omg.sysml.xtext/src/org/omg/sysml/xtext/SysML.xtext and the identical KerML
+            // production in org.omg.kerml.xtext/src/org/omg/kerml/xtext/KerML.xtext):
+            //
+            //     FlowEndSubsetting returns SysML::ReferenceSubsetting :
+            //           referencedFeature = [SysML::Feature | QualifiedName] '.'
+            //         | ownedRelatedElement += FeatureChainPrefix
+            //
+            // Resources/SysML-textual-bnf.kebnf omits that '.' on the reference alternative — the only
+            // genuine missing terminal found when diffing all 403 shared rules against the reference
+            // grammar. Since the kebnf files are OMG-owned and immutable, the terminal is recovered here
+            // instead. The inference is sound because the correlation holds for every rule of this shape:
+            // OwnedFeatureTyping, OwnedSubsetting, OwnedReferenceSubsetting, OwnedCrossSubsetting and
+            // OwnedRedefinition all pair with OwnedFeatureChain, which ends in a group and therefore keeps
+            // the plain space separator; FlowEndSubsetting is the sole rule pairing with FeatureChainPrefix.
+            var chainTrailingTerminal = QueryTrailingTerminal(referencedRule);
+
+            if (chainTrailingTerminal == null)
+            {
+                writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+            }
+            else
+            {
+                TerminalWriter.WriteTerminalAppend(writer, chainTrailingTerminal);
+                writer.WriteSafeString(Environment.NewLine);
+            }
+
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
             return true;
+        }
+
+        /// <summary>
+        /// Returns the value of the <see cref="TerminalElement" /> that <paramref name="rule" /> ends
+        /// with, or <see langword="null" /> when the rule has more than one alternative or does not end
+        /// in a terminal. Used to keep alternative forms of the same notational construct terminated
+        /// identically — see <see cref="TryEmitQualifiedNameOrChainAlternatives" />.
+        /// </summary>
+        /// <param name="rule">The referenced <see cref="TextualNotationRule" />; may be <see langword="null" />.</param>
+        /// <returns>The trailing terminal's value, or <see langword="null" />.</returns>
+        private static string QueryTrailingTerminal(TextualNotationRule rule)
+        {
+            if (rule == null || rule.Alternatives.Count != 1)
+            {
+                return null;
+            }
+
+            var elements = rule.Alternatives[0].Elements;
+
+            return elements.Count > 0 && elements[^1] is TerminalElement trailingTerminal
+                ? trailingTerminal.Value
+                : null;
         }
 
         /// <summary>

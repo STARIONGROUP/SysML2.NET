@@ -222,7 +222,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -363,7 +363,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
 
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
                 {
 
                     if (ownedRelationshipCursor.Current != null)
@@ -516,7 +516,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -924,7 +924,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SerializerArgumentValidationTestFixture.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -52,7 +52,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
             this.deSerializer = new DeSerializer(serviceProvider.GetRequiredService<ILoggerFactory>());
 
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
-            this.loadedNamespace = this.deSerializer.DeSerialize(new Uri(filePath));
+            this.loadedNamespace = this.deSerializer.DeSerialize(new Uri(filePath)).RootNamespace;
 
             this.serializer = new Serializer(serviceProvider.GetRequiredService<ILoggerFactory>());
         }

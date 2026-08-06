@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IndentedStringBuilder.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -22,6 +22,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Collections.Generic;
     using System.Text;
+
+    using SysML2.NET.LexicalRules;
 
     /// <summary>
     /// A thin wrapper around <see cref="StringBuilder"/> that produces an indentation-aware,
@@ -101,8 +103,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// preceding identifier (<c>frontWheel#(1)</c>); at logical line start (e.g.
         /// <c>#metadata</c> annotations) there is no preceding space to strip.
         /// <c>(</c> is intentionally NOT in this set — it is contextual (<c>foo(x)</c> tight
-        /// vs <c>not (x or y)</c> separated) and a runtime distinction would require either
-        /// grammar-aware emission or a dedicated helper.
+        /// vs <c>not (x or y)</c> separated). It is resolved separately, from the preceding
+        /// token, by <see cref="IsPostfixOpeningParenthesis"/>.
         /// </summary>
         private static readonly HashSet<string> TightLeftTerminals = [",", ")", "]", ";", "[", "#"];
 
@@ -259,6 +261,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return this;
             }
 
+            this.EnsureWordSeparation(value);
+
             var isTightBoth = this.ApplyTightTokenNormalisation(ref value);
 
             foreach (var character in value)
@@ -314,6 +318,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 return this.AppendLine();
             }
+
+            this.EnsureWordSeparation(value);
 
             var isTightBoth = this.ApplyTightTokenNormalisation(ref value);
 
@@ -392,7 +398,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var coreToken = value.Length > 1 && value[^1] == ' ' ? value[..^1] : value;
 
-            if (TightLeftTerminals.Contains(coreToken) || TightBothTerminals.Contains(coreToken))
+            if (TightLeftTerminals.Contains(coreToken) || TightBothTerminals.Contains(coreToken) || this.IsPostfixOpeningParenthesis(coreToken))
             {
                 this.StripTrailingSpace();
             }
@@ -404,6 +410,100 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Inserts a separating space when <paramref name="value"/> would otherwise merge with the token
+        /// already in the buffer to form a single, different token.
+        /// <para>Keyword terminals are emitted with a trailing space but no leading one, so a keyword that
+        /// follows a NAME collides with it: <c>action engineStarted</c> + <c>accept </c> produced
+        /// <c>engineStartedaccept</c>. That is not a cosmetic issue — per KerML §8.2.2.1 white space is the
+        /// token separator, so the merged form lexes as one identifier and the text no longer parses.</para>
+        /// <para>The rule is deliberately narrow: it fires only when the last buffered character and the
+        /// first character of the payload are both word constituents (letter, digit, underscore) or the
+        /// unrestricted-name quote, which is exactly the situation where omitting the space changes the
+        /// token stream. Punctuation is unaffected, so it composes with the tight-token rules rather than
+        /// fighting them, and it is a no-op whenever a separator is already present.</para>
+        /// </summary>
+        /// <param name="value">The payload about to be appended.</param>
+        private void EnsureWordSeparation(string value)
+        {
+            if (value.Length == 0 || !IsTokenConstituent(value[0]) || this.atLineStart || this.builder.Length == 0)
+            {
+                return;
+            }
+
+            if (IsTokenConstituent(this.builder[this.builder.Length - 1]))
+            {
+                this.builder.Append(' ');
+            }
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="character"/> can be part of a NAME token — a letter, digit or
+        /// underscore, or the quote that delimits an unrestricted name.
+        /// </summary>
+        /// <param name="character">The character to classify.</param>
+        /// <returns><see langword="true"/> when the character constitutes part of a name token.</returns>
+        private static bool IsTokenConstituent(char character)
+        {
+            return char.IsLetterOrDigit(character) || character == '_' || character == '\'';
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="coreToken"/> is an opening parenthesis in POSTFIX position,
+        /// i.e. one that binds to the token before it.
+        /// <para><c>(</c> cannot be classified by the token alone — the notation uses it both ways — so it
+        /// is resolved from what precedes it lexically. After a NAME it opens an argument or index list and
+        /// binds tight (<c>new TrailerHitch()</c>, <c>foo(x)</c>); after a reserved KEYWORD or an operator
+        /// it introduces a grouped or n-ary construct and keeps its separating space
+        /// (<c>connect (a, b, c)</c>, <c>not (x or y)</c>, <c>= (1, 2, 3)</c>).</para>
+        /// <para>The distinction is exactly "is the preceding word a reserved keyword", which
+        /// <see cref="Keywords.ReservedKeywords"/> already answers — so no grammar-rule knowledge is needed
+        /// here. A trailing <c>'</c> counts as part of a name so that a call on an unrestricted name
+        /// (<c>'my func'(x)</c>) is treated like any other call.</para>
+        /// </summary>
+        /// <param name="coreToken">The token about to be appended, with any trailing space removed.</param>
+        /// <returns><see langword="true"/> when the preceding space must be stripped.</returns>
+        private bool IsPostfixOpeningParenthesis(string coreToken)
+        {
+            if (coreToken != "(")
+            {
+                return false;
+            }
+
+            var endOfPrecedingToken = this.builder.Length;
+
+            while (endOfPrecedingToken > 0 && this.builder[endOfPrecedingToken - 1] == ' ')
+            {
+                endOfPrecedingToken--;
+            }
+
+            if (endOfPrecedingToken == 0)
+            {
+                return false;
+            }
+
+            if (this.builder[endOfPrecedingToken - 1] == '\'')
+            {
+                return true;
+            }
+
+            var startOfPrecedingToken = endOfPrecedingToken;
+
+            while (startOfPrecedingToken > 0 && (char.IsLetterOrDigit(this.builder[startOfPrecedingToken - 1]) || this.builder[startOfPrecedingToken - 1] == '_'))
+            {
+                startOfPrecedingToken--;
+            }
+
+            if (startOfPrecedingToken == endOfPrecedingToken)
+            {
+                return false;
+            }
+
+            var precedingToken = this.builder.ToString(startOfPrecedingToken, endOfPrecedingToken - startOfPrecedingToken);
+
+            return !Keywords.ReservedKeywords.Contains(precedingToken);
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace SysML2.NET.Serializer.Xmi
     using System.Collections.Generic;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// Represents a cache for storing and retrieving XMI <see cref="IData"/> during the reading process and defined references.
@@ -69,6 +70,19 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="data">The retrieved <see cref="IData"/> if applicable</param>
         /// <returns>True if the <see cref="IData"/> could was present in the cache and could be retrieved</returns>
         bool TryGetData(Guid dataId, out IData data);
+
+        /// <summary>
+        /// Queries the cached root <see cref="INamespace"/>s — those without an <c>owningNamespace</c>.
+        /// <para>A single de-serialization transitively reads every referenced resource (a model that
+        /// references one library element pulls in that library and its own dependencies), so the cache
+        /// holds the root <see cref="INamespace"/> of EVERY loaded resource, not only the one returned by
+        /// <c>DeSerialize</c>. Per KerML 1.0 §8.2.3.5.2, those other roots constitute the <i>global</i>
+        /// <see cref="INamespace"/> against which a qualified name is resolved once the containment chain
+        /// is exhausted — so a consumer that needs global-scope name resolution (such as the textual
+        /// notation writer) needs them all.</para>
+        /// </summary>
+        /// <returns>The cached root <see cref="INamespace"/>s; empty when nothing has been read</returns>
+        IReadOnlyCollection<INamespace> QueryRootNamespaces();
 
         /// <summary>
         /// Synchronize references that has been stored into the cache

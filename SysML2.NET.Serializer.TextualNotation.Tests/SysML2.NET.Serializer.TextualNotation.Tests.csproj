@@ -82,6 +82,54 @@
       <None Update="Validation\02-Parts Interconnection\2c-Parts Interconnection-Multiple Decompositions.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Expected\03-Function-based Behavior\3a-Function-based Behavior-1.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3a-Function-based Behavior-2.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3a-Function-based Behavior-3.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3c-Function-based Behavior-structure mod-1.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3c-Function-based Behavior-structure mod-2.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3c-Function-based Behavior-structure mod-3.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3d-Function-based Behavior-item.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Expected\03-Function-based Behavior\3e-Function-based Behavior-item.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3a-Function-based Behavior-1.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3a-Function-based Behavior-2.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3a-Function-based Behavior-3.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3c-Function-based Behavior-structure mod-1.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3c-Function-based Behavior-structure mod-2.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3c-Function-based Behavior-structure mod-3.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3d-Function-based Behavior-item.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\03-Function-based Behavior\3e-Function-based Behavior-item.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -29,7 +29,7 @@ package '1a-Parts Tree' {
              * imported package.
              */
         }
-        ref part vehicle1: Vehicle {
+        part vehicle1: Vehicle {
             /*
              * 'vehicle1' is a package-owned part of type Vehicle.
              */
@@ -62,7 +62,7 @@ package '1a-Parts Tree' {
                 part rearWheel: Wheel[2] ordered;
             }
         }
-        ref part vehicle1_c1: Vehicle {
+        part vehicle1_c1: Vehicle {
             /*
              * 'vehicle1_c1' is a modified copy of 'vehicle1'. There is no
              * connection between this copy and the original version in the

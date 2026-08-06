@@ -222,6 +222,34 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var typeName = emptyTarget.QueryFullyQualifiedTypeName();
             var cursorVarName = cursor.CursorVariableName;
 
+            // An "Empty" wrapper rule usually still ASSIGNS its collection — e.g.
+            // EmptyParameterMember : ParameterMembership = ownedRelatedElement += EmptyUsage, where
+            // EmptyUsage : ReferenceUsage = {} contributes an element that simply emits nothing. For
+            // such rules the collection is never empty at runtime, so a Count-based discriminator can
+            // never select the empty branch (WhileLoopNode always emitted 'while', never 'loop').
+            // Discriminate on the WRAPPED element type instead whenever the two branches wrap
+            // different classes: the non-empty branch is the one that actually carries its payload
+            // (an OwnedExpression), and the empty branch is the degenerate fallback.
+            var wrappedNonEmptyTypeName = QueryWrappedElementTypeName(nonEmptyBranch.NonTerminal, umlClass, ruleGenerationContext);
+            var wrappedEmptyTypeName = QueryWrappedElementTypeName(emptyBranch.NonTerminal, umlClass, ruleGenerationContext);
+
+            if (wrappedNonEmptyTypeName != null && wrappedEmptyTypeName != null && wrappedNonEmptyTypeName != wrappedEmptyTypeName)
+            {
+                var payloadVarName = $"{emptyTarget.Name.LowerCaseFirstLetter()}Payload{ruleGenerationContext.NarrowedTypeCheckCounter}";
+                ruleGenerationContext.NarrowedTypeCheckCounter++;
+
+                writer.WriteSafeString($"if ({cursorVarName}.Current is {typeName} {payloadVarName} && {payloadVarName}.{discriminatorPropertyName}.OfType<{wrappedNonEmptyTypeName}>().Any()){Environment.NewLine}");
+                writer.WriteSafeString($"{{{Environment.NewLine}");
+                this.EmitAlternativeBody(writer, umlClass, nonEmptyBranch.Alternative, ruleGenerationContext);
+                writer.WriteSafeString($"}}{Environment.NewLine}");
+                writer.WriteSafeString($"else if ({cursorVarName}.Current is {typeName}){Environment.NewLine}");
+                writer.WriteSafeString($"{{{Environment.NewLine}");
+                this.EmitAlternativeBody(writer, umlClass, emptyBranch.Alternative, ruleGenerationContext);
+                writer.WriteSafeString($"}}{Environment.NewLine}");
+
+                return true;
+            }
+
             writer.WriteSafeString($"if ({cursorVarName}.Current is {typeName} {{ {discriminatorPropertyName}.Count: 0 }}){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
             this.EmitAlternativeBody(writer, umlClass, emptyBranch.Alternative, ruleGenerationContext);
@@ -232,6 +260,38 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"}}{Environment.NewLine}");
 
             return true;
+        }
+
+        /// <summary>
+        /// Resolves the fully-qualified runtime type name of the element that a single-assignment
+        /// wrapper rule (e.g. <c>ExpressionParameterMember : ParameterMembership = ownedRelatedElement += OwnedExpression</c>)
+        /// puts into its collection — here <c>IExpression</c>. Returns <see langword="null" /> when the
+        /// referenced rule does not have exactly one <c>+=</c> assignment of a non-terminal, or when the
+        /// wrapped rule's target class cannot be resolved.
+        /// </summary>
+        /// <param name="wrapperNonTerminal">The <see cref="NonTerminalElement" /> naming the wrapper rule.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The wrapped element's fully-qualified type name, or <see langword="null" />.</returns>
+        private static string QueryWrappedElementTypeName(NonTerminalElement wrapperNonTerminal, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            var wrapperRule = ruleGenerationContext.FindRule(wrapperNonTerminal.Name);
+
+            var wrappedAssignments = wrapperRule?.Alternatives
+                .SelectMany(alternative => alternative.Elements)
+                .OfType<AssignmentElement>()
+                .Where(assignment => assignment is { Operator: "+=", Value: NonTerminalElement })
+                .ToList();
+
+            if (wrappedAssignments == null || wrappedAssignments.Count != 1)
+            {
+                return null;
+            }
+
+            var wrappedNonTerminal = (NonTerminalElement)wrappedAssignments[0].Value;
+            var wrappedClass = RuleQueryUtilities.ResolveRuleTargetClass(wrappedNonTerminal, umlClass.Cache, ruleGenerationContext.AllRules);
+
+            return wrappedClass?.QueryFullyQualifiedTypeName();
         }
 
         /// <summary>

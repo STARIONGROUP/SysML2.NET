@@ -13,6 +13,7 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
+        <Nullable>disable</Nullable>
         <Authors>Sam Gerené, Antoine Théate</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>

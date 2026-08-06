@@ -55,6 +55,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Builds the Textual Notation string for the rule FilterPackageImport
+        /// <para>FilterPackageImport:Import=ImportDeclaration{visibility='public'}</para>
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IImport" /> from which the rule should be build</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        public static void BuildFilterPackageImport(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
+        {
+            BuildImportDeclaration(poco, writerContext, stringBuilder);
+            // NonParsing Assignment Element : visibility = 'public' => Does not have to be process
+
+        }
+
+        /// <summary>
         /// Builds the Textual Notation string for the rule Import
         /// <para>Import=visibility=VisibilityIndicator'import'(isImportAll?='all')?ImportDeclarationRelationshipBody</para>
         /// </summary>

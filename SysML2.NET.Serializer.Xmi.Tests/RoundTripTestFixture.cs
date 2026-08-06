@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RoundTripTestFixture.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -62,7 +62,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
             var fileUri = new Uri(filePath);
 
-            var rootNamespace = deSerializer.DeSerialize(fileUri, originMap);
+            var rootNamespace = deSerializer.DeSerialize(fileUri, originMap).RootNamespace;
 
             Assert.That(rootNamespace, Is.Not.Null);
 
@@ -87,7 +87,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
             var deSerializer1 = new DeSerializer(this.loggerFactory);
 
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
-            var originalNamespace = deSerializer1.DeSerialize(new Uri(filePath));
+            var originalNamespace = deSerializer1.DeSerialize(new Uri(filePath)).RootNamespace;
 
             Assert.That(originalNamespace, Is.Not.Null);
 
@@ -152,7 +152,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
             var fileUri = new Uri(filePath);
 
-            var quantityNamespace = deSerializer.DeSerialize(fileUri, originMap);
+            var quantityNamespace = deSerializer.DeSerialize(fileUri, originMap).RootNamespace;
             
             var serializer = new Serializer(this.loggerFactory);
             var outputFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "SerializedQuantities.sysmlx");
@@ -251,7 +251,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
             var fileUri = new Uri(filePath);
 
-            var rootNamespace = await deSerializer.DeSerializeAsync(fileUri, originMap);
+            var rootNamespace = (await deSerializer.DeSerializeAsync(fileUri, originMap)).RootNamespace;
 
             var outputDirPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "AsyncMultiFileOutput");
             var outputDir = new DirectoryInfo(outputDirPath);
