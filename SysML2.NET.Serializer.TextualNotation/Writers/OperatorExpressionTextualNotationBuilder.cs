@@ -53,12 +53,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Builds the Textual Notation string for the <c>(…)</c> alternation inside the
-        /// <c>MetaclassificationExpression</c> and <c>ClassificationExpression</c> rule.
-        /// <para><c>( operator = ClassificationTestOperator ownedRelationship += TypeReferenceMember
+        /// <c>MetaclassificationExpression</c> rule.
+        /// <para><c>( operator = MetaclassificationTestOperator ownedRelationship += TypeReferenceMember
         /// | operator = MetaCastOperator ownedRelationship += TypeResultMember )</c></para>
-        /// <para>Identical structure to <see cref="BuildClassificationExpressionHandCoded"/> — the
-        /// operator literal is one of <c>'istype'</c>, <c>'hastype'</c>, <c>'@'</c>, <c>'meta'</c>.
-        /// Both membership alternatives share the same body and runtime type hierarchy, so a single
+        /// <para>Identical structure to <see cref="BuildClassificationExpressionHandCoded"/>, but over a
+        /// DISJOINT operator set — <c>MetaclassificationTestOperator</c> is <c>'@@'</c> and
+        /// <c>MetaCastOperator</c> is <c>'meta'</c>, whereas the classification variant uses
+        /// <c>'istype' | 'hastype' | '@'</c> and <c>'as'</c>. Both membership alternatives share the same
+        /// body and runtime type hierarchy, so a single
         /// <see cref="ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember"/> call
         /// handles both branches.</para>
         /// </summary>
@@ -71,15 +73,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the <c>(…)</c> common alternation inside the
-        /// <c>MetaclassificationExpression</c> rule.
-        /// <para><c>( operator = ClassificationTestOperator ownedRelationship += TypeReferenceMember
-        /// | operator = MetaCastOperator ownedRelationship += TypeResultMember )</c></para>
-        /// <para>Identical structure to <see cref="BuildClassificationExpressionHandCoded"/> — the
-        /// operator literal is one of <c>'istype'</c>, <c>'hastype'</c>, <c>'@'</c>, <c>'meta'</c>.
-        /// Both membership alternatives share the same body and runtime type hierarchy, so a single
-        /// <see cref="ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember"/> call
-        /// handles both branches.</para>
+        /// Builds the <c>operator</c>-plus-member alternation shared by the
+        /// <c>ClassificationExpression</c> and <c>MetaclassificationExpression</c> rules.
+        /// <para><c>( operator = &lt;test-operator&gt; ownedRelationship += TypeReferenceMember
+        /// | operator = &lt;cast-operator&gt; ownedRelationship += TypeResultMember )</c></para>
+        /// <para>The two rules differ only in their operator sets — <c>'istype' | 'hastype' | '@'</c> plus
+        /// <c>'as'</c> for classification, <c>'@@'</c> plus <c>'meta'</c> for metaclassification — and the
+        /// literal comes from <see cref="IOperatorExpression.Operator"/> on the model rather than from the
+        /// grammar, so one body serves both. Both membership alternatives also share the same body and
+        /// runtime type hierarchy (<c>TypeResultMember</c> targets <c>ReturnParameterMembership</c>, which
+        /// IS-A <c>ParameterMembership</c>), so a single
+        /// <see cref="ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember"/> call handles
+        /// both branches.</para>
         /// </summary>
         /// <param name="poco">The <see cref="IOperatorExpression" /> being serialised</param>
         /// <param name="writerContext">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>

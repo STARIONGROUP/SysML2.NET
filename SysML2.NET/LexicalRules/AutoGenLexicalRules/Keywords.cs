@@ -112,6 +112,7 @@ namespace SysML2.NET.LexicalRules
             "message",
             "meta",
             "metadata",
+            "new",
             "nonunique",
             "not",
             "null",

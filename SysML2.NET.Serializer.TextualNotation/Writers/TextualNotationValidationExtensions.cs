@@ -139,7 +139,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Asserts that the <see cref="IFeature"/> is valid for the PositionalArgumentList rule.
-        /// <para><c>PositionalArgumentList : Feature = e.ownedRelationship += ArgumentMember (',' e.ownedRelationship += ArgumentMember)*</c></para>
+        /// <para><c>PositionalArgumentList : Feature = ownedRelationship += ArgumentMember (',' ownedRelationship += ArgumentMember)*</c></para>
         /// <para>Matches when the cursor is positioned at an <see cref="IParameterMembership"/>
         /// (positional arguments) — the alternative <c>NamedArgumentList</c> uses plain
         /// <see cref="IFeatureMembership"/> members.</para>
@@ -670,14 +670,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Asserts that the <see cref="IOperatorExpression"/> is valid for the MetaclassificationExpression rule.
         /// <para><c>MetaclassificationExpression : OperatorExpression = ownedRelationship += MetadataArgumentMember
-        /// ( operator = ClassificationTestOperator ownedRelationship += TypeReferenceMember
+        /// ( operator = MetaclassificationTestOperator ownedRelationship += TypeReferenceMember
         /// | operator = MetaCastOperator ownedRelationship += TypeResultMember )
         /// ownedRelationship += EmptyResultMember</c></para>
-        /// <para>Matches when the operator is uniquely Metaclassification (<c>'meta'</c> or <c>'@@'</c>).
-        /// Operators shared with <c>ClassificationExpression</c> (<c>'istype'</c>, <c>'hastype'</c>, <c>'@'</c>)
-        /// are left to <c>ClassificationExpression</c>, which appears earlier in the switch dispatch.
-        /// True structural disambiguation (inspecting the <c>MetadataArgumentMember</c>'s contents) is
-        /// deferred.</para>
+        /// <para>Matches when the operator is <c>'@@'</c> (<c>MetaclassificationTestOperator</c>) or
+        /// <c>'meta'</c> (<c>MetaCastOperator</c>). Those sets are DISJOINT from
+        /// <c>ClassificationExpression</c>'s (<c>'istype' | 'hastype' | '@'</c> and <c>'as'</c>), so the
+        /// operator alone discriminates the two rules exactly — no structural inspection of the
+        /// <c>MetadataArgumentMember</c> is required, and the switch-dispatch order between them does not
+        /// matter.</para>
         /// </summary>
         /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
