@@ -112,7 +112,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             // — must leave one element for that trailing consumption. Without the
                             // reservation the loop eats every element and the mandatory tail emits its
                             // terminals against an exhausted cursor (`a.b.` became `a.b..`).
-                            var reservationGuard = this.ResolveTrailingConsumptionReservation(cursorToUse, umlClass, ruleGenerationContext);
+                            var reservationGuard = ResolveTrailingConsumptionReservation(cursorToUse, umlClass, ruleGenerationContext);
 
                             if (groupTypeGuard.StartsWith("__FULL_GUARD__"))
                             {
@@ -273,7 +273,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
         /// <returns>The additional guard clause, or an empty string.</returns>
-        private string ResolveTrailingConsumptionReservation(CursorDefinition cursorDefinition, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        private static string ResolveTrailingConsumptionReservation(CursorDefinition cursorDefinition, IClass umlClass, RuleGenerationContext ruleGenerationContext)
         {
             var siblings = ruleGenerationContext.CurrentSiblingElements;
 

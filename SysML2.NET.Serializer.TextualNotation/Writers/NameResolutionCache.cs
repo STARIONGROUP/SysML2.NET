@@ -143,7 +143,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// and import graph of <paramref name="rootNamespace" />, which is always safe — it can only yield
         /// a longer, equally valid name. Obtain the roots from
         /// <c>IDeSerializer.QueryRootNamespaces()</c>.</para>
-        /// </summary>
+        /// </param>
         public NameResolutionCache(INamespace rootNamespace, IEnumerable<INamespace> globalNamespaces = null)
         {
             this.RootNamespace = rootNamespace ?? throw new ArgumentNullException(nameof(rootNamespace));
@@ -1593,6 +1593,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="index">The destination index.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed (so supertypes that are
         /// also namespaces get their own index built).</param>
+        /// <param name="isGlobal">Whether the owning scope is reached through the global <see cref="INamespace" />.</param>
         private static void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
             List<IType> supertypes;
