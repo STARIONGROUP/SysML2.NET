@@ -121,6 +121,9 @@
       <None Update="Validation\03-Function-based Behavior\3d-Function-based Behavior-item.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Validation\03-Function-based Behavior\3e-Function-based Behavior-item.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
