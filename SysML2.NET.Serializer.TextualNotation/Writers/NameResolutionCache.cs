@@ -1445,9 +1445,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="membership">The candidate alias <see cref="IMembership"/>; may be <see langword="null"/>.</param>
         private void RecordAliasIfDeclared(INamespace scope, IMembership membership)
         {
-            var target = membership?.MemberElement;
-
-            if (target == null)
+            if (membership is not { MemberElement: { } target })
             {
                 return;
             }
@@ -1608,7 +1606,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            foreach (var supertype in supertypes.Where(s => s != null && !ReferenceEquals(s, type)))
+            foreach (var supertype in supertypes.OfType<IType>().Where(candidate => !ReferenceEquals(candidate, type)))
             {
                 if (supertype is INamespace supertypeAsNamespace)
                 {
@@ -1648,11 +1646,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="index">The destination index.</param>
         /// <param name="membership">The membership whose target is indexed.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed.</param>
+        /// <param name="isGlobal">Asserts if the target namespace is global of not</param>
         private static void AddMembershipEntry(Dictionary<string, HashSet<IElement>> index, IMembership membership, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
-            var target = membership?.MemberElement;
-
-            if (target == null)
+            if (membership is not { MemberElement: { } target })
             {
                 return;
             }
@@ -1660,6 +1657,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var shortName = !string.IsNullOrWhiteSpace(membership.MemberShortName)
                 ? membership.MemberShortName
                 : target.shortName;
+            
             var longName = !string.IsNullOrWhiteSpace(membership.MemberName)
                 ? membership.MemberName
                 : target.name;
