@@ -109,6 +109,9 @@
       <None Update="Validation\03-Function-based Behavior\3a-Function-based Behavior-1.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Validation\03-Function-based Behavior\3a-Function-based Behavior-2.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Validation\03-Function-based Behavior\3a-Function-based Behavior-3.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

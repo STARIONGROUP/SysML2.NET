@@ -741,19 +741,31 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Asserts that the <see cref="IFeatureMembership"/> is valid for the InitialNodeMember rule (ActionBodyItem).
         /// <para><c>InitialNodeMember : FeatureMembership = MemberPrefix 'first' memberFeature = [QualifiedName] RelationshipBody</c></para>
-        /// <para><b>Limitation:</b> the rule is identified by the combination "<c>MemberElement</c>
-        /// set via cross-reference (no owned related element)". Other FeatureMembership rules that
-        /// also set <c>MemberElement</c> by cross-reference without owning any related element
-        /// would match this predicate. In practice InitialNodeMember is the only such case inside
-        /// an <c>ActionBodyItem</c> dispatch, which is the only caller.</para>
+        /// <para>The receiver is <see cref="IMembership"/>, NOT <see cref="IFeatureMembership"/> as the
+        /// rule's declared target suggests. The rule cannot be satisfied by a
+        /// <see cref="IFeatureMembership"/>: that metaclass specializes <c>OwningMembership</c> and so
+        /// OWNS its member, whereas <c>memberFeature = [QualifiedName]</c> is a CROSS-REFERENCE to an
+        /// element owned elsewhere (<c>first start</c> names <c>Actions::Action::start</c> in the Systems
+        /// Library). A plain <see cref="IMembership"/> carrying <see cref="IMembership.MemberElement"/> is
+        /// therefore the only metamodel-valid encoding, and it is what the pilot exports. Note also that
+        /// <c>memberFeature</c> does not exist as a property anywhere in the metamodel — the rule names a
+        /// property the abstract syntax does not define (still true in release 2026-05).</para>
+        /// <para>Discriminated from the sibling <c>AliasMember : Membership = MemberPrefix 'alias'
+        /// ( '&lt;' memberShortName = NAME '&gt;' )? ( memberName = NAME )? 'for'
+        /// memberElement = [QualifiedName] RelationshipBody</c>, which has the same runtime shape, by the
+        /// ABSENCE of a member name: an alias exists solely to bind a new name, so a nameless membership
+        /// cannot be one. Without that test <c>first start;</c> was emitted as
+        /// <c>alias for Actions::Action::start;</c>.</para>
         /// </summary>
-        /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
+        /// <param name="membership">The <see cref="IMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership references its target via cross-reference only</returns>
-        internal static bool IsValidForInitialNodeMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
+        /// <returns>True if the membership references its target via cross-reference and binds no name</returns>
+        internal static bool IsValidForInitialNodeMember(this IMembership membership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership is { MemberElement: not null }
-                && featureMembership.OwnedRelatedElement.Count == 0;
+            return membership is { MemberElement: not null }
+                && membership.OwnedRelatedElement.Count == 0
+                && string.IsNullOrWhiteSpace(membership.MemberName)
+                && string.IsNullOrWhiteSpace(membership.MemberShortName);
         }
 
         /// <summary>
