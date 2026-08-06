@@ -1606,13 +1606,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            foreach (var supertype in supertypes.OfType<IType>().Where(candidate => !ReferenceEquals(candidate, type)))
-            {
-                if (supertype is INamespace supertypeAsNamespace)
-                {
-                    pending.Enqueue((supertypeAsNamespace, isGlobal));
-                }
+            var inheritableSupertypes = supertypes
+                .OfType<IType>()
+                .Where(candidate => !ReferenceEquals(candidate, type))
+                .ToList();
 
+            // Namespace supertypes are indexed as scopes in their own right, so a feature this type
+            // redefines stays nameable through a qualified name anchored on its declaring type. Selected
+            // with OfType rather than an `is` test inside the loop below: a failing type test admits
+            // "the value was null" as an explanation, which propagated a spurious null state onto the
+            // ownedMembership dereference.
+            foreach (var supertypeAsNamespace in inheritableSupertypes.OfType<INamespace>())
+            {
+                pending.Enqueue((supertypeAsNamespace, isGlobal));
+            }
+
+            foreach (var supertype in inheritableSupertypes)
+            {
                 try
                 {
                     foreach (var ownedMember in supertype.ownedMembership.Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal)))
