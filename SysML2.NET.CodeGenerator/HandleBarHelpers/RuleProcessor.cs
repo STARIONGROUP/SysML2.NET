@@ -87,7 +87,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
         /// <param name="restoreCallerPerElement">Whether to restore the caller rule after each element</param>
         /// <param name="isPartOfMultipleAlternative">Whether this is part of a multi-alternative context</param>
-        private void EmitElements(EncodedTextWriter writer, IClass umlClass, IReadOnlyList<RuleElement> elements, RuleGenerationContext ruleGenerationContext, bool restoreCallerPerElement = false, bool isPartOfMultipleAlternative = false)
+        private void EmitElements(EncodedTextWriter writer, IClass umlClass, List<RuleElement> elements, RuleGenerationContext ruleGenerationContext, bool restoreCallerPerElement = false, bool isPartOfMultipleAlternative = false)
         {
             var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
             var previousIndex = ruleGenerationContext.CurrentElementIndex;

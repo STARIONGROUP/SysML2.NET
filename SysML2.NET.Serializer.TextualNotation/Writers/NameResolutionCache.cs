@@ -1165,7 +1165,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             // remaining imports of this scope.
                             try
                             {
-                                foreach (var importedMember in this.QueryVisibleMemberships(namespaceImport.ImportedNamespace, namespaceImport.IsImportAll, isGlobal, [scope]))
+                                foreach (var importedMember in QueryVisibleMemberships(namespaceImport.ImportedNamespace, namespaceImport.IsImportAll, isGlobal, [scope]))
                                 {
                                     AddMembershipEntry(index, importedMember, pending, isGlobal);
 
@@ -1205,7 +1205,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="isGlobal">Whether the importing scope is reached through the global namespace, which admits only visible memberships regardless of <paramref name="includeAll"/> (KerML §8.2.3.5.2).</param>
         /// <param name="excluded">Namespaces already visited on this import chain.</param>
         /// <returns>The memberships contributed to the importing scope.</returns>
-        private IEnumerable<IMembership> QueryVisibleMemberships(INamespace importedNamespace, bool includeAll, bool isGlobal, HashSet<INamespace> excluded)
+        private static IEnumerable<IMembership> QueryVisibleMemberships(INamespace importedNamespace, bool includeAll, bool isGlobal, HashSet<INamespace> excluded)
         {
             if (importedNamespace == null || !excluded.Add(importedNamespace))
             {
@@ -1250,7 +1250,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                     case INamespaceImport { ImportedNamespace: { } reExportedNamespace } reExportedImport:
 
-                        foreach (var reExportedMembership in this.QueryVisibleMemberships(reExportedNamespace, reExportedImport.IsImportAll, isGlobal, excluded))
+                        foreach (var reExportedMembership in QueryVisibleMemberships(reExportedNamespace, reExportedImport.IsImportAll, isGlobal, excluded))
                         {
                             yield return reExportedMembership;
                         }
