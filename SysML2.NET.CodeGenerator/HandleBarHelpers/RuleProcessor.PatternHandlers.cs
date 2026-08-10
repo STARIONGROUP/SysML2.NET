@@ -222,14 +222,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var typeName = emptyTarget.QueryFullyQualifiedTypeName();
             var cursorVarName = cursor.CursorVariableName;
 
-            // An "Empty" wrapper rule usually still ASSIGNS its collection — e.g.
-            // EmptyParameterMember : ParameterMembership = ownedRelatedElement += EmptyUsage, where
-            // EmptyUsage : ReferenceUsage = {} contributes an element that simply emits nothing. For
-            // such rules the collection is never empty at runtime, so a Count-based discriminator can
-            // never select the empty branch (WhileLoopNode always emitted 'while', never 'loop').
-            // Discriminate on the WRAPPED element type instead whenever the two branches wrap
-            // different classes: the non-empty branch is the one that actually carries its payload
-            // (an OwnedExpression), and the empty branch is the degenerate fallback.
+            // An "Empty" wrapper rule usually still ASSIGNS its collection (EmptyUsage = {}), so a
+            // Count-based discriminator can never select the empty branch. When the branches wrap
+            // different classes, discriminate on the WRAPPED element type instead.
             var wrappedNonEmptyTypeName = QueryWrappedElementTypeName(nonEmptyBranch.NonTerminal, umlClass, ruleGenerationContext);
             var wrappedEmptyTypeName = QueryWrappedElementTypeName(emptyBranch.NonTerminal, umlClass, ruleGenerationContext);
 
@@ -263,11 +258,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Resolves the fully-qualified runtime type name of the element that a single-assignment
-        /// wrapper rule (e.g. <c>ExpressionParameterMember : ParameterMembership = ownedRelatedElement += OwnedExpression</c>)
-        /// puts into its collection — here <c>IExpression</c>. Returns <see langword="null" /> when the
-        /// referenced rule does not have exactly one <c>+=</c> assignment of a non-terminal, or when the
-        /// wrapped rule's target class cannot be resolved.
+        /// Resolves the runtime type a single-assignment wrapper rule puts into its collection
+        /// (e.g. <c>IExpression</c> for <c>ExpressionParameterMember</c>), or <see langword="null" />
+        /// when the rule does not have exactly one resolvable <c>+=</c> non-terminal assignment.
         /// </summary>
         /// <param name="wrapperNonTerminal">The <see cref="NonTerminalElement" /> naming the wrapper rule.</param>
         /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
@@ -694,25 +687,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
-                    // Subtype-overlap guard synthesis.
-                    //
-                    // After the existing IsValidFor pass, every duplicate group still has at most
-                    // one unguarded member that becomes the bare `case I{Target}:` fall-through.
-                    // That fall-through is only safe when no SIBLING alternative may dispatch a
-                    // subtype of I{Target} — otherwise the unguarded case greedily swallows the
-                    // subtype before it can reach the dispatcher that handles it (e.g. the
-                    // OperatorExpression group's unguarded ExtentExpression case swallowing
-                    // FeatureChainExpression before it can reach the sibling PrimaryExpression
-                    // alternative).
-                    //
-                    // Detection: the group has subtype overlap if any other alternative in the
-                    // dispatch targets a class that is a SUPERTYPE of this group's target — that
-                    // sibling's dispatcher may then handle subtypes of this group's target inside
-                    // its own switch.
-                    //
-                    // When detected, synthesise a `when` guard for the would-be-default member
-                    // from the rule's parsed body (only parsed assignments contribute; non-parsing
-                    // `{ … }` is ignored per GRAMMAR.md).
+                    // Subtype-overlap guard synthesis: a duplicate group's unguarded fall-through case
+                    // is only safe when no sibling alternative targets a SUPERTYPE of the group's class
+                    // (whose dispatcher may handle this group's subtypes internally). When overlap is
+                    // detected, synthesise a `when` guard from the rule's parsed body.
                     foreach (var duplicateGroup in duplicateClasses)
                     {
                         var stillUnguarded = duplicateGroup.Value
@@ -754,35 +732,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
-                    // Self-default inheritance-ambiguity guard synthesis.
-                    //
-                    // The criterion: emit guards only when one of the switch's alternatives
-                    // has the same UML class as the rule's `NamedElementToGenerate`. That is
-                    // the "self-default" shape — the rule uses its own target class as one
-                    // alternative and that alternative becomes the default catch-all arm
-                    // for inline/non-named subclass forms. The canonical example is
-                    // FeatureElement: `FeatureElement : Feature = Feature | Step | Expression | …`
-                    // where `Feature` is both an alternative and the rule's target. An
-                    // inline IOperatorExpression (subclass of IExpression with no declared
-                    // name) reaching the switch would match `case IExpression` and be
-                    // mis-rendered; a property-derived guard like `DeclaredName != null`
-                    // makes that arm decline the match and fall through to `BuildFeature`.
-                    //
-                    // When the rule does NOT exhibit this self-default pattern
-                    // (BuildAnnotatingElement, BuildDefinitionElement, BuildNonFeatureElement
-                    // — `NamedElementToGenerate` is `Element`/`AnnotatingElement` but no
-                    // alternative targets that class), the most-derived-first ordering
-                    // alone is sufficient: every legitimate runtime metaclass maps to its
-                    // own arm. No guards are emitted, regardless of any speculative
-                    // metamodel inheritance overlap.
-                    //
-                    // For each non-default alternative under a self-default rule, run the
-                    // depth-aware synthesizer on the called rule's parsed body. Every
-                    // synthesized clause (with property-mismatch and scalar-on-`+=` filters
-                    // already applied) becomes part of the arm's `when` predicate, joined
-                    // by `&&`. Shared clauses across siblings are harmless — they filter
-                    // out subclass forms uniformly while runtime metaclass + most-derived
-                    // ordering still routes named instances to the correct concrete arm.
+                    // Self-default guard synthesis: when the rule uses its own target class as one
+                    // alternative (e.g. `FeatureElement : Feature = Feature | Step | …`), that arm is the
+                    // catch-all for inline subclass forms — sibling arms need property-derived `when`
+                    // guards (e.g. `DeclaredName != null`) so an anonymous subclass instance declines the
+                    // match and falls through. Without the self-default shape, most-derived-first
+                    // ordering alone suffices and no guards are emitted.
                     var generatingClassForSelfDefault = ruleGenerationContext.NamedElementToGenerate as IClass;
                     var isSelfDefault = generatingClassForSelfDefault != null
                         && mappedNonTerminalElements.Any(element => element.UmlClass == generatingClassForSelfDefault);
@@ -1123,23 +1078,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Synthesises a <c>when</c>-clause guard template for a duplicate-group member that
-        /// would otherwise be emitted as the unguarded <c>case I{Target}:</c> fall-through, by
-        /// walking the rule's parsed body and emitting one predicate per
-        /// <see cref="AssignmentElement"/>. Non-parsing <c>{ prop = X }</c> assignments
-        /// (<see cref="NonParsingAssignmentElement"/>) are intentionally ignored — they are
-        /// write-only side effects of parsing per <c>SysML2.NET.CodeGenerator/GRAMMAR.md</c>
-        /// and must not influence dispatch.
+        /// Synthesises a <c>when</c>-guard template (with <c>{0}</c> as the case-variable placeholder)
+        /// from the rule's parsed body, one predicate per <see cref="AssignmentElement"/>. Non-parsing
+        /// <c>{ prop = X }</c> assignments are ignored per GRAMMAR.md. Returns <c>null</c> when the body
+        /// carries no usable parsed assignments.
         /// </summary>
         /// <param name="rule">The <see cref="TextualNotationRule"/> whose body to inspect</param>
         /// <param name="targetClass">The duplicate group's target <see cref="IClass"/></param>
         /// <param name="cache">The <see cref="IXmiElementCache"/> used to resolve referenced rule targets</param>
         /// <param name="allRules">All available rules for NonTerminal resolution</param>
-        /// <returns>
-        /// A <see cref="string.Format(string, object?)"/> template (with <c>{0}</c> as the
-        /// case variable name placeholder) ready for insertion into <c>whenGuards</c>, or
-        /// <c>null</c> when the rule body carries no usable parsed assignments.
-        /// </returns>
+        /// <returns>The guard template, or <c>null</c>.</returns>
         private static string SynthesiseGuardFromRuleBody(TextualNotationRule rule, IClass targetClass, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, int maxDepth = 0)
         {
             if (rule == null || targetClass == null)
@@ -1153,24 +1101,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Determines whether <paramref name="rule"/> is itself a type-dispatcher — i.e.
-        /// a rule whose body is exclusively a union of single-NonTerminal alternatives
-        /// (<c>Subclass1 | Subclass2 | …</c>) that delegate to per-subclass builders.
-        /// <para>
-        /// Used by the inheritance-ambiguity pass to suppress guard emission on a switch
-        /// arm whose called rule already routes subclasses internally. For example, the
-        /// <c>LiteralExpression</c> rule body is
-        /// <c>LiteralBoolean | LiteralInteger | LiteralRational | LiteralString | LiteralInfinity</c>
-        /// — any <see cref="ILiteralExpression"/> subclass that reaches a
-        /// <c>case ILiteralExpression</c> arm is correctly dispatched to its concrete
-        /// builder by <c>BuildLiteralExpression</c>'s inner switch. Contrast with the
-        /// <c>Expression</c> rule body
-        /// <c>FeaturePrefix 'expr' FeatureDeclaration ValuePart? FunctionBody</c>: a
-        /// concrete construction rule that only renders the base form, so a subclass
-        /// (e.g. <see cref="IOperatorExpression"/>) reaching a <c>case IExpression</c>
-        /// arm would be mis-rendered as a standalone Expression declaration and DOES
-        /// need a guard.
-        /// </para>
+        /// Determines whether <paramref name="rule"/>'s body is exclusively a union of
+        /// single-NonTerminal alternatives (<c>Subclass1 | Subclass2 | …</c>). Such a rule routes
+        /// subclasses internally (e.g. <c>LiteralExpression</c>), so its switch arm needs no guard —
+        /// unlike a concrete construction rule that renders only the base form.
         /// </summary>
         /// <param name="rule">The rule to test, or <c>null</c></param>
         /// <returns><c>true</c> when <paramref name="rule"/> is a multi-alternative type-dispatcher</returns>
@@ -1187,17 +1121,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Runs the structural-predicate walk for <paramref name="rule"/> and returns the raw list
-        /// of synthesised clauses, before they are joined with <c>&amp;&amp;</c>. Centralises the
-        /// per-walk seeding of <see cref="HashSet{T}"/> (visited-rules) and the cursor-state
-        /// bookkeeping.
+        /// Runs the structural-predicate walk for <paramref name="rule"/> and returns the raw clause
+        /// list, seeding the per-walk visited-rules set and cursor-state bookkeeping.
         /// </summary>
         /// <param name="rule">The entry <see cref="TextualNotationRule"/> to walk.</param>
-        /// <param name="targetClass">The dispatch-time target <see cref="IClass"/> (the alternative's UML class).</param>
+        /// <param name="targetClass">The dispatch-time target <see cref="IClass"/>.</param>
         /// <param name="cache">The <see cref="IXmiElementCache"/> for resolving NonTerminal RHS targets.</param>
         /// <param name="allRules">All available rules for NonTerminal resolution.</param>
-        /// <param name="maxDepth">Recursion budget: 0 = shallow (current/legacy behavior), N&gt;0 = recurse up to <paramref name="maxDepth"/> NonTerminal references deep.</param>
-        /// <returns>The per-clause list (unjoined) in source-order.</returns>
+        /// <param name="maxDepth">Recursion budget: 0 = shallow, N&gt;0 = recurse N references deep.</param>
+        /// <returns>The per-clause list (unjoined) in source order.</returns>
         private static List<string> CollectGuardClausesForRule(TextualNotationRule rule, IClass targetClass, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, int maxDepth)
         {
             var targetProperties = targetClass.QueryAllProperties();
@@ -1228,18 +1160,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Combines per-grammar-alternative clause lists into a single OR-disjunction
-        /// string, respecting grammar semantics: a rule body of the shape
-        /// <c>alt1 | alt2 | …</c> means "exactly one of these paths is taken at parse
-        /// time" → the corresponding dispatch-time predicate is the disjunction of the
-        /// per-alternative AND-conjunctions.
-        /// <para>
-        /// Each non-empty alternative's clause list is joined by <c>&amp;&amp;</c>
-        /// (wrapped in parens when it has 2+ clauses to keep operator precedence
-        /// explicit). Empty alternatives are dropped. Identical alternatives collapse
-        /// to a single clause. When 2+ distinct alternatives remain, the overall result
-        /// is wrapped in parens and joined by <c>||</c>.
-        /// </para>
+        /// Combines per-alternative clause lists into one predicate: each alternative's clauses joined
+        /// by <c>&amp;&amp;</c>, alternatives joined by <c>||</c> (exactly one parses at runtime).
+        /// Empty alternatives are dropped and identical ones collapse.
         /// </summary>
         /// <param name="perAlternativeClauses">One list of synthesized clauses per grammar alternative.</param>
         /// <returns>A single combined predicate string, or <c>null</c> when every alternative is empty.</returns>
@@ -1277,24 +1200,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="cache">The <see cref="IXmiElementCache"/> used to resolve referenced rule targets</param>
         /// <param name="allRules">All available rules for NonTerminal resolution</param>
         /// <param name="clauses">Accumulator into which non-null clauses are appended in source order</param>
-        /// <param name="firstCursorEmitted">
-        /// Tracks whether a cursor predicate has already been emitted for an
-        /// <c>ownedRelationship +=</c> assignment in this rule. Only the first such
-        /// assignment yields a cursor clause; subsequent ones run after the cursor has
-        /// advanced and cannot be expressed at dispatch time.
-        /// </param>
-        /// <param name="cursorMayHaveAdvanced">
-        /// Tracks whether any element walked so far may have advanced the dispatch cursor
-        /// (the <c>ownedRelationship</c> cursor) at runtime — either via a direct
-        /// <c>ownedRelationship +=</c> earlier in the body or via a <c>NonTerminalElement</c>
-        /// reference whose target rule may consume <c>ownedRelationship</c> internally. When
-        /// this becomes true, no subsequent <c>ownedRelationship += …</c> can yield a cursor
-        /// predicate at dispatch time because cursor position 0 no longer corresponds to that
-        /// assignment's target. Rules whose first <c>+=</c> sits behind a
-        /// <c>NonTerminal?</c>/<c>NonTerminal*</c> prefix (e.g. <c>IndividualDefinition</c>'s
-        /// trailing <c>ownedRelationship += EmptyMultiplicityMember</c>) therefore correctly
-        /// produce no cursor clause and fall back to leaving the rule as the unguarded default.
-        /// </param>
+        /// <param name="firstCursorEmitted">Whether an <c>ownedRelationship</c> cursor predicate was already emitted — only the first assignment can be expressed at dispatch time</param>
+        /// <param name="cursorMayHaveAdvanced">Whether a prior element may have advanced the dispatch cursor, invalidating position-0 predicates for the rest of the walk</param>
         private static void CollectGuardClauses(IEnumerable<RuleElement> elements, IEnumerable<IProperty> targetProperties, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, List<string> clauses, ref bool firstCursorEmitted, ref bool cursorMayHaveAdvanced, HashSet<string> visitedRules, int remainingDepth)
         {
             foreach (var element in elements)
@@ -1303,11 +1210,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     case AssignmentElement assignment:
                     {
-                        // Skip optional assignments (`?` / `*` suffix on the assignment
-                        // itself). Their target property may legitimately be unset on a
-                        // valid runtime POCO, so an emitted `&&`-joined predicate would
-                        // wrongly reject those instances at dispatch time. Only mandatory
-                        // assignments (no suffix or `+` suffix) yield guard clauses.
+                        // Optional assignments may legitimately be unset on a valid POCO — only
+                        // mandatory ones yield guard clauses.
                         if (assignment.IsOptional)
                         {
                             break;
@@ -1331,18 +1235,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     case NonTerminalElement nonTerminal:
                     {
-                        // Deep walk: if there is still depth budget and the referenced rule
-                        // has not yet been visited on this walk, descend into its body so
-                        // structural predicates further down the rule chain (e.g.
-                        // FeatureDeclaration → FeatureIdentification → declaredName = NAME)
-                        // are surfaced as additional clauses. Per-alternative OR-combine: a
-                        // referenced rule with multiple alternatives means exactly one path
-                        // fires at parse-time, so the dispatch-time predicate must be the
-                        // disjunction of the per-alternative AND-conjunctions (not their
-                        // conjunction). Once any NonTerminal is walked, the dispatch cursor
-                        // may have advanced (we cannot statically replay the entire builder),
-                        // so cursor-predicate emission is suppressed for the rest of this
-                        // walk via cursorMayHaveAdvanced = true.
+                        // Deep walk while depth budget lasts: descend into unvisited referenced rules,
+                        // OR-combining per-alternative clauses. Any walked NonTerminal may advance the
+                        // dispatch cursor, so later cursor predicates are suppressed.
                         if (remainingDepth > 0)
                         {
                             var referencedRule = allRules.SingleOrDefault(rule => rule.RuleName == nonTerminal.Name);
@@ -1371,36 +1266,23 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                         }
 
-                        // Shallow fallback: depth budget exhausted, rule not found, or
-                        // already visited. A NonTerminal reference may advance the dispatch
-                        // cursor at runtime, so conservatively suppress any later cursor
-                        // predicates.
+                        // Depth exhausted, rule not found, or already visited — conservatively
+                        // suppress later cursor predicates.
                         cursorMayHaveAdvanced = true;
                         break;
                     }
 
                     case GroupElement group:
                     {
-                        // Skip optional groups (`?` and `*` suffix). Assignments inside an
-                        // optional group are not guaranteed to fire at parse-time and
-                        // therefore the associated property may legitimately be unset on a
-                        // valid runtime POCO. Emitting them as mandatory `&&` clauses would
-                        // wrongly reject those POCOs at dispatch time. Only walk groups
-                        // that are guaranteed to execute: a group with no suffix or with
-                        // `+` (one-or-more — at least one iteration is mandatory).
+                        // Optional groups may not fire at parse time — only walk groups guaranteed to
+                        // execute (no suffix or `+`).
                         if (group.IsOptional)
                         {
                             break;
                         }
 
-                        // Per-alternative walk + OR-combine: each `group.Alternatives`
-                        // entry represents an "or-branch" of the group (`(a | b | c)`).
-                        // At runtime exactly one branch is taken, so the dispatch-time
-                        // predicate is the disjunction of per-branch AND-conjunctions.
-                        // Cursor-state (`firstCursorEmitted`, `cursorMayHaveAdvanced`) is
-                        // shared across branches because any branch may consume the
-                        // dispatch cursor; once that happens for any branch we must
-                        // conservatively suppress subsequent cursor predicates.
+                        // OR-combine per branch; cursor state is shared across branches since any
+                        // branch may consume the dispatch cursor.
                         var perGroupAlternativeClauses = new List<List<string>>();
 
                         foreach (var groupAlternative in group.Alternatives)
@@ -1453,24 +1335,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (matchingProperty == null)
             {
-                // The assignment targets a property that does not exist on the outer
-                // alternative's class. This can happen when the depth-aware walk descends
-                // into a NonTerminal whose target metaclass is unrelated to the outer's
-                // class (e.g. walking AnnotatingElement's switch dispatches into Comment
-                // / Documentation rules that assign `body`, `locale`, `language` which
-                // are NOT on the outer IAnnotatingElement). Emitting `{0}.{Prop}` would
-                // produce a compile error since the case variable lacks that member.
-                // Skip the clause; the outer guard remains correct without it.
+                // The deep walk can cross into rules whose properties do not exist on the OUTER class
+                // (e.g. Comment's `body`) — emitting `{0}.{Prop}` would not compile. Skip the clause.
                 return null;
             }
 
-            // Drop `+=` clauses whose target property is not actually a collection on the
-            // outer class. The grammar's `+=` annotation tells the parser to append to a
-            // collection in the called rule's target metaclass — but when the depth-aware
-            // walk crosses a NonTerminal boundary, the OUTER class may expose the same
-            // property name as a scalar (e.g. `ISubsetting.Specific` is a single IFeature,
-            // not an IFeature collection). Emitting `{0}.Specific.OfType<…>().Any()` would
-            // fail to compile against the scalar property.
+            // Likewise a `+=` property may be a SCALAR on the outer class (e.g. ISubsetting.Specific);
+            // an OfType<…>().Any() clause would not compile there.
             if (assignment.Operator == "+=" && !matchingProperty.QueryIsEnumerable())
             {
                 return null;
@@ -1490,14 +1361,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Determines whether <paramref name="property"/> can hold <c>null</c> in C#. True for
-        /// reference-typed properties (POCO interfaces, <see cref="string"/>) and nullable
-        /// value-typed properties (e.g. <c>int?</c>, <c>VisibilityKind?</c>); false for
-        /// non-nullable value types (mandatory enums or primitives with multiplicity [1]).
-        /// <para>
-        /// Used by <see cref="BuildScalarAssignmentClause"/> to suppress tautological
-        /// <c>!= null</c> guards on properties that the runtime POCO cannot leave unset.
-        /// </para>
+        /// Determines whether <paramref name="property"/> can hold <c>null</c> in C# — used to suppress
+        /// tautological <c>!= null</c> guards on non-nullable value types.
         /// </summary>
         /// <param name="property">The <see cref="IProperty"/> resolved against the outer alternative class.</param>
         /// <returns><c>true</c> if a runtime instance of the property could be <c>null</c>.</returns>
@@ -1509,17 +1374,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Translates a parsed scalar <c>=</c> assignment into its corresponding
-        /// <c>when</c>-clause predicate. Terminal-literal RHS becomes an equality check;
-        /// <c>[QualifiedName]</c> RHS becomes a non-null check; NonTerminal RHS narrows to
-        /// the referenced rule's target metaclass when known.
-        /// <para>
-        /// When the matching property is a non-nullable value type (mandatory enum /
-        /// primitive — multiplicity [1] in UML), <c>!= null</c> and <c>is I…</c>
-        /// predicates would be a tautology (always-true) or a compile error (value type
-        /// vs reference type), so they are silently dropped. Only the terminal-equality
-        /// branch (<c>{0}.{Prop} == "literal"</c>) survives for non-nullable scalars.
-        /// </para>
+        /// Translates a scalar <c>=</c> assignment into a <c>when</c> predicate: literal RHS → equality,
+        /// <c>[QualifiedName]</c> → non-null, NonTerminal → type narrowing. Predicates that would be
+        /// tautological or uncompilable on non-nullable value types are dropped.
         /// </summary>
         /// <param name="assignment">The <see cref="AssignmentElement"/> with <see cref="AssignmentElement.Operator"/> <c>=</c></param>
         /// <param name="matchingProperty">The <see cref="IProperty"/> on the outer alternative class that this assignment binds — consulted for C# nullability.</param>
@@ -1532,13 +1389,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             switch (assignment.Value)
             {
                 case TerminalElement terminal when !string.IsNullOrEmpty(terminal.Value):
-                    // Terminal-literal equality is meaningful for any property type.
                     return $"{{0}}.{propertyAccessor} == \"{terminal.Value}\"";
 
                 case ValueLiteralElement valueLiteral when valueLiteral.QueryIsQualifiedName():
-                    // [QualifiedName] RHS → non-null check; only meaningful when the C#
-                    // property can be null. Non-nullable value types (multiplicity [1]
-                    // enums / primitives) would yield a tautology — drop the clause.
                     return IsPropertyNullableInCSharp(matchingProperty)
                         ? $"{{0}}.{propertyAccessor} != null"
                         : null;
@@ -1549,17 +1402,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (rhsTargetClass != null)
                     {
-                        // `is I{Rhs}` requires a reference-typed property. For non-nullable
-                        // value-typed properties (mandatory enums / primitives) the cast
-                        // would not compile, so drop the clause.
+                        // `is I{Rhs}` needs a reference-typed property to compile.
                         return matchingProperty.QueryIsReferenceType()
                             ? $"{{0}}.{propertyAccessor} is {rhsTargetClass.QueryFullyQualifiedTypeName()}"
                             : null;
                     }
 
-                    // Fallback when the NonTerminal does not resolve to an IClass (e.g.
-                    // its target is an enum literal or unresolved name) — emit `!= null`
-                    // only when the property can actually hold null.
                     return IsPropertyNullableInCSharp(matchingProperty)
                         ? $"{{0}}.{propertyAccessor} != null"
                         : null;
@@ -1571,32 +1419,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Translates a parsed collection <c>+=</c> assignment into a cursor-based
-        /// <c>when</c>-clause predicate. The clause inspects the first element of the
-        /// target collection via the project's standard cursor pattern
-        /// (<c>writerContext.CursorCache.GetOrCreateCursor(…).Current is …</c>) — this
-        /// keeps the dispatch-time guards consistent with how the rest of the textual
-        /// notation builders consume containment collections.
-        /// <para>
-        /// For <c>ownedRelationship +=</c> the predicate is additionally gated by the
-        /// outer walk's <paramref name="cursorMayHaveAdvanced"/> tracker: once any
-        /// prior <c>ownedRelationship +=</c> or a NonTerminal reference may have
-        /// advanced the dispatch cursor past position 0, no further cursor predicate
-        /// is emitted (it would check a stale position). For other collections that
-        /// concern does not apply — each collection has its own independent cursor.
-        /// </para>
+        /// Translates a collection <c>+=</c> assignment into a cursor-based <c>when</c> predicate
+        /// (<c>GetOrCreateCursor(…).Current is …</c>). For <c>ownedRelationship</c> the predicate is
+        /// suppressed once the dispatch cursor may have advanced past position 0.
         /// </summary>
-        /// <param name="assignment">The <see cref="AssignmentElement"/> with <see cref="AssignmentElement.Operator"/> <c>+=</c></param>
-        /// <param name="propertyAccessor">The C# collection-property name resolved via <see cref="PropertyExtension.QueryPropertyNameBasedOnUmlProperties"/></param>
+        /// <param name="assignment">The <see cref="AssignmentElement"/> with operator <c>+=</c></param>
+        /// <param name="propertyAccessor">The resolved C# collection-property name</param>
         /// <param name="cache">The <see cref="IXmiElementCache"/> for resolving NonTerminal RHS targets</param>
         /// <param name="allRules">All available rules for NonTerminal resolution</param>
-        /// <param name="firstCursorEmitted">Tracks whether the first <c>ownedRelationship</c> cursor predicate has been emitted yet for this walk.</param>
-        /// <param name="cursorMayHaveAdvanced">
-        /// When true, the dispatch (<c>ownedRelationship</c>) cursor may have advanced
-        /// past position 0 at runtime due to a prior <c>ownedRelationship +=</c> or a
-        /// preceding <c>NonTerminal</c> reference whose target rule may consume the
-        /// cursor. Suppresses ownedRelationship cursor predicate emission.
-        /// </param>
+        /// <param name="firstCursorEmitted">Whether the first <c>ownedRelationship</c> cursor predicate was already emitted</param>
+        /// <param name="cursorMayHaveAdvanced">When true, suppresses <c>ownedRelationship</c> cursor predicates (stale position)</param>
         /// <returns>A template clause, or <c>null</c> when no useful clause can be synthesised.</returns>
         private static string BuildCollectionAssignmentClause(AssignmentElement assignment, string propertyAccessor, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, ref bool firstCursorEmitted, bool cursorMayHaveAdvanced)
         {

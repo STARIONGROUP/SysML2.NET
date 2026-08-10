@@ -145,16 +145,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
                             writer.WriteSafeString($"{{{Environment.NewLine}");
-
-                            var previousCaller = ruleGenerationContext.CallerRule;
-                            var previousName = ruleGenerationContext.CurrentVariableName;
-                            ruleGenerationContext.CallerRule = nonTerminalElement;
-
-                            this.ProcessAlternatives(writer, umlClass, referencedRule.Alternatives, ruleGenerationContext);
-
-                            ruleGenerationContext.CallerRule = previousCaller;
-                            ruleGenerationContext.CurrentVariableName = previousName;
-
+                            this.ProcessReferencedRuleAlternatives(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext);
                             writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                         }
 
@@ -370,15 +361,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Generates an inline condition expression for an optional non-terminal reference.
-        /// For enumerable properties whose consumption type can be resolved from the referenced
-        /// rule's <c>+=</c> assignments, emits a cursor-typed guard
-        /// (<c>{prop}Cursor.Current is T</c>) — declaring the cursor immediately into
-        /// <paramref name="writer" /> when not already present in
-        /// <see cref="RuleGenerationContext.DefinedCursors" />. The cursor principle aligns the
-        /// caller's guard with the position the called rule will actually consume from. When the
-        /// type cannot be resolved or <paramref name="variableName"/> is not the top-level
-        /// <c>poco</c>, the legacy <c>{var}.{Property}.Count != 0</c> form is preserved.
+        /// Generates the inline condition for an optional non-terminal reference: a cursor-typed guard
+        /// (<c>{prop}Cursor.Current is T</c>, declaring the cursor when needed) so the guard matches the
+        /// position the called rule will actually consume from; falls back to the legacy
+        /// <c>.Count != 0</c> form when the type cannot be resolved.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> used to emit any required cursor declarations</param>
         /// <param name="referencedRule">The optional non-terminal's referenced rule</param>
@@ -419,17 +405,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else if (referencedRule.QueryAllReferencedCollectionAssignments(propertyName, ruleGenerationContext.AllRules).Count > 0)
                     {
-                        // The referenced rule has += consumptions of this property but the cursor
-                        // types could not be resolved — fall back to the legacy collection-level
-                        // non-empty check rather than skip the clause entirely.
+                        // += consumptions exist but their types could not be resolved — fall back to
+                        // the legacy non-empty check rather than skip the clause.
                         conditionParts.Add($"{variableName}.{umlPropertyName}.Count != 0");
                     }
 
-                    // No += consumptions exist for this property anywhere in the referenced rule
-                    // tree (the property name reached the result set via a scalar `=` reference,
-                    // typically pulled in by a transitive non-terminal walk). Skipping the clause
-                    // tightens the guard to reflect what the called rule will actually consume
-                    // and avoids evaluating derived properties that the caller never reads.
+                    // With no += consumptions at all (scalar `=` reach only), the clause is skipped so
+                    // the guard reflects what the called rule actually consumes.
                 }
                 else
                 {
@@ -441,11 +423,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Resolves the runtime types the referenced rule's <c>+=</c> assignments consume from the
-        /// supplied <paramref name="property" /> and, when all are resolvable AND
-        /// <paramref name="variableName" /> is <c>poco</c>, returns a cursor-typed boolean
-        /// expression (declaring or reusing a cursor as needed). Returns <c>null</c> to signal
-        /// that the caller should fall back to the legacy <c>.Count != 0</c> form.
+        /// Returns a cursor-typed boolean expression for the referenced rule's <c>+=</c> consumptions of
+        /// <paramref name="property" /> (declaring or reusing a cursor as needed), or <c>null</c> when the
+        /// caller should fall back to the legacy <c>.Count != 0</c> form.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> used to emit a cursor declaration when one is required</param>
         /// <param name="referencedRule">The optional non-terminal's referenced rule</param>
@@ -469,11 +449,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            // Each entry: (WrapperType, InnerType). InnerType is non-null when the assignment's
-            // referenced rule is a "thin owning wrapper" (target=OwningMembership wrapping a
-            // single ownedRelatedElement += T); the inner type T then provides the narrowing
-            // discriminator that distinguishes the wrapper from sibling OwningMembership
-            // subtypes (e.g. EndFeatureMembership) that share the cursor's collection.
+            // Inner is non-null for thin owning wrappers; the wrapped type is the discriminator that
+            // distinguishes the wrapper from sibling OwningMembership subtypes on the same cursor.
             var resolvedTypes = new List<(string Wrapper, string Inner)>();
 
             foreach (var assignmentElement in collectionAssignments)
@@ -507,13 +484,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Builds a single cursor-typed boolean check. When <paramref name="innerType"/> is
-        /// supplied the check narrows from a bare <c>cursor.Current is Wrapper</c> to
-        /// <c>(cursor.Current is Wrapper owningMembershipN &amp;&amp; owningMembershipN.OwnedRelatedElement.OfType&lt;Inner&gt;().Any())</c>
-        /// so the discriminator is precise enough to distinguish a thin owning wrapper from
-        /// sibling subtypes of the same wrapper class. The pattern-variable suffix is drawn from
-        /// <see cref="RuleGenerationContext.NarrowedTypeCheckCounter"/> so multiple narrowed
-        /// checks in the same generated method do not collide on the C# scope (CS0136).
+        /// Builds a single cursor-typed check; with <paramref name="innerType"/> it narrows to the
+        /// wrapped element type. The pattern-variable suffix comes from
+        /// <see cref="RuleGenerationContext.NarrowedTypeCheckCounter"/> to avoid CS0136 collisions.
         /// </summary>
         /// <param name="cursorVariableName">The cursor variable name in scope at the emission site.</param>
         /// <param name="wrapperType">The fully-qualified wrapper type name.</param>
@@ -534,12 +507,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Returns the cursor variable name for <paramref name="property" />, reusing an
-        /// already-declared cursor when one is present in
-        /// <see cref="RuleGenerationContext.DefinedCursors" /> and emitting a new declaration into
-        /// <paramref name="writer" /> otherwise. The new declaration is registered in
-        /// <see cref="RuleGenerationContext.DefinedCursors" /> so subsequent host-rule elements
-        /// targeting the same property reuse it.
+        /// Returns the cursor variable name for <paramref name="property" />, reusing an existing cursor
+        /// or emitting and registering a new declaration.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> that receives the cursor declaration line when emitted</param>
         /// <param name="property">The property whose cursor is needed</param>

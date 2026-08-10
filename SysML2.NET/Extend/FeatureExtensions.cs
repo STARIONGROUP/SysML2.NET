@@ -535,7 +535,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 return featureSubject.DeclaredShortName;
             }
 
-            var namingFeature = featureSubject.OwnedRelationship.OfType<IRedefinition>().FirstOrDefault()?.RedefinedFeature;
+            var namingFeature = featureSubject.NamingFeature();
 
             return namingFeature?.EffectiveShortName();
         }
@@ -580,7 +580,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 return featureSubject.DeclaredName;
             }
 
-            var namingFeature = featureSubject.OwnedRelationship.OfType<IRedefinition>().FirstOrDefault()?.RedefinedFeature;
+            var namingFeature = featureSubject.NamingFeature();
 
             return namingFeature?.EffectiveName();
         }

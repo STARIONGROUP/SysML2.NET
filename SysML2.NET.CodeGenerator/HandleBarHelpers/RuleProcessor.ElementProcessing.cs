@@ -105,13 +105,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                             }
 
-                            // A repeated group followed by a MANDATORY consumption of the same element type
-                            // from the same cursor — the `( X )+ X` shape of e.g.
-                            // FeatureChainPrefix = ( ownedRelationship += OwnedFeatureChaining '.' )+
-                            //                        ownedRelationship += OwnedFeatureChaining '.'
-                            // — must leave one element for that trailing consumption. Without the
-                            // reservation the loop eats every element and the mandatory tail emits its
-                            // terminals against an exhausted cursor (`a.b.` became `a.b..`).
+                            // A `( X )+ X` shape must leave one element for the mandatory tail, or the
+                            // tail emits its terminals against an exhausted cursor (`a.b.` became `a.b..`).
                             var reservationGuard = ResolveTrailingConsumptionReservation(cursorToUse, umlClass, ruleGenerationContext);
 
                             if (groupTypeGuard.StartsWith("__FULL_GUARD__"))
@@ -258,16 +253,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Builds the extra <c>while</c> clause that reserves one element for a MANDATORY consumption
-        /// following a repeated group, or an empty string when no reservation is needed.
-        /// <para>KEBNF rules of the shape <c>( prop += X )+ prop += X</c> — <c>FeatureChainPrefix</c> being
-        /// the canonical case — consume from a single shared cursor. Emitted naively the loop is greedy: it
-        /// takes every element, and the mandatory trailing assignment then emits its terminals with nothing
-        /// left to consume, duplicating them. The guard <c>cursor.GetNext(1) is T</c> stops the loop one
-        /// element short, which is exactly the arity the grammar asks for.</para>
-        /// <para>Applies only when the element immediately following the group in the SAME alternative is a
-        /// non-optional <c>+=</c> assignment drawing on the same cursor and the same sub-rule; any other
-        /// successor consumes different elements and needs no reservation.</para>
+        /// Builds the extra <c>while</c> clause reserving one element for a MANDATORY trailing consumption
+        /// after a repeated group (the <c>( prop += X )+ prop += X</c> shape, e.g.
+        /// <c>FeatureChainPrefix</c>) — without it the greedy loop exhausts the cursor and the tail
+        /// duplicates its terminals. Empty when the successor is not a same-cursor <c>+=</c> assignment.
         /// </summary>
         /// <param name="cursorDefinition">The cursor the group consumes from.</param>
         /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
@@ -323,12 +312,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = assignmentElement;
 
-                        // Route the cursor Move() through PendingCursorMove so that ProcessNonTerminalElement
-                        // emits it INSIDE the type-discrimination block — Move() then fires only when the
-                        // runtime cast actually matches (cursor advances only on real += consumption,
-                        // honouring the Move() ↔ += Golden Rule). When the assignment is inside a collection
-                        // group `(...)*` / `(...)+`, the loop body's own emitter handles the move; when it is
-                        // part of a multi-alternative dispatch, the dispatcher handles the move.
+                        // Route Move() through PendingCursorMove so it lands INSIDE the type-discrimination
+                        // block — the cursor advances only on real += consumption (Golden Rule). Collection
+                        // groups and multi-alternative dispatchers emit their own move.
                         var shouldEmitCursorMove = !isPartOfMultipleAlternative
                             && assignmentElement.Container is not GroupElement { IsCollection: true };
 
@@ -390,11 +376,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             if (assignmentElement.Value is NonTerminalElement { Name: "REGULAR_COMMENT" })
                             {
-                                // Documentation rule (`doc /* … */`) surrounds the comment with
-                                // blank lines so doc blocks are visually separated from their
-                                // owning members. Every other rule that assigns a REGULAR_COMMENT
-                                // body (currently only `Comment`) renders adjacent to its
-                                // neighbouring statements per the SST convention.
+                                // Only the Documentation rule separates its comment with blank lines;
+                                // Comment renders adjacent per the SST convention.
                                 var surroundWithBlankLines = string.Equals(ruleGenerationContext.NamedElementToGenerate?.Name, "Documentation", StringComparison.Ordinal);
                                 writer.WriteSafeString($"SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.{targetPropertyName}, surroundWithBlankLines: {(surroundWithBlankLines ? "true" : "false")});");
                             }
@@ -404,10 +387,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                             else if (string.Equals(targetPropertyName, "Operator", StringComparison.Ordinal))
                             {
-                                // Operator tokens (binary, unary, conditional) need a trailing
-                                // space to separate them from the next operand. Matches the
-                                // convention used by the operator-switch dispatch path
-                                // (RuleProcessor.PatternHandlers.cs:94-95).
+                                // Operator tokens need a trailing space before the next operand, matching
+                                // the operator-switch dispatch path in RuleProcessor.PatternHandlers.cs.
                                 writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});{Environment.NewLine}");
                                 writer.WriteSafeString("stringBuilder.Append(' ');");
                             }
@@ -422,13 +403,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             {
                                 if (!isPartOfMultipleAlternative && assignmentElement.Container is not GroupElement { IsOptional: true })
                                 {
-                                    // KEBNF `Prop ?= 'literal'` — emit the literal when the runtime
-                                    // value is truthy, but suppress it for concrete subtypes whose
-                                    // metamodel default already equals the literal-trigger value.
-                                    // For those subtypes the keyword is structurally redundant and
-                                    // the canonical idiomatic source omits it (see e.g. SysML
-                                    // `attribute X` rather than `ref attribute X` because
-                                    // AttributeUsage's `isReference` default is `true`).
+                                    // `Prop ?= 'literal'` — suppress the keyword for subtypes whose metamodel
+                                    // default already equals the trigger value (e.g. `attribute X`, not
+                                    // `ref attribute X`).
                                     var exclusionTypes = targetProperty.QuerySubclassesWithMatchingDefault(umlClass, "true");
                                     var exclusionClause = exclusionTypes.Count == 0
                                         ? string.Empty
@@ -463,13 +440,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     var previousCaller = ruleGenerationContext.CallerRule;
                                     ruleGenerationContext.CallerRule = nonTerminalElement;
 
-                                    // Thin `[QualifiedName]` wrapper inlining: when the referenced rule's body is
-                                    // just `[QualifiedName]` (e.g. FeatureReference, InstantiatedTypeReference) the
-                                    // generated `Build{Wrapper}` method receives the target POCO as both target AND
-                                    // source for name resolution, which loses the reference site. Inline the
-                                    // AppendQualifiedName call here with the OUTER `poco` as the source context so
-                                    // imports declared in the source's enclosing namespace can resolve to the
-                                    // short / unqualified name.
+                                    // Thin `[QualifiedName]` wrappers are inlined with the OUTER `poco` as the
+                                    // resolution source — the generated Build{Wrapper} would lose the reference
+                                    // site (see IsThinQualifiedNameWrapperRule).
                                     var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
 
                                     if (IsThinQualifiedNameWrapperRule(referencedRule))
@@ -482,15 +455,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                         break;
                                     }
 
-                                    // Polymorphic `ownedMemberFeature` access on IFeatureMembership: the runtime
-                                    // POCO may also be an IParameterMembership (the form used to model operands
-                                    // of every InvocationExpression / OperatorExpression per KerML §8.2.5.8.2
-                                    // Notes 1-2 — see Resources/KerML-textual-bnf.kebnf:1176-1178). In that
-                                    // shape the operand expression lives under ownedMemberFeature → FeatureValue
-                                    // → value rather than directly under ownedMemberFeature. Route the access
-                                    // through SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature
-                                    // which transparently normalises both runtime shapes into a single feature
-                                    // reference downstream code can type-test as before.
+                                    // On an IParameterMembership the operand lives under ownedMemberFeature →
+                                    // FeatureValue → value (KerML §8.2.5.8.2 Notes 1-2), so route the access
+                                    // through QueryEffectiveOwnedMemberFeature, which normalises both shapes.
                                     if (string.Equals(targetProperty.Name, "ownedMemberFeature", StringComparison.Ordinal)
                                         && QueryIsAssignableToFeatureMembership(umlClass))
                                     {
@@ -548,11 +515,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                // The grammar's assignment property does not resolve against the target
-                // metamodel class (e.g. the OMG kebnf carries a one-off `ownedFeatureMember`
-                // vs. metamodel `ownedMemberFeature` typo for `OwnedExpressionMember`).
-                // Delegate to the HandCoded sibling per the documented convention rather
-                // than emitting a name-collision-prone `Build{Property}(poco, …)` call.
+                // The grammar's property does not resolve against the metamodel class (e.g. the kebnf's
+                // `ownedFeatureMember` typo) — delegate to the HandCoded sibling.
                 var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
                 EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
@@ -649,13 +613,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        ruleGenerationContext.CallerRule = nonTerminalElement;
-                        var previousName = ruleGenerationContext.CurrentVariableName;
-
-                        this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext, isPartOfMultipleAlternative);
-                        ruleGenerationContext.CallerRule = previousCaller;
-                        ruleGenerationContext.CurrentVariableName = previousName;
+                        this.ProcessReferencedRuleAlternatives(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext, isPartOfMultipleAlternative);
                     }
                 }
                 else
@@ -666,13 +624,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        ruleGenerationContext.CallerRule = nonTerminalElement;
-                        var previousName = ruleGenerationContext.CurrentVariableName;
-
-                        this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext, isPartOfMultipleAlternative);
-                        ruleGenerationContext.CallerRule = previousCaller;
-                        ruleGenerationContext.CurrentVariableName = previousName;
+                        this.ProcessReferencedRuleAlternatives(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext, isPartOfMultipleAlternative);
                     }
                 }
             }
@@ -700,6 +652,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 writer.WriteSafeString($"{Environment.NewLine}}}");
             }
+        }
+
+        /// <summary>
+        /// Recurses into <paramref name="referencedRule" />'s alternatives with
+        /// <paramref name="callerElement" /> as the caller rule, restoring the caller rule and current
+        /// variable name afterwards.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="umlClass">The related <see cref="IClass" /></param>
+        /// <param name="callerElement">The <see cref="NonTerminalElement" /> referencing the rule</param>
+        /// <param name="referencedRule">The referenced <see cref="TextualNotationRule" />; may be <see langword="null" /></param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <param name="isPartOfMultipleAlternative">Whether this is part of a multi-alternative context</param>
+        private void ProcessReferencedRuleAlternatives(EncodedTextWriter writer, IClass umlClass, NonTerminalElement callerElement, TextualNotationRule referencedRule, RuleGenerationContext ruleGenerationContext, bool isPartOfMultipleAlternative = false)
+        {
+            var previousCaller = ruleGenerationContext.CallerRule;
+            var previousName = ruleGenerationContext.CurrentVariableName;
+            ruleGenerationContext.CallerRule = callerElement;
+            this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext, isPartOfMultipleAlternative);
+            ruleGenerationContext.CallerRule = previousCaller;
+            ruleGenerationContext.CurrentVariableName = previousName;
         }
 
         /// <summary>
@@ -786,9 +759,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
         /// <summary>
         /// Returns <see langword="true"/> when <paramref name="umlClass"/> IS-A
-        /// <c>FeatureMembership</c> — used to gate the polymorphic <c>ownedMemberFeature</c>
-        /// access path that normalises pure <c>IFeatureMembership</c> and
-        /// <c>IParameterMembership</c> runtime shapes.
+        /// <c>FeatureMembership</c> — gates the polymorphic <c>ownedMemberFeature</c> access path.
         /// </summary>
         /// <param name="umlClass">The <see cref="IClass"/> under test.</param>
         /// <returns><see langword="true"/> if the class IS-A FeatureMembership.</returns>
@@ -804,20 +775,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Returns <see langword="true"/> when <paramref name="rule"/> is a "thin
-        /// <c>[QualifiedName]</c> wrapper" — i.e. its body is a single alternative containing a
-        /// single element that is a <c>[QualifiedName]</c> resolution. Examples in the KerML
-        /// grammar (<c>Resources/KerML-textual-bnf.kebnf</c>): <c>FeatureReference : Feature =
-        /// [QualifiedName]</c> (line 1201) and <c>InstantiatedTypeReference : Type =
-        /// [QualifiedName]</c> (line 1229).
-        /// <para>
-        /// When a caller-rule's assignment-element references such a wrapper as its value, the
-        /// generated <c>Build{Wrapper}</c> method receives the target as both target AND source
-        /// for name resolution, which loses the syntactic reference site (the caller's
-        /// <c>poco</c>) needed to honour imports declared in the source's enclosing scope chain.
-        /// The codegen inlines the <c>AppendQualifiedName</c> call at the caller's emission point
-        /// instead so the OUTER <c>poco</c> serves as the resolution source.
-        /// </para>
+        /// Returns <see langword="true"/> when <paramref name="rule"/>'s body is a single
+        /// <c>[QualifiedName]</c> resolution (e.g. <c>FeatureReference</c>,
+        /// <c>InstantiatedTypeReference</c>). Such wrappers are inlined at the caller so the OUTER
+        /// <c>poco</c> serves as the name-resolution source — the generated <c>Build{Wrapper}</c> would
+        /// receive the target as both target and source, losing the reference site.
         /// </summary>
         /// <param name="rule">The <see cref="TextualNotationRule"/> under test; may be <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if the rule is a thin <c>[QualifiedName]</c> wrapper.</returns>

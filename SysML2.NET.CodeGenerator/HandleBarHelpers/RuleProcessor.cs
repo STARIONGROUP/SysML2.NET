@@ -74,14 +74,35 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
         internal void EmitAlternativeBody(EncodedTextWriter writer, IClass umlClass, Alternatives alternative, RuleGenerationContext ruleGenerationContext)
         {
+            this.EmitElements(writer, umlClass, alternative.Elements, ruleGenerationContext);
+        }
+
+        /// <summary>
+        /// Emits <paramref name="elements" /> in order while maintaining the sibling/index context,
+        /// optionally restoring <see cref="RuleGenerationContext.CallerRule" /> after each element.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
+        /// <param name="umlClass">The current <see cref="IClass" /></param>
+        /// <param name="elements">The elements to emit</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <param name="restoreCallerPerElement">Whether to restore the caller rule after each element</param>
+        /// <param name="isPartOfMultipleAlternative">Whether this is part of a multi-alternative context</param>
+        private void EmitElements(EncodedTextWriter writer, IClass umlClass, List<RuleElement> elements, RuleGenerationContext ruleGenerationContext, bool restoreCallerPerElement = false, bool isPartOfMultipleAlternative = false)
+        {
             var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
             var previousIndex = ruleGenerationContext.CurrentElementIndex;
-            ruleGenerationContext.CurrentSiblingElements = alternative.Elements;
+            ruleGenerationContext.CurrentSiblingElements = elements;
 
-            for (var elementIndex = 0; elementIndex < alternative.Elements.Count; elementIndex++)
+            for (var elementIndex = 0; elementIndex < elements.Count; elementIndex++)
             {
                 ruleGenerationContext.CurrentElementIndex = elementIndex;
-                this.ProcessRuleElement(writer, umlClass, alternative.Elements[elementIndex], ruleGenerationContext);
+                var previousCaller = ruleGenerationContext.CallerRule;
+                this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext, isPartOfMultipleAlternative);
+
+                if (restoreCallerPerElement)
+                {
+                    ruleGenerationContext.CallerRule = previousCaller;
+                }
             }
 
             ruleGenerationContext.CurrentSiblingElements = previousSiblings;
@@ -116,17 +137,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Emits a <c>Build{ruleName}HandCoded(variable, writerContext, stringBuilder);</c> fallback call.
-        /// When <paramref name="deduplicate" /> is <c>true</c>, the call is only emitted if it has not
-        /// already been emitted for the same rule name in the current generation scope.
+        /// Emits a <c>Build{ruleName}HandCoded(…)</c> fallback call, optionally deduplicated per
+        /// generation scope.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
         /// <param name="ruleName">The grammar rule name used to form the method name</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        /// <param name="deduplicate">
-        /// When <c>true</c>, suppress duplicate emissions via
-        /// <see cref="RuleGenerationContext.EmittedHandCodedCalls" />
-        /// </param>
+        /// <param name="deduplicate">When <c>true</c>, suppress duplicate emissions for the same rule name</param>
         private static void EmitHandCodedFallback(EncodedTextWriter writer, string ruleName, RuleGenerationContext ruleGenerationContext, bool deduplicate = false)
         {
             if (deduplicate && !ruleGenerationContext.EmittedHandCodedCalls.Add(ruleName))
@@ -138,21 +155,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Collects, in the order they will be consumed at runtime, the <c>+=</c>
-        /// <see cref="AssignmentElement" /> items that target <paramref name="targetPropertyName" />.
-        /// The collected items are: first the <c>+=</c> assignments declared inside the optional
-        /// group itself (<paramref name="optionalGroupElements" />), then the <c>+=</c>
-        /// assignments declared by the parent alternative AFTER <paramref name="optionalElementIndex" />
-        /// (<paramref name="siblingElements" />).
-        /// <para>
-        /// The tail walk stops as soon as it encounters a sibling whose own contribution to the
-        /// target cursor is not statically determinable (an optional or collection
-        /// <see cref="GroupElement" /> that nests a <c>+=</c> on the same property, or a
-        /// <see cref="NonTerminalElement" /> that could indirectly consume the cursor). When the
-        /// tail offset is uncertain, only the optional group's own consumptions are returned —
-        /// callers can then emit a guard that type-checks the optional positions without making
-        /// claims about the tail.
-        /// </para>
+        /// Collects, in runtime consumption order, the <c>+=</c> assignments targeting
+        /// <paramref name="targetPropertyName" />: the optional group's own, then the parent
+        /// alternative's tail. The tail walk stops at the first sibling whose cursor contribution is
+        /// not statically determinable, so callers never guard positions they cannot prove.
         /// </summary>
         /// <param name="optionalGroupElements">The optional group's own elements</param>
         /// <param name="siblingElements">The parent alternative's elements</param>
@@ -209,10 +215,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Determines whether the supplied <paramref name="groupElement" /> (recursively) contains
-        /// any <c>+=</c> <see cref="AssignmentElement" /> targeting <paramref name="targetPropertyName" />.
-        /// Used by <see cref="CollectCursorConsumptions" /> to decide whether a sibling group
-        /// could shift the runtime offset of subsequent cursor consumptions.
+        /// Determines recursively whether <paramref name="groupElement" /> contains a <c>+=</c> assignment
+        /// targeting <paramref name="targetPropertyName" /> (i.e. could shift the runtime cursor offset).
         /// </summary>
         /// <param name="groupElement">The <see cref="GroupElement" /> to inspect</param>
         /// <param name="targetPropertyName">The property name whose consumption is detected</param>
@@ -239,11 +243,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Resolves the fully-qualified runtime type name (e.g.
-        /// <c>SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership</c>) that an
-        /// <see cref="AssignmentElement" />'s consumed cursor element is expected to satisfy.
-        /// Returns <c>null</c> when the assignment's value is not a <see cref="NonTerminalElement" />
-        /// or when the referenced rule has no resolvable target class.
+        /// Resolves the fully-qualified runtime type the assignment's consumed cursor element must
+        /// satisfy, or <c>null</c> when the referenced rule has no resolvable target class.
         /// </summary>
         /// <param name="assignmentElement">The <c>+=</c> assignment to resolve the target type of</param>
         /// <param name="umlClass">The class hosting the current rule (provides the UML cache)</param>
@@ -269,17 +270,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Resolves the fully-qualified runtime type name of the inner element a "thin owning
-        /// wrapper" rule wraps. A thin owning wrapper is a rule whose target is
-        /// <c>OwningMembership</c> and whose body is a single
-        /// <c>ownedRelatedElement += SomeNonTerminal</c> assignment (e.g.
-        /// <c>OwnedMultiplicity : OwningMembership = ownedRelatedElement += MultiplicityRange</c>).
-        /// In such cases the wrapper type (<c>IOwningMembership</c>) is too coarse a discriminator
-        /// because every <c>OwningMembership</c> subtype (e.g. <c>EndFeatureMembership</c>) also
-        /// satisfies it; narrowing the check to the wrapped inner element type
-        /// (<c>IMultiplicityRange</c>) gives the precision the optional-group guard needs.
-        /// Returns <see langword="null"/> when the assignment's referenced rule does not match
-        /// the thin-wrapper shape.
+        /// Resolves the inner element type of a "thin owning wrapper" rule
+        /// (<c>X : OwningMembership = ownedRelatedElement += Y</c>). The wrapper type is too coarse a
+        /// discriminator — every <c>OwningMembership</c> subtype satisfies it — so the guard narrows to
+        /// the wrapped type. Returns <see langword="null"/> when the rule is not a thin wrapper.
         /// </summary>
         /// <param name="assignmentElement">The <c>+=</c> assignment whose referenced rule is inspected.</param>
         /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
@@ -387,12 +381,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                                 else
                                 {
-                                    // Guard on the TYPE the assignment consumes, not merely on the cursor being
-                                    // non-empty. An optional group is entered only when the element it would
-                                    // consume is actually present; a bare non-null test also passes for the next
-                                    // UNRELATED relationship, emitting the group's terminals spuriously — e.g.
-                                    // AcceptParameterPart's ( 'via' ownedRelationship += NodeParameterMember )?
-                                    // emitted `via` whenever the accept action merely had a body to follow.
+                                    // Guard on the TYPE the assignment consumes, not on mere cursor non-emptiness —
+                                    // a bare non-null test also passes for the next UNRELATED relationship and emits
+                                    // the group's terminals spuriously (e.g. AcceptParameterPart's `via`).
                                     var singleTypeName = ResolveAssignmentTargetTypeName(assigment, umlClass, ruleGenerationContext);
 
                                     ifStatementContent.Add(singleTypeName == null
@@ -405,12 +396,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             var condition = property.QueryIfStatementContentForNonEmpty("poco");
 
-                            // For `Prop ?= 'literal'` keyword assignments inside an optional `(...)?`
-                            // group, exclude concrete subtypes whose metamodel default for the
-                            // assigned property already equals the literal-trigger value — the
-                            // keyword is structurally redundant for those subtypes and the
-                            // canonical source omits it (e.g. `attribute X` rather than
-                            // `ref attribute X` because AttributeUsage::isReference defaults to true).
+                            // For `Prop ?= 'literal'` in an optional group, exclude subtypes whose metamodel
+                            // default already equals the trigger value — the keyword is redundant there
+                            // (e.g. `attribute X`, not `ref attribute X`).
                             if (property.QueryIsBool())
                             {
                                 var exclusionTypes = property.QuerySubclassesWithMatchingDefault(umlClass, "true");
@@ -420,16 +408,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     condition += $" && poco is not ({string.Join(" or ", exclusionTypes.Select(c => c.QueryFullyQualifiedTypeName()))})";
                                 }
 
-                                // A DERIVED property cannot record whether the keyword was written: its runtime
-                                // value is COMPUTED from other state, so it is routinely true for reasons that
-                                // have nothing to do with the notation. `Usage::isReference` derives as
-                                // `not isComposite`, and every context in which the metamodel FORCES a Usage to
-                                // be referential (validateUsageIsReferential — directed, end feature, or no
-                                // featuringType) makes it true while the canonical source carries no `ref` at
-                                // all. The type-level exclusion above cannot see that: the redundancy is
-                                // per-INSTANCE, not per-subclass. Delegate the instance-level decision to a
-                                // hand-coded guard companion, reusing the `IsValidFor…` convention that the
-                                // rule-alternative dispatch already relies on.
+                                // A DERIVED property cannot record whether the keyword was written (e.g.
+                                // Usage::isReference = not isComposite is true in contexts with no `ref` at all),
+                                // and the redundancy is per-INSTANCE — delegate to a hand-coded IsValidFor… guard.
                                 if (property.IsDerived || property.IsDerivedUnion)
                                 {
                                     condition += $" && poco.IsValidFor{ruleGenerationContext.NamedElementToGenerate?.Name}{property.Name.CapitalizeFirstLetter()}(writerContext)";
@@ -444,20 +425,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"){Environment.NewLine}");
                     writer.WriteSafeString($"{{{Environment.NewLine}");
 
-                    var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
-                    var previousIndex = ruleGenerationContext.CurrentElementIndex;
-                    ruleGenerationContext.CurrentSiblingElements = elements;
-
-                    for (var elementIndex = 0; elementIndex < elements.Count; elementIndex++)
-                    {
-                        ruleGenerationContext.CurrentElementIndex = elementIndex;
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext);
-                        ruleGenerationContext.CallerRule = previousCaller;
-                    }
-
-                    ruleGenerationContext.CurrentSiblingElements = previousSiblings;
-                    ruleGenerationContext.CurrentElementIndex = previousIndex;
+                    this.EmitElements(writer, umlClass, elements, ruleGenerationContext, restoreCallerPerElement: true);
                 }
                 else
                 {
@@ -490,18 +458,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     writer.WriteSafeString($"{{{Environment.NewLine}");
 
-                    var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
-                    var previousIndex = ruleGenerationContext.CurrentElementIndex;
-                    ruleGenerationContext.CurrentSiblingElements = elements;
-
-                    for (var elementIndex = 0; elementIndex < elements.Count; elementIndex++)
-                    {
-                        ruleGenerationContext.CurrentElementIndex = elementIndex;
-                        this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext);
-                    }
-
-                    ruleGenerationContext.CurrentSiblingElements = previousSiblings;
-                    ruleGenerationContext.CurrentElementIndex = previousIndex;
+                    this.EmitElements(writer, umlClass, elements, ruleGenerationContext);
                 }
 
                 if (!ruleGenerationContext.IsNextElementNewLineTerminal() && !ruleGenerationContext.IsLastElement())
@@ -513,20 +470,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
-                var previousIndex = ruleGenerationContext.CurrentElementIndex;
-                ruleGenerationContext.CurrentSiblingElements = elements;
-
-                for (var elementIndex = 0; elementIndex < elements.Count; elementIndex++)
-                {
-                    ruleGenerationContext.CurrentElementIndex = elementIndex;
-                    var previousCaller = ruleGenerationContext.CallerRule;
-                    this.ProcessRuleElement(writer, umlClass, elements[elementIndex], ruleGenerationContext, isPartOfMultipleAlternative);
-                    ruleGenerationContext.CallerRule = previousCaller;
-                }
-
-                ruleGenerationContext.CurrentSiblingElements = previousSiblings;
-                ruleGenerationContext.CurrentElementIndex = previousIndex;
+                this.EmitElements(writer, umlClass, elements, ruleGenerationContext, restoreCallerPerElement: true, isPartOfMultipleAlternative);
             }
         }
 
@@ -742,12 +686,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                var previousCaller = ruleGenerationContext.CallerRule;
-                var previousName = ruleGenerationContext.CurrentVariableName;
-                ruleGenerationContext.CallerRule = nonTerminalElement;
-                this.ProcessAlternatives(writer, umlClass, nonTerminalReferencedRule?.Alternatives, ruleGenerationContext);
-                ruleGenerationContext.CallerRule = previousCaller;
-                ruleGenerationContext.CurrentVariableName = previousName;
+                this.ProcessReferencedRuleAlternatives(writer, umlClass, nonTerminalElement, nonTerminalReferencedRule, ruleGenerationContext);
             }
 
             writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
@@ -964,26 +903,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext, poco);{Environment.NewLine}");
 
-            // The two alternatives denote the SAME notational prefix, so the reference form must be
-            // terminated the same way the chain form is. When the chain rule ends in a terminal — as
-            // FeatureChainPrefix does with its trailing '.' — that terminal belongs to the prefix notation
-            // rather than to the chain, so the [QualifiedName] branch has to emit it too.
-            //
-            // Ground truth is the reference parser, whose FlowEndSubsetting spells the terminal out on BOTH
-            // alternatives (org.omg.sysml.xtext/src/org/omg/sysml/xtext/SysML.xtext and the identical KerML
-            // production in org.omg.kerml.xtext/src/org/omg/kerml/xtext/KerML.xtext):
-            //
-            //     FlowEndSubsetting returns SysML::ReferenceSubsetting :
-            //           referencedFeature = [SysML::Feature | QualifiedName] '.'
-            //         | ownedRelatedElement += FeatureChainPrefix
-            //
-            // Resources/SysML-textual-bnf.kebnf omits that '.' on the reference alternative — the only
-            // genuine missing terminal found when diffing all 403 shared rules against the reference
-            // grammar. Since the kebnf files are OMG-owned and immutable, the terminal is recovered here
-            // instead. The inference is sound because the correlation holds for every rule of this shape:
-            // OwnedFeatureTyping, OwnedSubsetting, OwnedReferenceSubsetting, OwnedCrossSubsetting and
-            // OwnedRedefinition all pair with OwnedFeatureChain, which ends in a group and therefore keeps
-            // the plain space separator; FlowEndSubsetting is the sole rule pairing with FeatureChainPrefix.
+            // Both alternatives denote the same notational prefix, so when the chain rule ends in a
+            // terminal (FeatureChainPrefix's trailing '.') the [QualifiedName] branch must emit it too.
+            // The kebnf omits that '.' on the reference alternative of FlowEndSubsetting; the pilot's
+            // Xtext grammar spells it out on both, and the kebnf is immutable, so it is recovered here.
             var chainTrailingTerminal = QueryTrailingTerminal(referencedRule);
 
             if (chainTrailingTerminal == null)
@@ -1002,10 +925,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Returns the value of the <see cref="TerminalElement" /> that <paramref name="rule" /> ends
-        /// with, or <see langword="null" /> when the rule has more than one alternative or does not end
-        /// in a terminal. Used to keep alternative forms of the same notational construct terminated
-        /// identically — see <see cref="TryEmitQualifiedNameOrChainAlternatives" />.
+        /// Returns the terminal value <paramref name="rule" /> ends with, or <see langword="null" /> when
+        /// it has multiple alternatives or does not end in a terminal.
         /// </summary>
         /// <param name="rule">The referenced <see cref="TextualNotationRule" />; may be <see langword="null" />.</param>
         /// <returns>The trailing terminal's value, or <see langword="null" />.</returns>
@@ -1024,17 +945,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Attempts to emit code for the subclass-rule dispatch pattern:
-        /// <c>property = X | SubclassRule</c>, where <c>SubclassRule</c> targets a strict
-        /// specialization of the current rule's target metaclass (e.g.
-        /// <c>FeatureChainMember : Membership = memberElement = [QualifiedName] | OwnedFeatureChainMember</c>
-        /// with <c>OwnedFeatureChainMember : OwningMembership</c>). The runtime subtype is the
-        /// discriminator: only an instance of the subclass can be the subclass-rule alternative,
-        /// so the emitted code dispatches on the POCO's runtime type FIRST and only falls back to
-        /// the assignment alternative for base-class instances. Emitting the alternatives in
-        /// grammar order instead would put a derived-property null check (e.g.
-        /// <c>MemberElement != null</c>, never null on an <c>OwningMembership</c>) in front,
-        /// rendering the subclass alternative unreachable.
+        /// Attempts the subclass-rule dispatch pattern <c>property = X | SubclassRule</c>, where
+        /// <c>SubclassRule</c> targets a strict specialization of the current metaclass (e.g.
+        /// <c>FeatureChainMember</c>). Dispatches on the runtime subtype FIRST — grammar order would put
+        /// a never-null derived-property check in front and make the subclass alternative unreachable.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
         /// <param name="umlClass">The related <see cref="IClass" /></param>
@@ -1115,17 +1029,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Attempts to emit code for the single-element-or-same-class-rule pattern:
-        /// <c>collection += X | SameClassRule</c>, where <c>SameClassRule</c> targets the current
-        /// rule's own metaclass and re-consumes the same collection property (e.g.
-        /// <c>ChainingPart : Feature = 'chains' (ownedRelationship += OwnedFeatureChaining | FeatureChain)</c>
-        /// with <c>FeatureChain : Feature = ownedRelationship += OwnedFeatureChaining ('.' ownedRelationship += OwnedFeatureChaining)+</c>).
-        /// Because the same-class rule consumes two or more elements of the <c>+=</c> value type,
-        /// the discriminator is the element count: exactly one matching element selects the single
-        /// <c>+=</c> alternative (with its Golden-Rule <c>Move()</c>), otherwise the same-class
-        /// rule is delegated to and manages the shared cursor itself. A bare
-        /// <c>cursor.Current != null</c> discriminator would make the same-class alternative
-        /// unreachable and, without the <c>Move()</c>, stall the caller's dispatch loop.
+        /// Attempts the pattern <c>collection += X | SameClassRule</c>, where the same-class rule
+        /// re-consumes the same collection (e.g. <c>ChainingPart</c> vs <c>FeatureChain</c>). The
+        /// discriminator is the element COUNT: exactly one match selects the single <c>+=</c> alternative
+        /// (with its <c>Move()</c>); otherwise the same-class rule manages the shared cursor itself.
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output</param>
         /// <param name="umlClass">The related <see cref="IClass" /></param>
@@ -1162,11 +1069,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return false;
             }
 
-            // The same-class rule must re-consume the same collection property THROUGH THE SAME
-            // sub-rule (e.g. FeatureChain re-consumes ownedRelationship += OwnedFeatureChaining):
-            // only then do the two alternatives compete for the same element type and need the
-            // count discriminator. Disjoint element types (e.g. CalculationBodyItem's
-            // ReturnParameterMember vs ActionBodyItem) stay with the plain type dispatch.
+            // Only when the same-class rule re-consumes the same property THROUGH THE SAME sub-rule do
+            // the alternatives compete for one element type and need the count discriminator.
             var elementValueNonTerminal = (NonTerminalElement)assignmentElement.Value;
 
             var reconsumesSameElements = referencedRule.Alternatives
@@ -1346,14 +1250,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             var propertyAccessName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
 
-            // KEBNF `XBody : Type = ';' | '{' XBodyItem* '}'` — both the choice and the `*` loop
-            // are bounded by "does the current cursor element match an XBodyItem alternative?".
-            // For body item rules whose dispatcher can encounter unrecognised elements legitimately
-            // belonging to a parent rule (notably PortDefinition's trailing
-            // ConjugatedPortDefinitionMember, which appears in OwnedRelationship but is NOT a
-            // DefinitionBodyItem alternative), the body rule must defer to an
-            // `IsValidFor{XBodyItem}` predicate. Other body rules retain the simple
-            // `cursor.Current != null` semantics; we promote rules into the guarded form by name.
+            // For body item rules that can encounter elements legitimately belonging to a parent rule
+            // (e.g. PortDefinition's trailing ConjugatedPortDefinitionMember), the `;` choice and the
+            // `*` loop must defer to an IsValidFor{XBodyItem} predicate instead of a bare non-null test.
             var requiresIsValidForGuard = IsGuardedBodyItemRule(collectionNonTerminals[0].Name);
             var guardCallSuffix = requiresIsValidForGuard
                 ? $".IsValidFor{collectionNonTerminals[0].Name}(writerContext)"
@@ -1407,12 +1306,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        var previousName = ruleGenerationContext.CurrentVariableName;
-                        ruleGenerationContext.CallerRule = collectionNonTerminal;
-                        this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
-                        ruleGenerationContext.CallerRule = previousCaller;
-                        ruleGenerationContext.CurrentVariableName = previousName;
+                        this.ProcessReferencedRuleAlternatives(writer, umlClass, collectionNonTerminal, referencedRule, ruleGenerationContext);
                     }
 
                     writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
@@ -1495,12 +1389,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        var previousName = ruleGenerationContext.CurrentVariableName;
-                        ruleGenerationContext.CallerRule = singleNonTerminal;
-                        this.ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
-                        ruleGenerationContext.CallerRule = previousCaller;
-                        ruleGenerationContext.CurrentVariableName = previousName;
+                        this.ProcessReferencedRuleAlternatives(writer, umlClass, singleNonTerminal, referencedRule, ruleGenerationContext);
                     }
 
                     writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
@@ -1515,19 +1404,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Returns true when the KEBNF body-item rule named <paramref name="bodyItemRuleName"/> can have
-        /// elements ahead of the cursor that legitimately belong to a parent rule (and therefore must
-        /// NOT be consumed by the body's <c>*</c> loop). For these rules, <see cref="EmitTerminalVsBodyWithCollectionNonTerminals"/>
-        /// emits the <c>;</c> / <c>{ … }</c> choice and the <c>*</c> loop as
-        /// <c>IsValidFor{XBodyItem}</c>-guarded code rather than a raw <c>cursor.Current != null</c>
-        /// check, faithfully implementing the KEBNF <c>*</c> quantifier semantics ("iterate while
-        /// the current element matches an alternative") for the affected rules.
-        /// <para>Allowlist (rather than allow-all) keeps the codegen change scoped: only rules whose
-        /// dispatcher can encounter foreign elements need the guard. Currently this is the two
-        /// rules whose body item includes the <c>DefinitionMember</c> alternative — <c>DefinitionBodyItem</c>
-        /// (consumed by <c>PortDefinition</c>'s trailing <c>ConjugatedPortDefinitionMember</c> that
-        /// the body must skip) and <c>InterfaceBodyItem</c> (same shape). All other body item rules
-        /// retain the existing <c>cursor.Current != null</c> semantics.</para>
+        /// Returns true when the body-item rule can have cursor elements that legitimately belong to a
+        /// parent rule and must not be consumed by the body's <c>*</c> loop. Allowlisted by name to keep
+        /// the guarded form scoped: currently <c>DefinitionBodyItem</c> (PortDefinition's trailing
+        /// <c>ConjugatedPortDefinitionMember</c>) and <c>InterfaceBodyItem</c>.
         /// </summary>
         /// <param name="bodyItemRuleName">The KEBNF rule name of the body item (e.g. <c>DefinitionBodyItem</c>)</param>
         /// <returns><c>true</c> if the codegen should emit the guarded form</returns>
