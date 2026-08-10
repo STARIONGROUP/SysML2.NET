@@ -130,6 +130,12 @@
       <None Update="Validation\03-Function-based Behavior\3e-Function-based Behavior-item.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Expected\04-Functional Allocation\4a-Functional Allocation.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\04-Functional Allocation\4a-Functional Allocation.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

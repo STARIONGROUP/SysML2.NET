@@ -616,9 +616,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             foreach (var rawLine in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
             {
-                var line = rawLine.TrimEnd('\r');
-                                stringBuilder.AppendIndentedLiteral(" * ");
-                stringBuilder.AppendLine(line);
+                stringBuilder.AppendIndentedLiteral(" * " + rawLine.TrimEnd());
+                stringBuilder.AppendLine();
             }
 
             stringBuilder.AppendIndentedLiteral(" */");
