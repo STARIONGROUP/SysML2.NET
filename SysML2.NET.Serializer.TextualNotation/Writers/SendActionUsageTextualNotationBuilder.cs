@@ -47,7 +47,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current is IParameterMembership { OwnedRelatedElement.Count: 0 } emptyMembership)
+            // An EmptyParameterMember owns an EmptyUsage (a ReferenceUsage with no binding), not nothing.
+            if (ownedRelationshipCursor.Current is IParameterMembership emptyMembership && emptyMembership.IsEmptyParameterMember())
             {
                 ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyMembership, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
@@ -83,7 +84,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current is IParameterMembership { OwnedRelatedElement.Count: 0 } emptyMembership)
+            // An EmptyParameterMember owns an EmptyUsage (a ReferenceUsage with no binding), not nothing.
+            if (ownedRelationshipCursor.Current is IParameterMembership emptyMembership && emptyMembership.IsEmptyParameterMember())
             {
                 // Alt 2: EmptyParameterMember 'to' NodeParameterMember
                 ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(emptyMembership, writerContext, stringBuilder);

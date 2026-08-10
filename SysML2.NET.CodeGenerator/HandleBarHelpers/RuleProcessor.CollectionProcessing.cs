@@ -134,6 +134,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                         }
 
+                        // A guarded body-item rule (IsGuardedBodyItemRule) admits elements that have no
+                        // notation, and its per-item builder refuses to consume them WITHOUT advancing the
+                        // cursor. The loop must therefore test the same predicate as the enclosing entry
+                        // guard: a bare non-null test spins forever on the first refused element.
+                        if (IsGuardedBodyItemRule(nonTerminalElement.Name))
+                        {
+                            var guardVariableName = $"{targetProperty.Name.LowerCaseFirstLetter()}BodyItem";
+
+                            whileCondition = $"{cursorVariableName}.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship {guardVariableName} && {guardVariableName}.IsValidFor{nonTerminalElement.Name}(writerContext)";
+                        }
+
                         if (perItemCall != null)
                         {
                             writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");

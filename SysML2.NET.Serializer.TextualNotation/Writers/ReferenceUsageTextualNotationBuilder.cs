@@ -25,6 +25,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
+    using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
 
     /// <summary>
@@ -43,15 +44,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         ///     PayloadFeature
         ///   | Identification PayloadFeatureSpecializationPart? TriggerValuePart
         ///
-        /// Alt 2 applies when the reference usage has identification AND a trigger-style
-        /// feature value. Otherwise, delegate to PayloadFeature (Alt 1).
+        /// Alt 2 applies when the reference usage carries a TriggerValuePart. `Identification` matches EMPTY
+        /// (( '&lt;' NAME '&gt;' )? ( NAME )?) so it is structurally always present and cannot discriminate.
+        /// Otherwise, delegate to PayloadFeature (Alt 1).
         /// </remarks>
         private static void BuildPayloadParameterHandCoded(IReferenceUsage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            var hasIdentification = !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName);
-            var hasTriggerValue = poco.OwnedRelationship.OfType<IFeatureValue>().Any();
-
-            if (hasIdentification && hasTriggerValue)
+            // TriggerFeatureValue and ValuePart's plain FeatureValue share the SAME target metaclass, so the
+            // trigger must be identified by its nested TriggerInvocationExpression. Testing for any
+            // IFeatureValue also matches a plain payload default (`accept x: Foo = default`) and routes it
+            // into BuildTriggerValuePart, which emits nothing for a non-trigger expression — silent data loss.
+            var hasTriggerValue = poco.OwnedRelationship
+                .OfType<IFeatureValue>()
+                .Any(featureValue => featureValue.OwnedRelatedElement.OfType<ITriggerInvocationExpression>().Any());
+            
+            if (hasTriggerValue)
             {
                 // Alt 2: Identification PayloadFeatureSpecializationPart? TriggerValuePart
                 ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);

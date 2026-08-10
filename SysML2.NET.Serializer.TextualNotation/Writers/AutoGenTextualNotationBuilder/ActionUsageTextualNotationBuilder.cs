@@ -208,7 +208,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             stringBuilder.Append(' ');
             stringBuilder.AppendLine("{");
             stringBuilder.IncreaseIndent();
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship ownedRelationshipBodyItem && ownedRelationshipBodyItem.IsValidForActionBodyItem(writerContext))
             {
                 TypeTextualNotationBuilder.BuildActionBodyItem(poco, writerContext, stringBuilder);
             }

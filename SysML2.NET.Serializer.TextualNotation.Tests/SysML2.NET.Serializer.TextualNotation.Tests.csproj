@@ -136,6 +136,12 @@
       <None Update="Validation\04-Functional Allocation\4a-Functional Allocation.sysmlx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Expected\05-State-based Behavior\5-State-based Behavior-1a.sysml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Validation\05-State-based Behavior\5-State-based Behavior-1a.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

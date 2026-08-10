@@ -28,6 +28,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -160,6 +161,22 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var sourceLocalScope = this.GetSourceLocalScope(sourcePoco);
 
+            // KerML §8.2.3.5.1: the ONE exception to basic resolution — a Redefinition's redefinedFeature is
+            // resolved against the general Type of each ownedSpecialization of the owningType, NOT against the
+            // reference site's local namespace. This is what keeps `:>> fuelCmdPort` short while the ordinary
+            // local scope has that inherited membership removed (§8.2.3.5.3).
+            // Skipped when the redefining feature DECLARES the redefined feature's name: the bare form is
+            // legal there (it resolves in the supertype, not locally) but reads as a self-reference, and the
+            // pilot always writes `mass :>> Vehicle::mass`. Qualifying is never wrong, so match it.
+            if (sourcePoco is IRedefinition { RedefiningFeature: { } redefiningFeature } redefinitionContext
+                && ReferenceEquals(target, redefinitionContext.RedefinedFeature)
+                && !RedefinerDeclaredNameCollidesWith(redefiningFeature, target)
+                && !ReferencedFeatureSharesSimpleName(redefiningFeature, target)
+                && this.QueryRedefinedFeatureScope(redefinitionContext, target) is { } redefinitionScope)
+            {
+                sourceLocalScope = redefinitionScope;
+            }
+
             // A redefinition's redefining feature — and equally a reference subsetting's referencing
             // feature, whose effective name derives FROM the referenced target — is bound in scope
             // under the very name being resolved and must not shadow its own target. Excluded from
@@ -207,7 +224,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return false;
             }
 
-            for (IElement scope = importOwner; scope != null; scope = QueryOwningContainer(scope))
+            for (var scope = importOwner; scope != null; scope = QueryOwningContainer(scope))
             {
                 if (ReferenceEquals(scope, declaringNamespace))
                 {
@@ -489,6 +506,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Determines whether the local referencer's DECLARED name equals the target's effective name — in
         /// which case the bare simple name would re-resolve to the local member and the qualified form is
         /// required. An anonymous referencer (no declared names) can never collide.
+        /// <para>Deliberately DECLARED names only. Widening this to the effective name looks right — an
+        /// anonymous redefiner inherits its name from the feature it redefines — but the pilot writes the
+        /// bare form for exactly that shape (<c>ref :>> driveshaft</c>, <c>port :>> fuelCmdPort</c>), so
+        /// widening over-qualifies 2a / 2c / 3c-2 / 4a.</para>
         /// </summary>
         /// <param name="localRedefiner">The redefining/referencing feature; must be non-null.</param>
         /// <param name="target">The referenced target.</param>
@@ -804,6 +825,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return this.RootNamespace;
             }
 
+            if (QueryContextRelationshipLocalScope(sourcePoco) is { } contextScope)
+            {
+                return contextScope;
+            }
+
             var visited = new HashSet<IElement>();
             var current = sourcePoco;
 
@@ -844,6 +870,116 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             return this.RootNamespace;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="redefiningFeature" /> also REFERENCES a different element that
+        /// shares a simple name with <paramref name="target" /> — the <c>exhibit X :>> Y</c> shape, where the
+        /// reference and the redefinition name distinct elements under one name.
+        /// <para>The reference is written bare, so leaving the redefinition bare emits the SAME token twice for
+        /// two different elements: they stay distinct only for a reader that applies the §8.2.3.5.1 exception.
+        /// Qualifying the redefinition is correct under either reading, and is what the pilot writes.</para>
+        /// </summary>
+        /// <param name="redefiningFeature">The feature owning the redefinition.</param>
+        /// <param name="target">The redefined feature being named.</param>
+        /// <returns><see langword="true" /> when the qualified form is required to keep the two distinct.</returns>
+        private static bool ReferencedFeatureSharesSimpleName(IFeature redefiningFeature, IElement target)
+        {
+            var referencedFeature = redefiningFeature.OwnedRelationship
+                .OfType<IReferenceSubsetting>()
+                .Select(referenceSubsetting => referenceSubsetting.ReferencedFeature)
+                .FirstOrDefault(referenced => referenced != null && !ReferenceEquals(referenced, target));
+
+            if (referencedFeature == null)
+            {
+                return false;
+            }
+
+            var referencedNames = new[] { referencedFeature.name, referencedFeature.shortName }
+                .Where(candidate => !string.IsNullOrWhiteSpace(candidate));
+
+            return referencedNames.Any(candidate =>
+                string.Equals(candidate, target.name, StringComparison.Ordinal)
+                || string.Equals(candidate, target.shortName, StringComparison.Ordinal));
+        }
+
+        /// <summary>
+        /// Returns the scope in which a <see cref="IRedefinition"/>'s <c>redefinedFeature</c> is resolved per
+        /// KerML §8.2.3.5.1: the general <c>Type</c> of each <c>ownedSpecialization</c> of the owning feature's
+        /// <c>owningType</c>, tried in turn until one binds the name. Falls back to the first such general type
+        /// so the qualified form is still anchored correctly.
+        /// </summary>
+        /// <param name="redefinition">The redefinition at the reference site.</param>
+        /// <param name="target">The redefined feature being named.</param>
+        /// <returns>The scope, or <see langword="null" /> when the exception does not apply.</returns>
+        private INamespace QueryRedefinedFeatureScope(IRedefinition redefinition, IElement target)
+        {
+            var owningType = redefinition.RedefiningFeature?.owningType;
+
+            if (owningType == null)
+            {
+                return null;
+            }
+
+            List<INamespace> generalScopes;
+
+            try
+            {
+                generalScopes = [..owningType.ownedSpecialization
+                    .Select(specialization => specialization.General)
+                    .OfType<INamespace>()
+                    .Where(general => !ReferenceEquals(general, owningType))];
+            }
+            catch (NotSupportedException)
+            {
+                return null;
+            }
+
+            if (generalScopes.Count == 0)
+            {
+                return null;
+            }
+
+            var rawName = QueryPreferredRawName(target);
+
+            var bindingScope = string.IsNullOrWhiteSpace(rawName)
+                ? null
+                : generalScopes.FirstOrDefault(scope =>
+                    this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner: null, selfBindingScope: null) == SimpleNameResolution.Matched);
+
+            return bindingScope ?? generalScopes[0];
+        }
+
+        /// <summary>
+        /// Determines the local <see cref="INamespace"/> from the KIND of context relationship, per
+        /// KerML §8.2.3.5.2. Only the kinds whose local scope is NOT simply the nearest enclosing namespace
+        /// are handled here; everything else falls back to the containment climb.
+        /// <para>For a <see cref="ISpecialization"/> the spec anchors resolution at the
+        /// <c>owningNamespace</c> of the <c>owningType</c> — one level OUT from the owning feature — so the
+        /// owning feature's own and inherited members are NOT in scope.</para>
+        /// <para>NOT implemented: the clause also anchors a <see cref="IReferenceSubsetting"/> whose
+        /// <c>referencingFeature</c> is an end feature of a <see cref="IConnector"/> at the CONNECTOR's owning
+        /// namespace. Applying that emits <c>Actions::Action::start</c> where 3a-1 needs the short <c>start</c>
+        /// the pilot writes; the cause is NOT diagnosed, since that namespace inherits <c>start</c> and ought
+        /// to resolve it. Meanwhile the climb anchors deeper than the spec allows — at the end feature, so the
+        /// end's and the connector's own members are wrongly in scope — which may be masking an indexing gap.
+        /// On odd resolution around connector ends, check first whether the connector's owning namespace binds
+        /// the name at all.</para>
+        /// </summary>
+        /// <param name="sourcePoco">The context relationship at the reference site.</param>
+        /// <returns>The local scope, or <see langword="null" /> when the generic climb applies.</returns>
+        private static INamespace QueryContextRelationshipLocalScope(IElement sourcePoco)
+        {
+            return sourcePoco switch
+            {
+                // Connector ends keep the containment climb — see the remark above. This case must precede
+                // ISpecialization: a ReferenceSubsetting IS a Specialization and would otherwise be
+                // re-anchored by the general rule below.
+                IReferenceSubsetting { referencingFeature: { IsEnd: true, owningType: IConnector } } => null,
+                ISpecialization specialization => specialization.owningType != null ? QueryOwningContainer(specialization.owningType) : QueryOwningContainer(specialization),
+                IConjugation conjugation => conjugation.owningType != null ? QueryOwningContainer(conjugation.owningType) : QueryOwningContainer(conjugation),
+                _ => null
+            };
         }
 
         /// <summary>
@@ -1411,11 +1547,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 pending.Enqueue((supertypeAsNamespace, isGlobal));
             }
 
+            var featuresRedefinedByOwned = QueryFeaturesRedefinedByOwnedFeatures(type);
+
             foreach (var supertype in inheritableSupertypes)
             {
                 try
                 {
-                    foreach (var ownedMember in supertype.ownedMembership.Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal)))
+                    foreach (var ownedMember in supertype.ownedMembership
+                                 .Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal))
+                                 .Where(ownedMember => !IsRedefinedAway(ownedMember, featuresRedefinedByOwned)))
                     {
                         AddMembershipEntry(index, ownedMember, pending, isGlobal);
                     }
@@ -1424,6 +1564,58 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 {
                     // ownedMembership not implemented for this supertype; skip.
                 }
+            }
+        }
+
+        /// <summary>
+        /// Collects the features directly redefined by <paramref name="type" />'s owned features — the
+        /// <c>ownedFeature.redefinition.redefinedFeature</c> set of <c>removeRedefinedFeatures</c>.
+        /// </summary>
+        /// <param name="type">The type whose owned redefinitions are collected.</param>
+        /// <returns>The redefined features; empty when unavailable.</returns>
+        private static HashSet<IElement> QueryFeaturesRedefinedByOwnedFeatures(IType type)
+        {
+            try
+            {
+                return [..type.ownedFeature
+                    .SelectMany(ownedFeature => ownedFeature.OwnedRelationship.OfType<IRedefinition>())
+                    .Select(redefinition => (IElement)redefinition.RedefinedFeature)
+                    .Where(redefined => redefined != null)];
+            }
+            catch (NotSupportedException)
+            {
+                return [];
+            }
+        }
+
+        /// <summary>
+        /// Applies condition 2 of <c>Type::removeRedefinedFeatures</c>: an inherited membership drops out of
+        /// the local scope when its member element — or anything that element redefines — is redefined by an
+        /// owned feature of the inheriting type. The redefinition's own target is still reachable through the
+        /// §8.2.3.5.1 supertype scope (see <see cref="QueryRedefinedFeatureScope" />).
+        /// </summary>
+        /// <param name="membership">The candidate inherited membership.</param>
+        /// <param name="featuresRedefinedByOwned">Features redefined by the inheriting type's owned features.</param>
+        /// <returns><see langword="true" /> when the membership must not be indexed.</returns>
+        private static bool IsRedefinedAway(IMembership membership, HashSet<IElement> featuresRedefinedByOwned)
+        {
+            if (featuresRedefinedByOwned.Count == 0 || membership.MemberElement is not IFeature memberFeature)
+            {
+                return false;
+            }
+
+            if (featuresRedefinedByOwned.Contains(memberFeature))
+            {
+                return true;
+            }
+
+            try
+            {
+                return memberFeature.AllRedefinedFeatures().Any(featuresRedefinedByOwned.Contains);
+            }
+            catch (NotSupportedException)
+            {
+                return false;
             }
         }
 

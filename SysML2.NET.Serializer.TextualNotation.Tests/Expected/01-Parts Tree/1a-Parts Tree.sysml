@@ -43,6 +43,7 @@ package '1a-Parts Tree' {
                 /*
                  * 'frontAxleAssembly' is a nested part of part 'vehicle1'.
                  * It is a composite part of the containing part.
+                 *
                  * (And similarly for 'rearAxleAssembly'.)
                  */
                 part frontAxle: Axle;

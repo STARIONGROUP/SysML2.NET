@@ -936,7 +936,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>True if the membership owns a succession or transition usage</returns>
         internal static bool IsValidForEntryTransitionMemberRule(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership?.OwnedRelatedElement.Any(element => element is ITransitionUsage or ISuccessionAsUsage) == true;
+            return featureMembership?.OwnedRelatedElement.Any(element => element switch
+            {
+                // GuardedTargetSuccession REQUIRES a GuardExpressionMember. A guardless TransitionUsage is a
+                // TransitionUsageMember (`transition initial then off;`); consuming it here emitted a bare
+                // `then;` because neither EntryTransitionMember alternative can express it.
+                ITransitionUsage transitionUsage => transitionUsage.OwnedRelationship
+                    .OfType<ITransitionFeatureMembership>()
+                    .Any(transitionFeature => transitionFeature.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard),
+                ISuccessionAsUsage => true,
+                _ => false,
+            }) == true;
         }
         
         /// <summary>
@@ -1143,5 +1153,50 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             return relationship.IsValidForDefinitionBodyItem(writerContext);
         }
+
+        /// <summary>
+        /// Asserts that the <see cref="IRelationship"/> currently positioned by the cursor is writable as an
+        /// <c>ActionBodyItem</c>. Everything is admitted except a content-free anonymous
+        /// <see cref="IReferenceUsage"/>: the pilot's model transform attaches one such feature to every
+        /// <c>TransitionUsage</c> / action node, and it has no notation — emitting it produces a bare
+        /// <c>ref;</c> that the grammar never writes.
+        /// </summary>
+        /// <param name="relationship">The <see cref="IRelationship"/> positioned by the cursor.</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> for the current write.</param>
+        /// <returns><see langword="true"/> when the relationship has notation as an action body item.</returns>
+        internal static bool IsValidForActionBodyItem(this IRelationship relationship, TextualNotationWriterContext writerContext)
+            => relationship is not IFeatureMembership featureMembership || !IsContentFreeAnonymousReferenceUsage(featureMembership);
+
+        /// <summary>
+        /// Asserts that <paramref name="parameterMembership"/> is an <c>EmptyParameterMember</c> — a
+        /// <see cref="IParameterMembership"/> owning an <c>EmptyUsage</c> (<c>EmptyUsage : ReferenceUsage = {}</c>):
+        /// an anonymous <see cref="IReferenceUsage"/> with no binding, typing or name. The grammar uses such a
+        /// member as the PLACEHOLDER for an omitted slot — e.g. the skipped <c>via</c> of <c>send … to …</c> —
+        /// so it must never be written as a parameter in its own right.
+        /// </summary>
+        /// <param name="parameterMembership">The candidate <see cref="IParameterMembership"/>.</param>
+        /// <returns><see langword="true"/> when the membership is an omitted-slot placeholder.</returns>
+        internal static bool IsEmptyParameterMember(this IParameterMembership parameterMembership)
+            => parameterMembership.OwnedRelatedElement.Count == 1
+               && parameterMembership.OwnedRelatedElement.OfType<IReferenceUsage>().Any(referenceUsage =>
+                      referenceUsage.OwnedRelationship.Count == 0
+                      && string.IsNullOrWhiteSpace(referenceUsage.DeclaredName)
+                      && string.IsNullOrWhiteSpace(referenceUsage.DeclaredShortName));
+
+        /// <summary>
+        /// Determines whether <paramref name="featureMembership"/> owns nothing but a completely
+        /// information-free anonymous <see cref="IReferenceUsage"/> — no name, no specialization,
+        /// no direction, no end flag.
+        /// </summary>
+        /// <param name="featureMembership">The candidate <see cref="IFeatureMembership"/>.</param>
+        /// <returns><see langword="true"/> when the membership carries no writable content.</returns>
+        private static bool IsContentFreeAnonymousReferenceUsage(IFeatureMembership featureMembership)
+            => featureMembership.OwnedRelatedElement.Count == 1
+               && featureMembership.OwnedRelatedElement.OfType<IReferenceUsage>().Any(referenceUsage =>
+                      string.IsNullOrWhiteSpace(referenceUsage.DeclaredName)
+                      && string.IsNullOrWhiteSpace(referenceUsage.DeclaredShortName)
+                      && referenceUsage.OwnedRelationship.Count == 0
+                      && !referenceUsage.Direction.HasValue
+                      && !referenceUsage.IsEnd);
     }
 }
