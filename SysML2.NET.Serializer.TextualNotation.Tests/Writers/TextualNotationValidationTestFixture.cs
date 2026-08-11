@@ -53,6 +53,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("05-State-based Behavior", "5-State-based Behavior-1a.sysmlx")]
         [TestCase("05-State-based Behavior", "5-State-based Behavior-1.sysmlx")]
         [TestCase("05-State-based Behavior", "5-State-based Behavior-2.sysmlx")]
+        [TestCase("06-Individual and Snapshots", "6-Individual and Snapshots.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

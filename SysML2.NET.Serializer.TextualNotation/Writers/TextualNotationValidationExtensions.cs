@@ -330,7 +330,27 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>True if the reference usage renders through the <c>'ref'</c>-less default form</returns>
         internal static bool IsValidForDefaultReferenceUsage(this IReferenceUsage referenceUsage, TextualNotationWriterContext writerContext)
         {
-            return !referenceUsage.IsEnd && referenceUsage.Direction.HasValue;
+            if (referenceUsage.IsEnd)
+            {
+                return false;
+            }
+
+            // A directed usage is always referential (Clause 7.6.3), so the keyword adds nothing.
+            if (referenceUsage.Direction.HasValue)
+            {
+                return true;
+            }
+
+            // Otherwise the keyword adds nothing only when there is no declaration for it to qualify: no
+            // name and an empty RefPrefix, i.e. the whole usage is a bare redefinition such as
+            // `:>> mass = m`. The pilot bears this out — it writes `ref vehicle: VehicleA` (named) and
+            // `abstract ref :>> trailerHitch[1]` (RefPrefix carries `abstract`) but plain `:>> mass = m`.
+            return string.IsNullOrWhiteSpace(referenceUsage.DeclaredName)
+                   && string.IsNullOrWhiteSpace(referenceUsage.DeclaredShortName)
+                   && !referenceUsage.IsDerived
+                   && !referenceUsage.IsAbstract
+                   && !referenceUsage.IsVariation
+                   && !referenceUsage.IsConstant;
         }
 
         /// <summary>

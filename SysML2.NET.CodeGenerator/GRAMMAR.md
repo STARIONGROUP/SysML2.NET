@@ -269,3 +269,39 @@ Consequence, in `TypeTextualNotationBuilder.EmitTargetTransitionRun`: the transi
 exception to the `Move()` ↔ `+=` Golden Rule, valid because the elected production has no notation for
 that element. It is conditional — it only runs after `QueryImpliedSourceTransition` has confirmed
 position 0 is the source membership — so it cannot consume a real element.
+
+### `DefaultReferenceUsage` vs `ReferenceUsage` — the optional `ref` keyword
+
+```
+NonOccurrenceUsageElement : Usage = DefaultReferenceUsage | ReferenceUsage | AttributeUsage | …
+DefaultReferenceUsage : ReferenceUsage = RefPrefix Usage                    ← no 'ref'
+ReferenceUsage                         = ( EndUsagePrefix | RefPrefix ) 'ref' Usage
+RefPrefix : Usage = ( direction = … )? ( isDerived ?= … )? ( isAbstract ?= … | isVariation ?= … )? ( isConstant ?= … )?
+```
+
+`RefPrefix` contains no `ref` keyword, and the `'ref'` in `ReferenceUsage` is a BARE terminal — not
+`isReference ?= 'ref'` — so it sets no property. Both productions therefore round-trip to the same
+model, and nothing records which the author wrote.
+
+The spec settles only the OPTIONALITY, not the choice. SysML 2.0 §7.6.4 Reference Usages (p. 74,
+informative): "The declaration of a reference usage may, but is not required, to include the `ref`
+keyword. However, a reference usage is always, by definition, referential." So both forms are valid
+and the writer must pick one; nothing normative says which.
+
+What follows is therefore an EMPIRICAL convention fitted to the corpus, not a spec rule — and §7.6.4's
+own example contradicts its "named" half (`orderedContent ordered :>> content;` is named yet omits
+`ref`). It is kept because it reproduces the pilot on all validated files and is always valid output.
+
+The corpus is consistent once both halves of the condition are taken together. `06` writes
+`:>> mass = m;` (unnamed, empty `RefPrefix`), `3c-…-2` writes `abstract ref :>> trailerHitch[1];`
+(unnamed but `RefPrefix` carries `isAbstract`) and `5-…-1` writes `ref vehicle: VehicleA;` (named).
+Each condition alone is refuted by one of the three; the conjunction fits all of them:
+
+> omit `ref` when the usage is unnamed AND `RefPrefix` is empty — there is no declaration for the
+> keyword to qualify. Otherwise write it.
+
+`IsValidForDefaultReferenceUsage` implements exactly that, on top of the spec-mandated case
+(a directed usage is always referential, Clause 7.6.3, so the keyword is redundant there).
+
+`IsValidForDefaultReferenceUsage` still encodes the one spec-mandated case (`!IsEnd &&
+Direction.HasValue`): a directed usage is always referential, so the keyword is redundant there.

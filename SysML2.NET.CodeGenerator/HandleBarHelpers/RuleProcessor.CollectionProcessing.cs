@@ -74,7 +74,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         var perItemCall = ResolveBuilderCall(umlClass, nonTerminalElement, typeTarget, ruleGenerationContext);
 
-                        var whileTypeExclusion = ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, ruleGenerationContext);
+                        var whileTypeExclusion = this.ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, propertyName, ruleGenerationContext);
 
                         string whileCondition;
 
@@ -174,7 +174,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Resolves the type condition for a collection while loop.
         /// </summary>
-        private static string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, RuleGenerationContext ruleGenerationContext)
+        private string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, string outerPropertyName, RuleGenerationContext ruleGenerationContext)
         {
             var siblings = ruleGenerationContext.CurrentSiblingElements;
             var currentIndex = ruleGenerationContext.CurrentElementIndex;
@@ -201,6 +201,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     var itemRule = ruleGenerationContext.FindRule(assignmentNonTerminals[0].Name);
                     var itemTypeTarget = itemRule != null ? itemRule.EffectiveTarget : null;
+
+                    // The item rule's own target is the WRAPPER type for a thin owning wrapper
+                    // (X : OwningMembership = … ownedRelatedElement = Y), which every sibling wrapper on this
+                    // cursor also satisfies — `individual def` consumed its own EmptyMultiplicityMember as a
+                    // DefinitionExtensionKeyword and emitted a stray '#'. Prefer the wrapped-type guard when
+                    // one is available; otherwise keep the coarse test rather than falling through to a
+                    // weaker condition that could admit elements the loop body will not consume.
+                    var wrappedTypeGuard = this.ResolveContentTypeGuard(cursorVariableName, collectionRule, outerPropertyName, umlClass, ruleGenerationContext);
+
+                    if (!string.IsNullOrWhiteSpace(wrappedTypeGuard))
+                    {
+                        return wrappedTypeGuard;
+                    }
 
                     if (itemTypeTarget != null)
                     {

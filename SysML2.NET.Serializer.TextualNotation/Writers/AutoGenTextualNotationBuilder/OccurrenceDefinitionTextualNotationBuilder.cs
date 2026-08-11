@@ -51,7 +51,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.IsIndividual && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
-                stringBuilder.Append(" individual ");
 
                 if (ownedRelationshipCursor.Current != null)
                 {
@@ -63,6 +62,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                     }
                 }
+                stringBuilder.Append(" individual ");
                 stringBuilder.Append(' ');
             }
 
@@ -85,22 +85,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (poco.IsAbstract || poco.IsVariation)
-            {
-                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, writerContext, stringBuilder);
-            }
-            if (poco.IsIndividual)
-            {
-                stringBuilder.Append(" individual ");
-            }
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
-            {
-                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
-            }
-
-            stringBuilder.Append("def ");
-            DefinitionTextualNotationBuilder.BuildDefinition(poco, writerContext, stringBuilder);
-
             if (ownedRelationshipCursor.Current != null)
             {
 
@@ -111,6 +95,22 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 }
             }
+
+            if (poco.IsAbstract || poco.IsVariation)
+            {
+                SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, writerContext, stringBuilder);
+            }
+            if (poco.IsIndividual)
+            {
+                stringBuilder.Append(" individual ");
+            }
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
+            {
+                DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
+            }
+
+            stringBuilder.Append("def ");
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, writerContext, stringBuilder);
 
         }
 
