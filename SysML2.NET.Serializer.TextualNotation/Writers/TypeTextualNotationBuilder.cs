@@ -34,6 +34,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     public static partial class TypeTextualNotationBuilder
     {
         /// <summary>
+         /// Name of the <c>ownedRelationship</c> collection, used as the cursor cache key.
+        /// </summary>
+        private const string OwnedRelationshipCollection = "ownedRelationship";
+
+        /// <summary>
         /// Builds the Textual Notation string for the rule ActionBodyItem
         /// <remarks>ActionBodyItem:Type=NonBehaviorBodyItem|ownedRelationship+=InitialNodeMember(ownedRelationship+=ActionTargetSuccessionMember)*|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=ActionBehaviorMember(ownedRelationship+=ActionTargetSuccessionMember)*|ownedRelationship+=GuardedSuccessionMember</remarks>
         /// </summary>
@@ -42,7 +47,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         private static void BuildActionBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipCollection, poco.OwnedRelationship);
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship actionBodyItem
                    && actionBodyItem.IsValidForActionBodyItem(writerContext))
@@ -162,7 +167,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipCollection, poco.OwnedRelationship);
 
             // Optional OwnedMultiplicity: single += consumption if the current ownedRelationship element
             // is an OwningMembership containing an IMultiplicity (OwnedMultiplicity:OwningMembership).
@@ -256,7 +261,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </remarks>
         private static void BuildStateBodyItemHandCoded(IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
+            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipCollection, poco.OwnedRelationship);
 
             while (ownedRelationshipCursor.Current != null)
             {
@@ -363,7 +368,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // resolves the shorthand at parse time), so the cursor must step past it unemitted before
                 // the generated builder reads the EmptyParameterMember.
                 writerContext.CursorCache
-                    .GetOrCreateCursor(transitionUsage.Id, "ownedRelationship", transitionUsage.OwnedRelationship)
+                    .GetOrCreateCursor(transitionUsage.Id, OwnedRelationshipCollection, transitionUsage.OwnedRelationship)
                     .Move();
 
                 FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
@@ -389,8 +394,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var transitionUsage = candidate.OwnedRelatedElement.OfType<ITransitionUsage>().FirstOrDefault();
 
+            if (transitionUsage == null || transitionUsage.OwnedRelationship.Count == 0)
+            {
+                return null;
+            }
+
             // The source is the FeatureChainMember: a non-owning Membership cross-referencing the state.
-            return transitionUsage?.OwnedRelationship.FirstOrDefault() is IMembership sourceMembership
+            return transitionUsage.OwnedRelationship[0] is IMembership sourceMembership
                    && sourceMembership is not IOwningMembership
                    && ReferenceEquals(sourceMembership.MemberElement, anchorFeature)
                 ? transitionUsage
