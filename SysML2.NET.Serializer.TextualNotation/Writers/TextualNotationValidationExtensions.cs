@@ -897,20 +897,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Asserts that the <see cref="IFeatureMembership"/> is valid for the TargetTransitionUsageMember rule (StateBodyItem).
         /// <para><c>TargetTransitionUsageMember : FeatureMembership = MemberPrefix ownedRelatedElement += TargetTransitionUsage</c></para>
         /// <para><c>TargetTransitionUsage : TransitionUsage = ownedRelationship += EmptyParameterMember …</c></para>
-        /// <para><b>Limitation:</b> <c>TargetTransitionUsage</c> shares the <see cref="ITransitionUsage"/>
-        /// metaclass with plain <c>TransitionUsage</c>. Heuristic distinguisher: the first owned
-        /// relationship is an <see cref="IParameterMembership"/> whose parameter carries no owned
-        /// related element (the "empty parameter" marker). This is pattern-based and may not
-        /// perfectly capture the parse context.</para>
+        /// <para><c>TargetTransitionUsage</c> shares the <see cref="ITransitionUsage"/> metaclass with plain
+        /// <c>TransitionUsage</c>, so two SHAPE conditions separate them here. The transition must be
+        /// ANONYMOUS — <c>TargetTransitionUsage</c> has no <c>UsageDeclaration</c> slot, so a named
+        /// transition cannot round-trip through it — and it must carry an <c>EmptyParameterMember</c>.</para>
+        /// <para>Note the emptiness test: an <c>EmptyParameterMember</c> owns an <c>EmptyUsage</c>
+        /// (<c>EmptyUsage : ReferenceUsage = {}</c>), so it has ONE owned related element, not zero.</para>
+        /// <para>The remaining condition — that the transition's source is the nearest preceding
+        /// <c>BehaviorUsageMember</c> — needs sibling context this signature does not carry, so it lives in
+        /// <c>BuildStateBodyItemHandCoded</c>.</para>
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns a transition usage whose first parameter is empty</returns>
+        /// <returns>True if the membership owns an anonymous transition usage with an empty parameter.</returns>
         internal static bool IsValidForTargetTransitionUsageMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
             return featureMembership?.OwnedRelatedElement.OfType<ITransitionUsage>().Any(transition =>
-                transition.OwnedRelationship.OfType<IParameterMembership>().FirstOrDefault() is IParameterMembership parameterMembership
-                && parameterMembership.OwnedRelatedElement.Count == 0) == true;
+                string.IsNullOrWhiteSpace(transition.DeclaredName)
+                && string.IsNullOrWhiteSpace(transition.DeclaredShortName)
+                && transition.OwnedRelationship.OfType<IParameterMembership>().FirstOrDefault() is { } parameterMembership
+                && parameterMembership.IsEmptyParameterMember()) == true;
         }
 
         /// <summary>

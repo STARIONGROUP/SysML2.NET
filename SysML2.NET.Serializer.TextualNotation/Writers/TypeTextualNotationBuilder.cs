@@ -22,7 +22,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
     using System.Linq;
 
+    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.States;
 
@@ -294,14 +296,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
-                            FeatureMembershipTextualNotationBuilder.BuildBehaviorUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
+                            var anchoredBehaviorMember = (IFeatureMembership)ownedRelationshipCursor.Current;
+                            FeatureMembershipTextualNotationBuilder.BuildBehaviorUsageMember(anchoredBehaviorMember, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
 
-                            while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition && targetTransition.IsValidForTargetTransitionUsageMember(writerContext))
-                            {
-                                FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
-                                ownedRelationshipCursor.Move();
-                            }
+                            EmitTargetTransitionRun(anchoredBehaviorMember, ownedRelationshipCursor, writerContext, stringBuilder);
                         }
                         else if (nextElement is IFeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember(writerContext))
                         {
@@ -324,11 +323,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         FeatureMembershipTextualNotationBuilder.BuildBehaviorUsageMember(featureMembershipForBehavior, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
-                        while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition && targetTransition.IsValidForTargetTransitionUsageMember(writerContext))
-                        {
-                            FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                        }
+                        EmitTargetTransitionRun(featureMembershipForBehavior, ownedRelationshipCursor, writerContext, stringBuilder);
 
                         break;
                     }
@@ -347,5 +342,59 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
         }
 
+        /// <summary>
+        /// Emits the <c>( ownedRelationship += TargetTransitionUsageMember )*</c> run that may follow a
+        /// <c>BehaviorUsageMember</c>, using the shorthand form (<c>accept X then Y;</c>) whose source is
+        /// implied by <paramref name="anchorMember" />.
+        /// </summary>
+        /// <param name="anchorMember">The <see cref="IFeatureMembership"/> just emitted as the BehaviorUsageMember.</param>
+        /// <param name="ownedRelationshipCursor">The body cursor, positioned after <paramref name="anchorMember" />.</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> for the current write.</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> accumulating the notation.</param>
+        private static void EmitTargetTransitionRun(IFeatureMembership anchorMember, CollectionCursor<IElement> ownedRelationshipCursor, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
+        {
+            var anchorFeature = anchorMember.OwnedRelatedElement.OfType<IFeature>().FirstOrDefault();
+
+            while (ownedRelationshipCursor.Current is IFeatureMembership targetTransition
+                   && targetTransition.IsValidForTargetTransitionUsageMember(writerContext)
+                   && QueryImpliedSourceTransition(targetTransition, anchorFeature) is { } transitionUsage)
+            {
+                // TargetTransitionUsage has NO notation for the source, but the model records it (the pilot
+                // resolves the shorthand at parse time), so the cursor must step past it unemitted before
+                // the generated builder reads the EmptyParameterMember.
+                writerContext.CursorCache
+                    .GetOrCreateCursor(transitionUsage.Id, "ownedRelationship", transitionUsage.OwnedRelationship)
+                    .Move();
+
+                FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+        }
+
+        /// <summary>
+        /// Returns the transition owned by <paramref name="candidate" /> when its source is exactly
+        /// <paramref name="anchorFeature" /> — the condition under which the source may be left implicit.
+        /// A source naming anything else must keep the explicit <c>transition &lt;source&gt;</c> form, or the
+        /// shorthand would re-parse against the preceding state and denote a different element.
+        /// </summary>
+        /// <param name="candidate">The candidate <see cref="IFeatureMembership"/>.</param>
+        /// <param name="anchorFeature">The feature whose name the shorthand implies; may be <see langword="null"/>.</param>
+        /// <returns>The transition eligible for the shorthand, or <see langword="null" />.</returns>
+        private static ITransitionUsage QueryImpliedSourceTransition(IFeatureMembership candidate, IFeature anchorFeature)
+        {
+            if (anchorFeature == null)
+            {
+                return null;
+            }
+
+            var transitionUsage = candidate.OwnedRelatedElement.OfType<ITransitionUsage>().FirstOrDefault();
+
+            // The source is the FeatureChainMember: a non-owning Membership cross-referencing the state.
+            return transitionUsage?.OwnedRelationship.FirstOrDefault() is IMembership sourceMembership
+                   && sourceMembership is not IOwningMembership
+                   && ReferenceEquals(sourceMembership.MemberElement, anchorFeature)
+                ? transitionUsage
+                : null;
+        }
     }
 }

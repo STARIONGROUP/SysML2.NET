@@ -1261,12 +1261,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="isGlobal">Whether the scope is reached through the global namespace.</param>
         private void BuildOwnedAndImportedEntries(INamespace scope, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
+            var ownedMemberships = new List<IMembership>();
+
             try
             {
                 foreach (var ownedMember in scope.ownedMembership.Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal)))
                 {
                     AddMembershipEntry(index, ownedMember, pending, isGlobal);
                     this.RecordAliasIfDeclared(scope, ownedMember);
+                    ownedMemberships.Add(ownedMember);
                 }
             }
             catch (NotSupportedException)
@@ -1274,13 +1277,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // ownedMembership may not be implemented; skip.
             }
 
+            // Per Namespace::importedMemberships, an imported membership that has a distinguishability
+            // collision with an OWNED membership is excluded. Snapshot the owned names first so a homonym
+            // pulled in by `import Other::*` cannot shadow — or appear to compete with — the owned member.
+            var ownedNames = new HashSet<string>(index.Keys, StringComparer.Ordinal);
+
             try
             {
                 foreach (var ownedImport in scope.ownedImport.Where(ownedImport => IsVisibleWhenGlobal(ownedImport, isGlobal)))
                 {
                     switch (ownedImport)
                     {
-                        case IMembershipImport { ImportedMembership: { } importedMembership }:
+                        case IMembershipImport { ImportedMembership: { } importedMembership }
+                            when !CollidesWithOwnedMembership(importedMembership, ownedNames, ownedMemberships):
+
                             AddMembershipEntry(index, importedMembership, pending, isGlobal);
                             this.RecordAliasIfDeclared(scope, importedMembership);
 
@@ -1301,7 +1311,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             // remaining imports of this scope.
                             try
                             {
-                                foreach (var importedMember in QueryVisibleMemberships(namespaceImport.ImportedNamespace, namespaceImport.IsImportAll, isGlobal, [scope]))
+                                foreach (var importedMember in QueryVisibleMemberships(namespaceImport.ImportedNamespace, namespaceImport.IsImportAll, isGlobal, [scope])
+                                             .Where(importedMember => !CollidesWithOwnedMembership(importedMember, ownedNames, ownedMemberships)))
                                 {
                                     AddMembershipEntry(index, importedMember, pending, isGlobal);
 
@@ -1635,13 +1646,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            var shortName = !string.IsNullOrWhiteSpace(membership.MemberShortName)
-                ? membership.MemberShortName
-                : target.shortName;
-
-            var longName = !string.IsNullOrWhiteSpace(membership.MemberName)
-                ? membership.MemberName
-                : target.name;
+            var (shortName, longName) = QueryMembershipNames(membership, target);
 
             AddIndexEntry(index, shortName, target);
             AddIndexEntry(index, longName, target);
@@ -1649,6 +1654,60 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (target is INamespace targetAsNamespace)
             {
                 pending.Enqueue((targetAsNamespace, isGlobal));
+            }
+        }
+
+        /// <summary>
+        /// Returns the two lexical forms a membership binds: the membership's explicit name overrides when
+        /// present, else the member element's own names.
+        /// </summary>
+        /// <param name="membership">The membership doing the binding.</param>
+        /// <param name="target">The membership's member element.</param>
+        /// <returns>The short and long lexical forms; either may be <see langword="null" />.</returns>
+        private static (string ShortName, string LongName) QueryMembershipNames(IMembership membership, IElement target)
+        {
+            return (!string.IsNullOrWhiteSpace(membership.MemberShortName) ? membership.MemberShortName : target.shortName,
+                    !string.IsNullOrWhiteSpace(membership.MemberName) ? membership.MemberName : target.name);
+        }
+
+        /// <summary>
+        /// Determines whether an IMPORTED membership has a distinguishability collision with an owned
+        /// membership of the importing scope, which <c>Namespace::importedMemberships</c> excludes. Without
+        /// this the homonym competes with the owned member and forces a needlessly qualified reference
+        /// (<c>'Model'::Definitions</c> instead of <c>Definitions</c>).
+        /// <para>Delegates to <see cref="IMembership.IsDistinguishableFrom" />: a shared name is NOT
+        /// sufficient, since two memberships remain distinguishable when neither member element's metaclass
+        /// conforms to the other's. The name check is only a cheap pre-filter — differing names always imply
+        /// distinguishable, so it can never reject a genuine collision.</para>
+        /// </summary>
+        /// <param name="membership">The candidate imported membership.</param>
+        /// <param name="ownedNames">Names bound by the scope's owned memberships, used to pre-filter.</param>
+        /// <param name="ownedMemberships">The scope's owned memberships, tested on a name hit.</param>
+        /// <returns><see langword="true" /> when the imported membership must be excluded.</returns>
+        private static bool CollidesWithOwnedMembership(IMembership membership, HashSet<string> ownedNames, List<IMembership> ownedMemberships)
+        {
+            if (ownedNames.Count == 0 || membership is not { MemberElement: { } target })
+            {
+                return false;
+            }
+
+            var (shortName, longName) = QueryMembershipNames(membership, target);
+
+            var sharesName = (!string.IsNullOrWhiteSpace(shortName) && ownedNames.Contains(shortName))
+                             || (!string.IsNullOrWhiteSpace(longName) && ownedNames.Contains(longName));
+
+            if (!sharesName)
+            {
+                return false;
+            }
+
+            try
+            {
+                return ownedMemberships.Any(owned => !membership.IsDistinguishableFrom(owned));
+            }
+            catch (NotSupportedException)
+            {
+                return false;
             }
         }
 
