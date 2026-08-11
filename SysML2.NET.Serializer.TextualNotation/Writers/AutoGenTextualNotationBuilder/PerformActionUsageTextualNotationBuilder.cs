@@ -103,12 +103,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             BuildPerformActionUsageDeclaration(poco, writerContext, stringBuilder);
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if ((ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IImport || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership || ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership) || !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName) || poco.Direction.HasValue || poco.IsDerived || poco.IsAbstract || poco.IsVariation || poco.IsConstant || poco.IsOrdered || poco.IsEnd || poco.isReference || poco.IsIndividual || poco.PortionKind.HasValue || poco.IsComposite || poco.IsPortion || poco.IsVariable || poco.IsSufficient)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship optionalBodyCandidate && optionalBodyCandidate.IsValidForActionBodyItem(writerContext))
             {
                 stringBuilder.Append(' ');
                 stringBuilder.AppendLine("{");
                 stringBuilder.IncreaseIndent();
-                while (ownedRelationshipCursor.Current != null)
+                while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship ownedRelationshipBodyItem && ownedRelationshipBodyItem.IsValidForActionBodyItem(writerContext))
                 {
                     TypeTextualNotationBuilder.BuildActionBodyItem(poco, writerContext, stringBuilder);
                 }

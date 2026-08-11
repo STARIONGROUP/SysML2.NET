@@ -614,9 +614,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             stringBuilder.AppendLine("/*");
 
-            foreach (var rawLine in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
+            // Only the leading/trailing blank lines are dropped (the body of a block comment always
+            // ends with one). Interior blank lines are CONTENT and must survive — filtering every
+            // blank line collapses deliberate paragraph breaks in the comment.
+            var firstContentIndex = Array.FindIndex(lines, line => !string.IsNullOrWhiteSpace(line));
+            var lastContentIndex = Array.FindLastIndex(lines, line => !string.IsNullOrWhiteSpace(line));
+
+            foreach (var rawLine in lines[firstContentIndex..(lastContentIndex + 1)])
             {
-                stringBuilder.AppendIndentedLiteral(" * " + rawLine.TrimEnd());
+                var trimmedLine = rawLine.TrimEnd();
+                stringBuilder.AppendIndentedLiteral(trimmedLine.Length == 0 ? " *" : " * " + trimmedLine);
                 stringBuilder.AppendLine();
             }
 

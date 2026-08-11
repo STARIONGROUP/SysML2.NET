@@ -95,7 +95,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage targetSuccession)
             {
-                stringBuilder.Append("then ");
+                // The rule's own 'then' is deliberately NOT emitted: TargetSuccession already supplies one
+                // ('SourceEndMember 'then' ConnectorEndMember'), so following the KEBNF literally yields
+                // `then then off;`, which no parser accepts. See SysML-v2-Release issue #124 item 8 and the
+                // "Known KEBNF divergences" section of SysML2.NET.CodeGenerator/GRAMMAR.md.
                 SuccessionAsUsageTextualNotationBuilder.BuildTargetSuccession(targetSuccession, writerContext, stringBuilder);
                 ownedRelatedElementCursor.Move();
             }

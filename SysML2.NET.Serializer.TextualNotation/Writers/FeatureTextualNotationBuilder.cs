@@ -285,7 +285,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var hasIdentification = !string.IsNullOrWhiteSpace(poco.DeclaredShortName) || !string.IsNullOrWhiteSpace(poco.DeclaredName);
 
-            if (hasIdentification || ownedRelationshipCursor.Current is ISpecialization)
+            // An unnamed payload whose specialization is a LONE OwnedFeatureTyping (optionally followed by a
+            // multiplicity) is alternative 2 — a bare type name. Alternative 1 always routes through
+            // PayloadFeatureSpecializationPart, which emits `: Type`; a FeatureTyping IS an ISpecialization,
+            // so without this test alternative 2 is unreachable and `accept X` comes out as `accept : X`.
+            var isBareTypedPayload = !hasIdentification
+                                     && ownedRelationshipCursor.Current is IFeatureTyping
+                                     && ownedRelationshipCursor.GetNext(1) is not ISpecialization;
+
+            if (!isBareTypedPayload && (hasIdentification || ownedRelationshipCursor.Current is ISpecialization))
             {
                 // Alt 1: Identification? PayloadFeatureSpecializationPart ValuePart?
                 if (hasIdentification)

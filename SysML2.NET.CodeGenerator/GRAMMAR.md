@@ -176,3 +176,96 @@ dotnet test SysML2.NET.sln
 ```bash
 grep -r "HandCoded" SysML2.NET.Serializer.TextualNotation/Writers/AutoGenTextualNotationBuilder/*.cs | wc -l
 ```
+
+## Known KEBNF / specification divergences
+
+The `.kebnf` files are OMG-owned and **never edited**. Where a production cannot describe the
+notation the pilot implementation actually reads and writes, the writer deviates and the deviation is
+recorded here. All of these are reported upstream in
+[SysML-v2-Release issue #124](https://github.com/Systems-Modeling/SysML-v2-Release/issues/124)
+("Several textual KEBNF productions appear unreachable or inconsistent with release examples").
+
+Do **not** "fix" the writer back to the literal production without checking this table first.
+
+### #124 item 8 — `EntryTransitionMember` emits a duplicated `then` (deviation implemented)
+
+```
+EntryTransitionMember : FeatureMembership =
+    MemberPrefix ( ownedRelatedElement += GuardedTargetSuccession
+                 | 'then' ownedRelatedElement += TargetSuccession ) ';'
+
+TargetSuccession : SuccessionAsUsage =
+    ownedRelationship += SourceEndMember 'then' ownedRelationship += ConnectorEndMember
+```
+
+`TargetSuccession` supplies its own `'then'`, so the literal reading of the second alternative is
+`then then S1;`. The corpus writes `entry; then off;`
+(`Validation/05-State-based Behavior/5-State-based Behavior-2.sysml`), and the pilot's Xtext uses
+`TransitionSuccession` (`EmptySourceEndMember ConnectorEndMember`, no `'then'`) at
+`org.omg.sysml.xtext/src/org/omg/sysml/xtext/SysML.xtext:1798`.
+
+Confirmed against both independent sources of the grammar — the `.kebnf` and the OMG specification
+(SysML 2.0 §8.2.2.18.1 State Definitions, §8.2.2.17.8 Action Successions) — so this is a genuine
+specification defect, not a transcription slip.
+
+The model cannot discriminate the two productions: both are a `SuccessionAsUsage` with two
+`EndFeatureMembership`s, and the multiplicity present on the source end is added by the pilot's
+transform to *both* ends. **Deviation:** `BuildEntryTransitionMemberHandCoded` suppresses the rule's
+own `'then'` and lets `TargetSuccession` supply it. The structure the KEBNF specifies is still
+honoured; only the redundant keyword is dropped.
+
+### #124 item 7 — `end` prefix on non-reference usages (deviation accepted, not implemented)
+
+`DefaultReferenceUsage` has no `EndUsagePrefix`, so `end ref hitch` / `end port p1: P;` are
+unreachable, yet appear in the corpus (`03-Function-based Behavior/3c-…-1`, `3c-…-2`). The writer
+emits the pilot's form; the difference is recorded as an accepted deviation for those files.
+
+### Items expected to affect folders not yet validated
+
+Not yet investigated — listed so the cause is recognised on first encounter rather than
+re-diagnosed:
+
+| item | production | folder likely affected |
+|---|---|---|
+| #1 | `AllocationDefinition` missing from `DefinitionElement` | 12-Dependency Relationships |
+| #3 | `MetadataUsage` not wired into any dispatch point | 14-Language Extensions |
+| #9 | `SatisfyRequirementUsage` requires `assert` | 08-Requirements |
+| #10 | `CaseBodyItem` admits no `ReturnParameterMember` | 10-Analysis and Trades |
+| #11 | `EnumeratedValue` cannot carry prefix metadata (`#Security enum secret`) | 13-Model Containment, 14-Language Extensions |
+
+Items #2, #4, #5, #6 concern productions with no corpus coverage.
+
+## Model ↔ notation reconciliations (NOT divergences)
+
+Cases where the grammar offers two conformant productions for one model, so the writer must choose.
+Nothing here deviates from the specification — unlike the divergences above.
+
+### `TargetTransitionUsage` — the implied transition source
+
+```
+StateBodyItem : Type = …
+    | ( ownedRelationship += SourceSuccessionMember )?
+      ownedRelationship += BehaviorUsageMember
+      ( ownedRelationship += TargetTransitionUsageMember )*     ← shorthand
+    | ownedRelationship += TransitionUsageMember                ← explicit
+```
+
+`state off; accept X then Y;` and `transition off accept X then Y;` are **both normative** and produce
+the *same* model: the pilot resolves the shorthand at parse time and stores the source explicitly as a
+`FeatureChainMember` (a non-owning `Membership` cross-referencing the state). The shorthand-ness is
+therefore not recoverable, and `TargetTransitionUsage` has **no notation for the source at all**.
+
+The writer prefers the shorthand (matching the corpus) only when all three hold, each required for
+correctness rather than style:
+
+- the transition is **anonymous** — `TargetTransitionUsage` has no `UsageDeclaration` slot, so a named
+  transition would silently lose its name (this is what keeps `5-…-1` / `5-…-1a` on the explicit form);
+- its source **is** the anchor feature of the preceding `BehaviorUsageMember` — otherwise the shorthand
+  re-parses against that state and denotes a different element;
+- it is positioned in the `( … )*` run following that member.
+
+Consequence, in `TypeTextualNotationBuilder.EmitTargetTransitionRun`: the transition's own
+`ownedRelationship` cursor is advanced once **past the source with no emission**. That is a deliberate
+exception to the `Move()` ↔ `+=` Golden Rule, valid because the elected production has no notation for
+that element. It is conditional — it only runs after `QueryImpliedSourceTransition` has confirmed
+position 0 is the source membership — so it cannot consume a real element.

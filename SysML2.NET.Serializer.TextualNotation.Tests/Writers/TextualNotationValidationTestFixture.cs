@@ -50,6 +50,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("03-Function-based Behavior", "3d-Function-based Behavior-item.sysmlx")]
         [TestCase("03-Function-based Behavior", "3e-Function-based Behavior-item.sysmlx")]
         [TestCase("04-Functional Allocation", "4a-Functional Allocation.sysmlx")]
+        [TestCase("05-State-based Behavior", "5-State-based Behavior-1a.sysmlx")]
+        [TestCase("05-State-based Behavior", "5-State-based Behavior-1.sysmlx")]
+        [TestCase("05-State-based Behavior", "5-State-based Behavior-2.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

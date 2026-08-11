@@ -30,6 +30,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
     using uml4net.Extensions;
+    using uml4net.SimpleClassifiers;
     using uml4net.StructuredClassifiers;
 
     /// <summary>
@@ -266,7 +267,51 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             var targetClass = RuleQueryUtilities.FindClass(umlClass.Cache, typeTarget);
-            return targetClass?.QueryFullyQualifiedTypeName();
+            var targetTypeName = targetClass?.QueryFullyQualifiedTypeName();
+
+            if (targetTypeName == null)
+            {
+                return null;
+            }
+
+            // A rule may PIN a property to a constant through a non-parsing assignment, e.g.
+            // `GuardExpressionMember : TransitionFeatureMembership = 'if' { kind = 'guard' } …`.
+            // Sibling rules then share one target type and are distinguishable ONLY by that constant,
+            // so it has to be part of the guard or the first sibling swallows them all.
+            var pinnedConstantPattern = ResolvePinnedConstantPattern(referencedRule, targetClass);
+
+            return pinnedConstantPattern == null ? targetTypeName : $"{targetTypeName} {pinnedConstantPattern}";
+        }
+
+        /// <summary>
+        /// Builds a C# property pattern for a constant a rule pins via a non-parsing assignment
+        /// (<c>{ kind = 'guard' }</c>), used to tell apart sibling rules that share a target type.
+        /// </summary>
+        /// <param name="referencedRule">The rule whose pinned constant is sought.</param>
+        /// <param name="targetClass">The rule's target <see cref="IClass" />.</param>
+        /// <returns>The property pattern, or <see langword="null" /> when nothing enum-typed is pinned.</returns>
+        private static string ResolvePinnedConstantPattern(TextualNotationRule referencedRule, IClass targetClass)
+        {
+            var pinnedAssignment = referencedRule.Alternatives
+                .SelectMany(alternative => alternative.Elements)
+                .OfType<NonParsingAssignmentElement>()
+                .FirstOrDefault(assignment => assignment.Operator == "=" && !string.IsNullOrWhiteSpace(assignment.Value));
+
+            if (pinnedAssignment == null)
+            {
+                return null;
+            }
+
+            var property = targetClass.QueryAllProperties()
+                .FirstOrDefault(x => string.Equals(x.Name, pinnedAssignment.PropertyName, StringComparison.OrdinalIgnoreCase));
+
+            if (property?.Type is not IEnumeration)
+            {
+                return null;
+            }
+
+            var literalName = pinnedAssignment.Value.Trim('\'').CapitalizeFirstLetter();
+            return $"{{ {property.Name.CapitalizeFirstLetter()}: {property.Type.QueryFullyQualifiedTypeName()}.{literalName} }}";
         }
 
         /// <summary>
@@ -447,7 +492,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
-                    if (inlineConditionParts.Count > 0)
+                    var optionalCollectionCondition = TryResolveOptionalCollectionGroupCondition(umlClass, elements, ruleGenerationContext);
+
+                    if (optionalCollectionCondition != null)
+                    {
+                        writer.WriteSafeString($"{Environment.NewLine}if ({optionalCollectionCondition}){Environment.NewLine}");
+                    }
+                    else if (inlineConditionParts.Count > 0)
                     {
                         writer.WriteSafeString($"{Environment.NewLine}if ({string.Join(" || ", inlineConditionParts)}){Environment.NewLine}");
                     }
@@ -472,6 +523,54 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 this.EmitElements(writer, umlClass, elements, ruleGenerationContext, restoreCallerPerElement: true, isPartOfMultipleAlternative);
             }
+        }
+
+        /// <summary>
+        /// Resolves the guard for an optional group whose only variable content is a <c>*</c>-quantified
+        /// bare non-terminal — e.g. <c>( '{' ActionBodyItem* '}' )?</c>. Such a group must be emitted only
+        /// when its loop would iterate at least once: the group's own terminals carry no information, so a
+        /// property-based condition wrongly emits an empty <c>{ }</c> whenever any unrelated property is set.
+        /// </summary>
+        /// <param name="umlClass">The related <see cref="IClass" /></param>
+        /// <param name="elements">The optional group's elements</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns>The cursor-based condition, or <see langword="null" /> when the group is not that shape.</returns>
+        private static string TryResolveOptionalCollectionGroupCondition(IClass umlClass, List<RuleElement> elements, RuleGenerationContext ruleGenerationContext)
+        {
+            var nonTerminals = elements.OfType<NonTerminalElement>().ToList();
+
+            if (nonTerminals.Count != 1 || !nonTerminals[0].IsCollection || elements.Any(element => element is AssignmentElement or GroupElement))
+            {
+                return null;
+            }
+
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminals[0].Name);
+            var collectionPropertyNames = referencedRule?.QueryCollectionPropertyNames(ruleGenerationContext.AllRules);
+
+            if (collectionPropertyNames?.Count != 1)
+            {
+                return null;
+            }
+
+            var targetProperty = umlClass.QueryAllProperties().SingleOrDefault(x => string.Equals(x.Name, collectionPropertyNames.Single(), StringComparison.OrdinalIgnoreCase));
+
+            if (targetProperty == null || !targetProperty.QueryIsEnumerable())
+            {
+                return null;
+            }
+
+            // The cursor is declared up-front by DeclareAllRequiredCursors; if it is absent this is not the
+            // shape we handle, so fall back rather than emit a second declaration.
+            var existingCursor = ruleGenerationContext.DefinedCursors.SingleOrDefault(x => x.IsCursorValidForProperty(targetProperty));
+
+            if (existingCursor == null)
+            {
+                return null;
+            }
+
+            return IsGuardedBodyItemRule(nonTerminals[0].Name)
+                ? $"{existingCursor.CursorVariableName}.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship optionalBodyCandidate && optionalBodyCandidate.IsValidFor{nonTerminals[0].Name}(writerContext)"
+                : $"{existingCursor.CursorVariableName}.Current != null";
         }
 
         /// <summary>
@@ -1414,7 +1513,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         private static bool IsGuardedBodyItemRule(string bodyItemRuleName)
         {
             return string.Equals(bodyItemRuleName, "DefinitionBodyItem", StringComparison.Ordinal)
-                || string.Equals(bodyItemRuleName, "InterfaceBodyItem", StringComparison.Ordinal);
+                || string.Equals(bodyItemRuleName, "InterfaceBodyItem", StringComparison.Ordinal)
+                || string.Equals(bodyItemRuleName, "ActionBodyItem", StringComparison.Ordinal);
         }
     }
 }

@@ -30,9 +30,10 @@ namespace SySML2.NET.REST.Tests
     using NUnit.Framework;
 
     /// <summary>
-    /// Suite of tests for the <see cref="RestClient"/> class
+    /// Suite of tests for the <see cref="RestClient"/> class.
     /// </summary>
     [TestFixture]
+    [Category("Integration")]
     public class RestClientTestFixture
     {
         private string baseUri;

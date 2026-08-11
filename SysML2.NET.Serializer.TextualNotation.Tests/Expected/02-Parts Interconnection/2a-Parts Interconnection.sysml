@@ -131,6 +131,7 @@ package '2a-Parts Interconnection' {
                 /*
                  * The two rear wheels of 'rearAxleAssembly' must be given
                  * their own names in order to be referenced in connections.
+                 *
                  * (":>" is a shorthand here for "subsets".)
                  */
                 part leftWheel :> rearWheel = rearWheel#(1) {

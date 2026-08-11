@@ -231,7 +231,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Trigger })
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -259,7 +259,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard })
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -276,7 +276,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Effect } && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
             {
 
                 if (ownedRelationshipCursor.Current != null)
