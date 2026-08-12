@@ -42,7 +42,8 @@
 15. [Wat de service-laag het schema nog verschuldigd is](#15-wat-de-service-laag-het-schema-nog-verschuldigd-is)
 16. [Uitgewerkte voorbeelden — data volgen door het schema](#16-uitgewerkte-voorbeelden--data-volgen-door-het-schema)
 17. [Codegeneratie: wat uit het UML-model wordt gegenereerd en hoe](#17-codegeneratie-wat-uit-het-uml-model-wordt-gegenereerd-en-hoe)
-18. [Begrippenlijst](#18-begrippenlijst)
+18. [Multi-user en concurrency](#18-multi-user-en-concurrency)
+19. [Begrippenlijst](#19-begrippenlijst)
 
 ---
 
@@ -1470,7 +1471,128 @@ zowel het golden als het gegenereerde schema moet identiek slagen.
 
 ---
 
-## 18. Begrippenlijst
+## 18. Multi-user en concurrency
+
+De korte versie: **het schema is bewust concurrency-vriendelijk voor readers, trechtert alle
+writer-contentie naar exact één rij per branch, en delegeert vijf echte
+multi-user-verantwoordelijkheden aan de service-laag.** Deze sectie maakt elk van die
+uitspraken precies — inclusief het ene protocol dat door het schema *vereist maar niet
+afgedwongen* wordt.
+
+### 18.1 Wat het ontwerp per constructie oplost
+
+**Append-only is de concurrency-strategie, niet alleen de versioneringsstrategie.**
+`element_version`, `derived_version`, `commit`, `commit_parent` en `commit_checkpoint` worden
+in normale operatie nooit ge-UPDATE't of ge-DELETE'd. Onder PostgreSQL's MVCC heeft dat een
+sterk gevolg: readers blokkeren nooit writers, writers blokkeren nooit readers, en twee
+writers kunnen alleen conflicteren waar ze *dezelfde rij* schrijven — en immutable rijen zijn
+nooit dezelfde rij. Een gebruiker die een model op commit C leest, leest data die *niet kan
+veranderen*: zijn beeld is perfect herhaalbaar zonder locks, onbeperkt cachebaar, en
+consistent ook als een collega midden in de read commit.
+
+**Alle mutabele state is bewust in twee plekken samengeperst:** `branch.head_commit_id`
+(+ `base_commit_id`) en de `branch_head`-overlay-rijen van die branch. Al het andere dat een
+commit schrijft is een pure insert. Het *complete* write-conflictoppervlak van een project is
+daarmee **één `branch`-rij per branch**. Committers op *verschillende* branches raken
+disjuncte mutabele rijen en kunnen helemaal niet conflicteren; committers op *dezelfde* branch
+conflicteren op exact één rij — en dat is correct, want een branch is per definitie een
+seriële historie. De databasecontentie spiegelt de domeinsemantiek.
+
+**Single-statement reads zijn per constructie scheurvrij.** De leesfuncties van §10 joinen
+`branch → overlay → checkpoint` in *één* SQL-statement, en één statement onder READ COMMITTED
+ziet één consistente snapshot — een reader kan nooit "nieuwe base-pointer + oude overlay"
+halverwege een compaction waarnemen. Deze eigenschap is dragend: als de service die read ooit
+opsplitst in twee round-trips (branch-rij ophalen, dan de overlay bevragen), verliest ze de
+garantie stilletjes. Houd zulke reads in één statement, of draai ze onder REPEATABLE READ.
+
+**Checkpoint-opbouw coëxisteert met alles.** `build_commit_checkpoint()` leest alleen
+immutable historie op een vaste commit en schrijft met `ON CONFLICT DO NOTHING`: twee workers
+die hetzelfde checkpoint bouwen verspillen hooguit wat werk; een checkpoint dat wordt gebouwd
+terwijl gebruikers committen ziet een bevroren verleden dat nieuwe commits niet kunnen
+veranderen. Daarom kan de cadence-policy volledig asynchroon draaien, zonder coördinatie.
+
+**Gewoon READ COMMITTED volstaat — nergens is SERIALIZABLE nodig.** Dat is een directe
+opbrengst van append-only + de één-mutabele-rij-trechter, en het beschermen waard wanneer de
+service wordt gebouwd.
+
+### 18.2 Het vereiste commit-protocol (normatief voor de service-laag)
+
+**Gelijktijdige commits op dezelfde branch zijn een lost-update-bug, tenzij de service
+compare-and-swap op de head gebruikt.** Het faalscenario: gebruikers A en B lezen beiden
+`head = c5`, bouwen beiden commits met parent c5, schrijven beiden; de head verschuift twee
+keer en de commit van één gebruiker wordt onbereikbaar vanaf de branch — stilletjes. Het
+schema kan dit niet voorkomen, want "de parent waartegen ik heb gebouwd" is applicatiestate.
+Het protocol (het Git-model; de OMG-`createCommit` die `previousCommit` meekrijgt impliceert
+precies dit):
+
+```sql
+BEGIN;
+-- Optie A (optimistisch, aanbevolen): CAS op de head
+UPDATE sysml2.branch
+   SET head_commit_id = :new_commit
+ WHERE id = :branch AND head_commit_id = :expected_parent;
+-- rowcount 0  =>  iemand anders was eerst: ROLLBACK, geef 409, client rebased
+
+-- Optie B (pessimistisch): SELECT ... FOR UPDATE op de branch-rij aan het begin
+-- van de transactie, waarmee committers per branch worden geserialiseerd.
+-- Eenvoudiger; blokkeert in plaats van te falen.
+
+-- daarna, allemaal conflictvrije pure inserts:
+--   commit + commit_parent (de trigger valideert monotonie),
+--   element_version + subtype- + link-rijen + stored_json,
+--   derived_version-rijen (de impact radius),
+--   branch_head-overlay-upserts.
+COMMIT;
+```
+
+De branch-rij **eerst** aanraken geeft elke writer bovendien dezelfde lock-volgorde —
+deadlockpreventie gratis erbij. **Compaction (§10.2) moet dezelfde branch-lock nemen**: het
+verzetten van `base_commit_id` en het legen van de overlay, verweven met de overlay-upserts
+van een commit, zou de overlay divergentie ten opzichte van de verkeerde base laten
+beschrijven.
+
+### 18.3 Nadelen en open beslissingen
+
+1. **Het derived-compute-venster rekt de kritieke sectie op.** Derived values moeten worden
+   berekend tegen exact de parent-snapshot. Binnen de branch-lock is dat triviaal correct —
+   maar een root-namespace-hernoeming berekent ~1M waarden, houdt de lock minutenlang vast en
+   laat elke committer op die branch wachten. Het betere patroon is optimistisch: bereken
+   *vóór* het locken, doe de CAS, en herbereken bij falen het (meestal kleine) verschil en
+   probeer opnieuw. Meer code, en de plek waar de subtiele bugs zullen leven. Cross-branch is
+   er geen probleem: derived-rijen zijn gesleuteld op `(identity, commit)`, en verschillende
+   branches produceren verschillende commits.
+2. **Pagineren op HEAD is een multi-user-val.** Als pagina 1 wordt geserveerd op head = c5 en
+   een collega commit vóór pagina 2, geeft "lees de head opnieuw" een gescheurde collectie
+   terug. Los branch → commit één keer op, stop het `commitId` in het page token, en pagineer
+   tegen de immutable commit. Het schema ondersteunt dit perfect — daar zijn commits *voor* —
+   maar de service moet het ook echt doen.
+3. **De kale-uuid-PK van `data_identity` maakt `@id`s instantie-globaal, niet
+   project-gebonden** — de bewuste prijs voor FK-bare cross-project-references (§7). Gevolg:
+   twee projecten kunnen geen element met hetzelfde `@id` bevatten. Een non-issue voor random
+   v4-ids; reëel voor *door de client aangeleverde* ids (kpar-imports, cross-project-klonen,
+   deterministische v5-ids) — de tweede insert faalt met een PK-schending. De service moet bij
+   klonen over projectgrenzen verse `@id`s munten en de schending vertalen naar een duidelijke
+   409 Conflict.
+4. **De monotonie-trigger kan legitieme snelle commits afwijzen.** `created` moet *strikt*
+   nieuwer zijn dan elke parent; twee commits binnen dezelfde microseconde op één lijn
+   (burst-automatisering) worden afgewezen — luid, by design — dus de service heeft een
+   herstempel-en-retry nodig, en deployments met meerdere app-servers laten `created` bij
+   voorkeur door de database toekennen (de `DEFAULT now()`) in plaats van scheve
+   applicatieklokken te vertrouwen.
+5. **Geen row-level security.** Tenant-isolatie (wie project X mag zien) is vandaag volledig
+   service-zijdig — een beslissing, geen omissie. PostgreSQL-RLS op `project_id` composeert
+   netjes met dit schema (elke elementtabel draagt de kolom) en is de natuurlijke
+   verhardingsstap als de database ooit aan minder vertrouwde componenten wordt blootgesteld.
+6. **Kleine lettertjes.** `UNIQUE (project_id, name)` maakt van gelijktijdige aanmaak van een
+   gelijknamige branch een constraint-schending (vertaal naar 409, prima).
+   GIN-pending-list-flushes op `derived_version` kunnen gelijktijdige derived-zware commits op
+   een gedeelde partitie kort serialiseren (auditbevinding R5). `fillfactor = 90` op
+   `branch_head` bestaat precies om de per-commit-overlay-churn van veel gelijktijdig actieve
+   branches op te vangen zonder index-bloat.
+
+---
+
+## 19. Begrippenlijst
 
 | Begrip | Betekenis hier |
 |---|---|

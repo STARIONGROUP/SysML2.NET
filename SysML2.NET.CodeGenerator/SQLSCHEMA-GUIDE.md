@@ -39,7 +39,8 @@
 15. [What the service layer still owes the schema](#15-what-the-service-layer-still-owes-the-schema)
 16. [Worked examples — following data through the schema](#16-worked-examples--following-data-through-the-schema)
 17. [Code generation: what is emitted from the UML model and how](#17-code-generation-what-is-emitted-from-the-uml-model-and-how)
-18. [Glossary](#18-glossary)
+18. [Multi-user and concurrency](#18-multi-user-and-concurrency)
+19. [Glossary](#19-glossary)
 
 ---
 
@@ -1412,7 +1413,120 @@ and the generated schema must pass identically.
 
 ---
 
-## 18. Glossary
+## 18. Multi-user and concurrency
+
+The short version: **the schema is deliberately concurrency-friendly for readers, funnels all
+writer contention into exactly one row per branch, and delegates five real multi-user
+responsibilities to the service layer.** This section makes each of those statements precise —
+including the one protocol that is *required but not enforced* by the schema.
+
+### 18.1 What the design solves by construction
+
+**Append-only is the concurrency strategy, not just the versioning strategy.**
+`element_version`, `derived_version`, `commit`, `commit_parent`, and `commit_checkpoint` are
+never UPDATEd or DELETEd in normal operation. Under PostgreSQL's MVCC that has a strong
+consequence: readers never block writers, writers never block readers, and two writers can
+only conflict where they write the *same row* — and immutable rows are never the same row. A
+user reading a model at commit C reads data that *cannot change*: their view is perfectly
+repeatable without locks, indefinitely cacheable, and consistent even if a colleague commits
+mid-read.
+
+**All mutable state was squeezed into two places on purpose:** `branch.head_commit_id`
+(+ `base_commit_id`) and the `branch_head` overlay rows of that branch. Everything else a
+commit writes is a pure insert. The *entire* write-conflict surface of a project is therefore
+**one `branch` row per branch**. Committers on *different* branches touch disjoint mutable
+rows and cannot conflict at all; committers on the *same* branch conflict on exactly one row —
+which is correct, because a branch is by definition a serial history. The database contention
+mirrors the domain semantics.
+
+**Single-statement reads are tear-proof by construction.** The read functions of §10 join
+`branch → overlay → checkpoint` in *one* SQL statement, and one statement in READ COMMITTED
+sees one consistent snapshot — a reader can never observe "new base pointer + old overlay"
+halfway through a compaction. This property is load-bearing: if the service ever splits that
+read into two round-trips (fetch the branch row, then query the overlay), it silently loses
+the guarantee. Keep such reads in one statement, or run them under REPEATABLE READ.
+
+**Checkpoint building coexists with everything.** `build_commit_checkpoint()` reads only
+immutable history at a fixed commit and writes with `ON CONFLICT DO NOTHING`: two workers
+building the same checkpoint merely waste some work; a checkpoint building while users commit
+sees a frozen past that new commits cannot alter. This is why the cadence policy can run fully
+asynchronously without coordination.
+
+**Plain READ COMMITTED is sufficient — nowhere is SERIALIZABLE needed.** That is a direct
+payoff of append-only + the single-mutable-row funnel, and worth protecting when the service
+is built.
+
+### 18.2 The required commit protocol (normative for the service layer)
+
+**Concurrent commits to the same branch are a lost-update bug unless the service uses
+compare-and-swap on the head.** The failure: users A and B both read `head = c5`, both build
+commits with parent c5, both write; the head moves twice and one user's commit becomes
+unreachable from the branch — silently. The schema cannot prevent this, because "the parent I
+built against" is application state. The protocol (the Git model; the OMG `createCommit`
+taking `previousCommit` implies exactly this):
+
+```sql
+BEGIN;
+-- Option A (optimistic, recommended): CAS on the head
+UPDATE sysml2.branch
+   SET head_commit_id = :new_commit
+ WHERE id = :branch AND head_commit_id = :expected_parent;
+-- rowcount 0  =>  someone committed first: ROLLBACK, return 409, client rebases
+
+-- Option B (pessimistic): SELECT ... FOR UPDATE on the branch row at transaction
+-- start, serializing committers per branch. Simpler; blocks instead of failing.
+
+-- then, all conflict-free pure inserts:
+--   commit + commit_parent (trigger validates monotonicity),
+--   element_version + subtype + link rows + stored_json,
+--   derived_version rows (the impact radius),
+--   branch_head overlay upserts.
+COMMIT;
+```
+
+Touching the branch row **first** also gives every writer the same lock ordering — deadlock
+prevention for free. **Compaction (§10.2) must take the same branch lock**: repointing
+`base_commit_id` and clearing the overlay interleaved with a commit's overlay upserts would
+leave the overlay describing divergence from the wrong base.
+
+### 18.3 Drawbacks and open decisions
+
+1. **The derived-compute window stretches the critical section.** Derived values must be
+   computed against the exact parent snapshot. Inside the branch lock that is trivially
+   correct — but a root-namespace rename computes ~1M values, holding the lock for minutes and
+   stalling every committer on that branch. The better pattern is optimistic: compute *before*
+   locking, CAS, and on failure recompute the (usually tiny) difference and retry. More code,
+   and where the subtle bugs will live. Cross-branch there is no issue: derived rows are keyed
+   `(identity, commit)`, and different branches produce different commits.
+2. **Pagination at HEAD is a multi-user trap.** If page 1 is served at head = c5 and a
+   colleague commits before page 2, "read the head again" returns a torn collection. Resolve
+   branch → commit once, embed the `commitId` in the page token, paginate against the
+   immutable commit. The schema supports this perfectly — that is what commits are *for* — but
+   the service must actually do it.
+3. **`data_identity`'s bare-uuid PK makes `@id`s instance-global, not project-scoped** — the
+   deliberate price for FK-able cross-project references (§7). Consequence: two projects
+   cannot contain an element with the same `@id`. Non-event for random v4 ids; real for
+   *client-supplied* ids (kpar imports, cross-project cloning, deterministic v5 ids) — the
+   second insert fails with a PK violation. The service must mint fresh `@id`s when cloning
+   across projects and map the violation to a clear 409 Conflict.
+4. **The monotonicity trigger can reject legitimate rapid commits.** `created` must be
+   *strictly* newer than every parent; two commits within the same microsecond on one lineage
+   (burst automation) are rejected — loudly, by design — so the service needs a
+   re-stamp-and-retry, and multi-app-server deployments should let the database assign
+   `created` (the `DEFAULT now()`) rather than trusting skewed application clocks.
+5. **No row-level security.** Tenant isolation (who may see project X) is entirely
+   service-side today — by decision, not omission. PostgreSQL RLS on `project_id` composes
+   cleanly with this schema (every element table carries the column) and is the natural
+   hardening step if the database is ever exposed to less-trusted components.
+6. **Small print.** `UNIQUE (project_id, name)` turns concurrent same-name branch creation
+   into a constraint violation (map to 409, fine). GIN pending-list flushes on
+   `derived_version` can briefly serialize concurrent derived-heavy commits on a shared
+   partition (audit finding R5). `fillfactor = 90` on `branch_head` exists precisely to absorb
+   per-commit overlay churn from many concurrently active branches without index bloat.
+
+---
+
+## 19. Glossary
 
 | Term | Meaning here |
 |---|---|

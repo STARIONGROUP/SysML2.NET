@@ -3,7 +3,12 @@
 This document is the compact design reference for the SQL schema code-generation pipeline.
 For the long-form architectural guide — the full reasoning chain behind every table, function,
 and index, with worked examples and the performance war stories — see
-`SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.md`.
+`SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.md` (Dutch translation:
+`SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.nl.md`). Guide section map: §1–§5 problem, census
+and rejected alternatives; §6–§13 layer-by-layer walkthrough; §14 performance audit; §15
+service-layer obligations; §16 worked examples; §17 code generation; **§18 multi-user and
+concurrency — including the NORMATIVE compare-and-swap commit protocol (§18.2) that every
+service implementation must follow**; §19 glossary.
 
 The pipeline artifacts:
 
@@ -11,7 +16,7 @@ The pipeline artifacts:
 |---|---|
 | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Hand-written, annotated reference design. Carries the rationale comments. |
 | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | The actual generator output, checked in for review. Supersedes the golden's `[GENERATED]` excerpts. |
-| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 11 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
+| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 19 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
 | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | Handlebars template: hand-written sections verbatim, `[GENERATED]` sections via helpers. |
 | `SysML2.NET.CodeGenerator/HandleBarHelpers/SqlSchemaHelpers.cs` | The nine `uml_template.SQL2.*` helpers. |
 | `SysML2.NET.CodeGenerator/Extensions/SqlSchemaExtensions.cs` | Naming, type mapping, and the stored-property census logic. |
@@ -179,7 +184,7 @@ Deliberately NOT DTO properties: `Commit.versionedData` (derived, unbounded — 
 dotnet test SysML2.NET.CodeGenerator.Tests/SysML2.NET.CodeGenerator.Tests.csproj \
     --filter "FullyQualifiedName~SQLSchemaGeneratorTestFixture"
 
-# install + functional smoke (11 assertions) against a real PostgreSQL 17
+# install + functional smoke (19 assertions) against a real PostgreSQL 17
 docker run -d --name sysml2pg -e POSTGRES_PASSWORD=pg postgres:17 -c max_locks_per_transaction=4096
 docker cp <schema file> sysml2pg:/tmp/schema.sql
 docker cp SysML2.NET.CodeGenerator/Sql/schema.smoke.sql sysml2pg:/tmp/smoke.sql
@@ -192,6 +197,10 @@ GENERATED schema — whose catalog is pre-filled — drop the smoke file's `clas
 replace the hard-coded kind ids with `(SELECT id FROM sysml2.class_kind WHERE name = '…')`.
 
 The smoke test's load-bearing assertions: a Package rename changes the child's derived
-`qualifiedName` while the child still resolves to its ORIGINAL version row (2a/2b — the reason
-derived state is a second stream), and a two-parent merge commit resolves to the merge's own
-conflict resolution while elements deleted on non-ancestor branches stay alive (8a–8c).
+`qualifiedName` while the child still resolves to its ORIGINAL version row (PASS 2a/2b — the
+reason derived state is a second stream); a two-parent merge commit resolves to the merge's
+own conflict resolution while elements deleted on non-ancestor branches stay alive (PASS
+8a–8c); the branch_head overlay life cycle — O(1) branch creation at a checkpoint,
+read-through to the base, tombstone masking, and overlay-only deletion (PASS 9a–9f); and
+deterministic fold resolution on sibling-commit timestamp ties, through both resolvers
+(PASS 10a/10b).
