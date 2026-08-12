@@ -159,9 +159,17 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug("the resourceIdentifier Json property was not found in the Tag: {Id}", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("taggedCommit"u8, out JsonElement taggedCommitProperty))
+            if (jsonElement.TryGetProperty("deleted"u8, out JsonElement deletedProperty) && deletedProperty.ValueKind != JsonValueKind.Null)
             {
-                if (taggedCommitProperty.TryGetProperty("@id"u8, out JsonElement taggedCommitPropertyIdProperty))
+                dtoInstance.Deleted = deletedProperty.GetDateTime();
+            }
+
+            // taggedCommit redefines referencedCommit; accept either wire name, taggedCommit taking precedence
+            if (jsonElement.TryGetProperty("taggedCommit"u8, out JsonElement taggedCommitProperty)
+                || jsonElement.TryGetProperty("referencedCommit"u8, out taggedCommitProperty))
+            {
+                if (taggedCommitProperty.ValueKind != JsonValueKind.Null
+                    && taggedCommitProperty.TryGetProperty("@id"u8, out JsonElement taggedCommitPropertyIdProperty))
                 {
                     var propertyValue = taggedCommitPropertyIdProperty.GetString();
                     if (propertyValue != null)

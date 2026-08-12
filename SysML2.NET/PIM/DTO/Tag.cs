@@ -30,8 +30,13 @@ namespace SysML2.NET.PIM.DTO
     public class Tag : CommitReference
     {
         /// <summary>
-        /// Gets or sets a reference to the tagged <see cref="Commit"/>
+        /// Gets or sets a reference to the tagged <see cref="Commit"/>. Redefines
+        /// <see cref="CommitReference.ReferencedCommit"/> — both properties expose the same underlying value.
         /// </summary>
-        public Guid TaggedCommit { get; set; }
+        public Guid TaggedCommit
+        {
+            get => this.ReferencedCommit;
+            set => this.ReferencedCommit = value;
+        }
     }
 }

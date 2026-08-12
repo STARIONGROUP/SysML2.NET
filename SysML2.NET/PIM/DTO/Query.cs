@@ -52,5 +52,11 @@ namespace SysML2.NET.PIM.DTO
         /// Query is the owning Project
         /// </summary>
         public List<Guid> Scope { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets the list of properties of Data (or its realizations) used for sorting the query
+        /// response. The order of the properties in the list governs the sorting order.
+        /// </summary>
+        public List<string> OrderBy { get; set; } = [];
     }
 }

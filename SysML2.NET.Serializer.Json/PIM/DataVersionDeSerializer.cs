@@ -106,7 +106,22 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug("the name Json property was not found in the DataVersion: {Id}", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("identity"u8, out JsonElement identityObject))
+            if (jsonElement.TryGetProperty("commit"u8, out JsonElement commitProperty)
+                && commitProperty.ValueKind != JsonValueKind.Null
+                && commitProperty.TryGetProperty("@id"u8, out JsonElement commitIdProperty))
+            {
+                var propertyValue = commitIdProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Commit = Guid.Parse(propertyValue);
+                }
+            }
+            else
+            {
+                logger.LogDebug("the commit Json property was not found in the DataVersion: {Id}", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("identity"u8, out JsonElement identityObject) && identityObject.ValueKind != JsonValueKind.Null)
             {
                 dtoInstance.Identity = DataIdentityDeSerializer.DeSerialize(identityObject, serializationModeKind, deserializeDerivedProperties, loggerFactory);
             }
@@ -115,7 +130,9 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug("the identity property was not found in the DataVersion: {Id}", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("payload"u8, out JsonElement payloadObject))
+            // a null payload is meaningful: it represents a deletion (OMG Systems Modeling API and
+            // Services v1.0, Clause 7.1.2) — the Payload property stays null
+            if (jsonElement.TryGetProperty("payload"u8, out JsonElement payloadObject) && payloadObject.ValueKind != JsonValueKind.Null)
             {
                 if (payloadObject.TryGetProperty("@type"u8, out var typeElement))
                 {

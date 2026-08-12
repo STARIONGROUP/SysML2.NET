@@ -32,6 +32,19 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing all versions of the given <see cref="DataIdentity"/>
         /// </summary>
-        public List<DataVersion> Version = new List<DataVersion>();
+        public List<DataVersion> Version { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets the derived reference to the <see cref="Commit"/> in a <see cref="Project"/> in
+        /// which the identified data was created, or null when not computed
+        /// </summary>
+        public Commit CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the derived reference to the <see cref="Commit"/> in a <see cref="Project"/> in
+        /// which the identified data was deleted, or null when the data is not deleted or the value is
+        /// not computed
+        /// </summary>
+        public Commit DeletedAt { get; set; }
     }
 }

@@ -75,9 +75,26 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteString("@id"u8, commit.OwningProject);
                     writer.WriteEndObject();
                     writer.WriteString("resourceIdentifier"u8, commit.ResourceIdentifier);
-                    writer.WriteStartObject("previousCommit"u8);
-                    writer.WriteString("@id"u8, commit.PreviousCommit);
-                    writer.WriteEndObject();
+
+                    writer.WriteStartArray("previousCommit"u8);
+
+                    foreach (var previousCommit in commit.PreviousCommit)
+                    {
+                        writer.WriteStartObject();
+                        writer.WriteString("@id"u8, previousCommit);
+                        writer.WriteEndObject();
+                    }
+
+                    writer.WriteEndArray();
+
+                    writer.WriteStartArray("change"u8);
+
+                    foreach (var dataVersion in commit.Change)
+                    {
+                        DataVersionSerializer.Serialize(dataVersion, writer, serializationModeKind, includeDerivedProperties);
+                    }
+
+                    writer.WriteEndArray();
                     writer.WriteEndObject();
                         
                     break;

@@ -182,7 +182,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
-                Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
+                Assert.That(firstCommit.PreviousCommit, Is.Empty);
                 Assert.That(firstCommit.Description, Is.Null);
                 Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00")));
             }
@@ -205,7 +205,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
-                Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
+                Assert.That(firstCommit.PreviousCommit, Is.Empty);
                 Assert.That(firstCommit.Description, Is.Null);
                 Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00")));
             }

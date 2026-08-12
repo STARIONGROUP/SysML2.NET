@@ -23,6 +23,7 @@ namespace SysML2.NET.Serializer.Json.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Text.Json;
     using System.Threading;
@@ -73,7 +74,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Created = new DateTime(1976, 8, 20),
                 Description = "",
                 OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
-                PreviousCommit = Guid.Empty,
+                PreviousCommit = [],
                 ResourceIdentifier = "http://www.stariongroup.eu/commit",
             };
 
@@ -124,6 +125,46 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
+        }
+
+        [Test]
+        public void Verify_that_merge_commit_with_change_set_can_be_roundtripped()
+        {
+            var firstParent = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var secondParent = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            List<Guid> expectedParents = [firstParent, secondParent];
+
+            this.commit.PreviousCommit = [firstParent, secondParent];
+
+            this.commit.Change =
+            [
+                new DataVersion
+                {
+                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                    Commit = this.commit.Id,
+                    Identity = new DataIdentity { Id = Guid.Parse("44444444-4444-4444-4444-444444444444") },
+                    Payload = null
+                }
+            ];
+
+            var stream = new MemoryStream();
+            this.serializer.Serialize(this.commit, SerializationModeKind.JSON, false, stream, new JsonWriterOptions());
+
+            stream.Position = 0;
+            var deSerializer = new DeSerializer();
+            var data = deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false).ToList();
+
+            var roundtrippedCommit = data.OfType<Commit>().Single();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(roundtrippedCommit.Id, Is.EqualTo(this.commit.Id));
+                Assert.That(roundtrippedCommit.PreviousCommit, Is.EqualTo(expectedParents));
+                Assert.That(roundtrippedCommit.Change, Has.Count.EqualTo(1));
+                Assert.That(roundtrippedCommit.Change[0].Identity.Id, Is.EqualTo(Guid.Parse("44444444-4444-4444-4444-444444444444")));
+                Assert.That(roundtrippedCommit.Change[0].Payload, Is.Null, "a null payload represents a deletion and must survive the round-trip");
+                Assert.That(roundtrippedCommit.Change[0].Commit, Is.EqualTo(this.commit.Id));
+            }
         }
 
         [Test]

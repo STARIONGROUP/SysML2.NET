@@ -52,8 +52,17 @@ namespace SysML2.NET.PIM.DTO
         public Guid OwningProject { get; set; }
 
         /// <summary>
-        /// Gets or sets the immediately preceding <see cref="Commit"/>s
+        /// Gets or sets the set of immediately preceding <see cref="Commit"/>s. A <see cref="Commit"/>
+        /// has more than one previous <see cref="Commit"/> when it merges branches; the order of the
+        /// entries is significant (first parent first).
         /// </summary>
-        public Guid PreviousCommit { get; set; }
+        public List<Guid> PreviousCommit { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets the set of <see cref="DataVersion"/> records representing data that is created,
+        /// updated, or deleted in the <see cref="Commit"/>. A deletion is represented by a
+        /// <see cref="DataVersion"/> whose <see cref="DataVersion.Payload"/> is null.
+        /// </summary>
+        public List<DataVersion> Change { get; set; } = [];
     }
 }

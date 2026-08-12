@@ -23,7 +23,7 @@ namespace SysML2.NET.Serializer.Json.ModelInterchange
     using System;
     using System.Buffers;
     using System.Text.Json;
-
+    using Extensions.ModelInterchange;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 

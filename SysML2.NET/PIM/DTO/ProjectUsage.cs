@@ -25,20 +25,16 @@ namespace SysML2.NET.PIM.DTO
     using SysML2.NET.Common;
 
     /// <summary>
-    /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
-    /// <see cref="Project"/>.
+    /// a subclass of <see cref="Record"/> and a realization of <see cref="IData"/> that represents the use
+    /// of a <see cref="Project"/> in the context of another <see cref="Project"/>. The constraint
+    /// usedProject = usedProjectCommit.owningProject applies.
     /// </summary>
-    public class ProjectUsage : IData
+    public class ProjectUsage : Record
     {
-        /// <summary>
-        /// Gets or sets the unique identifier
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
         /// </summary>
-        public Guid UsedCommit { get; set; }
+        public Guid UsedProjectCommit { get; set; }
 
         /// <summary>
         /// Gets or sets the reference to the <see cref="Project"/> of the <see cref="Project"/> being used.

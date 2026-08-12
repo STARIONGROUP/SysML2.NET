@@ -18,10 +18,11 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.ModelInterchange
+namespace SysML2.NET.Extensions.ModelInterchange
 {
     using System;
     using System.Buffers;
+    using NET.ModelInterchange;
 
     /// <summary>
     /// Provides high-performance parsing and serialization helpers

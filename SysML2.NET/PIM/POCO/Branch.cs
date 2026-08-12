@@ -29,8 +29,13 @@ namespace SysML2.NET.PIM.POCO
     {
         /// <summary>
         /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
-        /// <see cref="Project"/> on the given branch
+        /// <see cref="Project"/> on the given branch. Redefines <see cref="CommitReference.ReferencedCommit"/> —
+        /// both properties expose the same underlying value.
         /// </summary>
-        public Commit Head { get; set; }
+        public Commit Head
+        {
+            get => this.ReferencedCommit;
+            set => this.ReferencedCommit = value;
+        }
     }
 }

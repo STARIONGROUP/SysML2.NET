@@ -30,9 +30,14 @@ namespace SysML2.NET.PIM.POCO
     public class Tag : CommitReference
     {
         /// <summary>
-        /// Gets or sets a reference to the <see cref="Commit"/> which the Tag is pointing. It represents a 
-        /// <see cref="Commit"/>-of-interest in the owning <see cref="Project"/>.
+        /// Gets or sets a reference to the <see cref="Commit"/> which the Tag is pointing. It represents a
+        /// <see cref="Commit"/>-of-interest in the owning <see cref="Project"/>. Redefines
+        /// <see cref="CommitReference.ReferencedCommit"/> — both properties expose the same underlying value.
         /// </summary>
-        public Commit TaggedCommit { get; set; }
+        public Commit TaggedCommit
+        {
+            get => this.ReferencedCommit;
+            set => this.ReferencedCommit = value;
+        }
     }
 }

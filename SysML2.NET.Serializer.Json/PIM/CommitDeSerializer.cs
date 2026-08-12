@@ -139,25 +139,60 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             if (jsonElement.TryGetProperty("previousCommit"u8, out JsonElement previousCommitProperty))
             {
-                if (previousCommitProperty.ValueKind == JsonValueKind.Null)
+                switch (previousCommitProperty.ValueKind)
                 {
-                    dtoInstance.PreviousCommit = Guid.Empty;
-                }
-                else
-                {
-                    if (previousCommitProperty.TryGetProperty("@id"u8, out JsonElement previousCommitPropertyIdProperty))
-                    {
-                        var propertyValue = previousCommitPropertyIdProperty.GetString();
-                        if (propertyValue != null)
+                    case JsonValueKind.Null:
+                        break;
+                    case JsonValueKind.Array:
+
+                        foreach (var previousCommitItem in previousCommitProperty.EnumerateArray())
                         {
-                            dtoInstance.PreviousCommit = Guid.Parse(propertyValue);
+                            if (previousCommitItem.TryGetProperty("@id"u8, out JsonElement previousCommitItemIdProperty))
+                            {
+                                var propertyValue = previousCommitItemIdProperty.GetString();
+
+                                if (propertyValue != null)
+                                {
+                                    dtoInstance.PreviousCommit.Add(Guid.Parse(propertyValue));
+                                }
+                            }
                         }
+
+                        break;
+                    default:
+
+                        // the reference implementation emits a single { "@id": ... } object rather than an array
+                        if (previousCommitProperty.TryGetProperty("@id"u8, out JsonElement previousCommitPropertyIdProperty))
+                        {
+                            var propertyValue = previousCommitPropertyIdProperty.GetString();
+
+                            if (propertyValue != null)
+                            {
+                                dtoInstance.PreviousCommit.Add(Guid.Parse(propertyValue));
+                            }
+                        }
+
+                        break;
+                }
+            }
+            else
+            {
+                logger.LogDebug("the previousCommit Json property was not found in the Commit: {Id}", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("change"u8, out JsonElement changeProperty))
+            {
+                if (changeProperty.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var changeItem in changeProperty.EnumerateArray())
+                    {
+                        dtoInstance.Change.Add(DataVersionDeSerializer.DeSerialize(changeItem, serializationModeKind, deserializeDerivedProperties, loggerFactory));
                     }
                 }
             }
             else
             {
-                logger.LogDebug("the owningProject Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                logger.LogDebug("the change Json property was not found in the Commit: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))

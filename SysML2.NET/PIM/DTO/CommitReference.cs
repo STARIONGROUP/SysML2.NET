@@ -37,9 +37,16 @@ namespace SysML2.NET.PIM.DTO
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was deleted
+        /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was deleted, or null
+        /// when the <see cref="CommitReference"/> has not been deleted
         /// </summary>
-        public DateTime Deleted { get; set; }
+        public DateTime? Deleted { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Commit"/> that the <see cref="CommitReference"/> references.
+        /// <see cref="Branch.Head"/> and <see cref="Tag.TaggedCommit"/> redefine this property.
+        /// </summary>
+        public Guid ReferencedCommit { get; set; }
 
         /// <summary>
         /// Gets or sets the Project that owns the given <see cref="CommitReference"/>

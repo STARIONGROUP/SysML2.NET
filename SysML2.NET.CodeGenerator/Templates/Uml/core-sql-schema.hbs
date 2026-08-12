@@ -1,0 +1,49 @@
+------------------------------------------------------------------------------------------------
+--------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+------------------------------------------------------------------------------------------------
+
+-- Initialize database
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE SCHEMA IF NOT EXISTS "UML-CODEGEN";
+
+-- Root Thing table
+CREATE TABLE "UML-CODEGEN"."Thing" (
+    "iid" uuid NOT NULL, 
+    "classKind" VARCHAR(100),
+    "data" JSONB,
+    PRIMARY KEY ("iid")
+);
+
+CREATE INDEX "IX_REVISION_THING" ON "UML-CODEGEN"."Thing" ("revisionNumber", "iid");
+
+ALTER TABLE "UML-CODEGEN"."Thing" SET (autovacuum_vacuum_scale_factor = 0.0);
+ALTER TABLE "UML-CODEGEN"."Thing" SET (autovacuum_vacuum_threshold = 2500);
+ALTER TABLE "UML-CODEGEN"."Thing" SET (autovacuum_analyze_scale_factor = 0.0);
+ALTER TABLE "UML-CODEGEN"."Thing" SET (autovacuum_analyze_threshold = 2500);
+
+-- Table definitions
+{{#each this as | class |}}
+    {{#uml_template.SQL.WriteBasicTableDefinitions class}}
+{{/each}}
+
+-- Many to Many link tables including Foreign Key Constrains
+{{#each this as | class |}}
+    {{#uml_template.SQL.WriteManyToManyTableDefinitionsAndConstraints class}}
+{{/each}}
+
+-- Reference Properties that are not Many-to-Many
+{{#each this as | class |}}
+    {{#uml_template.SQL.WriteNormalReferenceConstraints class}}
+{{/each}}
+    
+-- ModelVersion
+CREATE OR REPLACE FUNCTION "UML-CODEGEN".query_model_version()
+RETURNS text AS $$
+BEGIN
+    RETURN '{{ #uml_template.ModelVersion this}}';
+END;
+$$ LANGUAGE plpgsql;
+   
+------------------------------------------------------------------------------------------------
+--------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+------------------------------------------------------------------------------------------------

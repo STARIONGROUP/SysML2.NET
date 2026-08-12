@@ -70,10 +70,23 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     }
                     writer.WriteEndArray();
                     writer.WriteString("created"u8, tag.Created);
+
+                    if (tag.Deleted.HasValue)
+                    {
+                        writer.WriteString("deleted"u8, tag.Deleted.Value);
+                    }
+                    else
+                    {
+                        writer.WriteNull("deleted"u8);
+                    }
+
                     writer.WriteString("description"u8, tag.Description);
                     writer.WriteString("name"u8, tag.Name);
                     writer.WriteStartObject("owningProject"u8);
                     writer.WriteString("@id"u8, tag.OwningProject);
+                    writer.WriteEndObject();
+                    writer.WriteStartObject("referencedCommit"u8);
+                    writer.WriteString("@id"u8, tag.ReferencedCommit);
                     writer.WriteEndObject();
                     writer.WriteStartObject("taggedCommit"u8);
                     writer.WriteString("@id"u8, tag.TaggedCommit);

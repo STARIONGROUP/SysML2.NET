@@ -18,15 +18,14 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Extensions.Tests.Core.ModelInterchange
+namespace SysML2.NET.Extensions.Tests.ModelInterchange
 {
     using System;
     using System.Buffers;
     using System.Linq;
     using System.Text;
-
     using NUnit.Framework;
-    
+    using SysML2.NET.Extensions.ModelInterchange;
     using SysML2.NET.ModelInterchange;
 
     [TestFixture]

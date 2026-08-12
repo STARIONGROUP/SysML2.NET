@@ -70,6 +70,16 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     }
                     writer.WriteEndArray();
                     writer.WriteString("created"u8, branch.Created);
+
+                    if (branch.Deleted.HasValue)
+                    {
+                        writer.WriteString("deleted"u8, branch.Deleted.Value);
+                    }
+                    else
+                    {
+                        writer.WriteNull("deleted"u8);
+                    }
+
                     writer.WriteString("description"u8, branch.Description);
                     writer.WriteStartObject("head"u8);
                     writer.WriteString("@id"u8, branch.Head);
@@ -77,6 +87,9 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteString("name"u8, branch.Name);
                     writer.WriteStartObject("owningProject"u8);
                     writer.WriteString("@id"u8, branch.OwningProject);
+                    writer.WriteEndObject();
+                    writer.WriteStartObject("referencedCommit"u8);
+                    writer.WriteString("@id"u8, branch.ReferencedCommit);
                     writer.WriteEndObject();
                     writer.WriteString("resourceIdentifier"u8, branch.ResourceIdentifier);
                     writer.WriteEndObject();

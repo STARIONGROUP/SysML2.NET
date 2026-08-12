@@ -30,5 +30,17 @@ namespace SysML2.NET.PIM.DTO
     /// </summary>
     public class DataIdentity : Record
     {
+        /// <summary>
+        /// Gets or sets the derived reference to the <see cref="Commit"/> in a <see cref="Project"/> in
+        /// which the identified data was created, or null when not computed by the service
+        /// </summary>
+        public Guid? CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the derived reference to the <see cref="Commit"/> in a <see cref="Project"/> in
+        /// which the identified data was deleted, or null when the data is not deleted or the value is
+        /// not computed by the service
+        /// </summary>
+        public Guid? DeletedAt { get; set; }
     }
 }

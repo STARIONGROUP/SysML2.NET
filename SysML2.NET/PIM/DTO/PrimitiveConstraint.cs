@@ -26,7 +26,7 @@ namespace SysML2.NET.PIM.DTO
     /// a subtype of Constraint that represents simple conditions that be modeled using the
     /// property-operator -value tuple. e.g. mass &lt;= 4 kg, or type instanceOf Generalization
     /// </summary>
-    public class PrimitiveConstraint
+    public class PrimitiveConstraint : Constraint
     {
         /// <summary>
         /// Gets or sets the name of a property of Element or its subtypes that is being constrained

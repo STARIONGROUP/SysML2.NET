@@ -31,8 +31,13 @@ namespace SysML2.NET.PIM.DTO
     {
         /// <summary>
         /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
-        /// <see cref="Project"/> on the given branch
+        /// <see cref="Project"/> on the given branch. Redefines <see cref="CommitReference.ReferencedCommit"/> —
+        /// both properties expose the same underlying value.
         /// </summary>
-        public Guid Head { get; set; }
+        public Guid Head
+        {
+            get => this.ReferencedCommit;
+            set => this.ReferencedCommit = value;
+        }
     }
 }
