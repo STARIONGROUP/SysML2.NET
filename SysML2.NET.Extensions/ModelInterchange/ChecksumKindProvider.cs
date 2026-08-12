@@ -11,6 +11,7 @@ namespace SysML2.NET.ModelInterchange
 {
     using System;
     using System.Buffers;
+    using NET.ModelInterchange;
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
@@ -122,7 +123,7 @@ namespace SysML2.NET.ModelInterchange
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            
+
             switch (value.Length)
             {
                 case 3:

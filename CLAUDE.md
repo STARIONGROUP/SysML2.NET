@@ -103,6 +103,47 @@ When working on the grammar/textual-notation generator (`SysML2.NET.CodeGenerato
 ### Textual notation reviewer is MANDATORY
 
 **Every change touching these paths MUST be verified by the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) before being reported complete or committed:**
+**Every code change touching any of the following paths MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing:**
+
+- Every file under `SysML2.NET.Serializer.TextualNotation/Writers/` — both hand-coded partials (`*.cs`), the generated `AutoGenTextualNotationBuilder/*.cs`, `IsValidFor` guard extensions (`TextualNotationValidationExtensions.cs`), and any membership / string / cursor helpers that sit beside them.
+- Every file under `SysML2.NET/LexicalRules/` — both hand-coded members and the generated `AutoGenLexicalRules/*.cs` (`Keywords`, `SymbolicKeywordKind`, `SymbolicKeywordKindExtensions`).
+- `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and any Handlebars template under `SysML2.NET.CodeGenerator/Templates/Uml/` that emits textual-notation or lexical-rules code.
+
+**The KEBNF grammar context applies to ALL of these locations** — not just the generator. When implementing or reviewing hand-coded methods in `SysML2.NET.Serializer.TextualNotation/Writers/`, the author and the reviewer must re-ground in:
+- `SysML2.NET.CodeGenerator/GRAMMAR.md` — the cursor / builder conventions and patterns
+- `Resources/SysML-textual-bnf.kebnf` and `Resources/KerML-textual-bnf.kebnf` — the grammar source of truth
+- The rule's `<para>{…}</para>` XML doc on the generated sibling method (if the method is a HandCoded companion)
+
+The agent is defined at `.claude/agents/textual-notation-reviewer.md`. Invoke it with the rule(s) being implemented, the KEBNF text, and the file paths to review. It enforces:
+- the `Move()` ↔ `+=` Golden Rule (cursor advances only on `+=` consumption; direct `cursor.Move()` calls are forbidden after any callee that already advances the cursor internally)
+- EBNF quantifier semantics (`?` = 0..1 → single `if`; `*` = 0+ → `while` loop; `+` = 1+ → emit-once then loop)
+- correct runtime type discriminators (e.g. `ISpecialization` IS the cursor element, not wrapped in `IOwningMembership`)
+- absence of greedy-builder pitfalls that silently drop interleaved elements
+- consistency between the hand-coded method and the grammar rule it implements (name, target type, element order, alternatives)
+
+Reason this is mandatory: reviewer passes have caught real grammar-correctness bugs (wrong discriminator, silent element drop, missing `*` loop, spurious double-`Move()` in `FeatureSpecialization*` loops) that would have shipped broken textual notation without failing any existing test.
+
+### Code Generation Pipeline
+
+Most code in this repo is **auto-generated** — files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.
+
+The pipeline:
+1. **Input**: `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` — these two UML-based XMI files define the KerML and SysML v2 specification respectively. They are the **single source of truth** for all generated DTOs, POCOs, serializers, extension methods, and other auto-generated code. All OCL constraints (derivation rules, validation invariants, and operation body conditions) for each metaclass are also defined within these XMI files.
+2. **Generator**: `SysML2.NET.CodeGenerator` reads these via `uml4net.xmi`, uses Handlebars templates (`Templates/Uml/*.hbs`) to generate code
+3. **Output**: `AutoGen*` directories across multiple projects
+
+Generator classes in `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/` produce:
+- DTOs and interfaces → `SysML2.NET/Core/AutoGenDto/`
+- POCOs → `SysML2.NET/Core/AutoGenPoco/`
+- Enums → `SysML2.NET/Core/AutoGenEnum/`
+- JSON serializers/deserializers → `SysML2.NET.Serializer.Json/Core/AutoGenSerializer/` and `AutoGenDeSerializer/`
+- MessagePack formatters → `SysML2.NET.Serializer.MessagePack/`
+- Extension methods (Extend) → `SysML2.NET/Extend/`
+- DAL factories → `SysML2.NET.Dal/Core/`
+
+### Grounding SysML v2 / KerML work with the Hypha plugin
+
+If the **Hypha** plugin is installed, it is the **preferred grounding source for every SysML v2 / KerML semantic question** — metamodel structure (`hypha:metamodel-lookup`, or the `hypha:metamodel-navigator` agent for cross-cutting fan-out), normative specification intent (`hypha:spec-citation`), and textual-notation validity (`hypha:sysml-validation`). Use it **before** implementing or reviewing anything that depends on the SysML v2 / KerML metamodel — do not rely on a sibling analogue, the doc-comment OCL, or prior knowledge as the source of truth. The metamodel is large and precise; a plausible prior is exactly what produces confident-but-wrong derivations.
 
 - anything under `SysML2.NET.Serializer.TextualNotation/Writers/` (hand-coded partials, `AutoGenTextualNotationBuilder/*.cs`, `TextualNotationValidationExtensions.cs`, membership/string/cursor helpers)
 - anything under `SysML2.NET/LexicalRules/` (including `AutoGenLexicalRules/*.cs`)

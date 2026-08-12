@@ -25,5 +25,18 @@ namespace SysML2.NET.PIM.POCO
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1577820469729_822777_66066", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<DataVersion> Version { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets the derived reference to the <see cref="Commit"/> in a <see cref="Project"/> in
+        /// which the identified data was created, or null when not computed
+        /// </summary>
+        public Commit CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the derived reference to the <see cref="Commit"/> in a <see cref="Project"/> in
+        /// which the identified data was deleted, or null when the data is not deleted or the value is
+        /// not computed
+        /// </summary>
+        public Commit DeletedAt { get; set; }
     }
 }
