@@ -90,6 +90,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="isPartOfMultipleAlternative">Whether this is part of a multi-alternative context</param>
         private void EmitElements(EncodedTextWriter writer, IClass umlClass, List<RuleElement> elements, RuleGenerationContext ruleGenerationContext, bool restoreCallerPerElement = false, bool isPartOfMultipleAlternative = false)
         {
+            elements = HoistSingleNonNotationalConsumption(elements, ruleGenerationContext);
+
             var previousSiblings = ruleGenerationContext.CurrentSiblingElements;
             var previousIndex = ruleGenerationContext.CurrentElementIndex;
             ruleGenerationContext.CurrentSiblingElements = elements;
@@ -108,6 +110,88 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             ruleGenerationContext.CurrentSiblingElements = previousSiblings;
             ruleGenerationContext.CurrentElementIndex = previousIndex;
+        }
+
+        /// <summary>
+        /// Text-free members the pilot is KNOWN to store before the elements the production declares ahead of
+        /// them, verified against real pilot output.
+        /// <para>Deliberately an allowlist, not a structural rule. Emitting no text does NOT imply the model
+        /// may store the element anywhere: storage order is a per-rule implementation detail and it goes BOTH
+        /// ways. <c>EmptyMultiplicityMember</c> is stored FIRST though declared last, while
+        /// <c>EmptyResultMember</c> / <c>ReturnParameterMembership</c> is stored LAST as declared (in the
+        /// <c>OperatorExpression</c> family, <c>InvocationExpression</c> and <c>FeatureReferenceExpression</c>).
+        /// Hoisting the latter would strand the cursor on it. Only add a name here after checking real output.</para>
+        /// </summary>
+        private static readonly HashSet<string> HoistableTextFreeMembers = new(StringComparer.Ordinal)
+        {
+            "EmptyMultiplicityMember",
+        };
+
+        /// <summary>
+        /// Moves a lone <c>+=</c> element whose production emits NO text to the front of the alternative.
+        /// <para>Such an element has no observable position in the notation, so the grammar cannot constrain
+        /// where the parser puts it in the collection — and the pilot does not always put it where the
+        /// production does. Consuming it first keeps the cursor aligned for the elements that DO emit text;
+        /// leaving it in place strands the cursor on it (e.g. <c>IndividualDefinition</c> declares
+        /// <c>EmptyMultiplicityMember</c> last but the model stores it first, hiding the Subclassification
+        /// that <c>Definition</c> must read).</para>
+        /// <para>Only a LONE such element is hoisted: when several appear (e.g. <c>TransitionUsage</c>'s two
+        /// <c>EmptyParameterMember</c>s) their relative order decides which pairs with which sibling, so
+        /// moving them would change meaning.</para>
+        /// </summary>
+        /// <param name="elements">The alternative's elements in grammar order.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The elements, reordered when a lone text-free consumption is present.</returns>
+        private static List<RuleElement> HoistSingleNonNotationalConsumption(List<RuleElement> elements, RuleGenerationContext ruleGenerationContext)
+        {
+            var textFree = elements
+                .OfType<AssignmentElement>()
+                .Where(assignment => assignment.Operator == "+="
+                                     && assignment.Value is NonTerminalElement nonTerminal
+                                     && HoistableTextFreeMembers.Contains(nonTerminal.Name)
+                                     && EmitsNoNotation(ruleGenerationContext.FindRule(nonTerminal.Name), ruleGenerationContext, []))
+                .ToList();
+
+            // Only a TRAILING text-free element is hoisted. Declared last, it has nothing after it whose
+            // position it could encode, so moving it is meaning-preserving; declared mid-sequence its order
+            // relative to the following elements is significant (TransitionUsage's EmptyParameterMember
+            // pairs with the TriggerActionMember that follows it).
+            if (textFree.Count != 1
+                || !ReferenceEquals(elements[^1], textFree[0])
+                || ReferenceEquals(elements[0], textFree[0]))
+            {
+                return elements;
+            }
+
+            var reordered = new List<RuleElement> { textFree[0] };
+            reordered.AddRange(elements.Where(element => !ReferenceEquals(element, textFree[0])));
+
+            return reordered;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="rule" /> produces no textual notation at all — no terminal and
+        /// no value-bearing assignment, transitively. <c>EmptyMultiplicity</c>, <c>EmptyUsage</c> and their
+        /// wrappers are the canonical cases.
+        /// </summary>
+        /// <param name="rule">The rule to inspect; may be <see langword="null" />.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <param name="visited">Rules already inspected, guarding against recursive productions.</param>
+        /// <returns><see langword="true" /> when the rule emits nothing.</returns>
+        private static bool EmitsNoNotation(TextualNotationRule rule, RuleGenerationContext ruleGenerationContext, HashSet<string> visited)
+        {
+            if (rule == null || !visited.Add(rule.RuleName))
+            {
+                return false;
+            }
+
+            return rule.Alternatives.SelectMany(alternative => alternative.Elements).All(element => element switch
+            {
+                NonParsingAssignmentElement => true,
+                AssignmentElement { Value: NonTerminalElement nested } => EmitsNoNotation(ruleGenerationContext.FindRule(nested.Name), ruleGenerationContext, visited),
+                NonTerminalElement nonTerminal => EmitsNoNotation(ruleGenerationContext.FindRule(nonTerminal.Name), ruleGenerationContext, visited),
+                _ => false,
+            });
         }
 
         /// <summary>
