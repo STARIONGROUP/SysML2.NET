@@ -70,7 +70,7 @@ package '7b-Variant Configurations' {
                 variant part '4cylEngine': '4CylEngine';
                 variant part '6cylEngine': '6CylEngine';
             }
-            satisfy engineRqtChoice by engineChoice;
+            assert satisfy engineRqtChoice by engineChoice;
             assert constraint 'engine choice constraint' { if engineRqtChoice == engineRqtChoice::highPerformanceRequirement ? engineChoice == engineChoice::'6cylEngine' else engineChoice == engineChoice::'4cylEngine' }
             variation part transmissionChoice :>> transmission {
                 variant part manualTransmission: ManualTransmission {
@@ -90,7 +90,7 @@ package '7b-Variant Configurations' {
                     variant part narrowRimWheel: NarrowRimWheel;
                     variant part wideRimWheel: WideRimWheel;
                 }
-                assert constraint 'engine-wheel selection constraint' { (engineChoice == engineChoice::'4cylEngine' and rearWheelChoice -> forAll { in ref w; w == rearWheelChoice::narrowRimWheel }) xor (engineChoice == engineChoice::'6cylEngine' and rearWheelChoice -> forAll { in ref w; w == rearWheelChoice::wideRimWheel }) }
+                assert constraint 'engine-wheel selection constraint' { (engineChoice == engineChoice::'4cylEngine' and rearWheelChoice -> forAll { in w; w == rearWheelChoice::narrowRimWheel }) xor (engineChoice == engineChoice::'6cylEngine' and rearWheelChoice -> forAll { in w; w == rearWheelChoice::wideRimWheel }) }
             }
         }
         variation part vehicleChoice :> anyVehicleConfig {

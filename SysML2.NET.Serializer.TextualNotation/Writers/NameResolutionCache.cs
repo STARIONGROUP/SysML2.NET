@@ -34,6 +34,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
 
@@ -935,6 +936,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return null;
             }
 
+            // A variant Usage must directly or indirectly specialize its owning variation — SysML v2
+            // §8.3.6.4, checkUsageVariationUsageSpecialization ("If a Usage has an owningVariationUsage,
+            // then it must directly or indirectly specialize that Usage") and its Definition counterpart.
+            // That Specialization is IMPLIED, so it is absent from a model exported without implied
+            // relationships; without adding the variation scope here, a redefinition of a member the
+            // variant inherits THROUGH the variation cannot shorten and degrades to a fully qualified
+            // name. Appended last so declared supertypes keep priority.
+            if (owningType.owningMembership is IVariantMembership
+                && owningType.owningNamespace is { } owningVariation
+                && !ReferenceEquals(owningVariation, owningType)
+                && !generalScopes.Contains(owningVariation))
+            {
+                generalScopes.Add(owningVariation);
+            }
+
             if (generalScopes.Count == 0)
             {
                 return null;
@@ -1538,9 +1554,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Indexes the entries inherited from <paramref name="type" />'s transitive supertypes. Deliberately
-        /// bypasses the <c>RemoveRedefinedFeatures</c> filter so <c>:&gt;&gt;</c> references stay reachable;
-        /// namespace supertypes are enqueued as scopes in their own right.
+        /// Indexes the entries inherited from <paramref name="type" />'s transitive supertypes; namespace
+        /// supertypes are enqueued as scopes in their own right.
+        /// <para>
+        /// KNOWN DIVERGENCE from <c>Type::inheritedMembership</c> (KerML §8.3.3.1.10): this walk flattens
+        /// the hierarchy and applies only <c>removeRedefinedFeatures</c> condition 2, at the leaf type
+        /// alone, so a membership an intermediate supertype redefined away still reaches this index. It
+        /// also admits <c>private</c> supertype members and misses their <c>public</c>/<c>protected</c>
+        /// imports. The SDK's <c>type.inheritedMembership</c> is spec-faithful on all three counts and is
+        /// verified for the transitive case by
+        /// <c>TypeExtensionsTestFixture.VerifyComputeInheritedMembershipsOperation</c>, so it is the
+        /// intended replacement, and delegating to it is a small, well-understood diff. It was attempted
+        /// and backed out for COST, not correctness: <c>inheritedMembership</c> recomputes the transitive
+        /// closure on every access (no memoisation) and this method runs once per indexed Type, which took
+        /// the textual-notation validation fixture from 17 s to over 4 minutes (measured back-to-back on an
+        /// otherwise idle machine). Delegating therefore needs a memoisation layer first — either inside
+        /// <c>TypeExtensions</c> or as a per-Type memo held by this cache.
+        /// </para>
         /// </summary>
         /// <param name="type">The type whose inherited memberships are indexed.</param>
         /// <param name="index">The destination index.</param>
