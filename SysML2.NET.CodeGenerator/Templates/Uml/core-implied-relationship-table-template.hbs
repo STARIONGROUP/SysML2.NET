@@ -1,0 +1,243 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="ImpliedRelationshipTable.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Semantics.Implied
+{
+    using System.Collections.Generic;
+
+    using SysML2.NET.Core.POCO.Root.Elements;
+
+    /// <summary>
+    /// The kind of <c>Relationship</c> that is implied to satisfy a semantic constraint.
+    /// </summary>
+    public enum ImpliedRelationshipKind
+    {
+        /// <summary>
+        /// A <c>Subclassification</c>, implied for a Classifier.
+        /// </summary>
+        Subclassification,
+
+        /// <summary>
+        /// A <c>Subsetting</c>, implied for a Feature.
+        /// </summary>
+        Subsetting
+    }
+
+    /// <summary>
+    /// A single implied library <c>Specialization</c>, as required by one semantic constraint of the
+    /// KerML/SysML abstract syntax.
+    /// </summary>
+    public readonly struct ImpliedLibrarySpecialization
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImpliedLibrarySpecialization"/> struct.
+        /// </summary>
+        /// <param name="constraintName">
+        /// The name of the semantic constraint the rule was extracted from
+        /// </param>
+        /// <param name="targetLibraryName">
+        /// The qualified name of the library Type that must be specialized
+        /// </param>
+        /// <param name="declaringMetaclassName">
+        /// The metaclass the constraint is declared on, which decides <see cref="Kind"/>
+        /// </param>
+        /// <param name="requiresGuard">
+        /// Whether the constraint's OCL guards the specialization
+        /// </param>
+        public ImpliedLibrarySpecialization(string constraintName, string targetLibraryName, string declaringMetaclassName, bool requiresGuard)
+        {
+            this.ConstraintName = constraintName;
+            this.TargetLibraryName = targetLibraryName;
+            this.DeclaringMetaclassName = declaringMetaclassName;
+            this.RequiresGuard = requiresGuard;
+        }
+
+        /// <summary>
+        /// Gets the name of the semantic constraint the rule was extracted from.
+        /// </summary>
+        public string ConstraintName { get; }
+
+        /// <summary>
+        /// Gets the qualified name of the library Type that must be specialized.
+        /// </summary>
+        public string TargetLibraryName { get; }
+
+        /// <summary>
+        /// Gets the metaclass the constraint is declared on. The Relationship kind is decided from this
+        /// name, not from the metaclass that inherits the constraint.
+        /// </summary>
+        public string DeclaringMetaclassName { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the constraint's OCL guards the specialization, in which case the
+        /// rule applies only when the hand-written predicate for <see cref="ConstraintName"/> says so.
+        /// </summary>
+        public bool RequiresGuard { get; }
+
+        /// <summary>
+        /// Gets the kind of Relationship to imply, decided by whether the declaring metaclass is a
+        /// Classifier or a Feature.
+        /// </summary>
+        public ImpliedRelationshipKind Kind =>
+            ImpliedRelationshipTable.SubclassificationMetaclasses.Contains(this.DeclaringMetaclassName)
+                ? ImpliedRelationshipKind.Subclassification
+                : ImpliedRelationshipKind.Subsetting;
+    }
+
+    /// <summary>
+    /// The table of implied library <c>Specializations</c> that KerML 1.0 §8.4.2 allows a tool to insert to
+    /// satisfy the specialization constraints of the abstract syntax.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The metaclass and the library target of each row come from the constraint's OCL body in the UML XMI.
+    /// The <see cref="ImpliedRelationshipKind"/> does NOT: the OCL says only what to specialize, never
+    /// whether the implied Relationship is a Subclassification or a Subsetting. That is stated only in the
+    /// specification tables — KerML 1.0 Table 8 (§8.4.3.1.1) and Table 10 (§8.4.4.1), and SysML 2.0
+    /// Tables 31-33 — so <see cref="SubclassificationMetaclasses"/> below is transcribed by hand from those
+    /// tables and lives in the Handlebars template, not in the generator.
+    /// </para>
+    /// <para>
+    /// Rows are NOT reduced against the §8.4.2 redundancy rules. Rule 1 suppresses an implied Specialization
+    /// whose general Type is a supertype of another applicable one, and deciding that needs the library
+    /// Types resolved — they are not present in the metamodel XMI. The reduction therefore belongs to the
+    /// caller, which must also apply rule 2 (de-duplicate identical targets). Neither rule applies to
+    /// Redefinitions.
+    /// </para>
+    /// </remarks>
+    public static class ImpliedRelationshipTable
+    {
+        /// <summary>
+        /// The metaclasses whose implied Specialization is a <c>Subclassification</c> rather than a
+        /// <c>Subsetting</c> — that is, the Classifiers.
+        /// </summary>
+        /// <remarks>
+        /// HAND-MAINTAINED. This is the one part of the table that cannot be derived from the OCL; it is
+        /// transcribed from KerML Table 8 / Table 10 and SysML Tables 31-33. KerML Table 8 note 1 is the
+        /// reason <c>Type</c> is absent: <c>checkTypeSpecialization</c> applies to every Type, but the
+        /// Subclassification is only implied for Classifiers. Anything not listed here is a Feature and
+        /// implies a Subsetting.
+        /// </remarks>
+        internal static readonly HashSet<string> SubclassificationMetaclasses =
+        [
+            "ActionDefinition",
+            "AllocationDefinition",
+            "AnalysisCaseDefinition",
+            "Association",
+            "AssociationStructure",
+            "Behavior",
+            "CalculationDefinition",
+            "CaseDefinition",
+            "Class",
+            "ConcernDefinition",
+            "ConnectionDefinition",
+            "ConstraintDefinition",
+            "DataType",
+            "FlowDefinition",
+            "Function",
+            "InterfaceDefinition",
+            "ItemDefinition",
+            "Metaclass",
+            "MetadataDefinition",
+            "OccurrenceDefinition",
+            "PartDefinition",
+            "PortDefinition",
+            "Predicate",
+            "RenderingDefinition",
+            "RequirementDefinition",
+            "StateDefinition",
+            "Structure",
+            "UseCaseDefinition",
+            "VerificationCaseDefinition",
+            "ViewDefinition",
+            "ViewpointDefinition"
+        ];
+
+        /// <summary>
+        /// The semantic constraints that are NOT represented in this table, with the reason. Emitted so that
+        /// no constraint of KerML §8.4.2 is silently dropped while its hand-coded arm is outstanding.
+        /// </summary>
+        public static IReadOnlyList<string> NotCovered { get; } =
+        [
+{{#each NotCovered as | constraint |}}
+            "{{constraint.MetaclassName}}.{{constraint.ConstraintName}} ({{constraint.Category}}) - {{constraint.Reason}}",
+{{/each}}
+        ];
+
+        /// <summary>
+        /// The name of every semantic constraint declared in the abstract syntax, covered or not.
+        /// </summary>
+        public static IReadOnlyList<string> AllConstraintNames { get; } =
+        [
+{{#each AllConstraintNames as | constraintName |}}
+            "{{constraintName}}",
+{{/each}}
+        ];
+
+        /// <summary>
+        /// The name of every constraint whose application is conditional, i.e. every row that requires a
+        /// guard before its implied <c>Relationship</c> may be included.
+        /// </summary>
+        public static IReadOnlyList<string> AllConditionalConstraintNames { get; } =
+        [
+{{#each ConditionalConstraintNames as | constraintName |}}
+            "{{constraintName}}",
+{{/each}}
+        ];
+
+        /// <summary>
+        /// Returns the implied library <c>Specializations</c> that apply to the supplied element, including
+        /// those inherited from its supertypes in the metamodel.
+        /// </summary>
+        /// <param name="element">
+        /// The <see cref="IElement"/> to query
+        /// </param>
+        /// <returns>
+        /// The applicable rules, or an empty list when the metaclass carries none
+        /// </returns>
+        public static IReadOnlyList<ImpliedLibrarySpecialization> QueryImpliedLibrarySpecializations(IElement element)
+        {
+            return element switch
+            {
+{{#each Metaclasses as | metaclass |}}
+                {{metaclass.InterfaceFqn}} => {{metaclass.MetaclassName}}Rules,
+{{/each}}
+                _ => []
+            };
+        }
+
+{{#each Metaclasses as | metaclass |}}
+        /// <summary>
+        /// The implied library <c>Specializations</c> applying to <c>{{metaclass.MetaclassName}}</c>, own and inherited.
+        /// </summary>
+        private static readonly ImpliedLibrarySpecialization[] {{metaclass.MetaclassName}}Rules =
+        [
+{{#each metaclass.Rules as | rule |}}
+            new("{{rule.ConstraintName}}", "{{rule.TargetLibraryName}}", "{{rule.DeclaringMetaclassName}}", {{#if rule.RequiresGuard}}true{{else}}false{{/if}}),
+{{/each}}
+        ];
+
+{{/each}}
+    }
+}

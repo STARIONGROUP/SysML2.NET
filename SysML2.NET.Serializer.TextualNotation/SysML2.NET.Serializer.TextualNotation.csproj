@@ -42,6 +42,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
+      <ProjectReference Include="..\SysML2.NET.Semantics\SysML2.NET.Semantics.csproj" />
     </ItemGroup>
     
 </Project>

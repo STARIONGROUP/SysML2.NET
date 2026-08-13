@@ -25,6 +25,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Semantics.Implied;
 
     /// <summary>
     /// Provides the serialization context for the textual notation builders. Carries the
@@ -55,14 +56,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>Optional: when omitted, resolution is confined to <paramref name="contextNamespace"/>'s own
         /// containment and import graph, which can only yield a longer — never an invalid — name.</para>
         /// </param>
-        public TextualNotationWriterContext(INamespace contextNamespace, IEnumerable<INamespace> globalNamespaces = null)
+        /// <param name="impliedRelationshipProvider">
+        /// The provider supplying the implied <c>Relationships</c> (KerML §8.4.2) that a model exported
+        /// without them omits. Optional: when omitted, a name reachable ONLY through an implied
+        /// <c>Specialization</c> degrades to a longer — never an invalid — form.
+        /// </param>
+        public TextualNotationWriterContext(INamespace contextNamespace, IEnumerable<INamespace> globalNamespaces = null, IImpliedRelationshipProvider impliedRelationshipProvider = null)
         {
             this.CursorCache = new CursorCache();
             this.ContextNamespace = contextNamespace ?? throw new ArgumentNullException(nameof(contextNamespace));
-            this.NameResolutionCache = new NameResolutionCache(contextNamespace, globalNamespaces);
+            this.ImpliedRelationshipProvider = impliedRelationshipProvider ?? NullImpliedRelationshipProvider.Instance;
+            this.NameResolutionCache = new NameResolutionCache(contextNamespace, globalNamespaces, this.ImpliedRelationshipProvider);
             this.OperatorContextStack = new Stack<IExpression>();
             this.EmitOperatorParentheses = true;
         }
+
+        /// <summary>
+        /// Gets the provider supplying the implied <c>Relationships</c> (KerML §8.4.2) omitted by a model
+        /// exported without them; never <c>null</c>.
+        /// </summary>
+        public IImpliedRelationshipProvider ImpliedRelationshipProvider { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the writer should emit precedence-aware

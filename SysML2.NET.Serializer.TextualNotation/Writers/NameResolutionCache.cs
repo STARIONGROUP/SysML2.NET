@@ -37,6 +37,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
+    using SysML2.NET.Semantics.Implied;
 
     /// <summary>
     /// Resolves the shortest unambiguous textual name for a reference, mirroring KerML §8.2.3.5.
@@ -88,6 +89,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private readonly List<INamespace> globalNamespaces;
 
         /// <summary>
+        /// Supplies the implied <c>Relationships</c> (KerML §8.4.2) that a model exported without them
+        /// omits, so a name reachable only through one can still be shortened.
+        /// </summary>
+        private readonly IImpliedRelationshipProvider impliedRelationshipProvider;
+
+        /// <summary>
         /// Initializes the cache and eagerly indexes every namespace reachable from
         /// <paramref name="rootNamespace" />.
         /// </summary>
@@ -96,7 +103,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// The other loaded root namespaces (model libraries), forming the global namespace per
         /// KerML §8.2.3.5.2. Optional — without them resolution falls back to longer, equally valid names.
         /// </param>
-        public NameResolutionCache(INamespace rootNamespace, IEnumerable<INamespace> globalNamespaces = null)
+        /// <param name="impliedRelationshipProvider">
+        /// The provider supplying the implied <c>Relationships</c> a model exported without them omits.
+        /// Optional — when absent, resolution sees only the declared <c>Specializations</c>, so a name
+        /// reachable ONLY through an implied one degrades to a longer, equally valid form.
+        /// </param>
+        public NameResolutionCache(INamespace rootNamespace, IEnumerable<INamespace> globalNamespaces = null, IImpliedRelationshipProvider impliedRelationshipProvider = null)
         {
             this.RootNamespace = rootNamespace ?? throw new ArgumentNullException(nameof(rootNamespace));
 
@@ -104,6 +116,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 .Where(candidate => candidate != null && !ReferenceEquals(candidate, rootNamespace))
                 .Distinct()
                 .ToList() ?? [];
+
+            this.impliedRelationshipProvider = impliedRelationshipProvider ?? NullImpliedRelationshipProvider.Instance;
 
             this.simpleNameIndices = this.BuildSimpleNameIndices(rootNamespace);
         }
@@ -936,20 +950,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return null;
             }
 
-            // A variant Usage must directly or indirectly specialize its owning variation — SysML v2
-            // §8.3.6.4, checkUsageVariationUsageSpecialization ("If a Usage has an owningVariationUsage,
-            // then it must directly or indirectly specialize that Usage") and its Definition counterpart.
-            // That Specialization is IMPLIED, so it is absent from a model exported without implied
-            // relationships; without adding the variation scope here, a redefinition of a member the
-            // variant inherits THROUGH the variation cannot shorten and degrades to a fully qualified
-            // name. Appended last so declared supertypes keep priority.
-            if (owningType.owningMembership is IVariantMembership
-                && owningType.owningNamespace is { } owningVariation
-                && !ReferenceEquals(owningVariation, owningType)
-                && !generalScopes.Contains(owningVariation))
-            {
-                generalScopes.Add(owningVariation);
-            }
+            // A model exported without implied Relationships (KerML §8.4.2) omits Specializations the
+            // abstract syntax requires — a variant Usage specializing its owning variation, for one. Without
+            // them a redefinition of a member inherited THROUGH such a Specialization cannot shorten and
+            // degrades to a fully qualified name. Appended last so declared supertypes keep priority.
+            generalScopes.AddRange(this.impliedRelationshipProvider.GetImpliedSpecializations(owningType)
+                .Select(specialization => specialization.General)
+                .OfType<INamespace>()
+                .Where(general => !ReferenceEquals(general, owningType) && !generalScopes.Contains(general)));
 
             if (generalScopes.Count == 0)
             {

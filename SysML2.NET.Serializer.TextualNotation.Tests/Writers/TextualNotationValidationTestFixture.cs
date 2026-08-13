@@ -28,6 +28,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
 
     using NUnit.Framework;
 
+    using SysML2.NET.Semantics.Implied;
+    using SysML2.NET.Semantics.Implied.Guards;
+    using SysML2.NET.Semantics.Implied.Rules;
     using SysML2.NET.Serializer.TextualNotation.Tests.Wrapper;
     using SysML2.NET.Serializer.TextualNotation.Writers;
     using SysML2.NET.Serializer.Xmi;
@@ -81,7 +84,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             // The referenced namespaces are the roots of the model libraries pulled in while resolving the
             // file's external references. They form the global Namespace (KerML §8.2.3.5.2), so the writer
             // needs them to shorten a reference routed through a library the model does not itself import.
-            using var writerContext = new TextualNotationWriterContext(rootNamespace, readResult.ReferencedNamespaces);
+            var impliedRelationshipFactory = new ImpliedRelationshipFactory();
+
+            var impliedRelationshipProvider = new ImpliedRelationshipProvider(
+                OwnershipTreeLibraryTypeIndex.Build(readResult.ReferencedNamespaces),
+                new ImpliedRuleGuardRegistry([
+                    ..GeneratedImpliedRuleGuards.All,
+                    new FeatureEndSpecializationGuard(),
+                    new ConnectorBinaryObjectSpecializationGuard(),
+                    new ConnectorBinarySpecializationGuard(),
+                    new ConnectorObjectSpecializationGuard(),
+                    new FeaturePortionSpecializationGuard()]),
+                impliedRelationshipFactory,
+                new ImpliedSpecializationReducer(),
+                new ImpliedRelationshipOptions(),
+                [
+                    new VariationUsageSpecializationRule(impliedRelationshipFactory),
+                    new VariationDefinitionSpecializationRule(impliedRelationshipFactory)
+                ]);
+
+            using var writerContext = new TextualNotationWriterContext(rootNamespace, readResult.ReferencedNamespaces, impliedRelationshipProvider);
             writerContext.EmitOperatorParentheses = true;
             var stringBuilder = new IndentedStringBuilder();
 
