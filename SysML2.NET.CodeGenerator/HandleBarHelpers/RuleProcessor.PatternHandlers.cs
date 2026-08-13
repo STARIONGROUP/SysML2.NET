@@ -43,6 +43,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     internal sealed partial class RuleProcessor
     {
         /// <summary>
+        /// Upper bound on a single regular-expression match, guarding against catastrophic backtracking
+        /// on a pathological OCL body.
+        /// </summary>
+        private const int MatchTimeoutMilliseconds = 1000;
+
+        /// <summary>
         /// Pattern B: detects operator-literal alternations and generates a switch on the operator property.
         /// </summary>
         private bool TryHandleOperatorLiteralAlternation(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
@@ -1075,7 +1081,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// Matches an OCL constraint body of the shape <c>&lt;antecedent&gt; implies &lt;consequent&gt;</c>
         /// where both operands are bare property names.
         /// </summary>
-        private static readonly Regex SimpleImplicationConstraint = new(@"^\s*(\w+)\s+implies\s+(\w+)\s*$", RegexOptions.Compiled);
+        /// <returns>The compile-time generated <see cref="Regex" />.</returns>
+        [GeneratedRegex(@"^\s*(\w+)\s+implies\s+(\w+)\s*$", RegexOptions.None, MatchTimeoutMilliseconds)]
+        private static partial Regex SimpleImplicationConstraint();
 
         /// <summary>
         /// Reorders mutually-exclusive boolean <c>?=</c> assignment alternatives so that, whenever the
@@ -1113,7 +1121,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 .SelectMany(owner => owner.OwnedRule)
                 .SelectMany(rule => rule.Specification?.OfType<IOpaqueExpression>() ?? [])
                 .SelectMany(specification => specification.Body ?? [])
-                .Select(body => SimpleImplicationConstraint.Match(body ?? string.Empty))
+                .Select(body => SimpleImplicationConstraint().Match(body ?? string.Empty))
                 .Where(match => match.Success)
                 .Select(match => (Antecedent: match.Groups[1].Value, Consequent: match.Groups[2].Value));
 
@@ -1238,7 +1246,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="cache">The <see cref="IXmiElementCache" /> used to resolve rule targets</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
         /// <returns>The arms to emit first, most-derived first; empty when no arm is shadowed</returns>
-        private static List<(NonTerminalElement RuleElement, IClass UmlClass)> CollectShadowedNestedRuleTargets(IReadOnlyList<(NonTerminalElement RuleElement, IClass UmlClass)> orderedElements, IReadOnlyDictionary<NonTerminalElement, string> whenGuards, NonTerminalElement defaultRuleElement, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
+        private static List<(NonTerminalElement RuleElement, IClass UmlClass)> CollectShadowedNestedRuleTargets(List<(NonTerminalElement RuleElement, IClass UmlClass)> orderedElements, Dictionary<NonTerminalElement, string> whenGuards, NonTerminalElement defaultRuleElement, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
         {
             var hoisted = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
 
@@ -1324,7 +1332,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 reachableClasses.Add(targetClass);
             }
 
-            if (!IsTypeDispatcherRule(rule))
+            if (rule == null || !IsTypeDispatcherRule(rule))
             {
                 return;
             }
