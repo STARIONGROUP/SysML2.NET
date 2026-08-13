@@ -23,6 +23,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using HandlebarsDotNet;
 
@@ -34,12 +35,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
+    using uml4net.Values;
 
     /// <summary>
     /// Pattern detection and specialized code emission for grammar alternatives
     /// </summary>
     internal sealed partial class RuleProcessor
     {
+        /// <summary>
+        /// Upper bound on a single regular-expression match, guarding against catastrophic backtracking
+        /// on a pathological OCL body.
+        /// </summary>
+        private const int MatchTimeoutMilliseconds = 1000;
+
         /// <summary>
         /// Pattern B: detects operator-literal alternations and generates a switch on the operator property.
         /// </summary>
@@ -842,8 +850,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
+                    var hoistedElements = CollectShadowedNestedRuleTargets(mappedNonTerminalElements, whenGuards, defaultElement.RuleElement, umlClass.Cache, ruleGenerationContext);
+
                     writer.WriteSafeString($"switch({variableName}){Environment.NewLine}");
                     writer.WriteSafeString("{");
+
+                    foreach (var hoistedElement in hoistedElements)
+                    {
+                        var previousHoistedVariableName = ruleGenerationContext.CurrentVariableName;
+                        var hoistedCaseVarName = $"poco{hoistedElement.UmlClass.Name}";
+                        writer.WriteSafeString($"case {hoistedElement.UmlClass.QueryFullyQualifiedTypeName()} {hoistedCaseVarName}:{Environment.NewLine}");
+                        ruleGenerationContext.CurrentVariableName = hoistedCaseVarName;
+
+                        var previousHoistedCaller = ruleGenerationContext.CallerRule;
+                        ruleGenerationContext.CallerRule = hoistedElement.RuleElement;
+
+                        this.ProcessNonTerminalElement(writer, hoistedElement.UmlClass, hoistedElement.RuleElement, ruleGenerationContext);
+
+                        ruleGenerationContext.CallerRule = previousHoistedCaller;
+                        ruleGenerationContext.CurrentVariableName = previousHoistedVariableName;
+                        writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
+                    }
 
                     foreach (var orderedNonTerminalElement in mappedNonTerminalElements)
                     {
@@ -1015,6 +1042,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
 
                         var properties = umlClass.QueryAllProperties();
+                        var orderedAssignments = OrderAssignmentsByImplicationConstraints(assignmentElements, umlClass);
 
                         for (var alternativeIndex = 0; alternativeIndex < alternatives.Count; alternativeIndex++)
                         {
@@ -1023,7 +1051,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 writer.WriteSafeString("else ");
                             }
 
-                            var assignment = assignmentElements[alternativeIndex];
+                            var assignment = orderedAssignments[alternativeIndex];
                             var targetProperty = properties.Single(x => string.Equals(x.Name, assignment.Property));
 
                             var iterator = ruleGenerationContext.DefinedCursors.SingleOrDefault(x => x.ApplicableRuleElements.Contains(assignment));
@@ -1047,6 +1075,85 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Matches an OCL constraint body of the shape <c>&lt;antecedent&gt; implies &lt;consequent&gt;</c>
+        /// where both operands are bare property names.
+        /// </summary>
+        /// <returns>The compile-time generated <see cref="Regex" />.</returns>
+        [GeneratedRegex(@"^\s*(\w+)\s+implies\s+(\w+)\s*$", RegexOptions.None, MatchTimeoutMilliseconds)]
+        private static partial Regex SimpleImplicationConstraint();
+
+        /// <summary>
+        /// Reorders mutually-exclusive boolean <c>?=</c> assignment alternatives so that, whenever the
+        /// rule's target class carries an OCL invariant of the shape <c>A implies B</c> over two of the
+        /// assigned properties, the implying property <c>A</c> is tested before the implied property
+        /// <c>B</c>.
+        /// </summary>
+        /// <remarks>
+        /// A grammar alternation such as <c>( isAbstract ?= 'abstract' | isVariation ?= 'variation' )?</c>
+        /// compiles to an <c>if</c>/<c>else if</c> chain in grammar order. When the model satisfies
+        /// <c>isVariation implies isAbstract</c> (SysML v2 <c>validateDefinitionVariationIsAbstract</c> /
+        /// <c>validateUsageVariationIsAbstract</c>) a variation always carries <c>isAbstract</c> too, so the
+        /// grammar-ordered chain would always take the <c>abstract</c> arm and the stronger <c>variation</c>
+        /// keyword would never be emitted. Testing the antecedent first keeps the chain exhaustive while
+        /// selecting the most specific keyword. Ordering is stable — alternatives not related by an
+        /// implication keep their grammar order.
+        /// </remarks>
+        /// <param name="assignmentElements">The single-element alternatives' <see cref="AssignmentElement"/>s, in grammar order</param>
+        /// <param name="umlClass">The rule's target <see cref="IClass"/>, whose invariants (own and inherited) are consulted</param>
+        /// <returns>The reordered assignments; the input order when no implication applies</returns>
+        private static List<AssignmentElement> OrderAssignmentsByImplicationConstraints(List<AssignmentElement> assignmentElements, IClass umlClass)
+        {
+            if (assignmentElements.Count < 2 || umlClass == null)
+            {
+                return assignmentElements;
+            }
+
+            var ordered = new List<AssignmentElement>(assignmentElements);
+
+            var namespaces = umlClass.QueryAllGeneralClassifiers()
+                .OfType<INamespace>()
+                .Prepend(umlClass);
+
+            var implications = namespaces
+                .SelectMany(owner => owner.OwnedRule)
+                .SelectMany(rule => rule.Specification?.OfType<IOpaqueExpression>() ?? [])
+                .SelectMany(specification => specification.Body ?? [])
+                .Select(body => SimpleImplicationConstraint().Match(body ?? string.Empty))
+                .Where(match => match.Success)
+                .Select(match => (Antecedent: match.Groups[1].Value, Consequent: match.Groups[2].Value));
+
+            foreach (var implication in implications)
+            {
+                var antecedentIndex = ordered.FindIndex(assignment => IsBooleanAssignmentTo(assignment, implication.Antecedent));
+                var consequentIndex = ordered.FindIndex(assignment => IsBooleanAssignmentTo(assignment, implication.Consequent));
+
+                if (antecedentIndex < 0 || consequentIndex < 0 || antecedentIndex < consequentIndex)
+                {
+                    continue;
+                }
+
+                var antecedentAssignment = ordered[antecedentIndex];
+                ordered.RemoveAt(antecedentIndex);
+                ordered.Insert(consequentIndex, antecedentAssignment);
+            }
+
+            return ordered;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="assignment"/> is a boolean-flag assignment
+        /// (<c>?=</c>) targeting the property named <paramref name="propertyName"/>.
+        /// </summary>
+        /// <param name="assignment">The <see cref="AssignmentElement"/> to test</param>
+        /// <param name="propertyName">The property name an OCL implication operand refers to</param>
+        /// <returns><c>true</c> when the assignment is a <c>?=</c> assignment to that property</returns>
+        private static bool IsBooleanAssignmentTo(AssignmentElement assignment, string propertyName)
+        {
+            return string.Equals(assignment.Operator, "?=", StringComparison.Ordinal)
+                   && string.Equals(assignment.Property, propertyName, StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -1118,6 +1225,122 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             return rule.Alternatives.All(alternative =>
                 alternative.Elements.Count == 1
                 && alternative.Elements[0] is NonTerminalElement);
+        }
+
+        /// <summary>
+        /// Collects the switch arms that must be hoisted ABOVE the depth-sorted arms so a metaclass that is
+        /// only reachable THROUGH a nested alternation rule is not captured by an earlier arm typed on one
+        /// of its supertypes.
+        /// <para>The depth sort ranks a nested-rule arm by the RULE's own declared target (e.g.
+        /// <c>BehaviorUsageElement : Usage</c>, shallow), never by the deepest metaclass reachable through it
+        /// (e.g. <c>PerformActionUsage</c>, deep) — and when that target IS the generating class the arm is
+        /// forced last as the <c>default:</c> case, where no sort key can rescue it. C# pattern matching is
+        /// first-match-wins on runtime type, so <c>case IEventOccurrenceUsage</c> would swallow every
+        /// <c>PerformActionUsage</c> before the <c>BehaviorUsageElement</c> arm is ever reached.</para>
+        /// <para>Only UNGUARDED arms are treated as shadowing: a <c>when</c>-guarded arm declines runtime
+        /// types its guard excludes, which is precisely what those guards exist for.</para>
+        /// </summary>
+        /// <param name="orderedElements">The depth-sorted arms, in emission order</param>
+        /// <param name="whenGuards">The synthesized <c>when</c> guards, keyed by rule element</param>
+        /// <param name="defaultRuleElement">The rule element emitted as <c>default:</c>, or <c>null</c></param>
+        /// <param name="cache">The <see cref="IXmiElementCache" /> used to resolve rule targets</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns>The arms to emit first, most-derived first; empty when no arm is shadowed</returns>
+        private static List<(NonTerminalElement RuleElement, IClass UmlClass)> CollectShadowedNestedRuleTargets(List<(NonTerminalElement RuleElement, IClass UmlClass)> orderedElements, Dictionary<NonTerminalElement, string> whenGuards, NonTerminalElement defaultRuleElement, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
+        {
+            var hoisted = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
+
+            for (var elementIndex = 0; elementIndex < orderedElements.Count; elementIndex++)
+            {
+                var element = orderedElements[elementIndex];
+                var reachableClasses = QueryReachableTargetClasses(element.RuleElement, cache, ruleGenerationContext.AllRules);
+
+                foreach (var reachableClass in reachableClasses.Where(reachableClass => reachableClass != element.UmlClass))
+                {
+                    var shadowingArm = orderedElements
+                        .Take(elementIndex)
+                        .Where(arm => !whenGuards.ContainsKey(arm.RuleElement) && arm.RuleElement != defaultRuleElement)
+                        .FirstOrDefault(arm => reachableClass.QueryAllGeneralClassifiers().Contains(arm.UmlClass));
+
+                    if (shadowingArm.RuleElement == null)
+                    {
+                        continue;
+                    }
+
+                    if (QueryReachableTargetClasses(shadowingArm.RuleElement, cache, ruleGenerationContext.AllRules).Contains(reachableClass))
+                    {
+                        continue;
+                    }
+
+                    // Hoisted arms are emitted at the very top of the switch, so a hoist is only safe when no
+                    // existing arm is typed on a STRICT SUBTYPE of the hoisted class — hoisting above such an
+                    // arm would trade one shadowing defect for another.
+                    if (orderedElements.Any(arm => arm.UmlClass != reachableClass && arm.UmlClass.QueryAllGeneralClassifiers().Contains(reachableClass)))
+                    {
+                        continue;
+                    }
+
+                    if (hoisted.All(alreadyHoisted => alreadyHoisted.UmlClass != reachableClass))
+                    {
+                        hoisted.Add((element.RuleElement, reachableClass));
+                    }
+                }
+            }
+
+            hoisted.Sort((a, b) => b.UmlClass.QueryAllGeneralClassifiers().Count.CompareTo(a.UmlClass.QueryAllGeneralClassifiers().Count));
+
+            return hoisted;
+        }
+
+        /// <summary>
+        /// Resolves every UML <see cref="IClass" /> that <paramref name="nonTerminal" /> can dispatch to,
+        /// flattening nested type-dispatcher rules transitively.
+        /// </summary>
+        /// <param name="nonTerminal">The <see cref="NonTerminalElement" /> to resolve</param>
+        /// <param name="cache">The <see cref="IXmiElementCache" /> used to resolve rule targets</param>
+        /// <param name="allRules">All available rules for recursive lookup</param>
+        /// <returns>The reachable classes, including the non-terminal's own target class</returns>
+        private static List<IClass> QueryReachableTargetClasses(NonTerminalElement nonTerminal, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var reachableClasses = new List<IClass>();
+            CollectReachableTargetClasses(nonTerminal.Name, cache, allRules, reachableClasses, new HashSet<string>(StringComparer.Ordinal));
+
+            return reachableClasses;
+        }
+
+        /// <summary>
+        /// Recursively accumulates the target classes reachable from <paramref name="ruleName" />, descending
+        /// only into rules that are pure type-dispatchers (see <see cref="IsTypeDispatcherRule" />).
+        /// </summary>
+        /// <param name="ruleName">The non-terminal rule name to resolve</param>
+        /// <param name="cache">The <see cref="IXmiElementCache" /> used to resolve rule targets</param>
+        /// <param name="allRules">All available rules for recursive lookup</param>
+        /// <param name="reachableClasses">The accumulated classes</param>
+        /// <param name="visitedRules">The already-visited rule names, preventing infinite recursion</param>
+        private static void CollectReachableTargetClasses(string ruleName, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, List<IClass> reachableClasses, HashSet<string> visitedRules)
+        {
+            if (!visitedRules.Add(ruleName))
+            {
+                return;
+            }
+
+            var rule = allRules.SingleOrDefault(x => x.RuleName == ruleName);
+            var targetClass = RuleQueryUtilities.FindClass(cache, rule?.EffectiveTarget ?? ruleName);
+
+            if (targetClass != null && !reachableClasses.Contains(targetClass))
+            {
+                reachableClasses.Add(targetClass);
+            }
+
+            if (rule == null || !IsTypeDispatcherRule(rule))
+            {
+                return;
+            }
+
+            foreach (var nestedNonTerminal in rule.Alternatives.Select(alternative => alternative.Elements[0]).OfType<NonTerminalElement>())
+            {
+                CollectReachableTargetClasses(nestedNonTerminal.Name, cache, allRules, reachableClasses, visitedRules);
+            }
         }
 
         /// <summary>

@@ -173,6 +173,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
+                case SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange pocoMultiplicityRange:
+                    BuildNonFeatureElement(pocoMultiplicityRange, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Types.IMultiplicity pocoMultiplicity:
+                    BuildNonFeatureElement(pocoMultiplicity, writerContext, stringBuilder);
+                    break;
                 case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeature:
                     FeatureTextualNotationBuilder.BuildFeatureElement(pocoFeature, writerContext, stringBuilder);
                     break;

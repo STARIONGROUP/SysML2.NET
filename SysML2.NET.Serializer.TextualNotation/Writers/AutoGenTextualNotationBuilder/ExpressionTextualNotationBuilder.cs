@@ -71,7 +71,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     BuildPrimaryExpression(poco, writerContext, stringBuilder);
                     break;
             }
-            if (operatorParensNeeded) { stringBuilder.Append(')'); }
+            if (operatorParensNeeded) { stringBuilder.Append(") "); }
 
         }
 

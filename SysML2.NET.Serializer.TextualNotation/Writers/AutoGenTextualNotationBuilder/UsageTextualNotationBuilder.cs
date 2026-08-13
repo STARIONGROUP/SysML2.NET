@@ -78,13 +78,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.Append(' ');
             }
 
-            if (poco.IsAbstract)
-            {
-                stringBuilder.Append(" abstract ");
-            }
-            else if (poco.IsVariation)
+            if (poco.IsVariation)
             {
                 stringBuilder.Append(" variation ");
+            }
+            else if (poco.IsAbstract)
+            {
+                stringBuilder.Append(" abstract ");
             }
 
 
@@ -454,6 +454,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
+                case SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage pocoIncludeUseCaseUsage:
+                    BuildBehaviorUsageElement(pocoIncludeUseCaseUsage, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage pocoExhibitStateUsage:
+                    BuildBehaviorUsageElement(pocoExhibitStateUsage, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage pocoPerformActionUsage:
+                    BuildBehaviorUsageElement(pocoPerformActionUsage, writerContext, stringBuilder);
+                    break;
                 case SysML2.NET.Core.POCO.Systems.Flows.ISuccessionFlowUsage pocoSuccessionFlowUsage:
                     SuccessionFlowUsageTextualNotationBuilder.BuildSuccessionFlowUsage(pocoSuccessionFlowUsage, writerContext, stringBuilder);
                     break;

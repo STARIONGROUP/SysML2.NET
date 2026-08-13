@@ -144,6 +144,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             .OfType<NonTerminalElement>()
                             .ToList();
 
+                        // Alternatives of the repeated group that are a BARE non-terminal rather than a
+                        // `+=` assignment (e.g. `TypeBodyElement` in
+                        // `( TypeBodyElement | ownedRelationship += ReturnFeatureMember )*`). Such a rule is a
+                        // per-item dispatcher over the SAME cursor that advances the cursor itself, so it
+                        // becomes the loop's fall-through arm — without it the group's switch has no case for
+                        // those elements and the trailing `Move()` silently discards them.
+                        var groupDispatcherNonTerminals = groupElement.Alternatives
+                            .SelectMany(alternative => alternative.Elements)
+                            .OfType<NonTerminalElement>()
+                            .Where(nonTerminal => nonTerminal.Container is not AssignmentElement)
+                            .ToList();
+
                         if (groupAssignments.Count > 0 && groupNonTerminals.Count == groupAssignments.Count)
                         {
                             var groupPropertyName = groupAssignments[0].Property;
@@ -174,7 +186,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                 var groupOrderedElements = RuleQueryUtilities.OrderElementsByInheritance(groupNonTerminals, umlClass.Cache, ruleGenerationContext);
 
-                                writer.WriteSafeString($"while ({groupCursorVarName}.Current != null){Environment.NewLine}");
+                                // A `*` group must not swallow an element that a FOLLOWING sibling consumes
+                                // from the same cursor — `( … )* ( ownedRelationship += ResultExpressionMember )?`
+                                // left the trailing optional facing an exhausted cursor and dropped the result
+                                // expression. Exclude the next sibling's target type from the loop condition.
+                                var groupWhileCondition = this.ResolveCollectionWhileTypeCondition(groupCursorVarName, umlClass, null, groupPropertyName, ruleGenerationContext);
+
+                                if (string.IsNullOrWhiteSpace(groupWhileCondition))
+                                {
+                                    groupWhileCondition = $"{groupCursorVarName}.Current != null";
+                                }
+
+                                writer.WriteSafeString($"while ({groupWhileCondition}){Environment.NewLine}");
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
                                 writer.WriteSafeString($"switch ({groupCursorVarName}.Current){Environment.NewLine}");
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -192,11 +215,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     ruleGenerationContext.CurrentVariableName = previousVariableName;
                                     ruleGenerationContext.CallerRule = previousCaller;
 
-                                    writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
+                                    // The case body built the element itself, so this `+=` consumption owns the
+                                    // cursor advance (Golden Rule) — the fall-through arm below must NOT repeat it.
+                                    writer.WriteSafeString($"{Environment.NewLine}{groupCursorVarName}.Move();{Environment.NewLine}break;{Environment.NewLine}");
                                 }
 
+                                writer.WriteSafeString($"default:{Environment.NewLine}");
+                                EmitCollectionGroupFallThrough(writer, umlClass, groupDispatcherNonTerminals, groupCursorVarName, ruleGenerationContext);
+                                writer.WriteSafeString($"break;{Environment.NewLine}");
+
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
-                                writer.WriteSafeString($"{groupCursorVarName}.Move();{Environment.NewLine}");
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
                             }
                             else

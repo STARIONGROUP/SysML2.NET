@@ -58,12 +58,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     {
                         case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership variantMembership:
                             VariantMembershipTextualNotationBuilder.BuildEnumerationUsageMember(variantMembership, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
                             break;
                         case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
                             OwningMembershipTextualNotationBuilder.BuildAnnotatingMember(owningMembership, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                            break;
+                        default:
+                            ownedRelationshipCursor.Move();
                             break;
                     }
-                    ownedRelationshipCursor.Move();
                 }
 
                 stringBuilder.DecreaseIndent();

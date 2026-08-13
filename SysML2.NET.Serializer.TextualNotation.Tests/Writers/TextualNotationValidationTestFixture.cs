@@ -54,6 +54,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("05-State-based Behavior", "5-State-based Behavior-1.sysmlx")]
         [TestCase("05-State-based Behavior", "5-State-based Behavior-2.sysmlx")]
         [TestCase("06-Individual and Snapshots", "6-Individual and Snapshots.sysmlx")]
+        [TestCase("07-Variant Configuration", "7a-Variant Configuration - General Concept.sysmlx")]
+        [TestCase("07-Variant Configuration", "7a1-Variant Configuration - General Concept-a.sysmlx")]
+        [TestCase("07-Variant Configuration", "7b-Variant Configurations.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
@@ -79,7 +82,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             // file's external references. They form the global Namespace (KerML §8.2.3.5.2), so the writer
             // needs them to shorten a reference routed through a library the model does not itself import.
             using var writerContext = new TextualNotationWriterContext(rootNamespace, readResult.ReferencedNamespaces);
-            writerContext.EmitOperatorParentheses = false;
+            writerContext.EmitOperatorParentheses = true;
             var stringBuilder = new IndentedStringBuilder();
 
             try
