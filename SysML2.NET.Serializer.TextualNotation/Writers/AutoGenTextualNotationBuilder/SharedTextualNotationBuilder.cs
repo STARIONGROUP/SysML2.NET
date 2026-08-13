@@ -45,13 +45,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildBasicDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (poco.IsAbstract)
-            {
-                stringBuilder.Append(" abstract ");
-            }
-            else if (poco.IsVariation)
+            if (poco.IsVariation)
             {
                 stringBuilder.Append(" variation ");
+            }
+            else if (poco.IsAbstract)
+            {
+                stringBuilder.Append(" abstract ");
             }
 
         }

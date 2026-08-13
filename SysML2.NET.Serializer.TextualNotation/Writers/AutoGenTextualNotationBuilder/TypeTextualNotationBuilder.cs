@@ -442,18 +442,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     {
                         case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership featureMembership:
                             FeatureMembershipTextualNotationBuilder.BuildMetadataBodyUsageMember(featureMembership, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
                             break;
                         case SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembership:
                             OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
                             break;
                         case SysML2.NET.Core.POCO.Root.Namespaces.IMembership membership:
                             MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
                             break;
                         case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
                             ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
+                            ownedRelationshipCursor.Move();
+                            break;
+                        default:
+                            ownedRelationshipCursor.Move();
                             break;
                     }
-                    ownedRelationshipCursor.Move();
                 }
 
                 stringBuilder.DecreaseIndent();
@@ -912,15 +918,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public static void BuildFunctionBodyPart(SysML2.NET.Core.POCO.Core.Types.IType poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
                 switch (ownedRelationshipCursor.Current)
                 {
                     case SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership returnParameterMembership:
                         ReturnParameterMembershipTextualNotationBuilder.BuildReturnFeatureMember(returnParameterMembership, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+                    default:
+                        BuildTypeBodyElement(poco, writerContext, stringBuilder);
                         break;
                 }
-                ownedRelationshipCursor.Move();
             }
 
 

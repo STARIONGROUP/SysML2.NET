@@ -172,6 +172,46 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Emits the fall-through arm of a repeated group's per-element <c>switch</c>. When the group has
+        /// bare non-terminal alternatives (dispatcher rules over the same cursor, e.g. <c>TypeBodyElement</c>
+        /// in <c>( TypeBodyElement | ownedRelationship += ReturnFeatureMember )*</c>) the arm delegates to
+        /// them; those rules advance the cursor themselves, so no <c>Move()</c> is emitted here per the
+        /// Golden Rule. With no dispatcher alternative the arm just advances, which is what terminates the
+        /// loop on an element the group cannot render.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> to emit to</param>
+        /// <param name="umlClass">The rule's target <see cref="IClass" /></param>
+        /// <param name="dispatcherNonTerminals">The group's bare (non-assignment) non-terminal alternatives</param>
+        /// <param name="cursorVariableName">The cursor driving the repeated group</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        private static void EmitCollectionGroupFallThrough(EncodedTextWriter writer, IClass umlClass, List<NonTerminalElement> dispatcherNonTerminals, string cursorVariableName, RuleGenerationContext ruleGenerationContext)
+        {
+            var dispatcherCalls = dispatcherNonTerminals
+                .Select(nonTerminal =>
+                {
+                    var referencedRule = ruleGenerationContext.FindRule(nonTerminal.Name);
+
+                    return referencedRule?.EffectiveTarget == null
+                        ? null
+                        : ResolveBuilderCall(umlClass, nonTerminal, referencedRule.EffectiveTarget, ruleGenerationContext);
+                })
+                .Where(call => call != null)
+                .ToList();
+
+            if (dispatcherCalls.Count == 0)
+            {
+                writer.WriteSafeString($"{cursorVariableName}.Move();{Environment.NewLine}");
+
+                return;
+            }
+
+            foreach (var dispatcherCall in dispatcherCalls)
+            {
+                writer.WriteSafeString($"{dispatcherCall}{Environment.NewLine}");
+            }
+        }
+
+        /// <summary>
         /// Resolves the type condition for a collection while loop.
         /// </summary>
         private string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, string outerPropertyName, RuleGenerationContext ruleGenerationContext)

@@ -71,6 +71,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// nested operator expressions are wrapped in <c>(…)</c> to guarantee round-trip
         /// fidelity against the precedence-climbing parser.
         /// <para>
+        /// In addition to the parens that fidelity requires, this mode emits clarifying parens
+        /// where precedence already settles the grouping but the mix reads ambiguously —
+        /// two different logical connectives (<c>(a and b) xor (c and d)</c>) and arithmetic
+        /// across precedence tiers (<c>a + (b * c)</c>). See <see cref="OperatorPrecedence"/>.
+        /// </para>
+        /// <para>
         /// Set to <c>false</c> to suppress the writer-side disambiguation parens entirely.
         /// The resulting output is more compact and matches the idiomatic shorthand used
         /// throughout the SysML tutorials (e.g. <c>a and b or c</c>), but a model whose

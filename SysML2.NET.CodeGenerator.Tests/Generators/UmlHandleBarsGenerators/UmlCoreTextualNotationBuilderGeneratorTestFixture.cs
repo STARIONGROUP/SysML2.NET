@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -102,6 +103,81 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 Assert.That(generatedSource, Does.Contain(".Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership"),
                     "Synthesised guard for ExtentExpression must include the parsed `ownedRelationship += TypeReferenceMember` cursor predicate.");
             });
+        }
+
+        /// <summary>
+        /// Regression for the selective nested-alternation flattening fix. A metaclass reachable only
+        /// THROUGH a nested alternation rule used to be captured by an earlier arm typed on one of its
+        /// supertypes, because the depth sort ranks a nested-rule arm by the RULE's declared target
+        /// (<c>BehaviorUsageElement : Usage</c>, shallow) rather than by the deepest metaclass reachable
+        /// through it (<c>PerformActionUsage</c>, deep) — and forces that arm last as <c>default:</c> when
+        /// the target IS the generating class. So <c>BuildVariantUsageElement</c> matched every
+        /// <c>IPerformActionUsage</c> against <c>case IEventOccurrenceUsage</c> (a supertype per
+        /// <c>IPerformActionUsage : IActionUsage, IEventOccurrenceUsage</c>) and emitted
+        /// <c>variant event doX;</c> instead of <c>variant perform doX;</c>. The fix hoists one
+        /// <c>case</c> arm per genuinely-shadowed class to the top of the switch, delegating to the nested
+        /// rule's builder. This test pins both known instances — <c>VariantUsageElement</c> and
+        /// <c>OwnedRelatedElement</c> (where <c>IMultiplicity : IFeature</c> was swallowed by
+        /// <c>case IFeature</c> before reaching <c>NonFeatureElement</c>).
+        /// </summary>
+        [Test]
+        public async Task Verify_that_shadowed_nested_alternation_targets_are_hoisted()
+        {
+            await this.umlCoreTextualNotationBuilderGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.textualNotationSpecification, this.umlPocoDirectoryInfo);
+
+            var generatedUsageBuilderPath = Path.Combine(this.umlPocoDirectoryInfo.FullName, "UsageTextualNotationBuilder.cs");
+            var generatedElementBuilderPath = Path.Combine(this.umlPocoDirectoryInfo.FullName, "ElementTextualNotationBuilder.cs");
+
+            Assert.That(File.Exists(generatedUsageBuilderPath), Is.True, $"Expected generator to emit {generatedUsageBuilderPath}");
+            Assert.That(File.Exists(generatedElementBuilderPath), Is.True, $"Expected generator to emit {generatedElementBuilderPath}");
+
+            var buildVariantUsageElement = ExtractMethodBody(await File.ReadAllTextAsync(generatedUsageBuilderPath), "BuildVariantUsageElement");
+            var buildOwnedRelatedElement = ExtractMethodBody(await File.ReadAllTextAsync(generatedElementBuilderPath), "BuildOwnedRelatedElement");
+
+            var performActionArmIndex = buildVariantUsageElement.IndexOf("case SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage pocoPerformActionUsage:", StringComparison.Ordinal);
+            var eventOccurrenceArmIndex = buildVariantUsageElement.IndexOf("case SysML2.NET.Core.POCO.Systems.Occurrences.IEventOccurrenceUsage pocoEventOccurrenceUsage:", StringComparison.Ordinal);
+            var multiplicityArmIndex = buildOwnedRelatedElement.IndexOf("case SysML2.NET.Core.POCO.Core.Types.IMultiplicity pocoMultiplicity:", StringComparison.Ordinal);
+            var featureArmIndex = buildOwnedRelatedElement.IndexOf("case SysML2.NET.Core.POCO.Core.Features.IFeature pocoFeature:", StringComparison.Ordinal);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(performActionArmIndex, Is.GreaterThanOrEqualTo(0),
+                    "BuildVariantUsageElement must hoist an IPerformActionUsage arm — PerformActionUsage is only reachable through the nested BehaviorUsageElement rule.");
+                Assert.That(performActionArmIndex, Is.LessThan(eventOccurrenceArmIndex),
+                    "The hoisted IPerformActionUsage arm must precede case IEventOccurrenceUsage, otherwise the supertype arm swallows it and `variant perform` renders as `variant event`.");
+                Assert.That(buildVariantUsageElement, Does.Contain("BuildBehaviorUsageElement(pocoPerformActionUsage, writerContext, stringBuilder);"),
+                    "The hoisted arm must delegate to the nested rule's own builder so no builder is bypassed.");
+                Assert.That(buildVariantUsageElement, Does.Contain("case SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage pocoExhibitStateUsage:"),
+                    "ExhibitStateUsage (IExhibitStateUsage : IStateUsage, IPerformActionUsage) is shadowed by the same IEventOccurrenceUsage arm and must be hoisted too.");
+                Assert.That(buildVariantUsageElement, Does.Contain("case SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage pocoIncludeUseCaseUsage:"),
+                    "IncludeUseCaseUsage (IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage) is shadowed by the same IEventOccurrenceUsage arm and must be hoisted too.");
+                Assert.That(multiplicityArmIndex, Is.GreaterThanOrEqualTo(0),
+                    "BuildOwnedRelatedElement must hoist an IMultiplicity arm — Multiplicity is only reachable through the nested NonFeatureElement rule.");
+                Assert.That(multiplicityArmIndex, Is.LessThan(featureArmIndex),
+                    "The hoisted IMultiplicity arm must precede case IFeature — Multiplicity is a NonFeatureElement alternative but IMultiplicity : IFeature.");
+                Assert.That(buildOwnedRelatedElement, Does.Contain("BuildNonFeatureElement(pocoMultiplicity, writerContext, stringBuilder);"),
+                    "The hoisted IMultiplicity arm must delegate to BuildNonFeatureElement, the rule that lists Multiplicity as an alternative.");
+            }
+        }
+
+        /// <summary>
+        /// Extracts the source of a single generated builder method, so arm-ordering assertions anchor on
+        /// the method under test rather than on the first file-wide match of a case label.
+        /// </summary>
+        /// <param name="generatedSource">The full generated builder source</param>
+        /// <param name="methodName">The name of the <c>public static void Build…</c> method to extract</param>
+        /// <returns>The method's source, up to the start of the next method</returns>
+        private static string ExtractMethodBody(string generatedSource, string methodName)
+        {
+            var methodStartIndex = generatedSource.IndexOf($"public static void {methodName}(", StringComparison.Ordinal);
+
+            Assert.That(methodStartIndex, Is.GreaterThanOrEqualTo(0), $"Expected the generated source to declare {methodName}");
+
+            var nextMethodIndex = generatedSource.IndexOf("public static void ", methodStartIndex + 1, StringComparison.Ordinal);
+
+            return nextMethodIndex < 0
+                ? generatedSource[methodStartIndex..]
+                : generatedSource[methodStartIndex..nextMethodIndex];
         }
     }
 }

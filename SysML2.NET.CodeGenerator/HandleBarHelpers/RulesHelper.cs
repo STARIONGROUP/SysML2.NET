@@ -140,7 +140,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (isOwnedExpressionRule)
                     {
-                        writer.WriteSafeString("if (operatorParensNeeded) { stringBuilder.Append(')'); }" + Environment.NewLine);
+                        // Emitted as the STRING ") " rather than the char ')': only the string
+                        // overload of IndentedStringBuilder.Append runs the tight-left token
+                        // normalisation that strips the space the operand left behind, and the
+                        // trailing space restores the separator the enclosing binary-operator
+                        // rule expects before it appends its own operator. The char overload
+                        // bypasses both and renders `a and b )xor (c and d)`.
+                        writer.WriteSafeString("if (operatorParensNeeded) { stringBuilder.Append(\") \"); }" + Environment.NewLine);
                     }
                 }
             });
