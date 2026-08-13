@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TypeExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -621,9 +621,208 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(typeSubject));
             }
 
-            var inheritable = typeSubject.InheritableMemberships(excludedNamespaces ?? [], excludedTypes ?? [], excludeImplied);
+            var inheritable = new List<IMembership>();
+
+            CollectInheritableMemberships(typeSubject, new InheritanceQuery(excludedNamespaces, excludedTypes, excludeImplied), inheritable);
 
             return typeSubject.RemoveRedefinedFeatures(inheritable);
+        }
+
+        /// <summary>
+        /// Carries the values that stay fixed for one top-level inheritance query, together with the
+        /// specialization path being walked and the results that may be reused across branches of it.
+        /// </summary>
+        /// <remarks>
+        /// <c>excludedNamespaces</c> and <c>excludeImplied</c> are passed down the recursion unchanged, so
+        /// within one query the only thing that varies is the path — which is why
+        /// <see cref="PathIndependentResults"/> can be keyed on the Type alone and why the memo must NOT
+        /// outlive the query. The model is a mutable object graph; a cache that survived the call would
+        /// need invalidation the SDK has no hook for.
+        /// </remarks>
+        private sealed class InheritanceQuery
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InheritanceQuery"/> class.
+            /// </summary>
+            /// <param name="excludedNamespaces">
+            /// The Namespaces whose Imports are excluded, or null for none
+            /// </param>
+            /// <param name="excludedTypes">
+            /// The Types to seed the specialization path with, or null for none
+            /// </param>
+            /// <param name="excludeImplied">
+            /// Whether supertypes reached through implied Specializations are excluded
+            /// </param>
+            internal InheritanceQuery(List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
+            {
+                this.ExcludedNamespaces = excludedNamespaces ?? [];
+                this.PathTypes = [..excludedTypes ?? []];
+                this.ExcludeImplied = excludeImplied;
+            }
+
+            /// <summary>
+            /// Gets the Namespaces whose Imports are excluded.
+            /// </summary>
+            internal List<INamespace> ExcludedNamespaces { get; }
+
+            /// <summary>
+            /// Gets the Types on the specialization path currently being walked, mutated in place as the
+            /// recursion descends and ascends.
+            /// </summary>
+            internal HashSet<IType> PathTypes { get; }
+
+            /// <summary>
+            /// Gets a value indicating whether supertypes reached through implied Specializations are excluded.
+            /// </summary>
+            internal bool ExcludeImplied { get; }
+
+            /// <summary>
+            /// Gets the non-private Memberships of Types whose subtree never consulted the cycle guard, and
+            /// which are therefore the same no matter which path reaches them.
+            /// </summary>
+            internal Dictionary<IType, List<IMembership>> PathIndependentResults { get; } = [];
+        }
+
+        /// <summary>
+        /// Collects the inheritable Memberships of a Type into <paramref name="result"/>, and reports whether
+        /// the subtree it walked is independent of the path that reached it.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This helper and <see cref="ResolveNonPrivateMemberships"/> carry the mutual recursion
+        /// <c>inheritedMemberships -&gt; inheritableMemberships -&gt; nonPrivateMemberships -&gt;
+        /// inheritedMemberships</c>. The public operations keep their <see cref="List{T}"/> signatures, but
+        /// the recursion runs through these helpers so the excluded Types can be ONE set pushed on descent
+        /// and popped on return, rather than a fresh List allocated per supertype per level and searched
+        /// with an O(n) <c>Contains</c>. Calling the helpers directly bypasses POCO dispatch, which is safe
+        /// ONLY because none of those three operations is redefined by any subclass — every POCO wires all
+        /// three to the methods in this file. Introducing a redefinition means routing that arm back through
+        /// the POCO instance member.
+        /// </para>
+        /// <para>
+        /// The returned flag is false as soon as the cycle guard rejects a supertype anywhere below this
+        /// Type. It gates memoisation: in an ACYCLIC hierarchy every Type on the path to a Type T is a
+        /// subtype of T, so no path node can also be one of T's supertypes and the guard never fires —
+        /// making T's result reusable. The guard firing means the graph is circular through this Type, the
+        /// answer genuinely differs per path (KerML §8.2.3.5.1), and nothing here may be reused.
+        /// </para>
+        /// </remarks>
+        /// <param name="typeSubject">
+        /// The subject <see cref="IType"/>
+        /// </param>
+        /// <param name="query">
+        /// The state of the top-level inheritance query
+        /// </param>
+        /// <param name="result">
+        /// The accumulator the Memberships are appended to
+        /// </param>
+        /// <returns>
+        /// True when no cycle guard fired in the walked subtree
+        /// </returns>
+        private static bool CollectInheritableMemberships(IType typeSubject, InheritanceQuery query, List<IMembership> result)
+        {
+            var addedSelf = query.PathTypes.Add(typeSubject);
+
+            // Failing to add means this Type is ALREADY on the path, i.e. a cycle closes on the subject
+            // itself — path-dependent by construction.
+            var isPathIndependent = addedSelf;
+
+            try
+            {
+                foreach (var supertype in typeSubject.Supertypes(query.ExcludeImplied).Where(supertype => supertype != null))
+                {
+                    if (query.PathTypes.Contains(supertype))
+                    {
+                        isPathIndependent = false;
+                        continue;
+                    }
+
+                    result.AddRange(ResolveNonPrivateMemberships(supertype, query, out var supertypeIsPathIndependent));
+
+                    isPathIndependent &= supertypeIsPathIndependent;
+                }
+            }
+            finally
+            {
+                if (addedSelf)
+                {
+                    query.PathTypes.Remove(typeSubject);
+                }
+            }
+
+            return isPathIndependent;
+        }
+
+        /// <summary>
+        /// Returns the public, protected and inherited Memberships of a Type, reusing an earlier result when
+        /// that Type proved independent of the path reaching it.
+        /// </summary>
+        /// <remarks>
+        /// See <see cref="CollectInheritableMemberships"/> for why the recursion runs through these helpers
+        /// and what makes a result reusable. The returned list may be the memoised instance, so callers must
+        /// read from it and never mutate it.
+        /// </remarks>
+        /// <param name="typeSubject">
+        /// The subject <see cref="IType"/>
+        /// </param>
+        /// <param name="query">
+        /// The state of the top-level inheritance query
+        /// </param>
+        /// <param name="isPathIndependent">
+        /// True when no cycle guard fired in the walked subtree
+        /// </param>
+        /// <returns>
+        /// The collected <see cref="IMembership"/>
+        /// </returns>
+        private static List<IMembership> ResolveNonPrivateMemberships(IType typeSubject, InheritanceQuery query, out bool isPathIndependent)
+        {
+            if (query.PathIndependentResults.TryGetValue(typeSubject, out var reusable))
+            {
+                isPathIndependent = true;
+
+                return reusable;
+            }
+
+            // The OCL joins the three parts with `union`, which deduplicates — but only within THIS call.
+            // inheritableMemberships deliberately concatenates its supertypes' results without deduplicating
+            // across them, so the seen-set must not outlive this invocation.
+            var seen = new HashSet<IMembership>();
+            var result = new List<IMembership>();
+
+            AppendDistinct(result, seen, typeSubject.MembershipsOfVisibility(VisibilityKind.Public, query.ExcludedNamespaces));
+            AppendDistinct(result, seen, typeSubject.MembershipsOfVisibility(VisibilityKind.Protected, query.ExcludedNamespaces));
+
+            var inheritable = new List<IMembership>();
+
+            isPathIndependent = CollectInheritableMemberships(typeSubject, query, inheritable);
+
+            AppendDistinct(result, seen, typeSubject.RemoveRedefinedFeatures(inheritable));
+
+            if (isPathIndependent)
+            {
+                query.PathIndependentResults[typeSubject] = result;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Appends the Memberships of <paramref name="source"/> that are not yet in <paramref name="seen"/>.
+        /// </summary>
+        /// <param name="target">
+        /// The accumulator the Memberships are appended to
+        /// </param>
+        /// <param name="seen">
+        /// The set of Memberships already appended, extended in place
+        /// </param>
+        /// <param name="source">
+        /// The Memberships to append
+        /// </param>
+        private static void AppendDistinct(List<IMembership> target, HashSet<IMembership> seen, List<IMembership> source)
+        {
+            // `seen.Add` is the filter AND the record of what was taken; AddRange enumerates once, in order,
+            // so the side effect is well defined here.
+            target.AddRange(source.Where(seen.Add));
         }
 
         /// <summary>
@@ -661,22 +860,9 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(typeSubject));
             }
 
-            var safeExcludedNamespaces = excludedNamespaces ?? [];
-            var safeExcludedTypes = excludedTypes ?? [];
-
-            var excludingSelf = new List<IType>(safeExcludedTypes) { typeSubject };
-
             var result = new List<IMembership>();
 
-            foreach (var supertype in typeSubject.Supertypes(excludeImplied))
-            {
-                if (supertype == null || excludingSelf.Contains(supertype))
-                {
-                    continue;
-                }
-
-                result.AddRange(supertype.NonPrivateMemberships(safeExcludedNamespaces, excludingSelf, excludeImplied));
-            }
+            CollectInheritableMemberships(typeSubject, new InheritanceQuery(excludedNamespaces, excludedTypes, excludeImplied), result);
 
             return result;
         }
@@ -723,14 +909,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(typeSubject));
             }
 
-            var safeExcludedNamespaces = excludedNamespaces ?? [];
-            var safeExcludedTypes = excludedTypes ?? [];
-
-            var publicMemberships = typeSubject.MembershipsOfVisibility(VisibilityKind.Public, safeExcludedNamespaces);
-            var protectedMemberships = typeSubject.MembershipsOfVisibility(VisibilityKind.Protected, safeExcludedNamespaces);
-            var inheritedMemberships = typeSubject.InheritedMemberships(safeExcludedNamespaces, safeExcludedTypes, excludeImplied);
-
-            return [..publicMemberships.Union(protectedMemberships).Union(inheritedMemberships)];
+            return ResolveNonPrivateMemberships(typeSubject, new InheritanceQuery(excludedNamespaces, excludedTypes, excludeImplied), out _);
         }
 
         /// <summary>
@@ -778,10 +957,29 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(memberships));
             }
 
+            // AllRedefinedFeaturesOf walks a redefinition chain, so it is computed ONCE per membership
+            // here rather than inside a nested loop: the previous form was O(n^2) calls over the whole
+            // inherited closure. Condition 1 then reduces to a set lookup — a membership is rejected when
+            // some OTHER membership in the same set redefines its memberElement. Because
+            // AllRedefinedFeaturesOf always includes the membership's own memberElement, "some other"
+            // is exactly "the feature appears in at least two memberships' redefined-sets".
+            // Memberships may arrive more than once (the same supertype membership is reachable by several
+            // paths through a branching hierarchy), so distinct memberships are counted — mirroring the
+            // original `other != current` guard, which likewise never let a membership reject itself.
+            var redefinedFeatureCounts = new Dictionary<IFeature, int>();
+
+            foreach (var redefinedFeature in memberships
+                         .Distinct()
+                         .SelectMany(membership => typeSubject.AllRedefinedFeaturesOf(membership).Distinct()))
+            {
+                redefinedFeatureCounts.TryGetValue(redefinedFeature, out var occurrences);
+                redefinedFeatureCounts[redefinedFeature] = occurrences + 1;
+            }
+
             var reducedMemberships = memberships
-                .Where(currentMembership => !memberships.Any(otherMembership =>
-                    otherMembership != currentMembership
-                    && typeSubject.AllRedefinedFeaturesOf(otherMembership).Contains(currentMembership.MemberElement as IFeature)))
+                .Where(currentMembership => currentMembership.MemberElement is not IFeature memberFeature
+                                            || !redefinedFeatureCounts.TryGetValue(memberFeature, out var occurrences)
+                                            || occurrences < 2)
                 .ToList();
 
             var redefinedFeatures = typeSubject.ownedFeature
@@ -830,6 +1028,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(membership));
             }
 
+            // `oclIsType(Feature)` is read as a KIND check (`is IFeature`), not as OCL's exact-type test.
+            // Feature is instantiated in practice only through its subclasses, so the literal exact-type
+            // reading would make redefinition hiding never fire on any real model — which cannot be the
+            // intent of a rule whose whole purpose is to remove redefined Features from inheritance.
             return membership.MemberElement is IFeature memberFeature
                 ? memberFeature.AllRedefinedFeatures()
                 : [];
@@ -1026,22 +1228,23 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(typeSubject));
             }
 
-            var visited = new List<IType> { typeSubject };
+            // The result is an OrderedSet, so discovery order is kept in `ordered` while `visited` answers
+            // membership in O(1) — a List doing both made the BFS O(n^2).
+            var ordered = new List<IType> { typeSubject };
+            var visited = new HashSet<IType> { typeSubject };
             var queue = new Queue<IType>();
             queue.Enqueue(typeSubject);
 
             while (queue.Count > 0)
             {
-                var current = queue.Dequeue();
-
-                foreach (var supertype in current.Supertypes(false).Where(supertype => supertype != null && !visited.Contains(supertype)))
+                foreach (var supertype in queue.Dequeue().Supertypes(false).Where(supertype => supertype != null && visited.Add(supertype)))
                 {
-                    visited.Add(supertype);
+                    ordered.Add(supertype);
                     queue.Enqueue(supertype);
                 }
             }
 
-            return visited;
+            return ordered;
         }
 
         /// <summary>

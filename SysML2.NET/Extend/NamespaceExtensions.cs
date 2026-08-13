@@ -26,6 +26,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System.Text;
 
     using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Extensions;
@@ -87,7 +88,20 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </returns>
         internal static List<IMembership> ComputeMembership(this INamespace namespaceSubject)
         {
-            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.ownedMembership.Union(namespaceSubject.ImportedMemberships([]))];
+            if (namespaceSubject == null)
+            {
+                throw new ArgumentNullException(nameof(namespaceSubject));
+            }
+
+            // `membership` is a derived UNION; its subsets are ownedMembership, importedMembership and —
+            // only when the Namespace is a Type — inheritedMembership. KerML §8.2.3.5.3: memberships
+            // "include owned, imported and (if the Namespace is a Type) inherited". Each subset is taken
+            // from its own derived property rather than re-deriving it here.
+            var result = namespaceSubject.ownedMembership.Union(namespaceSubject.importedMembership);
+
+            return namespaceSubject is IType typeSubject
+                ? [..result.Union(typeSubject.inheritedMembership)]
+                : [..result];
         }
 
         /// <summary>
@@ -295,38 +309,34 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(namespaceSubject));
             }
 
-            var result = new List<IMembership>();
+            var safeExcluded = excluded ?? [];
 
-            if (includeAll)
+            // Sourced from membershipsOfVisibility — NOT from `membership`. For a Type the two differ:
+            // `membership` carries inheritedMembership, which Type::visibleMemberships adds back separately
+            // with the excluded set threaded in. Reading `membership` here would double-count the inherited
+            // part and drop that cycle guard.
+            var result = namespaceSubject.MembershipsOfVisibility(includeAll ? null : VisibilityKind.Public, safeExcluded);
+
+            if (!isRecursive)
             {
-                result.AddRange(namespaceSubject.membership);
-            }
-            else
-            {
-                result.AddRange(namespaceSubject.ownedMembership.Where(m => m.Visibility == VisibilityKind.Public));
-
-                var excludedWithSelf = new List<INamespace>(excluded) { namespaceSubject };
-
-                var publicImported = namespaceSubject.ImportedMemberships(excludedWithSelf)
-                    .Where(m => namespaceSubject.VisibilityOf(m) == VisibilityKind.Public);
-
-                result.AddRange(publicImported);
+                return result;
             }
 
-            if (isRecursive)
-            {
-                var namespaceMemberships = includeAll
-                    ? namespaceSubject.ownedMembership
-                    : namespaceSubject.ownedMembership.Where(m => m.Visibility == VisibilityKind.Public);
+            // `excluded->including(self)`: descending into a nested Namespace must not round-trip back into
+            // this one. KerML §8.2.3.5.1 makes that guard normative — a nested Namespace importing its own
+            // owner would otherwise re-export this Namespace's members, private ones included when the
+            // Import is `import all`.
+            var excludedWithSelf = new List<INamespace>(safeExcluded) { namespaceSubject };
 
-                foreach (var mem in namespaceMemberships)
-                {
-                    if (mem.MemberElement is INamespace nestedNamespace)
-                    {
-                        var nestedMemberships = nestedNamespace.VisibleMemberships(excluded, true, includeAll);
-                        result.AddRange(nestedMemberships);
-                    }
-                }
+            var nestedNamespaces = namespaceSubject.ownedMembership
+                .OfType<IOwningMembership>()
+                .Where(mem => includeAll || mem.Visibility == VisibilityKind.Public)
+                .Select(mem => mem.ownedMemberElement)
+                .OfType<INamespace>();
+
+            foreach (var nestedNamespace in nestedNamespaces)
+            {
+                result.AddRange(nestedNamespace.VisibleMemberships(excludedWithSelf, true, includeAll));
             }
 
             return result;
@@ -410,23 +420,32 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(namespaceSubject));
             }
 
-            var excludedWithSelf = new List<INamespace>(excluded) { namespaceSubject };
+            var safeExcluded = excluded ?? [];
 
-            if (visibility == null)
-            {
-                var result = new List<IMembership>(namespaceSubject.ownedMembership);
-                result.AddRange(namespaceSubject.ImportedMemberships(excludedWithSelf));
-                return result;
-            }
+            var result = new List<IMembership>(
+                namespaceSubject.ownedMembership.Where(mem => visibility == null || mem.Visibility == visibility.Value));
 
-            var filtered = new List<IMembership>();
+            // `Namespace::importedMemberships` additionally drops Memberships with distinguishability
+            // collisions (KerML §8.2.3.5.1), which the terse OCL above does not spell out — so the imported
+            // side is taken from it and then narrowed to the Memberships contributed by Imports of the
+            // requested visibility.
+            //
+            // The visibility filter is applied to the IMPORTS, per the OCL, rather than by asking
+            // `visibilityOf` for each resulting Membership. The two readings agree — visibilityOf(mem) IS
+            // the visibility of the Import that produced mem — but only the import-side filter is usable
+            // here: visibilityOf falls back to `membership`, and for a Type `membership` includes
+            // inheritedMembership, whose derivation runs back through this very operation. visibilityOf
+            // also hard-codes Set{} where the excluded set has to be threaded through.
+            var excludedWithSelf = new List<INamespace>(safeExcluded) { namespaceSubject };
 
-            filtered.AddRange(namespaceSubject.ownedMembership.Where(m => m.Visibility == visibility.Value));
+            var membershipsOfVisibleImports = namespaceSubject.ownedImport
+                .Where(import => visibility == null || import.Visibility == visibility.Value)
+                .SelectMany(import => import.ImportedMemberships(excludedWithSelf))
+                .ToHashSet();
 
-            filtered.AddRange(namespaceSubject.ImportedMemberships(excludedWithSelf)
-                .Where(m => namespaceSubject.VisibilityOf(m) == visibility.Value));
+            result.AddRange(namespaceSubject.ImportedMemberships(safeExcluded).Where(membershipsOfVisibleImports.Contains));
 
-            return filtered;
+            return result;
         }
 
         /// <summary>
@@ -582,14 +601,22 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 return null;
             }
 
-            if (namespaceSubject.owner == null)
+            if (namespaceSubject.owningNamespace == null)
             {
                 return namespaceSubject.ResolveGlobal(name);
             }
 
-            var resolved = namespaceSubject.ResolveVisible(name);
+            // Local resolution searches EVERY membership of this Namespace regardless of visibility, per
+            // the OCL above and KerML §8.2.3.5.3. Filtering to the visible ones (ResolveVisible) is the
+            // rule for a NON-FIRST segment of a qualified name, not for local resolution, and made every
+            // reference to a private owned member fail to resolve locally. `membership` carries a Type's
+            // INHERITED memberships too (§8.2.3.5.3), so an inherited feature is nameable from within the
+            // Type that inherits it.
+            var resolved = namespaceSubject.membership
+                .FirstOrDefault(membership => string.Equals(membership.MemberShortName, name, StringComparison.Ordinal)
+                                              || string.Equals(membership.MemberName, name, StringComparison.Ordinal));
 
-            return resolved ?? namespaceSubject.owningNamespace?.ResolveLocal(name);
+            return resolved ?? namespaceSubject.owningNamespace.ResolveLocal(name);
         }
 
         /// <summary>

@@ -67,7 +67,15 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 return [];
             }
 
-            return namespaceImportSubject.ImportedNamespace.VisibleMemberships(excluded, namespaceImportSubject.IsRecursive, namespaceImportSubject.IsImportAll);
+            // `if excluded->includes(importedNamespace) then Sequence{}` is the first branch of the OCL and
+            // is the circularity guard of KerML §8.2.3.5.1 — without it a Namespace that imports one of its
+            // own ancestors re-enters that ancestor indefinitely.
+            if (excluded != null && excluded.Contains(namespaceImportSubject.ImportedNamespace))
+            {
+                return [];
+            }
+
+            return namespaceImportSubject.ImportedNamespace.VisibleMemberships(excluded ?? [], namespaceImportSubject.IsRecursive, namespaceImportSubject.IsImportAll);
         }
     }
 }

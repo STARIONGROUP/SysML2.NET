@@ -22,6 +22,7 @@ namespace SysML2.NET.Tests.Extend
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using NUnit.Framework;
 
@@ -787,6 +788,117 @@ namespace SysML2.NET.Tests.Extend
             supertype.AssignOwnership(publicMembership, publicElement);
 
             Assert.That(subject.ComputeInheritedMembershipsOperation(null, null, false), Does.Contain(publicMembership));
+
+            // Transitive hiding: `middle` owns a feature that REDEFINES grandparent::hidden under a
+            // different name, so grandparent::hidden is not a membership of `middle` and must not reach
+            // `leaf` either. RemoveRedefinedFeatures is applied at EVERY level of the recursion (KerML
+            // §8.3.3.1.10) — a flattened all-supertypes walk that filters only at the leaf would let it
+            // through, because `leaf` itself owns no redefinition.
+            var grandparent = new Type();
+            var hiddenFeature = new Feature { DeclaredName = "hidden" };
+            var hiddenMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            grandparent.AssignOwnership(hiddenMembership, hiddenFeature);
+
+            var middle = new Type();
+            middle.AssignOwnership(new Specialization { Specific = middle, General = grandparent });
+
+            var renamingFeature = new Feature { DeclaredName = "renamed" };
+            renamingFeature.AssignOwnership(new Redefinition { RedefiningFeature = renamingFeature, RedefinedFeature = hiddenFeature });
+            middle.AssignOwnership(new FeatureMembership { Visibility = VisibilityKind.Public }, renamingFeature);
+
+            var leaf = new Type();
+            leaf.AssignOwnership(new Specialization { Specific = leaf, General = middle });
+
+            // Positive control over the SAME two-level shape but with no redefinition, so the negative
+            // assertions below cannot pass vacuously: the grandparent membership must propagate two
+            // levels when nothing hides it.
+            var controlMiddle = new Type();
+            controlMiddle.AssignOwnership(new Specialization { Specific = controlMiddle, General = grandparent });
+
+            var controlLeaf = new Type();
+            controlLeaf.AssignOwnership(new Specialization { Specific = controlLeaf, General = controlMiddle });
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(controlLeaf.ComputeInheritedMembershipsOperation(null, null, false), Does.Contain(hiddenMembership));
+                Assert.That(middle.ComputeInheritedMembershipsOperation(null, null, false), Does.Not.Contain(hiddenMembership));
+                Assert.That(leaf.ComputeInheritedMembershipsOperation(null, null, false), Does.Not.Contain(hiddenMembership));
+            }
+        }
+
+        [Test]
+        public void VerifyComputeInheritedMembershipsOperationWithCircularSpecialization()
+        {
+            // KerML §8.2.3.5.1 makes circularity LEGAL for Specializations, so `excludedTypes` is a
+            // normative cycle guard rather than a defensive one, and `inheritedMemberships(T, eTs)` is
+            // genuinely PATH-DEPENDENT: the answer for a Type depends on which Types are already on the
+            // specialization path that reached it. Any memoisation keyed on the Type alone is unsound here.
+            var first = new Type();
+            var second = new Type();
+
+            var firstMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            first.AssignOwnership(firstMembership, new Feature { DeclaredName = "first" });
+
+            var secondMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            second.AssignOwnership(secondMembership, new Feature { DeclaredName = "second" });
+
+            first.AssignOwnership(new Specialization { Specific = first, General = second });
+            second.AssignOwnership(new Specialization { Specific = second, General = first });
+
+            using (Assert.EnterMultipleScope())
+            {
+                // Terminates, and each Type inherits the other's membership but never its own: descending
+                // from `first` puts it on the path, so `second`'s Specialization back to it is skipped.
+                Assert.That(first.ComputeInheritedMembershipsOperation(null, null, false), Is.EqualTo([secondMembership]));
+                Assert.That(second.ComputeInheritedMembershipsOperation(null, null, false), Is.EqualTo([firstMembership]));
+            }
+
+            // A Type specializing BOTH members of the cycle reaches each of them twice, by two paths that
+            // carry different excluded sets — and the two visits legitimately produce DIFFERENT results.
+            // Reached under path {root, first}, `second` contributes only its own membership because the
+            // step back to `first` is cut; reached under path {root, second}, `second` also contributes
+            // `first`'s. Memoising `second` on the first visit would drop the second contribution, so this
+            // is the assertion that distinguishes conditional memoisation from unconditional.
+            var root = new Type();
+            root.AssignOwnership(new Specialization { Specific = root, General = first });
+            root.AssignOwnership(new Specialization { Specific = root, General = second });
+
+            var rootInherited = root.ComputeInheritedMembershipsOperation(null, null, false);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(rootInherited.Count(membership => membership == firstMembership), Is.EqualTo(2));
+                Assert.That(rootInherited.Count(membership => membership == secondMembership), Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        public void VerifyComputeInheritedMembershipsOperationWithDiamondSpecialization()
+        {
+            // The acyclic counterpart of the circular fixture: `top` is reached by two disjoint paths that
+            // never intersect its own supertype closure, so both visits MUST agree — this is the shape
+            // memoisation is allowed to collapse, and the shape that proves it collapses to the right value.
+            var top = new Type();
+            var topMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            top.AssignOwnership(topMembership, new Feature { DeclaredName = "top" });
+
+            var left = new Type();
+            var leftMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            left.AssignOwnership(leftMembership, new Feature { DeclaredName = "left" });
+            left.AssignOwnership(new Specialization { Specific = left, General = top });
+
+            var right = new Type();
+            var rightMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            right.AssignOwnership(rightMembership, new Feature { DeclaredName = "right" });
+            right.AssignOwnership(new Specialization { Specific = right, General = top });
+
+            var bottom = new Type();
+            bottom.AssignOwnership(new Specialization { Specific = bottom, General = left });
+            bottom.AssignOwnership(new Specialization { Specific = bottom, General = right });
+
+            // `union` deduplicates only within a single nonPrivateMemberships call, so `top`'s membership
+            // legitimately arrives once per branch — collapsing it to one would be its own regression.
+            Assert.That(bottom.ComputeInheritedMembershipsOperation(null, null, false), Is.EqualTo([leftMembership, topMembership, rightMembership, topMembership]));
         }
 
         [Test]
