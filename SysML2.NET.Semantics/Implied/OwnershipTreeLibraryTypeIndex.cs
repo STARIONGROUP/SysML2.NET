@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="OwnershipTreeLibraryTypeIndex.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -93,6 +93,11 @@ namespace SysML2.NET.Semantics.Implied
         /// <param name="qualifiedName">The qualified name, for example Occurrences::Occurrence::suboccurrences.</param>
         /// <param name="type">When this method returns true, the resolved Type; otherwise null.</param>
         /// <returns>True when the qualified name resolves to an indexed Type.</returns>
+        /// <summary>
+        /// The character a qualified name uses to quote a segment that is not a valid bare name.
+        /// </summary>
+        private const char QuoteCharacter = (char)39;
+
         public bool TryGetType(string qualifiedName, out IType type)
         {
             if (string.IsNullOrWhiteSpace(qualifiedName))
@@ -102,7 +107,28 @@ namespace SysML2.NET.Semantics.Implied
                 return false;
             }
 
-            return this.typesByQualifiedName.TryGetValue(qualifiedName, out type);
+            return this.typesByQualifiedName.TryGetValue(qualifiedName, out type)
+                   || this.typesByQualifiedName.TryGetValue(Unquote(qualifiedName), out type);
+        }
+
+        /// <summary>
+        /// Removes the single quotes a qualified name uses around segments that are not valid bare names.
+        /// </summary>
+        /// <param name="qualifiedName">The qualified name to normalise.</param>
+        /// <returns>The name with each segment unquoted.</returns>
+        /// <remarks>
+        /// A constraint may target a Feature whose name needs quoting in the textual notation — the dot
+        /// operator is declared as <c>.</c> but written <c>'.'</c>, so the OCL says
+        /// <c>ControlFunctions::'.'::source::target</c> while the index is keyed on the declared names. The
+        /// quotes are notation, not part of the name, so a lookup falls back to the unquoted form.
+        /// </remarks>
+        private static string Unquote(string qualifiedName)
+        {
+            return string.Join("::", qualifiedName
+                .Split(["::"], StringSplitOptions.None)
+                .Select(segment => segment.Length > 1 && segment[0] == QuoteCharacter && segment[segment.Length - 1] == QuoteCharacter
+                    ? segment.Substring(1, segment.Length - 2)
+                    : segment));
         }
 
         /// <summary>

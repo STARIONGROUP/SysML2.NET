@@ -207,6 +207,21 @@ namespace SysML2.NET.Semantics.Implied
         ];
 
         /// <summary>
+        /// The qualified name of every library Type targeted by a row of this table, without duplicates.
+        /// </summary>
+        /// <remarks>
+        /// Every name here must resolve against a full model-library load, or the constraint that carries
+        /// it can never be satisfied. Exposed so that resolution can be asserted for the whole table rather
+        /// than only for the rows a given corpus happens to exercise.
+        /// </remarks>
+        public static IReadOnlyList<string> AllLibraryTargets { get; } =
+        [
+{{#each AllLibraryTargets as | libraryTarget |}}
+            "{{libraryTarget}}",
+{{/each}}
+        ];
+
+        /// <summary>
         /// Returns the implied library <c>Specializations</c> that apply to the supplied element, including
         /// those inherited from its supertypes in the metamodel.
         /// </summary>

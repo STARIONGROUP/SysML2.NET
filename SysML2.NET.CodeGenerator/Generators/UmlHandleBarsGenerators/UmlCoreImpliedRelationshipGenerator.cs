@@ -192,6 +192,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var rules = xmiReaderResult.QueryImpliedRelationshipRules();
 
+            // Every constraint has now been read, so a correction that matched nothing is stale: the XMI no
+            // longer carries the defect it repairs. Reported rather than thrown, since a fix upstream must
+            // not break generation.
+            foreach (var stale in OclErrata.QueryUnappliedErrata())
+            {
+                Console.WriteLine($"[OclErrata] STALE — {stale.Original} matched no OCL body and should be pruned. Recorded reason: {stale.Justification}");
+            }
+
             var generatable = rules
                 .Where(rule => rule.Form is ImpliedRuleForm.UnconditionalLibrarySpecialization or ImpliedRuleForm.GuardedLibrarySpecialization)
                 .ToLookup(rule => rule.MetaclassName, StringComparer.Ordinal);
@@ -259,12 +267,20 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                 .OrderBy(constraintName => constraintName, StringComparer.Ordinal)
                 .ToList();
 
+            var allLibraryTargets = rules
+                .Where(rule => !string.IsNullOrWhiteSpace(rule.TargetLibraryName))
+                .Select(rule => rule.TargetLibraryName)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(libraryTarget => libraryTarget, StringComparer.Ordinal)
+                .ToList();
+
             return new ImpliedRelationshipPayload
             {
                 Metaclasses = metaclasses,
                 NotCovered = notCovered,
                 AllConstraintNames = allConstraintNames,
                 ConditionalConstraintNames = conditionalConstraintNames,
+                AllLibraryTargets = allLibraryTargets,
                 Guards = guards
             };
         }
@@ -341,6 +357,12 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// a guard.
         /// </summary>
         public IReadOnlyList<string> ConditionalConstraintNames { get; init; }
+
+        /// <summary>
+        /// Gets the qualified name of every library Type targeted by a row, without duplicates, so that
+        /// resolution can be asserted for the whole table.
+        /// </summary>
+        public IReadOnlyList<string> AllLibraryTargets { get; init; }
 
         /// <summary>
         /// Gets the conditional constraints whose guard OCL was mechanically translated into a predicate.

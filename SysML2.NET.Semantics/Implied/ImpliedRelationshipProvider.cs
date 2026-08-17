@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ImpliedRelationshipProvider.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -184,13 +184,21 @@ namespace SysML2.NET.Semantics.Implied
             {
                 candidates.AddRange(ImpliedRelationshipTable.QueryImpliedLibrarySpecializations(type)
                     .Where(rule => this.Applies(rule, type))
-                    .Select(rule => this.CreateSpecialization(rule, type))
+                    .Select(rule => this.CreateSpecializationOrNull(rule, type))
                     .Where(specialization => specialization != null));
             }
 
             var ruleSpecializations = this.ApplyRules(type).OfType<ISpecialization>().ToList();
 
-            candidates.AddRange(ruleSpecializations.Where(specialization => specialization is not IRedefinition));
+            // A rule may return a Specialization whose SPECIFIC is a nested Element rather than the Type
+            // under evaluation — the result parameter of an Expression, the multiplicity of a Definition,
+            // the trigger of a TransitionUsage. Reduction compares candidates against THIS Type's declared
+            // generals and against each other, so admitting those would let a coincidental match on an
+            // unrelated Element's general discard a valid Specialization. They bypass reduction entirely.
+            var nonRedefinitions = ruleSpecializations.Where(specialization => specialization is not IRedefinition).ToList();
+            var notReducible = nonRedefinitions.Where(specialization => !ReferenceEquals(specialization.Specific, type)).ToList();
+
+            candidates.AddRange(nonRedefinitions.Where(specialization => ReferenceEquals(specialization.Specific, type)));
 
             // Redundancy reduction is deliberately NOT applied to Redefinitions: KerML 8.4.2 exempts them
             // because a Redefinition carries semantics beyond basic Specialization.
@@ -201,6 +209,7 @@ namespace SysML2.NET.Semantics.Implied
             IReadOnlyList<ISpecialization> result =
             [
                 ..reduced,
+                ..notReducible,
                 ..ruleSpecializations.OfType<IRedefinition>()
             ];
 
@@ -243,7 +252,34 @@ namespace SysML2.NET.Semantics.Implied
         /// </summary>
         /// <param name="element">The Element under evaluation.</param>
         /// <returns>The implied Relationships the rules produced, in registration order.</returns>
-        private IReadOnlyList<IRelationship> ApplyRules(IElement element) => [..this.rules.SelectMany(rule => rule.Apply(element))];
+        private IReadOnlyList<IRelationship> ApplyRules(IElement element) => [..this.rules.SelectMany(rule => this.ApplyRule(rule, element))];
+
+        /// <summary>
+        /// Applies one rule, degrading to no contribution when the library Type it targets cannot be resolved.
+        /// </summary>
+        /// <param name="rule">The rule to apply.</param>
+        /// <param name="element">The Element under evaluation.</param>
+        /// <returns>The rule's implied Relationships, or empty when its library target is unresolvable.</returns>
+        /// <remarks>
+        /// An unresolvable target has two causes and only one of them is the caller's to fix. Libraries not
+        /// loaded is a misconfiguration; a constraint naming a Feature that no library declares — a defect in
+        /// the specification OCL, or a path the index cannot express — is not. Throwing treats both alike and
+        /// costs the ENTIRE document: the exception escapes the writer mid-write and the output is truncated.
+        /// <para>Degrading costs one Relationship instead. A name that would have been shortened through it
+        /// falls back to a longer — never an invalid — form, which is the same failure mode the writer
+        /// already accepts elsewhere.</para>
+        /// </remarks>
+        private IReadOnlyList<IRelationship> ApplyRule(IImpliedRelationshipRule rule, IElement element)
+        {
+            try
+            {
+                return rule.Apply(element);
+            }
+            catch (UnresolvedLibraryTypeException)
+            {
+                return [];
+            }
+        }
 
         /// <summary>
         /// Asserts whether a table row applies to an Element, consulting the registered guard when the row
@@ -275,6 +311,25 @@ namespace SysML2.NET.Semantics.Implied
         /// <param name="type">The Type the Specialization specializes from.</param>
         /// <returns>The detached Specialization, or null when the row's kind does not match the Type.</returns>
         /// <exception cref="UnresolvedLibraryTypeException">Thrown when the targeted library Type is not indexed.</exception>
+        /// <summary>
+        /// Creates the implied Specialization for a table row, degrading to null when its library Type is
+        /// unresolvable — see <see cref="ApplyRule" /> for why this does not throw.
+        /// </summary>
+        /// <param name="rule">The table row.</param>
+        /// <param name="type">The Type under evaluation.</param>
+        /// <returns>The Specialization, or <c>null</c>.</returns>
+        private ISpecialization CreateSpecializationOrNull(ImpliedLibrarySpecialization rule, IType type)
+        {
+            try
+            {
+                return this.CreateSpecialization(rule, type);
+            }
+            catch (UnresolvedLibraryTypeException)
+            {
+                return null;
+            }
+        }
+
         private ISpecialization CreateSpecialization(ImpliedLibrarySpecialization rule, IType type)
         {
             if (!this.libraryTypeIndex.TryGetType(rule.TargetLibraryName, out var libraryType))

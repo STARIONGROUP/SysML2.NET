@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ServiceCollectionExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -76,6 +76,50 @@ namespace SysML2.NET.Semantics.Extensions
 
             services.AddImpliedRelationshipRule<VariationUsageSpecializationRule>();
             services.AddImpliedRelationshipRule<VariationDefinitionSpecializationRule>();
+            services.AddImpliedRelationshipRule<FeatureEndRedefinitionRule>();
+            services.AddImpliedRelationshipRule<FeatureResultRedefinitionRule>();
+            services.AddImpliedRelationshipRule<PayloadFeatureRedefinitionRule>();
+            services.AddImpliedRelationshipRule<RenderingUsageRedefinitionRule>();
+            services.AddImpliedRelationshipRule<ActionUsageStateActionRedefinitionRule>();
+            services.AddImpliedRelationshipRule<ForLoopActionUsageVarRedefinitionRule>();
+            services.AddImpliedRelationshipRule<AssignmentActionUsageStartingAtRedefinitionRule>();
+            services.AddImpliedRelationshipRule<AssignmentActionUsageAccessedFeatureRedefinitionRule>();
+            services.AddImpliedRelationshipRule<AssignmentActionUsageReferentRedefinitionRule>();
+            services.AddImpliedRelationshipRule<FeatureChainExpressionTargetRedefinitionRule>();
+            services.AddImpliedRelationshipRule<FeatureChainExpressionSourceTargetRedefinitionRule>();
+            services.AddImpliedRelationshipRule<FeatureFlowFeatureRedefinitionRule>();
+            services.AddImpliedRelationshipRule<FeatureParameterRedefinitionRule>();
+            services.AddImpliedRelationshipRule<RequirementUsageObjectiveRedefinitionRule>();
+
+            // Constraints whose OCL selects BETWEEN two library Features by a condition, which the
+            // single-target generated table cannot express.
+            services.AddImpliedRelationshipRule<AssertConstraintUsageSpecializationRule>();
+            services.AddImpliedRelationshipRule<SatisfyRequirementUsageSpecializationRule>();
+            services.AddImpliedRelationshipRule<IfActionUsageSpecializationRule>();
+            services.AddImpliedRelationshipRule<InvariantSpecializationRule>();
+
+            // Constraints whose OCL calls specializes(…) rather than specializesFromLibrary(…), or whose
+            // Relationship KIND the OCL leaves to the specification prose.
+            services.AddImpliedRelationshipRule<ConstructorExpressionSpecializationRule>();
+            services.AddImpliedRelationshipRule<ConstructorExpressionResultSpecializationRule>();
+            services.AddImpliedRelationshipRule<InvocationExpressionSpecializationRule>();
+            services.AddImpliedRelationshipRule<FeatureReferenceExpressionResultSpecializationRule>();
+            services.AddImpliedRelationshipRule<InvocationExpressionBehaviorResultSpecializationRule>();
+            services.AddImpliedRelationshipRule<SelectExpressionResultSpecializationRule>();
+            services.AddImpliedRelationshipRule<IndexExpressionResultSpecializationRule>();
+            services.AddImpliedRelationshipRule<FeatureValuationSpecializationRule>();
+            services.AddImpliedRelationshipRule<ConstraintUsageRequirementConstraintSpecializationRule>();
+            services.AddImpliedRelationshipRule<PartUsageActorSpecializationRule>();
+            services.AddImpliedRelationshipRule<OccurrenceDefinitionMultiplicitySpecializationRule>();
+            services.AddImpliedRelationshipRule<TransitionUsageTransitionFeatureSpecializationRule>();
+            services.AddImpliedRelationshipRule<FeatureOwnedCrossFeatureSpecializationRule>();
+            services.AddImpliedRelationshipRule<FeatureOwnedCrossFeatureRedefinitionSpecializationRule>();
+
+            // Chain-subsetting constraints: the Subsetting's general is a SYNTHESIZED feature chain.
+            services.AddImpliedRelationshipRule<DecisionNodeOutgoingSuccessionSpecializationRule>();
+            services.AddImpliedRelationshipRule<MergeNodeIncomingSuccessionSpecializationRule>();
+            services.AddImpliedRelationshipRule<FeatureChainExpressionResultSpecializationRule>();
+            services.AddImpliedRelationshipRule<TransitionUsagePayloadSpecializationRule>();
 
             // The mechanically translatable guards come from the generator; only the shapes its parser
             // deliberately declines are hand-written.

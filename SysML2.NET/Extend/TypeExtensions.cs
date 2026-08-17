@@ -30,6 +30,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="TypeExtensions"/> class provides extensions methods for
@@ -635,9 +636,12 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <remarks>
         /// <c>excludedNamespaces</c> and <c>excludeImplied</c> are passed down the recursion unchanged, so
         /// within one query the only thing that varies is the path — which is why
-        /// <see cref="PathIndependentResults"/> can be keyed on the Type alone and why the memo must NOT
-        /// outlive the query. The model is a mutable object graph; a cache that survived the call would
-        /// need invalidation the SDK has no hook for.
+        /// <see cref="PathIndependentResults"/> can be keyed on the Type alone.
+        /// <para>The model is a mutable object graph, so the memo must not outlive a traversal of it. By
+        /// default it lives and dies with the query. A caller that knows it is traversing a model that will
+        /// not change can widen that lifetime to a whole traversal by opening an
+        /// <see cref="InheritanceScope"/>, in which case queries carrying the default signature share one
+        /// memo instead of each rebuilding the supertype chain their Types have in common.</para>
         /// </remarks>
         private sealed class InheritanceQuery
         {
@@ -658,6 +662,12 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 this.ExcludedNamespaces = excludedNamespaces ?? [];
                 this.PathTypes = [..excludedTypes ?? []];
                 this.ExcludeImplied = excludeImplied;
+
+                var isDefaultSignature = this.ExcludedNamespaces.Count == 0 && this.PathTypes.Count == 0 && !excludeImplied;
+
+                this.PathIndependentResults = isDefaultSignature && InheritanceScope.Current != null
+                    ? InheritanceScope.Current.DefaultSignatureResults
+                    : [];
             }
 
             /// <summary>
@@ -680,7 +690,11 @@ namespace SysML2.NET.Core.POCO.Core.Types
             /// Gets the non-private Memberships of Types whose subtree never consulted the cycle guard, and
             /// which are therefore the same no matter which path reaches them.
             /// </summary>
-            internal Dictionary<IType, List<IMembership>> PathIndependentResults { get; } = [];
+            /// <remarks>
+            /// Shared with the open <see cref="InheritanceScope"/> when this query carries the default
+            /// signature; private to the query otherwise.
+            /// </remarks>
+            internal Dictionary<IType, List<IMembership>> PathIndependentResults { get; }
         }
 
         /// <summary>

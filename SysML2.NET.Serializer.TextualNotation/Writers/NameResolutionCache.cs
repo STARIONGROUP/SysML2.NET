@@ -95,6 +95,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private readonly IImpliedRelationshipProvider impliedRelationshipProvider;
 
         /// <summary>
+        /// Elements of the resolution graph keyed by Id, built lazily on the first implied-general
+        /// translation. Instance state, never shared: each writer context carries its own cache, so
+        /// parallel writers cannot observe or pollute one another.
+        /// </summary>
+        private Dictionary<Guid, IElement> resolutionGraphElementsById;
+
+        /// <summary>
         /// Initializes the cache and eagerly indexes every namespace reachable from
         /// <paramref name="rootNamespace" />.
         /// </summary>
@@ -955,7 +962,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             // them a redefinition of a member inherited THROUGH such a Specialization cannot shorten and
             // degrades to a fully qualified name. Appended last so declared supertypes keep priority.
             generalScopes.AddRange(this.impliedRelationshipProvider.GetImpliedSpecializations(owningType)
-                .Select(specialization => specialization.General)
+                .Select(specialization => this.TranslateToResolutionGraph(specialization.General))
                 .OfType<INamespace>()
                 .Where(general => !ReferenceEquals(general, owningType) && !generalScopes.Contains(general)));
 
@@ -966,12 +973,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var rawName = QueryPreferredRawName(target);
 
-            var bindingScope = string.IsNullOrWhiteSpace(rawName)
-                ? null
-                : generalScopes.FirstOrDefault(scope =>
-                    this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner: null, selfBindingScope: null) == SimpleNameResolution.Matched);
+            if (string.IsNullOrWhiteSpace(rawName))
+            {
+                return generalScopes[0];
+            }
 
-            return bindingScope ?? generalScopes[0];
+            // Only a scope that actually binds the name can be the scope the redefinition's own binding
+            // would have occupied. Electing one that does not — which became reachable once implied
+            // Specializations joined the candidates — makes the caller treat the name as self-bound there
+            // and walk past the scope that really holds it, ending in a needlessly qualified name.
+            return generalScopes.FirstOrDefault(scope =>
+                this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner: null, selfBindingScope: null) == SimpleNameResolution.Matched);
         }
 
         /// <summary>
@@ -981,14 +993,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>For a <see cref="ISpecialization"/> the spec anchors resolution at the
         /// <c>owningNamespace</c> of the <c>owningType</c> — one level OUT from the owning feature — so the
         /// owning feature's own and inherited members are NOT in scope.</para>
-        /// <para>NOT implemented: the clause also anchors a <see cref="IReferenceSubsetting"/> whose
-        /// <c>referencingFeature</c> is an end feature of a <see cref="IConnector"/> at the CONNECTOR's owning
-        /// namespace. Applying that emits <c>Actions::Action::start</c> where 3a-1 needs the short <c>start</c>
-        /// the pilot writes; the cause is NOT diagnosed, since that namespace inherits <c>start</c> and ought
-        /// to resolve it. Meanwhile the climb anchors deeper than the spec allows — at the end feature, so the
-        /// end's and the connector's own members are wrongly in scope — which may be masking an indexing gap.
-        /// On odd resolution around connector ends, check first whether the connector's owning namespace binds
-        /// the name at all.</para>
+        /// <para>A <see cref="IReferenceSubsetting"/> whose <c>referencingFeature</c> is an end feature of a
+        /// <see cref="IConnector"/> anchors at the CONNECTOR's owning namespace. That namespace inherits the
+        /// referenced name only through IMPLIED Specializations, so this anchoring works only because the
+        /// simple-name index folds implied generals in — translated into THIS graph first, since the implied
+        /// layer may be wired against a separate library load whose instances never satisfy reference
+        /// equality here. See <c>TranslateToResolutionGraph</c>; diagnosis in
+        /// .team-notes/start-overqualification-diagnosis.md.</para>
         /// </summary>
         /// <param name="sourcePoco">The context relationship at the reference site.</param>
         /// <returns>The local scope, or <see langword="null" /> when the generic climb applies.</returns>
@@ -999,7 +1010,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // Connector ends keep the containment climb — see the remark above. This case must precede
                 // ISpecialization: a ReferenceSubsetting IS a Specialization and would otherwise be
                 // re-anchored by the general rule below.
-                IReferenceSubsetting { referencingFeature: { IsEnd: true, owningType: IConnector } } => null,
+                IReferenceSubsetting { referencingFeature: { IsEnd: true, owningType: IConnector connector } } => QueryOwningContainer(connector),
                 ISpecialization specialization => specialization.owningType != null ? QueryOwningContainer(specialization.owningType) : QueryOwningContainer(specialization),
                 IConjugation conjugation => conjugation.owningType != null ? QueryOwningContainer(conjugation.owningType) : QueryOwningContainer(conjugation),
                 _ => null
@@ -1565,26 +1576,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Indexes the entries inherited from <paramref name="type" />'s transitive supertypes; namespace
         /// supertypes are enqueued as scopes in their own right.
         /// <para>
-        /// KNOWN DIVERGENCE from <c>Type::inheritedMembership</c> (KerML §8.3.3.1.10): this walk flattens
-        /// the hierarchy and applies only <c>removeRedefinedFeatures</c> condition 2, at the leaf type
-        /// alone, so a membership an intermediate supertype redefined away still reaches this index. It
-        /// also admits <c>private</c> supertype members and misses their <c>public</c>/<c>protected</c>
-        /// imports. The SDK's <c>type.inheritedMembership</c> is spec-faithful on all three counts and is
-        /// verified for the transitive case by
-        /// <c>TypeExtensionsTestFixture.VerifyComputeInheritedMembershipsOperation</c>, so it is the
-        /// intended replacement, and delegating to it is a small, well-understood diff. It was attempted
-        /// and backed out for COST, not correctness: <c>inheritedMembership</c> recomputes the transitive
-        /// closure on every access (no memoisation) and this method runs once per indexed Type, which took
-        /// the textual-notation validation fixture from 17 s to over 4 minutes (measured back-to-back on an
-        /// otherwise idle machine). Delegating therefore needs a memoisation layer first — either inside
-        /// <c>TypeExtensions</c> or as a per-Type memo held by this cache.
+        /// Membership indexing delegates to <c>Type::inheritedMembership</c> (KerML §8.3.3.1.10) rather than
+        /// re-deriving it. An earlier flattened walk applied <c>removeRedefinedFeatures</c> condition 2 at
+        /// the leaf type only — so a membership an intermediate supertype redefined away still reached the
+        /// index — and it admitted <c>private</c> supertype members while missing their
+        /// <c>public</c>/<c>protected</c> imports. Delegating is spec-faithful on all three counts.
+        /// </para>
+        /// <para>
+        /// The delegation had previously been backed out for COST, when <c>inheritedMembership</c>
+        /// recomputed the transitive closure on every access and took the validation fixture from 17 s to
+        /// over 4 minutes. The per-query memoisation since added to <c>TypeExtensions</c> removes that
+        /// blow-up: the same fixture now runs in 40 s against 18 s for the flattened walk, measured
+        /// back-to-back. That remaining ~2x is the price of spec fidelity, and the corpus output is
+        /// unchanged by the switch.
         /// </para>
         /// </summary>
         /// <param name="type">The type whose inherited memberships are indexed.</param>
         /// <param name="index">The destination index.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed.</param>
         /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
-        private static void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
+        private void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
             var inheritableSupertypes = QueryAllSupertypesSafe(type)
                 .OfType<IType>()
@@ -1596,75 +1607,203 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 pending.Enqueue((supertypeAsNamespace, isGlobal));
             }
 
-            var featuresRedefinedByOwned = QueryFeaturesRedefinedByOwnedFeatures(type);
+            List<IMembership> inheritedMemberships;
 
-            foreach (var supertype in inheritableSupertypes)
+            try
             {
-                try
+                inheritedMemberships = type.inheritedMembership;
+            }
+            catch (NotSupportedException)
+            {
+                // Resolving inheritance is atomic: a derivation that is unimplemented ANYWHERE in this
+                // Type's transitive supertype closure costs the whole closure, not just the branch that
+                // raised. Names that would have resolved through an unaffected supertype then fall back
+                // to a longer — never an invalid — form.
+                return;
+            }
+
+            foreach (var inheritedMember in inheritedMemberships
+                         .Where(inheritedMember => IsVisibleWhenGlobal(inheritedMember, isGlobal)))
+            {
+                AddMembershipEntry(index, inheritedMember, pending, isGlobal);
+            }
+
+            // Implied Specializations are DETACHED — the layer computing them never touches
+            // ownedRelationship, so inheritedMembership above cannot see them and a name inherited ONLY
+            // through an implied general never reaches the index. Resolution then walks past the scope that
+            // really binds the name and emits a needlessly qualified form.
+            //
+            // These entries are LOOKUP-ONLY. The implied general is deliberately NOT enqueued as a scope:
+            // `pending` drives traversal into further namespaces, and an implied general is a library Type,
+            // so enqueueing it would drag the model libraries into the walk. Only the members it contributes
+            // are indexed, so nothing here can reach the writer.
+            foreach (var impliedGeneral in this.QueryImpliedGeneralClosure(type, inheritableSupertypes))
+            {
+                // `pending` feeds INDEX construction only — it is not the traversal that emits output — so
+                // indexing the general as a scope in its own right keeps the fix lookup-only while making
+                // the names it owns resolvable.
+                if (impliedGeneral is INamespace impliedGeneralAsNamespace)
                 {
-                    foreach (var ownedMember in supertype.ownedMembership
-                                 .Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal))
-                                 .Where(ownedMember => !IsRedefinedAway(ownedMember, featuresRedefinedByOwned)))
-                    {
-                        AddMembershipEntry(index, ownedMember, pending, isGlobal);
-                    }
+                    pending.Enqueue((impliedGeneralAsNamespace, isGlobal));
                 }
-                catch (NotSupportedException)
-                {
-                    // ownedMembership not implemented for this supertype; skip.
-                }
+
+                AddImpliedLookupEntries(impliedGeneral, index, isGlobal);
             }
         }
 
         /// <summary>
-        /// Collects the features directly redefined by <paramref name="type" />'s owned features — the
-        /// <c>ownedFeature.redefinition.redefinedFeature</c> set of <c>removeRedefinedFeatures</c>.
+        /// Translates a Type produced by the implied-relationship layer into this cache's OWN object graph.
         /// </summary>
-        /// <param name="type">The type whose owned redefinitions are collected.</param>
-        /// <returns>The redefined features; empty when unavailable.</returns>
-        private static HashSet<IElement> QueryFeaturesRedefinedByOwnedFeatures(IType type)
+        /// <param name="impliedGeneral">The general of an implied Specialization, possibly from a foreign graph.</param>
+        /// <returns>The same-Id Type of the resolution graph, or <c>null</c> when the graph does not carry it.</returns>
+        /// <remarks>
+        /// The implied layer may be wired against a SEPARATE library load — a full, model-independent one —
+        /// so the generals it returns can be different POCO instances than the ones this cache resolves
+        /// against, even for the same library element (same <c>Id</c>). Indexing a foreign instance is
+        /// worse than useless: it can never equal a resolution target by reference, so it answers
+        /// <c>Shadowed</c> and STOPS the outward walk that would otherwise have found the local instance.
+        /// Translating by Id keeps reference equality authoritative everywhere else. A general the
+        /// resolution graph does not carry is dropped: its members can never be targets here.</remarks>
+        private IType TranslateToResolutionGraph(IType impliedGeneral)
         {
-            try
+            if (impliedGeneral == null)
             {
-                return [..type.ownedFeature
-                    .SelectMany(ownedFeature => ownedFeature.OwnedRelationship.OfType<IRedefinition>())
-                    .Select(redefinition => (IElement)redefinition.RedefinedFeature)
-                    .Where(redefined => redefined != null)];
+                return null;
             }
-            catch (NotSupportedException)
+
+            this.resolutionGraphElementsById ??= this.BuildResolutionGraphIndex();
+
+            if (this.resolutionGraphElementsById.TryGetValue(impliedGeneral.Id, out var local))
             {
-                return [];
+                return local as IType;
             }
+
+            // The general may belong to THIS graph already — a hand-coded rule computing against the model
+            // itself returns resolution-graph instances, which the containment walk below indexes only for
+            // library namespaces.
+            return this.IsInResolutionGraph(impliedGeneral) ? impliedGeneral : null;
         }
 
         /// <summary>
-        /// Applies condition 2 of <c>Type::removeRedefinedFeatures</c>: an inherited membership drops out of
-        /// the local scope when its member element — or anything that element redefines — is redefined by an
-        /// owned feature of the inheriting type. The redefinition's own target is still reachable through the
-        /// §8.2.3.5.1 supertype scope (see <see cref="QueryRedefinedFeatureScope" />).
+        /// Builds the by-Id index of every Element reachable from the global namespaces.
         /// </summary>
-        /// <param name="membership">The candidate inherited membership.</param>
-        /// <param name="featuresRedefinedByOwned">Features redefined by the inheriting type's owned features.</param>
-        /// <returns><see langword="true" /> when the membership must not be indexed.</returns>
-        private static bool IsRedefinedAway(IMembership membership, HashSet<IElement> featuresRedefinedByOwned)
+        /// <returns>The index.</returns>
+        private Dictionary<Guid, IElement> BuildResolutionGraphIndex()
         {
-            if (featuresRedefinedByOwned.Count == 0 || membership.MemberElement is not IFeature memberFeature)
+            var elementsById = new Dictionary<Guid, IElement>();
+            var pendingElements = new Queue<IElement>();
+
+            foreach (var globalNamespace in this.globalNamespaces)
             {
-                return false;
+                pendingElements.Enqueue(globalNamespace);
             }
 
-            if (featuresRedefinedByOwned.Contains(memberFeature))
+            while (pendingElements.Count > 0)
             {
-                return true;
+                var current = pendingElements.Dequeue();
+
+                // First-wins on a duplicate Id: distinct libraries carry unique Ids, so a collision only
+                // occurs when the same library is loaded twice, and the copies are then interchangeable.
+                if (!elementsById.TryAdd(current.Id, current))
+                {
+                    continue;
+                }
+
+                foreach (var owned in current.OwnedRelationship.SelectMany(relationship => relationship.OwnedRelatedElement))
+                {
+                    pendingElements.Enqueue(owned);
+                }
+            }
+
+            return elementsById;
+        }
+
+        /// <summary>
+        /// Asserts whether an Element belongs to this cache's own graph, by walking its owners to a known root.
+        /// </summary>
+        /// <param name="element">The Element to test.</param>
+        /// <returns>True when an owner chain reaches the root or a global namespace.</returns>
+        private bool IsInResolutionGraph(IElement element)
+        {
+            for (var current = element; current != null; current = current.owner)
+            {
+                if (ReferenceEquals(current, this.RootNamespace) || this.globalNamespaces.Contains(current))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns every Type reachable from a Type or its declared supertypes through implied
+        /// Specializations, transitively.
+        /// </summary>
+        /// <param name="type">The Type whose implied generals are collected.</param>
+        /// <param name="declaredSupertypes">The declared supertypes, which carry implied Specializations of their own.</param>
+        /// <returns>The implied generals, without duplicates.</returns>
+        private List<IType> QueryImpliedGeneralClosure(IType type, List<IType> declaredSupertypes)
+        {
+            var visited = new HashSet<IType>();
+            var pendingTypes = new Queue<IType>();
+
+            pendingTypes.Enqueue(type);
+
+            foreach (var declaredSupertype in declaredSupertypes)
+            {
+                pendingTypes.Enqueue(declaredSupertype);
+            }
+
+            var impliedGenerals = new List<IType>();
+
+            while (pendingTypes.Count > 0)
+            {
+                var current = pendingTypes.Dequeue();
+
+                foreach (var general in this.impliedRelationshipProvider.GetImpliedSpecializations(current)
+                             .Select(specialization => this.TranslateToResolutionGraph(specialization.General))
+                             .Where(general => general != null && visited.Add(general)))
+                {
+                    impliedGenerals.Add(general);
+                    pendingTypes.Enqueue(general);
+                }
+            }
+
+            return impliedGenerals;
+        }
+
+        /// <summary>
+        /// Indexes, for lookup only, the members an implied general contributes.
+        /// </summary>
+        /// <param name="impliedGeneral">The Type reached through an implied Specialization.</param>
+        /// <param name="index">The destination index.</param>
+        /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
+        private static void AddImpliedLookupEntries(IType impliedGeneral, Dictionary<string, HashSet<IElement>> index, bool isGlobal)
+        {
+            var contributed = new List<IMembership>();
+
+            if (impliedGeneral is INamespace impliedGeneralAsNamespace)
+            {
+                // Stricter than the declared-supertype walk on purpose: an implied general is reached
+                // without any authored relationship, so its private internals are never exposed, even in a
+                // non-global scope where IsVisibleWhenGlobal alone would admit them.
+                contributed.AddRange(impliedGeneralAsNamespace.ownedMembership
+                    .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private));
             }
 
             try
             {
-                return memberFeature.AllRedefinedFeatures().Any(featuresRedefinedByOwned.Contains);
+                contributed.AddRange(impliedGeneral.inheritedMembership);
             }
             catch (NotSupportedException)
             {
-                return false;
+                // Same atomicity as above: an unimplemented derivation costs this general's contribution.
+            }
+
+            foreach (var member in contributed.Where(member => IsVisibleWhenGlobal(member, isGlobal)))
+            {
+                AddLookupOnlyEntry(index, member);
             }
         }
 
@@ -1693,6 +1832,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 pending.Enqueue((targetAsNamespace, isGlobal));
             }
+        }
+
+        /// <summary>
+        /// Indexes a Membership for name lookup WITHOUT extending the namespace traversal.
+        /// </summary>
+        /// <param name="index">The destination index.</param>
+        /// <param name="membership">The Membership to index.</param>
+        /// <remarks>
+        /// The counterpart of <see cref="AddMembershipEntry" />, minus its <c>pending</c> enqueue. Used for
+        /// members reached through an IMPLIED Specialization: they must be resolvable by name, but the
+        /// library Types they come from must not be pulled into the walk that produces output.
+        /// </remarks>
+        private static void AddLookupOnlyEntry(Dictionary<string, HashSet<IElement>> index, IMembership membership)
+        {
+            if (membership is not { MemberElement: { } target })
+            {
+                return;
+            }
+
+            var (shortName, longName) = QueryMembershipNames(membership, target);
+
+            AddIndexEntry(index, shortName, target);
+            AddIndexEntry(index, longName, target);
         }
 
         /// <summary>

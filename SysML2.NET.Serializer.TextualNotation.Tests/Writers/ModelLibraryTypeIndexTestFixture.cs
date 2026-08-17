@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
 {
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.Extensions.Logging;
@@ -62,6 +63,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             var loader = new ModelLibraryLoader(loggerFactory, redirectingService);
 
             this.index = OwnershipTreeLibraryTypeIndex.Build(await loader.LoadAsync(libraryRoot));
+        }
+
+        [Test]
+        public void VerifyEveryTableTargetResolves()
+        {
+            // The whole table, not just the rows a corpus happens to exercise: a row whose library Type
+            // does not resolve can never be satisfied, and surfaces only when a model reaches that row.
+            // Eight such rows were found this way, all traced to typos in the XMI OCL and corrected by the
+            // generator's errata map (SysML2.NET.CodeGenerator/Extensions/OclErrata.cs).
+            var unresolved = ImpliedRelationshipTable.AllLibraryTargets
+                .Where(libraryTarget => !this.index.TryGetType(libraryTarget, out _))
+                .ToList();
+
+            Assert.That(unresolved, Is.Empty, $"unresolved library targets: {string.Join(", ", unresolved)}");
         }
 
         [Test]

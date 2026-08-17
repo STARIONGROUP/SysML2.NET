@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ImpliedRelationshipFactory.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -25,6 +25,7 @@ namespace SysML2.NET.Semantics.Implied
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Creates detached Relationship instances that carry isImplied.
@@ -90,6 +91,35 @@ namespace SysML2.NET.Semantics.Implied
                 SubsettingFeature = specific,
                 SubsettedFeature = general
             };
+        }
+
+        /// <summary>
+        /// Creates a detached Feature whose chainingFeatures are the two supplied Features, in order.
+        /// </summary>
+        /// <param name="first">The first Feature of the chain.</param>
+        /// <param name="second">The second Feature of the chain.</param>
+        /// <returns>A detached Feature standing for the chain <c>first.second</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when either Feature is null.</exception>
+        public IFeature CreateImpliedFeatureChain(IFeature first, IFeature second)
+        {
+            if (first == null)
+            {
+                throw new ArgumentNullException(nameof(first));
+            }
+
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            var chain = new Feature { Id = Guid.NewGuid() };
+
+            // The chain is expressed through owned FeatureChainings, which is what chainingFeature derives
+            // from — setting the derived list directly would not survive a re-read of the property.
+            chain.AssignOwnership(new FeatureChaining { Id = Guid.NewGuid(), IsImplied = true, ChainingFeature = first });
+            chain.AssignOwnership(new FeatureChaining { Id = Guid.NewGuid(), IsImplied = true, ChainingFeature = second });
+
+            return chain;
         }
 
         /// <summary>

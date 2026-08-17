@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IImpliedRelationshipFactory.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -50,6 +50,23 @@ namespace SysML2.NET.Semantics.Implied
         /// <returns>A detached Subsetting with isImplied set.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown when either argument is null.</exception>
         ISubsetting CreateImpliedSubsetting(IFeature specific, IFeature general);
+
+        /// <summary>
+        /// Creates a detached Feature whose chainingFeatures are the two supplied Features, in order.
+        /// </summary>
+        /// <param name="first">The first Feature of the chain.</param>
+        /// <param name="second">The second Feature of the chain.</param>
+        /// <returns>A detached Feature standing for the chain <c>first.second</c>.</returns>
+        /// <remarks>
+        /// The <c>subsetsChain(first, second)</c> constraints are satisfied by specializing a Feature whose
+        /// last two chainingFeatures are the given pair. No such Feature need exist in the model, so one is
+        /// synthesized here to be the general of the implied Subsetting.
+        /// <para>Unlike every other product of this factory, this is an ELEMENT rather than a Relationship,
+        /// and it is a NEW element rather than one the caller already holds. A consumer that walks
+        /// <c>SubsettedFeature</c> must therefore be prepared for a Feature that is absent from the model and
+        /// carries no name — its meaning is entirely in its <c>chainingFeature</c> list.</para>
+        /// </remarks>
+        IFeature CreateImpliedFeatureChain(IFeature first, IFeature second);
 
         /// <summary>
         /// Creates an implied Redefinition between two Features.

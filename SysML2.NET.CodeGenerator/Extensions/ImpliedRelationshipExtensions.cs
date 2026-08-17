@@ -220,7 +220,10 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             var body = opaqueExpression?.Body?.FirstOrDefault(candidate => !string.IsNullOrWhiteSpace(candidate));
 
-            return body == null ? null : string.Join(' ', body.Split((char[])null, StringSplitOptions.RemoveEmptyEntries));
+            // Corrected before classification, so the target, the guard and the recorded OCL all agree.
+            return body == null
+                ? null
+                : OclErrata.Apply(string.Join(' ', body.Split((char[])null, StringSplitOptions.RemoveEmptyEntries)));
         }
     }
 }
