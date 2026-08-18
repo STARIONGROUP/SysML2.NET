@@ -86,8 +86,9 @@ namespace SysML2.NET.Semantics.Implied
         /// </summary>
         /// <remarks>
         /// Every input is fixed for the lifetime of the instance, so the answer is too. Computing it per
-        /// access allocated a fresh list on a property that reads as a field — and <see cref="IsCoveredByRule" />
-        /// consults it per constraint, so the copy was on a hot path rather than an occasional one.
+        /// access allocated a fresh list on a property that reads as a field — and
+        /// <see cref="IsConstraintCovered" /> consults it per constraint, so the copy was on a hot path
+        /// rather than an occasional one.
         /// </remarks>
         private readonly IReadOnlyList<string> notCoveredConstraints;
 

@@ -1539,11 +1539,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             foreach (var impliedGeneral in this.QueryImpliedGeneralClosure(type, declaredSupertypes))
             {
-                if (impliedGeneral is INamespace impliedGeneralAsNamespace)
-                {
-                    memberships.AddRange(QueryOwnedMembershipsSafe(impliedGeneralAsNamespace)
-                        .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private && PassesVisibilityFilter(ownedMember, visibleOnly)));
-                }
+                memberships.AddRange(QueryOwnedMembershipsSafe(impliedGeneral)
+                    .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private && PassesVisibilityFilter(ownedMember, visibleOnly)));
 
                 memberships.AddRange(QueryInheritedMembershipsSafe(impliedGeneral).Where(inheritedMember => PassesVisibilityFilter(inheritedMember, visibleOnly)));
             }
@@ -2207,10 +2204,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // `pending` feeds INDEX construction only — it is not the traversal that emits output — so
                 // indexing the general as a scope in its own right keeps the fix lookup-only while making
                 // the names it owns resolvable.
-                if (impliedGeneral is INamespace impliedGeneralAsNamespace)
-                {
-                    pending.Enqueue((impliedGeneralAsNamespace, isGlobal));
-                }
+                pending.Enqueue((impliedGeneral, isGlobal));
 
                 AddImpliedLookupEntries(impliedGeneral, index, isGlobal);
             }
@@ -2346,21 +2340,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
         private static void AddImpliedLookupEntries(IType impliedGeneral, Dictionary<string, HashSet<IElement>> index, bool isGlobal)
         {
-            var contributed = new List<IMembership>();
-
-            switch (impliedGeneral)
+            if (impliedGeneral == null)
             {
-                case null:
-                    return;
-                case INamespace impliedGeneralAsNamespace:
-                    // Stricter than the declared-supertype walk on purpose: an implied general is reached
-                    // without any authored relationship, so its private internals are never exposed, even in a
-                    // non-global scope where PassesVisibilityFilter alone would admit them.
-                    contributed.AddRange(impliedGeneralAsNamespace.ownedMembership
-                        .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private));
-
-                    break;
+                return;
             }
+
+            // Stricter than the declared-supertype walk on purpose: an implied general is reached without
+            // any authored relationship, so its private internals are never exposed, even in a non-global
+            // scope where PassesVisibilityFilter alone would admit them.
+            var contributed = new List<IMembership>(impliedGeneral.ownedMembership
+                .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private));
 
             try
             {
