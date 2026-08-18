@@ -24,10 +24,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
     using System.IO;
     using System.Threading.Tasks;
 
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     using NUnit.Framework;
 
+    using SysML2.NET.Semantics.Extensions;
+    using SysML2.NET.Semantics.Implied;
     using SysML2.NET.Serializer.TextualNotation.Tests.Wrapper;
     using SysML2.NET.Serializer.TextualNotation.Writers;
     using SysML2.NET.Serializer.Xmi;
@@ -35,6 +38,50 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
     [TestFixture]
     public class TextualNotationValidationTestFixture
     {
+        /// <summary>
+        /// The container supplying the implied-relationship services, built once for the whole fixture.
+        /// </summary>
+        private ServiceProvider serviceProvider;
+
+        /// <summary>
+        /// Builds the semantics container once for the fixture.
+        /// </summary>
+        /// <remarks>
+        /// The library index is built from a FULL, model-independent load: the 8.4.2 constraints target
+        /// library Types a given model need not import, so an index built from a model's referenced
+        /// Namespaces cannot resolve them. It is shared across every case because the load is the
+        /// expensive part — repeating it per case dominates the suite.
+        /// </remarks>
+        /// <returns>An awaitable task.</returns>
+        [OneTimeSetUp]
+        public async Task OneTimeSetUp()
+        {
+            var loggerFactory = LoggerFactory.Create(builder => builder.SetMinimumLevel(LogLevel.Error));
+
+            var libraryRoot = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources");
+
+            var redirectingService = new LibraryRedirectingExternalReferenceService(
+                libraryRoot,
+                loggerFactory.CreateLogger<LibraryRedirectingExternalReferenceService>());
+
+            var libraryNamespaces = await new ModelLibraryLoader(loggerFactory, redirectingService).LoadAsync(libraryRoot);
+
+            var services = new ServiceCollection();
+            services.AddSysML2Semantics(options => options.EnableLibrarySpecializations = true);
+            services.AddSingleton<ILibraryTypeIndex>(OwnershipTreeLibraryTypeIndex.Build(libraryNamespaces));
+
+            this.serviceProvider = services.BuildServiceProvider();
+        }
+
+        /// <summary>
+        /// Disposes the fixture's container.
+        /// </summary>
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            this.serviceProvider?.Dispose();
+        }
+
         [Test]
         [TestCase("01-Parts Tree", "1a-Parts Tree.sysmlx")]
         [TestCase("01-Parts Tree", "1c-Parts Tree Redefinition.sysmlx")]
@@ -78,10 +125,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             var readResult = await deSerializer.DeSerializeAsync(new Uri(filePath));
             var rootNamespace = readResult.RootNamespace;
 
+            // The provider memoises per Type, so each case gets its own scope while the library index and
+            // the registered guards and rules stay shared across the fixture.
+            using var serviceScope = this.serviceProvider.CreateScope();
+            var impliedRelationshipProvider = serviceScope.ServiceProvider.GetRequiredService<IImpliedRelationshipProvider>();
+
             // The referenced namespaces are the roots of the model libraries pulled in while resolving the
             // file's external references. They form the global Namespace (KerML §8.2.3.5.2), so the writer
             // needs them to shorten a reference routed through a library the model does not itself import.
-            using var writerContext = new TextualNotationWriterContext(rootNamespace, readResult.ReferencedNamespaces);
+            using var writerContext = new TextualNotationWriterContext(rootNamespace, readResult.ReferencedNamespaces, impliedRelationshipProvider);
             writerContext.EmitOperatorParentheses = true;
             var stringBuilder = new IndentedStringBuilder();
 

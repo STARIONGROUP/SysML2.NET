@@ -46,5 +46,6 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="SysML2.NET.Tests" />
+        <InternalsVisibleTo Include="SysML2.NET.Semantics.Tests" />
     </ItemGroup>
 </Project>

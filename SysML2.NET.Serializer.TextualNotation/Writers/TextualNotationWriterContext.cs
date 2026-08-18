@@ -25,6 +25,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Extensions;
+    using SysML2.NET.Semantics.Implied;
 
     /// <summary>
     /// Provides the serialization context for the textual notation builders. Carries the
@@ -35,6 +37,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     /// </summary>
     public class TextualNotationWriterContext : IDisposable
     {
+        /// <summary>
+        /// Shares inheritance resolution across the whole write, so the Types being written resolve the
+        /// library supertype chain they have in common once rather than once each.
+        /// </summary>
+        private readonly InheritanceScope inheritanceScope;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TextualNotationWriterContext"/> class.
         /// Eagerly builds the per-namespace simple-name index for every namespace reachable
@@ -55,14 +63,44 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>Optional: when omitted, resolution is confined to <paramref name="contextNamespace"/>'s own
         /// containment and import graph, which can only yield a longer — never an invalid — name.</para>
         /// </param>
-        public TextualNotationWriterContext(INamespace contextNamespace, IEnumerable<INamespace> globalNamespaces = null)
+        /// <param name="impliedRelationshipProvider">
+        /// The provider supplying the implied <c>Relationships</c> (KerML §8.4.2) that a model exported
+        /// without them omits. Optional: when omitted, a name reachable ONLY through an implied
+        /// <c>Specialization</c> degrades to a longer — never an invalid — form.
+        /// </param>
+        public TextualNotationWriterContext(INamespace contextNamespace, IEnumerable<INamespace> globalNamespaces = null, IImpliedRelationshipProvider impliedRelationshipProvider = null)
         {
-            this.CursorCache = new CursorCache();
             this.ContextNamespace = contextNamespace ?? throw new ArgumentNullException(nameof(contextNamespace));
-            this.NameResolutionCache = new NameResolutionCache(contextNamespace, globalNamespaces);
-            this.OperatorContextStack = new Stack<IExpression>();
-            this.EmitOperatorParentheses = true;
+
+            // Opened before the name-resolution index is built, so the index and the write pass that
+            // follows it share one inheritance memo; closed by Dispose.
+            this.inheritanceScope = InheritanceScope.Begin();
+
+            // Building the index walks the whole reachable model and can therefore raise on a malformed
+            // one. A constructor that throws leaves the caller's `using` with nothing to dispose, so the
+            // scope has to be closed here or it would stay open on this thread for good.
+            try
+            {
+                this.CursorCache = new CursorCache();
+                this.ImpliedRelationshipProvider = impliedRelationshipProvider ?? NullImpliedRelationshipProvider.Instance;
+                this.NameResolutionCache = new NameResolutionCache(contextNamespace, globalNamespaces, this.ImpliedRelationshipProvider);
+                this.OperatorContextStack = new Stack<IExpression>();
+                this.EmitOperatorParentheses = true;
+            }
+            catch
+            {
+                this.CursorCache?.Dispose();
+                this.inheritanceScope.Dispose();
+
+                throw;
+            }
         }
+
+        /// <summary>
+        /// Gets the provider supplying the implied <c>Relationships</c> (KerML §8.4.2) omitted by a model
+        /// exported without them; never <c>null</c>.
+        /// </summary>
+        public IImpliedRelationshipProvider ImpliedRelationshipProvider { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the writer should emit precedence-aware
@@ -121,6 +159,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public void Dispose()
         {
             this.CursorCache.Dispose();
+            this.inheritanceScope.Dispose();
         }
     }
 }

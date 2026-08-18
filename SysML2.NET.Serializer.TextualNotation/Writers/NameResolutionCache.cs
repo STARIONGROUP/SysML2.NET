@@ -30,6 +30,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
+    using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -37,6 +38,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
+    using SysML2.NET.Semantics.Implied;
 
     /// <summary>
     /// Resolves the shortest unambiguous textual name for a reference, mirroring KerML §8.2.3.5.
@@ -59,13 +61,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Lazy cache: source-POCO id → its upward containment chain of namespaces.
         /// </summary>
-        private readonly Dictionary<Guid, IReadOnlyList<INamespace>> sourceScopeChains
+        private readonly Dictionary<Guid, SourceScopeChain> sourceScopeChains
             = new ();
 
         /// <summary>
-        /// Lazy cache: <c>(target.Id, sourceLocalScope.Id)</c> → emitted string.
+        /// Lazy cache: <c>(target.Id, sourceLocalScope.Id, matchFloorScope.Id)</c> → emitted string.
         /// </summary>
-        private readonly Dictionary<(Guid TargetId, Guid SourceScopeId), string> resolvedReferences
+        private readonly Dictionary<(Guid TargetId, Guid SourceScopeId, Guid MatchFloorId), string> resolvedReferences
             = new ();
 
         /// <summary>
@@ -88,6 +90,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private readonly List<INamespace> globalNamespaces;
 
         /// <summary>
+        /// Supplies the implied <c>Relationships</c> (KerML §8.4.2) that a model exported without them
+        /// omits, so a name reachable only through one can still be shortened.
+        /// </summary>
+        private readonly IImpliedRelationshipProvider impliedRelationshipProvider;
+
+        /// <summary>
+        /// Elements of the resolution graph keyed by Id, built lazily on the first implied-general
+        /// translation. Instance state, never shared: each writer context carries its own cache, so
+        /// parallel writers cannot observe or pollute one another.
+        /// </summary>
+        private Dictionary<Guid, IElement> resolutionGraphElementsById;
+
+        /// <summary>
         /// Initializes the cache and eagerly indexes every namespace reachable from
         /// <paramref name="rootNamespace" />.
         /// </summary>
@@ -96,7 +111,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// The other loaded root namespaces (model libraries), forming the global namespace per
         /// KerML §8.2.3.5.2. Optional — without them resolution falls back to longer, equally valid names.
         /// </param>
-        public NameResolutionCache(INamespace rootNamespace, IEnumerable<INamespace> globalNamespaces = null)
+        /// <param name="impliedRelationshipProvider">
+        /// The provider supplying the implied <c>Relationships</c> a model exported without them omits.
+        /// Optional — when absent, resolution sees only the declared <c>Specializations</c>, so a name
+        /// reachable ONLY through an implied one degrades to a longer, equally valid form.
+        /// </param>
+        public NameResolutionCache(INamespace rootNamespace, IEnumerable<INamespace> globalNamespaces = null, IImpliedRelationshipProvider impliedRelationshipProvider = null)
         {
             this.RootNamespace = rootNamespace ?? throw new ArgumentNullException(nameof(rootNamespace));
 
@@ -104,6 +124,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 .Where(candidate => candidate != null && !ReferenceEquals(candidate, rootNamespace))
                 .Distinct()
                 .ToList() ?? [];
+
+            this.impliedRelationshipProvider = impliedRelationshipProvider ?? NullImpliedRelationshipProvider.Instance;
 
             this.simpleNameIndices = this.BuildSimpleNameIndices(rootNamespace);
         }
@@ -162,6 +184,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var sourceLocalScope = this.GetSourceLocalScope(sourcePoco);
 
+            // The innermost scopes of the chain are SHADOW-ONLY when the reference sits in a FeatureValue
+            // expression: the two readings of KerML §8.2.3.5.2 disagree about them, so a simple name matched
+            // there would not resolve to this target under both. See QueryValueExpressionMatchFloor.
+            var matchFloorScope = QueryValueExpressionMatchFloor(sourcePoco) ?? sourceLocalScope;
+
             // KerML §8.2.3.5.1: the ONE exception to basic resolution — a Redefinition's redefinedFeature is
             // resolved against the general Type of each ownedSpecialization of the owningType, NOT against the
             // reference site's local namespace. This is what keeps `:>> fuelCmdPort` short while the ordinary
@@ -176,6 +203,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 && this.QueryRedefinedFeatureScope(redefinitionContext, target) is { } redefinitionScope)
             {
                 sourceLocalScope = redefinitionScope;
+
+                // The exception REPLACES the local Namespace, so the elected general type is itself the
+                // innermost scope a match may come from — no scope below it to hold shadow-only.
+                matchFloorScope = redefinitionScope;
             }
 
             // A redefinition's redefining feature — and equally a reference subsetting's referencing
@@ -192,17 +223,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (localReferencer != null && !RedefinerDeclaredNameCollidesWith(localReferencer, target))
             {
-                return this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localReferencer, QuerySelfBindingScope(sourcePoco));
+                return this.ResolveFresh(target, this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localReferencer), escapedName);
             }
 
-            var cacheKey = (target.Id, sourceLocalScope?.Id ?? Guid.Empty);
+            var cacheKey = (target.Id, sourceLocalScope?.Id ?? Guid.Empty, matchFloorScope?.Id ?? Guid.Empty);
 
             if (this.resolvedReferences.TryGetValue(cacheKey, out var cached))
             {
                 return cached;
             }
 
-            var resolved = this.ResolveFresh(target, sourcePoco, sourceLocalScope, escapedName, localRedefiner: null, QuerySelfBindingScope(sourcePoco));
+            var resolved = this.ResolveFresh(target, this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localRedefiner: null), escapedName);
             this.resolvedReferences[cacheKey] = resolved;
             return resolved;
         }
@@ -272,7 +303,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             for (var anchorIndex = 0; anchorIndex < namedAncestors.Count; anchorIndex++)
             {
-                if (namedAncestors[anchorIndex] is not INamespace anchor || !this.BindsDirectly(anchor, target, targetSegment))
+                if (namedAncestors[anchorIndex] is not INamespace anchor
+                    || !this.BindsDirectly(anchor, target, targetSegment)
+                    || !this.IsSuffixVisible(namedAncestors.Take(anchorIndex + 1).Append(target)))
                 {
                     continue;
                 }
@@ -292,7 +325,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Determines whether <paramref name="scope" />'s index binds <paramref name="segment" /> uniquely
-        /// to <paramref name="target" /> — i.e. the target is nameable directly from that scope.
+        /// to <paramref name="target" />, VISIBLY — i.e. the target is nameable from outside that scope,
+        /// which is what a qualified path through it requires (KerML §8.2.3.5.3).
         /// </summary>
         /// <param name="scope">The candidate anchor namespace.</param>
         /// <param name="target">The element being named.</param>
@@ -306,24 +340,44 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                    && this.GetSimpleNameIndex(scope).TryGetValue(rawName, out var bucket)
                    && bucket.Count == 1
                    && bucket.Contains(target)
-                   && !string.IsNullOrWhiteSpace(segment);
+                   && !string.IsNullOrWhiteSpace(segment)
+                   && this.BindsVisibly(scope, rawName, target);
         }
 
         /// <summary>
-        /// Returns the scope in which <paramref name="sourcePoco" /> is itself the name binding for the
-        /// target — a non-owning <see cref="IMembership"/> without a name override IS the reference being
-        /// emitted, and its binding does not exist yet at parse time. Its entry must be ignored in that
-        /// scope or every reference would resolve trivially at depth 0.
+        /// Returns the binding that <paramref name="sourcePoco" /> IS — a non-owning
+        /// <see cref="IMembership"/> without a name override is the reference being emitted, and its
+        /// binding does not exist yet at parse time. Its entry must be discounted in its own scope or
+        /// every such reference would resolve trivially at depth 0.
         /// </summary>
         /// <param name="sourcePoco">The source POCO at the reference site.</param>
-        /// <returns>The scope whose binding for the target must be ignored, or <see langword="null" />.</returns>
-        private static INamespace QuerySelfBindingScope(IElement sourcePoco)
+        /// <returns>The self binding, or <see langword="null" /> when the source is not one.</returns>
+        private static SelfBinding QuerySelfBinding(IElement sourcePoco)
         {
             return sourcePoco is IMembership membership and not IOwningMembership
                    && string.IsNullOrWhiteSpace(membership.MemberName)
                    && string.IsNullOrWhiteSpace(membership.MemberShortName)
-                ? membership.OwningRelatedElement as INamespace
+                   && membership.OwningRelatedElement is INamespace bindingScope
+                ? new SelfBinding(bindingScope, membership)
                 : null;
+        }
+
+        /// <summary>
+        /// Assembles the <see cref="ReferenceSite" /> for one reference: its scope chain plus the
+        /// exclusions every probe of it must honour.
+        /// </summary>
+        /// <param name="sourcePoco">The POCO bearing the reference.</param>
+        /// <param name="sourceLocalScope">The pre-computed local scope (may be <see langword="null" />).</param>
+        /// <param name="matchFloorScope">The innermost scope a match may come from (may be <see langword="null" />).</param>
+        /// <param name="localRedefiner">Feature to exclude from every bucket, or <see langword="null" />.</param>
+        /// <returns>The reference site.</returns>
+        private ReferenceSite BuildReferenceSite(IElement sourcePoco, INamespace sourceLocalScope, INamespace matchFloorScope, IFeature localRedefiner)
+        {
+            return new ReferenceSite(
+                sourcePoco,
+                this.GetSourceScopeChain(sourcePoco, sourceLocalScope, matchFloorScope),
+                localRedefiner,
+                QuerySelfBinding(sourcePoco));
         }
 
         /// <summary>
@@ -332,16 +386,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// partially-qualified suffix, and finally falls back to <see cref="IElement.qualifiedName" />.
         /// </summary>
         /// <param name="target">The referenced element.</param>
-        /// <param name="sourcePoco">The reference site's source POCO.</param>
-        /// <param name="sourceLocalScope">The pre-computed local scope (may be <see langword="null" />).</param>
+        /// <param name="site">The reference site: its scope chain and the exclusions that apply to every probe.</param>
         /// <param name="escapedName">The target's escaped raw <c>name</c>.</param>
-        /// <param name="localRedefiner">Local feature to exclude from scope buckets, or <see langword="null" />.</param>
-        /// <param name="selfBindingScope">Scope whose binding of the target must be ignored, or <see langword="null" />.</param>
         /// <returns>The resolved emission string.</returns>
-        private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, string escapedName, IFeature localRedefiner, INamespace selfBindingScope)
+        private string ResolveFresh(IElement target, ReferenceSite site, string escapedName)
         {
-            var chain = this.GetSourceScopeChain(sourcePoco, sourceLocalScope);
-
             var rawShortName = target.shortName;
             string escapedShortName = null;
 
@@ -349,7 +398,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 escapedShortName = Escape(rawShortName);
 
-                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, localRedefiner, selfBindingScope, out var matchedShort))
+                if (this.TryResolveSimpleNameAcrossChain(site, target, rawShortName, escapedShortName, accept: null, out var matchedShort))
                 {
                     return matchedShort;
                 }
@@ -358,7 +407,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var rawName = target.name;
 
             if (!string.IsNullOrWhiteSpace(rawName)
-                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, localRedefiner, selfBindingScope, out var matchedLong))
+                && this.TryResolveSimpleNameAcrossChain(site, target, rawName, escapedName, accept: null, out var matchedLong))
             {
                 return matchedLong;
             }
@@ -366,24 +415,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             // An alias binds the target under a name it does not carry itself, so the probes above
             // can never find it. Preferred over facade/qualified forms — it is how the model names
             // the element at this site.
-            if (this.TryResolveViaAlias(chain, target, sourcePoco, localRedefiner, selfBindingScope, out var matchedAlias))
+            if (this.TryResolveViaAlias(site, target, out var matchedAlias))
             {
                 return matchedAlias;
             }
 
             // Facade re-export: `ISQ::mass` over `ISQBase::mass` — the SST canonical idiom
             // (KerML §8.2.3.5.4 leaves the choice open; both forms parse to the same element).
-            if (this.TryResolveViaDirectFacade(chain, target, escapedShortName, escapedName, out var matchedFacade))
+            if (this.TryResolveViaDirectFacade(site.Chain, target, escapedShortName, escapedName, out var matchedFacade))
             {
                 return matchedFacade;
             }
 
             // Walk owner-chain ancestors outward; the first that resolves uniquely anchors a
-            // partially-qualified suffix down to the target.
-            var segmentsDownToTarget = new Stack<string>();
+            // partially-qualified suffix down to the target. The suffix is kept as ELEMENTS: every segment
+            // of it is resolved by the parser with visible resolution, which has to be verified per hop.
+            var pathDownToTarget = new Stack<IElement>();
 
-            segmentsDownToTarget.Push(QueryPreferredEscapedSegment(target) ?? string.Empty);
+            pathDownToTarget.Push(target);
 
+            var descendant = target;
             var ancestor = (IElement)QueryOwningContainer(target);
             var visitedAncestors = new HashSet<IElement>();
 
@@ -401,25 +452,58 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ancestorRawName = QueryPreferredRawName(ancestor);
 
                 if (!string.IsNullOrWhiteSpace(ancestorRawName)
-                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, localRedefiner, selfBindingScope, out var matchedAnchor))
+                    && this.IsSuffixVisible(pathDownToTarget)
+                    && this.TryResolveSimpleNameAcrossChain(site, ancestor, ancestorRawName, ancestorSegment, this.BuildAnchorAcceptance(ancestor, descendant), out var matchedAnchor))
                 {
                     var builder = new StringBuilder(matchedAnchor);
 
-                    foreach (var segment in segmentsDownToTarget)
+                    foreach (var segment in pathDownToTarget)
                     {
                         builder.Append("::");
-                        builder.Append(segment);
+                        builder.Append(QueryPreferredEscapedSegment(segment) ?? string.Empty);
                     }
 
                     return builder.ToString();
                 }
 
-                segmentsDownToTarget.Push(ancestorSegment);
+                pathDownToTarget.Push(ancestor);
 
+                descendant = ancestor;
                 ancestor = QueryOwningContainer(ancestor);
             }
 
             return target.qualifiedName ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Determines whether every hop WITHIN <paramref name="pathDownToTarget" /> resolves visibly — the
+        /// hop from the anchor into the path is checked separately, against whatever the anchor segment
+        /// actually resolves to (see <see cref="BuildAnchorAcceptance" />).
+        /// </summary>
+        /// <param name="pathDownToTarget">The suffix elements, outermost first.</param>
+        /// <returns><see langword="true" /> when the suffix re-resolves segment by segment.</returns>
+        private bool IsSuffixVisible(IEnumerable<IElement> pathDownToTarget)
+        {
+            IElement predecessor = null;
+
+            foreach (var segmentElement in pathDownToTarget)
+            {
+                if (predecessor != null)
+                {
+                    var rawName = QueryPreferredRawName(segmentElement);
+
+                    if (predecessor is not INamespace predecessorScope
+                        || string.IsNullOrWhiteSpace(rawName)
+                        || !this.BindsVisibly(predecessorScope, rawName, segmentElement))
+                    {
+                        return false;
+                    }
+                }
+
+                predecessor = segmentElement;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -538,7 +622,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="escapedName">Pre-escaped target name.</param>
         /// <param name="matched">On a hit, the emitted <c>facade::simpleName</c> string.</param>
         /// <returns><see langword="true"/> when a reachable facade was found.</returns>
-        private bool TryResolveViaDirectFacade(IReadOnlyList<INamespace> chain, IElement target, string escapedShortName, string escapedName, out string matched)
+        private bool TryResolveViaDirectFacade(SourceScopeChain chain, IElement target, string escapedShortName, string escapedName, out string matched)
         {
             matched = null;
 
@@ -559,9 +643,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             INamespace bestFacade = null;
             var bestScopeDepth = int.MaxValue;
 
-            for (var scopeDepth = 0; scopeDepth < chain.Count; scopeDepth++)
+            // Starts at the match floor: a facade reachable only from a scope the pilot parser never
+            // consults would emit a name that does not re-resolve there.
+            for (var scopeDepth = chain.MatchFloor; scopeDepth < chain.Scopes.Count; scopeDepth++)
             {
-                var scope = chain[scopeDepth];
+                var scope = chain.Scopes[scopeDepth];
                 var scopeIndex = this.GetSimpleNameIndex(scope);
 
                 foreach (var facade in facades)
@@ -630,6 +716,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return false;
             }
 
+            // The facade re-exports the owner, but the target still has to be VISIBLE through it: a
+            // non-public member, or one an `import all` pulled in without re-exporting, is not.
+            var targetRawName = QueryPreferredRawName(target);
+
+            if (string.IsNullOrWhiteSpace(targetRawName) || !this.BindsVisibly(bestFacade, targetRawName, target))
+            {
+                return false;
+            }
+
             matched = bestFacadeSegment + "::" + targetSimpleName;
             return true;
         }
@@ -665,19 +760,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Walks <paramref name="chain" /> innermost-out for a scope binding <paramref name="rawName" />
-        /// uniquely to <paramref name="target" />. A scope that binds the name to anything else stops the
-        /// walk — the parser's resolution would already have claimed the name there.
+        /// Walks <paramref name="site" />'s scope chain innermost-out for a scope binding
+        /// <paramref name="rawName" /> uniquely to <paramref name="target" />. A scope that binds the name
+        /// to anything else stops the walk — the parser's resolution would already have claimed the name
+        /// there.
+        /// <para>Scopes BELOW the chain's match floor are consulted for shadowing only: a hit there is
+        /// skipped and the walk continues outward, because the pilot parser does not consult them (see
+        /// <see cref="QueryValueExpressionMatchFloor" />) and the emitted name has to resolve to the same
+        /// element under both readings.</para>
         /// </summary>
-        /// <param name="chain">The pre-built source-scope chain (innermost first).</param>
+        /// <param name="site">The reference site: its scope chain and the exclusions that apply to every probe.</param>
         /// <param name="target">The referenced element.</param>
         /// <param name="rawName">The simple-name lexical form to probe (may be blank).</param>
         /// <param name="escapedName">The escaped form to emit on a hit.</param>
-        /// <param name="localRedefiner">Local feature to exclude from scope buckets, or <see langword="null" />.</param>
-        /// <param name="selfBindingScope">Scope whose binding of the target must be ignored, or <see langword="null" />.</param>
+        /// <param name="accept">Predicate deciding whether a bound element counts as the target, or <see langword="null" /> for reference identity.</param>
         /// <param name="matched">On a hit, the simple-name string to emit.</param>
         /// <returns><see langword="true" /> when the name resolves uniquely to the target.</returns>
-        private bool TryResolveSimpleNameAcrossChain(IReadOnlyList<INamespace> chain, IElement target, string rawName, string escapedName, IFeature localRedefiner, INamespace selfBindingScope, out string matched)
+        private bool TryResolveSimpleNameAcrossChain(ReferenceSite site, IElement target, string rawName, string escapedName, Func<IElement, bool> accept, out string matched)
         {
             matched = null;
 
@@ -686,17 +785,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return false;
             }
 
-            foreach (var scope in chain)
+            for (var scopeDepth = 0; scopeDepth < site.Chain.Scopes.Count; scopeDepth++)
             {
-                var resolution = this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner, selfBindingScope);
+                var resolution = this.ResolveSimpleNameInScope(site.Chain.Scopes[scopeDepth], target, rawName, site.LocalRedefiner, site.SelfBinding, accept);
 
-                switch (resolution)
+                if (resolution == SimpleNameResolution.Shadowed)
                 {
-                    case SimpleNameResolution.Matched:
-                        matched = escapedName;
-                        return true;
-                    case SimpleNameResolution.Shadowed:
-                        return false;
+                    return false;
+                }
+
+                if (resolution == SimpleNameResolution.Matched && scopeDepth >= site.Chain.MatchFloor)
+                {
+                    matched = escapedName;
+                    return true;
                 }
             }
 
@@ -744,12 +845,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="sourcePoco">The source POCO bearing the reference; may be <see langword="null" />.</param>
         /// <param name="sourceLocalScope">The pre-computed local scope (may be <see langword="null" />).</param>
+        /// <param name="matchFloorScope">The innermost scope a match may come from (may be <see langword="null" />).</param>
         /// <returns>The cached chain.</returns>
-        private IReadOnlyList<INamespace> GetSourceScopeChain(IElement sourcePoco, INamespace sourceLocalScope)
+        private SourceScopeChain GetSourceScopeChain(IElement sourcePoco, INamespace sourceLocalScope, INamespace matchFloorScope)
         {
             if (sourcePoco == null)
             {
-                return BuildChain(sourceLocalScope ?? this.RootNamespace);
+                return BuildChain(sourceLocalScope ?? this.RootNamespace, matchFloorScope);
             }
 
             if (this.sourceScopeChains.TryGetValue(sourcePoco.Id, out var cached))
@@ -757,29 +859,63 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return cached;
             }
 
-            var chain = BuildChain(sourceLocalScope ?? this.RootNamespace);
+            var chain = BuildChain(sourceLocalScope ?? this.RootNamespace, matchFloorScope);
             this.sourceScopeChains[sourcePoco.Id] = chain;
 
             return chain;
         }
 
         /// <summary>
-        /// Materialises the <c>owningNamespace</c> chain from <paramref name="start" /> up to the root.
+        /// Materialises the <c>owningNamespace</c> chain from <paramref name="start" /> up to the root, and
+        /// locates <paramref name="matchFloorScope" /> in it.
         /// </summary>
         /// <param name="start">The starting namespace.</param>
+        /// <param name="matchFloorScope">The innermost scope a match may come from (may be <see langword="null" />).</param>
         /// <returns>The chain.</returns>
-        private static IReadOnlyList<INamespace> BuildChain(INamespace start)
+        private static SourceScopeChain BuildChain(INamespace start, INamespace matchFloorScope)
         {
-            var chain = new List<INamespace>();
+            var scopes = new List<INamespace>();
             var current = start;
 
             while (current != null)
             {
-                chain.Add(current);
+                scopes.Add(current);
                 current = QueryOwningContainer(current);
             }
 
-            return chain;
+            return new SourceScopeChain(scopes, QueryMatchFloorDepth(scopes, matchFloorScope));
+        }
+
+        /// <summary>
+        /// Returns the depth in <paramref name="scopes" /> at which a match becomes admissible.
+        /// </summary>
+        /// <param name="scopes">The chain, innermost first.</param>
+        /// <param name="matchFloorScope">The floor scope, or <see langword="null" /> for no floor.</param>
+        /// <returns>The depth; 0 admits the whole chain.</returns>
+        /// <remarks>
+        /// The floor is reached by a CONTAINMENT climb while the chain is materialised through
+        /// <c>owningNamespace</c>, so the floor is not guaranteed to sit on the chain — the invocation
+        /// redirect of <see cref="QueryExpressionScope" /> can elect a Namespace the chain does not pass
+        /// through. Falling back to depth 0 there would silently re-admit the very scopes the floor exists
+        /// to exclude, so the floor's own CONTAINERS are tried next: the innermost of them that IS on the
+        /// chain sits at or outside the floor, which keeps the constraint at least as strict as intended.
+        /// Depth 0 is reached only when the two are genuinely unrelated.
+        /// </remarks>
+        private static int QueryMatchFloorDepth(List<INamespace> scopes, INamespace matchFloorScope)
+        {
+            var visited = new HashSet<INamespace>();
+
+            for (var candidate = matchFloorScope; candidate != null && visited.Add(candidate); candidate = QueryParentNamespace(candidate))
+            {
+                var depth = scopes.IndexOf(candidate);
+
+                if (depth >= 0)
+                {
+                    return depth;
+                }
+            }
+
+            return 0;
         }
 
         /// <summary>
@@ -874,6 +1010,129 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Returns the innermost scope of a reference's chain that may produce a MATCH, or
+        /// <see langword="null" /> when every scope of the chain may.
+        /// </summary>
+        /// <param name="sourcePoco">The source POCO at the reference site.</param>
+        /// <returns>The floor scope, or <see langword="null" />.</returns>
+        /// <remarks>
+        /// KerML §8.2.3.5.2 anchors a <see cref="IMembership" /> inside a
+        /// <see cref="IFeatureReferenceExpression" /> at the "non-invocation Namespace" — the nearest
+        /// containing Namespace that is neither an expression nor a parameter of one. For a
+        /// <see cref="IFeatureValue" /> that is the value-carrying Feature ITSELF, so its inherited members
+        /// are in scope. The pilot parser (<c>NamespaceUtil.getNonExpressionNamespaceFor</c>) steps one
+        /// scope FURTHER out whenever the climb passes a FeatureValue, so those inherited members are NOT.
+        /// <para>The disagreement is observable: <c>part :>> subsystemA = subsystem1;</c> resolves under the
+        /// spec reading (the redefining Feature inherits the variation's variant Memberships) but is a name
+        /// resolution ERROR under the pilot's. This floor keeps such scopes in the chain as SHADOW sources
+        /// while barring them from producing a match, so every name emitted resolves to the same element
+        /// under both readings.</para>
+        /// </remarks>
+        private static INamespace QueryValueExpressionMatchFloor(IElement sourcePoco)
+        {
+            if (sourcePoco is not IMembership sourceMembership)
+            {
+                return null;
+            }
+
+            var subject = sourceMembership;
+            var scope = QueryExpressionScope(subject);
+            var visited = new HashSet<IMembership>();
+
+            while (scope != null
+                   && (subject is IFeatureValue || scope is IInstantiationExpression || scope is IFeatureReferenceExpression))
+            {
+                subject = QueryOwningMembershipSafe(scope);
+
+                if (subject == null || !visited.Add(subject))
+                {
+                    break;
+                }
+
+                scope = QueryExpressionScope(subject);
+            }
+
+            return scope;
+        }
+
+        /// <summary>
+        /// Returns the namespace containing <paramref name="membership" />, except for a
+        /// <see cref="IFeatureValue" /> on a parameter of an <see cref="IInstantiationExpression" />, whose
+        /// value expression is resolved against the invocation rather than against the parameter.
+        /// </summary>
+        /// <param name="membership">The membership whose containing scope is requested.</param>
+        /// <returns>The scope, or <see langword="null" /> when the membership has none.</returns>
+        private static INamespace QueryExpressionScope(IMembership membership)
+        {
+            var scope = QueryParentNamespace(membership);
+
+            if (scope == null)
+            {
+                return null;
+            }
+
+            return membership is IFeatureValue && QueryOwningContainer(scope) is IInstantiationExpression invocation
+                ? invocation
+                : scope;
+        }
+
+        /// <summary>
+        /// Returns the nearest <see cref="INamespace" /> containing <paramref name="element" />, by
+        /// CONTAINMENT rather than by the derived <c>owningNamespace</c> — which is null for a Relationship.
+        /// </summary>
+        /// <param name="element">The element to climb from; may be <see langword="null" />.</param>
+        /// <returns>The containing namespace, or <see langword="null" /> at the top of the containment tree.</returns>
+        private static INamespace QueryParentNamespace(IElement element)
+        {
+            var visited = new HashSet<IElement>();
+
+            for (var current = QueryContainer(element); current != null && visited.Add(current); current = QueryContainer(current))
+            {
+                if (current is INamespace containingNamespace)
+                {
+                    return containingNamespace;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the element CONTAINING <paramref name="element" />: the owning related element of a
+        /// Relationship — whose <c>owner</c> is null, since it is owned as a relationship rather than as a
+        /// member — and the <c>owner</c> of anything else.
+        /// </summary>
+        /// <param name="element">The element to climb from; may be <see langword="null" />.</param>
+        /// <returns>The container, or <see langword="null" /> at the top of the containment tree.</returns>
+        private static IElement QueryContainer(IElement element)
+        {
+            return element switch
+            {
+                null => null,
+                IRelationship { OwningRelatedElement: { } owningRelatedElement } => owningRelatedElement,
+                _ => QueryOwnerSafe(element),
+            };
+        }
+
+        /// <summary>
+        /// Returns <paramref name="element" />'s <c>owningMembership</c>, or <see langword="null" /> when
+        /// unreachable or the derived property is not implemented.
+        /// </summary>
+        /// <param name="element">The element whose owning membership is requested; must be non-null.</param>
+        /// <returns>The owning membership or <see langword="null" />.</returns>
+        private static IMembership QueryOwningMembershipSafe(IElement element)
+        {
+            try
+            {
+                return element.owningMembership;
+            }
+            catch (NotSupportedException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Determines whether <paramref name="redefiningFeature" /> also REFERENCES a different element that
         /// shares a simple name with <paramref name="target" /> — the <c>exhibit X :>> Y</c> shape, where the
         /// reference and the redefinition name distinct elements under one name.
@@ -936,20 +1195,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return null;
             }
 
-            // A variant Usage must directly or indirectly specialize its owning variation — SysML v2
-            // §8.3.6.4, checkUsageVariationUsageSpecialization ("If a Usage has an owningVariationUsage,
-            // then it must directly or indirectly specialize that Usage") and its Definition counterpart.
-            // That Specialization is IMPLIED, so it is absent from a model exported without implied
-            // relationships; without adding the variation scope here, a redefinition of a member the
-            // variant inherits THROUGH the variation cannot shorten and degrades to a fully qualified
-            // name. Appended last so declared supertypes keep priority.
-            if (owningType.owningMembership is IVariantMembership
-                && owningType.owningNamespace is { } owningVariation
-                && !ReferenceEquals(owningVariation, owningType)
-                && !generalScopes.Contains(owningVariation))
-            {
-                generalScopes.Add(owningVariation);
-            }
+            // A model exported without implied Relationships (KerML §8.4.2) omits Specializations the
+            // abstract syntax requires — a variant Usage specializing its owning variation, for one. Without
+            // them a redefinition of a member inherited THROUGH such a Specialization cannot shorten and
+            // degrades to a fully qualified name. Appended last so declared supertypes keep priority.
+            generalScopes.AddRange(this.impliedRelationshipProvider.GetImpliedSpecializations(owningType)
+                .Select(specialization => this.TranslateToResolutionGraph(specialization.General))
+                .OfType<INamespace>()
+                .Where(general => !ReferenceEquals(general, owningType) && !generalScopes.Contains(general)));
 
             if (generalScopes.Count == 0)
             {
@@ -958,12 +1211,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             var rawName = QueryPreferredRawName(target);
 
-            var bindingScope = string.IsNullOrWhiteSpace(rawName)
-                ? null
-                : generalScopes.FirstOrDefault(scope =>
-                    this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner: null, selfBindingScope: null) == SimpleNameResolution.Matched);
+            if (string.IsNullOrWhiteSpace(rawName))
+            {
+                return generalScopes[0];
+            }
 
-            return bindingScope ?? generalScopes[0];
+            // Only a scope that actually binds the name can be the scope the redefinition's own binding
+            // would have occupied. Electing one that does not — which became reachable once implied
+            // Specializations joined the candidates — makes the caller treat the name as self-bound there
+            // and walk past the scope that really holds it, ending in a needlessly qualified name.
+            return generalScopes.FirstOrDefault(scope =>
+                this.ResolveSimpleNameInScope(scope, target, rawName, localRedefiner: null, selfBinding: null) == SimpleNameResolution.Matched);
         }
 
         /// <summary>
@@ -973,14 +1231,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>For a <see cref="ISpecialization"/> the spec anchors resolution at the
         /// <c>owningNamespace</c> of the <c>owningType</c> — one level OUT from the owning feature — so the
         /// owning feature's own and inherited members are NOT in scope.</para>
-        /// <para>NOT implemented: the clause also anchors a <see cref="IReferenceSubsetting"/> whose
-        /// <c>referencingFeature</c> is an end feature of a <see cref="IConnector"/> at the CONNECTOR's owning
-        /// namespace. Applying that emits <c>Actions::Action::start</c> where 3a-1 needs the short <c>start</c>
-        /// the pilot writes; the cause is NOT diagnosed, since that namespace inherits <c>start</c> and ought
-        /// to resolve it. Meanwhile the climb anchors deeper than the spec allows — at the end feature, so the
-        /// end's and the connector's own members are wrongly in scope — which may be masking an indexing gap.
-        /// On odd resolution around connector ends, check first whether the connector's owning namespace binds
-        /// the name at all.</para>
+        /// <para>A <see cref="IReferenceSubsetting"/> whose <c>referencingFeature</c> is an end feature of a
+        /// <see cref="IConnector"/> anchors at the CONNECTOR's owning namespace. That namespace inherits the
+        /// referenced name only through IMPLIED Specializations, so this anchoring works only because the
+        /// simple-name index folds implied generals in — translated into THIS graph first, since the implied
+        /// layer may be wired against a separate library load whose instances never satisfy reference
+        /// equality here. See <c>TranslateToResolutionGraph</c>; diagnosis in
+        /// .team-notes/start-overqualification-diagnosis.md.</para>
         /// </summary>
         /// <param name="sourcePoco">The context relationship at the reference site.</param>
         /// <returns>The local scope, or <see langword="null" /> when the generic climb applies.</returns>
@@ -991,11 +1248,111 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // Connector ends keep the containment climb — see the remark above. This case must precede
                 // ISpecialization: a ReferenceSubsetting IS a Specialization and would otherwise be
                 // re-anchored by the general rule below.
-                IReferenceSubsetting { referencingFeature: { IsEnd: true, owningType: IConnector } } => null,
+                IReferenceSubsetting { referencingFeature: { IsEnd: true, owningType: IConnector connector } } => QueryOwningContainer(connector),
                 ISpecialization specialization => specialization.owningType != null ? QueryOwningContainer(specialization.owningType) : QueryOwningContainer(specialization),
                 IConjugation conjugation => conjugation.owningType != null ? QueryOwningContainer(conjugation.owningType) : QueryOwningContainer(conjugation),
                 _ => null
             };
+        }
+
+        /// <summary>
+        /// What stays fixed while one reference is resolved: the scopes to probe and the two exclusions
+        /// that apply to every probe of it. Only the name being looked up varies.
+        /// </summary>
+        private sealed class ReferenceSite
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ReferenceSite"/> class.
+            /// </summary>
+            /// <param name="sourcePoco">The POCO bearing the reference.</param>
+            /// <param name="chain">The scopes to probe, innermost first, with the match floor.</param>
+            /// <param name="localRedefiner">Feature to exclude from every bucket, or <see langword="null" />.</param>
+            /// <param name="selfBinding">The binding the reference itself is, or <see langword="null" />.</param>
+            internal ReferenceSite(IElement sourcePoco, SourceScopeChain chain, IFeature localRedefiner, SelfBinding selfBinding)
+            {
+                this.SourcePoco = sourcePoco;
+                this.Chain = chain;
+                this.LocalRedefiner = localRedefiner;
+                this.SelfBinding = selfBinding;
+            }
+
+            /// <summary>
+            /// Gets the POCO bearing the reference.
+            /// </summary>
+            internal IElement SourcePoco { get; }
+
+            /// <summary>
+            /// Gets the scopes to probe, innermost first, with the depth at which a match is admissible.
+            /// </summary>
+            internal SourceScopeChain Chain { get; }
+
+            /// <summary>
+            /// Gets the Feature excluded from every bucket — the reference's own redefining or
+            /// referencing Feature, which must not shadow its own target.
+            /// </summary>
+            internal IFeature LocalRedefiner { get; }
+
+            /// <summary>
+            /// Gets the binding the reference itself is, whose entry does not exist at parse time.
+            /// </summary>
+            internal SelfBinding SelfBinding { get; }
+        }
+
+        /// <summary>
+        /// The name binding a reference IS: the Membership being emitted and the scope it binds in.
+        /// </summary>
+        private sealed class SelfBinding
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SelfBinding"/> class.
+            /// </summary>
+            /// <param name="scope">The scope the membership binds in.</param>
+            /// <param name="membership">The Membership that IS the reference.</param>
+            internal SelfBinding(INamespace scope, IMembership membership)
+            {
+                this.Scope = scope;
+                this.Membership = membership;
+            }
+
+            /// <summary>
+            /// Gets the scope the membership binds in.
+            /// </summary>
+            internal INamespace Scope { get; }
+
+            /// <summary>
+            /// Gets the Membership that IS the reference, and whose binding therefore does not exist yet
+            /// at parse time.
+            /// </summary>
+            internal IMembership Membership { get; }
+        }
+
+        /// <summary>
+        /// A reference site's scope chain, innermost first, together with the depth at which a MATCH
+        /// becomes admissible.
+        /// </summary>
+        private sealed class SourceScopeChain
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SourceScopeChain"/> class.
+            /// </summary>
+            /// <param name="scopes">The scopes, innermost first.</param>
+            /// <param name="matchFloor">The index of the innermost scope a match may come from.</param>
+            internal SourceScopeChain(IReadOnlyList<INamespace> scopes, int matchFloor)
+            {
+                this.Scopes = scopes;
+                this.MatchFloor = matchFloor;
+            }
+
+            /// <summary>
+            /// Gets the scopes of the chain, innermost first.
+            /// </summary>
+            internal IReadOnlyList<INamespace> Scopes { get; }
+
+            /// <summary>
+            /// Gets the index of the innermost scope a match may come from; scopes below it are consulted
+            /// for shadowing only (see <see cref="QueryValueExpressionMatchFloor" />).
+            /// </summary>
+            internal int MatchFloor { get; }
         }
 
         /// <summary>
@@ -1023,9 +1380,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="target">The element to look up.</param>
         /// <param name="rawName">The simple-name lexical form to probe; must be non-blank.</param>
         /// <param name="localRedefiner">Feature to exclude from the bucket, or <see langword="null"/>.</param>
-        /// <param name="selfBindingScope">Scope whose binding of the target must be ignored, or <see langword="null"/>.</param>
+        /// <param name="selfBinding">The binding the reference itself is, or <see langword="null"/>.</param>
+        /// <param name="accept">Predicate deciding whether a bound element counts as the target, or <see langword="null"/> for reference identity.</param>
         /// <returns>The resolution state.</returns>
-        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName, IFeature localRedefiner, INamespace selfBindingScope)
+        private SimpleNameResolution ResolveSimpleNameInScope(INamespace scope, IElement target, string rawName, IFeature localRedefiner, SelfBinding selfBinding, Func<IElement, bool> accept = null)
         {
             var index = this.GetSimpleNameIndex(scope);
 
@@ -1034,15 +1392,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return SimpleNameResolution.NotBound;
             }
 
+            accept ??= candidate => ReferenceEquals(candidate, target);
+
             // The reference's own binding does not exist at parse time; only OTHER elements bound
             // under the name in this scope shadow the target.
-            if (selfBindingScope != null && ReferenceEquals(scope, selfBindingScope))
+            if (selfBinding != null && ReferenceEquals(scope, selfBinding.Scope))
             {
                 var isBoundToOtherElement = elements.Any(element =>
-                    !ReferenceEquals(element, target) && !ReferenceEquals(element, localRedefiner));
+                    !accept(element) && !ReferenceEquals(element, localRedefiner));
 
-                return isBoundToOtherElement
-                    ? SimpleNameResolution.Shadowed
+                if (isBoundToOtherElement)
+                {
+                    return SimpleNameResolution.Shadowed;
+                }
+
+                // The index is keyed by ELEMENT, so the reference's own entry is indistinguishable from
+                // one the scope holds anyway — inherited, imported or aliased. Only the former is absent
+                // at parse time: when another Membership of this scope binds the same name to the same
+                // element, the parser resolves the simple name here and the bare form is correct.
+                return this.BindsTargetIndependently(scope, rawName, target, selfBinding.Membership)
+                    ? SimpleNameResolution.Matched
                     : SimpleNameResolution.NotBound;
             }
 
@@ -1055,7 +1424,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (candidates.Count == 1)
             {
-                return ReferenceEquals(candidates[0], target)
+                return accept(candidates[0])
                     ? SimpleNameResolution.Matched
                     : SimpleNameResolution.Shadowed;
             }
@@ -1088,9 +1457,216 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 onlyLeaf = element;
             }
 
-            return leafCount == 1 && ReferenceEquals(onlyLeaf, target)
+            return leafCount == 1 && accept(onlyLeaf)
                 ? SimpleNameResolution.Matched
                 : SimpleNameResolution.Shadowed;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="scope" /> binds <paramref name="rawName" /> to
+        /// <paramref name="target" /> through a Membership OTHER than <paramref name="selfMembership" />,
+        /// the reference being emitted.
+        /// </summary>
+        /// <param name="scope">The scope to inspect.</param>
+        /// <param name="rawName">The simple-name lexical form.</param>
+        /// <param name="target">The referenced element.</param>
+        /// <param name="selfMembership">The Membership that IS the reference.</param>
+        /// <returns><see langword="true" /> when the binding survives without the reference itself.</returns>
+        /// <remarks>
+        /// Answers the question the element-keyed index cannot: <c>first start;</c> declares a Membership
+        /// naming the library <c>Actions::Action::start</c> in a scope that ALREADY inherits that same
+        /// element through an implied Specialization, so the parser resolves the bare name — while
+        /// <c>member Foo::bar;</c> in a scope with no other binding for <c>bar</c> does not.
+        /// <para>Deliberately a live query rather than index provenance: it runs only when the probed scope
+        /// is the reference's own AND the name is bound there to nothing else, which is rare. It mirrors
+        /// the sources of <see cref="BuildOwnedAndImportedEntries" /> and
+        /// <see cref="BuildInheritedEntries" />; a source it fails to cover only costs a longer name, never
+        /// an invalid one.</para>
+        /// </remarks>
+        private bool BindsTargetIndependently(INamespace scope, string rawName, IElement target, IMembership selfMembership)
+        {
+            return this.QueryBindingMemberships(scope, visibleOnly: false)
+                .Any(membership => !ReferenceEquals(membership, selfMembership) && BindsName(membership, rawName, target));
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="scope" /> binds <paramref name="rawName" /> to
+        /// <paramref name="target" /> among its VISIBLE Memberships — the test the parser applies to every
+        /// segment of a qualified name after the first.
+        /// </summary>
+        /// <param name="scope">The scope named by the preceding segment.</param>
+        /// <param name="rawName">The segment's simple-name lexical form.</param>
+        /// <param name="target">The element the segment must name.</param>
+        /// <returns><see langword="true" /> when the segment resolves visibly to the target.</returns>
+        /// <remarks>
+        /// <c>Namespace::resolve</c> resolves the FIRST segment with <c>resolveLocal</c> — the outward climb
+        /// over owned, imported and inherited Memberships of ANY visibility — but every following segment
+        /// with <c>resolveVisible</c>, i.e. <c>visibleMemberships(Set{}, false, false)</c>, which is public
+        /// only (KerML §8.2.3.5.3). The simple-name index cannot answer this: it is built with the
+        /// visibility filter of the path that REACHED the scope, and within the model that admits
+        /// everything. Emitting <c>A::b</c> for a <c>b</c> that is private in <c>A</c> would produce a name
+        /// no conformant parser resolves.
+        /// </remarks>
+        private bool BindsVisibly(INamespace scope, string rawName, IElement target)
+        {
+            return this.QueryBindingMemberships(scope, visibleOnly: true)
+                .Any(membership => BindsName(membership, rawName, target));
+        }
+
+        /// <summary>
+        /// Enumerates the Memberships that give <paramref name="scope" /> its name bindings: owned,
+        /// imported, inherited, and those contributed by implied generals.
+        /// </summary>
+        /// <param name="scope">The scope whose bindings are collected.</param>
+        /// <param name="visibleOnly">Whether to keep only the bindings visible OUTSIDE the scope.</param>
+        /// <returns>The Memberships, with duplicates possible.</returns>
+        private List<IMembership> QueryBindingMemberships(INamespace scope, bool visibleOnly)
+        {
+            var memberships = new List<IMembership>(QueryOwnedMembershipsSafe(scope).Where(ownedMember => PassesVisibilityFilter(ownedMember, visibleOnly)));
+
+            memberships.AddRange(QueryImportedMembershipsSafe(scope, visibleOnly));
+
+            if (scope is not IType type)
+            {
+                return memberships;
+            }
+
+            memberships.AddRange(QueryInheritedMembershipsSafe(type).Where(inheritedMember => PassesVisibilityFilter(inheritedMember, visibleOnly)));
+
+            var declaredSupertypes = QueryAllSupertypesSafe(type)
+                .Where(supertype => !ReferenceEquals(supertype, type))
+                .ToList();
+
+            foreach (var impliedGeneral in this.QueryImpliedGeneralClosure(type, declaredSupertypes))
+            {
+                memberships.AddRange(QueryOwnedMembershipsSafe(impliedGeneral)
+                    .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private && PassesVisibilityFilter(ownedMember, visibleOnly)));
+
+                memberships.AddRange(QueryInheritedMembershipsSafe(impliedGeneral).Where(inheritedMember => PassesVisibilityFilter(inheritedMember, visibleOnly)));
+            }
+
+            return memberships;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="membership" /> binds <paramref name="rawName" /> to
+        /// <paramref name="target" />, under either lexical form.
+        /// </summary>
+        /// <param name="membership">The Membership to test.</param>
+        /// <param name="rawName">The simple-name lexical form.</param>
+        /// <param name="target">The referenced element.</param>
+        /// <returns><see langword="true" /> when the membership binds the name to the target.</returns>
+        private static bool BindsName(IMembership membership, string rawName, IElement target)
+        {
+            if (membership?.MemberElement == null || !ReferenceEquals(membership.MemberElement, target))
+            {
+                return false;
+            }
+
+            var (shortName, longName) = QueryMembershipNames(membership, target);
+
+            return string.Equals(shortName, rawName, StringComparison.Ordinal)
+                   || string.Equals(longName, rawName, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Returns <paramref name="scope" />'s <c>ownedMembership</c>, or an empty list when the derived
+        /// property is not implemented.
+        /// </summary>
+        /// <param name="scope">The scope to query; must be non-null.</param>
+        /// <returns>The owned memberships, possibly empty.</returns>
+        private static List<IMembership> QueryOwnedMembershipsSafe(INamespace scope)
+        {
+            try
+            {
+                return scope.ownedMembership;
+            }
+            catch (NotSupportedException)
+            {
+                return [];
+            }
+        }
+
+        /// <summary>
+        /// Returns <paramref name="type" />'s <c>inheritedMembership</c>, or an empty list when the derived
+        /// property is not implemented.
+        /// </summary>
+        /// <param name="type">The type to query; must be non-null.</param>
+        /// <returns>The inherited memberships, possibly empty.</returns>
+        private static List<IMembership> QueryInheritedMembershipsSafe(IType type)
+        {
+            try
+            {
+                return type.inheritedMembership;
+            }
+            catch (NotSupportedException)
+            {
+                return [];
+            }
+        }
+
+        /// <summary>
+        /// Returns the Memberships <paramref name="scope" />'s own Imports contribute, mirroring
+        /// <see cref="BuildOwnedAndImportedEntries" /> minus its collision filter — a colliding import
+        /// cannot be the INDEPENDENT binding anyway, since the owned member it collides with is.
+        /// </summary>
+        /// <param name="scope">The importing scope; must be non-null.</param>
+        /// <param name="visibleOnly">Whether to keep only PUBLIC imports, the ones that re-export.</param>
+        /// <returns>The imported memberships, possibly empty.</returns>
+        private static List<IMembership> QueryImportedMembershipsSafe(INamespace scope, bool visibleOnly)
+        {
+            var imported = new List<IMembership>();
+
+            try
+            {
+                foreach (var ownedImport in scope.ownedImport.Where(ownedImport => PassesVisibilityFilter(ownedImport, visibleOnly)))
+                {
+                    switch (ownedImport)
+                    {
+                        case IMembershipImport { ImportedMembership: { } importedMembership }:
+                            imported.Add(importedMembership);
+                            break;
+                        case INamespaceImport { ImportedNamespace: not null } namespaceImport:
+                            imported.AddRange(QueryVisibleMemberships(namespaceImport.ImportedNamespace, namespaceImport.IsImportAll, false, [scope]));
+                            break;
+                    }
+                }
+            }
+            catch (NotSupportedException)
+            {
+                // ownedImport, or a derivation behind one of the imported namespaces, is not implemented.
+            }
+
+            return imported;
+        }
+
+        /// <summary>
+        /// Builds the acceptance predicate for an ancestor ANCHOR in a partially-qualified name: the anchor
+        /// segment need not resolve to <paramref name="ancestor" /> itself, as long as what it resolves to
+        /// binds the next segment to the same <paramref name="descendant" />.
+        /// </summary>
+        /// <param name="ancestor">The owner-chain ancestor being probed as an anchor.</param>
+        /// <param name="descendant">The element named by the segment immediately below the anchor.</param>
+        /// <returns>The predicate.</returns>
+        /// <remarks>
+        /// A feature that redefines a Type binds that Type's members by inheritance, so it anchors a path
+        /// through them exactly as the Type does — <c>subsystemA::subsystem1</c> where <c>subsystemA</c>
+        /// resolves to the redefining <c>part :>> subsystemA</c> rather than to the variation it redefines.
+        /// Identity of the anchor is therefore too strong a test; what matters is that the WHOLE path still
+        /// resolves to the target, which is verified here one segment at a time.
+        /// </remarks>
+        private Func<IElement, bool> BuildAnchorAcceptance(IElement ancestor, IElement descendant)
+        {
+            var descendantRawName = QueryPreferredRawName(descendant);
+
+            // Whatever the anchor segment resolves to is what the parser applies visible resolution to for
+            // the next segment, so the check runs against the CANDIDATE — for the anchor itself as much as
+            // for a Feature that redefines it.
+            return candidate => candidate is INamespace candidateScope
+                                && !string.IsNullOrWhiteSpace(descendantRawName)
+                                && this.BindsVisibly(candidateScope, descendantRawName, descendant)
+                                && (ReferenceEquals(candidate, ancestor)
+                                    || this.ResolveSimpleNameInScope(candidateScope, descendant, descendantRawName, localRedefiner: null, selfBinding: null) == SimpleNameResolution.Matched);
         }
 
         /// <summary>
@@ -1281,7 +1857,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             try
             {
-                foreach (var ownedMember in scope.ownedMembership.Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal)))
+                foreach (var ownedMember in scope.ownedMembership.Where(ownedMember => PassesVisibilityFilter(ownedMember, isGlobal)))
                 {
                     AddMembershipEntry(index, ownedMember, pending, isGlobal);
                     this.RecordAliasIfDeclared(scope, ownedMember);
@@ -1300,7 +1876,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             try
             {
-                foreach (var ownedImport in scope.ownedImport.Where(ownedImport => IsVisibleWhenGlobal(ownedImport, isGlobal)))
+                foreach (var ownedImport in scope.ownedImport.Where(ownedImport => PassesVisibilityFilter(ownedImport, isGlobal)))
                 {
                     switch (ownedImport)
                     {
@@ -1321,7 +1897,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         case INamespaceImport { ImportedNamespace: not null } namespaceImport:
                         {
                             pending.Enqueue((namespaceImport.ImportedNamespace, isGlobal));
-                            this.RecordDirectFacade(namespaceImport.ImportedNamespace, scope);
+
+                            // Only a PUBLIC import re-exports what it brings in, so only a public one makes
+                            // the importing namespace a usable facade for it (KerML §8.2.3.5.3).
+                            if (namespaceImport.Visibility == VisibilityKind.Public)
+                            {
+                                this.RecordDirectFacade(namespaceImport.ImportedNamespace, scope);
+                            }
 
                             // Own try/catch so one broken imported namespace does not lose the
                             // remaining imports of this scope.
@@ -1468,26 +2050,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// through the same first-binding-wins scope walk as an ordinary simple name, so the emitted text
         /// always round-trips to the same element.
         /// </summary>
-        /// <param name="chain">The source scope chain (innermost first).</param>
+        /// <param name="site">The reference site; its source POCO rejects the alias declaration itself.</param>
         /// <param name="target">The element being referenced.</param>
-        /// <param name="sourcePoco">The reference site's source POCO — used to reject the alias declaration itself.</param>
-        /// <param name="localRedefiner">Feature to exclude from the scope buckets, or <see langword="null"/>.</param>
-        /// <param name="selfBindingScope">Scope whose binding of the target must be ignored, or <see langword="null"/>.</param>
         /// <param name="matched">On a hit, the escaped alias name to emit.</param>
         /// <returns><see langword="true"/> when an unambiguous in-scope alias was found.</returns>
-        private bool TryResolveViaAlias(IReadOnlyList<INamespace> chain, IElement target, IElement sourcePoco, IFeature localRedefiner, INamespace selfBindingScope, out string matched)
+        private bool TryResolveViaAlias(ReferenceSite site, IElement target, out string matched)
         {
             matched = null;
 
-            var candidateAliasNames = chain
+            var candidateAliasNames = site.Chain.Scopes
                 .Where(scope => this.aliasIndex.ContainsKey(scope))
                 .SelectMany(scope => this.aliasIndex[scope].TryGetValue(target, out var aliasNames) ? aliasNames : Enumerable.Empty<string>())
                 .Distinct(StringComparer.Ordinal)
-                .Where(aliasName => !DeclaresAlias(sourcePoco, target, aliasName));
+                .Where(aliasName => !DeclaresAlias(site.SourcePoco, target, aliasName));
 
             foreach (var aliasName in candidateAliasNames)
             {
-                if (this.TryResolveSimpleNameAcrossChain(chain, target, aliasName, Escape(aliasName), localRedefiner, selfBindingScope, out matched))
+                if (this.TryResolveSimpleNameAcrossChain(site, target, aliasName, Escape(aliasName), accept: null, out matched))
                 {
                     return true;
                 }
@@ -1531,16 +2110,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// When <paramref name="isGlobal" /> is set, admits only PUBLIC memberships and imports — the
-        /// global namespace contains only the visible memberships of other roots (KerML §8.2.3.5.2), so a
-        /// name bound privately there would not re-parse. Within the model itself everything is visible.
+        /// When <paramref name="publicOnly" /> is set, admits only PUBLIC memberships and imports — the
+        /// filter both the global namespace and visible resolution apply. The global namespace contains
+        /// only the visible memberships of other roots, and every segment of a qualified name after the
+        /// first resolves against the visible memberships of the preceding one (KerML §8.2.3.5.2–.3), so a
+        /// name bound privately there would not re-parse. Within a local scope everything is visible.
         /// </summary>
         /// <param name="relationship">The <see cref="IMembership" /> or <see cref="IImport" /> considered.</param>
-        /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
+        /// <param name="publicOnly">Whether only bindings visible OUTSIDE the owning scope are admitted.</param>
         /// <returns><see langword="true" /> when the relationship may contribute a binding.</returns>
-        private static bool IsVisibleWhenGlobal(IRelationship relationship, bool isGlobal)
+        private static bool PassesVisibilityFilter(IRelationship relationship, bool publicOnly)
         {
-            if (!isGlobal)
+            if (!publicOnly)
             {
                 return true;
             }
@@ -1557,26 +2138,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Indexes the entries inherited from <paramref name="type" />'s transitive supertypes; namespace
         /// supertypes are enqueued as scopes in their own right.
         /// <para>
-        /// KNOWN DIVERGENCE from <c>Type::inheritedMembership</c> (KerML §8.3.3.1.10): this walk flattens
-        /// the hierarchy and applies only <c>removeRedefinedFeatures</c> condition 2, at the leaf type
-        /// alone, so a membership an intermediate supertype redefined away still reaches this index. It
-        /// also admits <c>private</c> supertype members and misses their <c>public</c>/<c>protected</c>
-        /// imports. The SDK's <c>type.inheritedMembership</c> is spec-faithful on all three counts and is
-        /// verified for the transitive case by
-        /// <c>TypeExtensionsTestFixture.VerifyComputeInheritedMembershipsOperation</c>, so it is the
-        /// intended replacement, and delegating to it is a small, well-understood diff. It was attempted
-        /// and backed out for COST, not correctness: <c>inheritedMembership</c> recomputes the transitive
-        /// closure on every access (no memoisation) and this method runs once per indexed Type, which took
-        /// the textual-notation validation fixture from 17 s to over 4 minutes (measured back-to-back on an
-        /// otherwise idle machine). Delegating therefore needs a memoisation layer first — either inside
-        /// <c>TypeExtensions</c> or as a per-Type memo held by this cache.
+        /// Membership indexing delegates to <c>Type::inheritedMembership</c> (KerML §8.3.3.1.10) rather than
+        /// re-deriving it. An earlier flattened walk applied <c>removeRedefinedFeatures</c> condition 2 at
+        /// the leaf type only — so a membership an intermediate supertype redefined away still reached the
+        /// index — and it admitted <c>private</c> supertype members while missing their
+        /// <c>public</c>/<c>protected</c> imports. Delegating is spec-faithful on all three counts.
+        /// </para>
+        /// <para>
+        /// The delegation had previously been backed out for COST, when <c>inheritedMembership</c>
+        /// recomputed the transitive closure on every access and took the validation fixture from 17 s to
+        /// over 4 minutes. The per-query memoisation since added to <c>TypeExtensions</c> removes that
+        /// blow-up: the same fixture now runs in 40 s against 18 s for the flattened walk, measured
+        /// back-to-back. That remaining ~2x is the price of spec fidelity, and the corpus output is
+        /// unchanged by the switch.
         /// </para>
         /// </summary>
         /// <param name="type">The type whose inherited memberships are indexed.</param>
         /// <param name="index">The destination index.</param>
         /// <param name="pending">Queue of namespaces yet to be indexed.</param>
         /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
-        private static void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
+        private void BuildInheritedEntries(IType type, Dictionary<string, HashSet<IElement>> index, Queue<(INamespace Scope, bool IsGlobal)> pending, bool isGlobal)
         {
             var inheritableSupertypes = QueryAllSupertypesSafe(type)
                 .OfType<IType>()
@@ -1588,75 +2169,200 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 pending.Enqueue((supertypeAsNamespace, isGlobal));
             }
 
-            var featuresRedefinedByOwned = QueryFeaturesRedefinedByOwnedFeatures(type);
+            List<IMembership> inheritedMemberships;
 
-            foreach (var supertype in inheritableSupertypes)
+            try
             {
-                try
-                {
-                    foreach (var ownedMember in supertype.ownedMembership
-                                 .Where(ownedMember => IsVisibleWhenGlobal(ownedMember, isGlobal))
-                                 .Where(ownedMember => !IsRedefinedAway(ownedMember, featuresRedefinedByOwned)))
-                    {
-                        AddMembershipEntry(index, ownedMember, pending, isGlobal);
-                    }
-                }
-                catch (NotSupportedException)
-                {
-                    // ownedMembership not implemented for this supertype; skip.
-                }
+                inheritedMemberships = type.inheritedMembership;
+            }
+            catch (NotSupportedException)
+            {
+                // Resolving inheritance is atomic: a derivation that is unimplemented ANYWHERE in this
+                // Type's transitive supertype closure costs the whole closure, not just the branch that
+                // raised. Names that would have resolved through an unaffected supertype then fall back
+                // to a longer — never an invalid — form.
+                return;
+            }
+
+            foreach (var inheritedMember in inheritedMemberships
+                         .Where(inheritedMember => PassesVisibilityFilter(inheritedMember, isGlobal)))
+            {
+                AddMembershipEntry(index, inheritedMember, pending, isGlobal);
+            }
+
+            // Implied Specializations are DETACHED — the layer computing them never touches
+            // ownedRelationship, so inheritedMembership above cannot see them and a name inherited ONLY
+            // through an implied general never reaches the index. Resolution then walks past the scope that
+            // really binds the name and emits a needlessly qualified form.
+            //
+            // These entries are LOOKUP-ONLY. The implied general is deliberately NOT enqueued as a scope:
+            // `pending` drives traversal into further namespaces, and an implied general is a library Type,
+            // so enqueueing it would drag the model libraries into the walk. Only the members it contributes
+            // are indexed, so nothing here can reach the writer.
+            foreach (var impliedGeneral in this.QueryImpliedGeneralClosure(type, inheritableSupertypes))
+            {
+                // `pending` feeds INDEX construction only — it is not the traversal that emits output — so
+                // indexing the general as a scope in its own right keeps the fix lookup-only while making
+                // the names it owns resolvable.
+                pending.Enqueue((impliedGeneral, isGlobal));
+
+                AddImpliedLookupEntries(impliedGeneral, index, isGlobal);
             }
         }
 
         /// <summary>
-        /// Collects the features directly redefined by <paramref name="type" />'s owned features — the
-        /// <c>ownedFeature.redefinition.redefinedFeature</c> set of <c>removeRedefinedFeatures</c>.
+        /// Translates a Type produced by the implied-relationship layer into this cache's OWN object graph.
         /// </summary>
-        /// <param name="type">The type whose owned redefinitions are collected.</param>
-        /// <returns>The redefined features; empty when unavailable.</returns>
-        private static HashSet<IElement> QueryFeaturesRedefinedByOwnedFeatures(IType type)
+        /// <param name="impliedGeneral">The general of an implied Specialization, possibly from a foreign graph.</param>
+        /// <returns>The same-Id Type of the resolution graph, or <c>null</c> when the graph does not carry it.</returns>
+        /// <remarks>
+        /// The implied layer may be wired against a SEPARATE library load — a full, model-independent one —
+        /// so the generals it returns can be different POCO instances than the ones this cache resolves
+        /// against, even for the same library element (same <c>Id</c>). Indexing a foreign instance is
+        /// worse than useless: it can never equal a resolution target by reference, so it answers
+        /// <c>Shadowed</c> and STOPS the outward walk that would otherwise have found the local instance.
+        /// Translating by Id keeps reference equality authoritative everywhere else. A general the
+        /// resolution graph does not carry is dropped: its members can never be targets here.</remarks>
+        private IType TranslateToResolutionGraph(IType impliedGeneral)
         {
-            try
+            if (impliedGeneral == null)
             {
-                return [..type.ownedFeature
-                    .SelectMany(ownedFeature => ownedFeature.OwnedRelationship.OfType<IRedefinition>())
-                    .Select(redefinition => (IElement)redefinition.RedefinedFeature)
-                    .Where(redefined => redefined != null)];
+                return null;
             }
-            catch (NotSupportedException)
+
+            this.resolutionGraphElementsById ??= this.BuildResolutionGraphIndex();
+
+            if (this.resolutionGraphElementsById.TryGetValue(impliedGeneral.Id, out var local))
             {
-                return [];
+                return local as IType;
             }
+
+            // The general may belong to THIS graph already — a hand-coded rule computing against the model
+            // itself returns resolution-graph instances, which the containment walk below indexes only for
+            // library namespaces.
+            return this.IsInResolutionGraph(impliedGeneral) ? impliedGeneral : null;
         }
 
         /// <summary>
-        /// Applies condition 2 of <c>Type::removeRedefinedFeatures</c>: an inherited membership drops out of
-        /// the local scope when its member element — or anything that element redefines — is redefined by an
-        /// owned feature of the inheriting type. The redefinition's own target is still reachable through the
-        /// §8.2.3.5.1 supertype scope (see <see cref="QueryRedefinedFeatureScope" />).
+        /// Builds the by-Id index of every Element reachable from the global namespaces.
         /// </summary>
-        /// <param name="membership">The candidate inherited membership.</param>
-        /// <param name="featuresRedefinedByOwned">Features redefined by the inheriting type's owned features.</param>
-        /// <returns><see langword="true" /> when the membership must not be indexed.</returns>
-        private static bool IsRedefinedAway(IMembership membership, HashSet<IElement> featuresRedefinedByOwned)
+        /// <returns>The index.</returns>
+        private Dictionary<Guid, IElement> BuildResolutionGraphIndex()
         {
-            if (featuresRedefinedByOwned.Count == 0 || membership.MemberElement is not IFeature memberFeature)
+            var elementsById = new Dictionary<Guid, IElement>();
+            var pendingElements = new Queue<IElement>();
+
+            foreach (var globalNamespace in this.globalNamespaces)
             {
-                return false;
+                pendingElements.Enqueue(globalNamespace);
             }
 
-            if (featuresRedefinedByOwned.Contains(memberFeature))
+            while (pendingElements.Count > 0)
             {
-                return true;
+                var current = pendingElements.Dequeue();
+
+                // First-wins on a duplicate Id: distinct libraries carry unique Ids, so a collision only
+                // occurs when the same library is loaded twice, and the copies are then interchangeable.
+                if (!elementsById.TryAdd(current.Id, current))
+                {
+                    continue;
+                }
+
+                foreach (var owned in current.OwnedRelationship.SelectMany(relationship => relationship.OwnedRelatedElement))
+                {
+                    pendingElements.Enqueue(owned);
+                }
             }
+
+            return elementsById;
+        }
+
+        /// <summary>
+        /// Asserts whether an Element belongs to this cache's own graph, by walking its owners to a known root.
+        /// </summary>
+        /// <param name="element">The Element to test.</param>
+        /// <returns>True when an owner chain reaches the root or a global namespace.</returns>
+        private bool IsInResolutionGraph(IElement element)
+        {
+            for (var current = element; current != null; current = current.owner)
+            {
+                if (ReferenceEquals(current, this.RootNamespace) || this.globalNamespaces.Contains(current))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns every Type reachable from a Type or its declared supertypes through implied
+        /// Specializations, transitively.
+        /// </summary>
+        /// <param name="type">The Type whose implied generals are collected.</param>
+        /// <param name="declaredSupertypes">The declared supertypes, which carry implied Specializations of their own.</param>
+        /// <returns>The implied generals, without duplicates.</returns>
+        private List<IType> QueryImpliedGeneralClosure(IType type, List<IType> declaredSupertypes)
+        {
+            var visited = new HashSet<IType>();
+            var pendingTypes = new Queue<IType>();
+
+            pendingTypes.Enqueue(type);
+
+            foreach (var declaredSupertype in declaredSupertypes)
+            {
+                pendingTypes.Enqueue(declaredSupertype);
+            }
+
+            var impliedGenerals = new List<IType>();
+
+            while (pendingTypes.Count > 0)
+            {
+                var current = pendingTypes.Dequeue();
+
+                foreach (var general in this.impliedRelationshipProvider.GetImpliedSpecializations(current)
+                             .Select(specialization => this.TranslateToResolutionGraph(specialization.General))
+                             .Where(general => general != null && visited.Add(general)))
+                {
+                    impliedGenerals.Add(general);
+                    pendingTypes.Enqueue(general);
+                }
+            }
+
+            return impliedGenerals;
+        }
+
+        /// <summary>
+        /// Indexes, for lookup only, the members an implied general contributes.
+        /// </summary>
+        /// <param name="impliedGeneral">The Type reached through an implied Specialization.</param>
+        /// <param name="index">The destination index.</param>
+        /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
+        private static void AddImpliedLookupEntries(IType impliedGeneral, Dictionary<string, HashSet<IElement>> index, bool isGlobal)
+        {
+            if (impliedGeneral == null)
+            {
+                return;
+            }
+
+            // Stricter than the declared-supertype walk on purpose: an implied general is reached without
+            // any authored relationship, so its private internals are never exposed, even in a non-global
+            // scope where PassesVisibilityFilter alone would admit them.
+            var contributed = new List<IMembership>(impliedGeneral.ownedMembership
+                .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private));
 
             try
             {
-                return memberFeature.AllRedefinedFeatures().Any(featuresRedefinedByOwned.Contains);
+                contributed.AddRange(impliedGeneral.inheritedMembership);
             }
             catch (NotSupportedException)
             {
-                return false;
+                // Same atomicity as above: an unimplemented derivation costs this general's contribution.
+            }
+
+            foreach (var member in contributed.Where(member => PassesVisibilityFilter(member, isGlobal)))
+            {
+                AddLookupOnlyEntry(index, member);
             }
         }
 
@@ -1685,6 +2391,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 pending.Enqueue((targetAsNamespace, isGlobal));
             }
+        }
+
+        /// <summary>
+        /// Indexes a Membership for name lookup WITHOUT extending the namespace traversal.
+        /// </summary>
+        /// <param name="index">The destination index.</param>
+        /// <param name="membership">The Membership to index.</param>
+        /// <remarks>
+        /// The counterpart of <see cref="AddMembershipEntry" />, minus its <c>pending</c> enqueue. Used for
+        /// members reached through an IMPLIED Specialization: they must be resolvable by name, but the
+        /// library Types they come from must not be pulled into the walk that produces output.
+        /// </remarks>
+        private static void AddLookupOnlyEntry(Dictionary<string, HashSet<IElement>> index, IMembership membership)
+        {
+            if (membership is not { MemberElement: { } target })
+            {
+                return;
+            }
+
+            var (shortName, longName) = QueryMembershipNames(membership, target);
+
+            AddIndexEntry(index, shortName, target);
+            AddIndexEntry(index, longName, target);
         }
 
         /// <summary>

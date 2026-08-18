@@ -74,6 +74,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Textu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.TextualNotation.Tests", "SysML2.NET.Serializer.TextualNotation.Tests\SysML2.NET.Serializer.TextualNotation.Tests.csproj", "{46EB73DF-D702-4FC2-BD1F-FA9FEEACE8A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Semantics", "SysML2.NET.Semantics\SysML2.NET.Semantics.csproj", "{D42F33B8-63D6-485A-8335-E2084FE36812}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Semantics.Tests", "SysML2.NET.Semantics.Tests\SysML2.NET.Semantics.Tests.csproj", "{AE364357-591B-468D-9C39-9656B9A189C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -348,6 +352,30 @@ Global
 		{46EB73DF-D702-4FC2-BD1F-FA9FEEACE8A9}.Release|x64.Build.0 = Release|Any CPU
 		{46EB73DF-D702-4FC2-BD1F-FA9FEEACE8A9}.Release|x86.ActiveCfg = Release|Any CPU
 		{46EB73DF-D702-4FC2-BD1F-FA9FEEACE8A9}.Release|x86.Build.0 = Release|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Debug|x64.Build.0 = Debug|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Debug|x86.Build.0 = Debug|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Release|x64.ActiveCfg = Release|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Release|x64.Build.0 = Release|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Release|x86.ActiveCfg = Release|Any CPU
+		{D42F33B8-63D6-485A-8335-E2084FE36812}.Release|x86.Build.0 = Release|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Release|x64.Build.0 = Release|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE364357-591B-468D-9C39-9656B9A189C7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

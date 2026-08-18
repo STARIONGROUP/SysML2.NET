@@ -52,7 +52,7 @@ package '3a-Function-based Behavior-2' {
              * and the target of each succeeding first is indicated by
              * using the "then" keyword.
              */
-            first Actions::Action::start;
+            first start;
             then merge continue;
             then action engineStarted accept engineStart: EngineStart;
             then action engineStopped accept engineOff: EngineOff;

@@ -7,3 +7,5 @@ dotnet_diagnostic.S3776.severity = none
 dotnet_diagnostic.CS1570.severity = none
 dotnet_diagnostic.CS1584.severity = none
 dotnet_diagnostic.CS1658.severity = none
+# Disable CA1815: generated value types carry data only; equality semantics are not part of their contract
+dotnet_diagnostic.CA1815.severity = none

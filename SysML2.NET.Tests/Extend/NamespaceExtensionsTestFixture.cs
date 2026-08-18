@@ -25,10 +25,14 @@ namespace SysML2.NET.Tests.Extend
     using NUnit.Framework;
 
     using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Extensions;
+
+    using Type = SysML2.NET.Core.POCO.Core.Types.Type;
 
     [TestFixture]
     public class NamespaceExtensionsTestFixture
@@ -83,6 +87,24 @@ namespace SysML2.NET.Tests.Extend
             namespaceElement.AssignOwnership(membership, element);
 
             Assert.That(namespaceElement.ComputeMembership(), Is.EquivalentTo([membership]));
+
+            // `membership` is a derived UNION and its subsets are ownedMembership, importedMembership and
+            // — when the Namespace is a Type — inheritedMembership (KerML §8.2.3.5.3: memberships "include
+            // owned, imported and (if the Namespace is a Type) inherited"). Omitting the inherited subset
+            // makes ResolveLocal, ComputeMember and NamesOf blind to everything a Type inherits.
+            var supertype = new Type();
+            var inheritedFeature = new Feature { DeclaredName = "inherited" };
+            var inheritedMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            supertype.AssignOwnership(inheritedMembership, inheritedFeature);
+
+            var subtype = new Type();
+            subtype.AssignOwnership(new Specialization { Specific = subtype, General = supertype });
+
+            var ownFeature = new Feature { DeclaredName = "own" };
+            var ownMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            subtype.AssignOwnership(ownMembership, ownFeature);
+
+            Assert.That(subtype.ComputeMembership(), Is.EquivalentTo([ownMembership, inheritedMembership]));
         }
 
         [Test]
@@ -213,8 +235,56 @@ namespace SysML2.NET.Tests.Extend
 
                 // recursive case: public ownedMemberships of the outer namespace, plus visible
                 // memberships harvested from each public nested INamespace.
-                Assert.That(namespaceElement.ComputeVisibleMembershipsOperation([], true, false), Is.EquivalentTo(new[] { publicMembership, nestedOwning, nestedMembership }));
+                Assert.That(namespaceElement.ComputeVisibleMembershipsOperation([], true, false), Is.EquivalentTo([publicMembership, nestedOwning, nestedMembership]));
             }
+
+            // Namespace::visibleMemberships is membershipsOfVisibility(...), NOT `membership`. For a Type
+            // the two differ: `membership` carries inheritedMembership, which Type::visibleMemberships adds
+            // back separately with `excluded->including(self)` threaded into the recursion. Sourcing the
+            // Namespace-level operation from `membership` would both double-count the inherited part and
+            // discard that cycle guard.
+            var supertype = new Type();
+            var inheritedMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            supertype.AssignOwnership(inheritedMembership, new Feature { DeclaredName = "inherited" });
+
+            var subtype = new Type();
+            subtype.AssignOwnership(new Specialization { Specific = subtype, General = supertype });
+
+            var ownMembership = new FeatureMembership { Visibility = VisibilityKind.Public };
+            subtype.AssignOwnership(ownMembership, new Feature { DeclaredName = "own" });
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(subtype.ComputeVisibleMembershipsOperation([], false, true), Is.EquivalentTo([ownMembership]));
+                Assert.That(subtype.VisibleMemberships([], false, true), Is.EquivalentTo([ownMembership, inheritedMembership]));
+            }
+
+            // The recursive branch must descend with `excluded->including(self)`. Here `inner` is a public
+            // owned Namespace of `outer` that imports `outer` back with `import all`, so without self in
+            // the excluded set the descent round-trips: outer's PRIVATE membership is re-imported into
+            // `inner` (an `import all` sees it) and climbs back out as one of outer's own VISIBLE
+            // memberships. KerML §8.2.3.5.1 makes this guard normative, not defensive.
+            var outerNamespace = new Namespace { DeclaredName = "outer" };
+            var innerNamespace = new Namespace { DeclaredName = "inner" };
+            var innerOwning = new OwningMembership { Visibility = VisibilityKind.Public };
+            outerNamespace.AssignOwnership(innerOwning, innerNamespace);
+
+            var secretMembership = new OwningMembership { Visibility = VisibilityKind.Private };
+            outerNamespace.AssignOwnership(secretMembership, new Definition { DeclaredName = "secret" });
+
+            var innerMemberMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            innerNamespace.AssignOwnership(innerMemberMembership, new Definition { DeclaredName = "innerMember" });
+
+            innerNamespace.AssignOwnership(new NamespaceImport
+            {
+                ImportedNamespace = outerNamespace,
+                IsImportAll = true,
+                Visibility = VisibilityKind.Public
+            });
+
+            Assert.That(
+                outerNamespace.ComputeVisibleMembershipsOperation([], true, false),
+                Is.EquivalentTo([innerOwning, innerMemberMembership]));
         }
 
         [Test]
@@ -342,6 +412,19 @@ namespace SysML2.NET.Tests.Extend
             {
                 Assert.That(childNamespace.ComputeResolveLocalOperation("myElement"), Is.EqualTo(membership));
                 Assert.That(childNamespace.ComputeResolveLocalOperation("nonExistent"), Is.Null);
+            }
+
+            // Local resolution is visibility-BLIND (KerML §8.2.3.5.3) — it searches every membership of
+            // the Namespace, so a private owned member resolves in its own Namespace. That is what
+            // distinguishes it from visible resolution, which admits public memberships only.
+            var privateElement = new Definition { DeclaredName = "hidden", DeclaredShortName = "h" };
+            var privateMembership = new OwningMembership { Visibility = VisibilityKind.Private };
+            childNamespace.AssignOwnership(privateMembership, privateElement);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(childNamespace.ComputeResolveLocalOperation("hidden"), Is.EqualTo(privateMembership));
+                Assert.That(childNamespace.ComputeResolveLocalOperation("h"), Is.EqualTo(privateMembership));
             }
         }
 
