@@ -46,10 +46,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="expression" /> is null.</exception>
         public static string Emit(ImpliedGuardExpression expression, string declaringInterfaceFqn, IReadOnlyDictionary<string, string> interfaceFqnByName, IReadOnlyDictionary<string, string> enumerationFqnByName)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(expression);
 
             if (string.IsNullOrWhiteSpace(declaringInterfaceFqn))
             {
