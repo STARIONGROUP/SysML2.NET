@@ -46,16 +46,16 @@ package '7a1-Variant Configuration - General Concept-a' {
         assert constraint { subsystemA != subsystemA::subsystem2 | subsystemB == subsystemB::subsystem3 }
     }
     part vehicleConfigA :> anyVehicleConfig {
-        part :>> subsystemA = subsystem1;
-        part :>> subsystemB = subsystem3 {
+        part :>> subsystemA = subsystemA::subsystem1;
+        part :>> subsystemB = subsystemB::subsystem3 {
             part :>> part5 {
                 perform action :>> doXorY = '7a1-Variant Configuration - General Concept-a'::doX;
             }
         }
     }
     part VehicleConfigB :> anyVehicleConfig {
-        part :>> subsystemA = subsystem2;
-        part :>> subsystemB = subsystem4 {
+        part :>> subsystemA = subsystemA::subsystem2;
+        part :>> subsystemB = subsystemB::subsystem4 {
             part :>> part5 {
                 perform action :>> doXorY = '7a1-Variant Configuration - General Concept-a'::doY;
             }
