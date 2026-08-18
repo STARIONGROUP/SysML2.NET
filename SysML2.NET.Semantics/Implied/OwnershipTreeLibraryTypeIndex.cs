@@ -88,16 +88,16 @@ namespace SysML2.NET.Semantics.Implied
         }
 
         /// <summary>
+        /// The character a qualified name uses to quote a segment that is not a valid bare name.
+        /// </summary>
+        private const char QuoteCharacter = (char)39;
+
+        /// <summary>
         /// Attempts to resolve the library Type carrying the supplied qualified name.
         /// </summary>
         /// <param name="qualifiedName">The qualified name, for example Occurrences::Occurrence::suboccurrences.</param>
         /// <param name="type">When this method returns true, the resolved Type; otherwise null.</param>
         /// <returns>True when the qualified name resolves to an indexed Type.</returns>
-        /// <summary>
-        /// The character a qualified name uses to quote a segment that is not a valid bare name.
-        /// </summary>
-        private const char QuoteCharacter = (char)39;
-
         public bool TryGetType(string qualifiedName, out IType type)
         {
             if (string.IsNullOrWhiteSpace(qualifiedName))

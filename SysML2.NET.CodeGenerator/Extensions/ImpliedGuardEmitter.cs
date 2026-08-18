@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ImpliedGuardEmitter.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -98,9 +98,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </remarks>
         private static string EmitOwningTypeKind(ImpliedGuardExpression expression, string declaringInterfaceFqn, IReadOnlyDictionary<string, string> interfaceFqnByName)
         {
-            var alternatives = QueryInterfaces(expression.TypeNames, interfaceFqnByName);
-
-            if (alternatives == null)
+            if (!TryQueryInterfaces(expression.TypeNames, interfaceFqnByName, out var alternatives))
             {
                 return null;
             }
@@ -138,11 +136,9 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns>The predicate, or <c>null</c> when the metaclass is unknown.</returns>
         private static string EmitOwnedTypingKind(ImpliedGuardExpression expression, string subject, IReadOnlyDictionary<string, string> interfaceFqnByName)
         {
-            var alternatives = QueryInterfaces(expression.TypeNames, interfaceFqnByName);
-
-            return alternatives == null
-                ? null
-                : $"{subject} && guardSubject.ownedTyping.Any(featureTyping => featureTyping.Type is {alternatives[0]})";
+            return TryQueryInterfaces(expression.TypeNames, interfaceFqnByName, out var alternatives)
+                ? $"{subject} && guardSubject.ownedTyping.Any(featureTyping => featureTyping.Type is {alternatives[0]})"
+                : null;
         }
 
         /// <summary>
@@ -154,11 +150,9 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns>The predicate, or <c>null</c> when the metaclass is unknown.</returns>
         private static string EmitOwningFeatureMembershipKind(ImpliedGuardExpression expression, string declaringInterfaceFqn, IReadOnlyDictionary<string, string> interfaceFqnByName)
         {
-            var alternatives = QueryInterfaces(expression.TypeNames, interfaceFqnByName);
-
-            return alternatives == null
-                ? null
-                : $"element is {declaringInterfaceFqn} {{ owningFeatureMembership: {alternatives[0]} }}";
+            return TryQueryInterfaces(expression.TypeNames, interfaceFqnByName, out var alternatives)
+                ? $"element is {declaringInterfaceFqn} {{ owningFeatureMembership: {alternatives[0]} }}"
+                : null;
         }
 
         /// <summary>
@@ -180,8 +174,14 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </summary>
         /// <param name="typeNames">The metaclass names to resolve.</param>
         /// <param name="interfaceFqnByName">The fully qualified interface of every known metaclass, by name.</param>
-        /// <returns>The resolved interfaces, or <c>null</c> when any name is unknown.</returns>
-        private static IReadOnlyList<string> QueryInterfaces(IReadOnlyList<string> typeNames, IReadOnlyDictionary<string, string> interfaceFqnByName)
+        /// <param name="interfaces">The resolved interfaces, when every name resolved and at least one was given.</param>
+        /// <returns><see langword="true" /> when the guard can be emitted from these names.</returns>
+        /// <remarks>
+        /// A Try pattern rather than a nullable collection: "a metaclass name is unknown" is an OUTCOME —
+        /// the guard then falls back to hand-coding — not an empty result, and the two must not be
+        /// conflated by a caller that iterates what it gets back.
+        /// </remarks>
+        private static bool TryQueryInterfaces(IReadOnlyList<string> typeNames, IReadOnlyDictionary<string, string> interfaceFqnByName, out List<string> interfaces)
         {
             var resolved = new List<string>();
 
@@ -189,13 +189,17 @@ namespace SysML2.NET.CodeGenerator.Extensions
             {
                 if (!interfaceFqnByName.TryGetValue(typeName, out var interfaceFqn))
                 {
-                    return null;
+                    interfaces = null;
+
+                    return false;
                 }
 
                 resolved.Add(interfaceFqn);
             }
 
-            return resolved.Count == 0 ? null : resolved;
+            interfaces = resolved;
+
+            return resolved.Count != 0;
         }
 
         /// <summary>

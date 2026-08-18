@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ImpliedGuardParserTestFixture.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -35,6 +35,16 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     [TestFixture]
     public class ImpliedGuardParserTestFixture
     {
+        /// <summary>
+        /// The metaclass names an owning-Type kind test over two alternatives yields.
+        /// </summary>
+        private static readonly string[] ExpectedPartTypeNames = ["PartDefinition", "PartUsage"];
+
+        /// <summary>
+        /// The metaclass name an owned-typing kind test yields.
+        /// </summary>
+        private static readonly string[] ExpectedDataTypeNames = ["DataType"];
+
         [Test]
         public void VerifyParse()
         {
@@ -43,7 +53,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 var owningTypeKind = ImpliedGuardParser.Parse("isComposite and owningType <> null and (owningType.oclIsKindOf(PartDefinition) or owningType.oclIsKindOf(PartUsage))");
                 Assert.That(owningTypeKind.Shape, Is.EqualTo(ImpliedGuardShape.OwningTypeKind));
                 Assert.That(owningTypeKind.RequiresComposite, Is.True);
-                Assert.That(owningTypeKind.TypeNames, Is.EqualTo(new[] { "PartDefinition", "PartUsage" }));
+                Assert.That(owningTypeKind.TypeNames, Is.EqualTo(ExpectedPartTypeNames));
 
                 var withoutComposite = ImpliedGuardParser.Parse("owningType <> null and (owningType.oclIsKindOf(ViewDefinition) or owningType.oclIsKindOf(ViewUsage))");
                 Assert.That(withoutComposite.Shape, Is.EqualTo(ImpliedGuardShape.OwningTypeKind));
@@ -72,7 +82,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
                 var ownedTyping = ImpliedGuardParser.Parse("ownedTyping.type->exists(selectByKind(DataType))");
                 Assert.That(ownedTyping.Shape, Is.EqualTo(ImpliedGuardShape.OwnedTypingKind));
-                Assert.That(ownedTyping.TypeNames, Is.EqualTo(new[] { "DataType" }));
+                Assert.That(ownedTyping.TypeNames, Is.EqualTo(ExpectedDataTypeNames));
 
                 var membership = ImpliedGuardParser.Parse("owningFeatureMembership <> null and owningFeatureMembership.oclIsKindOf(StakeholderMembership)");
                 Assert.That(membership.Shape, Is.EqualTo(ImpliedGuardShape.OwningFeatureMembershipKind));
@@ -164,7 +174,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(unrenderable, Is.Empty, $"These guards parse but emit no predicate: {string.Join(", ", unrenderable)}");
         }
 
-        private static IReadOnlyDictionary<string, string> QueryInterfaceFqnByName()
+        private static Dictionary<string, string> QueryInterfaceFqnByName()
         {
             return GeneratorSetupFixture.XmiReaderResult
                 .QueryContainedAndImported("SysML")
@@ -173,7 +183,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 .ToDictionary(group => group.Key, group => group.First().QueryFullyQualifiedTypeName(), StringComparer.Ordinal);
         }
 
-        private static IReadOnlyDictionary<string, string> QueryEnumerationFqnByName()
+        private static Dictionary<string, string> QueryEnumerationFqnByName()
         {
             return GeneratorSetupFixture.XmiReaderResult
                 .QueryContainedAndImported("SysML")

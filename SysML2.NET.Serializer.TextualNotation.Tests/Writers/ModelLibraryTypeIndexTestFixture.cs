@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ModelLibraryTypeIndexTestFixture.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -47,7 +47,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             "Performances::performances"
         ];
 
-        private ILibraryTypeIndex index;
+        private OwnershipTreeLibraryTypeIndex index;
 
         [OneTimeSetUp]
         public async Task OneTimeSetUp()

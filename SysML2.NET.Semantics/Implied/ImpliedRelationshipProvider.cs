@@ -82,6 +82,16 @@ namespace SysML2.NET.Semantics.Implied
         private readonly HashSet<string> ruleConstraintNames;
 
         /// <summary>
+        /// The constraints this provider cannot compute, settled once at construction.
+        /// </summary>
+        /// <remarks>
+        /// Every input is fixed for the lifetime of the instance, so the answer is too. Computing it per
+        /// access allocated a fresh list on a property that reads as a field — and <see cref="IsCoveredByRule" />
+        /// consults it per constraint, so the copy was on a hot path rather than an occasional one.
+        /// </remarks>
+        private readonly IReadOnlyList<string> notCoveredConstraints;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ImpliedRelationshipProvider" /> class.
         /// </summary>
         /// <param name="libraryTypeIndex">The index resolving the library Types the constraints target.</param>
@@ -105,6 +115,13 @@ namespace SysML2.NET.Semantics.Implied
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.rules = rules.ToList();
             this.ruleConstraintNames = [..this.rules.Select(rule => rule.ConstraintName)];
+
+            var uncovered = this.options.EnableLibrarySpecializations
+                ? ImpliedRelationshipTable.NotCovered
+                : ImpliedRelationshipTable.AllConstraintNames;
+
+            this.notCoveredConstraints = [..uncovered
+                .Where(constraint => !this.ruleConstraintNames.Any(ruleConstraintName => constraint.Contains(ruleConstraintName, StringComparison.Ordinal)))];
         }
 
         /// <summary>
@@ -115,19 +132,7 @@ namespace SysML2.NET.Semantics.Implied
         /// rule supplies. When library specializations are disabled the answer widens to every constraint,
         /// since nothing table-driven is computed at all.
         /// </remarks>
-        public IReadOnlyList<string> NotCoveredConstraints
-        {
-            get
-            {
-                var uncovered = this.options.EnableLibrarySpecializations
-                    ? ImpliedRelationshipTable.NotCovered
-                    : ImpliedRelationshipTable.AllConstraintNames;
-
-                return uncovered
-                    .Where(constraint => !this.ruleConstraintNames.Any(ruleConstraintName => constraint.Contains(ruleConstraintName, StringComparison.Ordinal)))
-                    .ToList();
-            }
-        }
+        public IReadOnlyList<string> NotCoveredConstraints => this.notCoveredConstraints;
 
         /// <summary>
         /// Returns the implied Relationships required of the supplied Element.
@@ -252,7 +257,7 @@ namespace SysML2.NET.Semantics.Implied
         /// </summary>
         /// <param name="element">The Element under evaluation.</param>
         /// <returns>The implied Relationships the rules produced, in registration order.</returns>
-        private IReadOnlyList<IRelationship> ApplyRules(IElement element) => [..this.rules.SelectMany(rule => this.ApplyRule(rule, element))];
+        private IReadOnlyList<IRelationship> ApplyRules(IElement element) => [..this.rules.SelectMany(rule => ApplyRule(rule, element))];
 
         /// <summary>
         /// Applies one rule, degrading to no contribution when the library Type it targets cannot be resolved.
@@ -269,7 +274,7 @@ namespace SysML2.NET.Semantics.Implied
         /// falls back to a longer — never an invalid — form, which is the same failure mode the writer
         /// already accepts elsewhere.</para>
         /// </remarks>
-        private IReadOnlyList<IRelationship> ApplyRule(IImpliedRelationshipRule rule, IElement element)
+        private static IReadOnlyList<IRelationship> ApplyRule(IImpliedRelationshipRule rule, IElement element)
         {
             try
             {
@@ -305,13 +310,6 @@ namespace SysML2.NET.Semantics.Implied
         }
 
         /// <summary>
-        /// Creates the Specialization a table row implies for a Type.
-        /// </summary>
-        /// <param name="rule">The table row to realise.</param>
-        /// <param name="type">The Type the Specialization specializes from.</param>
-        /// <returns>The detached Specialization, or null when the row's kind does not match the Type.</returns>
-        /// <exception cref="UnresolvedLibraryTypeException">Thrown when the targeted library Type is not indexed.</exception>
-        /// <summary>
         /// Creates the implied Specialization for a table row, degrading to null when its library Type is
         /// unresolvable — see <see cref="ApplyRule" /> for why this does not throw.
         /// </summary>
@@ -330,6 +328,13 @@ namespace SysML2.NET.Semantics.Implied
             }
         }
 
+        /// <summary>
+        /// Creates the Specialization a table row implies for a Type.
+        /// </summary>
+        /// <param name="rule">The table row to realise.</param>
+        /// <param name="type">The Type the Specialization specializes from.</param>
+        /// <returns>The detached Specialization, or null when the row's kind does not match the Type.</returns>
+        /// <exception cref="UnresolvedLibraryTypeException">Thrown when the targeted library Type is not indexed.</exception>
         private ISpecialization CreateSpecialization(ImpliedLibrarySpecialization rule, IType type)
         {
             if (!this.libraryTypeIndex.TryGetType(rule.TargetLibraryName, out var libraryType))

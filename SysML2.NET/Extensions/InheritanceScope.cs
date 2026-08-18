@@ -76,13 +76,18 @@ namespace SysML2.NET.Extensions
         private bool isDisposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InheritanceScope" /> class and makes it the current
-        /// scope on the calling thread.
+        /// Initializes a new instance of the <see cref="InheritanceScope" /> class as a node of the
+        /// thread's scope chain.
         /// </summary>
-        private InheritanceScope()
+        /// <param name="enclosingScope">The scope open when this one begins, or <c>null</c>.</param>
+        /// <remarks>
+        /// Constructing a scope does NOT make it current: opening and closing are the two ends of one
+        /// operation on thread state, so both live in static members (<see cref="Begin" /> and
+        /// <see cref="Detach" />) and the instance never writes the thread's scope pointer itself.
+        /// </remarks>
+        private InheritanceScope(InheritanceScope enclosingScope)
         {
-            this.enclosingScope = current;
-            current = this;
+            this.enclosingScope = enclosingScope;
         }
 
         /// <summary>
@@ -101,7 +106,9 @@ namespace SysML2.NET.Extensions
         /// <returns>The scope, which restores the previously open scope when disposed.</returns>
         public static InheritanceScope Begin()
         {
-            return new InheritanceScope();
+            current = new InheritanceScope(current);
+
+            return current;
         }
 
         /// <summary>
@@ -122,25 +129,38 @@ namespace SysML2.NET.Extensions
 
             this.isDisposed = true;
 
-            if (ReferenceEquals(current, this))
-            {
-                current = this.enclosingScope;
-            }
-            else
-            {
-                for (var openScope = current; openScope != null; openScope = openScope.enclosingScope)
-                {
-                    if (ReferenceEquals(openScope.enclosingScope, this))
-                    {
-                        openScope.enclosingScope = this.enclosingScope;
-
-                        break;
-                    }
-                }
-            }
+            Detach(this);
 
             this.enclosingScope = null;
             this.DefaultSignatureResults.Clear();
+        }
+
+        /// <summary>
+        /// Removes a scope from the calling thread's chain of open scopes.
+        /// </summary>
+        /// <param name="scope">The scope to remove.</param>
+        /// <remarks>
+        /// The current scope is replaced by the one it encloses; a scope deeper in the chain is spliced
+        /// out of it, leaving whichever scope is current untouched.
+        /// </remarks>
+        private static void Detach(InheritanceScope scope)
+        {
+            if (ReferenceEquals(current, scope))
+            {
+                current = scope.enclosingScope;
+
+                return;
+            }
+
+            for (var openScope = current; openScope != null; openScope = openScope.enclosingScope)
+            {
+                if (ReferenceEquals(openScope.enclosingScope, scope))
+                {
+                    openScope.enclosingScope = scope.enclosingScope;
+
+                    return;
+                }
+            }
         }
     }
 }

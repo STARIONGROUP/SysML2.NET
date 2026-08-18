@@ -223,7 +223,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (localReferencer != null && !RedefinerDeclaredNameCollidesWith(localReferencer, target))
             {
-                return this.ResolveFresh(target, sourcePoco, sourceLocalScope, matchFloorScope, escapedName, localReferencer, QuerySelfBinding(sourcePoco));
+                return this.ResolveFresh(target, this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localReferencer), escapedName);
             }
 
             var cacheKey = (target.Id, sourceLocalScope?.Id ?? Guid.Empty, matchFloorScope?.Id ?? Guid.Empty);
@@ -233,7 +233,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return cached;
             }
 
-            var resolved = this.ResolveFresh(target, sourcePoco, sourceLocalScope, matchFloorScope, escapedName, localRedefiner: null, QuerySelfBinding(sourcePoco));
+            var resolved = this.ResolveFresh(target, this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localRedefiner: null), escapedName);
             this.resolvedReferences[cacheKey] = resolved;
             return resolved;
         }
@@ -363,22 +363,34 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Assembles the <see cref="ReferenceSite" /> for one reference: its scope chain plus the
+        /// exclusions every probe of it must honour.
+        /// </summary>
+        /// <param name="sourcePoco">The POCO bearing the reference.</param>
+        /// <param name="sourceLocalScope">The pre-computed local scope (may be <see langword="null" />).</param>
+        /// <param name="matchFloorScope">The innermost scope a match may come from (may be <see langword="null" />).</param>
+        /// <param name="localRedefiner">Feature to exclude from every bucket, or <see langword="null" />.</param>
+        /// <returns>The reference site.</returns>
+        private ReferenceSite BuildReferenceSite(IElement sourcePoco, INamespace sourceLocalScope, INamespace matchFloorScope, IFeature localRedefiner)
+        {
+            return new ReferenceSite(
+                sourcePoco,
+                this.GetSourceScopeChain(sourcePoco, sourceLocalScope, matchFloorScope),
+                localRedefiner,
+                QuerySelfBinding(sourcePoco));
+        }
+
+        /// <summary>
         /// First-time resolution: probes the target's own simple names (short first, per the SST
         /// convention), then aliases, then facade re-exports, then owner-chain ancestors as anchors for a
         /// partially-qualified suffix, and finally falls back to <see cref="IElement.qualifiedName" />.
         /// </summary>
         /// <param name="target">The referenced element.</param>
-        /// <param name="sourcePoco">The reference site's source POCO.</param>
-        /// <param name="sourceLocalScope">The pre-computed local scope (may be <see langword="null" />).</param>
-        /// <param name="matchFloorScope">The innermost scope a match may come from (may be <see langword="null" />).</param>
+        /// <param name="site">The reference site: its scope chain and the exclusions that apply to every probe.</param>
         /// <param name="escapedName">The target's escaped raw <c>name</c>.</param>
-        /// <param name="localRedefiner">Local feature to exclude from scope buckets, or <see langword="null" />.</param>
-        /// <param name="selfBinding">The binding the reference itself is, or <see langword="null" />.</param>
         /// <returns>The resolved emission string.</returns>
-        private string ResolveFresh(IElement target, IElement sourcePoco, INamespace sourceLocalScope, INamespace matchFloorScope, string escapedName, IFeature localRedefiner, SelfBinding selfBinding)
+        private string ResolveFresh(IElement target, ReferenceSite site, string escapedName)
         {
-            var chain = this.GetSourceScopeChain(sourcePoco, sourceLocalScope, matchFloorScope);
-
             var rawShortName = target.shortName;
             string escapedShortName = null;
 
@@ -386,7 +398,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 escapedShortName = Escape(rawShortName);
 
-                if (this.TryResolveSimpleNameAcrossChain(chain, target, rawShortName, escapedShortName, localRedefiner, selfBinding, accept: null, out var matchedShort))
+                if (this.TryResolveSimpleNameAcrossChain(site, target, rawShortName, escapedShortName, accept: null, out var matchedShort))
                 {
                     return matchedShort;
                 }
@@ -395,7 +407,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var rawName = target.name;
 
             if (!string.IsNullOrWhiteSpace(rawName)
-                && this.TryResolveSimpleNameAcrossChain(chain, target, rawName, escapedName, localRedefiner, selfBinding, accept: null, out var matchedLong))
+                && this.TryResolveSimpleNameAcrossChain(site, target, rawName, escapedName, accept: null, out var matchedLong))
             {
                 return matchedLong;
             }
@@ -403,14 +415,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             // An alias binds the target under a name it does not carry itself, so the probes above
             // can never find it. Preferred over facade/qualified forms — it is how the model names
             // the element at this site.
-            if (this.TryResolveViaAlias(chain, target, sourcePoco, localRedefiner, selfBinding, out var matchedAlias))
+            if (this.TryResolveViaAlias(site, target, out var matchedAlias))
             {
                 return matchedAlias;
             }
 
             // Facade re-export: `ISQ::mass` over `ISQBase::mass` — the SST canonical idiom
             // (KerML §8.2.3.5.4 leaves the choice open; both forms parse to the same element).
-            if (this.TryResolveViaDirectFacade(chain, target, escapedShortName, escapedName, out var matchedFacade))
+            if (this.TryResolveViaDirectFacade(site.Chain, target, escapedShortName, escapedName, out var matchedFacade))
             {
                 return matchedFacade;
             }
@@ -441,7 +453,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 if (!string.IsNullOrWhiteSpace(ancestorRawName)
                     && this.IsSuffixVisible(pathDownToTarget)
-                    && this.TryResolveSimpleNameAcrossChain(chain, ancestor, ancestorRawName, ancestorSegment, localRedefiner, selfBinding, this.BuildAnchorAcceptance(ancestor, descendant), out var matchedAnchor))
+                    && this.TryResolveSimpleNameAcrossChain(site, ancestor, ancestorRawName, ancestorSegment, this.BuildAnchorAcceptance(ancestor, descendant), out var matchedAnchor))
                 {
                     var builder = new StringBuilder(matchedAnchor);
 
@@ -748,24 +760,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Walks <paramref name="chain" /> innermost-out for a scope binding <paramref name="rawName" />
-        /// uniquely to <paramref name="target" />. A scope that binds the name to anything else stops the
-        /// walk — the parser's resolution would already have claimed the name there.
+        /// Walks <paramref name="site" />'s scope chain innermost-out for a scope binding
+        /// <paramref name="rawName" /> uniquely to <paramref name="target" />. A scope that binds the name
+        /// to anything else stops the walk — the parser's resolution would already have claimed the name
+        /// there.
         /// <para>Scopes BELOW the chain's match floor are consulted for shadowing only: a hit there is
         /// skipped and the walk continues outward, because the pilot parser does not consult them (see
         /// <see cref="QueryValueExpressionMatchFloor" />) and the emitted name has to resolve to the same
         /// element under both readings.</para>
         /// </summary>
-        /// <param name="chain">The pre-built source-scope chain (innermost first).</param>
+        /// <param name="site">The reference site: its scope chain and the exclusions that apply to every probe.</param>
         /// <param name="target">The referenced element.</param>
         /// <param name="rawName">The simple-name lexical form to probe (may be blank).</param>
         /// <param name="escapedName">The escaped form to emit on a hit.</param>
-        /// <param name="localRedefiner">Local feature to exclude from scope buckets, or <see langword="null" />.</param>
-        /// <param name="selfBinding">The binding the reference itself is, or <see langword="null" />.</param>
         /// <param name="accept">Predicate deciding whether a bound element counts as the target, or <see langword="null" /> for reference identity.</param>
         /// <param name="matched">On a hit, the simple-name string to emit.</param>
         /// <returns><see langword="true" /> when the name resolves uniquely to the target.</returns>
-        private bool TryResolveSimpleNameAcrossChain(SourceScopeChain chain, IElement target, string rawName, string escapedName, IFeature localRedefiner, SelfBinding selfBinding, Func<IElement, bool> accept, out string matched)
+        private bool TryResolveSimpleNameAcrossChain(ReferenceSite site, IElement target, string rawName, string escapedName, Func<IElement, bool> accept, out string matched)
         {
             matched = null;
 
@@ -774,16 +785,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return false;
             }
 
-            for (var scopeDepth = 0; scopeDepth < chain.Scopes.Count; scopeDepth++)
+            for (var scopeDepth = 0; scopeDepth < site.Chain.Scopes.Count; scopeDepth++)
             {
-                var resolution = this.ResolveSimpleNameInScope(chain.Scopes[scopeDepth], target, rawName, localRedefiner, selfBinding, accept);
+                var resolution = this.ResolveSimpleNameInScope(site.Chain.Scopes[scopeDepth], target, rawName, site.LocalRedefiner, site.SelfBinding, accept);
 
                 if (resolution == SimpleNameResolution.Shadowed)
                 {
                     return false;
                 }
 
-                if (resolution == SimpleNameResolution.Matched && scopeDepth >= chain.MatchFloor)
+                if (resolution == SimpleNameResolution.Matched && scopeDepth >= site.Chain.MatchFloor)
                 {
                     matched = escapedName;
                     return true;
@@ -1242,6 +1253,49 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 IConjugation conjugation => conjugation.owningType != null ? QueryOwningContainer(conjugation.owningType) : QueryOwningContainer(conjugation),
                 _ => null
             };
+        }
+
+        /// <summary>
+        /// What stays fixed while one reference is resolved: the scopes to probe and the two exclusions
+        /// that apply to every probe of it. Only the name being looked up varies.
+        /// </summary>
+        private sealed class ReferenceSite
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ReferenceSite"/> class.
+            /// </summary>
+            /// <param name="sourcePoco">The POCO bearing the reference.</param>
+            /// <param name="chain">The scopes to probe, innermost first, with the match floor.</param>
+            /// <param name="localRedefiner">Feature to exclude from every bucket, or <see langword="null" />.</param>
+            /// <param name="selfBinding">The binding the reference itself is, or <see langword="null" />.</param>
+            internal ReferenceSite(IElement sourcePoco, SourceScopeChain chain, IFeature localRedefiner, SelfBinding selfBinding)
+            {
+                this.SourcePoco = sourcePoco;
+                this.Chain = chain;
+                this.LocalRedefiner = localRedefiner;
+                this.SelfBinding = selfBinding;
+            }
+
+            /// <summary>
+            /// Gets the POCO bearing the reference.
+            /// </summary>
+            internal IElement SourcePoco { get; }
+
+            /// <summary>
+            /// Gets the scopes to probe, innermost first, with the depth at which a match is admissible.
+            /// </summary>
+            internal SourceScopeChain Chain { get; }
+
+            /// <summary>
+            /// Gets the Feature excluded from every bucket — the reference's own redefining or
+            /// referencing Feature, which must not shadow its own target.
+            /// </summary>
+            internal IFeature LocalRedefiner { get; }
+
+            /// <summary>
+            /// Gets the binding the reference itself is, whose entry does not exist at parse time.
+            /// </summary>
+            internal SelfBinding SelfBinding { get; }
         }
 
         /// <summary>
@@ -1999,26 +2053,23 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// through the same first-binding-wins scope walk as an ordinary simple name, so the emitted text
         /// always round-trips to the same element.
         /// </summary>
-        /// <param name="chain">The source scope chain (innermost first).</param>
+        /// <param name="site">The reference site; its source POCO rejects the alias declaration itself.</param>
         /// <param name="target">The element being referenced.</param>
-        /// <param name="sourcePoco">The reference site's source POCO — used to reject the alias declaration itself.</param>
-        /// <param name="localRedefiner">Feature to exclude from the scope buckets, or <see langword="null"/>.</param>
-        /// <param name="selfBinding">The binding the reference itself is, or <see langword="null"/>.</param>
         /// <param name="matched">On a hit, the escaped alias name to emit.</param>
         /// <returns><see langword="true"/> when an unambiguous in-scope alias was found.</returns>
-        private bool TryResolveViaAlias(SourceScopeChain chain, IElement target, IElement sourcePoco, IFeature localRedefiner, SelfBinding selfBinding, out string matched)
+        private bool TryResolveViaAlias(ReferenceSite site, IElement target, out string matched)
         {
             matched = null;
 
-            var candidateAliasNames = chain.Scopes
+            var candidateAliasNames = site.Chain.Scopes
                 .Where(scope => this.aliasIndex.ContainsKey(scope))
                 .SelectMany(scope => this.aliasIndex[scope].TryGetValue(target, out var aliasNames) ? aliasNames : Enumerable.Empty<string>())
                 .Distinct(StringComparer.Ordinal)
-                .Where(aliasName => !DeclaresAlias(sourcePoco, target, aliasName));
+                .Where(aliasName => !DeclaresAlias(site.SourcePoco, target, aliasName));
 
             foreach (var aliasName in candidateAliasNames)
             {
-                if (this.TryResolveSimpleNameAcrossChain(chain, target, aliasName, Escape(aliasName), localRedefiner, selfBinding, accept: null, out matched))
+                if (this.TryResolveSimpleNameAcrossChain(site, target, aliasName, Escape(aliasName), accept: null, out matched))
                 {
                     return true;
                 }
@@ -2297,13 +2348,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var contributed = new List<IMembership>();
 
-            if (impliedGeneral is INamespace impliedGeneralAsNamespace)
+            switch (impliedGeneral)
             {
-                // Stricter than the declared-supertype walk on purpose: an implied general is reached
-                // without any authored relationship, so its private internals are never exposed, even in a
-                // non-global scope where PassesVisibilityFilter alone would admit them.
-                contributed.AddRange(impliedGeneralAsNamespace.ownedMembership
-                    .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private));
+                case null:
+                    return;
+                case INamespace impliedGeneralAsNamespace:
+                    // Stricter than the declared-supertype walk on purpose: an implied general is reached
+                    // without any authored relationship, so its private internals are never exposed, even in a
+                    // non-global scope where PassesVisibilityFilter alone would admit them.
+                    contributed.AddRange(impliedGeneralAsNamespace.ownedMembership
+                        .Where(ownedMember => ownedMember.Visibility != VisibilityKind.Private));
+
+                    break;
             }
 
             try

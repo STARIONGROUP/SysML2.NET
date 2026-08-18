@@ -58,11 +58,16 @@ namespace SysML2.NET.Semantics.Implied.Rules
         /// <returns>The Feature and the library qualified name, or <c>null</c> when the constraint does not apply.</returns>
         protected override (IFeature SpecificFeature, string LibraryQualifiedName)? QuerySpecialization(IElement element)
         {
-            return element is not ISatisfyRequirementUsage satisfyRequirementUsage
-                ? null
-                : (satisfyRequirementUsage, satisfyRequirementUsage.IsNegated
-                    ? "Requirements::notSatisfiedRequirementChecks"
-                    : "Requirements::satisfiedRequirementChecks");
+            if (element is not ISatisfyRequirementUsage satisfyRequirementUsage)
+            {
+                return null;
+            }
+
+            var libraryQualifiedName = satisfyRequirementUsage.IsNegated
+                ? "Requirements::notSatisfiedRequirementChecks"
+                : "Requirements::satisfiedRequirementChecks";
+
+            return (satisfyRequirementUsage, libraryQualifiedName);
         }
     }
 }

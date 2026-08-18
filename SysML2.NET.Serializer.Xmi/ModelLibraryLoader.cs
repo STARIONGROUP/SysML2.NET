@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ModelLibraryLoader.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -94,7 +94,7 @@ namespace SysML2.NET.Serializer.Xmi
             {
                 try
                 {
-                    this.Collect(deSerializer.DeSerialize(new Uri(libraryFile)), namespaces);
+                    Collect(deSerializer.DeSerialize(new Uri(libraryFile)), namespaces);
                 }
                 catch (Exception exception)
                 {
@@ -124,7 +124,7 @@ namespace SysML2.NET.Serializer.Xmi
 
                 try
                 {
-                    this.Collect(await deSerializer.DeSerializeAsync(new Uri(libraryFile), cancellationToken), namespaces);
+                    Collect(await deSerializer.DeSerializeAsync(new Uri(libraryFile), cancellationToken), namespaces);
                 }
                 catch (Exception exception) when (exception is not OperationCanceledException)
                 {
@@ -171,7 +171,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// </summary>
         /// <param name="readResult">The result of deserializing one library file.</param>
         /// <param name="namespaces">The accumulator.</param>
-        private void Collect(XmiReadResult readResult, List<INamespace> namespaces)
+        private static void Collect(XmiReadResult readResult, List<INamespace> namespaces)
         {
             if (readResult.RootNamespace != null)
             {

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="LibrarySpecializationRuleTestFixture.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -86,10 +86,10 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             {
                 Assert.That(rule.ConstraintName, Is.EqualTo("checkAssertConstraintUsageSpecialization"));
 
-                Assert.That(this.SubsettedBy(rule, new AssertConstraintUsage { Id = Guid.NewGuid() }),
+                Assert.That(SubsettedBy(rule, new AssertConstraintUsage { Id = Guid.NewGuid() }),
                     Is.EqualTo([this.Library("Constraints::assertedConstraintChecks")]));
 
-                Assert.That(this.SubsettedBy(rule, new AssertConstraintUsage { Id = Guid.NewGuid(), IsNegated = true }),
+                Assert.That(SubsettedBy(rule, new AssertConstraintUsage { Id = Guid.NewGuid(), IsNegated = true }),
                     Is.EqualTo([this.Library("Constraints::negatedConstraintChecks")]));
 
                 // A SatisfyRequirementUsage IS an AssertConstraintUsage but has its own constraint, so this
@@ -110,10 +110,10 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             {
                 Assert.That(rule.ConstraintName, Is.EqualTo("checkSatisfyRequirementUsageSpecialization"));
 
-                Assert.That(this.SubsettedBy(rule, new SatisfyRequirementUsage { Id = Guid.NewGuid() }),
+                Assert.That(SubsettedBy(rule, new SatisfyRequirementUsage { Id = Guid.NewGuid() }),
                     Is.EqualTo([this.Library("Requirements::satisfiedRequirementChecks")]));
 
-                Assert.That(this.SubsettedBy(rule, new SatisfyRequirementUsage { Id = Guid.NewGuid(), IsNegated = true }),
+                Assert.That(SubsettedBy(rule, new SatisfyRequirementUsage { Id = Guid.NewGuid(), IsNegated = true }),
                     Is.EqualTo([this.Library("Requirements::notSatisfiedRequirementChecks")]));
 
                 // The plain AssertConstraintUsage is the other rule's business.
@@ -138,10 +138,10 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             {
                 Assert.That(rule.ConstraintName, Is.EqualTo("checkIfActionUsageSpecialization"));
 
-                Assert.That(this.SubsettedBy(rule, new IfActionUsage { Id = Guid.NewGuid() }),
+                Assert.That(SubsettedBy(rule, new IfActionUsage { Id = Guid.NewGuid() }),
                     Is.EqualTo([this.Library("Actions::ifThenActions")]));
 
-                Assert.That(this.SubsettedBy(rule, withElse),
+                Assert.That(SubsettedBy(rule, withElse),
                     Is.EqualTo([this.Library("Actions::ifThenElseActions")]));
 
                 Assert.That(rule.Apply(new Feature { Id = Guid.NewGuid() }), Is.Empty);
@@ -158,10 +158,10 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             {
                 Assert.That(rule.ConstraintName, Is.EqualTo("checkInvariantSpecialization"));
 
-                Assert.That(this.SubsettedBy(rule, new Invariant { Id = Guid.NewGuid() }),
+                Assert.That(SubsettedBy(rule, new Invariant { Id = Guid.NewGuid() }),
                     Is.EqualTo([this.Library("Performances::trueEvaluations")]));
 
-                Assert.That(this.SubsettedBy(rule, new Invariant { Id = Guid.NewGuid(), IsNegated = true }),
+                Assert.That(SubsettedBy(rule, new Invariant { Id = Guid.NewGuid(), IsNegated = true }),
                     Is.EqualTo([this.Library("Performances::falseEvaluations")]));
 
                 Assert.That(rule.Apply(new Feature { Id = Guid.NewGuid() }), Is.Empty);
@@ -207,7 +207,7 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             {
                 Assert.That(rule.ConstraintName, Is.EqualTo("checkConstructorExpressionSpecialization"));
 
-                Assert.That(this.SubsettedBy(rule, new ConstructorExpression { Id = Guid.NewGuid() }),
+                Assert.That(SubsettedBy(rule, new ConstructorExpression { Id = Guid.NewGuid() }),
                     Is.EqualTo([this.Library("Performances::constructorEvaluations")]));
 
                 Assert.That(rule.Apply(new Feature { Id = Guid.NewGuid() }), Is.Empty);
@@ -315,7 +315,7 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
 
         private IFeature Library(string qualifiedName) => (IFeature)this.libraryFeaturesByQualifiedName[qualifiedName];
 
-        private IReadOnlyList<IFeature> SubsettedBy(IImpliedRelationshipRule rule, IElement element)
+        private static IReadOnlyList<IFeature> SubsettedBy(IImpliedRelationshipRule rule, IElement element)
         {
             return [..rule.Apply(element).OfType<ISubsetting>().Select(subsetting => subsetting.SubsettedFeature)];
         }

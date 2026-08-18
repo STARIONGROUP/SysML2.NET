@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RedefinitionRuleTestFixture.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -43,6 +43,11 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
     [TestFixture]
     public class RedefinitionRuleTestFixture
     {
+        /// <summary>
+        /// The redefinition constraints no hand-coded rule covers yet.
+        /// </summary>
+        private static readonly string[] ExpectedUncoveredConstraints = ["checkConstructorExpressionResultFeatureRedefinition"];
+
         private ImpliedRelationshipFactory factory;
 
         [SetUp]
@@ -229,7 +234,7 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             {
                 Assert.That(redefinitionConstraints, Has.Count.EqualTo(15));
                 Assert.That(covered, Has.Count.EqualTo(14));
-                Assert.That(uncovered, Is.EqualTo(new[] { "checkConstructorExpressionResultFeatureRedefinition" }));
+                Assert.That(uncovered, Is.EqualTo(ExpectedUncoveredConstraints));
             }
         }
 

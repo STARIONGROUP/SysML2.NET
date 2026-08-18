@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ImpliedRelationshipExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -48,22 +48,29 @@ namespace SysML2.NET.CodeGenerator.Extensions
     /// is silently dropped in the meantime.
     /// </para>
     /// </remarks>
-    public static class ImpliedRelationshipExtensions
+    public static partial class ImpliedRelationshipExtensions
     {
+        /// <summary>
+        /// Upper bound on a single match, so a pathological OCL body cannot stall generation.
+        /// </summary>
+        private const int MatchTimeoutMilliseconds = 2000;
+
         /// <summary>
         /// Matches an OCL body that is nothing but a library specialization, e.g.
         /// <c>specializesFromLibrary('Ports::ports')</c>.
         /// </summary>
-        private static readonly Regex UnconditionalLibraryPattern =
-            new(@"^specializesFromLibrary\('(?<target>[^']+)'\)$", RegexOptions.Compiled);
+        /// <returns>The source-generated pattern.</returns>
+        [GeneratedRegex(@"^specializesFromLibrary\('(?<target>[^']+)'\)$", RegexOptions.None, MatchTimeoutMilliseconds)]
+        private static partial Regex UnconditionalLibraryPattern();
 
         /// <summary>
         /// Matches an OCL body of the form <c>&lt;guard&gt; implies specializesFromLibrary('X::y')</c>. The
         /// guard is captured verbatim; translating it into a C# predicate is hand-work, but the TARGET is
         /// still extracted mechanically.
         /// </summary>
-        private static readonly Regex GuardedLibraryPattern =
-            new(@"^(?<guard>.+?)\bimplies\b\s*specializesFromLibrary\('(?<target>[^']+)'\)$", RegexOptions.Compiled);
+        /// <returns>The source-generated pattern.</returns>
+        [GeneratedRegex(@"^(?<guard>.+?)\bimplies\b\s*specializesFromLibrary\('(?<target>[^']+)'\)$", RegexOptions.None, MatchTimeoutMilliseconds)]
+        private static partial Regex GuardedLibraryPattern();
 
         /// <summary>
         /// The four category keywords of KerML §8.4.2, in the order the specification lists them.
@@ -190,14 +197,14 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 return (ImpliedRuleForm.RequiresHandCoding, null, null);
             }
 
-            var unconditional = UnconditionalLibraryPattern.Match(ocl);
+            var unconditional = UnconditionalLibraryPattern().Match(ocl);
 
             if (unconditional.Success)
             {
                 return (ImpliedRuleForm.UnconditionalLibrarySpecialization, unconditional.Groups["target"].Value, null);
             }
 
-            var guarded = GuardedLibraryPattern.Match(ocl);
+            var guarded = GuardedLibraryPattern().Match(ocl);
 
             return guarded.Success
                 ? (ImpliedRuleForm.GuardedLibrarySpecialization, guarded.Groups["target"].Value, guarded.Groups["guard"].Value.Trim())

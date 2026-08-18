@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="InheritanceScopeTestFixture.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -198,7 +198,7 @@ namespace SysML2.NET.Tests.Extensions
         /// </summary>
         /// <param name="publicMembership">The public Membership the returned Type owns.</param>
         /// <returns>The supertype.</returns>
-        private static IType BuildSupertypeWithPublicMembership(out IOwningMembership publicMembership)
+        private static Type BuildSupertypeWithPublicMembership(out IOwningMembership publicMembership)
         {
             var supertype = new Type();
             publicMembership = new OwningMembership { Visibility = VisibilityKind.Public };

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ImpliedGuardParser.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -32,12 +32,17 @@ namespace SysML2.NET.CodeGenerator.Extensions
     /// mistranslates would inject Specializations a model does not require, corrupting every inheritance
     /// result computed from it.
     /// </remarks>
-    public static class ImpliedGuardParser
+    public static partial class ImpliedGuardParser
     {
         /// <summary>
         /// Upper bound on a single match, guarding against catastrophic backtracking.
         /// </summary>
         private const int MatchTimeoutMilliseconds = 1000;
+
+        /// <summary>
+        /// The capture group holding the boolean argument of an operation call.
+        /// </summary>
+        private const string LiteralGroup = "literal";
 
         /// <summary>
         /// Matches a bare boolean property, e.g. <c>isIndividual</c>.
@@ -118,7 +123,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                     Ocl = normalised,
                     MemberName = operationCall.Groups["member"].Value,
                     IsNegated = operationCall.Groups["not"].Success,
-                    Literal = operationCall.Groups["literal"].Success ? operationCall.Groups["literal"].Value : null
+                    Literal = operationCall.Groups[LiteralGroup].Success ? operationCall.Groups[LiteralGroup].Value : null
                 };
             }
 
@@ -130,7 +135,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 {
                     Shape = ImpliedGuardShape.OwnedEndFeatureCount,
                     Ocl = normalised,
-                    Literal = ownedEndFeatureCount.Groups["notEmpty"].Success ? null : ownedEndFeatureCount.Groups["literal"].Value
+                    Literal = ownedEndFeatureCount.Groups["notEmpty"].Success ? null : ownedEndFeatureCount.Groups[LiteralGroup].Value
                 };
             }
 
@@ -168,7 +173,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                     Ocl = normalised,
                     MemberName = enumerationComparison.Groups["member"].Value,
                     TypeNames = [enumerationComparison.Groups["enumeration"].Value],
-                    Literal = enumerationComparison.Groups["literal"].Value
+                    Literal = enumerationComparison.Groups[LiteralGroup].Value
                 };
             }
 
@@ -189,6 +194,13 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </summary>
         /// <param name="guardOcl">The raw guard OCL.</param>
         /// <returns>The single-line form, or <c>null</c> when the input is null.</returns>
-        private static string Normalise(string guardOcl) => guardOcl == null ? null : Regex.Replace(guardOcl, @"\s+", " ").Trim();
+        private static string Normalise(string guardOcl) => guardOcl == null ? null : WhitespaceRunPattern().Replace(guardOcl, " ").Trim();
+
+        /// <summary>
+        /// Matches a run of whitespace, including the line breaks an XMI body carries.
+        /// </summary>
+        /// <returns>The source-generated pattern.</returns>
+        [GeneratedRegex(@"\s+", RegexOptions.None, MatchTimeoutMilliseconds)]
+        private static partial Regex WhitespaceRunPattern();
     }
 }

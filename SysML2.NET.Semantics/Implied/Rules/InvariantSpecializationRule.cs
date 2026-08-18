@@ -56,11 +56,16 @@ namespace SysML2.NET.Semantics.Implied.Rules
         /// <returns>The Feature and the library qualified name, or <c>null</c> when the constraint does not apply.</returns>
         protected override (IFeature SpecificFeature, string LibraryQualifiedName)? QuerySpecialization(IElement element)
         {
-            return element is not IInvariant invariant
-                ? null
-                : (invariant, invariant.IsNegated
-                    ? "Performances::falseEvaluations"
-                    : "Performances::trueEvaluations");
+            if (element is not IInvariant invariant)
+            {
+                return null;
+            }
+
+            var libraryQualifiedName = invariant.IsNegated
+                ? "Performances::falseEvaluations"
+                : "Performances::trueEvaluations";
+
+            return (invariant, libraryQualifiedName);
         }
     }
 }
