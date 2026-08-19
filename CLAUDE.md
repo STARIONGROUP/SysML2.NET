@@ -79,6 +79,32 @@ Generator classes in `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerator
 - Extension methods (Extend) → `SysML2.NET/Extend/`
 - DAL factories → `SysML2.NET.Dal/Core/`
 
+### SQL-schema documentation sync is MANDATORY
+
+The SQL persistence schema carries a documentation set that MUST stay consistent with the
+code and with itself: `SysML2.NET.CodeGenerator/SQLSCHEMA.md` (compact reference),
+`SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.md` (long-form guide, English master),
+`SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.nl.md` (Dutch mirror — Dutch prose, English
+conceptual terms, identical section structure) and
+`SysML2.NET.CodeGenerator/IMPACT-RADIUS.md` (design sketch for the impact-radius engine,
+English-only). Both guides end in a glossary appendix (§19) that must list every term of art
+with a short definition and a guide-section reference.
+
+**At the end of EVERY task, evaluate whether the change touched any of:**
+`SysML2.NET.CodeGenerator/Sql/**`, `Templates/Uml/core-sql-schema-2.hbs`,
+`HandleBarHelpers/SqlSchemaHelpers.cs`, `Extensions/SqlSchemaExtensions.cs`,
+`Generators/UmlHandleBarsGenerators/SQLSchemaGenerator.cs`,
+`Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs` (the append-only class-kind /
+model-version registry), `SysML2.NET/PIM/**`,
+`SysML2.NET.Serializer.Json/PIM/**`, `SysML2.NET/Extend/**` (when it changes which derived
+properties exist or their semantics), or the XMI metamodel files. **If yes, run the
+`/sync-schema-guides` skill before reporting the task complete** — it carries the full
+procedure (English-first ordering, load-bearing numbers to re-verify, section/anchor
+integrity, glossary maintenance in BOTH languages). A change that alters behavior, counts,
+measured numbers, invariants, or terminology while leaving the documentation set untouched is
+a defect, not a shortcut. New terms of art introduced anywhere in these documents get a
+glossary row in both guides in the same change.
+
 ### Grounding SysML v2 / KerML work with the Hypha plugin
 
 If the **Hypha** plugin is installed, it is the **preferred grounding source for every SysML v2 / KerML semantic question** — metamodel structure (`hypha:metamodel-lookup`, or the `hypha:metamodel-navigator` agent for cross-cutting fan-out), normative specification intent (`hypha:spec-citation`), and textual-notation validity (`hypha:sysml-validation`). Use it **before** implementing or reviewing anything that depends on the SysML v2 / KerML metamodel — do not rely on a sibling analogue, the doc-comment OCL, or prior knowledge as the source of truth. The metamodel is large and precise; a plausible prior is exactly what produces confident-but-wrong derivations.

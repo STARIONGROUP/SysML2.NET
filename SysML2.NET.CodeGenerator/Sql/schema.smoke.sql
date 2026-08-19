@@ -12,17 +12,27 @@
 
 SET search_path = sysml2, public;
 
-INSERT INTO sysml2.class_kind (id, name, is_abstract) VALUES
-    (1, 'Package',   false),
-    (2, 'PartUsage', false);
+INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
+    (1, 'smoke-release-1', 'smoke:v1'),
+    (2, 'smoke-release-2', 'smoke:v2')
+ON CONFLICT (id) DO NOTHING;
+
+-- The FROZEN registry ids of the three metaclasses this test uses (see ClassKindRegistry) —
+-- identical to the generated schema's seeds, so this INSERT is a no-op there and every
+-- hard-coded id in validate_references_at_commit() means the same thing in both contexts.
+INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in) VALUES
+    (116, 'OwningMembership', false, 1),
+    (117, 'Package',          false, 1),
+    (120, 'PartUsage',        false, 1)
+ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO sysml2.project (id, name, created) VALUES
     ('11111111-0000-0000-0000-000000000000', 'SmokeProject', '2026-01-01T00:00:00Z');
 
-INSERT INTO sysml2.commit (id, project_id, created, description) VALUES
-    ('c1111111-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T10:00:00Z', 'create'),
-    ('c2222222-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T11:00:00Z', 'rename package'),
-    ('c3333333-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T12:00:00Z', 'delete wheel');
+INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id) VALUES
+    ('c1111111-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T10:00:00Z', 'create', 1),
+    ('c2222222-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T11:00:00Z', 'rename package', 1),
+    ('c3333333-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T12:00:00Z', 'delete wheel', 1);
 
 INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES
     ('c2222222-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', 0),
@@ -34,10 +44,13 @@ INSERT INTO sysml2.branch (id, project_id, name, head_commit_id) VALUES
 
 UPDATE sysml2.project SET default_branch_id = 'b1111111-0000-0000-0000-000000000000';
 
--- Identities: the stable @id of each element, independent of version.
-INSERT INTO sysml2.data_identity (id, project_id) VALUES
-    ('e1111111-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000'),  -- the Package
-    ('e2222222-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000');  -- the PartUsage
+-- Identities: the stable @id of each element, independent of version — TYPED (§4): the
+-- metaclass is invariant across versions, so it lives on the identity.
+INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES
+    ('e1111111-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000',
+     (SELECT id FROM sysml2.class_kind WHERE name = 'Package')),
+    ('e2222222-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000',
+     (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'));
 
 ----------------------------------------------------------------------------------------------
 -- c1 — create both elements
@@ -48,21 +61,21 @@ INSERT INTO sysml2.element_version
      element_id, declared_name, is_implied_included, stored_json)
 VALUES
     ('11111111-0000-0000-0000-000000000000', 'a1111111-0000-0000-0000-000000000000',
-     'e1111111-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', 1, false,
+     'e1111111-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
      'e1111111-0000-0000-0000-000000000000', 'Old', false,
      '{"@id":"e1111111-0000-0000-0000-000000000000","@type":"Package","declaredName":"Old"}'),
 
     ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
-     'e2222222-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', 2, false,
+     'e2222222-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'), false,
      'e2222222-0000-0000-0000-000000000000', 'wheel', false,
      '{"@id":"e2222222-0000-0000-0000-000000000000","@type":"PartUsage","declaredName":"wheel"}');
 
--- PartUsage participates in type_v / feature_v / usage_v / occurrence_usage_v
-INSERT INTO sysml2.type_v    VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false, false);
-INSERT INTO sysml2.feature_v VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
+-- PartUsage participates in type_version / feature_version / usage_version / occurrence_usage_version
+INSERT INTO sysml2.type_version    VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false, false);
+INSERT INTO sysml2.feature_version VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
                                      NULL, false, false, false, false, false, false, true, false);
-INSERT INTO sysml2.usage_v   VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false);
-INSERT INTO sysml2.occurrence_usage_v VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false, NULL);
+INSERT INTO sysml2.usage_version   VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false);
+INSERT INTO sysml2.occurrence_usage_version VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false, NULL);
 
 INSERT INTO sysml2.derived_version
     (project_id, derived_id, identity_id, commit_id, owner, qualified_name, name, derived_json)
@@ -86,7 +99,7 @@ INSERT INTO sysml2.element_version
      element_id, declared_name, is_implied_included, stored_json)
 VALUES
     ('11111111-0000-0000-0000-000000000000', 'a3333333-0000-0000-0000-000000000000',
-     'e1111111-0000-0000-0000-000000000000', 'c2222222-0000-0000-0000-000000000000', 1, false,
+     'e1111111-0000-0000-0000-000000000000', 'c2222222-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
      'e1111111-0000-0000-0000-000000000000', 'New', false,
      '{"@id":"e1111111-0000-0000-0000-000000000000","@type":"Package","declaredName":"New"}');
 
@@ -117,7 +130,7 @@ INSERT INTO sysml2.element_version
     (project_id, version_id, identity_id, commit_id, class_kind, tombstone)
 VALUES
     ('11111111-0000-0000-0000-000000000000', 'a4444444-0000-0000-0000-000000000000',
-     'e2222222-0000-0000-0000-000000000000', 'c3333333-0000-0000-0000-000000000000', 2, true);
+     'e2222222-0000-0000-0000-000000000000', 'c3333333-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'), true);
 
 ----------------------------------------------------------------------------------------------
 -- ASSERTIONS
@@ -206,9 +219,9 @@ $$;
 --    WRONG snapshot rather than an error. Prove the trigger fires.
 DO $$
 BEGIN
-    INSERT INTO sysml2.commit (id, project_id, created)
+    INSERT INTO sysml2.commit (id, project_id, created, model_version_id)
     VALUES ('c9999999-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000',
-            '2020-01-01T00:00:00Z');   -- older than its parent-to-be
+            '2020-01-01T00:00:00Z', 1);   -- older than its parent-to-be
 
     BEGIN
         INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal)
@@ -250,9 +263,9 @@ $$;
 -- Note c3 is NOT an ancestor of c5, so the wheel deleted at c3 must still be ALIVE at c5.
 ----------------------------------------------------------------------------------------------
 
-INSERT INTO sysml2.commit (id, project_id, created, description) VALUES
-    ('c4444444-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T10:30:00Z', 'concurrent rename on side branch'),
-    ('c5555555-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T13:00:00Z', 'merge c2 + c4');
+INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id) VALUES
+    ('c4444444-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T10:30:00Z', 'concurrent rename on side branch', 1),
+    ('c5555555-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T13:00:00Z', 'merge c2 + c4', 1);
 
 INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES
     ('c4444444-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', 0),
@@ -265,13 +278,13 @@ INSERT INTO sysml2.element_version
 VALUES
     -- c4: the side branch renames the Package to "Other" (conflicts with c2's "New")
     ('11111111-0000-0000-0000-000000000000', 'a5555555-0000-0000-0000-000000000000',
-     'e1111111-0000-0000-0000-000000000000', 'c4444444-0000-0000-0000-000000000000', 1, false,
+     'e1111111-0000-0000-0000-000000000000', 'c4444444-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
      'e1111111-0000-0000-0000-000000000000', 'Other', false,
      '{"@id":"e1111111-0000-0000-0000-000000000000","@type":"Package","declaredName":"Other"}'),
 
     -- c5: the merge resolves the conflict to "Merged" in its own change set
     ('11111111-0000-0000-0000-000000000000', 'a6666666-0000-0000-0000-000000000000',
-     'e1111111-0000-0000-0000-000000000000', 'c5555555-0000-0000-0000-000000000000', 1, false,
+     'e1111111-0000-0000-0000-000000000000', 'c5555555-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
      'e1111111-0000-0000-0000-000000000000', 'Merged', false,
      '{"@id":"e1111111-0000-0000-0000-000000000000","@type":"Package","declaredName":"Merged"}');
 
@@ -410,10 +423,10 @@ $$;
 -- DETERMINISTICALLY: the id DESC tiebreaker picks c7 (greater id) on every run.
 ----------------------------------------------------------------------------------------------
 
-INSERT INTO sysml2.commit (id, project_id, created, description) VALUES
-    ('c6666666-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T11:30:00Z', 'sibling A'),
-    ('c7777777-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T11:30:00Z', 'sibling B'),
-    ('c8888888-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T14:00:00Z', 'merge without restating');
+INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id) VALUES
+    ('c6666666-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T11:30:00Z', 'sibling A', 1),
+    ('c7777777-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T11:30:00Z', 'sibling B', 1),
+    ('c8888888-0000-0000-0000-000000000000', '11111111-0000-0000-0000-000000000000', '2026-01-01T14:00:00Z', 'merge without restating', 1);
 
 INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES
     ('c6666666-0000-0000-0000-000000000000', 'c1111111-0000-0000-0000-000000000000', 0),
@@ -426,12 +439,12 @@ INSERT INTO sysml2.element_version
      element_id, declared_name, is_implied_included, stored_json)
 VALUES
     ('11111111-0000-0000-0000-000000000000', 'a7777777-0000-0000-0000-000000000000',
-     'e1111111-0000-0000-0000-000000000000', 'c6666666-0000-0000-0000-000000000000', 1, false,
+     'e1111111-0000-0000-0000-000000000000', 'c6666666-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
      'e1111111-0000-0000-0000-000000000000', 'SiblingA', false,
      '{"@id":"e1111111-0000-0000-0000-000000000000","@type":"Package","declaredName":"SiblingA"}'),
 
     ('11111111-0000-0000-0000-000000000000', 'a8888888-0000-0000-0000-000000000000',
-     'e1111111-0000-0000-0000-000000000000', 'c7777777-0000-0000-0000-000000000000', 1, false,
+     'e1111111-0000-0000-0000-000000000000', 'c7777777-0000-0000-0000-000000000000', (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
      'e1111111-0000-0000-0000-000000000000', 'SiblingB', false,
      '{"@id":"e1111111-0000-0000-0000-000000000000","@type":"Package","declaredName":"SiblingB"}');
 
@@ -464,5 +477,277 @@ BEGIN
         RAISE EXCEPTION 'FAIL 10b: resolve_element_at_commit tie winner = %, expected a8888888', first_id;
     END IF;
     RAISE NOTICE 'PASS 10b: single-element resolver agrees with the full fold on the tie';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- MULTI-VERSION SCENARIO — commit-stamped metamodel releases.
+--
+-- The registry seeds are idempotent; a CONVERSION COMMIT (single parent, higher release) is
+-- the only way up; downgrades and mixed-release merges must be rejected by
+-- trg_commit_parent_version rather than silently mixing payload shapes.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj        constant uuid := '11111111-0000-0000-0000-000000000000';
+    c2          constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    c3          constant uuid := 'c3333333-0000-0000-0000-000000000000';
+    c4          constant uuid := 'c4444444-0000-0000-0000-000000000000';
+    conv        constant uuid := 'ca111111-0000-0000-0000-000000000000';   -- conversion commit, release 2
+    down        constant uuid := 'ca222222-0000-0000-0000-000000000000';   -- downgrade attempt, release 1
+    mixed       constant uuid := 'ca333333-0000-0000-0000-000000000000';   -- mixed-release merge attempt
+    combo       constant uuid := 'ca444444-0000-0000-0000-000000000000';   -- convert+merge combo attempt
+    count_before int;
+    count_after  int;
+BEGIN
+    -- 11a. The registry seeds are idempotent: re-applying them to a populated database is a
+    --      no-op, not a corruption (the old FRESH-INSTALLS-ONLY trap is gone by construction).
+    SELECT count(*) INTO count_before FROM sysml2.class_kind;
+
+    INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in) VALUES
+        (116, 'OwningMembership', false, 1),
+        (117, 'Package',          false, 1),
+        (120, 'PartUsage',        false, 1)
+    ON CONFLICT (id) DO NOTHING;
+
+    SELECT count(*) INTO count_after FROM sysml2.class_kind;
+
+    IF count_after <> count_before THEN
+        RAISE EXCEPTION 'FAIL 11a: seed re-apply changed class_kind from % to % rows', count_before, count_after;
+    END IF;
+    RAISE NOTICE 'PASS 11a: class_kind seed re-apply is idempotent';
+
+    -- 11b. A conversion commit — single parent, HIGHER release — is accepted.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (conv, proj, '2026-01-01T15:00:00Z', 'conversion to release 2', 2);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal)
+    VALUES (conv, c3, 0);
+
+    RAISE NOTICE 'PASS 11b: conversion commit (release 1 -> 2, single parent) accepted';
+
+    -- 11c. A DOWNGRADE — child in an older release than its parent — is rejected.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (down, proj, '2026-01-01T15:30:00Z', 'illegal downgrade', 1);
+
+    BEGIN
+        INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal)
+        VALUES (down, conv, 0);
+
+        RAISE EXCEPTION 'FAIL 11c: downgrade commit parent was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 11c: downgrade rejected by trg_commit_parent_version';
+    END;
+
+    -- 11d. A MERGE across releases — parents 2 and 1 — is rejected the moment the second
+    --      parent edge lands, regardless of insertion order.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (mixed, proj, '2026-01-01T16:00:00Z', 'illegal mixed-release merge', 2);
+
+    BEGIN
+        INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal)
+        VALUES (mixed, conv, 0),
+               (mixed, c2, 1);
+
+        RAISE EXCEPTION 'FAIL 11d: mixed-release merge was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 11d: mixed-release merge rejected (convert first, then merge)';
+    END;
+
+    -- 11e. A convert+merge COMBO — both parents in release 1, child claiming release 2 — is
+    --      also rejected: the conversion must be its own single-parent commit.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (combo, proj, '2026-01-01T16:30:00Z', 'illegal convert+merge combo', 2);
+
+    BEGIN
+        INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal)
+        VALUES (combo, c2, 0),
+               (combo, c4, 1);
+
+        RAISE EXCEPTION 'FAIL 11e: convert+merge combo was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 11e: convert+merge combo rejected (conversion must be single-parent)';
+    END;
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- TYPED-IDENTITY & REFERENCE-VALIDATION SCENARIO
+--
+-- The composite FK makes a version that claims a different metaclass than its identity
+-- impossible; validate_references_at_commit() reports what FKs cannot: 'wrong-type' (via the
+-- typed identity) and 'dangling' (target not alive in the commit's snapshot).
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    e2        constant uuid := 'e2222222-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    c12       constant uuid := 'cb111111-0000-0000-0000-000000000000';   -- parentless probe commit
+    e3        constant uuid := 'e3333333-0000-0000-0000-000000000000';   -- Package, refs e2 (wrong type)
+    e4        constant uuid := 'e4444444-0000-0000-0000-000000000000';   -- Package, refs e5 (dangling)
+    e5        constant uuid := 'e5555555-0000-0000-0000-000000000000';   -- OwningMembership, never given a version
+    row_count int;
+BEGIN
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c12, proj, '2026-01-01T17:00:00Z', 'reference-validation probe', 1);
+
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES
+        (e3, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'Package')),
+        (e4, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'Package')),
+        (e5, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'OwningMembership'));
+
+    -- 12a. The composite FK rejects a version claiming a different metaclass than its identity
+    --      (e1 is a Package identity; the row claims PartUsage).
+    BEGIN
+        INSERT INTO sysml2.element_version
+            (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
+             element_id, declared_name, is_implied_included, stored_json)
+        VALUES
+            (proj, 'ab111111-0000-0000-0000-000000000000', e1, c12,
+             (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'), false,
+             'e1111111-0000-0000-0000-000000000000', 'Imposter', false, '{}');
+
+        RAISE EXCEPTION 'FAIL 12a: version with a different class_kind than its identity was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 12a: typed identity rejects a version whose class_kind contradicts its identity';
+    END;
+
+    -- 12b. The healthy snapshot at c2 validates clean.
+    SELECT count(*) INTO row_count FROM sysml2.validate_references_at_commit(proj, c2);
+
+    IF row_count <> 0 THEN
+        RAISE EXCEPTION 'FAIL 12b: healthy snapshot reported % reference problems', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 12b: healthy snapshot validates clean';
+
+    -- 12c. A wrong-type reference (owning_relationship -> a PartUsage, not a Relationship) and
+    --      a dangling reference (owning_relationship -> a Membership identity with no live
+    --      version at c12) are both reported, and nothing else.
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
+         element_id, declared_name, is_implied_included, owning_relationship, stored_json)
+    VALUES
+        (proj, 'ab222222-0000-0000-0000-000000000000', e3, c12,
+         (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
+         'e3333333-0000-0000-0000-000000000000', 'WrongTypedRef', false, e2, '{}'),
+
+        (proj, 'ab333333-0000-0000-0000-000000000000', e4, c12,
+         (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
+         'e4444444-0000-0000-0000-000000000000', 'DanglingRef', false, e5, '{}');
+
+    SELECT count(*) INTO row_count FROM sysml2.validate_references_at_commit(proj, c12);
+
+    IF row_count <> 2 THEN
+        RAISE EXCEPTION 'FAIL 12c: expected exactly 2 reference problems at c12, got %', row_count;
+    END IF;
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.validate_references_at_commit(proj, c12) validation
+    WHERE (validation.source_identity = e3 AND validation.target_identity = e2 AND validation.problem = 'wrong-type')
+       OR (validation.source_identity = e4 AND validation.target_identity = e5 AND validation.problem = 'dangling');
+
+    IF row_count <> 2 THEN
+        RAISE EXCEPTION 'FAIL 12c: the 2 problems are not the expected wrong-type/dangling pair';
+    END IF;
+    RAISE NOTICE 'PASS 12c: validate_references_at_commit reports wrong-type and dangling, nothing else';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- INCREMENTAL-VALIDATION SCENARIO — the O(change set) tier.
+--
+--   c13 (parent c2): adds membership e7 and package e6 referencing it — a HEALTHY commit.
+--   c14 (parent c13): tombstones e7 ONLY. The incremental tier must catch the reverse
+--   direction: live, UNCHANGED e6 is left dangling — the case naive change-set validation
+--   misses — and must agree with the full audit pass.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    c12       constant uuid := 'cb111111-0000-0000-0000-000000000000';
+    c13       constant uuid := 'cc111111-0000-0000-0000-000000000000';
+    c14       constant uuid := 'cd111111-0000-0000-0000-000000000000';
+    e3        constant uuid := 'e3333333-0000-0000-0000-000000000000';
+    e4        constant uuid := 'e4444444-0000-0000-0000-000000000000';
+    e5        constant uuid := 'e5555555-0000-0000-0000-000000000000';
+    e6        constant uuid := 'e6666666-0000-0000-0000-000000000000';   -- Package, refs e7
+    e7        constant uuid := 'e7777777-0000-0000-0000-000000000000';   -- OwningMembership, tombstoned at c14
+    row_count int;
+BEGIN
+    -- 13a. The incremental tier reports c12's own outgoing problems — and exactly those.
+    SELECT count(*) INTO row_count
+    FROM sysml2.validate_references_in_commit(proj, c12) validation
+    WHERE (validation.source_identity = e3 AND validation.target_identity = 'e2222222-0000-0000-0000-000000000000' AND validation.problem = 'wrong-type')
+       OR (validation.source_identity = e4 AND validation.target_identity = e5 AND validation.problem = 'dangling');
+
+    IF row_count <> 2
+       OR (SELECT count(*) FROM sysml2.validate_references_in_commit(proj, c12)) <> 2 THEN
+        RAISE EXCEPTION 'FAIL 13a: incremental tier does not report exactly c12''s wrong-type/dangling pair';
+    END IF;
+    RAISE NOTICE 'PASS 13a: incremental tier catches the change set''s outgoing problems';
+
+    -- 13b. A healthy commit validates clean incrementally.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c13, proj, '2026-01-01T18:00:00Z', 'add membership + referencing package', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c13, c2, 0);
+
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES
+        (e6, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'Package')),
+        (e7, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'OwningMembership'));
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
+         element_id, declared_name, is_implied_included, owning_relationship, stored_json)
+    VALUES
+        (proj, 'ac111111-0000-0000-0000-000000000000', e7, c13,
+         (SELECT id FROM sysml2.class_kind WHERE name = 'OwningMembership'), false,
+         'e7777777-0000-0000-0000-000000000000', 'm', false, NULL, '{}'),
+
+        (proj, 'ac222222-0000-0000-0000-000000000000', e6, c13,
+         (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
+         'e6666666-0000-0000-0000-000000000000', 'Owned', false, e7, '{}');
+
+    SELECT count(*) INTO row_count FROM sysml2.validate_references_in_commit(proj, c13);
+
+    IF row_count <> 0 THEN
+        RAISE EXCEPTION 'FAIL 13b: healthy commit reported % incremental problems', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 13b: healthy commit validates clean incrementally';
+
+    -- 13c. Tombstoning e7 breaks UNCHANGED e6's reference: the incremental tier must catch
+    --      the reverse direction, and must agree with the full audit pass.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c14, proj, '2026-01-01T19:00:00Z', 'delete the membership only', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c14, c13, 0);
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone)
+    VALUES
+        (proj, 'ac333333-0000-0000-0000-000000000000', e7, c14,
+         (SELECT id FROM sysml2.class_kind WHERE name = 'OwningMembership'), true);
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.validate_references_in_commit(proj, c14) validation
+    WHERE validation.source_identity = e6 AND validation.target_identity = e7 AND validation.problem = 'dangling';
+
+    IF row_count <> 1
+       OR (SELECT count(*) FROM sysml2.validate_references_in_commit(proj, c14)) <> 1 THEN
+        RAISE EXCEPTION 'FAIL 13c: tombstone''s reverse-direction dangling reference not reported exactly once';
+    END IF;
+
+    SELECT count(*) INTO row_count FROM sysml2.validate_references_at_commit(proj, c14);
+
+    IF row_count <> 1 THEN
+        RAISE EXCEPTION 'FAIL 13c: full audit pass disagrees with the incremental tier (% rows)', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 13c: incremental tier catches the reverse direction and agrees with the full pass';
 END;
 $$;

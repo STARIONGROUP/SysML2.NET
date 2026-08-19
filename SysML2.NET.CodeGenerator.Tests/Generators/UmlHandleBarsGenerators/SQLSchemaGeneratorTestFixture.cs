@@ -57,8 +57,20 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(generatedSchema, Does.Contain("CREATE TYPE sysml2.visibility_kind AS ENUM ('private', 'protected', 'public');"));
             Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.feature_v"));
             Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.element_owned_relationship"));
-            Assert.That(generatedSchema, Does.Contain("CREATE VIEW sysml2.v_part_usage"));
-            Assert.That(generatedSchema, Does.Contain("INSERT INTO sysml2.property_catalog"));
+            Assert.That(generatedSchema, Does.Contain("CREATE VIEW sysml2.vw_part_usage"));
+            Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.model_version"));
+            Assert.That(generatedSchema, Does.Contain("INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES"));
+            Assert.That(generatedSchema, Does.Contain("INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES"));
+            Assert.That(generatedSchema, Does.Contain("ON CONFLICT (id) DO NOTHING;"), "the registry seeds must be idempotent");
+            Assert.That(generatedSchema, Does.Contain("(120, 'PartUsage', false, 1, NULL)"), "class_kind ids must come from the frozen registry");
+            Assert.That(generatedSchema, Does.Contain("model_version_id smallint   NOT NULL REFERENCES sysml2.model_version (id)"));
+            Assert.That(generatedSchema, Does.Contain("FOREIGN KEY (identity_id, class_kind) REFERENCES sysml2.data_identity (id, class_kind)"), "the typed-identity composite FK must anchor every version");
+            Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.validate_references_at_commit("));
+            Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.validate_references_in_commit("));
+            Assert.That(generatedSchema, Does.Contain("ANALYZE validation_snapshot;"), "the full pass must feed the planner true snapshot cardinality");
+            Assert.That(generatedSchema, Does.Contain("'wrong-type'"), "the reference validation must type-check via the typed identity");
+            Assert.That(generatedSchema, Does.Not.Contain("CREATE TABLE sysml2.property_catalog"), "the property->storage routing lives in generated C#, not in the database");
+            Assert.That(generatedSchema, Does.Not.Contain("CREATE TABLE sysml2.class_kind_table"), "subtype-table participation lives in generated C#, not in the database");
             Assert.That(generatedSchema, Does.Not.Contain("{{"), "no unresolved handlebars expressions may survive generation");
         }
     }

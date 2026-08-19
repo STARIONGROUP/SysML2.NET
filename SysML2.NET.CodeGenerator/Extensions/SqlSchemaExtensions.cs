@@ -212,7 +212,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
-        /// Queries the SQL name of the class's subtype table, e.g. "occurrence_usage_v" for OccurrenceUsage
+        /// Queries the SQL name of the class's subtype table, e.g. "occurrence_usage_version" for OccurrenceUsage
         /// </summary>
         /// <param name="class">
         /// The subject <see cref="IClass" />
@@ -224,7 +224,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             ArgumentNullException.ThrowIfNull(@class);
 
-            return $"{@class.Name.QuerySqlSnakeCaseName()}_v";
+            return $"{@class.Name.QuerySqlSnakeCaseName()}_version";
         }
 
         /// <summary>

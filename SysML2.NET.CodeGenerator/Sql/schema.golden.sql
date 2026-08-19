@@ -24,6 +24,11 @@
 --     append-only stream keyed by (identity, commit).
 --   * Referential integrity targets DATA IDENTITIES, never versions. A SysML2
 --     reference points at a stable element @id, not at a particular version of it.
+--   * MULTIPLE METAMODEL RELEASES coexist in one database: every commit is stamped
+--     with the model_version its payloads were written in (§2/§3), class_kind ids
+--     are frozen in an append-only registry, and the physical schema is the
+--     superset across the registered releases. A branch upgrades via a CONVERSION
+--     COMMIT; merges require all parents to be in the same release.
 ------------------------------------------------------------------------------------------------
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -51,75 +56,61 @@ CREATE TYPE sysml2.visibility_kind               AS ENUM ('private', 'protected'
 ------------------------------------------------------------------------------------------------
 -- 2. METAMODEL CATALOGS                                                            [GENERATED]
 --
--- class_kind interns the 167 concrete metaclass names to a smallint. Every element row
--- carries the smallint, not a VARCHAR(100) — at 1M+ elements that is the difference between
--- a 2-byte and a ~20-byte column on the hottest table in the database.
+-- model_version registers every metamodel release this database has ever stored data for.
+-- The id is an ORDINAL — a higher id is a later release — handed out once by the checked-in
+-- registry (SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs)
+-- and never renumbered. Every commit is stamped with the release its payloads are written in
+-- (commit.model_version_id, §3); that stamp, not the branch or the project, is what a reader
+-- consults to know the shape of a historical payload.
 --
--- property_catalog is the bridge between the OMG API and this schema. The Query service
--- translates PrimitiveConstraint.property (an API-level property NAME, e.g. "qualifiedName")
--- into SQL by looking up WHERE that property lives. Without this table, filtering on derived
--- properties — which Derived Property Full Conformance (Clause 2) requires — is not possible.
+-- class_kind interns the metaclass names to a smallint. Every element row carries the
+-- smallint, not a VARCHAR(100) — at 1M+ elements that is the difference between a 2-byte and
+-- a ~20-byte column on the hottest table in the database.
+--
+-- !! THE IDS ARE AN APPEND-ONLY REGISTRY — FROZEN FOREVER ONCE ASSIGNED !!
+-- A new metamodel release appends its new metaclasses AFTER the highest existing id (the
+-- newcomers alphabetical among themselves); existing ids never change, so persisted
+-- element_version.class_kind values and the generated C# ClassKind enum stay valid across
+-- upgrades. A metaclass dropped by a release keeps its row, closed with removed_in. The
+-- generator FAILS on any drift between the UML model and the registry (unregistered class,
+-- stale registration, fingerprint mismatch) instead of silently renumbering, and the seed
+-- INSERTs are idempotent (ON CONFLICT DO NOTHING) — safe to re-apply to a populated database.
+--
+-- The property->storage routing that earlier designs kept in a property_catalog table is
+-- deliberately NOT in the database: the generated service layer carries it as static
+-- per-release C# (model-version descriptors). Nothing in this schema reads such a catalog —
+-- the views and resolvers are already specialized per metaclass at generation time — and only
+-- versioned generated code can describe EVERY registered release at once.
 ------------------------------------------------------------------------------------------------
 
-CREATE TABLE sysml2.class_kind (
-    id           smallint     NOT NULL,
-    name         text         NOT NULL,   -- the API @type value, e.g. 'PartUsage'
-    is_abstract  boolean      NOT NULL,
+CREATE TABLE sysml2.model_version (
+    id                  smallint  NOT NULL,   -- ordinal: higher id == later release
+    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.0-beta-4'
+    source_fingerprint  text      NOT NULL,   -- root-package fingerprint of the generator input
     PRIMARY KEY (id),
     UNIQUE (name)
 );
 
--- Which subtype tables an instance of a given class_kind participates in. Derived from the
--- metaclass's transitive supertype closure, restricted to storage-introducing supertypes.
--- FlowUsage has SIX entries — it inherits both Feature and Relationship storage, because
--- Connector is simultaneously a Feature and a Relationship. The inheritance graph is a DAG,
--- not a chain; this table is what makes that tractable.
-CREATE TABLE sysml2.class_kind_table (
-    class_kind   smallint     NOT NULL REFERENCES sysml2.class_kind (id),
-    table_name   text         NOT NULL,
-    ordinal      smallint     NOT NULL,   -- join order, shallowest supertype first
-    PRIMARY KEY (class_kind, table_name)
+CREATE TABLE sysml2.class_kind (
+    id             smallint     NOT NULL,
+    name           text         NOT NULL,   -- the API @type value, e.g. 'PartUsage'
+    is_abstract    boolean      NOT NULL,
+    introduced_in  smallint     NOT NULL REFERENCES sysml2.model_version (id),
+    removed_in     smallint     NULL     REFERENCES sysml2.model_version (id),   -- first release WITHOUT the class; NULL = current
+    PRIMARY KEY (id),
+    UNIQUE (name)
 );
 
-CREATE TYPE sysml2.storage_location AS ENUM (
-    'column',        -- a real column on element_version or a subtype table
-    'link_table',    -- an ordered multi-valued reference or string
-    'derived',       -- materialized into derived_version (column or derived_json key)
-    'alias'          -- a redeclaration ('new') of an inherited property; no storage of its own
-);
-
-CREATE TABLE sysml2.property_catalog (
-    class_kind      smallint            NOT NULL REFERENCES sysml2.class_kind (id),
-    property_name   text                NOT NULL,   -- the API name, e.g. 'qualifiedName', 'ownedRelationship'
-    location        sysml2.storage_location NOT NULL,
-    table_name      text                NULL,       -- for 'column' / 'link_table'
-    column_name     text                NULL,       -- for 'column'; or the derived_version column
-    json_key        text                NULL,       -- for 'derived' values that live in derived_json
-    is_reference    boolean             NOT NULL,   -- value type vs. element reference
-    is_collection   boolean             NOT NULL,
-    is_ordered      boolean             NOT NULL,
-    lower_bound     integer             NOT NULL,
-    upper_bound     integer             NOT NULL,   -- -1 == unbounded
-    PRIMARY KEY (class_kind, property_name)
-);
-
-CREATE INDEX ix_property_catalog_name ON sysml2.property_catalog (property_name);
-
--- [GENERATED] Representative rows — the template emits all 167 classes / 12,963 properties.
+-- [GENERATED] Representative rows — the template emits every registered release and all 175
+-- registered metaclasses from ClassKindRegistry, idempotently:
 --
--- INSERT INTO sysml2.class_kind (id, name, is_abstract) VALUES
---     (1, 'Element', true), (2, 'Relationship', true), ..., (94, 'PartUsage', false), ...;
+-- INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
+--     (1, 'sysml-2.0-beta-4', 'SysML:_mczcUFn3EfG_XZTXp4TXuA')
+-- ON CONFLICT (id) DO NOTHING;
 --
--- INSERT INTO sysml2.class_kind_table (class_kind, table_name, ordinal) VALUES
---     (94, 'element_version', 0), (94, 'type_v', 1), (94, 'feature_v', 2),
---     (94, 'usage_v', 3), (94, 'occurrence_usage_v', 4);
---
--- INSERT INTO sysml2.property_catalog VALUES
---     (94, 'declaredName',      'column',     'element_version',   'declared_name',  NULL, false, false, false, 0,  1),
---     (94, 'isVariation',       'column',     'usage_v',           'is_variation',   NULL, false, false, false, 1,  1),
---     (94, 'ownedRelationship', 'link_table', 'element_owned_relationship', NULL,    NULL, true,  true,  true,  0, -1),
---     (94, 'qualifiedName',     'derived',    'derived_version',   'qualified_name', NULL, false, false, false, 0,  1),
---     (94, 'ownedFeature',      'derived',    'derived_version',   NULL, 'ownedFeature', true, true, true, 0, -1);
+-- INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES
+--     (1, 'AcceptActionUsage', false, 1, NULL), ..., (120, 'PartUsage', false, 1, NULL), ...
+-- ON CONFLICT (id) DO NOTHING;
 
 ------------------------------------------------------------------------------------------------
 -- 3. PIM — PROJECTS, COMMITS, BRANCHES, TAGS                                      [HAND-WRITTEN]
@@ -139,6 +130,12 @@ CREATE TABLE sysml2.project (
     resource_identifier text        NULL,
     created             timestamptz NOT NULL DEFAULT now(),
     default_branch_id   uuid        NULL,   -- FK added after branch exists (circular)
+
+    -- Upgrade POLICY, not truth: the highest model_version (§2) new commits may be written
+    -- in. NULL = no restriction (any registered release). The release a commit actually IS
+    -- in lives on the commit itself.
+    target_model_version_id smallint NULL REFERENCES sysml2.model_version (id),
+
     PRIMARY KEY (id)
 );
 
@@ -147,6 +144,16 @@ CREATE TABLE sysml2.commit (
     project_id     uuid        NOT NULL REFERENCES sysml2.project (id) ON DELETE CASCADE,
     created        timestamptz NOT NULL DEFAULT now(),
     description    text        NULL,
+
+    -- The metamodel release (§2) this commit's payloads are written in. Append-only history
+    -- makes the per-commit stamp the only correct grain: a historical commit stays in the
+    -- release it was written in forever. A branch upgrades via a CONVERSION COMMIT — a
+    -- single-parent commit that bumps this stamp and restates every element whose shape
+    -- changed between the releases (service obligation; force a commit_checkpoint on it so
+    -- folds rarely cross the release boundary). Readers resolve payload shape from this
+    -- stamp, never from the branch or the project.
+    model_version_id smallint   NOT NULL REFERENCES sysml2.model_version (id),
+
     PRIMARY KEY (id)
 );
 
@@ -192,6 +199,63 @@ CREATE TRIGGER trg_commit_parent_monotonic
     AFTER INSERT ON sysml2.commit_parent
     FOR EACH ROW
     EXECUTE FUNCTION sysml2.assert_commit_monotonic();
+
+-- Model-version invariants on the commit DAG (multi-version support, §2):
+--   * a commit is never in an OLDER release than a parent — downgrades are unsupported;
+--   * a SINGLE-parent commit MAY bump the release: that is a conversion commit;
+--   * a MERGE commit (2+ parents) must have ALL parents in its own release — convert first,
+--     then merge. Without this check a merge would silently mix payload shapes.
+-- The count-based re-check makes the guard insertion-order independent: the moment a second
+-- parent row lands, every already-inserted parent is re-validated against the child's release.
+CREATE OR REPLACE FUNCTION sysml2.assert_commit_version_compatible()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    child_version  smallint;
+    parent_version smallint;
+    parent_count   int;
+    mixed_parents  int;
+BEGIN
+    SELECT model_version_id INTO child_version  FROM sysml2.commit WHERE id = NEW.commit_id;
+    SELECT model_version_id INTO parent_version FROM sysml2.commit WHERE id = NEW.parent_commit_id;
+
+    IF child_version < parent_version THEN
+        RAISE EXCEPTION
+            'commit % (model_version %) cannot have parent % (model_version %): downgrades are not supported',
+            NEW.commit_id, child_version, NEW.parent_commit_id, parent_version
+            USING ERRCODE = 'check_violation';
+    END IF;
+
+    SELECT count(*) INTO parent_count
+      FROM sysml2.commit_parent
+     WHERE commit_id = NEW.commit_id;
+
+    IF parent_count >= 2 THEN
+
+        SELECT count(*) INTO mixed_parents
+          FROM sysml2.commit_parent cp
+          JOIN sysml2.commit parent ON parent.id = cp.parent_commit_id
+         WHERE cp.commit_id = NEW.commit_id
+           AND parent.model_version_id <> child_version;
+
+        IF mixed_parents > 0 THEN
+            RAISE EXCEPTION
+                'merge commit % (model_version %) has a parent in a different model_version: convert every branch to the target release before merging',
+                NEW.commit_id, child_version
+                USING ERRCODE = 'check_violation';
+        END IF;
+
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_commit_parent_version
+    AFTER INSERT ON sysml2.commit_parent
+    FOR EACH ROW
+    EXECUTE FUNCTION sysml2.assert_commit_version_compatible();
 
 -- Branch and Tag are both CommitReference. Branch is mutable + destructible; Tag is immutable +
 -- destructible (Clause 7.1.2 mutability table).
@@ -268,9 +332,23 @@ CREATE TABLE sysml2.project_usage (
 -- The remaining NO ACTION FKs guarantee the procedure cannot leave dangling references — they
 -- block out-of-order deletion instead of silently scanning.
 CREATE TABLE sysml2.data_identity (
-    id         uuid NOT NULL,
-    project_id uuid NOT NULL REFERENCES sysml2.project (id),
-    PRIMARY KEY (id)
+    id         uuid     NOT NULL,
+    project_id uuid     NOT NULL REFERENCES sysml2.project (id),
+
+    -- TYPED IDENTITY. The metaclass of an element is invariant across its versions — an
+    -- identity is born a PartUsage and stays one — so the type is a property of the IDENTITY
+    -- and therefore FK-able, unlike everything else about an element. Two consumers:
+    --   * element_version's composite FK (identity_id, class_kind) makes a version that
+    --     claims a different metaclass than its identity IMPOSSIBLE;
+    --   * validate_references_at_commit (§14) type-checks every stored reference against
+    --     this column — including cross-project targets, because identities are typed
+    --     regardless of which project they live in.
+    -- A release conversion that retypes an element (e.g. its metaclass was dropped) must
+    -- update this column in the same transaction (service obligation, guide §15.16).
+    class_kind smallint NOT NULL REFERENCES sysml2.class_kind (id),
+
+    PRIMARY KEY (id),
+    UNIQUE (id, class_kind)   -- FK target for element_version's type-consistency check
 );
 
 CREATE INDEX ix_data_identity_project ON sysml2.data_identity (project_id);
@@ -292,7 +370,7 @@ CREATE INDEX ix_data_identity_project ON sysml2.data_identity (project_id);
 CREATE TABLE sysml2.element_version (
     project_id           uuid       NOT NULL,
     version_id           uuid       NOT NULL,   -- DataVersion.id
-    identity_id          uuid       NOT NULL REFERENCES sysml2.data_identity (id),
+    identity_id          uuid       NOT NULL,   -- FK via the composite typed-identity check below
     commit_id            uuid       NOT NULL REFERENCES sysml2.commit (id),
     class_kind           smallint   NOT NULL REFERENCES sysml2.class_kind (id),
 
@@ -313,6 +391,10 @@ CREATE TABLE sysml2.element_version (
     stored_json          jsonb      NULL,
 
     PRIMARY KEY (project_id, version_id),
+
+    -- TYPED IDENTITY (§4): one composite FK both anchors the identity AND makes a version
+    -- that claims a different metaclass than its identity impossible.
+    FOREIGN KEY (identity_id, class_kind) REFERENCES sysml2.data_identity (id, class_kind),
 
     CONSTRAINT element_version_tombstone_empty
         CHECK (NOT tombstone OR (stored_json IS NULL AND element_id IS NULL)),
@@ -451,12 +533,12 @@ CREATE INDEX ix_dependency_supplier_target
 -- column — they resolve to the ancestor's column. There are 9 of them:
 --
 --   CollectExpression::operator, SelectExpression::operator, FeatureChainExpression::operator,
---   IndexExpression::operator          -> operator_expression_v.operator
---   ConnectionDefinition::isSufficient -> type_v.is_sufficient
---   EnumerationDefinition::isVariation -> definition_v.is_variation
---   Expose::isImportAll, Expose::visibility -> import_v.is_import_all / import_v.visibility
+--   IndexExpression::operator          -> operator_expression_version.operator
+--   ConnectionDefinition::isSufficient -> type_version.is_sufficient
+--   EnumerationDefinition::isVariation -> definition_version.is_variation
+--   Expose::isImportAll, Expose::visibility -> import_version.is_import_all / import_version.visibility
 --   FramedConcernMembership::kind,
---   RequirementVerificationMembership::kind -> requirement_constraint_membership_v.kind
+--   RequirementVerificationMembership::kind -> requirement_constraint_membership_version.kind
 --
 -- Every table is keyed by (project_id, version_id) and co-partitioned with element_version, so
 -- the join is partition-local. NOT NULL is safe on [1..1] properties: a row only exists here if
@@ -476,7 +558,7 @@ CREATE INDEX ix_dependency_supplier_target
 ------------------------------------------------------------------------------------------------
 
 -- Root: KerML Core
-CREATE TABLE sysml2.relationship_v (
+CREATE TABLE sysml2.relationship_version (
     project_id            uuid    NOT NULL,
     version_id            uuid    NOT NULL,
     is_implied            boolean NOT NULL,
@@ -486,7 +568,7 @@ CREATE TABLE sysml2.relationship_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.type_v (
+CREATE TABLE sysml2.type_version (
     project_id    uuid    NOT NULL,
     version_id    uuid    NOT NULL,
     is_abstract   boolean NOT NULL,
@@ -496,7 +578,7 @@ CREATE TABLE sysml2.type_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.feature_v (
+CREATE TABLE sysml2.feature_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
     direction    sysml2.feature_direction_kind NULL,
@@ -513,7 +595,7 @@ CREATE TABLE sysml2.feature_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.membership_v (
+CREATE TABLE sysml2.membership_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
     member_element     uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -526,9 +608,9 @@ CREATE TABLE sysml2.membership_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE INDEX ix_membership_v_member_element ON sysml2.membership_v (project_id, member_element);
+CREATE INDEX ix_membership_version_member_element ON sysml2.membership_version (project_id, member_element);
 
-CREATE TABLE sysml2.import_v (
+CREATE TABLE sysml2.import_version (
     project_id     uuid    NOT NULL,
     version_id     uuid    NOT NULL,
     is_import_all  boolean NOT NULL DEFAULT false,
@@ -541,7 +623,7 @@ CREATE TABLE sysml2.import_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.membership_import_v (
+CREATE TABLE sysml2.membership_import_version (
     project_id          uuid NOT NULL,
     version_id          uuid NOT NULL,
     imported_membership uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -550,7 +632,7 @@ CREATE TABLE sysml2.membership_import_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.namespace_import_v (
+CREATE TABLE sysml2.namespace_import_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
     imported_namespace uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -561,7 +643,7 @@ CREATE TABLE sysml2.namespace_import_v (
 
 -- Specialization and its 8 refinements. Each carries its own pair of endpoint references, which
 -- SUBSET Relationship::source/target but are stored independently (isDerived=false in the model).
-CREATE TABLE sysml2.specialization_v (
+CREATE TABLE sysml2.specialization_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     general    uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -573,10 +655,10 @@ CREATE TABLE sysml2.specialization_v (
 
 -- The specialization graph is walked by Type::allSupertypes / inheritedMembership / feature.
 -- These two indexes are what make the derived-property impact analysis (§10) affordable.
-CREATE INDEX ix_specialization_v_general  ON sysml2.specialization_v (project_id, general);
-CREATE INDEX ix_specialization_v_specific ON sysml2.specialization_v (project_id, specific);
+CREATE INDEX ix_specialization_version_general  ON sysml2.specialization_version (project_id, general);
+CREATE INDEX ix_specialization_version_specific ON sysml2.specialization_version (project_id, specific);
 
-CREATE TABLE sysml2.subclassification_v (
+CREATE TABLE sysml2.subclassification_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
     subclassifier   uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -586,7 +668,7 @@ CREATE TABLE sysml2.subclassification_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.subsetting_v (
+CREATE TABLE sysml2.subsetting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
     subsetted_feature  uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -596,7 +678,7 @@ CREATE TABLE sysml2.subsetting_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.redefinition_v (
+CREATE TABLE sysml2.redefinition_version (
     project_id          uuid NOT NULL,
     version_id          uuid NOT NULL,
     redefined_feature   uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -606,7 +688,7 @@ CREATE TABLE sysml2.redefinition_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.reference_subsetting_v (
+CREATE TABLE sysml2.reference_subsetting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
     referenced_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -615,7 +697,7 @@ CREATE TABLE sysml2.reference_subsetting_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.cross_subsetting_v (
+CREATE TABLE sysml2.cross_subsetting_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
     crossed_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -624,7 +706,7 @@ CREATE TABLE sysml2.cross_subsetting_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.feature_typing_v (
+CREATE TABLE sysml2.feature_typing_version (
     project_id    uuid NOT NULL,
     version_id    uuid NOT NULL,
     type          uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -634,9 +716,9 @@ CREATE TABLE sysml2.feature_typing_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE INDEX ix_feature_typing_v_type ON sysml2.feature_typing_v (project_id, type);
+CREATE INDEX ix_feature_typing_version_type ON sysml2.feature_typing_version (project_id, type);
 
-CREATE TABLE sysml2.conjugated_port_typing_v (
+CREATE TABLE sysml2.conjugated_port_typing_version (
     project_id               uuid NOT NULL,
     version_id               uuid NOT NULL,
     conjugated_port_definition uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -645,7 +727,7 @@ CREATE TABLE sysml2.conjugated_port_typing_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.conjugation_v (
+CREATE TABLE sysml2.conjugation_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
     conjugated_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -655,7 +737,7 @@ CREATE TABLE sysml2.conjugation_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.port_conjugation_v (
+CREATE TABLE sysml2.port_conjugation_version (
     project_id               uuid NOT NULL,
     version_id               uuid NOT NULL,
     original_port_definition uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -664,7 +746,7 @@ CREATE TABLE sysml2.port_conjugation_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.disjoining_v (
+CREATE TABLE sysml2.disjoining_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
     disjoining_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -674,7 +756,7 @@ CREATE TABLE sysml2.disjoining_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.differencing_v (
+CREATE TABLE sysml2.differencing_version (
     project_id        uuid NOT NULL,
     version_id        uuid NOT NULL,
     differencing_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -683,7 +765,7 @@ CREATE TABLE sysml2.differencing_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.intersecting_v (
+CREATE TABLE sysml2.intersecting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
     intersecting_type  uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -692,7 +774,7 @@ CREATE TABLE sysml2.intersecting_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.unioning_v (
+CREATE TABLE sysml2.unioning_version (
     project_id    uuid NOT NULL,
     version_id    uuid NOT NULL,
     unioning_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -701,7 +783,7 @@ CREATE TABLE sysml2.unioning_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.feature_chaining_v (
+CREATE TABLE sysml2.feature_chaining_version (
     project_id       uuid NOT NULL,
     version_id       uuid NOT NULL,
     chaining_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -710,7 +792,7 @@ CREATE TABLE sysml2.feature_chaining_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.feature_inverting_v (
+CREATE TABLE sysml2.feature_inverting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
     feature_inverted   uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -720,7 +802,7 @@ CREATE TABLE sysml2.feature_inverting_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.type_featuring_v (
+CREATE TABLE sysml2.type_featuring_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
     feature_of_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -730,7 +812,7 @@ CREATE TABLE sysml2.type_featuring_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.feature_value_v (
+CREATE TABLE sysml2.feature_value_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
     is_default boolean NOT NULL,
@@ -740,7 +822,7 @@ CREATE TABLE sysml2.feature_value_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.annotation_v (
+CREATE TABLE sysml2.annotation_version (
     project_id        uuid NOT NULL,
     version_id        uuid NOT NULL,
     annotated_element uuid NOT NULL REFERENCES sysml2.data_identity (id),
@@ -749,10 +831,10 @@ CREATE TABLE sysml2.annotation_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE INDEX ix_annotation_v_annotated_element
-    ON sysml2.annotation_v (project_id, annotated_element);
+CREATE INDEX ix_annotation_version_annotated_element
+    ON sysml2.annotation_version (project_id, annotated_element);
 
-CREATE TABLE sysml2.comment_v (
+CREATE TABLE sysml2.comment_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     body       text NOT NULL,
@@ -762,7 +844,7 @@ CREATE TABLE sysml2.comment_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.textual_representation_v (
+CREATE TABLE sysml2.textual_representation_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     body       text NOT NULL,
@@ -772,7 +854,7 @@ CREATE TABLE sysml2.textual_representation_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.library_package_v (
+CREATE TABLE sysml2.library_package_version (
     project_id  uuid    NOT NULL,
     version_id  uuid    NOT NULL,
     is_standard boolean NOT NULL,
@@ -783,7 +865,7 @@ CREATE TABLE sysml2.library_package_v (
 
 -- Expressions. Note that `operator` is declared ONCE on OperatorExpression; CollectExpression,
 -- SelectExpression, FeatureChainExpression and IndexExpression merely redeclare it.
-CREATE TABLE sysml2.operator_expression_v (
+CREATE TABLE sysml2.operator_expression_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     operator   text NOT NULL,
@@ -794,7 +876,7 @@ CREATE TABLE sysml2.operator_expression_v (
 
 -- `value` is a DIFFERENT TYPE on each of the four Literal metaclasses. This is the single
 -- clearest reason the schema cannot collapse to one wide table.
-CREATE TABLE sysml2.literal_boolean_v (
+CREATE TABLE sysml2.literal_boolean_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
     value      boolean NOT NULL,
@@ -803,7 +885,7 @@ CREATE TABLE sysml2.literal_boolean_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.literal_integer_v (
+CREATE TABLE sysml2.literal_integer_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
     value      integer NOT NULL,
@@ -812,7 +894,7 @@ CREATE TABLE sysml2.literal_integer_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.literal_rational_v (
+CREATE TABLE sysml2.literal_rational_version (
     project_id uuid             NOT NULL,
     version_id uuid             NOT NULL,
     value      double precision NOT NULL,
@@ -821,7 +903,7 @@ CREATE TABLE sysml2.literal_rational_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.literal_string_v (
+CREATE TABLE sysml2.literal_string_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     value      text NOT NULL,
@@ -830,7 +912,7 @@ CREATE TABLE sysml2.literal_string_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.invariant_v (
+CREATE TABLE sysml2.invariant_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
     is_negated boolean NOT NULL,
@@ -840,7 +922,7 @@ CREATE TABLE sysml2.invariant_v (
 ) PARTITION BY HASH (project_id);
 
 -- SysML layer
-CREATE TABLE sysml2.definition_v (
+CREATE TABLE sysml2.definition_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
     is_variation boolean NOT NULL,
@@ -849,7 +931,7 @@ CREATE TABLE sysml2.definition_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.usage_v (
+CREATE TABLE sysml2.usage_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
     is_variation boolean NOT NULL,
@@ -860,7 +942,7 @@ CREATE TABLE sysml2.usage_v (
 
 -- isIndividual is declared independently on OccurrenceDefinition and OccurrenceUsage — they sit
 -- on the two parallel Definition/Usage branches and neither inherits from the other.
-CREATE TABLE sysml2.occurrence_definition_v (
+CREATE TABLE sysml2.occurrence_definition_version (
     project_id    uuid    NOT NULL,
     version_id    uuid    NOT NULL,
     is_individual boolean NOT NULL,
@@ -869,7 +951,7 @@ CREATE TABLE sysml2.occurrence_definition_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.occurrence_usage_v (
+CREATE TABLE sysml2.occurrence_usage_version (
     project_id    uuid    NOT NULL,
     version_id    uuid    NOT NULL,
     is_individual boolean NOT NULL,
@@ -879,7 +961,7 @@ CREATE TABLE sysml2.occurrence_usage_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.state_definition_v (
+CREATE TABLE sysml2.state_definition_version (
     project_id  uuid    NOT NULL,
     version_id  uuid    NOT NULL,
     is_parallel boolean NOT NULL,
@@ -888,7 +970,7 @@ CREATE TABLE sysml2.state_definition_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.state_usage_v (
+CREATE TABLE sysml2.state_usage_version (
     project_id  uuid    NOT NULL,
     version_id  uuid    NOT NULL,
     is_parallel boolean NOT NULL,
@@ -897,7 +979,7 @@ CREATE TABLE sysml2.state_usage_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.requirement_definition_v (
+CREATE TABLE sysml2.requirement_definition_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     req_id     text NULL,
@@ -906,7 +988,7 @@ CREATE TABLE sysml2.requirement_definition_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.requirement_usage_v (
+CREATE TABLE sysml2.requirement_usage_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     req_id     text NULL,
@@ -916,7 +998,7 @@ CREATE TABLE sysml2.requirement_usage_v (
 ) PARTITION BY HASH (project_id);
 
 -- `kind` is a DIFFERENT ENUM TYPE on each of these four. Same argument as Literal::value.
-CREATE TABLE sysml2.requirement_constraint_membership_v (
+CREATE TABLE sysml2.requirement_constraint_membership_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     kind       sysml2.requirement_constraint_kind NOT NULL,
@@ -925,7 +1007,7 @@ CREATE TABLE sysml2.requirement_constraint_membership_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.state_subaction_membership_v (
+CREATE TABLE sysml2.state_subaction_membership_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     kind       sysml2.state_subaction_kind NOT NULL,
@@ -934,7 +1016,7 @@ CREATE TABLE sysml2.state_subaction_membership_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.transition_feature_membership_v (
+CREATE TABLE sysml2.transition_feature_membership_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     kind       sysml2.transition_feature_kind NOT NULL,
@@ -943,7 +1025,7 @@ CREATE TABLE sysml2.transition_feature_membership_v (
         REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
-CREATE TABLE sysml2.trigger_invocation_expression_v (
+CREATE TABLE sysml2.trigger_invocation_expression_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
     kind       sysml2.trigger_kind NOT NULL,
@@ -1369,7 +1451,7 @@ $$;
 --
 -- Representative excerpt — the template emits all 167:
 --
--- CREATE VIEW sysml2.v_part_usage AS
+-- CREATE VIEW sysml2.vw_part_usage AS
 --     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
 --            ev.element_id, ev.declared_name, ev.declared_short_name, ev.is_implied_included,
 --            ev.owning_relationship,
@@ -1379,14 +1461,14 @@ $$;
 --            u.is_variation,
 --            ou.is_individual, ou.portion_kind
 --     FROM sysml2.element_version ev
---     JOIN sysml2.type_v            t  USING (project_id, version_id)
---     JOIN sysml2.feature_v         f  USING (project_id, version_id)
---     JOIN sysml2.usage_v           u  USING (project_id, version_id)
---     JOIN sysml2.occurrence_usage_v ou USING (project_id, version_id)
---     WHERE ev.class_kind = 94 AND NOT ev.tombstone;
+--     JOIN sysml2.type_version            t  USING (project_id, version_id)
+--     JOIN sysml2.feature_version         f  USING (project_id, version_id)
+--     JOIN sysml2.usage_version           u  USING (project_id, version_id)
+--     JOIN sysml2.occurrence_usage_version ou USING (project_id, version_id)
+--     WHERE ev.class_kind = 120 AND NOT ev.tombstone;   -- 120 = PartUsage's FROZEN registry id (§2)
 --
--- CREATE VIEW sysml2.v_flow_usage AS ...  -- SIX subtype tables: Connector is both a Feature
---                                          -- and a Relationship, so relationship_v joins too.
+-- CREATE VIEW sysml2.vw_flow_usage AS ...  -- SIX subtype tables: Connector is both a Feature
+--                                          -- and a Relationship, so relationship_version joins too.
 
 ------------------------------------------------------------------------------------------------
 -- 12. PARTITIONS
@@ -1431,19 +1513,19 @@ BEGIN
         'element_owned_relationship', 'element_alias_ids',
         'relationship_owned_related_element', 'relationship_source', 'relationship_target',
         'dependency_client', 'dependency_supplier',
-        'relationship_v', 'type_v', 'feature_v', 'membership_v', 'import_v',
-        'membership_import_v', 'namespace_import_v', 'specialization_v', 'subclassification_v',
-        'subsetting_v', 'redefinition_v', 'reference_subsetting_v', 'cross_subsetting_v',
-        'feature_typing_v', 'conjugated_port_typing_v', 'conjugation_v', 'port_conjugation_v',
-        'disjoining_v', 'differencing_v', 'intersecting_v', 'unioning_v',
-        'feature_chaining_v', 'feature_inverting_v', 'type_featuring_v', 'feature_value_v',
-        'annotation_v', 'comment_v', 'textual_representation_v', 'library_package_v',
-        'operator_expression_v', 'literal_boolean_v', 'literal_integer_v', 'literal_rational_v',
-        'literal_string_v', 'invariant_v',
-        'definition_v', 'usage_v', 'occurrence_definition_v', 'occurrence_usage_v',
-        'state_definition_v', 'state_usage_v', 'requirement_definition_v', 'requirement_usage_v',
-        'requirement_constraint_membership_v', 'state_subaction_membership_v',
-        'transition_feature_membership_v', 'trigger_invocation_expression_v'
+        'relationship_version', 'type_version', 'feature_version', 'membership_version', 'import_version',
+        'membership_import_version', 'namespace_import_version', 'specialization_version', 'subclassification_version',
+        'subsetting_version', 'redefinition_version', 'reference_subsetting_version', 'cross_subsetting_version',
+        'feature_typing_version', 'conjugated_port_typing_version', 'conjugation_version', 'port_conjugation_version',
+        'disjoining_version', 'differencing_version', 'intersecting_version', 'unioning_version',
+        'feature_chaining_version', 'feature_inverting_version', 'type_featuring_version', 'feature_value_version',
+        'annotation_version', 'comment_version', 'textual_representation_version', 'library_package_version',
+        'operator_expression_version', 'literal_boolean_version', 'literal_integer_version', 'literal_rational_version',
+        'literal_string_version', 'invariant_version',
+        'definition_version', 'usage_version', 'occurrence_definition_version', 'occurrence_usage_version',
+        'state_definition_version', 'state_usage_version', 'requirement_definition_version', 'requirement_usage_version',
+        'requirement_constraint_membership_version', 'state_subaction_membership_version',
+        'transition_feature_membership_version', 'trigger_invocation_expression_version'
     ]
     LOOP
         FOR partition_index IN 0 .. partition_count - 1 LOOP
@@ -1491,6 +1573,33 @@ BEGIN
 END;
 $$;
 
+-- PG18 OPPORTUNISTIC DEFAULTS (version-guarded; a no-op on the PostgreSQL 16/17 floor).
+--
+-- On PostgreSQL 18+ the schema self-activates native uuidv7() defaults on every
+-- SERVER-MINTED key. Time-ordered ids turn each project's insert pattern into rightmost
+-- btree appends instead of random-page scatter (audit finding R8). The application-side
+-- Guid.CreateVersion7() remains the PRIMARY id source — the service usually needs the ids
+-- before insert (to wire derived_id into branch_head etc.); these defaults are the safety
+-- net that keeps ad-hoc/tooling inserts time-ordered too.
+--
+-- Deliberately NOT defaulted: data_identity.id (the spec-visible @id is supplied by the
+-- API layer or the client — a silent server default would mask missing-id bugs).
+DO $$
+BEGIN
+
+    IF current_setting('server_version_num')::int >= 180000 THEN
+
+        ALTER TABLE sysml2.element_version ALTER COLUMN version_id SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.derived_version ALTER COLUMN derived_id SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.project         ALTER COLUMN id         SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.commit          ALTER COLUMN id         SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.branch          ALTER COLUMN id         SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.tag             ALTER COLUMN id         SET DEFAULT uuidv7();
+
+    END IF;
+END;
+$$;
+
 ------------------------------------------------------------------------------------------------
 -- 13. MODEL VERSION                                                                [GENERATED]
 ------------------------------------------------------------------------------------------------
@@ -1501,4 +1610,1596 @@ LANGUAGE sql
 IMMUTABLE
 AS $$
     SELECT '{{model-version}}'::text;
+$$;
+
+------------------------------------------------------------------------------------------------
+-- 14. REFERENCE VALIDATION — two tiers                                              [GENERATED]
+--
+-- The ON-DEMAND half of referential integrity (guide §7): the FKs prove that every stored
+-- reference targets an EXISTING identity; these functions check what FKs cannot —
+--   * 'dangling'    — a same-project target that is not alive in the snapshot of the given
+--                     commit (absent or tombstoned);
+--   * 'wrong-type'  — a target whose metaclass is illegal for the referencing property,
+--                     checked via the TYPED IDENTITY (data_identity.class_kind, §4) — this
+--                     check applies to cross-project targets too.
+-- Liveness of cross-project targets is deliberately NOT checked here: it depends on the
+-- used-project commit (project_usage), which is service-layer resolution.
+--
+-- TIER 1 — validate_references_at_commit: the FULL periodic audit over one commit's whole
+-- snapshot. It materializes and ANALYZEs the snapshot in a temp table first, so the planner
+-- knows the true cardinality and bounds the pass at O(snapshot x log history) — never
+-- O(history) — however deep the append-only tables grow. Run asynchronously (checkpoint
+-- cadence is a natural rhythm).
+--
+-- TIER 2 — validate_references_in_commit: the INCREMENTAL per-commit check, O(change set):
+-- the outgoing references of the versions the commit wrote, PLUS the reverse direction its
+-- tombstones break — a live, unchanged element left referencing a deleted identity (driven
+-- by the reverse-lookup indexes; per-target liveness probed via resolve_element_at_commit).
+-- Cheap enough for the synchronous commit-validation path; tier 1 backstops it.
+--
+-- Deliberately FUNCTIONS, not constraints: the spec allows transiently dangling references,
+-- and liveness is a function of (identity, commit) — unenforceable by FK. One UNION ALL arm
+-- per stored reference column, emitted from the UML model with the allowed target
+-- metaclasses resolved through ClassKindRegistry.
+------------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION sysml2.validate_references_at_commit(
+    p_project_id uuid,
+    p_commit_id  uuid
+)
+RETURNS TABLE (
+    source_table    text,
+    source_column   text,
+    source_identity uuid,
+    target_identity uuid,
+    problem         text
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Materialize + ANALYZE the snapshot so the planner knows its TRUE cardinality and
+    -- can choose per arm between hashing the source (young history) and snapshot-driven
+    -- PK probes (deep history) — bounding the pass at O(snapshot x log history) instead
+    -- of O(history). A bare function CTE would be estimated at ~1000 rows.
+    CREATE TEMP TABLE IF NOT EXISTS validation_snapshot (
+        identity_id uuid NOT NULL,
+        version_id  uuid NOT NULL
+    ) ON COMMIT DROP;
+
+    TRUNCATE validation_snapshot;
+
+    INSERT INTO validation_snapshot (identity_id, version_id)
+    SELECT r.identity_id, r.version_id
+    FROM sysml2.resolve_commit_state(p_project_id, p_commit_id) r;
+
+    CREATE INDEX IF NOT EXISTS ix_validation_snapshot_version  ON validation_snapshot (version_id);
+    CREATE INDEX IF NOT EXISTS ix_validation_snapshot_identity ON validation_snapshot (identity_id);
+
+    ANALYZE validation_snapshot;
+
+    RETURN QUERY
+    SELECT 'annotation_version'::text, 'annotated_element'::text,
+           snap.identity_id, src.annotated_element, 'dangling'::text
+    FROM sysml2.annotation_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.annotated_element
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.annotated_element
+    WHERE src.project_id = p_project_id
+      AND src.annotated_element IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'conjugated_port_typing_version'::text, 'conjugated_port_definition'::text,
+           snap.identity_id, src.conjugated_port_definition,
+           CASE WHEN ti.class_kind NOT IN (31) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.conjugated_port_typing_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.conjugated_port_definition
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.conjugated_port_definition
+    WHERE src.project_id = p_project_id
+      AND src.conjugated_port_definition IS NOT NULL
+      AND (ti.class_kind NOT IN (31)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'conjugation_version'::text, 'conjugated_type'::text,
+           snap.identity_id, src.conjugated_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.conjugation_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.conjugated_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.conjugated_type
+    WHERE src.project_id = p_project_id
+      AND src.conjugated_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'conjugation_version'::text, 'original_type'::text,
+           snap.identity_id, src.original_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.conjugation_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.original_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.original_type
+    WHERE src.project_id = p_project_id
+      AND src.original_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'cross_subsetting_version'::text, 'crossed_feature'::text,
+           snap.identity_id, src.crossed_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.cross_subsetting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.crossed_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.crossed_feature
+    WHERE src.project_id = p_project_id
+      AND src.crossed_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'dependency_client'::text, 'target_identity'::text,
+           snap.identity_id, src.target_identity, 'dangling'::text
+    FROM sysml2.dependency_client src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.target_identity
+    WHERE src.project_id = p_project_id
+      AND src.target_identity IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'dependency_supplier'::text, 'target_identity'::text,
+           snap.identity_id, src.target_identity, 'dangling'::text
+    FROM sysml2.dependency_supplier src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.target_identity
+    WHERE src.project_id = p_project_id
+      AND src.target_identity IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'differencing_version'::text, 'differencing_type'::text,
+           snap.identity_id, src.differencing_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.differencing_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.differencing_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.differencing_type
+    WHERE src.project_id = p_project_id
+      AND src.differencing_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'disjoining_version'::text, 'disjoining_type'::text,
+           snap.identity_id, src.disjoining_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.disjoining_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.disjoining_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.disjoining_type
+    WHERE src.project_id = p_project_id
+      AND src.disjoining_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'disjoining_version'::text, 'type_disjoined'::text,
+           snap.identity_id, src.type_disjoined,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.disjoining_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.type_disjoined
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.type_disjoined
+    WHERE src.project_id = p_project_id
+      AND src.type_disjoined IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'element_version'::text, 'owning_relationship'::text,
+           snap.identity_id, src.owning_relationship,
+           CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.owning_relationship
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.owning_relationship
+    WHERE src.project_id = p_project_id
+      AND src.owning_relationship IS NOT NULL
+      AND (ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'element_owned_relationship'::text, 'target_identity'::text,
+           snap.identity_id, src.target_identity,
+           CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_owned_relationship src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.target_identity
+    WHERE src.project_id = p_project_id
+      AND src.target_identity IS NOT NULL
+      AND (ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'feature_chaining_version'::text, 'chaining_feature'::text,
+           snap.identity_id, src.chaining_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.feature_chaining_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.chaining_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.chaining_feature
+    WHERE src.project_id = p_project_id
+      AND src.chaining_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'feature_inverting_version'::text, 'feature_inverted'::text,
+           snap.identity_id, src.feature_inverted,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.feature_inverting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.feature_inverted
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.feature_inverted
+    WHERE src.project_id = p_project_id
+      AND src.feature_inverted IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'feature_inverting_version'::text, 'inverting_feature'::text,
+           snap.identity_id, src.inverting_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.feature_inverting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.inverting_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.inverting_feature
+    WHERE src.project_id = p_project_id
+      AND src.inverting_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'feature_typing_version'::text, 'type'::text,
+           snap.identity_id, src.type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.feature_typing_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.type
+    WHERE src.project_id = p_project_id
+      AND src.type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'feature_typing_version'::text, 'typed_feature'::text,
+           snap.identity_id, src.typed_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.feature_typing_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.typed_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.typed_feature
+    WHERE src.project_id = p_project_id
+      AND src.typed_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'intersecting_version'::text, 'intersecting_type'::text,
+           snap.identity_id, src.intersecting_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.intersecting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.intersecting_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.intersecting_type
+    WHERE src.project_id = p_project_id
+      AND src.intersecting_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'membership_version'::text, 'member_element'::text,
+           snap.identity_id, src.member_element, 'dangling'::text
+    FROM sysml2.membership_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.member_element
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.member_element
+    WHERE src.project_id = p_project_id
+      AND src.member_element IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'membership_import_version'::text, 'imported_membership'::text,
+           snap.identity_id, src.imported_membership,
+           CASE WHEN ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.membership_import_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.imported_membership
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.imported_membership
+    WHERE src.project_id = p_project_id
+      AND src.imported_membership IS NOT NULL
+      AND (ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'namespace_import_version'::text, 'imported_namespace'::text,
+           snap.identity_id, src.imported_namespace,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.namespace_import_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.imported_namespace
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.imported_namespace
+    WHERE src.project_id = p_project_id
+      AND src.imported_namespace IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'port_conjugation_version'::text, 'original_port_definition'::text,
+           snap.identity_id, src.original_port_definition,
+           CASE WHEN ti.class_kind NOT IN (31, 124) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.port_conjugation_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.original_port_definition
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.original_port_definition
+    WHERE src.project_id = p_project_id
+      AND src.original_port_definition IS NOT NULL
+      AND (ti.class_kind NOT IN (31, 124)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'redefinition_version'::text, 'redefined_feature'::text,
+           snap.identity_id, src.redefined_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.redefinition_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.redefined_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.redefined_feature
+    WHERE src.project_id = p_project_id
+      AND src.redefined_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'redefinition_version'::text, 'redefining_feature'::text,
+           snap.identity_id, src.redefining_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.redefinition_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.redefining_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.redefining_feature
+    WHERE src.project_id = p_project_id
+      AND src.redefining_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'reference_subsetting_version'::text, 'referenced_feature'::text,
+           snap.identity_id, src.referenced_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.reference_subsetting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.referenced_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.referenced_feature
+    WHERE src.project_id = p_project_id
+      AND src.referenced_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'relationship_version'::text, 'owning_related_element'::text,
+           snap.identity_id, src.owning_related_element, 'dangling'::text
+    FROM sysml2.relationship_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.owning_related_element
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.owning_related_element
+    WHERE src.project_id = p_project_id
+      AND src.owning_related_element IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'relationship_owned_related_element'::text, 'target_identity'::text,
+           snap.identity_id, src.target_identity, 'dangling'::text
+    FROM sysml2.relationship_owned_related_element src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.target_identity
+    WHERE src.project_id = p_project_id
+      AND src.target_identity IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'relationship_source'::text, 'target_identity'::text,
+           snap.identity_id, src.target_identity, 'dangling'::text
+    FROM sysml2.relationship_source src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.target_identity
+    WHERE src.project_id = p_project_id
+      AND src.target_identity IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'relationship_target'::text, 'target_identity'::text,
+           snap.identity_id, src.target_identity, 'dangling'::text
+    FROM sysml2.relationship_target src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.target_identity
+    WHERE src.project_id = p_project_id
+      AND src.target_identity IS NOT NULL
+      AND ti.project_id = p_project_id
+      AND live.identity_id IS NULL
+    UNION ALL
+    SELECT 'specialization_version'::text, 'general'::text,
+           snap.identity_id, src.general,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.specialization_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.general
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.general
+    WHERE src.project_id = p_project_id
+      AND src.general IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'specialization_version'::text, 'specific'::text,
+           snap.identity_id, src.specific,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.specialization_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.specific
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.specific
+    WHERE src.project_id = p_project_id
+      AND src.specific IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'subclassification_version'::text, 'subclassifier'::text,
+           snap.identity_id, src.subclassifier,
+           CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.subclassification_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.subclassifier
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.subclassifier
+    WHERE src.project_id = p_project_id
+      AND src.subclassifier IS NOT NULL
+      AND (ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'subclassification_version'::text, 'superclassifier'::text,
+           snap.identity_id, src.superclassifier,
+           CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.subclassification_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.superclassifier
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.superclassifier
+    WHERE src.project_id = p_project_id
+      AND src.superclassifier IS NOT NULL
+      AND (ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'subsetting_version'::text, 'subsetted_feature'::text,
+           snap.identity_id, src.subsetted_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.subsetting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.subsetted_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.subsetted_feature
+    WHERE src.project_id = p_project_id
+      AND src.subsetted_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'subsetting_version'::text, 'subsetting_feature'::text,
+           snap.identity_id, src.subsetting_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.subsetting_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.subsetting_feature
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.subsetting_feature
+    WHERE src.project_id = p_project_id
+      AND src.subsetting_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'type_featuring_version'::text, 'feature_of_type'::text,
+           snap.identity_id, src.feature_of_type,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.type_featuring_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.feature_of_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.feature_of_type
+    WHERE src.project_id = p_project_id
+      AND src.feature_of_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'type_featuring_version'::text, 'featuring_type'::text,
+           snap.identity_id, src.featuring_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.type_featuring_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.featuring_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.featuring_type
+    WHERE src.project_id = p_project_id
+      AND src.featuring_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
+    UNION ALL
+    SELECT 'unioning_version'::text, 'unioning_type'::text,
+           snap.identity_id, src.unioning_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.unioning_version src
+    JOIN validation_snapshot snap ON snap.version_id = src.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.unioning_type
+    LEFT JOIN validation_snapshot live ON live.identity_id = src.unioning_type
+    WHERE src.project_id = p_project_id
+      AND src.unioning_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id AND live.identity_id IS NULL));
+END;
+$$;
+
+-- The INCREMENTAL tier: validates only commit p_commit_id's change set — outgoing
+-- references of its new versions, plus the reverse direction its tombstones break
+-- (a live, UNCHANGED element left referencing a deleted identity). O(change set),
+-- independent of history and snapshot size; the full pass above remains the
+-- periodic audit that backstops it.
+CREATE OR REPLACE FUNCTION sysml2.validate_references_in_commit(
+    p_project_id uuid,
+    p_commit_id  uuid
+)
+RETURNS TABLE (
+    source_table    text,
+    source_column   text,
+    source_identity uuid,
+    target_identity uuid,
+    problem         text
+)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT DISTINCT findings.source_table, findings.source_column,
+           findings.source_identity, findings.target_identity, findings.problem
+    FROM (
+    SELECT 'annotation_version'::text, 'annotated_element'::text,
+           changed.identity_id, src.annotated_element,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.annotation_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.annotated_element
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.annotated_element IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.annotated_element)))
+    UNION ALL
+    SELECT 'conjugated_port_typing_version'::text, 'conjugated_port_definition'::text,
+           changed.identity_id, src.conjugated_port_definition,
+           CASE WHEN ti.class_kind NOT IN (31) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.conjugated_port_typing_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.conjugated_port_definition
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.conjugated_port_definition IS NOT NULL
+      AND (ti.class_kind NOT IN (31)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.conjugated_port_definition))))
+    UNION ALL
+    SELECT 'conjugation_version'::text, 'conjugated_type'::text,
+           changed.identity_id, src.conjugated_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.conjugation_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.conjugated_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.conjugated_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.conjugated_type))))
+    UNION ALL
+    SELECT 'conjugation_version'::text, 'original_type'::text,
+           changed.identity_id, src.original_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.conjugation_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.original_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.original_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.original_type))))
+    UNION ALL
+    SELECT 'cross_subsetting_version'::text, 'crossed_feature'::text,
+           changed.identity_id, src.crossed_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.cross_subsetting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.crossed_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.crossed_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.crossed_feature))))
+    UNION ALL
+    SELECT 'dependency_client'::text, 'target_identity'::text,
+           changed.identity_id, src.target_identity,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.dependency_client src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.target_identity IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity)))
+    UNION ALL
+    SELECT 'dependency_supplier'::text, 'target_identity'::text,
+           changed.identity_id, src.target_identity,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.dependency_supplier src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.target_identity IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity)))
+    UNION ALL
+    SELECT 'differencing_version'::text, 'differencing_type'::text,
+           changed.identity_id, src.differencing_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.differencing_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.differencing_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.differencing_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.differencing_type))))
+    UNION ALL
+    SELECT 'disjoining_version'::text, 'disjoining_type'::text,
+           changed.identity_id, src.disjoining_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.disjoining_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.disjoining_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.disjoining_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.disjoining_type))))
+    UNION ALL
+    SELECT 'disjoining_version'::text, 'type_disjoined'::text,
+           changed.identity_id, src.type_disjoined,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.disjoining_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.type_disjoined
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.type_disjoined IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.type_disjoined))))
+    UNION ALL
+    SELECT 'element_version'::text, 'owning_relationship'::text,
+           changed.identity_id, changed.owning_relationship,
+           CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.data_identity ti ON ti.id = changed.owning_relationship
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND changed.owning_relationship IS NOT NULL
+      AND (ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, changed.owning_relationship))))
+    UNION ALL
+    SELECT 'element_owned_relationship'::text, 'target_identity'::text,
+           changed.identity_id, src.target_identity,
+           CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.element_owned_relationship src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.target_identity IS NOT NULL
+      AND (ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
+    UNION ALL
+    SELECT 'feature_chaining_version'::text, 'chaining_feature'::text,
+           changed.identity_id, src.chaining_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.feature_chaining_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.chaining_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.chaining_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.chaining_feature))))
+    UNION ALL
+    SELECT 'feature_inverting_version'::text, 'feature_inverted'::text,
+           changed.identity_id, src.feature_inverted,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.feature_inverting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.feature_inverted
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.feature_inverted IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.feature_inverted))))
+    UNION ALL
+    SELECT 'feature_inverting_version'::text, 'inverting_feature'::text,
+           changed.identity_id, src.inverting_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.feature_inverting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.inverting_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.inverting_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.inverting_feature))))
+    UNION ALL
+    SELECT 'feature_typing_version'::text, 'type'::text,
+           changed.identity_id, src.type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.feature_typing_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.type))))
+    UNION ALL
+    SELECT 'feature_typing_version'::text, 'typed_feature'::text,
+           changed.identity_id, src.typed_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.feature_typing_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.typed_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.typed_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.typed_feature))))
+    UNION ALL
+    SELECT 'intersecting_version'::text, 'intersecting_type'::text,
+           changed.identity_id, src.intersecting_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.intersecting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.intersecting_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.intersecting_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.intersecting_type))))
+    UNION ALL
+    SELECT 'membership_version'::text, 'member_element'::text,
+           changed.identity_id, src.member_element,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.membership_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.member_element
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.member_element IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.member_element)))
+    UNION ALL
+    SELECT 'membership_import_version'::text, 'imported_membership'::text,
+           changed.identity_id, src.imported_membership,
+           CASE WHEN ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.membership_import_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.imported_membership
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.imported_membership IS NOT NULL
+      AND (ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.imported_membership))))
+    UNION ALL
+    SELECT 'namespace_import_version'::text, 'imported_namespace'::text,
+           changed.identity_id, src.imported_namespace,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.namespace_import_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.imported_namespace
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.imported_namespace IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.imported_namespace))))
+    UNION ALL
+    SELECT 'port_conjugation_version'::text, 'original_port_definition'::text,
+           changed.identity_id, src.original_port_definition,
+           CASE WHEN ti.class_kind NOT IN (31, 124) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.port_conjugation_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.original_port_definition
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.original_port_definition IS NOT NULL
+      AND (ti.class_kind NOT IN (31, 124)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.original_port_definition))))
+    UNION ALL
+    SELECT 'redefinition_version'::text, 'redefined_feature'::text,
+           changed.identity_id, src.redefined_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.redefinition_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.redefined_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.redefined_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.redefined_feature))))
+    UNION ALL
+    SELECT 'redefinition_version'::text, 'redefining_feature'::text,
+           changed.identity_id, src.redefining_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.redefinition_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.redefining_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.redefining_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.redefining_feature))))
+    UNION ALL
+    SELECT 'reference_subsetting_version'::text, 'referenced_feature'::text,
+           changed.identity_id, src.referenced_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.reference_subsetting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.referenced_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.referenced_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.referenced_feature))))
+    UNION ALL
+    SELECT 'relationship_version'::text, 'owning_related_element'::text,
+           changed.identity_id, src.owning_related_element,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.relationship_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.owning_related_element
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.owning_related_element IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.owning_related_element)))
+    UNION ALL
+    SELECT 'relationship_owned_related_element'::text, 'target_identity'::text,
+           changed.identity_id, src.target_identity,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.relationship_owned_related_element src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.target_identity IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity)))
+    UNION ALL
+    SELECT 'relationship_source'::text, 'target_identity'::text,
+           changed.identity_id, src.target_identity,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.relationship_source src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.target_identity IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity)))
+    UNION ALL
+    SELECT 'relationship_target'::text, 'target_identity'::text,
+           changed.identity_id, src.target_identity,
+           'dangling'::text
+    FROM sysml2.element_version changed
+    JOIN sysml2.relationship_target src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.target_identity
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.target_identity IS NOT NULL
+      AND (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity)))
+    UNION ALL
+    SELECT 'specialization_version'::text, 'general'::text,
+           changed.identity_id, src.general,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.specialization_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.general
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.general IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.general))))
+    UNION ALL
+    SELECT 'specialization_version'::text, 'specific'::text,
+           changed.identity_id, src.specific,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.specialization_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.specific
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.specific IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.specific))))
+    UNION ALL
+    SELECT 'subclassification_version'::text, 'subclassifier'::text,
+           changed.identity_id, src.subclassifier,
+           CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.subclassification_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.subclassifier
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.subclassifier IS NOT NULL
+      AND (ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.subclassifier))))
+    UNION ALL
+    SELECT 'subclassification_version'::text, 'superclassifier'::text,
+           changed.identity_id, src.superclassifier,
+           CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.subclassification_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.superclassifier
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.superclassifier IS NOT NULL
+      AND (ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.superclassifier))))
+    UNION ALL
+    SELECT 'subsetting_version'::text, 'subsetted_feature'::text,
+           changed.identity_id, src.subsetted_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.subsetting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.subsetted_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.subsetted_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.subsetted_feature))))
+    UNION ALL
+    SELECT 'subsetting_version'::text, 'subsetting_feature'::text,
+           changed.identity_id, src.subsetting_feature,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.subsetting_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.subsetting_feature
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.subsetting_feature IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.subsetting_feature))))
+    UNION ALL
+    SELECT 'type_featuring_version'::text, 'feature_of_type'::text,
+           changed.identity_id, src.feature_of_type,
+           CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.type_featuring_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.feature_of_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.feature_of_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.feature_of_type))))
+    UNION ALL
+    SELECT 'type_featuring_version'::text, 'featuring_type'::text,
+           changed.identity_id, src.featuring_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.type_featuring_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.featuring_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.featuring_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.featuring_type))))
+    UNION ALL
+    SELECT 'unioning_version'::text, 'unioning_type'::text,
+           changed.identity_id, src.unioning_type,
+           CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
+    FROM sysml2.element_version changed
+    JOIN sysml2.unioning_version src
+      ON src.project_id = changed.project_id AND src.version_id = changed.version_id
+    JOIN sysml2.data_identity ti ON ti.id = src.unioning_type
+    WHERE changed.project_id = p_project_id
+      AND changed.commit_id = p_commit_id
+      AND NOT changed.tombstone
+      AND src.unioning_type IS NOT NULL
+      AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
+           OR (ti.project_id = p_project_id
+           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.unioning_type))))
+    UNION ALL
+    SELECT 'annotation_version'::text, 'annotated_element'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.annotation_version src
+      ON src.project_id = dead.project_id AND src.annotated_element = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'conjugated_port_typing_version'::text, 'conjugated_port_definition'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.conjugated_port_typing_version src
+      ON src.project_id = dead.project_id AND src.conjugated_port_definition = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'conjugation_version'::text, 'conjugated_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.conjugation_version src
+      ON src.project_id = dead.project_id AND src.conjugated_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'conjugation_version'::text, 'original_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.conjugation_version src
+      ON src.project_id = dead.project_id AND src.original_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'cross_subsetting_version'::text, 'crossed_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.cross_subsetting_version src
+      ON src.project_id = dead.project_id AND src.crossed_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'dependency_client'::text, 'target_identity'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.dependency_client src
+      ON src.project_id = dead.project_id AND src.target_identity = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'dependency_supplier'::text, 'target_identity'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.dependency_supplier src
+      ON src.project_id = dead.project_id AND src.target_identity = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'differencing_version'::text, 'differencing_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.differencing_version src
+      ON src.project_id = dead.project_id AND src.differencing_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'disjoining_version'::text, 'disjoining_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.disjoining_version src
+      ON src.project_id = dead.project_id AND src.disjoining_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'disjoining_version'::text, 'type_disjoined'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.disjoining_version src
+      ON src.project_id = dead.project_id AND src.type_disjoined = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'element_version'::text, 'owning_relationship'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.element_version holder
+      ON holder.project_id = dead.project_id AND holder.owning_relationship = dead.identity_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'element_owned_relationship'::text, 'target_identity'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.element_owned_relationship src
+      ON src.project_id = dead.project_id AND src.target_identity = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'feature_chaining_version'::text, 'chaining_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.feature_chaining_version src
+      ON src.project_id = dead.project_id AND src.chaining_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'feature_inverting_version'::text, 'feature_inverted'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.feature_inverting_version src
+      ON src.project_id = dead.project_id AND src.feature_inverted = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'feature_inverting_version'::text, 'inverting_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.feature_inverting_version src
+      ON src.project_id = dead.project_id AND src.inverting_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'feature_typing_version'::text, 'type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.feature_typing_version src
+      ON src.project_id = dead.project_id AND src.type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'feature_typing_version'::text, 'typed_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.feature_typing_version src
+      ON src.project_id = dead.project_id AND src.typed_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'intersecting_version'::text, 'intersecting_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.intersecting_version src
+      ON src.project_id = dead.project_id AND src.intersecting_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'membership_version'::text, 'member_element'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.membership_version src
+      ON src.project_id = dead.project_id AND src.member_element = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'membership_import_version'::text, 'imported_membership'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.membership_import_version src
+      ON src.project_id = dead.project_id AND src.imported_membership = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'namespace_import_version'::text, 'imported_namespace'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.namespace_import_version src
+      ON src.project_id = dead.project_id AND src.imported_namespace = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'port_conjugation_version'::text, 'original_port_definition'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.port_conjugation_version src
+      ON src.project_id = dead.project_id AND src.original_port_definition = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'redefinition_version'::text, 'redefined_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.redefinition_version src
+      ON src.project_id = dead.project_id AND src.redefined_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'redefinition_version'::text, 'redefining_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.redefinition_version src
+      ON src.project_id = dead.project_id AND src.redefining_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'reference_subsetting_version'::text, 'referenced_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.reference_subsetting_version src
+      ON src.project_id = dead.project_id AND src.referenced_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'relationship_version'::text, 'owning_related_element'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.relationship_version src
+      ON src.project_id = dead.project_id AND src.owning_related_element = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'relationship_owned_related_element'::text, 'target_identity'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.relationship_owned_related_element src
+      ON src.project_id = dead.project_id AND src.target_identity = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'relationship_source'::text, 'target_identity'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.relationship_source src
+      ON src.project_id = dead.project_id AND src.target_identity = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'relationship_target'::text, 'target_identity'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.relationship_target src
+      ON src.project_id = dead.project_id AND src.target_identity = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'specialization_version'::text, 'general'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.specialization_version src
+      ON src.project_id = dead.project_id AND src.general = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'specialization_version'::text, 'specific'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.specialization_version src
+      ON src.project_id = dead.project_id AND src.specific = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'subclassification_version'::text, 'subclassifier'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.subclassification_version src
+      ON src.project_id = dead.project_id AND src.subclassifier = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'subclassification_version'::text, 'superclassifier'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.subclassification_version src
+      ON src.project_id = dead.project_id AND src.superclassifier = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'subsetting_version'::text, 'subsetted_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.subsetting_version src
+      ON src.project_id = dead.project_id AND src.subsetted_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'subsetting_version'::text, 'subsetting_feature'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.subsetting_version src
+      ON src.project_id = dead.project_id AND src.subsetting_feature = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'type_featuring_version'::text, 'feature_of_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.type_featuring_version src
+      ON src.project_id = dead.project_id AND src.feature_of_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'type_featuring_version'::text, 'featuring_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.type_featuring_version src
+      ON src.project_id = dead.project_id AND src.featuring_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    UNION ALL
+    SELECT 'unioning_version'::text, 'unioning_type'::text,
+           holder.identity_id, dead.identity_id, 'dangling'::text
+    FROM sysml2.element_version dead
+    JOIN sysml2.unioning_version src
+      ON src.project_id = dead.project_id AND src.unioning_type = dead.identity_id
+    JOIN sysml2.element_version holder
+      ON holder.project_id = src.project_id AND holder.version_id = src.version_id
+    WHERE dead.project_id = p_project_id
+      AND dead.commit_id = p_commit_id
+      AND dead.tombstone
+      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive
+                  WHERE alive.version_id = holder.version_id)
+    ) AS findings (source_table, source_column, source_identity, target_identity, problem);
 $$;

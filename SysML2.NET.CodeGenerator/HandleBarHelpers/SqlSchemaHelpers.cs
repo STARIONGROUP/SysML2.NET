@@ -68,69 +68,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteClassKindRows", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL2.WriteMetamodelCatalogRows", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
-                var classKinds = QueryClassKinds(payload);
+
+                AssertRegistryInSyncWithModel(payload);
 
                 var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine("INSERT INTO sysml2.class_kind (id, name, is_abstract) VALUES");
+                stringBuilder.AppendLine("INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES");
 
-                var rows = classKinds
-                    .Select(classKind => $"    ({classKind.Value}, '{classKind.Key.Name}', {FormatSqlBoolean(classKind.Key.IsAbstract)})");
+                var modelVersionRows = ClassKindRegistry.ModelVersions
+                    .Select(modelVersion => $"    ({modelVersion.Id}, '{modelVersion.Name}', '{modelVersion.SourceFingerprint}')");
 
-                stringBuilder.AppendLine(string.Join(",\n", rows) + ";");
+                stringBuilder.AppendLine(string.Join(",\n", modelVersionRows));
+                stringBuilder.AppendLine("ON CONFLICT (id) DO NOTHING;");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES");
 
-                writer.WriteSafeString(stringBuilder.ToString());
-            });
+                var classKindRows = ClassKindRegistry.ClassKinds
+                    .Select(registration => $"    ({registration.Id}, '{registration.Name}', {FormatSqlBoolean(registration.IsAbstract)}, {registration.IntroducedIn}, {(registration.RemovedIn.HasValue ? registration.RemovedIn.Value.ToString() : "NULL")})");
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteClassKindTableRows", (writer, _, parameters) =>
-            {
-                var payload = ResolvePayload(parameters[0]);
-                var classKinds = QueryClassKinds(payload);
-
-                var stringBuilder = new StringBuilder();
-                var rows = new List<string>();
-
-                foreach (var classKind in classKinds.Where(classKind => !classKind.Key.IsAbstract))
-                {
-                    rows.Add($"    ({classKind.Value}, 'element_version', 0)");
-
-                    rows.AddRange(classKind.Key.QueryStorageAncestors()
-                        .Select((ancestor, ancestorIndex) => $"    ({classKind.Value}, '{ancestor.QuerySqlSubtypeTableName()}', {ancestorIndex + 1})"));
-                }
-
-                stringBuilder.AppendLine("INSERT INTO sysml2.class_kind_table (class_kind, table_name, ordinal) VALUES");
-                stringBuilder.AppendLine(string.Join(",\n", rows) + ";");
-
-                writer.WriteSafeString(stringBuilder.ToString());
-            });
-
-            handlebars.RegisterHelper("uml_template.SQL2.WritePropertyCatalogRows", (writer, _, parameters) =>
-            {
-                var payload = ResolvePayload(parameters[0]);
-                var classKinds = QueryClassKinds(payload);
-                var declaringClasses = QueryDeclaringClasses(payload);
-
-                var stringBuilder = new StringBuilder();
-
-                foreach (var classKind in classKinds.Where(classKind => !classKind.Key.IsAbstract))
-                {
-                    var rows = QueryCatalogProperties(classKind.Key)
-                        .Select(property => FormatPropertyCatalogRow(classKind.Key, classKind.Value, property, declaringClasses))
-                        .ToList();
-
-                    if (rows.Count == 0)
-                    {
-                        continue;
-                    }
-
-                    stringBuilder.AppendLine("INSERT INTO sysml2.property_catalog");
-                    stringBuilder.AppendLine("    (class_kind, property_name, location, table_name, column_name, json_key, is_reference, is_collection, is_ordered, lower_bound, upper_bound) VALUES");
-                    stringBuilder.AppendLine(string.Join(",\n", rows) + ";");
-                    stringBuilder.AppendLine("");
-                }
+                stringBuilder.AppendLine(string.Join(",\n", classKindRows));
+                stringBuilder.AppendLine("ON CONFLICT (id) DO NOTHING;");
 
                 writer.WriteSafeString(stringBuilder.ToString());
             });
@@ -225,7 +185,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     var ancestors = classKind.Key.QueryStorageAncestors();
 
-                    stringBuilder.AppendLine($"CREATE VIEW sysml2.v_{classKind.Key.Name.QuerySqlSnakeCaseName()} AS");
+                    stringBuilder.AppendLine($"CREATE VIEW sysml2.vw_{classKind.Key.Name.QuerySqlSnakeCaseName()} AS");
                     stringBuilder.AppendLine("    SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,");
                     stringBuilder.Append("           ev.element_id, ev.declared_name, ev.declared_short_name, ev.is_implied_included, ev.owning_relationship");
 
@@ -249,6 +209,116 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     stringBuilder.AppendLine($"    WHERE ev.class_kind = {classKind.Value} AND NOT ev.tombstone;");
                     stringBuilder.AppendLine("");
                 }
+
+                writer.WriteSafeString(stringBuilder.ToString());
+            });
+
+            handlebars.RegisterHelper("uml_template.SQL2.WriteReferenceValidation", (writer, _, parameters) =>
+            {
+                var payload = ResolvePayload(parameters[0]);
+                var registrationsByName = ClassKindRegistry.ClassKinds.ToDictionary(registration => registration.Name);
+
+                var concreteClassCount = QueryOrderedClasses(payload).Count(@class => !@class.IsAbstract);
+                var referenceSources = new List<(string TableName, string ColumnName, string TypeName)>();
+
+                foreach (var @class in QueryOrderedClasses(payload))
+                {
+                    var scalarTable = @class.Name == "Element" ? "element_version" : @class.QuerySqlSubtypeTableName();
+
+                    referenceSources.AddRange(@class.QueryStoredScalarOwnProperties()
+                        .Where(property => property.QueryIsReferenceType())
+                        .Select(property => (scalarTable, property.QuerySqlColumnName(), property.QueryTypeName())));
+
+                    referenceSources.AddRange(@class.QueryStoredMultiOwnProperties()
+                        .Where(property => property.QueryIsReferenceType())
+                        .Select(property => (@class.QuerySqlLinkTableName(property), "target_identity", property.QueryTypeName())));
+                }
+
+                var boundedSources = referenceSources
+                    .Select(source =>
+                    {
+                        var allowedTargetKinds = QueryAllowedTargetKinds(payload, registrationsByName, source.TypeName);
+
+                        return (source.TableName, source.ColumnName,
+                            AllowedTargetKinds: allowedTargetKinds.Count == concreteClassCount ? null : allowedTargetKinds);
+                    })
+                    .ToList();
+
+                var fullPassBlocks = boundedSources
+                    .Select(source => FormatReferenceValidationBlock(source.TableName, source.ColumnName, source.AllowedTargetKinds));
+
+                var outgoingBlocks = boundedSources
+                    .Select(source => FormatOutgoingValidationBlock(source.TableName, source.ColumnName, source.AllowedTargetKinds));
+
+                var incomingBlocks = boundedSources
+                    .Select(source => FormatIncomingValidationBlock(source.TableName, source.ColumnName));
+
+                var stringBuilder = new StringBuilder();
+
+                stringBuilder.AppendLine("CREATE OR REPLACE FUNCTION sysml2.validate_references_at_commit(");
+                stringBuilder.AppendLine("    p_project_id uuid,");
+                stringBuilder.AppendLine("    p_commit_id  uuid");
+                stringBuilder.AppendLine(")");
+                stringBuilder.AppendLine("RETURNS TABLE (");
+                stringBuilder.AppendLine("    source_table    text,");
+                stringBuilder.AppendLine("    source_column   text,");
+                stringBuilder.AppendLine("    source_identity uuid,");
+                stringBuilder.AppendLine("    target_identity uuid,");
+                stringBuilder.AppendLine("    problem         text");
+                stringBuilder.AppendLine(")");
+                stringBuilder.AppendLine("LANGUAGE plpgsql");
+                stringBuilder.AppendLine("AS $$");
+                stringBuilder.AppendLine("BEGIN");
+                stringBuilder.AppendLine("    -- Materialize + ANALYZE the snapshot so the planner knows its TRUE cardinality and");
+                stringBuilder.AppendLine("    -- can choose per arm between hashing the source (young history) and snapshot-driven");
+                stringBuilder.AppendLine("    -- PK probes (deep history) — bounding the pass at O(snapshot x log history) instead");
+                stringBuilder.AppendLine("    -- of O(history). A bare function CTE would be estimated at ~1000 rows.");
+                stringBuilder.AppendLine("    CREATE TEMP TABLE IF NOT EXISTS validation_snapshot (");
+                stringBuilder.AppendLine("        identity_id uuid NOT NULL,");
+                stringBuilder.AppendLine("        version_id  uuid NOT NULL");
+                stringBuilder.AppendLine("    ) ON COMMIT DROP;");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("    TRUNCATE validation_snapshot;");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("    INSERT INTO validation_snapshot (identity_id, version_id)");
+                stringBuilder.AppendLine("    SELECT r.identity_id, r.version_id");
+                stringBuilder.AppendLine("    FROM sysml2.resolve_commit_state(p_project_id, p_commit_id) r;");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("    CREATE INDEX IF NOT EXISTS ix_validation_snapshot_version  ON validation_snapshot (version_id);");
+                stringBuilder.AppendLine("    CREATE INDEX IF NOT EXISTS ix_validation_snapshot_identity ON validation_snapshot (identity_id);");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("    ANALYZE validation_snapshot;");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("    RETURN QUERY");
+                stringBuilder.AppendLine(string.Join("\n    UNION ALL\n", fullPassBlocks) + ";");
+                stringBuilder.AppendLine("END;");
+                stringBuilder.AppendLine("$$;");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine("-- The INCREMENTAL tier: validates only commit p_commit_id's change set — outgoing");
+                stringBuilder.AppendLine("-- references of its new versions, plus the reverse direction its tombstones break");
+                stringBuilder.AppendLine("-- (a live, UNCHANGED element left referencing a deleted identity). O(change set),");
+                stringBuilder.AppendLine("-- independent of history and snapshot size; the full pass above remains the");
+                stringBuilder.AppendLine("-- periodic audit that backstops it.");
+                stringBuilder.AppendLine("CREATE OR REPLACE FUNCTION sysml2.validate_references_in_commit(");
+                stringBuilder.AppendLine("    p_project_id uuid,");
+                stringBuilder.AppendLine("    p_commit_id  uuid");
+                stringBuilder.AppendLine(")");
+                stringBuilder.AppendLine("RETURNS TABLE (");
+                stringBuilder.AppendLine("    source_table    text,");
+                stringBuilder.AppendLine("    source_column   text,");
+                stringBuilder.AppendLine("    source_identity uuid,");
+                stringBuilder.AppendLine("    target_identity uuid,");
+                stringBuilder.AppendLine("    problem         text");
+                stringBuilder.AppendLine(")");
+                stringBuilder.AppendLine("LANGUAGE sql");
+                stringBuilder.AppendLine("STABLE");
+                stringBuilder.AppendLine("AS $$");
+                stringBuilder.AppendLine("    SELECT DISTINCT findings.source_table, findings.source_column,");
+                stringBuilder.AppendLine("           findings.source_identity, findings.target_identity, findings.problem");
+                stringBuilder.AppendLine("    FROM (");
+                stringBuilder.AppendLine(string.Join("\n    UNION ALL\n", outgoingBlocks.Concat(incomingBlocks)));
+                stringBuilder.AppendLine("    ) AS findings (source_table, source_column, source_identity, target_identity, problem);");
+                stringBuilder.AppendLine("$$;");
 
                 writer.WriteSafeString(stringBuilder.ToString());
             });
@@ -314,8 +384,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Queries the interned class_kind id of every class. The id is the 1-based position in the
-        /// name-ordered class list — deterministic across generator runs for an unchanged metamodel.
+        /// Queries the interned class_kind id of every class in the payload. The ids come from the
+        /// append-only <see cref="ClassKindRegistry" /> — frozen once assigned, never positional —
+        /// so generated artifacts (seeds, view predicates) stay stable across metamodel releases.
         /// </summary>
         /// <param name="payload">
         /// The subject <see cref="HandlebarsPayload" />
@@ -325,9 +396,83 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </returns>
         private static IReadOnlyList<KeyValuePair<IClass, int>> QueryClassKinds(HandlebarsPayload payload)
         {
+            var registrationsByName = ClassKindRegistry.ClassKinds.ToDictionary(registration => registration.Name);
+
             return QueryOrderedClasses(payload)
-                .Select((@class, classIndex) => new KeyValuePair<IClass, int>(@class, classIndex + 1))
+                .Select(@class => new KeyValuePair<IClass, int>(@class, registrationsByName[@class.Name].Id))
+                .OrderBy(classKind => classKind.Value)
                 .ToList();
+        }
+
+        /// <summary>
+        /// Asserts that the UML model on disk matches the newest release registered in the
+        /// append-only <see cref="ClassKindRegistry" />. Any drift fails generation LOUDLY —
+        /// silently renumbering class_kind ids would corrupt every populated database and every
+        /// consumer of the generated ClassKind enum.
+        /// </summary>
+        /// <param name="payload">
+        /// The subject <see cref="HandlebarsPayload" />
+        /// </param>
+        private static void AssertRegistryInSyncWithModel(HandlebarsPayload payload)
+        {
+            var newestVersion = ClassKindRegistry.ModelVersions[^1];
+            var fingerprint = $"{payload.RootPackage.Name}:{payload.RootPackage.XmiId}";
+
+            if (fingerprint != newestVersion.SourceFingerprint)
+            {
+                throw new InvalidOperationException(
+                    $"The UML model fingerprint '{fingerprint}' does not match the newest registered model version '{newestVersion.Name}' " +
+                    $"('{newestVersion.SourceFingerprint}') in ClassKindRegistry. Append a new ModelVersionRegistration for a new metamodel " +
+                    "release, or update the fingerprint in place for an editorial change that adds or removes no metaclasses.");
+            }
+
+            var registrationsByName = ClassKindRegistry.ClassKinds.ToDictionary(registration => registration.Name);
+            var orderedClasses = QueryOrderedClasses(payload);
+
+            var unregisteredClasses = orderedClasses
+                .Where(@class => !registrationsByName.ContainsKey(@class.Name))
+                .ToList();
+
+            if (unregisteredClasses.Count != 0)
+            {
+                var maxId = ClassKindRegistry.ClassKinds.Max(registration => registration.Id);
+
+                var suggestedRegistrations = string.Join("\n", unregisteredClasses
+                    .Select((@class, classIndex) => $"    new({maxId + classIndex + 1}, \"{@class.Name}\", {(@class.IsAbstract ? "true" : "false")}, {newestVersion.Id}),"));
+
+                throw new InvalidOperationException(
+                    "The UML model contains metaclasses that are not registered in ClassKindRegistry. APPEND them after the highest " +
+                    $"existing id — never renumber existing entries:\n{suggestedRegistrations}");
+            }
+
+            var modelClassNames = orderedClasses
+                .Select(@class => @class.Name)
+                .ToHashSet();
+
+            var staleRegistrations = ClassKindRegistry.ClassKinds
+                .Where(registration => registration.RemovedIn == null && !modelClassNames.Contains(registration.Name))
+                .ToList();
+
+            if (staleRegistrations.Count != 0)
+            {
+                var staleNames = string.Join(", ", staleRegistrations.Select(registration => registration.Name));
+
+                throw new InvalidOperationException(
+                    $"ClassKindRegistry registers metaclasses the UML model no longer contains: {staleNames}. Keep their entries and " +
+                    "close them with RemovedIn = the id of the release that dropped them — never delete a registration.");
+            }
+
+            var driftedRegistrations = orderedClasses
+                .Where(@class => registrationsByName[@class.Name].IsAbstract != @class.IsAbstract)
+                .ToList();
+
+            if (driftedRegistrations.Count != 0)
+            {
+                var driftedNames = string.Join(", ", driftedRegistrations.Select(@class => @class.Name));
+
+                throw new InvalidOperationException(
+                    $"The abstractness of {driftedNames} differs between the UML model and ClassKindRegistry — update the registry entries to match.");
+            }
         }
 
         /// <summary>
@@ -347,119 +492,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 .OrderBy(@class => @class.QueryAllGeneralClassifiers().Count)
                 .ThenBy(@class => @class.Name, StringComparer.Ordinal)
                 .ToList();
-        }
-
-        /// <summary>
-        /// Queries the properties of a class that get a property_catalog row: the full flattened set,
-        /// with properties that are redefined in the context of the class collapsed onto their most
-        /// specific redefinition (the catalog is keyed by API property NAME)
-        /// </summary>
-        /// <param name="class">
-        /// The subject <see cref="IClass" />
-        /// </param>
-        /// <returns>
-        /// The catalog properties, ordered by name
-        /// </returns>
-        private static IReadOnlyList<IProperty> QueryCatalogProperties(IClass @class)
-        {
-            return @class.QueryAllProperties()
-                .Where(property => !property.TryQueryRedefinedByProperty(@class, out _))
-                .GroupBy(property => property.Name)
-                .Select(propertyGroup => propertyGroup.OrderByDescending(property => property.RedefinedProperty.Count).First())
-                .OrderBy(property => property.Name, StringComparer.Ordinal)
-                .ToList();
-        }
-
-        /// <summary>
-        /// Queries, for every stored property in the metamodel, the class that DECLARES it. This is
-        /// resolved through <see cref="SqlSchemaExtensions.QueryStoredOwnProperties" /> rather than
-        /// <see cref="IProperty" />.Owner because association ends (e.g. Membership::memberElement) are
-        /// owned by the association, not by the class whose storage they belong to.
-        /// </summary>
-        /// <param name="payload">
-        /// The subject <see cref="HandlebarsPayload" />
-        /// </param>
-        /// <returns>
-        /// A property-XmiId to declaring-class map
-        /// </returns>
-        private static Dictionary<string, IClass> QueryDeclaringClasses(HandlebarsPayload payload)
-        {
-            return QueryOrderedClasses(payload)
-                .SelectMany(@class => @class.QueryStoredOwnProperties().Select(property => (property.XmiId, Class: @class)))
-                .GroupBy(pair => pair.XmiId)
-                .ToDictionary(pairGroup => pairGroup.Key, pairGroup => pairGroup.First().Class);
-        }
-
-        /// <summary>
-        /// Formats one property_catalog VALUES row, resolving the property to its storage location:
-        /// derived properties to derived_version (promoted column or derived_json key), stored
-        /// multi-valued properties to their link table, stored scalars to the declaring class's subtype
-        /// table (Element's scalars to element_version), same-name redefinitions to the storage of
-        /// their root.
-        /// </summary>
-        /// <param name="class">
-        /// The <see cref="IClass" /> whose catalog is being emitted
-        /// </param>
-        /// <param name="classKindId">
-        /// The interned class_kind id of the class
-        /// </param>
-        /// <param name="property">
-        /// The subject <see cref="IProperty" />
-        /// </param>
-        /// <param name="declaringClasses">
-        /// The property-XmiId to declaring-class map of the whole metamodel
-        /// </param>
-        /// <returns>
-        /// The formatted VALUES row
-        /// </returns>
-        private static string FormatPropertyCatalogRow(IClass @class, int classKindId, IProperty property, Dictionary<string, IClass> declaringClasses)
-        {
-            string location;
-            string tableName = null;
-            string columnName = null;
-            string jsonKey = null;
-
-            if (property.IsDerived || property.IsDerivedUnion)
-            {
-                location = "derived";
-                tableName = "derived_version";
-
-                if (property.TryQueryPromotedDerivedColumn(out var promotedColumn))
-                {
-                    columnName = promotedColumn;
-                }
-                else
-                {
-                    jsonKey = property.Name;
-                }
-            }
-            else
-            {
-                var root = property.QueryStorageRootProperty();
-
-                if (!declaringClasses.TryGetValue(root.XmiId, out var declaringClass))
-                {
-                    throw new NotSupportedException($"No declaring class found for the stored property {root.Name} of {@class.Name}");
-                }
-
-                if (root.QueryIsEnumerable())
-                {
-                    location = "link_table";
-                    tableName = declaringClass.QuerySqlLinkTableName(root);
-                }
-                else
-                {
-                    location = "column";
-                    tableName = declaringClass.Name == "Element" ? "element_version" : declaringClass.QuerySqlSubtypeTableName();
-                    columnName = root.QuerySqlColumnName();
-                }
-            }
-
-            var lowerBound = property.QueryIsNullable() ? 0 : 1;
-            var upperBound = property.QueryIsEnumerable() ? -1 : 1;
-
-            return $"    ({classKindId}, '{property.Name}', '{location}', {FormatSqlStringOrNull(tableName)}, {FormatSqlStringOrNull(columnName)}, {FormatSqlStringOrNull(jsonKey)}, " +
-                   $"{FormatSqlBoolean(property.QueryIsReferenceType())}, {FormatSqlBoolean(property.QueryIsEnumerable())}, {FormatSqlBoolean(property.IsOrdered)}, {lowerBound}, {upperBound})";
         }
 
         /// <summary>
@@ -530,6 +562,206 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Queries the interned class_kind ids a reference property of the given declared type may
+        /// legally target: the concrete descendants of the declared type, the type itself included
+        /// when concrete. Resolved against the append-only <see cref="ClassKindRegistry" />.
+        /// </summary>
+        /// <param name="payload">
+        /// The subject <see cref="HandlebarsPayload" />
+        /// </param>
+        /// <param name="registrationsByName">
+        /// The registry lookup by metaclass name
+        /// </param>
+        /// <param name="typeName">
+        /// The name of the property's declared type, e.g. "Relationship"
+        /// </param>
+        /// <returns>
+        /// The allowed class_kind ids, ordered ascending
+        /// </returns>
+        private static IReadOnlyList<int> QueryAllowedTargetKinds(HandlebarsPayload payload, Dictionary<string, ClassKindRegistration> registrationsByName, string typeName)
+        {
+            return QueryOrderedClasses(payload)
+                .Where(@class => !@class.IsAbstract)
+                .Where(@class => @class.Name == typeName
+                    || @class.QueryAllGeneralClassifiers().OfType<IClass>().Any(general => general.Name == typeName))
+                .Select(@class => registrationsByName[@class.Name].Id)
+                .OrderBy(classKindId => classKindId)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Formats one UNION ALL arm of validate_references_at_commit for a single stored reference
+        /// column. Reports 'wrong-type' via the typed identity (checked for cross-project targets
+        /// too) and 'dangling' for same-project targets absent from the snapshot; liveness of
+        /// cross-project targets is deliberately out of scope (it depends on the used-project
+        /// commit, which is service-layer resolution).
+        /// </summary>
+        /// <param name="tableName">
+        /// The source table carrying the reference column
+        /// </param>
+        /// <param name="columnName">
+        /// The reference column
+        /// </param>
+        /// <param name="allowedTargetKinds">
+        /// The legal target class_kind ids, or null when every concrete metaclass is legal (an
+        /// Element-typed reference) and the type check is omitted
+        /// </param>
+        /// <returns>
+        /// The formatted SELECT arm, without a trailing separator
+        /// </returns>
+        private static string FormatReferenceValidationBlock(string tableName, string columnName, IReadOnlyList<int> allowedTargetKinds)
+        {
+            var stringBuilder = new StringBuilder();
+
+            if (allowedTargetKinds == null)
+            {
+                stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
+                stringBuilder.AppendLine($"           snap.identity_id, src.{columnName}, 'dangling'::text");
+                stringBuilder.AppendLine($"    FROM sysml2.{tableName} src");
+                stringBuilder.AppendLine("    JOIN validation_snapshot snap ON snap.version_id = src.version_id");
+                stringBuilder.AppendLine($"    JOIN sysml2.data_identity ti ON ti.id = src.{columnName}");
+                stringBuilder.AppendLine($"    LEFT JOIN validation_snapshot live ON live.identity_id = src.{columnName}");
+                stringBuilder.AppendLine("    WHERE src.project_id = p_project_id");
+                stringBuilder.AppendLine($"      AND src.{columnName} IS NOT NULL");
+                stringBuilder.AppendLine("      AND ti.project_id = p_project_id");
+                stringBuilder.Append("      AND live.identity_id IS NULL");
+
+                return stringBuilder.ToString();
+            }
+
+            var allowedIds = string.Join(", ", allowedTargetKinds);
+
+            stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
+            stringBuilder.AppendLine($"           snap.identity_id, src.{columnName},");
+            stringBuilder.AppendLine($"           CASE WHEN ti.class_kind NOT IN ({allowedIds}) THEN 'wrong-type' ELSE 'dangling' END");
+            stringBuilder.AppendLine($"    FROM sysml2.{tableName} src");
+            stringBuilder.AppendLine("    JOIN validation_snapshot snap ON snap.version_id = src.version_id");
+            stringBuilder.AppendLine($"    JOIN sysml2.data_identity ti ON ti.id = src.{columnName}");
+            stringBuilder.AppendLine($"    LEFT JOIN validation_snapshot live ON live.identity_id = src.{columnName}");
+            stringBuilder.AppendLine("    WHERE src.project_id = p_project_id");
+            stringBuilder.AppendLine($"      AND src.{columnName} IS NOT NULL");
+            stringBuilder.AppendLine($"      AND (ti.class_kind NOT IN ({allowedIds})");
+            stringBuilder.Append("           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))");
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Formats one UNION ALL arm of the OUTGOING half of validate_references_in_commit: the
+        /// references carried by the versions the commit itself wrote. Liveness is probed per
+        /// target through resolve_element_at_commit (zero rows == not alive), so the arm is
+        /// O(change set) — no snapshot materialization.
+        /// </summary>
+        /// <param name="tableName">
+        /// The source table carrying the reference column
+        /// </param>
+        /// <param name="columnName">
+        /// The reference column
+        /// </param>
+        /// <param name="allowedTargetKinds">
+        /// The legal target class_kind ids, or null when every concrete metaclass is legal and the
+        /// type check is omitted
+        /// </param>
+        /// <returns>
+        /// The formatted SELECT arm, without a trailing separator
+        /// </returns>
+        private static string FormatOutgoingValidationBlock(string tableName, string columnName, IReadOnlyList<int> allowedTargetKinds)
+        {
+            var stringBuilder = new StringBuilder();
+            var isCoreTable = tableName == "element_version";
+            var sourceAlias = isCoreTable ? "changed" : "src";
+
+            stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
+            stringBuilder.AppendLine($"           changed.identity_id, {sourceAlias}.{columnName},");
+
+            if (allowedTargetKinds == null)
+            {
+                stringBuilder.AppendLine("           'dangling'::text");
+            }
+            else
+            {
+                stringBuilder.AppendLine($"           CASE WHEN ti.class_kind NOT IN ({string.Join(", ", allowedTargetKinds)}) THEN 'wrong-type' ELSE 'dangling' END");
+            }
+
+            stringBuilder.AppendLine("    FROM sysml2.element_version changed");
+
+            if (!isCoreTable)
+            {
+                stringBuilder.AppendLine($"    JOIN sysml2.{tableName} src");
+                stringBuilder.AppendLine("      ON src.project_id = changed.project_id AND src.version_id = changed.version_id");
+            }
+
+            stringBuilder.AppendLine($"    JOIN sysml2.data_identity ti ON ti.id = {sourceAlias}.{columnName}");
+            stringBuilder.AppendLine("    WHERE changed.project_id = p_project_id");
+            stringBuilder.AppendLine("      AND changed.commit_id = p_commit_id");
+            stringBuilder.AppendLine("      AND NOT changed.tombstone");
+            stringBuilder.AppendLine($"      AND {sourceAlias}.{columnName} IS NOT NULL");
+
+            var livenessCheck =
+                $"(ti.project_id = p_project_id\n" +
+                $"           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, {sourceAlias}.{columnName})))";
+
+            if (allowedTargetKinds == null)
+            {
+                stringBuilder.Append($"      AND {livenessCheck}");
+            }
+            else
+            {
+                stringBuilder.AppendLine($"      AND (ti.class_kind NOT IN ({string.Join(", ", allowedTargetKinds)})");
+                stringBuilder.Append($"           OR {livenessCheck})");
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Formats one UNION ALL arm of the INCOMING half of validate_references_in_commit: for
+        /// every identity the commit tombstones, the live-but-UNCHANGED holders whose stored
+        /// reference now dangles. Driven by the reverse-lookup index on the reference column;
+        /// a candidate holder row only counts when it IS its identity's live version at the
+        /// commit (probed through resolve_element_at_commit).
+        /// </summary>
+        /// <param name="tableName">
+        /// The source table carrying the reference column
+        /// </param>
+        /// <param name="columnName">
+        /// The reference column
+        /// </param>
+        /// <returns>
+        /// The formatted SELECT arm, without a trailing separator
+        /// </returns>
+        private static string FormatIncomingValidationBlock(string tableName, string columnName)
+        {
+            var stringBuilder = new StringBuilder();
+            var isCoreTable = tableName == "element_version";
+
+            stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
+            stringBuilder.AppendLine("           holder.identity_id, dead.identity_id, 'dangling'::text");
+            stringBuilder.AppendLine("    FROM sysml2.element_version dead");
+
+            if (isCoreTable)
+            {
+                stringBuilder.AppendLine("    JOIN sysml2.element_version holder");
+                stringBuilder.AppendLine($"      ON holder.project_id = dead.project_id AND holder.{columnName} = dead.identity_id");
+            }
+            else
+            {
+                stringBuilder.AppendLine($"    JOIN sysml2.{tableName} src");
+                stringBuilder.AppendLine($"      ON src.project_id = dead.project_id AND src.{columnName} = dead.identity_id");
+                stringBuilder.AppendLine("    JOIN sysml2.element_version holder");
+                stringBuilder.AppendLine("      ON holder.project_id = src.project_id AND holder.version_id = src.version_id");
+            }
+
+            stringBuilder.AppendLine("    WHERE dead.project_id = p_project_id");
+            stringBuilder.AppendLine("      AND dead.commit_id = p_commit_id");
+            stringBuilder.AppendLine("      AND dead.tombstone");
+            stringBuilder.AppendLine("      AND EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, holder.identity_id) alive");
+            stringBuilder.Append("                  WHERE alive.version_id = holder.version_id)");
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
         /// Formats a boolean as a SQL literal
         /// </summary>
         /// <param name="value">
@@ -543,18 +775,5 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             return value ? "true" : "false";
         }
 
-        /// <summary>
-        /// Formats an optional string as a quoted SQL literal or NULL
-        /// </summary>
-        /// <param name="value">
-        /// The value to format
-        /// </param>
-        /// <returns>
-        /// The quoted literal, or "NULL"
-        /// </returns>
-        private static string FormatSqlStringOrNull(string value)
-        {
-            return value == null ? "NULL" : $"'{value}'";
-        }
     }
 }

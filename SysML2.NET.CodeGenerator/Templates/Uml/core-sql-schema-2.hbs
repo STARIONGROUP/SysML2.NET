@@ -29,68 +29,55 @@ SET search_path = sysml2, public;
 ------------------------------------------------------------------------------------------------
 -- 2. METAMODEL CATALOGS                                                            [GENERATED]
 --
--- class_kind interns the 167 concrete metaclass names to a smallint. Every element row
--- carries the smallint, not a VARCHAR(100) — at 1M+ elements that is the difference between
--- a 2-byte and a ~20-byte column on the hottest table in the database.
+-- model_version registers every metamodel release this database has ever stored data for.
+-- The id is an ORDINAL — a higher id is a later release — handed out once by the checked-in
+-- registry (SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs)
+-- and never renumbered. Every commit is stamped with the release its payloads are written in
+-- (commit.model_version_id, §3); that stamp, not the branch or the project, is what a reader
+-- consults to know the shape of a historical payload.
 --
--- property_catalog is the bridge between the OMG API and this schema. The Query service
--- translates PrimitiveConstraint.property (an API-level property NAME, e.g. "qualifiedName")
--- into SQL by looking up WHERE that property lives. Without this table, filtering on derived
--- properties — which Derived Property Full Conformance (Clause 2) requires — is not possible.
+-- class_kind interns the metaclass names to a smallint. Every element row carries the
+-- smallint, not a VARCHAR(100) — at 1M+ elements that is the difference between a 2-byte and
+-- a ~20-byte column on the hottest table in the database.
+--
+-- !! THE IDS ARE AN APPEND-ONLY REGISTRY — FROZEN FOREVER ONCE ASSIGNED !!
+-- A new metamodel release appends its new metaclasses AFTER the highest existing id (the
+-- newcomers alphabetical among themselves); existing ids never change, so persisted
+-- element_version.class_kind values and the generated C# ClassKind enum stay valid across
+-- upgrades. A metaclass dropped by a release keeps its row, closed with removed_in. The
+-- generator FAILS on any drift between the UML model and the registry (unregistered class,
+-- stale registration, fingerprint mismatch) instead of silently renumbering, and the seed
+-- INSERTs are idempotent (ON CONFLICT DO NOTHING) — safe to re-apply to a populated database.
+--
+-- The property->storage routing that earlier designs kept in a property_catalog table is
+-- deliberately NOT in the database: the generated service layer carries it as static
+-- per-release C# (model-version descriptors). Nothing in this schema reads such a catalog —
+-- the views and resolvers are already specialized per metaclass at generation time — and only
+-- versioned generated code can describe EVERY registered release at once.
 ------------------------------------------------------------------------------------------------
 
-CREATE TABLE sysml2.class_kind (
-    id           smallint     NOT NULL,
-    name         text         NOT NULL,   -- the API @type value, e.g. 'PartUsage'
-    is_abstract  boolean      NOT NULL,
+CREATE TABLE sysml2.model_version (
+    id                  smallint  NOT NULL,   -- ordinal: higher id == later release
+    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.0-beta-4'
+    source_fingerprint  text      NOT NULL,   -- root-package fingerprint of the generator input
     PRIMARY KEY (id),
     UNIQUE (name)
 );
 
--- Which subtype tables an instance of a given class_kind participates in. Derived from the
--- metaclass's transitive supertype closure, restricted to storage-introducing supertypes.
--- FlowUsage has SIX entries — it inherits both Feature and Relationship storage, because
--- Connector is simultaneously a Feature and a Relationship. The inheritance graph is a DAG,
--- not a chain; this table is what makes that tractable.
-CREATE TABLE sysml2.class_kind_table (
-    class_kind   smallint     NOT NULL REFERENCES sysml2.class_kind (id),
-    table_name   text         NOT NULL,
-    ordinal      smallint     NOT NULL,   -- join order, shallowest supertype first
-    PRIMARY KEY (class_kind, table_name)
+CREATE TABLE sysml2.class_kind (
+    id             smallint     NOT NULL,
+    name           text         NOT NULL,   -- the API @type value, e.g. 'PartUsage'
+    is_abstract    boolean      NOT NULL,
+    introduced_in  smallint     NOT NULL REFERENCES sysml2.model_version (id),
+    removed_in     smallint     NULL     REFERENCES sysml2.model_version (id),   -- first release WITHOUT the class; NULL = current
+    PRIMARY KEY (id),
+    UNIQUE (name)
 );
 
-CREATE TYPE sysml2.storage_location AS ENUM (
-    'column',        -- a real column on element_version or a subtype table
-    'link_table',    -- an ordered multi-valued reference or string
-    'derived',       -- materialized into derived_version (column or derived_json key)
-    'alias'          -- a redeclaration ('new') of an inherited property; no storage of its own
-);
+-- The append-only registry seeds, emitted from ClassKindRegistry (NOT from the UML model —
+-- the model only validates against the registry). Idempotent by construction.
 
-CREATE TABLE sysml2.property_catalog (
-    class_kind      smallint            NOT NULL REFERENCES sysml2.class_kind (id),
-    property_name   text                NOT NULL,   -- the API name, e.g. 'qualifiedName', 'ownedRelationship'
-    location        sysml2.storage_location NOT NULL,
-    table_name      text                NULL,       -- for 'column' / 'link_table'
-    column_name     text                NULL,       -- for 'column'; or the derived_version column
-    json_key        text                NULL,       -- for 'derived' values that live in derived_json
-    is_reference    boolean             NOT NULL,   -- value type vs. element reference
-    is_collection   boolean             NOT NULL,
-    is_ordered      boolean             NOT NULL,
-    lower_bound     integer             NOT NULL,
-    upper_bound     integer             NOT NULL,   -- -1 == unbounded
-    PRIMARY KEY (class_kind, property_name)
-);
-
-CREATE INDEX ix_property_catalog_name ON sysml2.property_catalog (property_name);
-
--- The interned metaclass catalog and the property->storage map, generated from the UML model.
--- Redefinitions (e.g. CollectExpression::operator) are resolved to the storage of the property
--- they redefine and emitted as location 'column'; the 'alias' member of storage_location is
--- reserved.
-
-{{ #uml_template.SQL2.WriteClassKindRows this }}
-{{ #uml_template.SQL2.WriteClassKindTableRows this }}
-{{ #uml_template.SQL2.WritePropertyCatalogRows this }}
+{{ #uml_template.SQL2.WriteMetamodelCatalogRows this }}
 ------------------------------------------------------------------------------------------------
 -- 3. PIM — PROJECTS, COMMITS, BRANCHES, TAGS                                      [HAND-WRITTEN]
 --
@@ -109,6 +96,12 @@ CREATE TABLE sysml2.project (
     resource_identifier text        NULL,
     created             timestamptz NOT NULL DEFAULT now(),
     default_branch_id   uuid        NULL,   -- FK added after branch exists (circular)
+
+    -- Upgrade POLICY, not truth: the highest model_version (§2) new commits may be written
+    -- in. NULL = no restriction (any registered release). The release a commit actually IS
+    -- in lives on the commit itself.
+    target_model_version_id smallint NULL REFERENCES sysml2.model_version (id),
+
     PRIMARY KEY (id)
 );
 
@@ -117,6 +110,16 @@ CREATE TABLE sysml2.commit (
     project_id     uuid        NOT NULL REFERENCES sysml2.project (id) ON DELETE CASCADE,
     created        timestamptz NOT NULL DEFAULT now(),
     description    text        NULL,
+
+    -- The metamodel release (§2) this commit's payloads are written in. Append-only history
+    -- makes the per-commit stamp the only correct grain: a historical commit stays in the
+    -- release it was written in forever. A branch upgrades via a CONVERSION COMMIT — a
+    -- single-parent commit that bumps this stamp and restates every element whose shape
+    -- changed between the releases (service obligation; force a commit_checkpoint on it so
+    -- folds rarely cross the release boundary). Readers resolve payload shape from this
+    -- stamp, never from the branch or the project.
+    model_version_id smallint   NOT NULL REFERENCES sysml2.model_version (id),
+
     PRIMARY KEY (id)
 );
 
@@ -162,6 +165,63 @@ CREATE TRIGGER trg_commit_parent_monotonic
     AFTER INSERT ON sysml2.commit_parent
     FOR EACH ROW
     EXECUTE FUNCTION sysml2.assert_commit_monotonic();
+
+-- Model-version invariants on the commit DAG (multi-version support, §2):
+--   * a commit is never in an OLDER release than a parent — downgrades are unsupported;
+--   * a SINGLE-parent commit MAY bump the release: that is a conversion commit;
+--   * a MERGE commit (2+ parents) must have ALL parents in its own release — convert first,
+--     then merge. Without this check a merge would silently mix payload shapes.
+-- The count-based re-check makes the guard insertion-order independent: the moment a second
+-- parent row lands, every already-inserted parent is re-validated against the child's release.
+CREATE OR REPLACE FUNCTION sysml2.assert_commit_version_compatible()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    child_version  smallint;
+    parent_version smallint;
+    parent_count   int;
+    mixed_parents  int;
+BEGIN
+    SELECT model_version_id INTO child_version  FROM sysml2.commit WHERE id = NEW.commit_id;
+    SELECT model_version_id INTO parent_version FROM sysml2.commit WHERE id = NEW.parent_commit_id;
+
+    IF child_version < parent_version THEN
+        RAISE EXCEPTION
+            'commit % (model_version %) cannot have parent % (model_version %): downgrades are not supported',
+            NEW.commit_id, child_version, NEW.parent_commit_id, parent_version
+            USING ERRCODE = 'check_violation';
+    END IF;
+
+    SELECT count(*) INTO parent_count
+      FROM sysml2.commit_parent
+     WHERE commit_id = NEW.commit_id;
+
+    IF parent_count >= 2 THEN
+
+        SELECT count(*) INTO mixed_parents
+          FROM sysml2.commit_parent cp
+          JOIN sysml2.commit parent ON parent.id = cp.parent_commit_id
+         WHERE cp.commit_id = NEW.commit_id
+           AND parent.model_version_id <> child_version;
+
+        IF mixed_parents > 0 THEN
+            RAISE EXCEPTION
+                'merge commit % (model_version %) has a parent in a different model_version: convert every branch to the target release before merging',
+                NEW.commit_id, child_version
+                USING ERRCODE = 'check_violation';
+        END IF;
+
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_commit_parent_version
+    AFTER INSERT ON sysml2.commit_parent
+    FOR EACH ROW
+    EXECUTE FUNCTION sysml2.assert_commit_version_compatible();
 
 -- Branch and Tag are both CommitReference. Branch is mutable + destructible; Tag is immutable +
 -- destructible (Clause 7.1.2 mutability table).
@@ -238,9 +298,23 @@ CREATE TABLE sysml2.project_usage (
 -- The remaining NO ACTION FKs guarantee the procedure cannot leave dangling references — they
 -- block out-of-order deletion instead of silently scanning.
 CREATE TABLE sysml2.data_identity (
-    id         uuid NOT NULL,
-    project_id uuid NOT NULL REFERENCES sysml2.project (id),
-    PRIMARY KEY (id)
+    id         uuid     NOT NULL,
+    project_id uuid     NOT NULL REFERENCES sysml2.project (id),
+
+    -- TYPED IDENTITY. The metaclass of an element is invariant across its versions — an
+    -- identity is born a PartUsage and stays one — so the type is a property of the IDENTITY
+    -- and therefore FK-able, unlike everything else about an element. Two consumers:
+    --   * element_version's composite FK (identity_id, class_kind) makes a version that
+    --     claims a different metaclass than its identity IMPOSSIBLE;
+    --   * validate_references_at_commit (§14) type-checks every stored reference against
+    --     this column — including cross-project targets, because identities are typed
+    --     regardless of which project they live in.
+    -- A release conversion that retypes an element (e.g. its metaclass was dropped) must
+    -- update this column in the same transaction (service obligation, guide §15.16).
+    class_kind smallint NOT NULL REFERENCES sysml2.class_kind (id),
+
+    PRIMARY KEY (id),
+    UNIQUE (id, class_kind)   -- FK target for element_version's type-consistency check
 );
 
 CREATE INDEX ix_data_identity_project ON sysml2.data_identity (project_id);
@@ -262,7 +336,7 @@ CREATE INDEX ix_data_identity_project ON sysml2.data_identity (project_id);
 CREATE TABLE sysml2.element_version (
     project_id           uuid       NOT NULL,
     version_id           uuid       NOT NULL,   -- DataVersion.id
-    identity_id          uuid       NOT NULL REFERENCES sysml2.data_identity (id),
+    identity_id          uuid       NOT NULL,   -- FK via the composite typed-identity check below
     commit_id            uuid       NOT NULL REFERENCES sysml2.commit (id),
     class_kind           smallint   NOT NULL REFERENCES sysml2.class_kind (id),
 
@@ -283,6 +357,10 @@ CREATE TABLE sysml2.element_version (
     stored_json          jsonb      NULL,
 
     PRIMARY KEY (project_id, version_id),
+
+    -- TYPED IDENTITY (§4): one composite FK both anchors the identity AND makes a version
+    -- that claims a different metaclass than its identity impossible.
+    FOREIGN KEY (identity_id, class_kind) REFERENCES sysml2.data_identity (id, class_kind),
 
     CONSTRAINT element_version_tombstone_empty
         CHECK (NOT tombstone OR (stored_json IS NULL AND element_id IS NULL)),
@@ -334,12 +412,12 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 -- column — they resolve to the ancestor's column. There are 9 of them:
 --
 --   CollectExpression::operator, SelectExpression::operator, FeatureChainExpression::operator,
---   IndexExpression::operator          -> operator_expression_v.operator
---   ConnectionDefinition::isSufficient -> type_v.is_sufficient
---   EnumerationDefinition::isVariation -> definition_v.is_variation
---   Expose::isImportAll, Expose::visibility -> import_v.is_import_all / import_v.visibility
+--   IndexExpression::operator          -> operator_expression_version.operator
+--   ConnectionDefinition::isSufficient -> type_version.is_sufficient
+--   EnumerationDefinition::isVariation -> definition_version.is_variation
+--   Expose::isImportAll, Expose::visibility -> import_version.is_import_all / import_version.visibility
 --   FramedConcernMembership::kind,
---   RequirementVerificationMembership::kind -> requirement_constraint_membership_v.kind
+--   RequirementVerificationMembership::kind -> requirement_constraint_membership_version.kind
 --
 -- Every table is keyed by (project_id, version_id) and co-partitioned with element_version, so
 -- the join is partition-local. NOT NULL is safe on [1..1] properties: a row only exists here if
@@ -776,7 +854,7 @@ $$;
 --
 -- Representative excerpt — the template emits all 167:
 --
--- CREATE VIEW sysml2.v_part_usage AS
+-- CREATE VIEW sysml2.vw_part_usage AS
 --     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
 --            ev.element_id, ev.declared_name, ev.declared_short_name, ev.is_implied_included,
 --            ev.owning_relationship,
@@ -786,14 +864,14 @@ $$;
 --            u.is_variation,
 --            ou.is_individual, ou.portion_kind
 --     FROM sysml2.element_version ev
---     JOIN sysml2.type_v            t  USING (project_id, version_id)
---     JOIN sysml2.feature_v         f  USING (project_id, version_id)
---     JOIN sysml2.usage_v           u  USING (project_id, version_id)
---     JOIN sysml2.occurrence_usage_v ou USING (project_id, version_id)
---     WHERE ev.class_kind = 94 AND NOT ev.tombstone;
+--     JOIN sysml2.type_version            t  USING (project_id, version_id)
+--     JOIN sysml2.feature_version         f  USING (project_id, version_id)
+--     JOIN sysml2.usage_version           u  USING (project_id, version_id)
+--     JOIN sysml2.occurrence_usage_version ou USING (project_id, version_id)
+--     WHERE ev.class_kind = 120 AND NOT ev.tombstone;   -- 120 = PartUsage's FROZEN registry id (§2)
 --
--- CREATE VIEW sysml2.v_flow_usage AS ...  -- SIX subtype tables: Connector is both a Feature
---                                          -- and a Relationship, so relationship_v joins too.
+-- CREATE VIEW sysml2.vw_flow_usage AS ...  -- SIX subtype tables: Connector is both a Feature
+--                                          -- and a Relationship, so relationship_version joins too.
 
 
 {{ #uml_template.SQL2.WriteFlatteningViews this }}
@@ -884,6 +962,33 @@ BEGIN
 END;
 $$;
 
+-- PG18 OPPORTUNISTIC DEFAULTS (version-guarded; a no-op on the PostgreSQL 16/17 floor).
+--
+-- On PostgreSQL 18+ the schema self-activates native uuidv7() defaults on every
+-- SERVER-MINTED key. Time-ordered ids turn each project's insert pattern into rightmost
+-- btree appends instead of random-page scatter (audit finding R8). The application-side
+-- Guid.CreateVersion7() remains the PRIMARY id source — the service usually needs the ids
+-- before insert (to wire derived_id into branch_head etc.); these defaults are the safety
+-- net that keeps ad-hoc/tooling inserts time-ordered too.
+--
+-- Deliberately NOT defaulted: data_identity.id (the spec-visible @id is supplied by the
+-- API layer or the client — a silent server default would mask missing-id bugs).
+DO $$
+BEGIN
+
+    IF current_setting('server_version_num')::int >= 180000 THEN
+
+        ALTER TABLE sysml2.element_version ALTER COLUMN version_id SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.derived_version ALTER COLUMN derived_id SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.project         ALTER COLUMN id         SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.commit          ALTER COLUMN id         SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.branch          ALTER COLUMN id         SET DEFAULT uuidv7();
+        ALTER TABLE sysml2.tag             ALTER COLUMN id         SET DEFAULT uuidv7();
+
+    END IF;
+END;
+$$;
+
 ------------------------------------------------------------------------------------------------
 -- 13. MODEL VERSION                                                                [GENERATED]
 ------------------------------------------------------------------------------------------------
@@ -896,6 +1001,38 @@ AS $$
     SELECT '{{ #uml_template.SQL2.WriteModelVersion this }}'::text;
 $$;
 
+------------------------------------------------------------------------------------------------
+-- 14. REFERENCE VALIDATION — two tiers                                              [GENERATED]
+--
+-- The ON-DEMAND half of referential integrity (guide §7): the FKs prove that every stored
+-- reference targets an EXISTING identity; these functions check what FKs cannot —
+--   * 'dangling'    — a same-project target that is not alive in the snapshot of the given
+--                     commit (absent or tombstoned);
+--   * 'wrong-type'  — a target whose metaclass is illegal for the referencing property,
+--                     checked via the TYPED IDENTITY (data_identity.class_kind, §4) — this
+--                     check applies to cross-project targets too.
+-- Liveness of cross-project targets is deliberately NOT checked here: it depends on the
+-- used-project commit (project_usage), which is service-layer resolution.
+--
+-- TIER 1 — validate_references_at_commit: the FULL periodic audit over one commit's whole
+-- snapshot. It materializes and ANALYZEs the snapshot in a temp table first, so the planner
+-- knows the true cardinality and bounds the pass at O(snapshot x log history) — never
+-- O(history) — however deep the append-only tables grow. Run asynchronously (checkpoint
+-- cadence is a natural rhythm).
+--
+-- TIER 2 — validate_references_in_commit: the INCREMENTAL per-commit check, O(change set):
+-- the outgoing references of the versions the commit wrote, PLUS the reverse direction its
+-- tombstones break — a live, unchanged element left referencing a deleted identity (driven
+-- by the reverse-lookup indexes; per-target liveness probed via resolve_element_at_commit).
+-- Cheap enough for the synchronous commit-validation path; tier 1 backstops it.
+--
+-- Deliberately FUNCTIONS, not constraints: the spec allows transiently dangling references,
+-- and liveness is a function of (identity, commit) — unenforceable by FK. One UNION ALL arm
+-- per stored reference column, emitted from the UML model with the allowed target
+-- metaclasses resolved through ClassKindRegistry.
+------------------------------------------------------------------------------------------------
+
+{{ #uml_template.SQL2.WriteReferenceValidation this }}
 ------------------------------------------------------------------------------------------------
 --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 ------------------------------------------------------------------------------------------------

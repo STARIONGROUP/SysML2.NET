@@ -11,7 +11,7 @@
 > |---|---|
 > | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Hand-written, annotated reference design |
 > | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | Actual generator output (checked in for review) |
-> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | 19-assertion functional test |
+> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | 30-assertion functional test |
 > | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | The Handlebars template that emits the schema |
 >
 > Section numbers like **§5** refer to the numbered banners inside the schema files themselves.
@@ -220,7 +220,7 @@ they are worth recording because they will bite anyone who touches the generator
 association can be owned by the *association*, not by the class. `Membership::memberElement`,
 `Specialization::general`, `FeatureTyping::type` — the load-bearing reference properties of the
 entire metamodel — do **not** appear in `IClass.OwnedAttribute`. A generator that reads
-`OwnedAttribute` silently produces a `membership_v` table *without the member element column*
+`OwnedAttribute` silently produces a `membership_version` table *without the member element column*
 (this actually happened during development; 22 of the 47 subtype tables came out wrong). The
 correct definition of "declared by class C" is: *flattened properties of C, minus the union of
 flattened properties of C's direct generalizations*. See
@@ -300,7 +300,7 @@ At the rename commit, the write is: **one** new `element_version` row (for P) an
 new `derived_version` rows (for P and every element whose derived values the rename affected —
 its "impact radius"). W's stored state is untouched; W's derived state has a new row.
 
-The 19-assertion smoke test (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) makes this exact
+The 30-assertion smoke test (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) makes this exact
 scenario its first and central assertion pair (PASS 2a/2b): after the rename, W's
 `qualifiedName` resolves to `"New::wheel"` *while W still resolves to its original version row*.
 If you ever refactor this schema, keep that test passing — it is the design's load-bearing wall.
@@ -397,12 +397,40 @@ stored properties are the two multi-valued ones that become link tables).
 
 ### 6.1 The commit DAG
 
+First, the term itself. **DAG** stands for *Directed Acyclic Graph* — a directed graph without
+cycles — and it is the shape a commit history takes on as soon as branches and merges are
+allowed. Without branches, history would be a simple **chain**, every commit having exactly
+one parent:
+
+```
+c1 ← c2 ← c3 ← c4        (chain: linear history)
+```
+
+Branches let history *split* (two commits sharing a parent), and merges let it *converge*
+again (one commit with **two or more parents**):
+
+```
+        c2 ← c3          (branch "main")
+      ↙         ↖
+c1                 c5    (merge: c5 has TWO parents, c3 and c4)
+      ↖         ↙
+        c4               (feature branch)
+```
+
+*Directed*: every arrow points from child to parent ("c5 grew out of c3 and c4"). *Acyclic*:
+following parent arrows can never lead back to where you started — a commit cannot be its own
+ancestor, since a parent already existed when its child was created. Resolving "what did the
+model look like at c5?" means walking this graph *backwards* from c5 (the recursive
+`ancestry` CTE of §9) and picking, per element, the newest version found along the way —
+exactly Git's model, which the OMG spec adopted deliberately.
+
 ```sql
 CREATE TABLE sysml2.commit (
-    id             uuid        NOT NULL,
-    project_id     uuid        NOT NULL REFERENCES sysml2.project (id) ON DELETE CASCADE,
-    created        timestamptz NOT NULL DEFAULT now(),
-    description    text        NULL,
+    id               uuid        NOT NULL,
+    project_id       uuid        NOT NULL REFERENCES sysml2.project (id) ON DELETE CASCADE,
+    created          timestamptz NOT NULL DEFAULT now(),
+    description      text        NULL,
+    model_version_id smallint    NOT NULL REFERENCES sysml2.model_version (id),  -- see 6.4
     PRIMARY KEY (id)
 );
 
@@ -447,6 +475,35 @@ trigger fires.)
 Note what monotonicity does *not* give you: an ordering between **siblings**. Two commits on
 parallel branches may legally share a timestamp. Section 10.4 explains the tiebreaker that
 handles this.
+
+**The four merge invariants at a glance.** An *invariant* is a rule that must hold at all
+times, no matter what — and these four (Clause 7.1.2) are not formalities: the snapshot
+resolver's correctness depends on them directly. Consolidated, with where each one lives:
+
+1. **Monotonicity** — a commit is strictly newer than every parent, along every path. This is
+   what makes "newest ancestor wins" a sound resolution rule. Enforced in the schema by
+   `trg_commit_parent_monotonic` (smoke PASS 6), because a violation would produce silently
+   wrong snapshots rather than errors.
+2. **Conflict restatement** — a merge must restate the resolution of every conflict in its
+   OWN change set. Combined with invariant 1, the merge is the newest commit in its ancestry,
+   so its restatement automatically wins over both parents (smoke PASS 8a). Monotonicity does
+   not order the *siblings* themselves — which is why a merge that illegally skips
+   restatement falls to the deterministic `id DESC` tiebreaker (§10.4, audit R13, smoke
+   PASS 10a/10b). Restating is a service-layer obligation (§15, item 7).
+3. **Deletions must delete something** — a tombstone (`DataVersion` with null payload) is
+   only valid if at least one parent had that element alive in its snapshot. Service-layer
+   validation; the schema stores the tombstone either way.
+4. **One version per element per commit** — `DataVersion.identity` is unique within
+   `Commit.change`. Enforced by `ux_element_version_identity_commit` (§8.1).
+
+To these four spec invariants this schema adds a fifth of its own, for multi-version support
+(section 6.4): **release compatibility** — a commit is never in an older metamodel release
+than a parent, and a merge requires all parents in the merge's own release. Enforced by
+`trg_commit_parent_version` (smoke PASS 11c–11e).
+
+In one sentence: the commit DAG is the *shape* of history (splitting and converging), and the
+merge invariants are the *rules of the game* that guarantee reading that history back — the
+fold of §9 — has exactly one well-defined, deterministic answer.
 
 ### 6.2 How deltas become snapshots — the spec's own algorithm
 
@@ -505,24 +562,111 @@ whose `default_branch_id` FK is added *after* `branch` exists and made
 transaction, and the circular FK (project → branch → project) can only be satisfied at commit
 time.
 
+### 6.4 Model-version stamping — multiple metamodel releases in one database
+
+The OMG metamodel itself has releases (Beta 4 today; later releases will add, drop, and
+reshape metaclasses). This schema supports **multiple releases coexisting in one database**,
+and the design falls out of one observation: in an append-only store, historical commits are
+immutably in the release they were written in. Whatever label a project or a branch carries,
+a reader of an old commit must know *that commit's* release to interpret its payloads. The
+per-commit stamp is therefore the only correct grain — everything else is derived from it:
+
+- **`model_version`** (§2) registers every release the database has ever stored data for.
+  Its id is an *ordinal* — higher is later — handed out once by the checked-in registry
+  (`SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs`) and
+  never renumbered.
+- **`commit.model_version_id NOT NULL`** is the truth: the release this commit's payloads
+  are written in. A *branch* "is" simply the release of its head commit; there is no mutable
+  version field on `branch` that could disagree with history.
+- **`project.target_model_version_id`** is policy, not truth: the highest release new
+  commits may be written in (NULL = unrestricted). An operator raises it to *allow* branches
+  to upgrade; the stamp records what each branch actually did.
+
+**Upgrading is a commit, not a migration.** A branch moves to a newer release via a
+**conversion commit**: a single-parent commit that bumps the stamp and restates every element
+whose shape changed between the releases (the version-diff is an impact-radius variant — the
+machinery of `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md` applies). The service must force a
+`commit_checkpoint` on every conversion commit so folds rarely cross a release boundary.
+Elements whose shape did not change are *not* restated — their old rows remain valid under
+the new release, which is what makes conversion O(changed shapes), not O(model).
+
+**The physical schema is the superset across registered releases.** New metaclasses become
+new subtype tables; new properties become nullable columns; a renamed or moved property
+becomes a *new* column next to the old one (the conversion commit moves the data; the old
+column keeps serving old commits). Nothing is ever dropped. Which tables and properties are
+valid in which release is NOT recorded in database tables — it ships as static, per-release
+generated C# (the model-version *descriptors*, section 12.2).
+
+Three invariants keep mixed-release history sound, enforced by `trg_commit_parent_version`
+(smoke PASS 11b–11e): no commit is in an older release than a parent (downgrades are
+unsupported — conversion is lossy in reverse); a single-parent commit may bump the release
+(that IS the conversion commit); and a merge requires **all parents in the merge's own
+release** — convert first, then merge, never both in one commit. Without the last rule a
+merge would silently mix payload shapes.
+
 ---
 
 ## 7. Identity: `data_identity` and the referential-integrity philosophy (§4)
 
 ```sql
 CREATE TABLE sysml2.data_identity (
-    id         uuid NOT NULL,
-    project_id uuid NOT NULL REFERENCES sysml2.project (id),
-    PRIMARY KEY (id)
+    id         uuid     NOT NULL,
+    project_id uuid     NOT NULL REFERENCES sysml2.project (id),
+    class_kind smallint NOT NULL REFERENCES sysml2.class_kind (id),   -- TYPED identity
+    PRIMARY KEY (id),
+    UNIQUE (id, class_kind)
 );
 ```
 
-Two columns. This tiny table is the anchor of Axiom 1: every element-reference column in the
+Three columns. This tiny table is the anchor of Axiom 1: every element-reference column in the
 entire schema — ~30 single-reference columns on subtype tables, 5 reference link tables,
 `element_version.owning_relationship`, `branch_head.identity_id`, and so on — is a foreign key
 to `data_identity(id)`.
 
-Three deliberate choices here:
+**The identity is TYPED.** The metaclass of an element is invariant across its versions — an
+identity is born a PartUsage and stays one — so unlike everything else about an element, the
+type is a property of the *identity* and therefore FK-able. Two consumers:
+
+- `element_version` carries a composite FK `(identity_id, class_kind)` →
+  `data_identity (id, class_kind)`, making a version that claims a different metaclass than
+  its identity **impossible** (smoke PASS 12a);
+- the generated `validate_references_at_commit()` function (below) type-checks every stored
+  reference against this column — including cross-project targets, because identities are
+  typed regardless of which project they live in.
+
+One maintenance rule follows: a release conversion (§6.4) that retypes an element — its
+metaclass was dropped — must update `data_identity.class_kind` in the same transaction
+(obligation §15.16).
+
+**What FKs cannot check is now checkable ON DEMAND — in two tiers.** FKs prove a reference
+targets an *existing* identity; they can never prove the target is *alive at the commit
+being read* (liveness is a function of (identity, commit) — there is no row to FK against),
+nor that its metaclass is legal for the referencing property (an FK matches values, not type
+sets). Both gaps are covered by generated functions (§14 of the schema files), one
+`UNION ALL` arm per stored reference column (42 of them), each reporting `'wrong-type'` (via
+the typed identity, checked for cross-project targets too) and `'dangling'` (a same-project
+target absent from the commit's snapshot):
+
+- **`validate_references_at_commit`** — the FULL periodic audit over one commit's whole
+  snapshot. It materializes the snapshot into an ANALYZE'd, indexed temp table first, so the
+  planner knows the true cardinality and can switch to snapshot-driven PK probes on deep
+  histories — the pass is bounded at O(snapshot × log history), never O(history), however
+  large the append-only tables grow. Measured: 2.5–4.3 s on a 1M snapshot (smoke PASS
+  12b/12c).
+- **`validate_references_in_commit`** — the INCREMENTAL per-commit tier, O(change set): the
+  outgoing references of the versions the commit wrote, PLUS the reverse direction its
+  tombstones break — a live, *unchanged* element left referencing a deleted identity, the
+  case naive change-set validation misses (driven by the reverse-lookup indexes, per-target
+  liveness probed via `resolve_element_at_commit`). Measured: 77–86 ms for a 101-row change
+  set against a 1M project — fit for the synchronous commit-validation path (smoke PASS
+  13a–13c).
+
+Deliberately *functions*, not constraints: the spec allows transiently dangling references,
+and liveness of cross-project targets depends on the used-project commit (`project_usage`) —
+service-layer resolution. The working protocol (obligation §15.6): the incremental tier per
+commit, the full audit periodically as its backstop.
+
+Three more deliberate choices here:
 
 **The PK is the bare uuid, not `(project_id, id)`.** `ProjectUsage` lets an element in project
 A reference an element in project B. A composite PK would make every cross-project reference
@@ -563,7 +707,7 @@ general FK philosophy.
 CREATE TABLE sysml2.element_version (
     project_id           uuid       NOT NULL,
     version_id           uuid       NOT NULL,      -- the spec's DataVersion.id
-    identity_id          uuid       NOT NULL REFERENCES sysml2.data_identity (id),
+    identity_id          uuid       NOT NULL,      -- composite typed-identity FK below (§7)
     commit_id            uuid       NOT NULL REFERENCES sysml2.commit (id),
     class_kind           smallint   NOT NULL REFERENCES sysml2.class_kind (id),
     tombstone            boolean    NOT NULL DEFAULT false,
@@ -578,6 +722,8 @@ CREATE TABLE sysml2.element_version (
     stored_json          jsonb      NULL,
 
     PRIMARY KEY (project_id, version_id),
+    FOREIGN KEY (identity_id, class_kind)
+        REFERENCES sysml2.data_identity (id, class_kind),   -- typed identity (§7)
     CONSTRAINT element_version_tombstone_empty
         CHECK (NOT tombstone OR (stored_json IS NULL AND element_id IS NULL)),
     CONSTRAINT element_version_payload_present
@@ -610,7 +756,7 @@ Design notes, column by column:
   make tombstones and payload rows mutually exclusive shapes: a tombstone must be empty, a
   non-tombstone must be complete. These CHECKs are the cheapest possible insurance against the
   service layer writing half-formed rows.
-- **The five Element columns are folded in** rather than living in an `element_v` subtype
+- **The five Element columns are folded in** rather than living in a separate Element subtype
   table. Rationale: *every* element has them (they are Element's own declarations, and
   everything is an Element), so a separate table would add one join to every single read for
   zero storage benefit. `declared_name` is also the most-filtered stored column, and having it
@@ -671,7 +817,7 @@ with a `text` value column instead of a reference.)
 One table per storage-declaring metaclass — 47 of them, all with the same skeleton:
 
 ```sql
-CREATE TABLE sysml2.feature_v (
+CREATE TABLE sysml2.feature_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
     direction    sysml2.feature_direction_kind NULL,
@@ -689,12 +835,21 @@ CREATE TABLE sysml2.feature_v (
 ) PARTITION BY HASH (project_id);
 ```
 
+**About the `_version` suffix:** these tables carry the *version-scoped* facet of a metaclass —
+`feature_version` holds the Feature-declared columns of one element **version**, keyed by
+`(project_id, version_id)` and hanging off `element_version`. The suffix deliberately matches
+`element_version` and `derived_version`: the three names together read as one family of
+per-version state. (Naming history: an earlier draft used a terse `_v` suffix for these
+tables while the flattening views carried a `v_` prefix — `v_part_usage` vs `part_usage_v`,
+same letter meaning two different things, an accident waiting to happen. Both were renamed:
+the tables to `_version`, the views to `vw_` — see §12.3.)
+
 How an instance maps to tables: a `PartUsage` version has rows in `element_version` +
-`type_v` + `feature_v` + `usage_v` + `occurrence_usage_v` — the subtype tables of exactly its
+`type_version` + `feature_version` + `usage_version` + `occurrence_usage_version` — the subtype tables of exactly its
 storage-declaring ancestors. A `FlowUsage` version has rows in **six** tables including *both*
-`feature_v` and `relationship_v`, because `Connector` is simultaneously a Feature and a
+`feature_version` and `relationship_version`, because `Connector` is simultaneously a Feature and a
 Relationship. This is how the inheritance DAG is represented: **membership in a set of tables**,
-not a chain of joins. The `class_kind_table` catalog (section 12) records the set per
+not a chain of joins. The per-release generated descriptors (section 12.2) record the set per
 metaclass so generic code never has to re-derive it.
 
 Details that carry intent:
@@ -712,18 +867,18 @@ Details that carry intent:
   the metamodel knowledge base during review.
 - **Reference columns FK to `data_identity`** (Axiom 1) and every one gets a reverse-lookup
   index `ix_{table}_{column}`. Two of those indexes deserve a callout:
-  `ix_specialization_v_general` and `ix_specialization_v_specific` index the *specialization
+  `ix_specialization_version_general` and `ix_specialization_version_specific` index the *specialization
   graph* — the edges that derived properties like `Type::feature` fold over. When the service
   computes the impact radius of "a supertype gained a feature", these two indexes are what make
   "find all transitive specializations" affordable.
 - **The four `kind` tables and four `literal_*` tables** are the visible proof of the census's
-  type-collision fact: `requirement_constraint_membership_v.kind` is
-  `sysml2.requirement_constraint_kind` while `state_subaction_membership_v.kind` is
-  `sysml2.state_subaction_kind`; `literal_boolean_v.value` is `boolean` while
-  `literal_rational_v.value` is `double precision`. One wide table cannot represent this.
+  type-collision fact: `requirement_constraint_membership_version.kind` is
+  `sysml2.requirement_constraint_kind` while `state_subaction_membership_version.kind` is
+  `sysml2.state_subaction_kind`; `literal_boolean_version.value` is `boolean` while
+  `literal_rational_version.value` is `double precision`. One wide table cannot represent this.
 - **Redefinitions have no columns.** `CollectExpression` has no subtype table at all — its only
   stored property is the same-name redefinition of `operator`, which lives in
-  `operator_expression_v` (its ancestor's table). The property catalog records this resolution
+  `operator_expression_version` (its ancestor's table). The property catalog records this resolution
   so query code doesn't need to know it.
 
 ### 8.4 The enum types (§1)
@@ -835,6 +990,49 @@ rechecks candidates from co-located projects. The standing guidance: promoted co
 GIN as fallback; if production telemetry shows the filtered-property set is actually narrow,
 replace the whole-document GIN with targeted expression indexes.
 
+### 9.4 The other two conformance levels
+
+Full conformance is what the schema was *optimized* for — but the schema itself is
+**conformance-agnostic**. The Clause 2 level is purely a **write-path policy**: it decides who
+authors `derived_version` rows and when. Nothing in the DDL changes between levels.
+
+**Passthrough conformance falls out of the design almost for free.** The client sends payloads
+*including* derived values (the SysML2.NET DTO/serializer layer round-trips them). The service
+splits the incoming payload: stored half → `element_version` + normalized columns; derived
+half → a `derived_version` row at that commit, with the promoted columns simply *extracted*
+from the client's payload instead of computed. Reads reproduce exactly what the client sent —
+the faithful-reproduction guarantee, byte for byte — and queries on derived properties work
+identically, which Clause 2 explicitly requires of passthrough providers. The only difference
+from full: derived rows exist **only for change-set elements** (no impact-radius analysis
+runs), so an untouched element keeps its last client-sent derived values — stale or wrong as
+they may be, which is exactly passthrough semantics. The `(identity, commit)` fold does not
+care *who* computed a value; the smoke test itself writes its derived rows passthrough-style
+(hand-authored, never computed).
+
+**No conformance is trivially supported**, because derived state was made structurally
+optional on purpose: never write `derived_version` rows at all. Every read function
+`LEFT JOIN`s `derived_version` and `COALESCE`s `derived_json` to `'{}'`, so responses simply
+contain only stored properties; `branch_head.derived_id` and `commit_checkpoint.derived_id`
+are nullable by design; the `derived_version` table and its GIN index — the biggest write
+amplifier — stay empty. The Query translator must then reject `PrimitiveConstraint`s whose
+descriptor entry (section 12.2) routes to derived storage, consistent with the claimed level.
+
+**Moving between levels is a backfill, not a migration.** Because `derived_version` is a
+separate append-only stream keyed `(identity, commit)`, full conformance can be adopted later
+by computing derived state for the whole model and writing it *at one commit* (e.g. each
+branch head); reads at or after that commit pick it up through the normal fold, and history
+before it stays as it was. Caveat: checkpoints built before the backfill carry null/stale
+`derived_id`s — rebuild them, or tolerate until the next cadence checkpoint. And note the
+granularity mismatch: the spec declares conformance per Service Provider, but the schema would
+mechanically support a different policy per project (derived rows are project-scoped like
+everything else) — useful for a staged rollout, as long as the public conformance claim
+reflects the weakest level actually served.
+
+The trade-off in one line: *no conformance* = cheapest, thinnest API; *passthrough* = full
+payloads and derived queries at near-zero server cost, but derived values are client-trusted
+and can silently drift from the model; *full* = correct by construction, paid for at commit
+time with the impact-radius machinery — the only level with real engineering risk.
+
 ---
 
 ## 10. Layer D — snapshot resolution (§9)
@@ -927,6 +1125,11 @@ Life-cycle costs under the overlay:
 Checkpoints are naturally **shared**: the hundreds of branches forked near main's head all base
 on the same few checkpoints. That sharing is what fixes the storage arithmetic — total snapshot
 storage is governed by the checkpoint cadence, not by branch count.
+
+One thing to be explicit about: the thresholds above (and the cadence of §10.1) are not
+design commentary — they are **operational contracts that must be actively monitored**, with
+alerts firing *before* the limits are reached. Every one of them is queryable from the schema
+itself; the concrete signals, probes and alert levels are obligation §15.15.
 
 `ix_branch_head_branch` exists for one precise reason: the `ON DELETE CASCADE` from `branch`
 filters on `branch_id` *alone*, and the PK leads with `project_id` — without this index, every
@@ -1062,7 +1265,9 @@ PK probe on one partition.
 **The `project_id` discipline, learned the hard way (audit finding R2):** the original version
 of this function filtered `branch_head` on `(branch_id, identity_id)` alone. Consequences on
 PG16/17: no partition pruning (the predicate lacks the hash key → all 16 leaves visited), and
-no PK usage (`branch_id` is the PK's *second* column, and there is no btree skip scan). The
+no PK usage (`branch_id` is the PK's *second* column, and btree skip scan only exists from
+PG18). Note that even ON PG18 the rule stands: skip scan softens the index side at best —
+partition pruning still requires the `project_id` predicate. The
 "hottest query in the system" was, silently, the worst one. The fix — joining through `branch`
 to recover `project_id` — makes runtime pruning work through the join parameter. The measured
 plan shows 15 of 16 partitions "(never executed)" and 0.061 ms execution. The rule generalizes
@@ -1077,52 +1282,80 @@ identities via anti-join, `UNION ALL` the live overlay — measured 1.24 s for a
 
 ## 12. The metamodel catalogs and the Query service (§2, §11)
 
-### 12.1 `class_kind` and `class_kind_table`
+### 12.1 `model_version` and `class_kind` — the append-only registry
 
 ```sql
-CREATE TABLE sysml2.class_kind (
-    id          smallint NOT NULL,
-    name        text     NOT NULL,   -- the API @type, e.g. 'PartUsage'
-    is_abstract boolean  NOT NULL,
+CREATE TABLE sysml2.model_version (
+    id                 smallint NOT NULL,   -- ordinal: higher id == later release
+    name               text     NOT NULL,   -- human label, e.g. 'sysml-2.0-beta-4'
+    source_fingerprint text     NOT NULL,   -- root-package fingerprint of the generator input
     PRIMARY KEY (id), UNIQUE (name)
 );
 
-CREATE TABLE sysml2.class_kind_table (
-    class_kind smallint NOT NULL REFERENCES sysml2.class_kind (id),
-    table_name text     NOT NULL,
-    ordinal    smallint NOT NULL,    -- shallowest supertype first
-    PRIMARY KEY (class_kind, table_name)
+CREATE TABLE sysml2.class_kind (
+    id            smallint NOT NULL,
+    name          text     NOT NULL,   -- the API @type, e.g. 'PartUsage'
+    is_abstract   boolean  NOT NULL,
+    introduced_in smallint NOT NULL REFERENCES sysml2.model_version (id),
+    removed_in    smallint NULL     REFERENCES sysml2.model_version (id),  -- first release WITHOUT it
+    PRIMARY KEY (id), UNIQUE (name)
 );
 ```
 
-`class_kind` interns the 175 metaclass names (ids assigned deterministically: 1-based position
-in the name-ordered list — stable across generator runs for an unchanged metamodel).
-`class_kind_table` is the **flattened inheritance DAG**: for each concrete metaclass, exactly
-which subtype tables an instance participates in (653 rows total; `FlowUsage` → 6 entries).
-Any generic component — a bulk loader, a validator, an admin tool — reads this instead of
-re-deriving UML generalization closures.
+`class_kind` interns the 175 metaclass names to a smallint. Its ids are **not positional**:
+they come from the checked-in, append-only registry
+(`SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs`), which is
+the source of truth the seeds are emitted from — the UML model only *validates* against it.
+An id is handed out once, when the metaclass first appears in a registered release, and is
+frozen forever; a new release appends its newcomers after the highest existing id
+(alphabetical among themselves); a dropped metaclass keeps its row, closed with `removed_in`.
+The generator **fails loudly** on any drift — an unregistered class (the error message prints
+the exact registry lines to append), a registration the model no longer contains, an
+abstractness mismatch, or a `source_fingerprint` that no longer matches the newest registered
+release. Silent renumbering — the great trap of the earlier positional design — is
+impossible by construction, which is also why the seed `INSERT`s are idempotent
+(`ON CONFLICT (id) DO NOTHING`, smoke PASS 11a) and safe to re-apply to a populated database.
 
-### 12.2 `property_catalog` — the API-to-storage bridge
+**The contract for every consumer:** the canonical identity of a metaclass is still its
+**name** (the API `@type`); the smallint is the registry's interning of it. Never
+hand-maintain a C# enum mirroring these ids — the planned `ClassKind` enum is *generated from
+the same registry*, so its values are stable across releases by construction, plus a startup
+assertion in the service that compares the compiled constants against the `class_kind` table
+and refuses to start on drift (noted, not yet built).
 
-```sql
-CREATE TABLE sysml2.property_catalog (
-    class_kind    smallint NOT NULL REFERENCES sysml2.class_kind (id),
-    property_name text     NOT NULL,          -- API name: 'qualifiedName', 'ownedRelationship', ...
-    location      sysml2.storage_location NOT NULL,   -- 'column' | 'link_table' | 'derived' | 'alias'
-    table_name    text     NULL,
-    column_name   text     NULL,
-    json_key      text     NULL,
-    is_reference  boolean  NOT NULL,
-    is_collection boolean  NOT NULL,
-    is_ordered    boolean  NOT NULL,
-    lower_bound   integer  NOT NULL,
-    upper_bound   integer  NOT NULL,          -- -1 = unbounded
-    PRIMARY KEY (class_kind, property_name)
-);
-```
+The earlier design also kept a `class_kind_table` catalog (the flattened inheritance DAG:
+which subtype tables each concrete metaclass joins). It is gone from the database — nothing
+in the schema ever read it, and per-release table participation now belongs to the generated
+descriptors of section 12.2.
 
-12,113 generated rows — one per (concrete metaclass, API property). This table is what makes
-the OMG **Query service** implementable. The spec's query model is:
+### 12.2 The model-version descriptors — the API-to-storage bridge
+
+Earlier designs kept a `property_catalog` table here: 12,113 generated rows mapping every
+(concrete metaclass, API property) to its storage location. It is deliberately **gone from
+the database**, for three reasons that reinforce each other:
+
+- **Nothing in the schema reads it.** Every view, resolver, and index is already specialized
+  per metaclass at generation time; the catalog was passive data with zero inbound
+  references, purely for an external consumer.
+- **The service layer is generated too.** The same generator that emits this schema emits the
+  service's data access; static per-metaclass C# (the codebase's standing
+  performance-over-reflection rule) answers the routing question without a database
+  round-trip.
+- **A table describes one release; descriptors describe them all.** With multiple metamodel
+  releases in one database (section 6.4), the property→storage routing is *per release*. A
+  single catalog table cannot say "in release 1 this lived here, in release 2 there" without
+  reinventing the registry — versioned generated code carries exactly that, naturally.
+
+The replacement is the **model-version descriptor**: per registered release, generated C#
+that enumerates the release's metaclasses, each metaclass's subtype-table set (what
+`class_kind_table` used to record), and each API property's storage routing (what
+`property_catalog` used to record) — plus the multiplicity/ordering metadata the Query
+translator needs to validate constraint shapes. The descriptors are emitted from the same
+XMI + registry inputs as the schema, so they are in lockstep by construction. (Design
+sketched here; the descriptor generator lands with the service layer.)
+
+What the descriptor makes implementable is unchanged: the OMG **Query service**. The spec's
+query model is:
 
 ```
 Query { select: [String], where: Constraint, orderBy: [String], scope: [...] }
@@ -1131,16 +1364,16 @@ Constraint = PrimitiveConstraint { property, operator, value, inverse }
 ```
 
 A `PrimitiveConstraint.property` is an API-level *name*. The query translator resolves it
-through the catalog:
+through the descriptor of the commit's release:
 
-| Catalog row says | Translator emits |
+| Descriptor entry says | Translator emits |
 |---|---|
 | `('PartUsage', 'declaredName', 'column', 'element_version', 'declared_name', …)` | `ev.declared_name = $v` |
-| `('PartUsage', 'isVariation', 'column', 'usage_v', 'is_variation', …)` | join `usage_v`, `u.is_variation = $v` |
+| `('PartUsage', 'isVariation', 'column', 'usage_version', 'is_variation', …)` | join `usage_version`, `u.is_variation = $v` |
 | `('PartUsage', 'qualifiedName', 'derived', 'derived_version', 'qualified_name', …)` | join `derived_version`, `dv.qualified_name = $v` — an indexed column |
 | `('PartUsage', 'featuringType', 'derived', 'derived_version', NULL, json_key='featuringType', …)` | `dv.derived_json @> '{"featuringType": …}'` — the GIN fallback |
 | `('PartUsage', 'ownedRelationship', 'link_table', 'element_owned_relationship', …)` | `EXISTS (SELECT 1 FROM element_owned_relationship …)` |
-| `('CollectExpression', 'operator', 'column', 'operator_expression_v', 'operator', …)` | the redefinition, already resolved to its storage root — the translator never learns UML redefinition rules |
+| `('CollectExpression', 'operator', 'column', 'operator_expression_version', 'operator', …)` | the redefinition, already resolved to its storage root — the translator never learns UML redefinition rules |
 
 Note that derived properties are first-class query targets — which is exactly what Clause 2's
 full conformance demands ("derived properties can be used in Query structures as
@@ -1148,37 +1381,43 @@ PrimitiveConstraint properties … query execution will consider the correctly c
 up-to-date values"). The commit-time precomputation strategy is what makes this row-source
 cheap.
 
-`lower_bound`/`upper_bound`/`is_ordered` ride along so the translator can also validate
-constraint shapes and so API metadata endpoints can describe properties without loading the
-.NET reflection model.
+Multiplicity and ordering metadata ride along in the descriptor so the translator can also
+validate constraint shapes and so API metadata endpoints can describe properties without
+loading the .NET reflection model.
 
 ### 12.3 The flattening views (§11)
 
 One generated view per concrete metaclass reconstructs the DTO's row shape:
 
 ```sql
-CREATE VIEW sysml2.v_part_usage AS
+CREATE VIEW sysml2.vw_part_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
            ev.element_id, ev.declared_name, ev.declared_short_name,
            ev.is_implied_included, ev.owning_relationship,
-           type_v.is_abstract, type_v.is_sufficient,
-           feature_v.direction, feature_v.is_composite, /* … */
-           usage_v.is_variation,
-           occurrence_usage_v.is_individual, occurrence_usage_v.portion_kind
+           type_version.is_abstract, type_version.is_sufficient,
+           feature_version.direction, feature_version.is_composite, /* … */
+           usage_version.is_variation,
+           occurrence_usage_version.is_individual, occurrence_usage_version.portion_kind
     FROM sysml2.element_version ev
-    JOIN sysml2.type_v             USING (project_id, version_id)
-    JOIN sysml2.feature_v          USING (project_id, version_id)
-    JOIN sysml2.usage_v            USING (project_id, version_id)
-    JOIN sysml2.occurrence_usage_v USING (project_id, version_id)
-    WHERE ev.class_kind = 94 AND NOT ev.tombstone;
+    JOIN sysml2.type_version             USING (project_id, version_id)
+    JOIN sysml2.feature_version          USING (project_id, version_id)
+    JOIN sysml2.usage_version            USING (project_id, version_id)
+    JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
+    WHERE ev.class_kind = 120 AND NOT ev.tombstone;   -- 120 = PartUsage's frozen registry id
 ```
+
+Naming: the `vw_` prefix stands for **view** — chosen over the more common single-letter `v_`
+precisely so it can never be misread as *version*, the meaning of the `_version` suffix on
+the subtype tables (§8.3). Two unmistakably different spellings for two different concepts.
 
 These are for the Query service and human inspection — the API element read never touches
 them (it serves `stored_json`). They are pass-through views: they expose `project_id`, and the
 caller's `WHERE project_id = $1` propagates through the equivalence classes of the USING joins
 to prune every joined partitioned table. The audit's ops checklist (R10) applies here: verify
 hot plans show pruning; watch for generic-plan flips on the 6-join views
-(`plan_cache_mode = force_custom_plan` is the lever); prefer PG17, where fast-path lock slots
+(`plan_cache_mode = force_custom_plan` is the lever); prefer PG18 where available (btree skip
+scan, AIO, `NOT VALID` FKs on partitioned tables, native `uuidv7()`), else PG17 — which scales
+the fast-path lock slots
 scale with `max_locks_per_transaction` — a query touching 6 partitioned relations plus indexes
 can otherwise spill into the shared lock manager under high QPS.
 
@@ -1193,6 +1432,37 @@ one partition, and every `(project_id, version_id)` join between element tables 
 partition-local. (For a deployment dominated by one giant project, partitioning is neutral —
 one partition holds it; the design does not depend on partitioning for single-project
 performance, only for multi-tenant spread. The modulus is a deployment knob.)
+
+**Version policy.** The floor is PostgreSQL **16** — a deployability choice, not a technical
+one: nothing in the schema needs anything newer, and pinning the floor to the latest major
+would exclude most real enterprise installations for zero functional gain. All verification
+in this repository ran on **17** (which also scales the fast-path lock slots with
+`max_locks_per_transaction`, relevant with 928 leaf partitions). **Prefer 18 where
+available**: it brings four concrete wins for exactly this schema — btree skip scan (softens
+the R2 failure mode, though the `project_id` rule stands: pruning still needs the predicate),
+`NOT VALID` + `VALIDATE` FKs on partitioned tables (the clean R11 bulk-import path),
+native `uuidv7()` (the R8 recommendation, now database-side), and asynchronous I/O (speeds up
+precisely the O(model) operations: checkpoint builds, set reads, vacuum on the big leaves).
+
+The schema exploits 18 automatically where it can, and the rest is deployment guidance:
+
+- **Self-activating `uuidv7()` defaults** (implemented, §12): a version-guarded `DO` block
+  sets `DEFAULT uuidv7()` on every server-minted key (`version_id`, `derived_id`, and the
+  PIM record ids) when `server_version_num >= 180000` — a verified no-op on the 16/17 floor.
+  `Guid.CreateVersion7()` in the service remains the primary id source (the service needs
+  ids before insert); the defaults are the safety net that keeps ad-hoc and tooling inserts
+  time-ordered. `data_identity.id` is deliberately excluded — the spec-visible `@id` must be
+  supplied, never silently minted.
+- **AIO tuning**: the default `io_method = worker` already helps the O(model) operations;
+  on Linux consider `io_method = io_uring` and raising `io_workers` for checkpoint-build and
+  bulk-import windows.
+- **Bulk import on 18**: prefer the honest path — create the import target's FKs `NOT VALID`,
+  load, then `VALIDATE CONSTRAINT` (non-blocking-ish) — over the
+  `session_replication_role = replica` trust-me hack of R11.
+- **Parallel GIN builds**: rebuilding `ix_derived_version_json` after a bulk derived write
+  (the R5 path) parallelizes on 18 — budget maintenance windows accordingly.
+- **`pg_upgrade` keeps planner statistics** on 18 — with 928 leaf partitions that removes
+  the post-upgrade ANALYZE storm entirely.
 
 Physical decisions that came out of the audit:
 
@@ -1294,7 +1564,9 @@ design assumes they exist:
    descendant closure (`feature`, `membership`, `inheritedMembership`). The reverse-lookup
    indexes (`ix_*_target`, the specialization indexes) exist precisely to make these closures
    computable. This is where the correctness bugs of the whole system will live — it deserves
-   the project's best tests.
+   the project's best tests. A full design sketch for this engine — the five propagation
+   kinds, the `derived_dependency` catalog, early cutoff, and the differential-testing
+   oracle — is `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md`.
 2. **Checkpoint cadence, retention, and overlay compaction** — the policies of sections 10.1
    and 10.2, executed asynchronously.
 3. **The commit transaction discipline**: one transaction writes `commit` + `commit_parent`
@@ -1305,11 +1577,91 @@ design assumes they exist:
 4. **The base-commit invariant**: never point `branch.base_commit_id` at an uncheckpointed
    commit.
 5. **Project deletion** via the ordered explicit procedure (section 7) — never by deleting
-   `data_identity` rows first.
-6. **Model-level reference validation** (dangling references at a commit) — a query the
-   reverse indexes support, but a *validation*, not an FK (Axiom 1).
+   `data_identity` rows first. And check `project_usage` beforehand: identities referenced
+   from *other* projects will (correctly, loudly) block the procedure through the NO ACTION
+   FKs — remove or migrate the usages first.
+6. **Model-level reference validation** (dangling and wrong-type references at a commit) —
+   a *validation*, not an FK (Axiom 1). The generated two-tier functions (§7) are its
+   ready-made implementation: run `validate_references_in_commit` on every commit (O(change
+   set), cheap enough to gate acceptance), schedule `validate_references_at_commit` as the
+   periodic full audit, resolve cross-project targets through `project_usage`, and surface
+   the findings.
 7. **Merge conflict restatement** — the spec requires merges to restate conflicting elements
    in their own change set; the tiebreaker makes violations deterministic, not correct.
+
+The following obligations all stem from one underlying fact: **a single logical user action
+usually touches more elements than the user thinks it does.** The canonical example: "add
+child B to A" writes a new B, a new Membership, *and a new version of A* (A's
+`ownedRelationship` list is stored, ordered state — §8.2). These couplings are invisible at
+the API surface but decide whether concurrent editing feels smooth or maddening:
+
+8. **Three-way collection merge, with an ordering policy.** Two users adding children to the
+   same container both produce a new version of that container — formally a same-element
+   conflict on every rebase (§18.2) and every merge. Additive, disjoint collection changes
+   (base `[…]`, mine `[…, M_B]`, theirs `[…, M_C]`) MUST be auto-merged (`[…, M_B, M_C]`)
+   under a deterministic ordering policy (e.g. first-committed first), or every popular
+   container becomes a conflict magnet. Escalate to a human only for reorder-vs-reorder,
+   remove-vs-reference, and other genuinely incompatible combinations — and always run
+   model validation on the merged result (see item 12): a structurally clean union can still
+   produce duplicate member names.
+9. **Ownership-quadruple coherence.** One ownership fact ("B is owned by A via M") is stored
+   in FOUR places: A's `ownedRelationship` list, M's `owning_related_element`, M's
+   `ownedRelatedElement` list, and B's `owning_relationship` back-pointer — plus the
+   endpoint mirrors required by the new-name redefinitions (e.g. `memberElement` alongside
+   `target`). Every write must keep all of them coherent within the change set; the schema
+   can FK-check each pointer individually but cannot cross-check their mutual agreement.
+10. **Containment-aware conflict detection.** Naive conflict detection (intersect the two
+    change sets by identity) MISSES the delete-vs-descendant-edit case: user 1 tombstones
+    package A while user 2 edits a deep descendant D — disjoint identities, real conflict.
+    Detection must treat a tombstoned element as conflicting with every change *under* its
+    subtree (and with moves into it).
+11. **Subtree-delete completeness.** Deleting an element means tombstoning its entire owned
+    closure — the element, its memberships, and all transitive children — in ONE change set.
+    The schema will happily store a half-deleted tree (Axiom 1: FKs check existence, not
+    liveness); only the service can guarantee the closure.
+12. **Post-merge semantic validation, including cycle guards.** Two individually valid
+    branches can merge into an invalid model: duplicate names in one namespace, and — worse —
+    cycles that no single branch contains (user 1: B specializes C; user 2: C specializes B;
+    or two moves that nest A under B and B under A). Ownership cycles additionally break the
+    derived-computation walks (`qualifiedName` would never terminate), so the impact-radius
+    engine needs explicit cycle guards, and merge commits must be validated before
+    acceptance.
+13. **Merge impact radius runs on the MERGED state.** Recomputing derived values for a merge
+    by unioning the two branches' derived results is wrong: cross-branch interactions (one
+    branch adds a Specialization, the other adds a feature to its target) produce derived
+    changes that neither branch ever saw. Compute against the merged snapshot.
+14. **Treat the `class_kind` mapping as registry data — never hand-maintain it.** Load the
+    name↔id map from the `class_kind` table at startup (or use the generated `ClassKind`
+    enum, emitted from the same registry). The ids are frozen by the append-only registry
+    (§12.1), so re-applying seeds is safe and upgrades never renumber — but the registry
+    discipline itself (append newcomers, close dropped classes with `removed_in`, never
+    renumber) is a maintenance obligation on whoever regenerates the schema.
+15. **Monitor the performance thresholds and alert BEFORE they bite.** The policies of
+    §10.1/§10.2 degrade silently when neglected — reads just get slower. Every threshold is
+    queryable from the schema, so measuring them is cheap; the obligation is to wire the
+    probes into monitoring and notify operators (and, where it explains their experience,
+    users) when a trend heads the wrong way. The signal set:
+
+    | Signal | Probe | Alert when | What degrades otherwise |
+    |---|---|---|---|
+    | Overlay size per branch | `SELECT branch_id, count(*) FROM branch_head GROUP BY 1` vs the base checkpoint's row count | ≥ 50% of the compaction threshold (~10% of model / ~100k rows) | set reads and the anti-join grow; compaction is overdue |
+    | Checkpoint distance per branch | commits between `head_commit_id` and `base_commit_id` (walk `commit_parent`) | > 2× the cadence target (~400 commits) | resolver walks and historical reads lengthen |
+    | Branches with `base_commit_id IS NULL` | `SELECT count(*) FROM branch WHERE base_commit_id IS NULL AND deleted IS NULL` | > 0 outside project bootstrap | the O(model) full-overlay legacy behavior is silently back |
+    | Checkpoint retention backlog | checkpoints referenced by no branch and outside the historical ladder | sustained growth | storage grows by ~0.2 GB per stale 1M-element checkpoint |
+    | Impact radius per commit | `derived_version` rows per `commit_id` | > a few % of model size | derived bursts need the R5 bulk path (GIN pending-list tuning) |
+    | CAS conflict + auto-merge rate | service metrics: 409s and collection-merge rebases per branch | upward trend | hot-container contention (§18.3.6) is degrading UX |
+    | Seq-scan counters on element tables | `pg_stat_user_tables.seq_scan` deltas on the partitioned leaves | climbing above ~0 in steady state | an R2/R3-class planner regression has reappeared — the silent failure mode of §14 |
+
+16. **Release conversion (§6.4).** The schema enforces the release invariants on the commit
+    DAG (`trg_commit_parent_version`), but the conversion commit itself is service work: build
+    the version-diff between the two releases (which metaclasses/properties changed shape),
+    restate exactly the affected elements against the new-release descriptors, force a
+    `commit_checkpoint` on the conversion commit, honor `project.target_model_version_id`
+    before accepting the upgrade, and refuse cross-release merges with a clear
+    "convert first" error rather than surfacing the trigger's exception raw. When the
+    conversion retypes an element (its metaclass was dropped by the new release), update
+    `data_identity.class_kind` in the same transaction — the typed identity (§7) must keep
+    matching the restated versions.
 
 ---
 
@@ -1365,13 +1717,13 @@ is the OCL fold of section 6.2, executed by index.
 *"All PartUsages under `Vehicle` whose `isVariation` is true, ordered by name"* — as a spec
 Query: `where = and(PrimitiveConstraint(qualifiedName, like, 'Vehicle::%'),
 PrimitiveConstraint(isVariation, =, true))`, `orderBy = [name]`. The translator resolves each
-property through `property_catalog` (section 12.2) and emits, over the branch-head state:
+property through the release's descriptor (section 12.2) and emits, over the branch-head state:
 
 ```sql
 SELECT h.identity_id
 FROM sysml2.get_elements_at_branch_head($branch) h          -- or the overlay-merge inline
 JOIN sysml2.element_version   ev USING (project_id, version_id)
-JOIN sysml2.usage_v           u  USING (project_id, version_id)   -- catalog: isVariation -> usage_v
+JOIN sysml2.usage_version           u  USING (project_id, version_id)   -- catalog: isVariation -> usage_version
 JOIN sysml2.derived_version   dv ON dv.project_id = ev.project_id AND dv.derived_id = h.derived_id
 WHERE ev.class_kind = 94                                          -- catalog: PartUsage
   AND dv.qualified_name LIKE 'Vehicle::%'                         -- catalog: derived, promoted column
@@ -1393,11 +1745,12 @@ spec** (everything metaclass-shaped).
 | Generated section | Source of truth | Emitting helper |
 |---|---|---|
 | §1 enum types | UML enumerations | `WriteEnumTypes` |
-| §2 catalog rows (175 + 653 + 12,113) | classes, generalizations, flattened properties | `WriteClassKindRows`, `WriteClassKindTableRows`, `WritePropertyCatalogRows` |
+| §2 registry seeds (1 release + 175 class kinds) | ClassKindRegistry (validated against the UML model) | `WriteMetamodelCatalogRows` |
 | §6 link tables | multi-valued stored properties | `WriteLinkTables` |
 | §7 subtype tables (47) | scalar stored declarations, bounds, XMI defaults | `WriteSubtypeTables` |
 | §11 views (167) | storage-ancestor sets | `WriteFlatteningViews` |
 | §12 partition list, §13 model version | table inventory, root package | `WritePartitionedTableArray`, `WriteModelVersion` |
+| §14 reference validation, two tiers (42 sources; full + incremental) | stored reference columns + allowed target kinds per declared type | `WriteReferenceValidation` |
 
 Pipeline: `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/SQLSchemaGenerator.cs`
 reads the XMI via uml4net, renders `core-sql-schema-2.hbs` (whose hand-written sections are
@@ -1407,8 +1760,9 @@ declared-property computation per the two traps of section 3) and the emitters i
 `SysML2.NET.CodeGenerator/HandleBarHelpers/SqlSchemaHelpers.cs`. The generator is driven by
 `SysML2.NET.CodeGenerator.Tests/Generators/UmlHandleBarsGenerators/SQLSchemaGeneratorTestFixture.cs`.
 
-Verification loop, end to end: run the fixture → apply `schema2.generated.sql` to PostgreSQL 17
-(`max_locks_per_transaction=4096`) → run `schema.smoke.sql` (19 assertions) → both the golden
+Verification loop, end to end: run the fixture → apply `schema2.generated.sql` to PostgreSQL 18
+(`max_locks_per_transaction=4096`; both schemas are verified on 17 and 18.6, the recipe follows
+the prefer-18 version policy of §13) → run `schema.smoke.sql` (30 assertions) → both the golden
 and the generated schema must pass identically.
 
 ---
@@ -1489,6 +1843,21 @@ prevention for free. **Compaction (§10.2) must take the same branch lock**: rep
 `base_commit_id` and clearing the overlay interleaved with a commit's overlay upserts would
 leave the overlay describing divergence from the wrong base.
 
+**Stamp `commit.created` with `clock_timestamp()`, never transaction-start `now()`.** Under
+concurrency, a transaction that began *before* the current head's transaction committed
+would stamp its commit with a timestamp EARLIER than its parent's and be rejected by
+`trg_commit_parent_monotonic`. `clock_timestamp()` taken after reading the expected head is
+always strictly later than that head's stamp. (Surfaced by the concurrency suite below.)
+
+**This protocol is verified under real concurrency** by the checked-in pgbench suite
+(`SysML2.NET.CodeGenerator/Sql/schema.concurrency.*.sql` — setup, hot-branch race, spread,
+reader-under-write-storm, and an invariant verifier C1–C5). Measured on PG18 with 16 racing
+clients on ONE branch: ~1,000 attempts/s, exactly one winner per head value, losers write
+nothing (83% CAS-conflict rate at full hammer — the §15.15 signal in its worst case), heads
+strictly linear, zero deadlocks; the same clients spread over 16 branches: ~2,200 commits/s
+at 0% conflicts — contention is branch-local, as designed. Reads stayed at ~1.2 ms (from
+0.8 ms idle) while the write storm ran: the MVCC promise of §18.1, measured.
+
 ### 18.3 Drawbacks and open decisions
 
 1. **The derived-compute window stretches the critical section.** Derived values must be
@@ -1518,7 +1887,14 @@ leave the overlay describing divergence from the wrong base.
    service-side today — by decision, not omission. PostgreSQL RLS on `project_id` composes
    cleanly with this schema (every element table carries the column) and is the natural
    hardening step if the database is ever exposed to less-trusted components.
-6. **Small print.** `UNIQUE (project_id, name)` turns concurrent same-name branch creation
+6. **Hot containers are natural contention points.** Because a container's child list is
+   stored, *every* child addition versions the parent (§15, item 8) — so two users adding
+   children to the same package always collide, and popular containers (root packages,
+   library folders) collide constantly. The three-way collection merge of §15.8 is what
+   keeps this workable; without it, concurrent editing degrades into serial editing on
+   exactly the containers people share. (The same coupling is the R7 write-amplification
+   hotspot: each new container version rewrites its full collection rows.)
+7. **Small print.** `UNIQUE (project_id, name)` turns concurrent same-name branch creation
    into a constraint violation (map to 409, fine). GIN pending-list flushes on
    `derived_version` can briefly serialize concurrent derived-heavy commits on a shared
    partition (audit finding R5). `fillfactor = 90` on `branch_head` exists precisely to absorb
@@ -1528,23 +1904,106 @@ leave the overlay describing divergence from the wrong base.
 
 ## 19. Glossary
 
-| Term | Meaning here |
-|---|---|
-| **Identity** | The stable `@id` of an element across its whole life; a `data_identity` row; the only thing references point at (Axiom 1). |
-| **Version** | One element's stored state as of one commit; an `element_version` row; immutable. |
-| **Tombstone** | A version row marking deletion at a commit (`payload = null` in spec terms). |
-| **Derived property** | A metamodel property computed from other elements (77% of the metamodel); lives in `derived_version`, keyed by (identity, commit) — Axiom 2. |
-| **Impact radius** | The set of elements whose derived values a change set invalidates; determines which `derived_version` rows a commit writes. |
-| **Promoted column** | One of the six derived properties given a real indexed column (`owner`, `qualified_name`, `name`, `short_name`, `owning_namespace`, `is_library_element`). |
-| **Fold / snapshot** | The spec's `versionedData` computation: a commit's own changes plus everything inherited from its parents' snapshots. |
-| **Checkpoint** | A fully materialized fold for one commit (`commit_checkpoint`), registered in `commit_checkpoint_registry`; bounds resolver walks and bases overlays. |
-| **Overlay** | The sparse `branch_head` contents: only the identities on which a branch diverges from its base checkpoint. |
-| **Cadence** | The service policy deciding which commits get checkpoints (churn-based: ~200 commits or ~25% model churn, plus fork bases). |
-| **Compaction** | Re-basing an overgrown overlay onto a fresh checkpoint at the branch head. |
-| **Stored / same-name-redefinition rule** | Only redefinitions under the *same name* are storage-free; new-name redefinitions (e.g. `memberElement` redefining `target`) get their own storage, matching the DTOs. |
-| **Storage-declaring metaclass** | A metaclass that declares ≥1 stored scalar of its own → gets a subtype table (47 of them). |
-| **Registry** | `commit_checkpoint_registry` — one row per checkpoint, existing solely so existence probes hit a table whose grain matches the question (the `n_distinct` lesson). |
-| **Property catalog** | The generated map from every API property name to its physical storage — the bridge that makes the OMG Query service translatable to SQL. |
+Appendix: every term of art used in this guide, with the shortest clear definition and — where
+the guide explains it further — the section to read. Numbers in the *See* column are **guide
+sections** (not the schema files' § banners); "—" means the term is used only in passing.
+
+| Term | Definition | See |
+|---|---|---|
+| **@id / @type** | The two JSON keys on every API record: the element's stable identity (uuid) and its metaclass name. | 7, 12.1 |
+| **Anti-join** | "Rows in A with no match in B" (`NOT EXISTS`); how the set read subtracts overlaid identities from the checkpoint. | 11 |
+| **Append-only** | Tables that only ever receive INSERTs; simultaneously the history model and the concurrency strategy. | 4, 18.1 |
+| **Association-owned end** | A UML reference property owned by the association rather than the class; invisible in `OwnedAttribute` (generator trap 1). | 3 |
+| **Autovacuum** | PostgreSQL's background cleanup/statistics daemon; tuned per write profile in the partition loop. | 13 |
+| **Base commit** | The checkpointed commit a branch's overlay diverges from (`branch.base_commit_id`). | 10.2 |
+| **Branch** | A mutable, named pointer to a head commit — the only mutable object in the versioning core. | 6.3 |
+| **btree** | PostgreSQL's default ordered index type; every PK and lookup index here. | — |
+| **Cadence** | The churn-based service policy deciding which commits get checkpoints. | 10.1 |
+| **CAS (compare-and-swap)** | Atomically updating the branch head only if it still has the expected value; the normative commit protocol. | 18.2 |
+| **Census** | The quantitative count of the metamodel (stored vs derived, types, inheritance) that drove every design decision. | 3 |
+| **Change set** | The DataVersions one commit writes (`Commit.change`) — the delta. | 6.2 |
+| **CHECK constraint** | A row-level validity rule (e.g. the mutually exclusive tombstone/payload shapes). | 8.1 |
+| **Checkpoint** | A fully materialized fold of one commit (`commit_checkpoint`); bounds resolver walks and bases overlays. | 10.1 |
+| **class_kind (interning)** | The smallint id per metaclass — interning of the canonical NAME, with ids frozen forever by the append-only registry; consumers load the map at runtime or use the registry-generated enum. | 12.1, 15 |
+| **Class-kind registry** | The checked-in, append-only source of truth (`ClassKindRegistry.cs`) that freezes class_kind ids and model_version ordinals across releases; the generator validates the UML model against it and fails on drift. | 12.1 |
+| **Commit** | An immutable record of the changes made at a point in time; a node in the commit DAG. | 6.1 |
+| **Commit DAG** | The directed acyclic graph commits form once branching and merging are allowed. | 6.1 |
+| **CommitReference** | The spec's abstract base of Branch and Tag: a named reference to a commit. | 6.3 |
+| **Compaction** | Re-basing an overgrown overlay onto a fresh checkpoint at the branch head. | 10.2 |
+| **Conformance (Derived Property)** | The spec's three levels — none / passthrough / full — realized here as write-path policies over one schema. | 1, 9.4 |
+| **Conversion commit** | A single-parent commit that bumps the model-version stamp and restates every element whose shape changed between two releases; the only way a branch upgrades. | 6.4 |
+| **CTE (recursive)** | A `WITH`-query that references itself; the resolvers' ancestry walk. | 10.4 |
+| **Dangling reference** | A model-level reference to an element absent at the commit being read; a validation concern, never an FK violation (Axiom 1). | 4 |
+| **data_identity** | The three-column table anchoring stable element identity (uuid, project, immutable class_kind); the FK target of every element reference. | 7 |
+| **DataIdentity / DataVersion** | Spec types: the version-independent identity of data / the per-commit payload wrapper (≈ `element_version` row). | 2, 6.2 |
+| **Derived property** | A metamodel property computed from other elements (77% of the metamodel); lives in `derived_version`, keyed (identity, commit) — Axiom 2. | 3, 9 |
+| **derived_json / stored_json** | The pre-serialized read-model halves of an element's payload; concatenated at read time. | 8.1, 9 |
+| **DISTINCT ON** | PostgreSQL's per-group-first-row selection; implements "newest version wins" in the fold. | 10.4 |
+| **EAV** | Entity-attribute-value modeling (generic property rows); rejected as system of record, retained narrowly (link tables). | 5.3 |
+| **element_version** | The core append-only table of stored element state; one row per (element, commit-that-changed-it). | 8.1 |
+| **EXPLAIN (ANALYZE, BUFFERS)** | Plan + measured-execution inspection; the only tool that catches planner-class bugs. | 14 |
+| **Fillfactor** | Page free space reserved for in-page (HOT) updates; 90 on `branch_head`. | 13 |
+| **Flattened property** | A metaclass's own + inherited properties taken together (12,963 across the metamodel). | 3 |
+| **Flattening view (`vw_` prefix)** | One generated view per concrete metaclass (e.g. `vw_part_usage`) reconstructing the DTO row shape; `vw_` stands for *view* — deliberately distinct from the `_version` table suffix. | 12.3 |
+| **Fold** | The spec's `versionedData` computation: a commit's own changes plus everything inherited from its parents' snapshots. | 6.2 |
+| **Foreign key (FK)** | A referential constraint; for element references always → `data_identity`, never → a version. | 7 |
+| **Full conformance** | Derived values computed and current in every response, queryable; the design target. | 9.1, 9.4 |
+| **GIN index** | An inverted index over jsonb keys/values; serves containment probes on non-promoted derived properties. | 9.3 |
+| **Hash partitioning** | Splitting each table into N pieces by `hash(project_id)`; co-located across all element tables. | 13 |
+| **HOT update** | A heap-only update that avoids touching indexes; requires fillfactor headroom. | 13 |
+| **Identity** | The stable `@id` of an element across its whole life; a `data_identity` row; the only thing references point at (Axiom 1). | 4, 7 |
+| **Impact radius** | The set of elements whose derived values a change set invalidates; determines which `derived_version` rows a commit writes. | 9.2, 15 |
+| **Index-only scan** | Answering a query from the index alone; needs a current visibility map (hence insert-driven vacuum). | 13 |
+| **Invariant** | A rule that must hold at all times; the four merge invariants underwrite the resolver. | 6.1 |
+| **jsonb** | PostgreSQL's binary JSON column type. | — |
+| **KerML** | Kernel Modeling Language — the foundation layer of SysML v2. | 1 |
+| **Link table** | An ordered `(version, ordinal, target)` table for a multi-valued stored property; 7 exist. | 8.2 |
+| **lz4** | Fast compression for TOASTed values; applied to both jsonb columns. | 13 |
+| **max_locks_per_transaction** | Lock-table sizing; ≥ 4096 is a deployment requirement for whole-schema DDL. | 13 |
+| **Merge (commit)** | A commit with two or more parents, converging branches. | 6.1 |
+| **Merge invariants** | The four Clause 7.1.2 rules (monotonicity, restatement, deletion validity, uniqueness) the resolver depends on, plus this schema's own fifth: release compatibility. | 6.1, 6.4 |
+| **Metaclass / metamodel** | A type in the modeling language (175 of them) / the set of all of them. | 1, 3 |
+| **Model version** | A registered metamodel release (`model_version` table); every commit is stamped with the release its payloads are written in — the stamp, not the branch or project, is the truth. | 6.4, 12.1 |
+| **Model-version descriptor** | Per-release generated C# that carries what the dropped catalog tables used to: each release's metaclasses, subtype-table sets, and property→storage routing for the Query translator. | 12.2 |
+| **Monotonicity** | A commit is strictly newer than every parent; trigger-enforced because violations corrupt snapshots silently. | 6.1 |
+| **MVCC** | Multi-version concurrency control: readers see consistent snapshots, never blocking writers. | 18.1 |
+| **n_distinct** | The planner's distinct-values statistic; its collapse to 1 on checkpoint rows caused the registry redesign. | 10.3 |
+| **OCL** | Object Constraint Language — the spec's formal derivation/constraint formulas. | 3, 6.2 |
+| **Overlay** | The sparse `branch_head` contents: only the identities on which a branch diverges from its base checkpoint. | 10.2 |
+| **Ownership chain** | The containment path from an element up to its root namespace (the `qualifiedName` walk). | 3 |
+| **Ownership quadruple** | The four stored places that together record one ownership fact (parent's `ownedRelationship`, membership's `owning_related_element` + `ownedRelatedElement`, child's `owning_relationship`); the service must write them coherently — the schema cannot cross-check them. | 15 |
+| **Partition pruning** | The planner skipping irrelevant partitions; requires a `project_id` predicate — the R2 lesson. | 11, 13 |
+| **Passthrough** | Storing and faithfully reproducing client-sent derived values without computing; supported by the same schema. | 9.4 |
+| **PIM** | Platform-Independent Model: the spec's repository machinery (Project, Commit, Branch, …); hand-written layer. | 2, 6 |
+| **Promoted column** | One of the six derived properties given a real indexed column (`owner`, `qualified_name`, `name`, `short_name`, `owning_namespace`, `is_library_element`). | 9.3 |
+| **Property catalog** | The former database table mapping every API property name to its physical storage; dropped in favor of the per-release model-version descriptors. | 12.2 |
+| **READ COMMITTED** | PostgreSQL's default isolation level — sufficient everywhere here, by design. | 18.1 |
+| **Redefinition (same-name / new-name)** | Same-name redefinitions are storage-free (resolve to the root's column); new-name redefinitions get their own storage (generator trap 2). | 3 |
+| **Reference validation (generated, two-tier)** | `validate_references_in_commit()` per commit (O(change set), including the reverse direction tombstones break) + `validate_references_at_commit()` as the periodic full audit (O(snapshot × log history)); wrong-type via the typed identity, dangling via the snapshot; functions by design, never constraints. | 7 |
+| **Registry** | `commit_checkpoint_registry` — one row per checkpoint, so existence probes hit a table whose grain matches the question. | 10.3 |
+| **Resolver** | A SQL function that resolves an indirect reference ("commit C", "head of branch B") into the concrete snapshot: per element the mapping identity → (version_id, derived_id), by executing the fold bounded by checkpoints. Three exist: `resolve_commit_state`, `resolve_element_at_commit`, and the branch-head read path as their pre-materialized form. | 10.4 |
+| **RLS** | Row-level security; absent by decision, the natural hardening step if needed. | 18.3 |
+| **Sequential scan** | Reading a whole table; the silent failure mode behind findings R2/R3/registry. | 14 |
+| **Sibling commits** | Commits on parallel branches sharing a parent; legally may share a timestamp — hence the tiebreaker. | 6.1, 10.4 |
+| **Skip scan** | A btree scan on a non-leading index column; only from PG18, and even there partition pruning still needs `project_id` — the rule stands. | 11 |
+| **Snapshot** | The full model state at one commit (`versionedData`); resolved via checkpoint + fold. | 6.2, 10 |
+| **Specialization closure** | The transitive supertype/subtype set of a type; what `Type::feature` folds over. | 3 |
+| **Stored property** | A non-derived metamodel property persisted in columns/link tables (2,698 flattened; 97 declarations). | 3 |
+| **Storage-declaring metaclass** | A metaclass declaring ≥ 1 stored scalar of its own → gets a subtype table (47 of them). | 8.3 |
+| **Subtype table** | The per-storage-declaring-metaclass table keyed `(project_id, version_id)`; DAG handled by membership, not joins. | 8.3 |
+| **Superset schema** | The physical-schema policy for multi-version support: tables and columns are the union across all registered releases; nothing is ever dropped, renames become new columns. | 6.4 |
+| **System of record** | The authoritative normalized columns/link tables, as opposed to the jsonb read model. | 5.4, 8.1 |
+| **Tag** | An immutable, destructible named reference to a commit. | 6.3 |
+| **Three-way collection merge** | Merging two changed versions of an ordered collection against their common base; additive disjoint changes auto-resolve, reorders/removals escalate to a human. | 15, 18.3 |
+| **Tiebreaker (`id DESC`)** | The deterministic ordering applied when sibling commits share a timestamp. | 10.4 |
+| **Tombstone** | A version row marking deletion at a commit (`payload = null` in spec terms). | 8.1 |
+| **TPT (table-per-type)** | One table per class, joined along inheritance; rejected — the DAG breaks the chain. | 5.2 |
+| **Typed identity** | `data_identity.class_kind`: the element's immutable metaclass on the identity row, making type FK-able where versions never are — enforced on every version by a composite FK. | 7 |
+| **Upsert (`ON CONFLICT`)** | Insert-or-update in one statement; how commits maintain the overlay. | 10.2, 18.2 |
+| **UUID v4 / v5 / v7** | Random / name-based / time-ordered uuids; v7 recommended for app-generated keys (self-activated as `DEFAULT uuidv7()` on PG18), v5 normative for library elementIds. | 7, 13 |
+| **Version** | One element's stored state as of one commit; an `element_version` row; immutable. | 4, 8.1 |
+| **WAL** | PostgreSQL's write-ahead log — the durability cost of every write. | 14 |
+| **XMI** | XML Metadata Interchange — the UML files that are the metamodel's source of truth for generation. | 2, 17 |
 
 ---
 
