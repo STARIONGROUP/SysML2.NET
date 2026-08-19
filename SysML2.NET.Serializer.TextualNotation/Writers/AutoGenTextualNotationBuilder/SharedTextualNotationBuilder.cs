@@ -148,23 +148,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule LiteralReal
-        /// <para>LiteralReal=value=RealValue</para>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue" /> from which the rule should be build</param>
-        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
-        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
-        public static void BuildLiteralReal(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
-        {
-
-            if (poco.value != null)
-            {
-                BuildRealValueHandCoded(poco.value, writerContext, stringBuilder);
-            }
-
-        }
-
-        /// <summary>
         /// Builds the Textual Notation string for the rule NonBehaviorBodyItem
         /// <para>NonBehaviorBodyItem=ownedRelationship+=Import|ownedRelationship+=AliasMember|ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=StructureUsageMember</para>
         /// </summary>

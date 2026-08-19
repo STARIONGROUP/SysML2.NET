@@ -23,6 +23,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
     /// <summary>
@@ -53,7 +54,11 @@ namespace SysML2.NET.CodeGenerator.Grammar
             var rule = new TextualNotationRule()
             {
                 RuleName = context.name.Text,
-                TargetElementName = context.target_ast?.Text,
+
+                // A rule whose name differs from the metaclass it builds normally states the target
+                // itself; where the grammar omits it, GrammarErrata supplies it, so every consumer of
+                // EffectiveTarget resolves the same metaclass the annotation would have named.
+                TargetElementName = GrammarErrata.ApplyTarget(context.name.Text, context.target_ast?.Text),
                 RawRule = context.GetText().Trim()
             };
             

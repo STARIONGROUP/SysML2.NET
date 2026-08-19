@@ -112,6 +112,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// </returns>
         public async Task GenerateAsync(XmiReaderResult xmiReaderResult, TextualNotationSpecification textualNotationSpecification, DirectoryInfo outputDirectory)
         {
+            // Every rule has now been read, so a correction that matched nothing is stale: the grammar no
+            // longer carries the defect it repairs. Reported rather than thrown, since a fix upstream must
+            // not break generation.
+            foreach (var stale in GrammarErrata.QueryUnappliedErrata())
+            {
+                Console.WriteLine($"[GrammarErrata] STALE — {stale.RuleName} matched no grammar rule and should be pruned. Recorded reason: {stale.Justification}");
+            }
+
             await this.GenerateBuilderClasses(xmiReaderResult, textualNotationSpecification, outputDirectory);
             await this.GenerateSharedBuilder(xmiReaderResult, textualNotationSpecification, outputDirectory);
            // await this.GenerateBuilderFacade(xmiReaderResult, outputDirectory);
