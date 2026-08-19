@@ -170,19 +170,28 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the rule RealValue (the value of a
-        /// <c>LiteralReal</c>), which the grammar expresses as an <see cref="IExpression" />.
-        /// <para>In the unparse direction, the real numeric value is stored as a property on the
-        /// <see cref="IExpression" /> POCO; this method simply emits it as a string.</para>
+        /// Appends a real number in the form the <c>RealValue</c> rule accepts.
+        /// <para><c>RealValue : Real = DECIMAL_VALUE? '.' ( DECIMAL_VALUE | EXPONENTIAL_VALUE )
+        /// | EXPONENTIAL_VALUE</c></para>
         /// </summary>
-        /// <param name="poco">The <see cref="IExpression" /> that holds the real value expression</param>
-        /// <param name="_">The <see cref="ICursorCache" /> used to get access to CursorCollection for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
-        private static void BuildRealValueHandCoded(IExpression poco, TextualNotationWriterContext _, IndentedStringBuilder stringBuilder)
+        /// <param name="value">The real value to emit</param>
+        /// <remarks>
+        /// Two things the default <c>ToString()</c> gets wrong here. It is culture-sensitive, so a decimal
+        /// comma would be emitted wherever the host locale uses one, which no reader accepts. And a value
+        /// with no fractional part round-trips as <c>0</c> or <c>2000</c>, which the rule does not admit:
+        /// every alternative requires either a <c>'.'</c> or an exponent, so an integral real is completed
+        /// to <c>0.0</c> / <c>2000.0</c>.
+        /// </remarks>
+        internal static void AppendRealValue(IndentedStringBuilder stringBuilder, double value)
         {
-            if (poco is ILiteralRational literalRational)
+            var text = value.ToString("R", System.Globalization.CultureInfo.InvariantCulture);
+
+            stringBuilder.Append(text);
+
+            if (text.IndexOf('.') < 0 && text.IndexOf('E') < 0 && text.IndexOf('e') < 0)
             {
-                stringBuilder.Append(literalRational.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                stringBuilder.Append(".0");
             }
         }
 
@@ -430,68 +439,73 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipPropertyName, poco.OwnedRelationship);
 
-            while (ownedRelationshipCursor.Current != null)
+            // DefinitionBodyItem / InterfaceBodyItem is a SINGLE item: the `*` that repeats it belongs to
+            // DefinitionBody / InterfaceBody, and every caller supplies that loop itself. Draining the
+            // cursor here instead would swallow the whole remaining body — including members that a
+            // SPECIALIZED body rule delegating in (RequirementBodyItem, ViewDefinitionBodyItem,
+            // ViewUsageBodyItem) still has to claim for its own alternatives. That is what silently
+            // rendered a SubjectMembership as a plain `in` parameter and dropped a ConstraintUsage's
+            // ResultExpressionMember once any annotation preceded them in ownedRelationship.
+            switch (ownedRelationshipCursor.Current)
             {
-                switch (ownedRelationshipCursor.Current)
+                case IVariantMembership variantMembership:
+                    VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
                 {
-                    case IVariantMembership variantMembership:
-                        VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
+                    var nextElement = ownedRelationshipCursor.GetNext(1);
 
-                    case IFeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember(writerContext):
+                    // ( ownedRelationship += SourceSuccessionMember )? ownedRelationship += OccurrenceUsageMember
+                    // is ONE alternative, so both elements are consumed by this single item.
+                    if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
                     {
-                        var nextElement = ownedRelationshipCursor.GetNext(1);
-
-                        if (nextElement is IFeatureMembership nextFeatureMembership && nextFeatureMembership.IsValidForOccurrenceUsageMember(writerContext))
-                        {
-                            FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                            buildOccurrenceUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                        }
-                        else
-                        {
-                            ownedRelationshipCursor.Move();
-                        }
-
-                        break;
+                        FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        buildOccurrenceUsageMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                    }
+                    else
+                    {
+                        ownedRelationshipCursor.Move();
                     }
 
-                    case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
-                        buildOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
-                        buildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IOwningMembership owningMembership when owningMembership.IsValidForDefinitionMember(writerContext):
-                        OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IImport import:
-                        ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    case IMembership membership when membership is not IOwningMembership and not IFeatureMembership:
-                        MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
-
-                    default:
-                        // KEBNF DefinitionBodyItem* / InterfaceBodyItem* semantics: terminate the body
-                        // loop when the cursor's current element matches no alternative — this leaves
-                        // the element for the parent rule to consume (e.g. PortDefinition's trailing
-                        // ownedRelationship += ConjugatedPortDefinitionMember). The outer body loop is
-                        // also guarded by IsValidForDefinitionBodyItem / IsValidForInterfaceBodyItem,
-                        // so no caller reaches the dispatcher with an unrecognised element.
-                        return;
+                    break;
                 }
+
+                case IFeatureMembership featureMembershipForOccurrence when featureMembershipForOccurrence.IsValidForOccurrenceUsageMember(writerContext):
+                    buildOccurrenceUsageMember(featureMembershipForOccurrence, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IFeatureMembership featureMembershipForNonOccurrence when featureMembershipForNonOccurrence.IsValidForNonOccurrenceUsageMember(writerContext):
+                    buildNonOccurrenceUsageMember(featureMembershipForNonOccurrence, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IOwningMembership owningMembership when owningMembership.IsValidForDefinitionMember(writerContext):
+                    OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IImport import:
+                    ImportTextualNotationBuilder.BuildImport(import, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                case IMembership membership when membership is not IOwningMembership and not IFeatureMembership:
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, writerContext, stringBuilder);
+                    ownedRelationshipCursor.Move();
+                    break;
+
+                default:
+                    // No alternative matches (a null cursor included): leave the element for the parent
+                    // rule to consume, e.g. PortDefinition's trailing ownedRelationship +=
+                    // ConjugatedPortDefinitionMember. DefinitionBody / InterfaceBody additionally guard
+                    // their loop with IsValidForDefinitionBodyItem / IsValidForInterfaceBodyItem, so no
+                    // caller reaches the dispatcher with an unrecognised element.
+                    break;
             }
         }
 
@@ -612,24 +626,41 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return;
             }
 
-            stringBuilder.AppendLine("/*");
+            // A body that carries newlines cannot be emitted on one line without losing them, so an
+            // enclosing inline block (a constraint body, `{ expr }`) is suspended for the duration of the
+            // comment and restored after it. Without this the line terminators below each degrade to a
+            // space and the comment read back from the emitted text no longer equals the modelled body.
+            var suspendedInlineDepth = stringBuilder.SuspendInlineBlock();
 
-            // Only the leading/trailing blank lines are dropped (the body of a block comment always
-            // ends with one). Interior blank lines are CONTENT and must survive — filtering every
-            // blank line collapses deliberate paragraph breaks in the comment.
-            var firstContentIndex = Array.FindIndex(lines, line => !string.IsNullOrWhiteSpace(line));
-            var lastContentIndex = Array.FindLastIndex(lines, line => !string.IsNullOrWhiteSpace(line));
-
-            foreach (var rawLine in lines[firstContentIndex..(lastContentIndex + 1)])
+            try
             {
-                var trimmedLine = rawLine.TrimEnd();
-                stringBuilder.AppendIndentedLiteral(trimmedLine.Length == 0 ? " *" : " * " + trimmedLine);
+                stringBuilder.AppendLine("/*");
+
+                // Only the leading/trailing blank lines are dropped (the body of a block comment always
+                // ends with one). Interior blank lines are CONTENT and must survive — filtering every
+                // blank line collapses deliberate paragraph breaks in the comment.
+                var firstContentIndex = Array.FindIndex(lines, line => !string.IsNullOrWhiteSpace(line));
+                var lastContentIndex = Array.FindLastIndex(lines, line => !string.IsNullOrWhiteSpace(line));
+
+                foreach (var rawLine in lines[firstContentIndex..(lastContentIndex + 1)])
+                {
+                    var trimmedLine = rawLine.TrimEnd();
+                    stringBuilder.AppendIndentedLiteral(trimmedLine.Length == 0 ? " *" : " * " + trimmedLine);
+                    stringBuilder.AppendLine();
+                }
+
+                stringBuilder.AppendIndentedLiteral(" */");
                 stringBuilder.AppendLine();
             }
+            finally
+            {
+                stringBuilder.ResumeInlineBlock(suspendedInlineDepth);
+            }
 
-            stringBuilder.AppendIndentedLiteral(" */");
-            stringBuilder.AppendLine();
-
+            // Emitted after the suspension is lifted, so the trailing separator observes the same enclosing
+            // state as the leading one above: inside an inline block both degrade to a space. Emitting it
+            // while still suspended forced a hard line break on one side only, splitting a `doc` block that
+            // the enclosing rule renders on a single line.
             if (surroundWithBlankLines)
             {
                 stringBuilder.AppendLine();

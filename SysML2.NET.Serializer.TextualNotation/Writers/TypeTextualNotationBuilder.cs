@@ -49,8 +49,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, OwnedRelationshipCollection, poco.OwnedRelationship);
 
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship actionBodyItem
-                   && actionBodyItem.IsValidForActionBodyItem(writerContext))
+            // ActionBodyItem is a SINGLE item; the repetition belongs to the body rules that call it, and
+            // every caller supplies that loop. Draining the cursor here would run past the terminator a
+            // caller is waiting for — CalculationBodyPart stops its own loop at the ResultExpressionMember,
+            // so a greedy sweep consumed the constraint's result expression through the generic member path
+            // and the expression never reached BuildResultExpressionMember.
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship actionBodyItem
+                && actionBodyItem.IsValidForActionBodyItem(writerContext))
             {
                 switch (ownedRelationshipCursor.Current)
                 {
@@ -64,6 +69,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         MembershipTextualNotationBuilder.BuildInitialNodeMemberFromReference(membershipForInitialNode, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
+                        // ( ownedRelationship += ActionTargetSuccessionMember )* belongs to THIS alternative,
+                        // so the trailing loop stays inside the item.
                         while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
                         {
                             FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);

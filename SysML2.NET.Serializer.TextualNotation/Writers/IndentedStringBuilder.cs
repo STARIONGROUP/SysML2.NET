@@ -234,6 +234,38 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Suspends inline-block mode entirely, whatever its current depth, and returns that depth
+        /// so <see cref="ResumeInlineBlock"/> can restore it.
+        /// </summary>
+        /// <returns>The suspended depth, to be handed back to <see cref="ResumeInlineBlock"/>.</returns>
+        /// <remarks>
+        /// For content that CANNOT be rendered on one line without losing information. A block comment
+        /// carrying newlines is the case that motivated this: inline mode turns each line terminator into
+        /// a space, so the comment body read back from the emitted text no longer equals the body the
+        /// model holds. Collapsing a layout is a formatting choice; collapsing a comment's own line
+        /// structure changes the value, so the writer leaves inline mode rather than corrupt it.
+        /// <para>The whole depth is suspended, not one level: the comment must reach column zero even
+        /// when several inline blocks nest around it.</para>
+        /// </remarks>
+        public int SuspendInlineBlock()
+        {
+            var suspendedDepth = this.inlineBlockDepth;
+
+            this.inlineBlockDepth = 0;
+
+            return suspendedDepth;
+        }
+
+        /// <summary>
+        /// Restores the inline-block depth returned by <see cref="SuspendInlineBlock"/>.
+        /// </summary>
+        /// <param name="suspendedDepth">The depth returned by the matching <see cref="SuspendInlineBlock"/> call.</param>
+        public void ResumeInlineBlock(int suspendedDepth)
+        {
+            this.inlineBlockDepth = suspendedDepth;
+        }
+
+        /// <summary>
         /// Appends a single <see cref="char"/> to the underlying buffer, applying the
         /// leading-whitespace-at-line-start and consecutive-space-collapse normalisation
         /// rules described on the type.

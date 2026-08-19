@@ -53,11 +53,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger pocoLiteralInteger:
                     LiteralIntegerTextualNotationBuilder.BuildLiteralInteger(pocoLiteralInteger, writerContext, stringBuilder);
                     break;
+                case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralRational pocoLiteralRational:
+                    LiteralRationalTextualNotationBuilder.BuildLiteralReal(pocoLiteralRational, writerContext, stringBuilder);
+                    break;
                 case SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInfinity pocoLiteralInfinity:
                     LiteralInfinityTextualNotationBuilder.BuildLiteralInfinity(pocoLiteralInfinity, writerContext, stringBuilder);
-                    break;
-                case SysML2.NET.Core.POCO.Root.Elements.IElement pocoElement:
-                    SharedTextualNotationBuilder.BuildLiteralReal((SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue)pocoElement, writerContext, stringBuilder);
                     break;
             }
 

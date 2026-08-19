@@ -534,6 +534,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     break;
                             }
                         }
+                        else if (string.Equals(targetProperty.Type?.Name, "Real", StringComparison.Ordinal))
+                        {
+                            // A Real maps to double, whose default ToString() is culture-sensitive and drops
+                            // the '.' that every RealValue alternative requires — see AppendRealValue.
+                            writer.WriteSafeString($"SharedTextualNotationBuilder.AppendRealValue(stringBuilder, poco.{targetPropertyName});");
+                        }
                         else
                         {
                             writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString());");
