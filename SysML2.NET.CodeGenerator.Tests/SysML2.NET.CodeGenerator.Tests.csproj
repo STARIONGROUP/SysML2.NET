@@ -19,6 +19,7 @@
     <Compile Remove="Extensions\**" />
     <EmbeddedResource Remove="Extensions\**" />
     <None Remove="Extensions\**" />
+    <Compile Include="Extensions\*TestFixture.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenExtensions\ElementExtensions.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenReaders\AnnotatingElementReader.cs" />
     <None Include="Expected\UML\Core\AutoGenExtensions\ElementExtensions.cs">
