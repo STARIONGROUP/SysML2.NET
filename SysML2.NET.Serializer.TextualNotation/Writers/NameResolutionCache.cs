@@ -472,7 +472,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 ancestor = QueryOwningContainer(ancestor);
             }
 
-            return target.qualifiedName ?? string.Empty;
+            var shortQualifiedName = QueryShortQualifiedName(target);
+
+            return string.IsNullOrWhiteSpace(shortQualifiedName)
+                ? target.qualifiedName ?? string.Empty
+                : shortQualifiedName;
         }
 
         /// <summary>

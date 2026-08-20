@@ -123,6 +123,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             await this.GenerateBuilderClasses(xmiReaderResult, textualNotationSpecification, outputDirectory);
             await this.GenerateSharedBuilder(xmiReaderResult, textualNotationSpecification, outputDirectory);
            // await this.GenerateBuilderFacade(xmiReaderResult, outputDirectory);
+
+            // Every rule has now been generated, so an invariant whose OMG name resolved against nothing is
+            // no longer being applied. Reported rather than thrown: the emission rule it backs is off, which
+            // is a defect to re-anchor, but it must not stop generation.
+            foreach (var unresolved in NotationInvariants.QueryUnresolvedInvariants())
+            {
+                Console.WriteLine($"[NotationInvariants] UNRESOLVED — {unresolved.Name} is anchored to '{unresolved.MetamodelName}', which the metamodel no longer carries, so the rule it backs is NOT applied. Recorded reason: {unresolved.Justification}");
+            }
         }
 
         /// <summary>

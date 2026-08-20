@@ -721,7 +721,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var direct = membership?.ownedMemberFeature;
 
-            if (membership is IParameterMembership && direct != null)
+            // A NAMED argument must NOT be unwrapped. Both argument forms arrive as a ParameterMembership,
+            // but they need different features: a positional Argument is a bare wrapper around its
+            // ArgumentValue, so the expression inside is what the notation writes, whereas a NamedArgument
+            // (`ownedRelationship += ParameterRedefinition '=' ownedRelationship += ArgumentValue`) IS the
+            // feature to write — unwrapping it hands BuildNamedArgument the value expression, which owns
+            // neither the redefinition nor the value, so it emits a bare `=`. The redefinition is the same
+            // signal IsValidForPositionalArgumentList uses to tell the two apart.
+            if (membership is IParameterMembership && direct != null
+                && !direct.OwnedRelationship.OfType<IRedefinition>().Any())
             {
                 var featureValue = direct.OwnedRelationship.OfType<IFeatureValue>().FirstOrDefault();
 

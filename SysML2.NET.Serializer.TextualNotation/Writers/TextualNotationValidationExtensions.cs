@@ -140,16 +140,30 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Asserts that the <see cref="IFeature"/> is valid for the PositionalArgumentList rule.
         /// <para><c>PositionalArgumentList : Feature = ownedRelationship += ArgumentMember (',' ownedRelationship += ArgumentMember)*</c></para>
-        /// <para>Matches when the cursor is positioned at an <see cref="IParameterMembership"/>
-        /// (positional arguments) — the alternative <c>NamedArgumentList</c> uses plain
-        /// <see cref="IFeatureMembership"/> members.</para>
+        /// <para>The two argument-list alternatives are told apart by whether the member's parameter
+        /// carries a <c>ParameterRedefinition</c>, NOT by the metaclass of the Membership:</para>
+        /// <para><c>Argument : Feature = ownedRelationship += ArgumentValue</c> — positional, value only.</para>
+        /// <para><c>NamedArgument : Feature = ownedRelationship += ParameterRedefinition '='
+        /// ownedRelationship += ArgumentValue</c> — named, redefinition first.</para>
         /// </summary>
         /// <param name="feature">The <see cref="IFeature"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
-        /// <returns>True if the cursor's current element is an <see cref="IParameterMembership"/></returns>
+        /// <returns>True if the cursor is at an argument member whose parameter has no redefinition</returns>
+        /// <remarks>
+        /// The KEBNF declares <c>ArgumentMember : ParameterMembership</c> against
+        /// <c>NamedArgumentMember : FeatureMembership</c>, which reads as though the Membership metaclass
+        /// discriminated the two. It does not: <see cref="IParameterMembership"/> IS an
+        /// <see cref="IFeatureMembership"/>, and a named argument arrives as a ParameterMembership too, so a
+        /// test on the Membership alone matches BOTH and routes every named argument down the positional
+        /// path — where <c>BuildArgument</c> looks for an <c>ArgumentValue</c>, finds the
+        /// <c>ParameterRedefinition</c> instead, and emits nothing at all.
+        /// <para>The redefinition is the reliable signal, and it is what the grammar actually keys on: only
+        /// <c>NamedArgument</c> owns one.</para>
+        /// </remarks>
         internal static bool IsValidForPositionalArgumentList(this IFeature feature, TextualNotationWriterContext writerContext)
         {
-            return QueryCurrentOwnedRelationship(feature, writerContext) is IParameterMembership;
+            return QueryCurrentOwnedRelationship(feature, writerContext) is IParameterMembership parameterMembership
+                   && parameterMembership.ownedMemberParameter?.OwnedRelationship.OfType<IRedefinition>().Any() != true;
         }
 
         /// <summary>

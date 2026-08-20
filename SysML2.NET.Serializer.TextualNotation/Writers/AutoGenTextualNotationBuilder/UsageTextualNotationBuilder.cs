@@ -66,8 +66,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.Direction.HasValue)
             {
-                stringBuilder.Append(poco.Direction.ToString().ToLower());
-                stringBuilder.Append(' ');
+                if (poco.owningMembership is not SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership)
+                {
+                    stringBuilder.Append(poco.Direction.ToString().ToLower());
+                    stringBuilder.Append(' ');
+                }
                 stringBuilder.Append(' ');
             }
 
