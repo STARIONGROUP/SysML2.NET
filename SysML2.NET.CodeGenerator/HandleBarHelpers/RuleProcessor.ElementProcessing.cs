@@ -21,6 +21,7 @@
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using HandlebarsDotNet;
@@ -99,7 +100,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                         }
                                         else
                                         {
-                                            groupTypeGuard = $" && {cursorToUse.CursorVariableName}.Current is {targetClass.QueryFullyQualifiedTypeName()}";
+                                            groupTypeGuard = $" && {cursorToUse.CursorVariableName}.Current is {targetClass.QueryFullyQualifiedTypeName()}{ResolveResultMemberExclusion(cursorToUse, targetClass, umlClass)}";
                                         }
                                     }
                                 }
@@ -314,6 +315,51 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Builds the extra <c>while</c> clause keeping a repeated <c>+=</c> member from consuming a
+        /// <c>ReturnParameterMembership</c>.
+        /// </summary>
+        /// <param name="cursorDefinition">The cursor the repeated group consumes from.</param>
+        /// <param name="itemTargetClass">The class the repetition's own type guard tests for.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <returns>The additional guard clause, or an empty string when the repetition cannot match one.</returns>
+        /// <remarks>
+        /// The grammar never repeats a result member: it always gives one its OWN slot in the enclosing rule
+        /// (<c>EmptyResultMember</c>, <c>ConstructorResultMember</c>, <c>ReturnParameterMember</c>), never a
+        /// comma-separated repetition. A repetition that shares the enclosing rule's cursor will therefore
+        /// swallow it whenever the repetition's guard type happens to be one of its supertypes:
+        /// <code>
+        /// InvocationExpression = ownedRelationship += InstantiatedTypeMember
+        ///                        ArgumentList
+        ///                        ownedRelationship += EmptyResultMember
+        /// PositionalArgumentList = ownedRelationship += ArgumentMember
+        ///                          ( ',' ownedRelationship += ArgumentMember )*
+        /// </code>
+        /// <c>ArgumentMember : ParameterMembership</c> and <c>EmptyResultMember : ReturnParameterMembership</c>
+        /// — a ParameterMembership — so the loop emits a separator for it and then renders nothing:
+        /// <c>f(a, )</c>.
+        /// <para>Gating on subtype overlap keeps this general without touching repetitions it cannot affect.
+        /// Of the fifteen comma-repetition shapes across both grammars only two — <c>ArgumentMember</c> and
+        /// <c>NamedArgumentMember</c> — guard on a supertype of ReturnParameterMembership; the rest test
+        /// relationship types or sibling membership subtypes, for which the clause would be dead code.</para>
+        /// </remarks>
+        private static string ResolveResultMemberExclusion(CursorDefinition cursorDefinition, IClass itemTargetClass, IClass umlClass)
+        {
+            var resultMemberClass = NotationInvariants.QueryMetaclass(NotationInvariants.ResultMemberMetaclass, umlClass);
+
+            if (resultMemberClass == null || itemTargetClass == null)
+            {
+                return string.Empty;
+            }
+
+            var repetitionAdmitsResultMember = string.Equals(resultMemberClass.Name, itemTargetClass.Name, StringComparison.Ordinal)
+                                               || resultMemberClass.QueryAllGeneralClassifiers().Any(general => string.Equals(general.Name, itemTargetClass.Name, StringComparison.Ordinal));
+
+            return repetitionAdmitsResultMember
+                ? $" && {cursorDefinition.CursorVariableName}.Current is not {resultMemberClass.QueryFullyQualifiedTypeName()}"
+                : string.Empty;
+        }
+
+        /// <summary>
         /// Processes an <see cref="AssignmentElement" />
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write into output content</param>
@@ -456,8 +502,39 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else if (targetProperty.QueryIsEnum())
                         {
+                            // A result member's own keyword already conveys the direction, so writing it
+                            // again emits `return out verdict` where the notation is `return verdict`.
+                            // Testing the owning Membership follows the metamodel's own idiom — Feature's
+                            // parameter-redefinition constraint selects parameters with `direction <> null`
+                            // and then rejects those whose owningFeatureMembership is a result membership.
+                            // Both OMG names come from NotationInvariants, which reports either of them
+                            // going missing rather than letting this rule switch itself off.
+                            var impliedDirectionProperty = NotationInvariants.QueryMetamodelName(NotationInvariants.ImpliedDirectionProperty);
+                            var isImpliedDirectionProperty = string.Equals(targetProperty.Name, impliedDirectionProperty, StringComparison.Ordinal);
+
+                            if (isImpliedDirectionProperty)
+                            {
+                                // Marked on the NAME matching, independently of the metaclass below, so a
+                                // report names only the anchor that actually went missing.
+                                NotationInvariants.MarkResolved(NotationInvariants.ImpliedDirectionProperty);
+                            }
+
+                            var resultMemberClass = NotationInvariants.QueryMetaclass(NotationInvariants.ResultMemberMetaclass, umlClass);
+                            var suppressForResultParameter = isImpliedDirectionProperty && resultMemberClass != null;
+
+                            if (suppressForResultParameter)
+                            {
+                                writer.WriteSafeString($"if (poco.owningMembership is not {resultMemberClass.QueryFullyQualifiedTypeName()}){Environment.NewLine}");
+                                writer.WriteSafeString($"{{{Environment.NewLine}");
+                            }
+
                             writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString().ToLower());{Environment.NewLine}");
                             writer.WriteSafeString("stringBuilder.Append(' ');");
+
+                            if (suppressForResultParameter)
+                            {
+                                writer.WriteSafeString($"{Environment.NewLine}}}");
+                            }
                         }
                         else if (targetProperty.QueryIsReferenceType())
                         {

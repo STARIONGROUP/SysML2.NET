@@ -24,6 +24,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
 
     using Antlr4.Runtime;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
     /// <summary>
@@ -44,7 +45,9 @@ namespace SysML2.NET.CodeGenerator.Grammar
                 throw new FileNotFoundException("File not found", fileUri);
             }
             
-            var stream = CharStreams.fromPath(fileUri);
+            // The KEBNF files are OMG source and are never edited, so a defective production is corrected
+            // here, on the way into the parser — see GrammarErrata.ApplyProductions.
+            var stream = CharStreams.fromString(GrammarErrata.ApplyProductions(File.ReadAllText(fileUri)));
             var lexer = new kebnfLexer(stream);
             var tokens = new CommonTokenStream(lexer);
             var parser = new kebnfParser(tokens);

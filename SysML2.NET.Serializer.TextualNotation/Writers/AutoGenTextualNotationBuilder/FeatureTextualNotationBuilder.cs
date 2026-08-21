@@ -609,8 +609,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             if (poco.Direction.HasValue)
             {
-                stringBuilder.Append(poco.Direction.ToString().ToLower());
-                stringBuilder.Append(' ');
+                if (poco.owningMembership is not SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership)
+                {
+                    stringBuilder.Append(poco.Direction.ToString().ToLower());
+                    stringBuilder.Append(' ');
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -1053,7 +1056,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership && ownedRelationshipCursor.Current is not SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership)
             {
                 stringBuilder.Append(", ");
 
@@ -1093,7 +1096,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)
+            while (ownedRelationshipCursor.Current != null && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership && ownedRelationshipCursor.Current is not SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership)
             {
                 stringBuilder.Append(", ");
 

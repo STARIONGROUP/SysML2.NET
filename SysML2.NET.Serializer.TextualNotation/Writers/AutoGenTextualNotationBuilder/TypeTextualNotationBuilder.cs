@@ -387,7 +387,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Builds the Textual Notation string for the rule CaseBodyItem
-        /// <para>CaseBodyItem:Type=ActionBodyItem|ownedRelationship+=SubjectMember|ownedRelationship+=ActorMember|ownedRelationship+=ObjectiveMember</para>
+        /// <para>CaseBodyItem:Type=CalculationBodyItem|ownedRelationship+=SubjectMember|ownedRelationship+=ActorMember|ownedRelationship+=ObjectiveMember</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IType" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
@@ -412,7 +412,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else
             {
-                BuildActionBodyItem(poco, writerContext, stringBuilder);
+                BuildCalculationBodyItem(poco, writerContext, stringBuilder);
             }
 
         }
