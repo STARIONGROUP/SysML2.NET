@@ -110,9 +110,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Terminals whose canonical SST form has NO space on either side: qualified-name
-        /// separator <c>::</c>, range separator <c>..</c>, and dotted-access <c>.</c>.
+        /// separator <c>::</c>, range separator <c>..</c>, dotted-access <c>.</c>, and the
+        /// function-operation arrow <c>-&gt;</c> (<c>powerProfile-&gt;size()</c>).
         /// </summary>
-        private static readonly HashSet<string> TightBothTerminals = [".", "::", ".."];
+        private static readonly HashSet<string> TightBothTerminals = [".", "::", "..", "->"];
 
         /// <summary>
         /// Characters that, when they appear as the last buffered character, suppress any

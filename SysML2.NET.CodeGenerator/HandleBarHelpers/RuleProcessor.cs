@@ -1598,7 +1598,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             return string.Equals(bodyItemRuleName, "DefinitionBodyItem", StringComparison.Ordinal)
                 || string.Equals(bodyItemRuleName, "InterfaceBodyItem", StringComparison.Ordinal)
-                || string.Equals(bodyItemRuleName, "ActionBodyItem", StringComparison.Ordinal);
+                || string.Equals(bodyItemRuleName, "ActionBodyItem", StringComparison.Ordinal)
+                || string.Equals(bodyItemRuleName, "CaseBodyItem", StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Returns true when an alternative's discriminator cannot be derived from its rule body and must
+        /// be supplied by a hand-coded <c>IsValidFor{Rule}</c> guard.
+        /// </summary>
+        /// <remarks>
+        /// Currently <c>FunctionOperationExpression</c>. Its arm in <c>NonFeatureChainPrimaryExpression</c>
+        /// targets <c>InvocationExpression</c> and sits above the <c>SequenceExpression</c> arm, which
+        /// targets the supertype <c>Expression</c>. A sequence <c>(a, b, c)</c> is an <c>OperatorExpression</c>
+        /// with <c>operator = ","</c> — hence an <c>InvocationExpression</c> whose first owned relationship is
+        /// an <c>IParameterMembership</c>, which is all the unguarded arm tested — so every sequence was
+        /// swallowed and rendered with a spurious <c>-&gt;</c>. Telling the two apart needs the SECOND owned
+        /// relationship (<c>Membership</c> for <c>x-&gt;f()</c>, <c>ParameterMembership</c> for a sequence),
+        /// i.e. cursor lookahead, which no body-shape analysis can produce.
+        /// </remarks>
+        /// <param name="alternativeRuleName">The KEBNF rule name of the alternative</param>
+        /// <returns><c>true</c> if the codegen should emit a hand-coded <c>IsValidFor{Rule}</c> guard</returns>
+        private static bool RequiresHandCodedAlternativeGuard(string alternativeRuleName)
+        {
+            return string.Equals(alternativeRuleName, "FunctionOperationExpression", StringComparison.Ordinal);
         }
     }
 }

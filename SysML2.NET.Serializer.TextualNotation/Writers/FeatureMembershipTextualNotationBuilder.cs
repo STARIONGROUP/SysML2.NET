@@ -68,7 +68,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
         private static void BuildOwnedExpressionMemberHandCoded(IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            if (poco.ownedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
+            // Mirrors BuildSequenceExpressionListMember: the operand of a sequence is reached through the
+            // effective member feature, since the raw ownedMemberFeature can be a wrapping Feature whose
+            // value is the Expression. Reading the raw property drops every left operand of a
+            // SequenceOperatorExpression, leaving only its separators.
+            var effectiveOwnedMemberFeature = SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
+
+            if (effectiveOwnedMemberFeature is SysML2.NET.Core.POCO.Kernel.Functions.IExpression elementAsExpression)
             {
                 ExpressionTextualNotationBuilder.BuildOwnedExpression(elementAsExpression, writerContext, stringBuilder);
             }

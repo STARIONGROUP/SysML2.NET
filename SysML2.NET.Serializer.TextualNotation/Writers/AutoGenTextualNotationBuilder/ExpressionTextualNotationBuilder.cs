@@ -119,7 +119,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression pocoOperatorExpressionBracketExpression when (writerContext.CursorCache.GetOrCreateCursor(pocoOperatorExpressionBracketExpression.Id, "ownedRelationship", pocoOperatorExpressionBracketExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership && pocoOperatorExpressionBracketExpression.Operator == "["):
                     OperatorExpressionTextualNotationBuilder.BuildBracketExpression(pocoOperatorExpressionBracketExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpressionFunctionOperationExpression when writerContext.CursorCache.GetOrCreateCursor(pocoInvocationExpressionFunctionOperationExpression.Id, "ownedRelationship", pocoInvocationExpressionFunctionOperationExpression.OwnedRelationship).Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership:
+                case SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression pocoInvocationExpressionFunctionOperationExpression when pocoInvocationExpressionFunctionOperationExpression.IsValidForFunctionOperationExpression(writerContext):
                     InvocationExpressionTextualNotationBuilder.BuildFunctionOperationExpression(pocoInvocationExpressionFunctionOperationExpression, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionSequenceExpression when pocoExpressionSequenceExpression.IsValidForSequenceExpression(writerContext):
