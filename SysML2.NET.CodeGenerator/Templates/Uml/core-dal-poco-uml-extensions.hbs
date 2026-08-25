@@ -75,19 +75,20 @@ namespace SysML2.NET.Dal
                 {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                 {{#if (Property.QueryIsReferenceProperty property)}}
                     {{#if (Property.QueryIsEnumerable property) }}
-                            var {{ property.Name}}ToDelete = poco.{{ String.PascalCase property.Name}}.Select(x => x.Id).Except(dto.{{ String.PascalCase property.Name}});
-                    
-                            foreach (var identifier in {{ property.Name}}ToDelete)
+                            var {{ property.Name}}Retained = new HashSet<Guid>(dto.{{ String.PascalCase property.Name}});
+                            var {{ property.Name}}ToDelete = poco.{{ String.PascalCase property.Name}}.Where(x => !{{ property.Name}}Retained.Contains(x.Id)).ToList();
+
+                            foreach (var {{ property.Name}} in {{ property.Name}}ToDelete)
                             {
                         {{#if property.IsComposite }}
-                            ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}}.Remove(poco.{{ String.PascalCase property.Name}}.Single(x => x.Id == identifier));
+                            ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}}.Remove({{ property.Name}});
                         {{else}}
-                            poco.{{ String.PascalCase property.Name}}.Remove(poco.{{ String.PascalCase property.Name}}.Single(x => x.Id == identifier));
+                            poco.{{ String.PascalCase property.Name}}.Remove({{ property.Name}});
                         {{/if}}
                             }
-                    
+
                         {{#if property.IsComposite }}
-                            identifiersOfObjectsToDelete.AddRange({{ property.Name}}ToDelete);
+                            identifiersOfObjectsToDelete.AddRange({{ property.Name}}ToDelete.Select(x => x.Id));
                         {{/if}}
 
                     {{/if}}

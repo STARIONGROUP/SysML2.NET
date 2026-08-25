@@ -88,14 +88,15 @@ namespace SysML2.NET.Dal
 
             poco.IsVariation = dto.IsVariation;
 
-            var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+            var ownedRelationshipRetained = new HashSet<Guid>(dto.OwnedRelationship);
+            var ownedRelationshipToDelete = poco.OwnedRelationship.Where(x => !ownedRelationshipRetained.Contains(x.Id)).ToList();
 
-            foreach (var identifier in ownedRelationshipToDelete)
+            foreach (var ownedRelationship in ownedRelationshipToDelete)
             {
-                ((IContainedElement)poco).OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
+                ((IContainedElement)poco).OwnedRelationship.Remove(ownedRelationship);
             }
 
-            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
+            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete.Select(x => x.Id));
 
 
             return identifiersOfObjectsToDelete;

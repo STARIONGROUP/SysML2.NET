@@ -168,6 +168,64 @@ namespace SysML2.NET.Dal.Tests
         }
 
         [Test]
+        public void Synchronize_WithRemovedOwnedRelationship_RemovesThePocoFromTheCache()
+        {
+            var ownerId = Guid.Parse("1b7c1f14-9a2e-4c8d-8f3b-2c6e0d5a4b91");
+            var membershipId = Guid.Parse("2c8d2f25-8b3f-4d9e-9a4c-3d7f1e6b5c02");
+            var packageId = Guid.Parse("3d9e3f36-7c4a-4eaf-8b5d-4e802f7c6d13");
+
+            var ownerDto = new Core.DTO.Kernel.Packages.Package
+            {
+                Id = ownerId,
+                DeclaredName = "the owner",
+                ElementId = ownerId.ToString(),
+                OwnedRelationship = [membershipId]
+            };
+
+            var membershipDto = new Core.DTO.Root.Namespaces.OwningMembership
+            {
+                Id = membershipId,
+                OwnedRelatedElement = [packageId],
+                OwningRelatedElement = ownerId
+            };
+
+            var packageDto = new Core.DTO.Kernel.Packages.Package
+            {
+                Id = packageId,
+                DeclaredName = "the owned package",
+                ElementId = packageId.ToString(),
+                OwningRelationship = membershipId
+            };
+
+            this.assembler.Synchronize([ownerDto, membershipDto, packageDto]);
+
+            Core.POCO.Kernel.Packages.Package ownerPoco = null;
+
+            if (this.assembler.Cache.TryGetValue(ownerId, out this.lazyPoco))
+            {
+                ownerPoco = (Core.POCO.Kernel.Packages.Package)this.lazyPoco.Value;
+            }
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(3));
+                Assert.That(ownerPoco.OwnedRelationship, Has.Count.EqualTo(1));
+            }
+
+            // drop the membership from the owner and from the delta, which is what a server-side removal looks like
+            ownerDto.OwnedRelationship = [];
+
+            Assert.That(() => this.assembler.Synchronize([ownerDto, packageDto]), Throws.Nothing);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(ownerPoco.OwnedRelationship, Has.Count.EqualTo(0));
+                Assert.That(this.assembler.Cache.ContainsKey(membershipId), Is.False);
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(2));
+            }
+        }
+
+        [Test]
         public void Synchronize_WithGrowingDtoSequence_DoesNotRescanTheSequencePerElement()
         {
             var smallModel = new EnumerationCountingElements(64);
