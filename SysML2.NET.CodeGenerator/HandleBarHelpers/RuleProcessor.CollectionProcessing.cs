@@ -77,6 +77,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var whileTypeExclusion = this.ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, propertyName, ruleGenerationContext);
 
                         string whileCondition;
+                        var whileConditionIsBareNullTest = false;
 
                         if (!string.IsNullOrWhiteSpace(whileTypeExclusion))
                         {
@@ -131,14 +132,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             else
                             {
                                 whileCondition = $"{cursorVariableName}.Current != null";
+                                whileConditionIsBareNullTest = true;
                             }
                         }
 
                         // A guarded body-item rule (IsGuardedBodyItemRule) admits elements that have no
                         // notation, and its per-item builder refuses to consume them WITHOUT advancing the
                         // cursor. The loop must therefore test the same predicate as the enclosing entry
-                        // guard: a bare non-null test spins forever on the first refused element.
-                        if (IsGuardedBodyItemRule(nonTerminalElement.Name))
+                        // guard: a bare non-null test spins forever on the first refused element. The
+                        // guarded form only replaces the BARE null-test fallback: when a type-derived
+                        // while-condition already bounds the loop (next-type exclusion or content-type
+                        // guard, e.g. CalculationBodyPart's `is not IResultExpressionMembership`), that
+                        // stronger structural bound stays.
+                        if (whileConditionIsBareNullTest && IsGuardedBodyItemRule(nonTerminalElement.Name, ruleGenerationContext))
                         {
                             var guardVariableName = $"{targetProperty.Name.LowerCaseFirstLetter()}BodyItem";
 

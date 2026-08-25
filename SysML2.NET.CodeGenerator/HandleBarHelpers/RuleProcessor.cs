@@ -652,7 +652,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            return IsGuardedBodyItemRule(nonTerminals[0].Name)
+            return IsGuardedBodyItemRule(nonTerminals[0].Name, ruleGenerationContext)
                 ? $"{existingCursor.CursorVariableName}.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship optionalBodyCandidate && optionalBodyCandidate.IsValidFor{nonTerminals[0].Name}(writerContext)"
                 : $"{existingCursor.CursorVariableName}.Current != null";
         }
@@ -1436,7 +1436,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             // For body item rules that can encounter elements legitimately belonging to a parent rule
             // (e.g. PortDefinition's trailing ConjugatedPortDefinitionMember), the `;` choice and the
             // `*` loop must defer to an IsValidFor{XBodyItem} predicate instead of a bare non-null test.
-            var requiresIsValidForGuard = IsGuardedBodyItemRule(collectionNonTerminals[0].Name);
+            var requiresIsValidForGuard = IsGuardedBodyItemRule(collectionNonTerminals[0].Name, ruleGenerationContext);
             var guardCallSuffix = requiresIsValidForGuard
                 ? $".IsValidFor{collectionNonTerminals[0].Name}(writerContext)"
                 : string.Empty;
@@ -1588,13 +1588,26 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
         /// <summary>
         /// Returns true when the body-item rule can have cursor elements that legitimately belong to a
-        /// parent rule and must not be consumed by the body's <c>*</c> loop. Allowlisted by name to keep
-        /// the guarded form scoped: currently <c>DefinitionBodyItem</c> (PortDefinition's trailing
-        /// <c>ConjugatedPortDefinitionMember</c>) and <c>InterfaceBodyItem</c>.
+        /// parent rule and must not be consumed by the body's <c>*</c> loop, so the loop must be bounded
+        /// by an <c>IsValidFor{Rule}</c> predicate instead of a bare null-test.
         /// </summary>
+        /// <remarks>
+        /// Still allowlisted by name. The structural analysis in <see cref="GuardedBodyItemRuleAnalysis" />
+        /// derives the rules threatened by a TRAILING same-cursor consumer, but that is only one of two
+        /// independent hazards, and not the load-bearing one: the item dispatchers break out of their
+        /// <c>default:</c> arm WITHOUT advancing the cursor
+        /// (<c>SysML2.NET.Serializer.TextualNotation/Writers/SharedTextualNotationBuilder.cs</c>), so a bare
+        /// <c>while (cursor.Current != null)</c> spins forever on any element no alternative matches —
+        /// regardless of what follows the loop. <c>InterfaceBody</c> is the witness: it is the last element
+        /// of both <c>InterfaceDefinition</c> and <c>InterfaceUsage</c>, so the trailing-consumer analysis
+        /// correctly reports no threat, yet its guard is what keeps the dispatcher from being reached with
+        /// an unrecognised element. Whether an element falls outside the rule's alternatives is a runtime
+        /// property, not a grammar property, so the allowlist stays until the second hazard is modelled.
+        /// </remarks>
         /// <param name="bodyItemRuleName">The KEBNF rule name of the body item (e.g. <c>DefinitionBodyItem</c>)</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /> supplying the grammar</param>
         /// <returns><c>true</c> if the codegen should emit the guarded form</returns>
-        private static bool IsGuardedBodyItemRule(string bodyItemRuleName)
+        private static bool IsGuardedBodyItemRule(string bodyItemRuleName, RuleGenerationContext ruleGenerationContext)
         {
             return string.Equals(bodyItemRuleName, "DefinitionBodyItem", StringComparison.Ordinal)
                 || string.Equals(bodyItemRuleName, "InterfaceBodyItem", StringComparison.Ordinal)
