@@ -1483,6 +1483,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     writer.WriteSafeString($"{{{Environment.NewLine}");
 
+                    var positionVariableName = EmitLoopProgressCapture(writer, cursorVarName, ruleGenerationContext);
+
                     if (perItemCall != null)
                     {
                         writer.WriteSafeString(perItemCall);
@@ -1492,7 +1494,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         this.ProcessReferencedRuleAlternatives(writer, umlClass, collectionNonTerminal, referencedRule, ruleGenerationContext);
                     }
 
-                    writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
+                    writer.WriteSafeString(Environment.NewLine);
+                    EmitLoopProgressAssertion(writer, cursorVarName, positionVariableName, collectionNonTerminal.Name);
+                    writer.WriteSafeString($"}}{Environment.NewLine}");
                 }
                 else
                 {
@@ -1588,17 +1592,101 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
         /// <summary>
         /// Returns true when the body-item rule can have cursor elements that legitimately belong to a
-        /// parent rule and must not be consumed by the body's <c>*</c> loop. Allowlisted by name to keep
-        /// the guarded form scoped: currently <c>DefinitionBodyItem</c> (PortDefinition's trailing
-        /// <c>ConjugatedPortDefinitionMember</c>) and <c>InterfaceBodyItem</c>.
+        /// parent rule and must not be consumed by the body's <c>*</c> loop, so the loop must be bounded
+        /// by an <c>IsValidFor{Rule}</c> predicate instead of a bare null-test.
         /// </summary>
+        /// <remarks>
+        /// Allowlisted by name, deliberately, because the four entries encode TWO unrelated concerns and no
+        /// single predicate can derive both:
+        /// <list type="table">
+        /// <item>
+        /// <term><c>CaseBodyItem</c>, <c>DefinitionBodyItem</c></term>
+        /// <description>A trailing consumer reads the SAME cursor after the loop, so an unguarded loop
+        /// swallows it — <c>CaseBody</c>'s own <c>( ownedRelationship += ResultExpressionMember )?</c>, and
+        /// <c>PortDefinition</c>'s trailing <c>ConjugatedPortDefinitionMember</c> reached through
+        /// <c>Definition → DefinitionBody</c>. This is a property OF THE GRAMMAR and
+        /// <see cref="GuardedBodyItemRuleAnalysis" /> derives it.</description>
+        /// </item>
+        /// <item>
+        /// <term><c>InterfaceBodyItem</c>, <c>ActionBodyItem</c></term>
+        /// <description>The item builder declines an element it cannot render WITHOUT advancing the cursor
+        /// — <c>SharedTextualNotationBuilder</c>'s <c>default:</c> arm, and <c>ActionBodyItem</c>'s outer
+        /// <c>if (IsValidForActionBodyItem)</c>. The guard is what keeps such an element from ever reaching
+        /// the dispatcher. <c>InterfaceBody</c> is the clean witness that this is NOT the grammar concern:
+        /// it is the last element of both <c>InterfaceDefinition</c> and <c>InterfaceUsage</c>, so no
+        /// trailing consumer exists, yet the guard is still load-bearing.</description>
+        /// </item>
+        /// </list>
+        /// <para>The second concern is not derivable. It depends on the internal control flow of a
+        /// hand-written method: <c>BuildStateBodyItemHandCoded</c> is equally hand-coded yet DRAINS the
+        /// cursor in its own <c>while</c>, so it can never stall its caller — a "the item builder is
+        /// hand-coded" heuristic would over-guard it. Deciding it would mean analysing that C#.</para>
+        /// <para>What removes the risk instead is <c>CollectionCursor.AssertAdvancedSince</c>, emitted by
+        /// <see cref="EmitLoopProgressAssertion" /> at the foot of every generated cursor loop: a stalled
+        /// iteration now throws immediately instead of hanging. That matters because a hang is invisible to
+        /// a corpus that compares output — dropping <c>InterfaceBodyItem</c> from this list once produced a
+        /// fully green 33-case run. With the assertion in place this allowlist governs OUTPUT CORRECTNESS
+        /// (do not swallow the result expression, do not emit a bare <c>ref;</c>) rather than termination.</para>
+        /// </remarks>
+        /// <summary>
+        /// Emits the capture of a cursor's position immediately before a loop body, and returns the name of
+        /// the local it wrote to. Pair with <see cref="EmitLoopProgressAssertion" /> at the end of the body.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> to emit to</param>
+        /// <param name="cursorVariableName">The cursor driving the loop</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
+        /// <returns>The name of the emitted position local</returns>
+        private static string EmitLoopProgressCapture(EncodedTextWriter writer, string cursorVariableName, RuleGenerationContext ruleGenerationContext)
+        {
+            var positionVariableName = $"positionBeforeItem{ruleGenerationContext.LoopProgressCheckCounter++}";
+
+            writer.WriteSafeString($"var {positionVariableName} = {cursorVariableName}.Position;{Environment.NewLine}");
+
+            return positionVariableName;
+        }
+
+        /// <summary>
+        /// Emits the forward-progress assertion closing a cursor loop body, so an iteration that consumes
+        /// nothing fails immediately instead of spinning forever.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> to emit to</param>
+        /// <param name="cursorVariableName">The cursor driving the loop</param>
+        /// <param name="positionVariableName">The local returned by <see cref="EmitLoopProgressCapture" /></param>
+        /// <param name="ruleName">The KEBNF rule the loop body builds, named in the failure message</param>
+        private static void EmitLoopProgressAssertion(EncodedTextWriter writer, string cursorVariableName, string positionVariableName, string ruleName)
+        {
+            writer.WriteSafeString($"{cursorVariableName}.AssertAdvancedSince({positionVariableName}, \"{ruleName}\");{Environment.NewLine}");
+        }
+
         /// <param name="bodyItemRuleName">The KEBNF rule name of the body item (e.g. <c>DefinitionBodyItem</c>)</param>
         /// <returns><c>true</c> if the codegen should emit the guarded form</returns>
         private static bool IsGuardedBodyItemRule(string bodyItemRuleName)
         {
             return string.Equals(bodyItemRuleName, "DefinitionBodyItem", StringComparison.Ordinal)
                 || string.Equals(bodyItemRuleName, "InterfaceBodyItem", StringComparison.Ordinal)
-                || string.Equals(bodyItemRuleName, "ActionBodyItem", StringComparison.Ordinal);
+                || string.Equals(bodyItemRuleName, "ActionBodyItem", StringComparison.Ordinal)
+                || string.Equals(bodyItemRuleName, "CaseBodyItem", StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Returns true when an alternative's discriminator cannot be derived from its rule body and must
+        /// be supplied by a hand-coded <c>IsValidFor{Rule}</c> guard.
+        /// </summary>
+        /// <remarks>
+        /// Currently <c>FunctionOperationExpression</c>. Its arm in <c>NonFeatureChainPrimaryExpression</c>
+        /// targets <c>InvocationExpression</c> and sits above the <c>SequenceExpression</c> arm, which
+        /// targets the supertype <c>Expression</c>. A sequence <c>(a, b, c)</c> is an <c>OperatorExpression</c>
+        /// with <c>operator = ","</c> — hence an <c>InvocationExpression</c> whose first owned relationship is
+        /// an <c>IParameterMembership</c>, which is all the unguarded arm tested — so every sequence was
+        /// swallowed and rendered with a spurious <c>-&gt;</c>. Telling the two apart needs the SECOND owned
+        /// relationship (<c>Membership</c> for <c>x-&gt;f()</c>, <c>ParameterMembership</c> for a sequence),
+        /// i.e. cursor lookahead, which no body-shape analysis can produce.
+        /// </remarks>
+        /// <param name="alternativeRuleName">The KEBNF rule name of the alternative</param>
+        /// <returns><c>true</c> if the codegen should emit a hand-coded <c>IsValidFor{Rule}</c> guard</returns>
+        private static bool RequiresHandCodedAlternativeGuard(string alternativeRuleName)
+        {
+            return string.Equals(alternativeRuleName, "FunctionOperationExpression", StringComparison.Ordinal);
         }
     }
 }

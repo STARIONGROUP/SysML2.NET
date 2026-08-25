@@ -106,6 +106,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("07-Variant Configuration", "7b-Variant Configurations.sysmlx")]
         [TestCase("08-Requirements", "8-Requirements.sysmlx")]
         [TestCase("09-Verification", "9-Verification-simplified.sysmlx")]
+        [TestCase("10-Analysis and Trades", "10a-Analysis.sysmlx")]
+        [TestCase("10-Analysis and Trades", "10b-Trade-off Among Alternative Configurations.sysmlx")]
+        [TestCase("10-Analysis and Trades", "10c-Fuel Economy Analysis.sysmlx")]
+        [TestCase("10-Analysis and Trades", "10d-Dynamics Analysis.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

@@ -81,7 +81,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.IncreaseIndent();
                 while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship ownedRelationshipBodyItem && ownedRelationshipBodyItem.IsValidForActionBodyItem(writerContext))
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     TypeTextualNotationBuilder.BuildActionBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "ActionBodyItem");
                 }
 
                 stringBuilder.DecreaseIndent();

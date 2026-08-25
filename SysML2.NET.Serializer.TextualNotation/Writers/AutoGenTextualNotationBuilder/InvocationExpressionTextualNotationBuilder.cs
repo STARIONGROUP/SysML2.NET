@@ -42,70 +42,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildFunctionOperationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IInvocationExpression poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-
-            if (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
-            }
-            stringBuilder.Append("-> ");
-
-            if (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IMembership elementAsMembership)
-                {
-                    MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(elementAsMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
-            }
-            if (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildBodyArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    }
-                }
-            }
-            else if (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current != null)
-                {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildFunctionReferenceArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    }
-                }
-            }
-            else
-            {
-                FeatureTextualNotationBuilder.BuildArgumentList(poco, writerContext, stringBuilder);
-            }
-            stringBuilder.Append(' ');
-
-            if (ownedRelationshipCursor.Current != null)
-            {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                {
-                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
-            }
+            BuildFunctionOperationExpressionHandCoded(poco, writerContext, stringBuilder);
 
         }
 

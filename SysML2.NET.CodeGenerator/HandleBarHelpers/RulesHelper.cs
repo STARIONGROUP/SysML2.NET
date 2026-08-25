@@ -126,7 +126,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         writer.WriteSafeString("try" + Environment.NewLine + "{" + Environment.NewLine);
                     }
 
-                    processor.ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
+                    if (RequiresHandCodedBody(textualRule.RuleName))
+                    {
+                        writer.WriteSafeString($"Build{textualRule.RuleName}HandCoded(poco, writerContext, stringBuilder);{Environment.NewLine}");
+                    }
+                    else
+                    {
+                        processor.ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
+                    }
 
                     if (isInlineBraceBodyRule)
                     {
@@ -150,6 +157,30 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// Determines whether the rule's whole body must be supplied by a hand-coded
+        /// <c>Build{Rule}HandCoded</c> companion because its alternatives cannot be discriminated
+        /// from the parsed grammar body.
+        /// </summary>
+        /// <remarks>
+        /// Currently <c>FunctionOperationExpression</c>, whose trailing choice is
+        /// <c>( ownedRelationship += BodyArgumentMember | ownedRelationship += FunctionReferenceArgumentMember
+        /// | ArgumentList )</c>. The first two both target <c>ParameterMembership</c>, so no cursor-type test
+        /// separates them — they differ only in the FeatureValue their argument carries (a
+        /// <c>BodyExpression</c> vs a <c>FunctionReferenceExpression</c>) — and the third is a bare
+        /// non-terminal with no assignment at all. The generator therefore emitted three branches sharing the
+        /// guard <c>Current != null</c>, making branches 2 and 3 provably dead: the mandatory <c>()</c> of
+        /// <c>ArgumentList</c> was never emitted, and the rule's trailing <c>EmptyResultMember</c> (a
+        /// <c>ReturnParameterMembership</c>, hence an <c>IParameterMembership</c>) was captured by branch 1
+        /// and then emitted a second time.
+        /// </remarks>
+        /// <param name="ruleName">The KEBNF rule name.</param>
+        /// <returns><c>true</c> when the codegen should delegate the entire body.</returns>
+        private static bool RequiresHandCodedBody(string ruleName)
+        {
+            return string.Equals(ruleName, "FunctionOperationExpression", StringComparison.Ordinal);
         }
 
         /// <summary>

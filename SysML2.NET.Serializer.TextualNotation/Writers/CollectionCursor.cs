@@ -57,6 +57,45 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public T Current => this.GetCurrent(this.index);
 
         /// <summary>
+        /// Gets the cursor's current offset into the collection. Exposed so a caller iterating this cursor
+        /// can prove its loop body made forward progress; see <see cref="AssertAdvancedSince" />.
+        /// </summary>
+        public int Position => this.index;
+
+        /// <summary>
+        /// Throws when the cursor has not moved past <paramref name="positionBeforeIteration"/>, i.e. the
+        /// loop body just ran without consuming anything.
+        /// </summary>
+        /// <param name="positionBeforeIteration">The <see cref="Position"/> captured before the loop body ran.</param>
+        /// <param name="ruleName">The KEBNF rule the loop body was building, named in the exception.</param>
+        /// <exception cref="InvalidOperationException">When the cursor did not advance.</exception>
+        /// <remarks>
+        /// A grammar <c>*</c> loop tests the SAME cursor it consumes from, so an iteration that consumes
+        /// nothing leaves every input to the next test unchanged — the loop cannot terminate. Detecting it
+        /// here converts an unrecoverable hang into an immediate, attributable failure.
+        /// <para>This is a real failure mode rather than a defensive flourish: the item dispatchers
+        /// deliberately break out of their <c>default:</c> arm WITHOUT advancing, so that an element
+        /// belonging to a parent rule survives for that rule to consume
+        /// (<see cref="SharedTextualNotationBuilder"/>). That is correct only while the enclosing loop's
+        /// condition excludes exactly those elements. When the two drift apart the writer hangs, and a hang
+        /// is invisible to a test that compares output — which is precisely how one such drift reached a
+        /// full green run.</para>
+        /// </remarks>
+        public void AssertAdvancedSince(int positionBeforeIteration, string ruleName)
+        {
+            if (this.index != positionBeforeIteration)
+            {
+                return;
+            }
+
+            var currentDescription = this.Current?.GetType().Name ?? "<end of collection>";
+
+            throw new InvalidOperationException(
+                $"The textual notation writer made no progress building '{ruleName}': the loop body consumed nothing at position {positionBeforeIteration} (current element: {currentDescription}). "
+                + $"The loop's condition admits an element that Build{ruleName} declines to consume — the two must agree, otherwise the loop cannot terminate.");
+        }
+
+        /// <summary>
         /// Gets the element at a specific index without modifying the cursor position.
         /// </summary>
         /// <param name="indexToUse">The index to read from.</param>

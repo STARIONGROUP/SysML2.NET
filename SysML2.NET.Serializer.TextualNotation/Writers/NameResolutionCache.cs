@@ -154,7 +154,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // segment (`import SI::kg`, not `SI::kilogram` as qualifiedName would give).
                 case IMembership membership:
                     return membership.MemberElement != null
-                        ? QueryShortQualifiedName(membership.MemberElement)
+                        ? QueryShortQualifiedName(membership.MemberElement, sourcePoco)
                         : string.Empty;
             }
 
@@ -256,11 +256,22 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return false;
             }
 
+            // The declaring namespace need not be an ANCESTOR of the import owner. A SIBLING package under a
+            // shared enclosing namespace is equally reachable without any import, because containment scoping
+            // makes that enclosing namespace's members visible by simple name from within it — so the test is
+            // whether the two chains INTERSECT, not whether one contains the other. Comparing only against the
+            // import owner's own ancestors made every sibling fall through to the absolute self-contained path
+            // (`'10a-Analysis'::VehicleDesignModel::Vehicle` from inside `'10a-Analysis'`), which is redundant
+            // self-prefixing. Elements from a separate resource (a library) share no ancestor and still
+            // correctly return false.
             for (var scope = importOwner; scope != null; scope = QueryOwningContainer(scope))
             {
-                if (ReferenceEquals(scope, declaringNamespace))
+                for (var candidate = declaringNamespace; candidate != null; candidate = QueryOwningContainer(candidate))
                 {
-                    return true;
+                    if (ReferenceEquals(scope, candidate))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -931,6 +942,37 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>The short-form qualified name, or empty when no segment carries a usable name.</returns>
         private static string QueryShortQualifiedName(IElement element)
         {
+            return QueryShortQualifiedName(element, sourcePoco: null);
+        }
+
+        /// <summary>
+        /// As <see cref="QueryShortQualifiedName(IElement)" />, but stops the walk at the first namespace that
+        /// also encloses <paramref name="sourcePoco" />.
+        /// </summary>
+        /// <remarks>
+        /// A namespace that encloses the reference site is already in scope by containment, so naming it
+        /// explicitly is redundant self-prefixing: from inside <c>'10a-Analysis'</c> the pilot writes
+        /// <c>import VehicleDesignModel::Vehicle</c>, not
+        /// <c>import '10a-Analysis'::VehicleDesignModel::Vehicle</c>. An element in a separate resource (a
+        /// library) shares no enclosing namespace with the source, so its path stays fully qualified —
+        /// <c>SI::kg</c> is unaffected.
+        /// </remarks>
+        /// <param name="element">The leaf <see cref="IElement" /> to qualify; must be non-null.</param>
+        /// <param name="sourcePoco">The reference site, or <see langword="null" /> to always walk to the root.</param>
+        /// <returns>The short-form qualified name, relative to the nearest shared enclosing namespace.</returns>
+        private static string QueryShortQualifiedName(IElement element, IElement sourcePoco)
+        {
+            var enclosingScopes = new List<IElement>();
+
+            // An Import is owned as a RELATIONSHIP, so its owningNamespace does not resolve — the chain has
+            // to be entered through OwningRelatedElement, exactly as IsReachableByContainment does.
+            var origin = sourcePoco is IImport { OwningRelatedElement: { } importOwner } ? importOwner : sourcePoco;
+
+            for (var scope = origin; scope != null; scope = QueryOwningContainer(scope))
+            {
+                enclosingScopes.Add(scope);
+            }
+
             var segments = new Stack<string>();
             var current = element;
 
@@ -946,6 +988,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 segments.Push(Escape(preferred));
 
                 current = QueryOwningContainer(current);
+
+                if (current != null && enclosingScopes.Any(scope => ReferenceEquals(scope, current)))
+                {
+                    break;
+                }
             }
 
             return string.Join("::", segments);

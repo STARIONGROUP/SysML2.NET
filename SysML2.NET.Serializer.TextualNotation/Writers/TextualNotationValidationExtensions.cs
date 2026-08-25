@@ -741,7 +741,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// by <c>BaseExpression</c>'s dispatch (<see cref="INullExpression"/>,
         /// <see cref="ILiteralExpression"/>, <see cref="IFeatureReferenceExpression"/>,
         /// <see cref="IMetadataAccessExpression"/>, <see cref="IInvocationExpression"/>,
-        /// <see cref="IConstructorExpression"/>); false otherwise.
+        /// <see cref="IConstructorExpression"/>); false otherwise. An <see cref="IOperatorExpression"/>
+        /// whose operator is <c>,</c> is admitted despite being an <see cref="IInvocationExpression"/> —
+        /// that IS the sequence form this rule exists to render.
         /// </returns>
         internal static bool IsValidForSequenceExpression(this IExpression expression, TextualNotationWriterContext writerContext)
         {
@@ -750,8 +752,46 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 && expression is not ILiteralExpression
                 && expression is not IFeatureReferenceExpression
                 && expression is not IMetadataAccessExpression
-                && expression is not IInvocationExpression
-                && expression is not IConstructorExpression;
+                && expression is not IConstructorExpression
+                && (expression is not IInvocationExpression || expression is IOperatorExpression { Operator: "," });
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IInvocationExpression"/> is valid for the FunctionOperationExpression rule.
+        /// <para><c>FunctionOperationExpression : InvocationExpression = ownedRelationship += PrimaryArgumentMember '-&gt;'
+        /// ownedRelationship += InstantiatedTypeMember ( ownedRelationship += BodyArgumentMember |
+        /// ownedRelationship += FunctionReferenceArgumentMember | ArgumentList )</c></para>
+        /// <para>The dispatching arm in <c>NonFeatureChainPrimaryExpression</c> tests only that the cursor
+        /// element is an <see cref="IParameterMembership"/>, which a sequence <c>(a, b, c)</c> also satisfies —
+        /// it is an <see cref="IOperatorExpression"/> with operator <c>,</c>, hence an
+        /// <see cref="IInvocationExpression"/> whose members are <c>OwnedExpressionMember</c> and
+        /// <c>SequenceExpressionListMember</c>, both <see cref="IFeatureMembership"/>. Without this guard the
+        /// arm swallowed every sequence and emitted a spurious <c>-&gt;</c>.</para>
+        /// <para><c>InstantiatedTypeMember</c> is a plain <c>Membership</c> (or an <c>OwnedFeatureChainMember :
+        /// OwningMembership</c>) — never a <see cref="IFeatureMembership"/>. Owning one is therefore what
+        /// distinguishes this rule from a sequence, whose memberships are all
+        /// <see cref="IFeatureMembership"/>.</para>
+        /// </summary>
+        /// <param name="invocationExpression">The <see cref="IInvocationExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>
+        /// True when the expression leads with a PrimaryArgumentMember and owns an InstantiatedTypeMember;
+        /// false otherwise.
+        /// </returns>
+        internal static bool IsValidForFunctionOperationExpression(this IInvocationExpression invocationExpression, TextualNotationWriterContext writerContext)
+        {
+            if (invocationExpression is null)
+            {
+                return false;
+            }
+
+            var memberships = invocationExpression.OwnedRelationship.OfType<IMembership>().ToList();
+
+            // This guard REPLACES the arm's cursor test, so it has to re-assert it: a plain invocation
+            // `f(a, b)` also owns a non-FeatureMembership InstantiatedTypeMember, and is separated from
+            // `x->f(…)` only by leading with that Membership rather than with a PrimaryArgumentMember.
+            return memberships.FirstOrDefault() is IParameterMembership
+                && memberships.Any(membership => membership is not IFeatureMembership);
         }
 
         /// <summary>
@@ -878,8 +918,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para><c>ActionBehaviorMember : FeatureMembership = BehaviorUsageMember | ActionNodeMember</c></para>
         /// <para><c>ActionNodeMember</c> wraps an <c>ActionNode</c> (ControlNode / SendNode / AcceptNode /
         /// AssignmentNode / TerminateNode / IfNode / WhileLoopNode / ForLoopNode — all <see cref="IActionUsage"/>
-        /// descendants). BehaviorUsageMember wraps a BehaviorUsageElement (also mostly <see cref="IActionUsage"/>
-        /// or its descendants). The broadest accurate predicate is "owns an <see cref="IActionUsage"/>".</para>
+        /// descendants). <c>BehaviorUsageMember</c> wraps a <c>BehaviorUsageElement</c>, which the grammar
+        /// declares as a union of FOURTEEN Usages:</para>
+        /// <para><c>BehaviorUsageElement : Usage = ActionUsage | CalculationUsage | StateUsage
+        /// | ConstraintUsage | RequirementUsage | ConcernUsage | CaseUsage | AnalysisCaseUsage
+        /// | VerificationCaseUsage | UseCaseUsage | ViewpointUsage | PerformActionUsage | ExhibitStateUsage
+        /// | IncludeUseCaseUsage</c></para>
+        /// <para>Two interfaces cover all fourteen. <see cref="IActionUsage"/> covers ActionUsage and the
+        /// CalculationUsage / StateUsage / CaseUsage / AnalysisCaseUsage / VerificationCaseUsage /
+        /// UseCaseUsage / PerformActionUsage / ExhibitStateUsage / IncludeUseCaseUsage descendants;
+        /// <see cref="IConstraintUsage"/> covers ConstraintUsage and its RequirementUsage / ConcernUsage /
+        /// ViewpointUsage descendants. Testing <see cref="IActionUsage"/> ALONE silently drops the whole
+        /// constraint branch: a <c>RequirementUsage</c> member of an analysis body matched no arm at all —
+        /// not this one, and not <see cref="IsValidForStructureUsageMember"/>, which correctly excludes
+        /// <see cref="IConstraintUsage"/> because the grammar puts it on the behavior side.</para>
         /// <para><see cref="IFlowUsage"/> (and its <see cref="ISuccessionFlowUsage"/> subtype) IS-A
         /// <see cref="IActionUsage"/> in the metamodel, but appears in NEITHER alternative of this rule —
         /// <c>BehaviorUsageElement</c> and <c>ActionNode</c> both exclude it. A flow reaches the body through
@@ -889,10 +941,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="featureMembership">The <see cref="IFeatureMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns an <see cref="IActionUsage"/> that is not an <see cref="IFlowUsage"/></returns>
+        /// <returns>True if the membership owns a <c>BehaviorUsageElement</c> that is not an <see cref="IFlowUsage"/></returns>
         internal static bool IsValidForActionBehaviorMember(this IFeatureMembership featureMembership, TextualNotationWriterContext writerContext)
         {
-            return featureMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any(actionUsage => actionUsage is not IFlowUsage) == true;
+            return featureMembership?.OwnedRelatedElement.Any(element =>
+                (element is IActionUsage or IConstraintUsage) && element is not IFlowUsage) == true;
         }
 
         /// <summary>
@@ -1206,6 +1259,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns><see langword="true"/> when the relationship has notation as an action body item.</returns>
         internal static bool IsValidForActionBodyItem(this IRelationship relationship, TextualNotationWriterContext writerContext)
             => relationship is not IFeatureMembership featureMembership || !IsContentFreeAnonymousReferenceUsage(featureMembership);
+
+        /// <summary>
+        /// Asserts that the <see cref="IRelationship"/> currently positioned by the cursor is writable as a
+        /// <c>CaseBodyItem</c>.
+        /// <para><c>CaseBody : Type = ';' | '{' CaseBodyItem* ( ownedRelationship += ResultExpressionMember )? '}'</c></para>
+        /// <para><c>CaseBodyItem : Type = CalculationBodyItem | ownedRelationship += SubjectMember
+        /// | ownedRelationship += ActorMember | ownedRelationship += ObjectiveMember</c></para>
+        /// </summary>
+        /// <param name="relationship">The <see cref="IRelationship"/> positioned by the cursor.</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext"/> for the current write.</param>
+        /// <returns><see langword="true"/> when the relationship has notation as a case body item.</returns>
+        /// <remarks>
+        /// The result expression is the ONE element the item loop must not take: <c>CaseBody</c> is the only
+        /// body rule whose <c>*</c> repetition is followed by anything, and that trailing
+        /// <c>( ResultExpressionMember )?</c> reads from the SAME cursor. Ungated, the loop consumed the
+        /// <see cref="IResultExpressionMembership"/> and the optional then faced an exhausted cursor, so the
+        /// case's result expression was silently dropped.
+        /// <para>Everything else defers to <see cref="IsValidForActionBodyItem" />, which
+        /// <c>CalculationBodyItem</c> reaches — so the two rules keep one definition of what a body item is
+        /// rather than drifting apart.</para>
+        /// </remarks>
+        internal static bool IsValidForCaseBodyItem(this IRelationship relationship, TextualNotationWriterContext writerContext)
+            => relationship is not IResultExpressionMembership && relationship.IsValidForActionBodyItem(writerContext);
 
         /// <summary>
         /// Asserts that <paramref name="parameterMembership"/> is an <c>EmptyParameterMember</c> — a

@@ -84,7 +84,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "FeatureSpecialization");
             }
 
             UsageTextualNotationBuilder.BuildUsageBody(poco, writerContext, stringBuilder);
@@ -309,7 +311,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "UsageExtensionKeyword");
             }
 
             UsageTextualNotationBuilder.BuildUsage(poco, writerContext, stringBuilder);

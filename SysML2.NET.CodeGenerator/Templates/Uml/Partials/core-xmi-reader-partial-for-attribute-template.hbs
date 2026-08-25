@@ -53,7 +53,7 @@ if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAt
                     poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsInt);
                 }
             {{else if (Property.QueryIsDouble property) }}
-                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsDouble))
+                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsDouble))
                 {
                     poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsDouble);
                 }
@@ -82,7 +82,7 @@ if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAt
                     poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsInt;
                     }
             {{else if (Property.QueryIsDouble property) }}
-                    if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsDouble))
+                    if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsDouble))
                     {
                     poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsDouble;
                     }

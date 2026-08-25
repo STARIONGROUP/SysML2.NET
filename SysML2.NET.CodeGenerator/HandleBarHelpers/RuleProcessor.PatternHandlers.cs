@@ -740,6 +740,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
+                    // Hand-coded alternative guards: an alternative whose discriminator cannot be derived
+                    // from the rule body at all (it needs cursor lookahead, not a property test) is
+                    // allowlisted by rule name and delegates to a hand-coded IsValidFor{Rule}.
+                    foreach (var unguarded in mappedNonTerminalElements
+                        .Select(element => element.RuleElement)
+                        .Where(ruleElement => RequiresHandCodedAlternativeGuard(ruleElement.Name)
+                            && !whenGuards.ContainsKey(ruleElement)))
+                    {
+                        whenGuards[unguarded] = $"{{0}}.IsValidFor{unguarded.Name}(writerContext)";
+                    }
+
                     // Self-default guard synthesis: when the rule uses its own target class as one
                     // alternative (e.g. `FeatureElement : Feature = Feature | Step | …`), that arm is the
                     // catch-all for inline subclass forms — sibling arms need property-derived `when`

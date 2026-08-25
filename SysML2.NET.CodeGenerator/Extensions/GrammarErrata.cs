@@ -74,8 +74,8 @@ namespace SysML2.NET.CodeGenerator.Extensions
         private static readonly GrammarProductionErratum[] ProductionEntries =
         [
             new("CaseBodyItem",
-                "CaseBodyItem : Type =\r\n      ActionBodyItem",
-                "CaseBodyItem : Type =\r\n      CalculationBodyItem",
+                "CaseBodyItem : Type =\n      ActionBodyItem",
+                "CaseBodyItem : Type =\n      CalculationBodyItem",
                 "SysML 8.2.2.22.1 gives CaseBodyItem the alternative 'ActionBodyItem', which reaches no " +
                 "ReturnParameterMember, so 'return' cannot be written in a case body. Three independent " +
                 "sources say it must be: (1) the pilot implementation's own grammar uses " +
@@ -143,6 +143,13 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// correction cannot partially match, and re-applying it to already-corrected text is a no-op.
         /// Both KEBNF files are passed through this, so an entry only fires against the file that carries
         /// its production.
+        /// <para>Line endings are normalised to <c>\n</c> FIRST, and every <c>Original</c> / <c>Replacement</c>
+        /// is written with <c>\n</c>. A multi-line correction is otherwise silently inert on whichever
+        /// platform disagrees with the checked-out line endings: the entries used to carry <c>\r\n</c>, which
+        /// matched on Windows (<c>core.autocrlf=true</c> yields a CRLF working tree) and matched NOTHING on
+        /// Linux CI, so the same commit generated different builders on the two platforms and the mismatch
+        /// surfaced only as a downstream test failure. Normalising also makes the text handed to the parser
+        /// byte-identical across platforms, so the whole generation pipeline is deterministic.</para>
         /// </remarks>
         public static string ApplyProductions(string kebnfSource)
         {
@@ -151,14 +158,27 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 return kebnfSource;
             }
 
+            var normalisedSource = NormaliseLineEndings(kebnfSource);
+
             return ProductionEntries
-                .Where(erratum => kebnfSource.Contains(erratum.Original, StringComparison.Ordinal))
-                .Aggregate(kebnfSource, (corrected, erratum) =>
+                .Where(erratum => normalisedSource.Contains(erratum.Original, StringComparison.Ordinal))
+                .Aggregate(normalisedSource, (corrected, erratum) =>
                 {
                     AppliedRuleNames.Add(erratum.RuleName);
 
                     return corrected.Replace(erratum.Original, erratum.Replacement);
                 });
+        }
+
+        /// <summary>
+        /// Normalises CRLF and lone CR line endings to <c>\n</c> so a multi-line correction matches
+        /// regardless of how the grammar file was checked out.
+        /// </summary>
+        /// <param name="source">The grammar text as read from disk.</param>
+        /// <returns>The text with every line ending expressed as <c>\n</c>.</returns>
+        private static string NormaliseLineEndings(string source)
+        {
+            return source.Replace("\r\n", "\n").Replace('\r', '\n');
         }
 
         /// <summary>

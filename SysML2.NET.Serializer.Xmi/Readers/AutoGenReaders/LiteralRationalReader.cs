@@ -310,7 +310,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                 if (!string.IsNullOrWhiteSpace(valueXmlAttribute))
                 {
-                    if (double.TryParse(valueXmlAttribute, out var valueXmlAttributeAsDouble))
+                    if (double.TryParse(valueXmlAttribute, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var valueXmlAttributeAsDouble))
                     {
                         poco.Value = valueXmlAttributeAsDouble;
                     }
@@ -658,7 +658,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(valueValue))
                                     {
-                                        if (double.TryParse(valueValue, out var valueValueAsDouble))
+                                        if (double.TryParse(valueValue, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var valueValueAsDouble))
                                         {
                                             poco.Value = valueValueAsDouble;
                                         }
@@ -919,7 +919,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                 if (!string.IsNullOrWhiteSpace(valueXmlAttribute))
                 {
-                    if (double.TryParse(valueXmlAttribute, out var valueXmlAttributeAsDouble))
+                    if (double.TryParse(valueXmlAttribute, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var valueXmlAttributeAsDouble))
                     {
                         poco.Value = valueXmlAttributeAsDouble;
                     }
@@ -1267,7 +1267,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(valueValue))
                                     {
-                                        if (double.TryParse(valueValue, out var valueValueAsDouble))
+                                        if (double.TryParse(valueValue, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var valueValueAsDouble))
                                         {
                                             poco.Value = valueValueAsDouble;
                                         }

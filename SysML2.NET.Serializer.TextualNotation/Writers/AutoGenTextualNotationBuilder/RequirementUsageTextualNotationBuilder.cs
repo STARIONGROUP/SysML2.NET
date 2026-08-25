@@ -45,7 +45,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "UsageExtensionKeyword");
             }
 
             ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, writerContext, stringBuilder);

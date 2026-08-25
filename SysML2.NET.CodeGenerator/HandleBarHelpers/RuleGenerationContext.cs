@@ -117,6 +117,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         public int NarrowedTypeCheckCounter { get; set; }
 
         /// <summary>
+        /// Monotonically-incrementing counter used to produce unique loop-progress variable names
+        /// (e.g. <c>positionBeforeBodyItem0</c>) across the emission of a single rule body. Required
+        /// because a rule may emit more than one cursor loop into the same generated method, and the
+        /// captured-position locals would otherwise collide (CS0128). Incremented by
+        /// <c>RuleProcessor.EmitLoopProgressCapture</c>.
+        /// </summary>
+        public int LoopProgressCheckCounter { get; set; }
+
+        /// <summary>
         /// Determines whether the next sibling element is a terminal that uses <c>AppendLine</c>
         /// (e.g., <c>{</c>, <c>}</c>, <c>;</c>), in which case a trailing space would be unnecessary.
         /// </summary>

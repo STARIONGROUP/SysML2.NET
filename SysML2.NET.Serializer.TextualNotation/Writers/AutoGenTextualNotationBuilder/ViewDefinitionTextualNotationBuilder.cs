@@ -54,7 +54,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildViewDefinitionBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "ViewDefinitionBodyItem");
                 }
                 stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");

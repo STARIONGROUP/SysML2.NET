@@ -81,7 +81,7 @@ case"{{String.LowerCaseFirstLetter property.Name}}":
                     this.logger.LogWarning("Failed to parse int value '{Value}' for property '{{String.LowerCaseFirstLetter property.Name}}' on element {ElementId}", {{String.LowerCaseFirstLetter property.Name}}Value, poco.Id);
                 }
             {{else if (Property.QueryIsDouble property) }}
-                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}Value, out var {{String.LowerCaseFirstLetter property.Name}}ValueAsDouble))
+                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}Value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var {{String.LowerCaseFirstLetter property.Name}}ValueAsDouble))
                 {
                     poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}ValueAsDouble);
                 }
@@ -125,7 +125,7 @@ case"{{String.LowerCaseFirstLetter property.Name}}":
                     this.logger.LogWarning("Failed to parse int value '{Value}' for property '{{String.LowerCaseFirstLetter property.Name}}' on element {ElementId}", {{String.LowerCaseFirstLetter property.Name}}Value, poco.Id);
                 }
             {{else if (Property.QueryIsDouble property) }}
-                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}Value, out var {{String.LowerCaseFirstLetter property.Name}}ValueAsDouble))
+                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}Value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var {{String.LowerCaseFirstLetter property.Name}}ValueAsDouble))
                 {
                     poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}ValueAsDouble;
                 }
