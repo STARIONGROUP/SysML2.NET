@@ -54,7 +54,7 @@ namespace SysML2.NET.Dal
         /// Gets the Cache that contains all the <see cref="Core.POCO.Root.Elements.IElement"/>s
         /// </summary>
         public ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> Cache { get; private set; }
-        
+
         /// <summary>
         /// Synchronize the Cache based on the provided <paramref name="dtos"/>
         /// </summary>
@@ -78,8 +78,6 @@ namespace SysML2.NET.Dal
             // the DTOs are walked three times, materialize once so that a lazy sequence is not re-evaluated on every pass
             var elements = dtos as IReadOnlyList<Core.DTO.Root.Elements.IElement> ?? dtos.ToList();
 
-            var isTraceEnabled = this.logger.IsEnabled(LogLevel.Trace);
-
             var sw = Stopwatch.StartNew();
 
             var deletedIdentifiers = new List<Guid>();
@@ -95,7 +93,10 @@ namespace SysML2.NET.Dal
                 }
             }
 
-            this.logger.LogDebug("A total of {DeletedCount} identifiers have been processed in {Elapsed} [ms] and ready to be deleted", deletedIdentifiers.Count, sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("A total of {DeletedCount} identifiers have been processed in {Elapsed} [ms] and ready to be deleted", deletedIdentifiers.Count, sw.ElapsedMilliseconds);
+            }
 
             // removed POCOs that are up for deletion
             foreach (var identifier in deletedIdentifiers)
@@ -106,7 +107,7 @@ namespace SysML2.NET.Dal
                     continue;
                 }
 
-                if (isTraceEnabled)
+                if (this.logger.IsEnabled(LogLevel.Trace))
                 {
                     this.logger.LogTrace("{PocoType} with identifier {Identifier} was deleted", deletedLazyPoco.Value.GetType().Name, identifier);
                 }
@@ -126,13 +127,16 @@ namespace SysML2.NET.Dal
 
                 addedCount++;
 
-                if (isTraceEnabled)
+                if (this.logger.IsEnabled(LogLevel.Trace))
                 {
                     this.logger.LogTrace("{PocoType}:{Identifier} added to Cache", poco.GetType().Name, poco.Id);
                 }
             }
 
-            this.logger.LogDebug("A total of {AddedCount} POCOs have been added to the Cache in {Elapsed} [ms]", addedCount, sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("A total of {AddedCount} POCOs have been added to the Cache in {Elapsed} [ms]", addedCount, sw.ElapsedMilliseconds);
+            }
 
             sw.Restart();
             this.logger.LogDebug("Update POCO reference properties");
@@ -145,7 +149,10 @@ namespace SysML2.NET.Dal
                 }
             }
 
-            this.logger.LogDebug("POCO reference properties updated in {Elapsed} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("POCO reference properties updated in {Elapsed} [ms]", sw.ElapsedMilliseconds);
+            }
 
             sw.Stop();
         }
