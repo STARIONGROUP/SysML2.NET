@@ -17,7 +17,7 @@
 > |---|---|
 > | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Handgeschreven, geannoteerd referentieontwerp |
 > | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | Echte generator-output (ingecheckt ter review) |
-> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functionele test met 30 assertions |
+> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functionele test met 32 assertions |
 > | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | De Handlebars-template die het schema genereert |
 >
 > Sectienummers zoals **§5** verwijzen naar de genummerde banners in de schemabestanden zelf.
@@ -330,7 +330,7 @@ P) en **N + 1** nieuwe `derived_version`-rijen (voor P plus elk element dat door
 hernoeming werd geraakt — de "impact radius"). De stored state van W blijft onaangeroerd; de
 derived state van W krijgt een nieuwe rij.
 
-De smoke-test met zijn 30 assertions (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) heeft
+De smoke-test met zijn 32 assertions (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) heeft
 precies dit scenario als eerste en belangrijkste assertion-paar (PASS 2a/2b): na de
 hernoeming levert W's `qualifiedName` netjes `"New::wheel"` op, *terwijl W nog steeds naar
 zijn oorspronkelijke version-rij verwijst*. Wie dit schema ooit gaat verbouwen: zorg dat die
@@ -491,9 +491,18 @@ en het project-verband al via `project_id` loopt.
 Twee invarianten uit de spec moet je echt paraat hebben, want de *resolvers steunen erop*:
 
 **Immutability.** *"Commits are immutable… Commits are not destructible"* (Clause 7.1.2). Het
-schema neemt dat letterlijk: geen enkele bewerking doet ooit een UPDATE op een commit of een
-`element_version`-rij. Append-only is hier geen optimalisatie, het is gewoon de semantiek van
-de specificatie.
+schema dwingt dat letterlijk af: `trg_commit_immutable` weigert elke UPDATE op een
+`commit`-rij (smoke PASS 14a/14b). Die tanden zijn nodig omdat de twee `commit_parent`-
+triggers hieronder hun invarianten bewijzen op het moment van de edge-INSERT en ze daarna
+nooit meer controleren — een UPDATE achteraf van `created` of `model_version_id` zou reeds
+geaccepteerde edges geruisloos ongeldig maken, en de fold zou verkeerde snapshots teruggeven
+in plaats van fouten. Het bevriezen van `created` tilt bovendien "acyclic" op van een
+modelleer-aanname naar een mechanische garantie: een cycle zou minstens één parent-edge nodig
+hebben die terug in de tijd wijst, en precies die weigert de monotonie-trigger — de
+commit-graaf is dus by construction een DAG. DELETE wordt bewust niét geblokkeerd
+(project-deletie cascadeert door `commit`). `element_version`-rijen zijn net zo append-only:
+geen enkele bewerking doet er ooit een UPDATE op. Append-only is hier geen optimalisatie, het
+is gewoon de semantiek van de specificatie.
 
 **Monotonie.** *"Version histories must monotonically increase in time: for Commit C, the
 value of C.created must be strictly newer than the value of D.created for any commit D in
@@ -526,7 +535,9 @@ met de plek waar elk wordt geregeld:
 1. **Monotonie** — een commit is strikt nieuwer dan elk van zijn parents, langs elk pad. Dít
    maakt "nieuwste ancestor wint" tot een deugdelijke resolutieregel. In het schema
    afgedwongen door `trg_commit_parent_monotonic` (smoke PASS 6), omdat een schending
-   geruisloos verkeerde snapshots zou opleveren in plaats van fouten.
+   geruisloos verkeerde snapshots zou opleveren in plaats van fouten. Met `created` bevroren
+   door `trg_commit_immutable` (smoke PASS 14a/14b) is deze check meteen de
+   **acyclicity-garantie** van het schema voor de commit-DAG.
 2. **Conflict-restatement** — een merge moet de oplossing van elk conflict in zijn EIGEN
    change set herhalen. In combinatie met invariant 1 is de merge de nieuwste commit in zijn
    eigen ancestry, dus zijn herformulering wint vanzelf van beide parents (smoke PASS 8a).
@@ -1895,7 +1906,7 @@ aangestuurd vanuit
 De verificatielus, van begin tot eind: draai de fixture → zet `schema2.generated.sql` op een
 PostgreSQL 18 (`max_locks_per_transaction=4096`; beide schema's zijn geverifieerd op 17 én
 18.6, het recept volgt het prefereer-18-versiebeleid van §13) → draai `schema.smoke.sql`
-(30 assertions) → en zowel het golden als het gegenereerde schema moet daar identiek doorheen
+(32 assertions) → en zowel het golden als het gegenereerde schema moet daar identiek doorheen
 komen.
 
 ---

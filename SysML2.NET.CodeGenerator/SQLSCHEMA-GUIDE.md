@@ -451,7 +451,15 @@ as in Git). The commit's PK is the bare uuid because commits are referenced from
 Two spec invariants are worth internalizing because the *resolvers depend on them*:
 
 **Immutability.** *"Commits are immutable… Commits are not destructible"* (Clause 7.1.2). The
-schema takes this at face value: nothing ever UPDATEs a commit or an `element_version` row.
+schema enforces this literally: `trg_commit_immutable` rejects every UPDATE of a `commit` row
+(smoke PASS 14a/14b). The teeth matter because the two `commit_parent` triggers below prove
+their invariants at edge-INSERT time and never re-check them — a retroactive UPDATE of
+`created` or `model_version_id` would silently invalidate already-accepted edges, and the fold
+would return wrong snapshots rather than errors. Freezing `created` also upgrades "acyclic"
+from a modeling assumption to a mechanical guarantee: a cycle would need at least one parent
+edge going backwards in time, which the monotonicity trigger rejects — so the commit graph is
+a DAG by construction. DELETE is deliberately not blocked (project deletion cascades through
+`commit`). `element_version` rows are equally append-only: nothing ever UPDATEs them.
 Append-only is not an optimization here; it is the spec's own semantics.
 
 **Monotonicity.** *"Version histories must monotonically increase in time: for Commit C, the
@@ -483,7 +491,9 @@ resolver's correctness depends on them directly. Consolidated, with where each o
 1. **Monotonicity** — a commit is strictly newer than every parent, along every path. This is
    what makes "newest ancestor wins" a sound resolution rule. Enforced in the schema by
    `trg_commit_parent_monotonic` (smoke PASS 6), because a violation would produce silently
-   wrong snapshots rather than errors.
+   wrong snapshots rather than errors. With `created` frozen by `trg_commit_immutable`
+   (smoke PASS 14a/14b), this check doubles as the schema's **acyclicity guarantee** for the
+   commit DAG.
 2. **Conflict restatement** — a merge must restate the resolution of every conflict in its
    OWN change set. Combined with invariant 1, the merge is the newest commit in its ancestry,
    so its restatement automatically wins over both parents (smoke PASS 8a). Monotonicity does
@@ -1762,7 +1772,7 @@ declared-property computation per the two traps of section 3) and the emitters i
 
 Verification loop, end to end: run the fixture → apply `schema2.generated.sql` to PostgreSQL 18
 (`max_locks_per_transaction=4096`; both schemas are verified on 17 and 18.6, the recipe follows
-the prefer-18 version policy of §13) → run `schema.smoke.sql` (30 assertions) → both the golden
+the prefer-18 version policy of §13) → run `schema.smoke.sql` (32 assertions) → both the golden
 and the generated schema must pass identically.
 
 ---

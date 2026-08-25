@@ -65,6 +65,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(generatedSchema, Does.Contain("(120, 'PartUsage', false, 1, NULL)"), "class_kind ids must come from the frozen registry");
             Assert.That(generatedSchema, Does.Contain("model_version_id smallint   NOT NULL REFERENCES sysml2.model_version (id)"));
             Assert.That(generatedSchema, Does.Contain("FOREIGN KEY (identity_id, class_kind) REFERENCES sysml2.data_identity (id, class_kind)"), "the typed-identity composite FK must anchor every version");
+            Assert.That(generatedSchema, Does.Contain("CREATE TRIGGER trg_commit_immutable"), "commits are immutable per Clause 7.1.2 - the DAG acyclicity proof and the fold rely on commit.created being frozen");
             Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.validate_references_at_commit("));
             Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.validate_references_in_commit("));
             Assert.That(generatedSchema, Does.Contain("ANALYZE validation_snapshot;"), "the full pass must feed the planner true snapshot cardinality");

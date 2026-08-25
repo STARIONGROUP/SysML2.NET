@@ -159,6 +159,32 @@ CREATE TABLE sysml2.commit (
 
 CREATE INDEX ix_commit_project_created ON sysml2.commit (project_id, created DESC);
 
+-- Clause 7.1.2 mutability table: a Commit is IMMUTABLE. Enforce it, because two invariants are
+-- proven at commit_parent INSERT time and never re-checked: trg_commit_parent_monotonic's
+-- strict child-newer-than-parent check doubles as the schema's ACYCLICITY guarantee for the
+-- commit DAG (a cycle would need at least one edge going backwards in time), and
+-- trg_commit_parent_version pins the release stamps of already-accepted edges. A later UPDATE
+-- of created or model_version_id would retroactively invalidate those edges — and the
+-- resolvers' "newest ancestor wins" fold would return WRONG SNAPSHOTS, not errors. Blocking
+-- the whole row (not just the load-bearing columns) matches the spec's mutability table.
+-- DELETE is deliberately NOT blocked: project deletion cascades through commit.
+CREATE OR REPLACE FUNCTION sysml2.assert_commit_immutable()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RAISE EXCEPTION
+        'commit % is immutable (Clause 7.1.2): UPDATE is forbidden',
+        OLD.id
+        USING ERRCODE = 'check_violation';
+END;
+$$;
+
+CREATE TRIGGER trg_commit_immutable
+    BEFORE UPDATE ON sysml2.commit
+    FOR EACH ROW
+    EXECUTE FUNCTION sysml2.assert_commit_immutable();
+
 -- Commit.previousCommit is a SET — merges have multiple parents. The DAG lives here.
 CREATE TABLE sysml2.commit_parent (
     commit_id         uuid     NOT NULL REFERENCES sysml2.commit (id) ON DELETE CASCADE,

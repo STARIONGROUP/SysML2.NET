@@ -20,7 +20,7 @@ The pipeline artifacts:
 |---|---|
 | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Hand-written, annotated reference design. Carries the rationale comments. |
 | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | The actual generator output, checked in for review. Supersedes the golden's `[GENERATED]` excerpts. |
-| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 30 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
+| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 32 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
 | `SysML2.NET.CodeGenerator/Sql/schema.concurrency.{setup,hot,spread,read,verify}.sql` | Multi-user suite: pgbench scenarios racing the §18.2 CAS protocol (hot branch / spread / reads-under-write-storm) + invariant verifier C1–C5 (linear chains, losers write nothing, overlay coherence). |
 | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | Handlebars template: hand-written sections verbatim, `[GENERATED]` sections via helpers. |
 | `SysML2.NET.CodeGenerator/HandleBarHelpers/SqlSchemaHelpers.cs` | The eight `uml_template.SQL2.*` helpers. |
@@ -56,7 +56,10 @@ force everything else:
 1. **PIM / versioning** (hand-written): `project`, `commit`, `commit_parent` (the DAG — a commit
    has a SET of parents; merges are real), `branch`, `tag`, `project_usage`, `data_identity`.
    A trigger enforces the spec's monotonic-commit-timestamp invariant because the snapshot
-   resolver depends on it ("newest ancestor wins"). **Multi-version support** lives here too:
+   resolver depends on it ("newest ancestor wins"); `trg_commit_immutable` rejects every
+   UPDATE of a commit row (Clause 7.1.2: commits are immutable) — with `created` frozen, the
+   monotonicity check doubles as the commit DAG's acyclicity guarantee. **Multi-version
+   support** lives here too:
    every commit carries `model_version_id` (the metamodel release its payloads are written in;
    guide §6.4), `project.target_model_version_id` is the upgrade policy, and a second trigger
    (`trg_commit_parent_version`) forbids downgrades and mixed-release merges — a branch
@@ -326,7 +329,7 @@ Deliberately NOT DTO properties: `Commit.versionedData` (derived, unbounded — 
 dotnet test SysML2.NET.CodeGenerator.Tests/SysML2.NET.CodeGenerator.Tests.csproj \
     --filter "FullyQualifiedName~SQLSchemaGeneratorTestFixture"
 
-# install + functional smoke (30 assertions) against a real PostgreSQL 18
+# install + functional smoke (32 assertions) against a real PostgreSQL 18
 # (both schemas verified on 17 AND 18.6; the recipe follows the prefer-18 version policy)
 docker run -d --name sysml2pg -e POSTGRES_PASSWORD=pg postgres:18 -c max_locks_per_transaction=4096
 docker cp <schema file> sysml2pg:/tmp/schema.sql
@@ -367,6 +370,8 @@ commit as the only way up, and rejection of downgrades, mixed-release merges, an
 convert+merge combos (PASS 11a–11e); the typed identity plus reference validation —
 the composite FK rejecting a version whose class_kind contradicts its identity, a clean
 snapshot validating clean, and wrong-type/dangling references being reported precisely
-(PASS 12a–12c); and the incremental tier — the change set's own problems, a healthy
+(PASS 12a–12c); the incremental tier — the change set's own problems, a healthy
 commit validating clean, and a tombstone's reverse-direction dangling reference caught
-in agreement with the full audit (PASS 13a–13c).
+in agreement with the full audit (PASS 13a–13c); and commit immutability — UPDATEs of
+`created` (the column the acyclicity proof and the fold rest on) and of any other commit
+column both rejected by `trg_commit_immutable` (PASS 14a/14b).

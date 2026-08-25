@@ -751,3 +751,40 @@ BEGIN
     RAISE NOTICE 'PASS 13c: incremental tier catches the reverse direction and agrees with the full pass';
 END;
 $$;
+
+----------------------------------------------------------------------------------------------
+-- COMMIT-IMMUTABILITY SCENARIO
+--
+-- trg_commit_parent_monotonic proves the commit DAG acyclic via strict timestamps, and the
+-- resolvers' fold orders by commit.created — both proofs hold only if a commit row can never
+-- change after its parent edges are accepted. Prove trg_commit_immutable fires, on the
+-- load-bearing column (created) and on any other column (description): the row is frozen
+-- wholesale, per the Clause 7.1.2 mutability table.
+----------------------------------------------------------------------------------------------
+
+DO $$
+BEGIN
+    -- 14a. The load-bearing column: a retroactive change of created would silently break the
+    --      DAG acyclicity proof and the "newest ancestor wins" fold.
+    BEGIN
+        UPDATE sysml2.commit
+           SET created = created + interval '1 hour'
+         WHERE id = 'c1111111-0000-0000-0000-000000000000';
+
+        RAISE EXCEPTION 'FAIL 14a: UPDATE of commit.created was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 14a: commit.created UPDATE rejected by trg_commit_immutable';
+    END;
+
+    -- 14b. Not just the load-bearing columns: the whole row is immutable.
+    BEGIN
+        UPDATE sysml2.commit
+           SET description = 'rewritten history'
+         WHERE id = 'c1111111-0000-0000-0000-000000000000';
+
+        RAISE EXCEPTION 'FAIL 14b: UPDATE of commit.description was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 14b: commit row is immutable wholesale (description UPDATE rejected)';
+    END;
+END;
+$$;
