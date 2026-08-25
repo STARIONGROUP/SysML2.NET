@@ -21,8 +21,11 @@
 namespace SysML2.NET.Dal.Tests
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
-    
+    using System.Globalization;
+    using System.Linq;
+
     using NUnit.Framework;
 
 	using SysML2.NET.Dal;
@@ -44,8 +47,14 @@ namespace SysML2.NET.Dal.Tests
 		}
 
         [Test]
-        public void Verify_that_synchronize_Works_as_Expected()
+        public void VerifySynchronize()
         {
+            Assert.That(() => this.assembler.Synchronize(null), Throws.TypeOf<ArgumentNullException>());
+
+            Assert.That(() => this.assembler.Synchronize([]), Throws.Nothing);
+
+            Assert.That(this.assembler.Cache, Has.Count.EqualTo(0));
+
             var dtos = new List<Core.DTO.Root.Elements.IElement>();
 
             var packageDto = new SysML2.NET.Core.DTO.Kernel.Packages.Package
@@ -121,6 +130,94 @@ namespace SysML2.NET.Dal.Tests
             }
             
             Assert.That(featurePoco.DeclaredName, Is.EqualTo("some updated feature"));
+        }
+
+        [Test]
+        public void Synchronize_WithDuplicateIdentifiers_KeepsTheFirstDto()
+        {
+            var identifier = Guid.Parse("4a2e6c2e-3d6b-4a1f-9a6f-7f0d1a2b3c4d");
+
+            var packageDto = new Core.DTO.Kernel.Packages.Package
+            {
+                Id = identifier,
+                DeclaredName = "the first package",
+                ElementId = identifier.ToString()
+            };
+
+            var duplicateDto = new Core.DTO.Kernel.Packages.Package
+            {
+                Id = identifier,
+                DeclaredName = "the duplicate package",
+                ElementId = identifier.ToString()
+            };
+
+            Assert.That(() => this.assembler.Synchronize([packageDto, duplicateDto]), Throws.Nothing);
+
+            Core.POCO.Kernel.Packages.Package packagePoco = null;
+
+            if (this.assembler.Cache.TryGetValue(identifier, out this.lazyPoco))
+            {
+                packagePoco = (Core.POCO.Kernel.Packages.Package)this.lazyPoco.Value;
+            }
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(1));
+                Assert.That(packagePoco.DeclaredName, Is.EqualTo("the first package"));
+            }
+        }
+
+        [Test]
+        public void Synchronize_WithGrowingDtoSequence_DoesNotRescanTheSequencePerElement()
+        {
+            var smallModel = new EnumerationCountingElements(64);
+            var largeModel = new EnumerationCountingElements(1024);
+
+            var smallAssembler = new Assembler();
+            var largeAssembler = new Assembler();
+
+            smallAssembler.Synchronize(smallModel);
+            largeAssembler.Synchronize(largeModel);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(smallAssembler.Cache, Has.Count.EqualTo(smallModel.Count));
+                Assert.That(largeAssembler.Cache, Has.Count.EqualTo(largeModel.Count));
+                Assert.That(smallModel.EnumerationCount, Is.LessThanOrEqualTo(4));
+                Assert.That(largeModel.EnumerationCount, Is.EqualTo(smallModel.EnumerationCount));
+            }
+        }
+
+        private sealed class EnumerationCountingElements : IReadOnlyList<Core.DTO.Root.Elements.IElement>
+        {
+            private readonly List<Core.DTO.Root.Elements.IElement> elements;
+
+            public EnumerationCountingElements(int size)
+            {
+                this.elements = Enumerable.Range(0, size)
+                    .Select(index => (Core.DTO.Root.Elements.IElement)new Core.DTO.Kernel.Packages.Package
+                    {
+                        Id = Guid.NewGuid(),
+                        DeclaredName = $"package {index.ToString(CultureInfo.InvariantCulture)}",
+                        ElementId = index.ToString(CultureInfo.InvariantCulture)
+                    })
+                    .ToList();
+            }
+
+            public int EnumerationCount { get; private set; }
+
+            public int Count => this.elements.Count;
+
+            public Core.DTO.Root.Elements.IElement this[int index] => this.elements[index];
+
+            public IEnumerator<Core.DTO.Root.Elements.IElement> GetEnumerator()
+            {
+                this.EnumerationCount++;
+
+                return this.elements.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
     }
 }
