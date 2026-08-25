@@ -54,7 +54,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship loopBodyItem && loopBodyItem.IsValidForDefinitionBodyItem(writerContext))
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildDefinitionBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "DefinitionBodyItem");
                 }
                 stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
@@ -95,7 +97,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship loopBodyItem && loopBodyItem.IsValidForInterfaceBodyItem(writerContext))
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildInterfaceBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "InterfaceBodyItem");
                 }
                 stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
@@ -136,7 +140,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship loopBodyItem && loopBodyItem.IsValidForActionBodyItem(writerContext))
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildActionBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "ActionBodyItem");
                 }
                 stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
@@ -218,7 +224,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 BuildCalculationBodyItem(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "CalculationBodyItem");
             }
 
 
@@ -283,7 +291,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildRequirementBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "RequirementBodyItem");
                 }
                 stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
@@ -359,7 +369,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.IncreaseIndent();
                 while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship ownedRelationshipBodyItem && ownedRelationshipBodyItem.IsValidForCaseBodyItem(writerContext))
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildCaseBodyItem(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "CaseBodyItem");
                 }
 
 
@@ -438,6 +450,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.IncreaseIndent();
                 while (ownedRelationshipCursor.Current != null)
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     switch (ownedRelationshipCursor.Current)
                     {
                         case SysML2.NET.Core.POCO.Core.Types.IFeatureMembership featureMembership:
@@ -460,6 +473,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             ownedRelationshipCursor.Move();
                             break;
                     }
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "MetadataBody");
                 }
 
                 stringBuilder.DecreaseIndent();
@@ -542,7 +556,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             stringBuilder.Append(' ');
             while (ownedRelationshipCursor.Current != null)
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 BuildTypeRelationshipPart(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "TypeRelationshipPart");
             }
 
 
@@ -827,7 +843,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
                 while (ownedRelationshipCursor.Current != null)
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     BuildTypeBodyElement(poco, writerContext, stringBuilder);
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "TypeBodyElement");
                 }
                 stringBuilder.DecreaseIndent();
                 stringBuilder.AppendLine("}");
@@ -920,6 +938,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 switch (ownedRelationshipCursor.Current)
                 {
                     case SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership returnParameterMembership:
@@ -930,6 +949,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         BuildTypeBodyElement(poco, writerContext, stringBuilder);
                         break;
                 }
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "FunctionBodyPart");
             }
 
 

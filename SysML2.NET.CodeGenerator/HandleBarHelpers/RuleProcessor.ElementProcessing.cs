@@ -200,6 +200,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                 writer.WriteSafeString($"while ({groupWhileCondition}){Environment.NewLine}");
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
+
+                                var groupPositionVariableName = EmitLoopProgressCapture(writer, groupCursorVarName, ruleGenerationContext);
+
                                 writer.WriteSafeString($"switch ({groupCursorVarName}.Current){Environment.NewLine}");
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
 
@@ -226,6 +229,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 writer.WriteSafeString($"break;{Environment.NewLine}");
 
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
+                                EmitLoopProgressAssertion(writer, groupCursorVarName, groupPositionVariableName, groupElement.TextualNotationRule?.RuleName ?? groupPropertyName);
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
                             }
                             else

@@ -112,7 +112,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             BuildClassifierDeclarationHandCoded(poco, writerContext, stringBuilder);
             while (ownedRelationshipCursor.Current != null)
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "TypeRelationshipPart");
             }
 
 

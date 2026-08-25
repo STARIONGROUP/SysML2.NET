@@ -54,6 +54,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.IncreaseIndent();
                 while (ownedRelationshipCursor.Current != null)
                 {
+                    var positionBeforeItem0 = ownedRelationshipCursor.Position;
                     switch (ownedRelationshipCursor.Current)
                     {
                         case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IVariantMembership variantMembership:
@@ -68,6 +69,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             ownedRelationshipCursor.Move();
                             break;
                     }
+                    ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "EnumerationBody");
                 }
 
                 stringBuilder.DecreaseIndent();
@@ -88,7 +90,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
             {
+                var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, writerContext, stringBuilder);
+                ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "DefinitionExtensionKeyword");
             }
 
             stringBuilder.Append("enum ");

@@ -103,7 +103,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="elements">The sequence of <see cref="RuleElement" /> of one alternative</param>
         /// <param name="analysisContext">The <see cref="AnalysisContext" /> for rule lookups</param>
         /// <param name="guardedRuleNames">The accumulated set of guarded rule names</param>
-        private static void AnalyseSequence(IReadOnlyList<RuleElement> elements, AnalysisContext analysisContext, HashSet<string> guardedRuleNames)
+        private static void AnalyseSequence(List<RuleElement> elements, AnalysisContext analysisContext, HashSet<string> guardedRuleNames)
         {
             for (var elementIndex = 0; elementIndex < elements.Count; elementIndex++)
             {
@@ -195,7 +195,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="analysisContext">The <see cref="AnalysisContext" /> for rule lookups</param>
         /// <param name="visitedRuleNames">Rule names already visited on this chain, to break reference cycles</param>
         /// <returns>The exposed loops with the collection properties their iterations consume</returns>
-        private static List<(string LoopRuleName, IReadOnlyCollection<string> ConsumedProperties)> CollectTailExposedLoops(IReadOnlyList<RuleElement> elements, AnalysisContext analysisContext, HashSet<string> visitedRuleNames)
+        private static List<(string LoopRuleName, IReadOnlyCollection<string> ConsumedProperties)> CollectTailExposedLoops(List<RuleElement> elements, AnalysisContext analysisContext, HashSet<string> visitedRuleNames)
         {
             var exposedLoops = new List<(string LoopRuleName, IReadOnlyCollection<string> ConsumedProperties)>();
 
@@ -239,17 +239,20 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     continue;
                 }
 
-                foreach (var dispatcherArmName in guardedRule.Alternatives
+                // The trailing Where filters on HashSet.Add, which returns true ONLY for a name not already
+                // guarded — so the same call both records the name and selects the ones still to expand,
+                // which is exactly the fixpoint condition. Safe as a filter despite mutating: the sequence
+                // being enumerated is the rule's alternatives, not the set being written, and deferred
+                // evaluation preserves the per-item ordering the equivalent if-body had.
+                foreach (var newlyGuardedArmName in guardedRule.Alternatives
                     .Where(alternative => alternative.Elements.Count == 1)
                     .Select(alternative => alternative.Elements[0])
                     .OfType<NonTerminalElement>()
                     .Where(nonTerminal => !nonTerminal.IsCollection)
-                    .Select(nonTerminal => nonTerminal.Name))
+                    .Select(nonTerminal => nonTerminal.Name)
+                    .Where(guardedRuleNames.Add))
                 {
-                    if (guardedRuleNames.Add(dispatcherArmName))
-                    {
-                        pendingRuleNames.Enqueue(dispatcherArmName);
-                    }
+                    pendingRuleNames.Enqueue(newlyGuardedArmName);
                 }
             }
         }

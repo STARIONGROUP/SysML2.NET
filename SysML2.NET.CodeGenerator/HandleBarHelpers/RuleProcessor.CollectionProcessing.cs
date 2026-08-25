@@ -144,27 +144,30 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         // while-condition already bounds the loop (next-type exclusion or content-type
                         // guard, e.g. CalculationBodyPart's `is not IResultExpressionMembership`), that
                         // stronger structural bound stays.
-                        if (whileConditionIsBareNullTest && IsGuardedBodyItemRule(nonTerminalElement.Name, ruleGenerationContext))
+                        if (whileConditionIsBareNullTest && IsGuardedBodyItemRule(nonTerminalElement.Name))
                         {
                             var guardVariableName = $"{targetProperty.Name.LowerCaseFirstLetter()}BodyItem";
 
                             whileCondition = $"{cursorVariableName}.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship {guardVariableName} && {guardVariableName}.IsValidFor{nonTerminalElement.Name}(writerContext)";
                         }
 
+                        writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
+                        writer.WriteSafeString($"{{{Environment.NewLine}");
+
+                        var positionVariableName = EmitLoopProgressCapture(writer, cursorVariableName, ruleGenerationContext);
+
                         if (perItemCall != null)
                         {
-                            writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
-                            writer.WriteSafeString($"{{{Environment.NewLine}");
                             writer.WriteSafeString(perItemCall);
-                            writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                         }
                         else
                         {
-                            writer.WriteSafeString($"while ({whileCondition}){Environment.NewLine}");
-                            writer.WriteSafeString($"{{{Environment.NewLine}");
                             this.ProcessReferencedRuleAlternatives(writer, umlClass, nonTerminalElement, referencedRule, ruleGenerationContext);
-                            writer.WriteSafeString($"{Environment.NewLine}}}{Environment.NewLine}");
                         }
+
+                        writer.WriteSafeString(Environment.NewLine);
+                        EmitLoopProgressAssertion(writer, cursorVariableName, positionVariableName, nonTerminalElement.Name);
+                        writer.WriteSafeString($"}}{Environment.NewLine}");
 
                         return;
                     }
