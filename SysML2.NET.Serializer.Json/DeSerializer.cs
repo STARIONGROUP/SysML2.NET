@@ -42,9 +42,9 @@ namespace SysML2.NET.Serializer.Json
     /// an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
     /// </summary>
     /// <remarks>
-    /// The JSON payload is read into a pooled buffer and then walked with a <see cref="Utf8JsonReader"/> that
-    /// materializes one element at a time. Only the <see cref="JsonDocument"/> of the element being deserialized
-    /// is alive at any point, instead of a <see cref="JsonDocument"/> covering the complete payload.
+    /// The JSON payload is read into a pooled buffer and then walked with a <see cref="Utf8JsonReader"/>. No
+    /// <see cref="JsonDocument"/> is materialized for the core payload at any point; each element is handed to
+    /// its generated deserializer as a reader positioned on its opening brace.
     /// </remarks>
     public class DeSerializer : IDeSerializer
     {

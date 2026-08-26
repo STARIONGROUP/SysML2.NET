@@ -54,6 +54,15 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// </summary>
         private static readonly Guid ElementIdentifier = Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083");
 
+        /// <summary>
+        /// The number of elements of the payload that forces the pooled input buffer to grow
+        /// </summary>
+        /// <remarks>
+        /// Each element serializes to roughly 130 bytes, so 4000 of them is about 520 kB. A non seekable
+        /// stream starts on an 81 920 byte buffer, which therefore has to double three times.
+        /// </remarks>
+        private const int LargePayloadElementCount = 4000;
+
         private DeSerializer deSerializer;
 
         [SetUp]
@@ -279,6 +288,16 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(feature.Id, Is.EqualTo(ElementIdentifier));
                 Assert.That(feature.ElementId, Is.EqualTo("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
             }
+
+            var grown = this.DeSerializeJson(CreateLargePayload(LargePayloadElementCount), dribble: true, chunkSize: 8192);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(grown, Has.Count.EqualTo(LargePayloadElementCount));
+                Assert.That(grown[0].Id, Is.EqualTo(LargePayloadIdentifier(0)), "the first element survives the buffer growth");
+                Assert.That(grown[^1].Id, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount - 1)), "the last element survives the buffer growth");
+                Assert.That(((IFeature)grown[LargePayloadElementCount / 2]).ElementId, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount / 2).ToString()), "an element spanning a growth boundary is not corrupted");
+            }
         }
 
         [Test]
@@ -295,6 +314,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var singleObject = await this.DeSerializeJsonAsync(Element);
             var byteOrderMark = await this.DeSerializeJsonAsync($"﻿[{Element}]");
             var dribbled = await this.DeSerializeJsonAsync($"[{Element}]", dribble: true);
+            var grown = await this.DeSerializeJsonAsync(CreateLargePayload(LargePayloadElementCount), dribble: true, chunkSize: 8192);
 
             using (Assert.EnterMultipleScope())
             {
@@ -304,6 +324,8 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(byteOrderMark, Has.Count.EqualTo(1), "utf-8 byte order mark");
                 Assert.That(dribbled, Has.Count.EqualTo(1), "non seekable stream that dribbles bytes");
                 Assert.That(((IFeature)arrayRoot[0]).Id, Is.EqualTo(ElementIdentifier));
+                Assert.That(grown, Has.Count.EqualTo(LargePayloadElementCount), "payload larger than the initial buffer");
+                Assert.That(grown[^1].Id, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount - 1)), "the last element survives the buffer growth");
             }
         }
 
@@ -314,14 +336,17 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// the json to deserialize
         /// </param>
         /// <param name="dribble">
-        /// when true the json is presented through a non seekable stream that yields a single byte per read
+        /// when true the json is presented through a non seekable stream
+        /// </param>
+        /// <param name="chunkSize">
+        /// the number of bytes that the non seekable stream yields per read
         /// </param>
         /// <returns>
         /// the deserialized <see cref="IData"/> items
         /// </returns>
-        private List<IData> DeSerializeJson(string json, bool dribble = false)
+        private List<IData> DeSerializeJson(string json, bool dribble = false, int chunkSize = 1)
         {
-            using var stream = CreateStream(json, dribble);
+            using var stream = CreateStream(json, dribble, chunkSize);
 
             return this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, false).ToList();
         }
@@ -333,14 +358,17 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// the json to deserialize
         /// </param>
         /// <param name="dribble">
-        /// when true the json is presented through a non seekable stream that yields a single byte per read
+        /// when true the json is presented through a non seekable stream
+        /// </param>
+        /// <param name="chunkSize">
+        /// the number of bytes that the non seekable stream yields per read
         /// </param>
         /// <returns>
         /// the deserialized <see cref="IData"/> items
         /// </returns>
-        private async Task<List<IData>> DeSerializeJsonAsync(string json, bool dribble = false)
+        private async Task<List<IData>> DeSerializeJsonAsync(string json, bool dribble = false, int chunkSize = 1)
         {
-            await using var stream = CreateStream(json, dribble);
+            await using var stream = CreateStream(json, dribble, chunkSize);
 
             var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, false, CancellationToken.None);
 
@@ -354,16 +382,71 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// the json that the stream exposes
         /// </param>
         /// <param name="dribble">
-        /// when true a non seekable stream that yields a single byte per read is returned
+        /// when true a non seekable stream is returned
+        /// </param>
+        /// <param name="chunkSize">
+        /// the number of bytes that the non seekable stream yields per read
         /// </param>
         /// <returns>
         /// the input <see cref="Stream"/>
         /// </returns>
-        private static Stream CreateStream(string json, bool dribble)
+        private static Stream CreateStream(string json, bool dribble, int chunkSize)
         {
             var bytes = new UTF8Encoding(false).GetBytes(json);
 
-            return dribble ? new DribblingStream(bytes) : new MemoryStream(bytes, false);
+            return dribble ? new DribblingStream(bytes, chunkSize) : new MemoryStream(bytes, false);
+        }
+
+        /// <summary>
+        /// Builds a json array of <paramref name="elementCount"/> distinct elements
+        /// </summary>
+        /// <param name="elementCount">
+        /// the number of elements the array carries
+        /// </param>
+        /// <returns>
+        /// the json payload
+        /// </returns>
+        /// <remarks>
+        /// Every element carries its own identifier so that a payload that was assembled across several
+        /// growths of the pooled input buffer can be shown to be free of corruption, rather than merely
+        /// having the expected number of elements.
+        /// </remarks>
+        private static string CreateLargePayload(int elementCount)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append('[');
+
+            for (var elementIndex = 0; elementIndex < elementCount; elementIndex++)
+            {
+                if (elementIndex > 0)
+                {
+                    builder.Append(',');
+                }
+
+                var identifier = LargePayloadIdentifier(elementIndex);
+
+                builder.Append("{\"@type\":\"Feature\",\"@id\":\"").Append(identifier).Append("\",\"elementId\":\"").Append(identifier).Append("\"}");
+            }
+
+            builder.Append(']');
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Computes the identifier that the element at <paramref name="elementIndex"/> of the payload built by
+        /// <see cref="CreateLargePayload"/> carries
+        /// </summary>
+        /// <param name="elementIndex">
+        /// the index of the element
+        /// </param>
+        /// <returns>
+        /// the identifier of the element
+        /// </returns>
+        private static Guid LargePayloadIdentifier(int elementIndex)
+        {
+            return new Guid(elementIndex, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         /// <summary>
@@ -378,6 +461,11 @@ namespace SysML2.NET.Serializer.Json.Tests
             private readonly byte[] bytes;
 
             /// <summary>
+            /// The number of bytes yielded per read
+            /// </summary>
+            private readonly int chunkSize;
+
+            /// <summary>
             /// The index of the next byte to yield
             /// </summary>
             private int index;
@@ -388,9 +476,13 @@ namespace SysML2.NET.Serializer.Json.Tests
             /// <param name="bytes">
             /// The bytes that the stream exposes
             /// </param>
-            public DribblingStream(byte[] bytes)
+            /// <param name="chunkSize">
+            /// The number of bytes yielded per read
+            /// </param>
+            public DribblingStream(byte[] bytes, int chunkSize)
             {
                 this.bytes = bytes;
+                this.chunkSize = chunkSize;
             }
 
             /// <inheritdoc/>
@@ -425,9 +517,13 @@ namespace SysML2.NET.Serializer.Json.Tests
                     return 0;
                 }
 
-                buffer[offset] = this.bytes[this.index++];
+                var read = Math.Min(Math.Min(this.chunkSize, count), this.bytes.Length - this.index);
 
-                return 1;
+                Buffer.BlockCopy(this.bytes, this.index, buffer, offset, read);
+
+                this.index += read;
+
+                return read;
             }
 
             /// <inheritdoc/>
