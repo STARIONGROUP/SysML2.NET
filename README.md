@@ -23,6 +23,7 @@ project                                                                         
 ----------------------------------------------------------------------------------------------------- | ------------
 [SysML2.NET](https://www.nuget.org/packages/SysML2.NET)                                               | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET)
 [SysML2.NET.Extensions](https://www.nuget.org/packages/SysML2.NET.Extensions)                         | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Extensions)
+[SysML2.NET.Semantics](https://www.nuget.org/packages/SysML2.NET.Semantics)                           | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Semantics)
 [SysML2.NET.Serializer.Json](https://www.nuget.org/packages/SysML2.NET.Serializer.Json)               | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.Json)
 [SysML2.NET.Serializer.Xmi](https://www.nuget.org/packages/SysML2.NET.Serializer.Xmi)                 | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.Xmi)
 [SysML2.NET.Serializer.MessagePack](https://www.nuget.org/packages/SysML2.NET.Serializer.MessagePack) | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.MessagePack)
