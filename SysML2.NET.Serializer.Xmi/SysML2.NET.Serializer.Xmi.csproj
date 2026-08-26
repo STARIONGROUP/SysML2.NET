@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>12.0</LangVersion>
-        <Version>0.22.0</Version>
+        <Version>0.23.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 Xmi serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Xmi</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -14,9 +14,9 @@
         <Authors>Sam Gerené, Théate Antoine</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] DeSerializer adjustments tied to library-redirecting external reference resolution (#283)
-            [Update] Regenerated against updated UML abstract syntax model (#285)
-            [Update] Aligned with SysML2.NET.Extensions 0.22.0
+            [Add] XmiReadResult and XmiDataCache surface the result of a read together with its element cache
+            [Update] Writers regenerated against the current abstract syntax model
+            [Update] Aligned with SysML2.NET 0.23.0
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>

@@ -5,7 +5,7 @@
       <LangVersion>14.0</LangVersion>
       <Company>Starion Group S.A.</Company>
       <Title>SysML2 Viewer</Title>
-      <Version>0.22.0</Version>
+      <Version>0.23.0</Version>
       <Description>Web Application to inspect SysML2 model server</Description>
       <Copyright>Copyright © Starion Group S.A.</Copyright>
       <Authors>Sam Gerené</Authors>
@@ -17,18 +17,18 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazor.SessionStorage.WebAssembly" Version="10.0.0" />
+        <PackageReference Include="Blazor.SessionStorage.WebAssembly" Version="10.1.0" />
         <PackageReference Include="BlazorStrap.V5" Version="5.2.104" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.9" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.9" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.9" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" PrivateAssets="all" />
         <PackageReference Include="ReactiveUI" Version="23.2.28" />
-        <PackageReference Include="Radzen.Blazor" Version="10.4.9" />
+        <PackageReference Include="Radzen.Blazor" Version="11.2.7" />
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
         <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1" />
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />

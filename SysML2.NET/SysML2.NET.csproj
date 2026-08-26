@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>12.0</LangVersion>
-        <Version>0.22.0</Version>
+        <Version>0.23.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -16,9 +16,9 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] Abstract syntax UML model resynced to upstream commit 22dbbc30d13e5cde39a2d69cbd68cab895d6c9e1 (#285) — regenerated AutoGenDto and AutoGenPoco interfaces/classes; impacts Feature, Usage, Membership, ReferenceSubsetting, TextualRepresentation, MultiplicityRange, LiteralInteger, LiteralRational, RequirementUsage, SelectExpression and more
-            [Fix] ReferenceUsageExtensions corrected (#168)
-            [Fix] DAL POCO extensions regenerated against interface types instead of concrete classes (#278)
+            [Add] Derived-property and operation implementations across the Extend layer, covering the Expression, Classifier, Behavior, Action, Constraint, Requirement, Port and Membership families
+            [Fix] Multiplicity is now enforced on all derived-property patterns (#312)
+            [Update] Microsoft.Extensions.Logging.Abstractions and System.Collections.Immutable floored to LTS 8.0.x, lowering the minimum version imposed on consumers (#328)
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -27,9 +27,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
         <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.5" PrivateAssets="all" />
-        <PackageReference Include="System.Collections.Immutable" Version="10.0.9" />
+        <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

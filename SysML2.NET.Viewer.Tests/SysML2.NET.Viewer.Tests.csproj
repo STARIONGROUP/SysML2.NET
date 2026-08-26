@@ -18,13 +18,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+      <!-- pinned above the version bunit.web 1.40.0 pulls in, which carries GHSA-pgww-w46g-26qg -->
+      <PackageReference Include="AngleSharp" Version="1.7.2" />
       <PackageReference Include="bunit.web" Version="1.40.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.9" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.11" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
       <PackageReference Include="Moq" Version="4.20.72" />
       <PackageReference Include="NUnit" Version="4.6.1" />
       <PackageReference Include="NUnit.Console" Version="3.22.0" />
-      <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
 
       <PackageReference Include="coverlet.collector" Version="10.0.1">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

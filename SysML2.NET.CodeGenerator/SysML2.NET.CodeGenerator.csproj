@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <LangVersion>14.0</LangVersion>
-    <Version>0.22.0</Version>
+    <Version>0.23.0</Version>
     <Description>A Library to generate SysML v2 code.</Description>
     <PackageId>SysML2.NET</PackageId>
     <Company>Starion Group S.A.</Company>
@@ -20,9 +20,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
-      <PackageReference Include="Microsoft.CodeAnalysis" Version="5.3.0" />
-      <PackageReference Include="uml4net.HandleBars" Version="8.2.1" />
-    <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.2.1" />
+      <PackageReference Include="Microsoft.CodeAnalysis" Version="5.9.0" />
+      <PackageReference Include="uml4net.HandleBars" Version="8.4.0" />
+    <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.6.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">

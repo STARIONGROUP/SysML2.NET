@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>12.0</LangVersion>
-        <Version>0.22.0</Version>
+        <Version>0.23.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 JSON serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Json</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -14,9 +14,8 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] Deserialization performance (#352) — the deserializers now read straight from a Utf8JsonReader and no JsonDocument is materialised at any point, Guids are read from the UTF-8 bytes, and the redundant @type re-validation was dropped. Roughly twice as fast with half the allocation on a 100k element payload. Deserialized content is unchanged.
-            [Update] Deserializers regenerated from updated UML abstract syntax model (#285) — covers AcceptActionUsage, ActionUsage, AnalysisCaseUsage, AssignmentActionUsage, CalculationUsage, CaseUsage, DecisionNode, ExhibitStateUsage, FlowUsage, ForLoopActionUsage, ForkNode, IfActionUsage, IncludeUseCaseUsage, JoinNode, MergeNode, MetadataUsage, PerformActionUsage, SendActionUsage, StateUsage, SuccessionFlowUsage, TerminateActionUsage, TransitionUsage, UseCaseUsage, VerificationCaseUsage, WhileLoopActionUsage
-            [Update] Aligned with SysML2.NET.Extensions 0.22.0
+            [Update] Deserializers rewritten to read directly from a Utf8JsonReader (#352) - no JsonDocument is materialised at any point, roughly twice as fast with half the allocation on a 100 000 element payload. Deserialized content is unchanged
+            [Update] Aligned with SysML2.NET 0.23.0
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -25,7 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Json" Version="10.0.9" />
+        <PackageReference Include="System.Text.Json" Version="10.0.11" />
         <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.5" PrivateAssets="all" />
     </ItemGroup>
 

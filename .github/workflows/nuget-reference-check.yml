@@ -30,7 +30,11 @@ jobs:
         run: |
           set -e
 
-          IGNORE_PACKAGES="Microsoft\.NETCore\.Platforms|Microsoft\.NETCore\.Targets"
+          # Deliberately floored to an LTS version so that redistributable libraries do not impose a
+          # high minimum on downstream consumers (see issue #328). They are by design permanently
+          # "outdated", so they are excluded from the outdated signal only - the --deprecated and
+          # --vulnerable steps below do not use this filter.
+          IGNORE_PACKAGES="Microsoft\.NETCore\.Platforms|Microsoft\.NETCore\.Targets|Microsoft\.Extensions\.Logging\.Abstractions|Microsoft\.Extensions\.DependencyInjection\.Abstractions|System\.Collections\.Immutable|System\.IO\.Pipelines"
 
           # Full report for the workflow logs only, including transitive packages
           dotnet list SysML2.NET.sln package --outdated --include-transitive > outdated-full-raw.log

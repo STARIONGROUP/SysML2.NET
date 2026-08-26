@@ -3,7 +3,7 @@
    <PropertyGroup>
       <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
        <LangVersion>12.0</LangVersion>
-       <Version>0.22.0</Version>
+       <Version>0.23.0</Version>
       <Description>A .NET implementation of the OMG SysML v2 specification data-acces-layer.</Description>
       <PackageId>SysML2.NET.Dal</PackageId>
       <Company>Starion Group S.A.</Company>
@@ -14,8 +14,9 @@
       <Authors>Sam Gerené</Authors>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
-          [Fix] POCO extensions now target interface types instead of concrete classes (#278) — affects FeatureTyping, ReferenceSubsetting, Subclassification, ConjugatedPortTyping, Conjugation, CrossSubsetting, Differencing, Disjoining, FeatureChaining, FeatureInverting, Intersecting, MembershipExpose/Import, NamespaceExpose/Import, PortConjugation, Redefinition, Specialization, Subsetting, TypeFeaturing, Unioning
-          [Update] Aligned with SysML2.NET.Extensions 0.22.0
+          [Fix] Assembler.Synchronize no longer degrades to O(n2) on large models (#347)
+          [Fix] The Assembler deletion path no longer throws on every removal (#349)
+          [Update] Aligned with SysML2.NET 0.23.0
       </PackageReleaseNotes>
        <PackageIcon>cdp4-icon.png</PackageIcon>
        <PackageReadmeFile>README.md</PackageReadmeFile>

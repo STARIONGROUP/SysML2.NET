@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>12.0</LangVersion>
-        <Version>0.22.0</Version>
+        <Version>0.23.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 Textual Notation serializer.</Description>
         <PackageId>SysML2.NET.Serializer.TextualNotation</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -17,11 +17,9 @@
         <Authors>Sam Gerené, Antoine Théate</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] Indentation support in the textual-notation writer (#284)
-            [Add] Validation of textual notation against larger models, including library-redirecting external-reference resolution via LibraryRedirectingExternalReferenceService (#272, #283)
-            [Fix] Qualified-name resolution on the redefinition case in NameResolutionCache (significantly rewritten)
-            [Fix] Numerous TextualNotationBuilder corrections: FeatureMembership, ParameterMembership, Membership, NamespaceImport, ActionUsage, SendActionUsage, EventOccurrenceUsage, TransitionUsage, ReferenceUsage, ViewUsage, ConnectorAsUsage, BindingConnectorAsUsage, SuccessionAsUsage, AssertConstraintUsage, SatisfyRequirementUsage, AcceptActionUsage, PerformActionUsage, TerminateActionUsage, ExhibitStateUsage, IncludeUseCaseUsage, Feature, Usage, Connector
-            [Update] Aligned with SysML2.NET.Extensions 0.22.0
+            [Add] Validation coverage extended to parts interconnection, function- and state-based behaviour, variant configuration, requirements, verification, and analysis and trades (#289 - #297)
+            [Update] Microsoft.Extensions.Logging.Abstractions and System.Collections.Immutable floored to LTS 8.0.x (#328)
+            [Update] Aligned with SysML2.NET 0.23.0
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -30,9 +28,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
         <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.5" PrivateAssets="all" />
-        <PackageReference Include="System.Collections.Immutable" Version="10.0.9" />
+        <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
