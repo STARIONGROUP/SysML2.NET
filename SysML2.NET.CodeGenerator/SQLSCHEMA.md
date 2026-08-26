@@ -10,7 +10,8 @@ commit-stamped metamodel releases, the append-only class-kind registry, and conv
 commits; §9.4: how all three Derived Property Conformance levels — none / passthrough /
 full — map onto the same schema as write-path policies); §14 performance audit; §15
 service-layer obligations; §16 worked
-examples; §17 code generation; **§18 multi-user and concurrency — including the NORMATIVE
+examples (§16.5: the snapshot-paging recipe — commit-anchored keyset pages and the
+function-inlining guard); §17 code generation; **§18 multi-user and concurrency — including the NORMATIVE
 compare-and-swap commit protocol (§18.2) that every service implementation must follow**;
 §19 glossary.
 
@@ -20,7 +21,7 @@ The pipeline artifacts:
 |---|---|
 | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Hand-written, annotated reference design. Carries the rationale comments. |
 | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | The actual generator output, checked in for review. Supersedes the golden's `[GENERATED]` excerpts. |
-| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 32 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
+| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 40 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
 | `SysML2.NET.CodeGenerator/Sql/schema.concurrency.{setup,hot,spread,read,verify}.sql` | Multi-user suite: pgbench scenarios racing the §18.2 CAS protocol (hot branch / spread / reads-under-write-storm) + invariant verifier C1–C5 (linear chains, losers write nothing, overlay coherence). |
 | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | Handlebars template: hand-written sections verbatim, `[GENERATED]` sections via helpers. |
 | `SysML2.NET.CodeGenerator/HandleBarHelpers/SqlSchemaHelpers.cs` | The eight `uml_template.SQL2.*` helpers. |
@@ -329,7 +330,7 @@ Deliberately NOT DTO properties: `Commit.versionedData` (derived, unbounded — 
 dotnet test SysML2.NET.CodeGenerator.Tests/SysML2.NET.CodeGenerator.Tests.csproj \
     --filter "FullyQualifiedName~SQLSchemaGeneratorTestFixture"
 
-# install + functional smoke (32 assertions) against a real PostgreSQL 18
+# install + functional smoke (40 assertions) against a real PostgreSQL 18
 # (both schemas verified on 17 AND 18.6; the recipe follows the prefer-18 version policy)
 docker run -d --name sysml2pg -e POSTGRES_PASSWORD=pg postgres:18 -c max_locks_per_transaction=4096
 docker cp <schema file> sysml2pg:/tmp/schema.sql
@@ -372,6 +373,11 @@ the composite FK rejecting a version whose class_kind contradicts its identity, 
 snapshot validating clean, and wrong-type/dangling references being reported precisely
 (PASS 12a–12c); the incremental tier — the change set's own problems, a healthy
 commit validating clean, and a tombstone's reverse-direction dangling reference caught
-in agreement with the full audit (PASS 13a–13c); and commit immutability — UPDATEs of
+in agreement with the full audit (PASS 13a–13c); commit immutability — UPDATEs of
 `created` (the column the acyclicity proof and the fold rest on) and of any other commit
-column both rejected by `trg_commit_immutable` (PASS 14a/14b).
+column both rejected by `trg_commit_immutable` (PASS 14a/14b); and the API-route storage
+shapes — the tag lifecycle (create/read, dangling-commit FK guard, destructible; PASS
+15a–15c), `project_usage` pinning a used project at a commit with its FK guard (PASS
+16a/16b), the `GET /roots` query over the promoted `owner` column (PASS 17), and the
+reverse relationship lookup by related element through the `ix_{link}_target` indexes and
+the snapshot (PASS 18a/18b).

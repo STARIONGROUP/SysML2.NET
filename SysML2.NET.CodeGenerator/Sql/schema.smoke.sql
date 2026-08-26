@@ -788,3 +788,197 @@ BEGIN
     END;
 END;
 $$;
+
+----------------------------------------------------------------------------------------------
+-- TAG SCENARIO — the API's frozen pointers (GET/POST/DELETE /tags).
+--
+-- Tag is immutable + destructible (Clause 7.1.2 mutability table). Prove the lifecycle: a tag
+-- is created against a commit and read back, a tag cannot dangle (FK to commit), and a tag is
+-- destructible.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    t1        constant uuid := 'fa111111-0000-0000-0000-000000000000';
+    tagged    uuid;
+    row_count int;
+BEGIN
+    -- 15a. Create + read back.
+    INSERT INTO sysml2.tag (id, project_id, name, description, tagged_commit_id)
+    VALUES (t1, proj, 'v1.0', 'first release of the smoke model', c2);
+
+    SELECT tag.tagged_commit_id INTO tagged FROM sysml2.tag WHERE tag.id = t1 AND tag.name = 'v1.0';
+
+    IF tagged IS DISTINCT FROM c2 THEN
+        RAISE EXCEPTION 'FAIL 15a: tag v1.0 does not resolve to c2 (got %)', tagged;
+    END IF;
+    RAISE NOTICE 'PASS 15a: tag created against a commit and read back';
+
+    -- 15b. A tag cannot point at a commit that does not exist.
+    BEGIN
+        INSERT INTO sysml2.tag (id, project_id, name, tagged_commit_id)
+        VALUES ('fa222222-0000-0000-0000-000000000000', proj, 'dangling',
+                'cdeadbee-0000-0000-0000-000000000000');
+
+        RAISE EXCEPTION 'FAIL 15b: tag pointing at a non-existent commit was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 15b: dangling tag rejected by FK to commit';
+    END;
+
+    -- 15c. Tags are destructible (unlike commits).
+    DELETE FROM sysml2.tag WHERE id = t1;
+
+    SELECT count(*) INTO row_count FROM sysml2.tag WHERE id = t1;
+
+    IF row_count <> 0 THEN
+        RAISE EXCEPTION 'FAIL 15c: tag not deleted';
+    END IF;
+    RAISE NOTICE 'PASS 15c: tag deleted (destructible, per the mutability table)';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- PROJECT-USAGE SCENARIO — cross-project references (GET .../projectUsage).
+--
+-- A ProjectUsage pins a used project AT a commit. Storage-level contract: the row reads back,
+-- and it can dangle neither on the used project nor on the used commit.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    proj2     constant uuid := '22222222-0000-0000-0000-000000000000';
+    cu1       constant uuid := 'cf111111-0000-0000-0000-000000000000';
+    u1        constant uuid := 'de111111-0000-0000-0000-000000000000';
+    used_at   uuid;
+BEGIN
+    INSERT INTO sysml2.project (id, name, created)
+    VALUES (proj2, 'UsedLibraryProject', '2026-01-02T00:00:00Z');
+
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (cu1, proj2, '2026-01-02T01:00:00Z', 'library release', 1);
+
+    -- 16a. Create + read back: the usage pins proj -> proj2 AT cu1.
+    INSERT INTO sysml2.project_usage (id, project_id, used_project_id, used_project_commit_id)
+    VALUES (u1, proj, proj2, cu1);
+
+    SELECT pu.used_project_commit_id INTO used_at
+    FROM sysml2.project_usage pu
+    WHERE pu.project_id = proj AND pu.used_project_id = proj2;
+
+    IF used_at IS DISTINCT FROM cu1 THEN
+        RAISE EXCEPTION 'FAIL 16a: project_usage does not pin the used commit (got %)', used_at;
+    END IF;
+    RAISE NOTICE 'PASS 16a: project_usage pins the used project at a commit and reads back';
+
+    -- 16b. The pinned commit must exist.
+    BEGIN
+        INSERT INTO sysml2.project_usage (id, project_id, used_project_id, used_project_commit_id)
+        VALUES ('de222222-0000-0000-0000-000000000000', proj, proj2,
+                'cdeadbee-0000-0000-0000-000000000000');
+
+        RAISE EXCEPTION 'FAIL 16b: project_usage pinning a non-existent commit was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 16b: project_usage with a dangling used commit rejected by FK';
+    END;
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- ROOTS SCENARIO — GET /projects/{p}/commits/{c}/roots.
+--
+-- A root is an element with no owner. The storage query shape: snapshot resolution joined to
+-- derived_version on the PROMOTED owner column. At c2 the snapshot is {Package, wheel} and
+-- only the Package is a root.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    root_count int;
+    e1_roots   int;
+BEGIN
+    SELECT count(*), count(*) FILTER (WHERE r.identity_id = e1) INTO root_count, e1_roots
+    FROM sysml2.resolve_commit_state(proj, c2) r
+    JOIN sysml2.derived_version dv
+      ON dv.project_id = proj AND dv.derived_id = r.derived_id
+    WHERE dv.owner IS NULL;
+
+    IF root_count <> 1 OR e1_roots <> 1 THEN
+        RAISE EXCEPTION 'FAIL 17: expected exactly the Package as root at c2, got % roots (% matching e1)', root_count, e1_roots;
+    END IF;
+    RAISE NOTICE 'PASS 17: roots query over the promoted owner column returns exactly the root Package';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- REVERSE-RELATIONSHIP SCENARIO — GET .../elements/{relatedElementId}/relationships.
+--
+-- c15 adds a Membership e8 whose relationship_source names the Package (e1) and whose
+-- relationship_target names the PartUsage (e2). The API's reverse lookup — "which
+-- relationships touch this element?" — is the ix_{link}_target reverse index joined to the
+-- snapshot. The wheel's deletion at c3 is invisible here (c3 is not an ancestor of c15).
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c14       constant uuid := 'cd111111-0000-0000-0000-000000000000';
+    c15       constant uuid := 'ce111111-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    e2        constant uuid := 'e2222222-0000-0000-0000-000000000000';
+    e8        constant uuid := 'e8888888-0000-0000-0000-000000000000';
+    v8        constant uuid := 'ad111111-0000-0000-0000-000000000000';
+    row_count int;
+BEGIN
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c15, proj, '2026-01-01T20:00:00Z', 'add membership for reverse lookup', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c15, c14, 0);
+
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind)
+    VALUES (e8, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'OwningMembership'));
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
+         element_id, is_implied_included, stored_json)
+    VALUES
+        (proj, v8, e8, c15,
+         (SELECT id FROM sysml2.class_kind WHERE name = 'OwningMembership'), false,
+         'e8888888-0000-0000-0000-000000000000', false, '{}');
+
+    INSERT INTO sysml2.relationship_source (project_id, version_id, ordinal, target_identity)
+    VALUES (proj, v8, 0, e1);
+
+    INSERT INTO sysml2.relationship_target (project_id, version_id, ordinal, target_identity)
+    VALUES (proj, v8, 0, e2);
+
+    -- 18a. Reverse lookup by SOURCE: relationships whose source names the Package.
+    SELECT count(*) INTO row_count
+    FROM sysml2.resolve_commit_state(proj, c15) r
+    JOIN sysml2.relationship_source rs
+      ON rs.project_id = proj AND rs.version_id = r.version_id
+    WHERE rs.target_identity = e1;
+
+    IF row_count <> 1 THEN
+        RAISE EXCEPTION 'FAIL 18a: expected exactly 1 relationship with the Package as source, got %', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 18a: reverse lookup by source finds the membership through the snapshot';
+
+    -- 18b. Reverse lookup by TARGET: relationships whose target names the PartUsage.
+    SELECT count(*) INTO row_count
+    FROM sysml2.resolve_commit_state(proj, c15) r
+    JOIN sysml2.relationship_target rt
+      ON rt.project_id = proj AND rt.version_id = r.version_id
+    WHERE rt.target_identity = e2;
+
+    IF row_count <> 1 THEN
+        RAISE EXCEPTION 'FAIL 18b: expected exactly 1 relationship with the PartUsage as target, got %', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 18b: reverse lookup by target finds the membership through the snapshot';
+END;
+$$;

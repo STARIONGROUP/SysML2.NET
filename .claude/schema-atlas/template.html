@@ -1,0 +1,721 @@
+<title>SysML2 Schema Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #F4F7F6;
+  --surface: #FFFFFF;
+  --surface-2: #EBF1EF;
+  --ink: #182826;
+  --muted: #5A716D;
+  --line: #D3DEDB;
+  --accent: #0E7A6E;
+  --accent-soft: #0E7A6E1A;
+  --brass: #96691E;
+  --brass-soft: #96691E14;
+  --chip-bg: #FFFFFF;
+  --code-bg: #EDF2F1;
+  --shadow: 0 1px 2px rgba(24, 40, 38, 0.06), 0 4px 14px rgba(24, 40, 38, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1615;
+    --surface: #151F1E;
+    --surface-2: #1B2726;
+    --ink: #D8E4E1;
+    --muted: #86A09A;
+    --line: #283835;
+    --accent: #41BFAE;
+    --accent-soft: #41BFAE21;
+    --brass: #D6A64C;
+    --brass-soft: #D6A64C1F;
+    --chip-bg: #1B2726;
+    --code-bg: #1B2726;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0E1615;
+  --surface: #151F1E;
+  --surface-2: #1B2726;
+  --ink: #D8E4E1;
+  --muted: #86A09A;
+  --line: #283835;
+  --accent: #41BFAE;
+  --accent-soft: #41BFAE21;
+  --brass: #D6A64C;
+  --brass-soft: #D6A64C1F;
+  --chip-bg: #1B2726;
+  --code-bg: #1B2726;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Archivo', 'Segoe UI', system-ui, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+code, .mono {
+  font-family: 'Spline Sans Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover, a:focus-visible { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- masthead ---------- */
+header.mast { padding: 44px 0 8px; }
+
+.eyebrow {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  margin: 6px 0 10px;
+  text-wrap: balance;
+}
+
+.mast p.lede { max-width: 68ch; color: var(--muted); margin: 0 0 22px; }
+.mast p.lede code { font-size: 0.92em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+
+.stat {
+  display: flex; align-items: baseline; gap: 6px;
+  background: var(--chip-bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 11px;
+}
+.stat b { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 11.5px; color: var(--muted); letter-spacing: 0.02em; }
+
+/* ---------- sections ---------- */
+h2 {
+  font-size: 21px; font-weight: 700; letter-spacing: -0.01em;
+  margin: 54px 0 6px; text-wrap: balance;
+}
+h2 .sec-no { color: var(--muted); font-weight: 500; margin-right: 8px; }
+.sec-sub { color: var(--muted); max-width: 74ch; margin: 0 0 18px; }
+
+/* ---------- figure ---------- */
+figure.arch { margin: 26px 0 0; }
+figure.arch .svgbox { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 10px; }
+figure.arch svg { display: block; min-width: 940px; max-width: 100%; height: auto; margin: 0 auto; }
+figcaption { color: var(--muted); font-size: 13px; max-width: 80ch; margin: 10px 2px 0; }
+
+.arch .b  { fill: var(--surface-2); stroke: currentColor; stroke-width: 1.1; }
+.arch .bs { fill: var(--surface-2); stroke: currentColor; stroke-width: 0.8; opacity: 0.5; }
+.arch .t  { font: 600 12.5px 'Spline Sans Mono', ui-monospace, monospace; fill: currentColor; }
+.arch .s  { font: 400 10.5px 'Archivo', sans-serif; fill: var(--muted); }
+.arch .lab{ font: 500 10.5px 'Archivo', sans-serif; fill: var(--muted); }
+.arch .laA{ font: 600 10.5px 'Archivo', sans-serif; fill: var(--accent); }
+.arch .laT{ font: 600 10.5px 'Archivo', sans-serif; fill: var(--brass); }
+.arch .hdr{ font: 700 11px 'Archivo', sans-serif; fill: var(--muted); letter-spacing: 1.4px; }
+.arch .e  { stroke: currentColor; stroke-width: 1.1; fill: none; }
+.arch .eA { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+.arch .eD { stroke: currentColor; stroke-width: 1.1; fill: none; stroke-dasharray: 4 3; }
+
+/* ---------- reference map ---------- */
+.refmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+.refgroup { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.refgroup h3 { margin: 0 0 2px; font-size: 14px; }
+.refgroup h3 code { font-size: 14px; font-weight: 600; }
+.refgroup .in-count { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 6px; }
+.refgroup ul { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12.5px; }
+.refgroup li { padding: 3px 0; border-top: 1px dashed var(--line); }
+.refgroup li:first-child { border-top: 0; }
+.refgroup li code { font-size: 12px; }
+.refgroup .ondel { color: var(--brass); font-size: 11px; margin-left: 5px; white-space: nowrap; }
+.refgroup .fkarrow { color: var(--muted); }
+
+/* ---------- catalog ---------- */
+.toolbar {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--bg);
+  padding: 12px 0;
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+.toolbar input {
+  flex: 1; min-width: 220px;
+  font: inherit; color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 14px;
+}
+.toolbar input::placeholder { color: var(--muted); }
+.toolbar .count { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+h3.layer {
+  font-size: 15px; font-weight: 700;
+  margin: 34px 0 4px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+h3.layer .sec-no { color: var(--muted); font-weight: 500; }
+.layer-sub { color: var(--muted); font-size: 13px; max-width: 76ch; margin: 0 0 12px; }
+
+.origin {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  padding: 2px 7px; border-radius: 4px;
+}
+.origin.gen { color: var(--accent); background: var(--accent-soft); }
+.origin.hand { color: var(--brass); background: var(--brass-soft); }
+
+.cards { display: flex; flex-direction: column; gap: 8px; }
+
+details.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+details.card[open] { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+details.card > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 14px;
+}
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-right: 1.6px solid var(--muted);
+  border-bottom: 1.6px solid var(--muted);
+  transform: rotate(-45deg);
+  transition: transform 0.12s ease;
+  flex: none;
+}
+details.card[open] > summary::before { transform: rotate(45deg); }
+@media (prefers-reduced-motion: reduce) { details.card > summary::before { transition: none; } }
+
+summary .tname { font-weight: 600; font-size: 13.5px; }
+summary .meta { color: var(--muted); font-size: 11.5px; margin-left: auto; display: flex; gap: 10px; align-items: center; font-variant-numeric: tabular-nums; }
+
+.badge {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  padding: 1.5px 6px; border-radius: 4px;
+  white-space: nowrap;
+}
+.badge.part { color: var(--accent); background: var(--accent-soft); }
+.badge.trg  { color: var(--brass); background: var(--brass-soft); }
+
+.card-body { padding: 2px 14px 14px; border-top: 1px solid var(--line); }
+.tcomment {
+  color: var(--muted); font-size: 12.5px;
+  white-space: pre-wrap;
+  max-width: 86ch;
+  margin: 10px 0 4px;
+}
+
+.card-body table { border-collapse: collapse; width: 100%; font-size: 12.5px; margin-top: 8px; }
+.card-body th {
+  text-align: left; font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted);
+  padding: 5px 10px 5px 0;
+  border-bottom: 1px solid var(--line);
+}
+.card-body td { padding: 4.5px 10px 4.5px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.card-body tr:last-child td { border-bottom: 0; }
+.card-body td code { font-size: 12px; }
+.colname { font-weight: 600; white-space: nowrap; }
+.colname .pk-key { color: var(--brass); font-size: 10px; font-weight: 700; letter-spacing: 0.04em; margin-left: 5px; }
+.ctype { color: var(--muted); white-space: nowrap; }
+.cnull { white-space: nowrap; font-size: 11.5px; color: var(--muted); }
+.cnull.req { color: var(--ink); font-weight: 500; }
+.cdefault code { color: var(--brass); }
+.ccomment { color: var(--muted); font-size: 11.5px; max-width: 44ch; }
+.scrollx { overflow-x: auto; }
+
+.klist { margin: 10px 0 0; font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+.klist .krow b { color: var(--ink); font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 6px; }
+.klist code { font-size: 11.5px; }
+
+/* ---------- enums ---------- */
+.enums { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.enumcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.enumcard h3 { margin: 0 0 8px; font-size: 13px; }
+.enumcard .vals { display: flex; flex-wrap: wrap; gap: 6px; }
+.enumcard .val { font-size: 11.5px; background: var(--surface-2); border-radius: 5px; padding: 2px 8px; font-family: 'Spline Sans Mono', ui-monospace, monospace; }
+
+/* ---------- functions ---------- */
+.fnstable { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.fnstable th { text-align: left; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 9px 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.fnstable td { padding: 8px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.fnstable tr:last-child td { border-bottom: 0; }
+.fnstable td:first-child { white-space: nowrap; font-weight: 600; }
+.fnstable .ret { color: var(--muted); font-size: 11.5px; }
+.fnstable .note { color: var(--muted); font-size: 12px; max-width: 58ch; }
+
+/* ---------- views ---------- */
+details.plain > summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+.viewcloud { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+.viewcloud code { font-size: 11px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 1.5px 6px; }
+
+footer { margin-top: 70px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; }
+footer code { font-size: 11.5px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+
+.hl-flash { animation: flash 1.2s ease 1; }
+@keyframes flash { 0% { background: var(--accent-soft); } 100% { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .hl-flash { animation: none; } }
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">SysML2.NET &middot; PostgreSQL persistence schema</div>
+  <h1>SysML2 Schema Atlas</h1>
+  <p class="lede">
+    Every table, column, and reference of the generated schema
+    (<code>SysML2.NET.CodeGenerator/Sql/schema2.generated.sql</code>), the persistence design for the
+    OMG Systems Modeling API: a Git-shaped commit DAG over append-only, partitioned element state.
+    Generated from the KerML/SysML v2 UML metamodel via
+    <code>Templates/Uml/core-sql-schema-2.hbs</code>. Target: PostgreSQL&nbsp;16+
+    with <code>max_locks_per_transaction&nbsp;&ge;&nbsp;4096</code>.
+  </p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<figure class="arch">
+  <div class="svgbox">
+  <svg viewBox="0 0 1000 632" role="img" aria-label="Architecture of the schema: the PIM commit DAG on the left, the typed data_identity hub in the middle, append-only element state on the right, and the checkpoint/overlay read path at the far right. Every stored reference lands on data_identity or commit; nothing references a version row.">
+    <defs>
+      <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0.6 L7.4,4 L0,7.4 Z" fill="currentColor"/>
+      </marker>
+      <marker id="arrA" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0.6 L7.4,4 L0,7.4 Z" fill="var(--accent)"/>
+      </marker>
+    </defs>
+
+    <!-- column headers -->
+    <text x="105" y="30" class="hdr" text-anchor="middle">PIM / VERSIONING</text>
+    <text x="390" y="30" class="hdr" text-anchor="middle">IDENTITY &amp; CATALOGS</text>
+    <text x="650" y="30" class="hdr" text-anchor="middle">APPEND-ONLY STATE</text>
+    <text x="895" y="30" class="hdr" text-anchor="middle">READ PATH</text>
+
+    <!-- PIM column -->
+    <rect x="40" y="48" width="130" height="40" rx="6" class="b"/>
+    <text x="105" y="66" class="t" text-anchor="middle">project</text>
+    <text x="105" y="80" class="s" text-anchor="middle">upgrade policy</text>
+
+    <rect x="40" y="140" width="130" height="52" rx="6" class="b"/>
+    <text x="105" y="158" class="t" text-anchor="middle">commit</text>
+    <text x="105" y="171" class="s" text-anchor="middle">immutable &middot; release stamp</text>
+    <text x="105" y="184" class="s" text-anchor="middle">created (monotonic)</text>
+
+    <rect x="40" y="250" width="130" height="46" rx="6" class="b"/>
+    <text x="105" y="268" class="t" text-anchor="middle">commit_parent</text>
+    <text x="105" y="282" class="s" text-anchor="middle">the DAG &middot; parents = SET</text>
+
+    <rect x="40" y="356" width="130" height="34" rx="6" class="b"/>
+    <text x="105" y="377" class="t" text-anchor="middle">branch</text>
+    <rect x="40" y="404" width="130" height="34" rx="6" class="b"/>
+    <text x="105" y="425" class="t" text-anchor="middle">tag</text>
+
+    <!-- triggers -->
+    <text x="182" y="122" class="laT">trg_commit_immutable</text>
+    <text x="182" y="135" class="s">rejects every UPDATE</text>
+    <text x="182" y="228" class="laT">trg_commit_parent_monotonic</text>
+    <text x="182" y="241" class="s">child newer than parent &rArr; acyclic</text>
+    <text x="182" y="318" class="laT">trg_commit_parent_version</text>
+    <text x="182" y="331" class="s">no downgrades, no mixed merges</text>
+
+    <!-- PIM edges -->
+    <path class="e" d="M105,140 L105,88" marker-end="url(#arr)"/>
+    <text x="112" y="112" class="lab">project_id &middot; CASCADE</text>
+    <path class="e" d="M85,250 L85,192" marker-end="url(#arr)"/>
+    <path class="e" d="M125,250 L125,192" marker-end="url(#arr)"/>
+    <text x="90" y="222" class="lab">child / parent</text>
+    <path class="e" d="M40,373 L26,373 L26,166 L40,166" marker-end="url(#arr)"/>
+    <text x="14" y="282" class="lab" transform="rotate(-90 14 282)" text-anchor="middle">head_commit_id</text>
+    <path class="e" d="M40,421 L14,421 L14,178 L40,178" marker-end="url(#arr)"/>
+
+    <!-- identity + catalogs -->
+    <rect x="310" y="120" width="160" height="64" rx="6" class="b"/>
+    <text x="390" y="140" class="t" text-anchor="middle">data_identity</text>
+    <text x="390" y="154" class="s" text-anchor="middle">stable element @id</text>
+    <text x="390" y="167" class="s" text-anchor="middle">+ immutable class_kind</text>
+
+    <rect x="310" y="420" width="160" height="42" rx="6" class="b"/>
+    <text x="390" y="438" class="t" text-anchor="middle">class_kind</text>
+    <text x="390" y="452" class="s" text-anchor="middle">175 frozen metaclass ids</text>
+
+    <rect x="310" y="486" width="160" height="42" rx="6" class="b"/>
+    <text x="390" y="504" class="t" text-anchor="middle">model_version</text>
+    <text x="390" y="518" class="s" text-anchor="middle">metamodel releases</text>
+
+    <path class="e" d="M355,184 L355,420" marker-end="url(#arr)"/>
+    <text x="362" y="300" class="lab">class_kind</text>
+    <path class="e" d="M170,178 L245,178 Q252,178 252,186 L252,499 Q252,507 259,507 L310,507" marker-end="url(#arr)"/>
+    <text x="180" y="202" class="lab">model_version_id</text>
+
+    <!-- stored state column -->
+    <rect x="560" y="48" width="180" height="74" rx="6" class="b"/>
+    <text x="650" y="67" class="t" text-anchor="middle">element_version</text>
+    <text x="650" y="81" class="s" text-anchor="middle">one row per element per commit</text>
+    <text x="650" y="94" class="s" text-anchor="middle">tombstone = deletion</text>
+    <text x="650" y="107" class="s" text-anchor="middle">&times;16 hash partitions</text>
+
+    <rect x="566" y="176" width="180" height="52" rx="6" class="bs"/>
+    <rect x="563" y="173" width="180" height="52" rx="6" class="bs"/>
+    <rect x="560" y="170" width="180" height="52" rx="6" class="b"/>
+    <text x="650" y="189" class="t" text-anchor="middle">47 subtype tables</text>
+    <text x="650" y="203" class="s" text-anchor="middle">one per storage-declaring class</text>
+    <text x="650" y="215" class="s" text-anchor="middle">membership, not join chains</text>
+
+    <rect x="566" y="282" width="180" height="46" rx="6" class="bs"/>
+    <rect x="563" y="279" width="180" height="46" rx="6" class="bs"/>
+    <rect x="560" y="276" width="180" height="46" rx="6" class="b"/>
+    <text x="650" y="295" class="t" text-anchor="middle">7 link tables</text>
+    <text x="650" y="309" class="s" text-anchor="middle">ordered multi-valued props</text>
+
+    <rect x="560" y="390" width="180" height="64" rx="6" class="b"/>
+    <text x="650" y="409" class="t" text-anchor="middle">derived_version</text>
+    <text x="650" y="423" class="s" text-anchor="middle">second append-only stream</text>
+    <text x="650" y="436" class="s" text-anchor="middle">qualifiedName &middot; derived_json</text>
+
+    <!-- stored-state edges -->
+    <path class="e" d="M560,62 L182,62 Q174,62 174,70 L174,148 L170,148" marker-end="url(#arr)"/>
+    <text x="220" y="56" class="lab">commit_id</text>
+
+    <path class="eA" d="M560,100 L390,100 L390,120" marker-end="url(#arrA)"/>
+    <text x="398" y="92" class="laA">typed composite FK</text>
+    <text x="398" y="114" class="laA" style="font-size:10px">(identity_id, class_kind)</text>
+
+    <path class="e" d="M560,196 L520,196 Q512,196 512,188 L512,93 Q512,85 520,85 L560,85" marker-end="url(#arr)"/>
+    <path class="e" d="M560,302 L504,302 Q496,302 496,294 L496,101 Q496,93 504,93 L560,93" marker-end="url(#arr)"/>
+    <text x="488" y="240" class="lab" text-anchor="end">(project_id, version_id)</text>
+    <text x="488" y="254" class="lab" text-anchor="end">ON DELETE CASCADE</text>
+
+    <path class="e" d="M560,318 L440,318 Q432,318 432,310 L432,184" marker-end="url(#arr)"/>
+    <text x="456" y="340" class="lab">target_identity &mdash; names an element, never a version</text>
+
+    <path class="e" d="M560,406 L456,406 Q448,406 448,398 L448,184" marker-end="url(#arr)"/>
+    <text x="462" y="401" class="lab">identity_id &middot; owner</text>
+
+    <path class="e" d="M650,454 L650,472 L184,472 Q176,472 176,464 L176,186 L170,186" marker-end="url(#arr)"/>
+    <text x="196" y="466" class="lab">commit_id (derived at)</text>
+
+    <!-- read path column -->
+    <rect x="810" y="48" width="170" height="58" rx="6" class="b"/>
+    <text x="895" y="67" class="t" text-anchor="middle">commit_checkpoint</text>
+    <text x="895" y="81" class="s" text-anchor="middle">materialized fold of one commit</text>
+    <text x="895" y="94" class="s" text-anchor="middle">+ planner-side registry</text>
+
+    <rect x="810" y="150" width="170" height="58" rx="6" class="b"/>
+    <text x="895" y="169" class="t" text-anchor="middle">branch_head</text>
+    <text x="895" y="183" class="s" text-anchor="middle">overlay over a checkpoint</text>
+    <text x="895" y="196" class="s" text-anchor="middle">O(1) branch create</text>
+
+    <rect x="810" y="262" width="170" height="88" rx="6" class="b"/>
+    <text x="895" y="281" class="t" text-anchor="middle" style="font-size:11.5px">resolvers &amp; views</text>
+    <text x="895" y="297" class="s" text-anchor="middle">resolve_commit_state()</text>
+    <text x="895" y="310" class="s" text-anchor="middle">get_elements_at_commit()</text>
+    <text x="895" y="323" class="s" text-anchor="middle">167 vw_* flattening views</text>
+    <text x="895" y="339" class="s" text-anchor="middle">validate_references_*()</text>
+
+    <text x="895" y="372" class="s" text-anchor="middle" style="font-size:10px">FKs: commit_id &rarr; commit &middot; branch_id &rarr; branch</text>
+    <text x="895" y="385" class="s" text-anchor="middle" style="font-size:10px">identity_id &rarr; data_identity</text>
+
+    <!-- read path edges -->
+    <path class="e" d="M810,72 L744,72" marker-end="url(#arr)"/>
+    <text x="776" y="64" class="lab" text-anchor="middle">folds</text>
+    <path class="eD" d="M895,150 L895,106" marker-end="url(#arr)"/>
+    <text x="888" y="134" class="lab" text-anchor="end">reads through to base</text>
+    <path class="eD" d="M860,262 L860,208" marker-end="url(#arr)"/>
+    <path class="eD" d="M810,286 L778,286 Q770,286 770,278 L770,96 Q770,88 762,88 L744,88" marker-end="url(#arr)"/>
+    <path class="eD" d="M810,314 L788,314 Q780,314 780,322 L780,414 L744,414" marker-end="url(#arr)"/>
+    <text x="792" y="376" class="lab" transform="rotate(-90 792 376)" text-anchor="middle">merges stored + derived</text>
+
+    <!-- bottom annotation -->
+    <text x="500" y="556" class="s" text-anchor="middle" style="font-size:11.5px">58 partitioned tables &times; 16 hash partitions on project_id = 928 leaves &middot; 2,629 cloned FK constraints</text>
+    <text x="500" y="576" class="s" text-anchor="middle" style="font-size:11.5px">Solid arrows: real foreign keys &middot; dashed arrows: read-path data flow (no FK)</text>
+    <text x="500" y="602" class="laA" text-anchor="middle">Element references always land on data_identity (an element) or commit (a point in history) &mdash; never on a version row.</text>
+  </svg>
+  </div>
+  <figcaption>
+    The reference discipline of the schema: version rows are append-only and unreferenced; identity
+    (<code>data_identity</code>, carrying the immutable metaclass) and history (<code>commit</code>, guarded by
+    three triggers) are the only FK targets. Cross-element references are soft &mdash; checked for existence by FK,
+    validated for liveness and type by <code>validate_references_at_commit()</code>.
+  </figcaption>
+</figure>
+
+<h2 id="refmap"><span class="sec-no">A</span>Reference map</h2>
+<p class="sec-sub">
+  Every declared foreign-key constraint, grouped by the table it points at. Composite keys are shown
+  as column lists. These are the schema-level constraints only &mdash; model-level element references
+  (a Specialization's <code>general</code>, a Membership's <code>member_element</code>) FK to
+  <code>data_identity</code> for existence, and get their liveness and type checked at commit time by the
+  two-tier validation functions.
+</p>
+<div class="refmap" id="refmap-body"></div>
+
+<h2 id="catalog"><span class="sec-no">B</span>Table catalog</h2>
+<p class="sec-sub">
+  All 68 tables in schema order, with every column, type, default, constraint, index, and trigger.
+  Comments are lifted verbatim from the DDL. Teal links jump to the referenced table.
+</p>
+
+<div class="toolbar">
+  <input id="q" type="search" placeholder="Filter by table or column name&hellip;" aria-label="Filter tables">
+  <span class="count" id="qcount"></span>
+</div>
+
+<div id="catalog-body"></div>
+
+<h2 id="enums"><span class="sec-no">C</span>Enum types</h2>
+<p class="sec-sub">Labels are the lowercase form of the C# literal, matching the JSON wire format.</p>
+<div class="enums" id="enums-body"></div>
+
+<h2 id="functions"><span class="sec-no">D</span>Functions &amp; triggers</h2>
+<p class="sec-sub">
+  Three trigger functions guard the commit DAG; the rest are the resolver, read-path, and
+  validation surface.
+</p>
+<div class="scrollx"><table class="fnstable" id="fns-body"></table></div>
+
+<h2 id="views"><span class="sec-no">E</span>Flattening views</h2>
+<p class="sec-sub" id="views-sub"></p>
+<details class="plain"><summary>Show all views</summary><div class="viewcloud" id="views-body"></div></details>
+
+<footer>
+  Generated from <code>Resources/KerML_only_xmi.uml</code> + <code>Resources/SysML_only_xmi.uml</code>
+  by <code>SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/SQLSchemaGenerator.cs</code>
+  via <code>Templates/Uml/core-sql-schema-2.hbs</code>.
+  Reference design &amp; rationale: <code>SysML2.NET.CodeGenerator/Sql/schema.golden.sql</code> and
+  <code>SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.md</code>.
+  Snapshot: __SNAPSHOT__.
+</footer>
+
+</div>
+
+<script id="data" type="application/json">__SCHEMA_JSON__</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+
+const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/* ---------- layer metadata (schema-section order) ---------- */
+const LAYERS = [
+  { sec: 2, title: 'Metamodel catalogs', origin: 'GENERATED',
+    blurb: 'model_version registers every metamodel release this database has stored data for; class_kind interns the 175 metaclass names with ids frozen forever by the append-only ClassKindRegistry.' },
+  { sec: 3, title: 'PIM — projects, commits, branches, tags', origin: 'HAND-WRITTEN',
+    blurb: 'The OMG API’s repository machinery (Clause 7). Commits form a DAG (parents are a SET); three triggers make the invariants mechanical: monotonic timestamps (which doubles as the acyclicity guarantee), release compatibility, and full commit-row immutability.' },
+  { sec: 4, title: 'Data identity', origin: 'HAND-WRITTEN',
+    blurb: 'The stable @id of every element, independent of versions — typed: the metaclass is invariant across versions, so class_kind lives on the identity row and every version is pinned to it by a composite FK.' },
+  { sec: 5, title: 'Stored element state', origin: 'HAND-WRITTEN',
+    blurb: 'Append-only. One element_version row per element per commit; tombstone = deletion. Element’s own stored properties are folded into the core table; stored_json is the pre-serialized stored half of the payload.' },
+  { sec: 6, title: 'Link tables — ordered multi-valued properties', origin: 'GENERATED',
+    blurb: 'The whole metamodel has only 6 multi-valued reference properties + aliasIds, all isOrdered, hence ordinal in every PK. target_identity FKs to data_identity, not element_version — a reference names an element, not a version of it.' },
+  { sec: 7, title: 'Subtype tables — one per storage-declaring metaclass', origin: 'GENERATED',
+    blurb: 'An instance has rows in exactly the subtype tables of its storage-declaring ancestors — a SET, not a chain: multiple inheritance is handled by membership in tables, not by joins. All keyed (project_id, version_id), cascading from element_version.' },
+  { sec: 8, title: 'Derived element state', origin: 'HAND-WRITTEN',
+    blurb: 'The second append-only stream. A derived value is a function of (version, snapshot), not of the version alone — renaming a Namespace changes a child’s qualifiedName without touching the child’s stored row. Hence its own stream, keyed by the commit that changed the derived state.' },
+  { sec: 9, title: 'Snapshot resolution & read path', origin: 'HAND-WRITTEN',
+    blurb: 'commit_checkpoint materializes the full fold of one commit (bounding resolver walks); commit_checkpoint_registry exists because the planner’s selectivity model failed on the raw probe; branch_head is the per-branch overlay: O(1) branch creation, read-through to the base checkpoint, tombstone masking.' },
+];
+
+/* ---------- stats strip ---------- */
+const totalCols = D.tables.reduce((n, t) => n + t.columns.length, 0);
+const fkCount = D.tables.reduce((n, t) => n + t.fks.length + t.columns.filter(c => c.ref).length, 0);
+const stats = [
+  [D.tables.length, 'tables'],
+  [totalCols, 'columns'],
+  [fkCount, 'foreign keys'],
+  [D.indexes.length, 'indexes'],
+  [D.triggers.length, 'triggers'],
+  [D.functions.length, 'functions'],
+  [D.views.length, 'views'],
+  [D.enums.length, 'enums'],
+  [D.partitions.partitionedTables + '×' + D.partitions.modulus, 'partitions'],
+  [D.classKindRows, 'class kinds'],
+];
+document.getElementById('stats').innerHTML =
+  stats.map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+
+/* ---------- reference map ---------- */
+const edges = [];
+for (const t of D.tables) {
+  for (const c of t.columns) if (c.ref) edges.push({ from: t.name, cols: c.name, to: c.ref.table, toCols: c.ref.col, onDelete: c.ref.onDelete });
+  for (const f of t.fks) edges.push({ from: t.name, cols: f.cols, to: f.refTable, toCols: f.refCols, onDelete: f.onDelete });
+}
+const byTarget = new Map();
+for (const e of edges) { if (!byTarget.has(e.to)) byTarget.set(e.to, []); byTarget.get(e.to).push(e); }
+const groups = [...byTarget.entries()].sort((a, b) => b[1].length - a[1].length);
+document.getElementById('refmap-body').innerHTML = groups.map(([target, list]) => {
+  const collapsed = new Map();
+  for (const e of list) {
+    const key = e.from + '|' + e.cols + '|' + e.onDelete;
+    if (!collapsed.has(key)) collapsed.set(key, e);
+  }
+  // group the 47/7 fan-ins compactly: if many sources share identical col signature, summarize
+  const sig = new Map();
+  for (const e of collapsed.values()) {
+    const k = e.cols + ' → (' + e.toCols + ')' + (e.onDelete ? '|' + e.onDelete : '');
+    if (!sig.has(k)) sig.set(k, []);
+    sig.get(k).push(e.from);
+  }
+  const rows = [...sig.entries()].map(([k, sources]) => {
+    const [colPart, od] = k.split('|');
+    const srcHtml = sources.length > 4
+      ? `<em>${sources.length} tables</em> (${sources.slice(0, 3).map(s => `<a href="#t-${s}"><code>${s}</code></a>`).join(', ')}, …)`
+      : sources.map(s => `<a href="#t-${s}"><code>${s}</code></a>`).join(', ');
+    return `<li>${srcHtml}<span class="fkarrow"> &middot; </span><code>${esc(colPart)}</code>${od ? `<span class="ondel">${od}</span>` : ''}</li>`;
+  }).join('');
+  return `<div class="refgroup"><h3><a href="#t-${target}"><code>${target}</code></a><span class="in-count">${list.length} inbound</span></h3><ul>${rows}</ul></div>`;
+}).join('');
+
+/* ---------- catalog ---------- */
+const idxByTable = new Map();
+for (const ix of D.indexes) { if (!idxByTable.has(ix.table)) idxByTable.set(ix.table, []); idxByTable.get(ix.table).push(ix); }
+const trgByTable = new Map();
+for (const tr of D.triggers) { if (!trgByTable.has(tr.table)) trgByTable.set(tr.table, []); trgByTable.get(tr.table).push(tr); }
+
+function colRow(t, c) {
+  const pkCols = (t.pk || '').split(',').map(s => s.trim());
+  const isPk = pkCols.includes(c.name);
+  const ref = c.ref
+    ? `<a href="#t-${c.ref.table}"><code>${c.ref.table}(${c.ref.col})</code></a>${c.ref.onDelete ? ` <span class="ondel">${c.ref.onDelete}</span>` : ''}`
+    : '';
+  return `<tr>
+    <td class="colname"><code>${c.name}</code>${isPk ? '<span class="pk-key">PK</span>' : ''}</td>
+    <td class="ctype"><code>${esc(c.type.replace('sysml2.', ''))}</code></td>
+    <td class="cnull ${c.notnull ? 'req' : ''}">${c.notnull ? 'not null' : 'null'}</td>
+    <td class="cdefault">${c.default ? `<code>${esc(c.default)}</code>` : ''}</td>
+    <td>${ref}</td>
+    <td class="ccomment">${esc(c.comment)}</td>
+  </tr>`;
+}
+
+function card(t) {
+  const fkTotal = t.fks.length + t.columns.filter(c => c.ref).length;
+  const trgs = trgByTable.get(t.name) || [];
+  const idxs = idxByTable.get(t.name) || [];
+  const krows = [];
+  if (t.pk) krows.push(`<div class="krow"><b>Primary key</b><code>(${esc(t.pk)})</code></div>`);
+  for (const f of t.fks) krows.push(`<div class="krow"><b>Foreign key</b><code>(${esc(f.cols)})</code> → <a href="#t-${f.refTable}"><code>${f.refTable}(${esc(f.refCols)})</code></a>${f.onDelete ? ` <span class="ondel">${f.onDelete}</span>` : ''}</div>`);
+  for (const u of (t.uniques || [])) krows.push(`<div class="krow"><b>Unique</b><code>(${esc(u)})</code></div>`);
+  for (const ch of (t.checks || [])) krows.push(`<div class="krow"><b>Check</b>${ch.name ? `<code>${ch.name}</code> ` : ''}<code>${esc(ch.body)}</code></div>`);
+  for (const ix of idxs) krows.push(`<div class="krow"><b>${ix.unique ? 'Unique index' : 'Index'}</b><code>${ix.name}</code> <code>${esc(ix.def)}</code></div>`);
+  for (const tr of trgs) krows.push(`<div class="krow"><b>Trigger</b><code>${tr.name}</code> — ${esc(tr.timing)} → <code>${tr.fn}()</code></div>`);
+
+  const search = (t.name + ' ' + t.columns.map(c => c.name).join(' ')).toLowerCase();
+  return `<details class="card" id="t-${t.name}" data-search="${esc(search)}">
+    <summary>
+      <span class="tname"><code>${t.name}</code></span>
+      ${t.partition ? '<span class="badge part">partitioned</span>' : ''}
+      ${trgs.length ? '<span class="badge trg">' + trgs.length + ' trigger' + (trgs.length > 1 ? 's' : '') + '</span>' : ''}
+      <span class="meta"><span>${t.columns.length} cols</span><span>${fkTotal} FK${fkTotal === 1 ? '' : 's'}</span></span>
+    </summary>
+    <div class="card-body">
+      ${t.comment ? `<div class="tcomment">${esc(t.comment)}</div>` : ''}
+      <div class="scrollx"><table>
+        <thead><tr><th>Column</th><th>Type</th><th>Null</th><th>Default</th><th>References</th><th>Comment</th></tr></thead>
+        <tbody>${t.columns.map(c => colRow(t, c)).join('')}</tbody>
+      </table></div>
+      <div class="klist">${krows.join('')}${t.partition ? `<div class="krow"><b>Partition</b><code>${esc(t.partition)}</code></div>` : ''}</div>
+    </div>
+  </details>`;
+}
+
+document.getElementById('catalog-body').innerHTML = LAYERS.map(L => {
+  const tables = D.tables.filter(t => t.section === L.sec);
+  if (!tables.length) return '';
+  return `<section class="layer-sec" data-sec="${L.sec}">
+    <h3 class="layer"><span class="sec-no">§${L.sec}</span>${esc(L.title)}
+      <span class="origin ${L.origin === 'GENERATED' ? 'gen' : 'hand'}">${L.origin}</span>
+      <span class="meta" style="color:var(--muted);font-weight:400;font-size:12px">${tables.length} table${tables.length > 1 ? 's' : ''}</span>
+    </h3>
+    <p class="layer-sub">${L.blurb}</p>
+    <div class="cards">${tables.map(card).join('')}</div>
+  </section>`;
+}).join('');
+
+/* ---------- search ---------- */
+const qEl = document.getElementById('q');
+const qCount = document.getElementById('qcount');
+function applyFilter() {
+  const q = qEl.value.trim().toLowerCase();
+  let shown = 0;
+  for (const d of document.querySelectorAll('details.card')) {
+    const hit = !q || d.dataset.search.includes(q);
+    d.style.display = hit ? '' : 'none';
+    if (hit) shown++;
+  }
+  for (const sec of document.querySelectorAll('.layer-sec')) {
+    const any = [...sec.querySelectorAll('details.card')].some(d => d.style.display !== 'none');
+    sec.style.display = any ? '' : 'none';
+  }
+  qCount.textContent = q ? `${shown} of ${D.tables.length} tables` : `${D.tables.length} tables`;
+}
+qEl.addEventListener('input', applyFilter);
+applyFilter();
+
+/* ---------- anchor: open + flash target card ---------- */
+function openTarget() {
+  const id = location.hash.slice(1);
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (el && el.tagName === 'DETAILS') {
+    el.open = true;
+    el.classList.remove('hl-flash');
+    requestAnimationFrame(() => el.classList.add('hl-flash'));
+  }
+}
+window.addEventListener('hashchange', openTarget);
+openTarget();
+
+/* ---------- enums ---------- */
+document.getElementById('enums-body').innerHTML = D.enums.map(e =>
+  `<div class="enumcard"><h3><code>${e.name}</code></h3><div class="vals">${e.values.map(v => `<span class="val">${v}</span>`).join('')}</div></div>`
+).join('');
+
+/* ---------- functions ---------- */
+const fnNotes = {
+  assert_commit_immutable: 'Rejects every UPDATE of a commit row (Clause 7.1.2). With created frozen, the monotonicity check doubles as the DAG’s acyclicity guarantee.',
+  assert_commit_monotonic: 'A commit must be strictly newer than each parent — the “newest ancestor wins” fold depends on it.',
+  assert_commit_version_compatible: 'No release downgrades; merges require all parents in the merge’s own release.',
+  resolve_commit_state: 'The general fold: walks the DAG back from a commit (stopping at the nearest checkpoint), picks the newest version per identity; id DESC tiebreaker on sibling timestamp ties.',
+  resolve_element_at_commit: 'Single-element resolver; must agree with the full fold (smoke PASS 10b).',
+  build_commit_checkpoint: 'Materializes the full fold of one commit into commit_checkpoint; returns the row count.',
+  get_element_at_branch_head: 'Branch-head read through the overlay: merges stored_json with derived_json.',
+  get_elements_at_branch_head: 'Set read over the overlay merged with the base checkpoint.',
+  get_elements_at_commit: 'Full merged snapshot (stored + derived payload) at a commit.',
+  get_element_at_commit: 'Single merged payload at a commit.',
+  query_model_version: 'The metamodel release fingerprint this schema was generated from.',
+  validate_references_at_commit: 'Full audit tier: reports wrong-type and dangling element references over the whole snapshot (ANALYZE’d temp snapshot for true planner cardinality).',
+  validate_references_in_commit: 'Incremental O(change set) tier: catches both directions, including the reverse case a naive change-set check misses.',
+};
+document.getElementById('fns-body').innerHTML =
+  '<thead><tr><th>Function</th><th>Returns</th><th>Role</th></tr></thead><tbody>' +
+  D.functions.map(f => `<tr><td><code>${f.name}()</code></td><td class="ret"><code>${esc(f.returns.replace(/TABLE \($/, 'TABLE (…)'))}</code></td><td class="note">${fnNotes[f.name] || esc((f.comment || '').slice(0, 160))}</td></tr>`).join('') +
+  '</tbody>';
+
+/* ---------- views ---------- */
+document.getElementById('views-sub').innerHTML =
+  `${D.views.length} generated views — one per concrete metaclass (${D.classKindRows} registered class kinds, ${D.abstractKinds} abstract). ` +
+  `Each <code>vw_*</code> view flattens an instance across its subtype tables so generic code never re-derives the inheritance set.`;
+document.getElementById('views-body').innerHTML = D.views.map(v => `<code>${v}</code>`).join('');
+</script>

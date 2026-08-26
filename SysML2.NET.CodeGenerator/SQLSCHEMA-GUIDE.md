@@ -1443,6 +1443,25 @@ partition-local. (For a deployment dominated by one giant project, partitioning 
 one partition holds it; the design does not depend on partitioning for single-project
 performance, only for multi-tenant spread. The modulus is a deployment knob.)
 
+**Why not one partition per project (LIST)?** The alternative worth taking seriously: LIST
+partitioning with a leaf per `project_id`. It would win two real things — project deletion
+becomes an O(1) `DETACH`/`DROP PARTITION` instead of the ordered, batched deletion procedure
+of §7, and each project gets perfect vacuum/ANALYZE isolation. It loses on three grounds at
+the §1 profile. First, **project creation becomes runtime DDL**: a new project means
+`CREATE TABLE … PARTITION OF` on all 58 partitioned parents (PostgreSQL cloning every index
+and FK onto each new leaf), executed by the service with DDL rights while the concurrent
+write workload of §18 holds locks on those same parents — versus a single `INSERT` today.
+Second, **the catalog stops being bounded**: hash-16 fixes the schema at 928 leaves and
+2,629 cloned FKs forever, already enough to demand `max_locks_per_transaction = 4096`; at
+the profile's hundreds of projects, per-project LIST is ~11,600 leaves and ~33,000 FK
+clones, and the R10 failure mode (fast-path lock exhaustion on the 6-join views) scales
+with leaf count. Third, **the read side gains nothing**: every index leads with
+`project_id` and every query carries the predicate (the §12 rule), so a project's rows are
+already contiguous within their shared hash leaf — the 0.061 ms pruned probes of §14 would
+not get faster. The trade only inverts for a deployment with few (order tens) large,
+long-lived projects and *frequent* project offboarding — there, drop-partition archival
+starts to pay for the DDL machinery it requires.
+
 **Version policy.** The floor is PostgreSQL **16** — a deployability choice, not a technical
 one: nothing in the schema needs anything newer, and pinning the floor to the latest major
 would exclude most real enterprise installations for zero functional gain. All verification
@@ -1661,6 +1680,7 @@ the API surface but decide whether concurrent editing feels smooth or maddening:
     | Impact radius per commit | `derived_version` rows per `commit_id` | > a few % of model size | derived bursts need the R5 bulk path (GIN pending-list tuning) |
     | CAS conflict + auto-merge rate | service metrics: 409s and collection-merge rebases per branch | upward trend | hot-container contention (§18.3.6) is degrading UX |
     | Seq-scan counters on element tables | `pg_stat_user_tables.seq_scan` deltas on the partitioned leaves | climbing above ~0 in steady state | an R2/R3-class planner regression has reappeared — the silent failure mode of §14 |
+    | Set-read inlining (paging) | `EXPLAIN` the keyset page query over `get_elements_at_branch_head` (§16.5) | the plan shows `Function Scan on get_elements_at_branch_head` | SQL-function inlining broke — every page silently degrades to materialize-then-limit, O(model) per page |
 
 16. **Release conversion (§6.4).** The schema enforces the release invariants on the commit
     DAG (`trg_commit_parent_version`), but the conversion commit itself is service work: build
@@ -1744,6 +1764,57 @@ ORDER BY dv.name;
 Every predicate landed on a real, indexed, statistics-bearing column — the payoff of promoted
 derived columns plus the catalog.
 
+### 16.5 Paging a snapshot
+
+The set read is O(model) — ~1.1 s at 1M elements — and §14's verdict stands: **API pagination
+is mandatory at 1M**. The service recipe has two rules, one caveat, and one guard.
+
+**Rule 1 — anchor to a commit, never to HEAD.** Resolve branch → commit once, embed the
+`commitId` in the page token, and serve every page against that immutable commit (the
+multi-user trap this avoids is §18's pitfall 2). Because commits can never change, the page
+sequence is torn-free forever with no server-side cursor state — the token *is* the cursor.
+
+**Rule 2 — keyset, never OFFSET.** A page is a range continuation, not a row skip:
+
+```sql
+SELECT h.identity_id, h.payload
+FROM sysml2.get_elements_at_branch_head($branch) h
+WHERE h.identity_id > $last_seen          -- from the page token
+ORDER BY h.identity_id
+LIMIT $page_size;
+```
+
+This is index-priced by construction: both legs of the function's union end in `identity_id`
+in their primary keys (`branch_head (project_id, branch_id, identity_id)`,
+`commit_checkpoint (project_id, commit_id, identity_id)`), so each page range-scans from the
+cursor and stops after `LIMIT` rows — it never re-materializes the model. For *ordered* pages
+(spec Query `orderBy`), keyset over a promoted derived column with the identity as
+tiebreaker: `WHERE (dv.name, h.identity_id) > ($last_name, $last_id) ORDER BY dv.name,
+h.identity_id LIMIT n`. `OFFSET` paging re-scans everything before the page and is never the
+right answer here.
+
+**The historical caveat.** `resolve_commit_state` is a plpgsql fold — it resolves the whole
+snapshot *before* any page predicate applies, so naively paging a deep historical commit
+re-pays the fold per page. Page a historical commit either by caching the resolution for the
+token's lifetime, or by running `build_commit_checkpoint` on a commit that will be paged
+heavily — after which it pages exactly like the branch-head case, straight off the
+checkpoint PK.
+
+**The guard — SQL function inlining.** Everything above rests on one planner mechanism:
+`get_elements_at_branch_head` is a single-`SELECT` `LANGUAGE sql STABLE` function, which
+PostgreSQL **inlines** into the calling query — the function boundary disappears and the
+keyset predicate plus `LIMIT` reach the inner index scans. If inlining ever breaks (an
+`OFFSET 0`, `SECURITY DEFINER`, a rewrite to plpgsql, a materialized CTE inside the body),
+paging silently degrades to materialize-all-then-limit — O(model) per page — and the
+non-inlined function's default ~1000-row estimate corrupts the outer plan on top. This is
+precisely why the function takes **no `LIMIT` parameter**: a limit alone is not paging, the
+inlined outer query is plan-identical to a parameterized one, and the O(model) consumers
+(the query translation of §16.4, bulk exports) want the unlimited shape. The tell is one
+`EXPLAIN` on the keyset page query: a healthy plan shows index scans on `branch_head` and
+`commit_checkpoint` directly; a broken one shows `Function Scan on
+get_elements_at_branch_head`. That check is wired into the monitoring signal set of §15,
+obligation 15 — the same family as R10's "Subplans Removed: 15" verification.
+
 ---
 
 ## 17. Code generation: what is emitted from the UML model and how
@@ -1772,7 +1843,7 @@ declared-property computation per the two traps of section 3) and the emitters i
 
 Verification loop, end to end: run the fixture → apply `schema2.generated.sql` to PostgreSQL 18
 (`max_locks_per_transaction=4096`; both schemas are verified on 17 and 18.6, the recipe follows
-the prefer-18 version policy of §13) → run `schema.smoke.sql` (32 assertions) → both the golden
+the prefer-18 version policy of §13) → run `schema.smoke.sql` (40 assertions) → both the golden
 and the generated schema must pass identically.
 
 ---
@@ -1881,7 +1952,9 @@ at 0% conflicts — contention is branch-local, as designed. Reads stayed at ~1.
    colleague commits before page 2, "read the head again" returns a torn collection. Resolve
    branch → commit once, embed the `commitId` in the page token, paginate against the
    immutable commit. The schema supports this perfectly — that is what commits are *for* — but
-   the service must actually do it.
+   the service must actually do it. The full recipe — the keyset page shape, ordered cursors,
+   the historical-commit caveat, and the inlining guard that keeps pages index-priced — is
+   §16.5.
 3. **`data_identity`'s bare-uuid PK makes `@id`s instance-global, not project-scoped** — the
    deliberate price for FK-able cross-project references (§7). Consequence: two projects
    cannot contain an element with the same `@id`. Non-event for random v4 ids; real for
@@ -1958,6 +2031,7 @@ sections** (not the schema files' § banners); "—" means the term is used only
 | **Fold** | The spec's `versionedData` computation: a commit's own changes plus everything inherited from its parents' snapshots. | 6.2 |
 | **Foreign key (FK)** | A referential constraint; for element references always → `data_identity`, never → a version. | 7 |
 | **Full conformance** | Derived values computed and current in every response, queryable; the design target. | 9.1, 9.4 |
+| **Function inlining (SQL)** | PostgreSQL's expansion of a single-`SELECT` `LANGUAGE sql` function into the calling query, so outer predicates and `LIMIT` reach the inner index scans; what keeps keyset pages index-priced. | 16.5 |
 | **GIN index** | An inverted index over jsonb keys/values; serves containment probes on non-promoted derived properties. | 9.3 |
 | **Hash partitioning** | Splitting each table into N pieces by `hash(project_id)`; co-located across all element tables. | 13 |
 | **HOT update** | A heap-only update that avoids touching indexes; requires fillfactor headroom. | 13 |
@@ -1967,7 +2041,9 @@ sections** (not the schema files' § banners); "—" means the term is used only
 | **Invariant** | A rule that must hold at all times; the four merge invariants underwrite the resolver. | 6.1 |
 | **jsonb** | PostgreSQL's binary JSON column type. | — |
 | **KerML** | Kernel Modeling Language — the foundation layer of SysML v2. | 1 |
+| **Keyset pagination** | Paging with a `WHERE key > last-seen … ORDER BY key LIMIT n` cursor instead of `OFFSET`, anchored to an immutable commit carried in the page token. | 16.5, 18 |
 | **Link table** | An ordered `(version, ordinal, target)` table for a multi-valued stored property; 7 exist. | 8.2 |
+| **LIST partitioning (per project)** | The rejected alternative of one leaf per `project_id`: O(1) project drop, but runtime DDL on every project create and an unbounded catalog. | 13 |
 | **lz4** | Fast compression for TOASTed values; applied to both jsonb columns. | 13 |
 | **max_locks_per_transaction** | Lock-table sizing; ≥ 4096 is a deployment requirement for whole-schema DDL. | 13 |
 | **Merge (commit)** | A commit with two or more parents, converging branches. | 6.1 |

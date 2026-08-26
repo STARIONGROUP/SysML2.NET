@@ -88,7 +88,11 @@ code and with itself: `SysML2.NET.CodeGenerator/SQLSCHEMA.md` (compact reference
 conceptual terms, identical section structure) and
 `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md` (design sketch for the impact-radius engine,
 English-only). Both guides end in a glossary appendix (§19) that must list every term of art
-with a short definition and a guide-section reference.
+with a short definition and a guide-section reference. The set also includes the published
+**Schema Atlas** artifact — an interactive visualization parsed from
+`SysML2.NET.CodeGenerator/Sql/schema2.generated.sql`; whenever that file changes, the artifact
+must be rebuilt and republished (assets, URL, and procedure: `.claude/schema-atlas/README.md`;
+the `/sync-schema-guides` skill carries the step).
 
 **At the end of EVERY task, evaluate whether the change touched any of:**
 `SysML2.NET.CodeGenerator/Sql/**`, `Templates/Uml/core-sql-schema-2.hbs`,

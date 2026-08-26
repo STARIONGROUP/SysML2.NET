@@ -17,7 +17,7 @@
 > |---|---|
 > | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Handgeschreven, geannoteerd referentieontwerp |
 > | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | Echte generator-output (ingecheckt ter review) |
-> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functionele test met 32 assertions |
+> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functionele test met 40 assertions |
 > | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | De Handlebars-template die het schema genereert |
 >
 > Sectienummers zoals **§5** verwijzen naar de genummerde banners in de schemabestanden zelf.
@@ -330,7 +330,7 @@ P) en **N + 1** nieuwe `derived_version`-rijen (voor P plus elk element dat door
 hernoeming werd geraakt — de "impact radius"). De stored state van W blijft onaangeroerd; de
 derived state van W krijgt een nieuwe rij.
 
-De smoke-test met zijn 32 assertions (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) heeft
+De smoke-test met zijn 40 assertions (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) heeft
 precies dit scenario als eerste en belangrijkste assertion-paar (PASS 2a/2b): na de
 hernoeming levert W's `qualifiedName` netjes `"New::wheel"` op, *terwijl W nog steeds naar
 zijn oorspronkelijke version-rij verwijst*. Wie dit schema ooit gaat verbouwen: zorg dat die
@@ -1553,6 +1553,27 @@ neutraal — dat project past in zijn geheel in één partitie. Het ontwerp heef
 ook niet nodig voor single-project-performance, alleen voor de spreiding over tenants. De
 modulus is een instelknop per deployment.)
 
+**Waarom niet één partitie per project (LIST)?** Het alternatief dat serieuze overweging
+verdient: LIST partitioning met een leaf per `project_id`. Dat zou twee echte dingen
+winnen — project-deletie wordt een O(1) `DETACH`/`DROP PARTITION` in plaats van de
+geordende, gebatchte deletieprocedure van §7, en elk project krijgt perfecte
+vacuum/ANALYZE-isolatie. Het verliest op drie gronden bij het profiel van §1. Ten eerste:
+**project-aanmaak wordt runtime-DDL** — een nieuw project betekent
+`CREATE TABLE … PARTITION OF` op alle 58 gepartitioneerde parents (waarbij PostgreSQL elke
+index en FK naar de nieuwe leaf kloont), uitgevoerd door de service mét DDL-rechten terwijl
+de concurrente write-werklast van §18 locks op diezelfde parents houdt — tegenover één
+`INSERT` nu. Ten tweede: **de catalog is niet langer begrensd** — hash-16 legt het schema
+voorgoed vast op 928 leaves en 2.629 gekloonde FK's, al genoeg om
+`max_locks_per_transaction = 4096` te eisen; bij de honderden projects uit het profiel is
+per-project LIST ~11.600 leaves en ~33.000 FK-klonen, en de R10-faalmodus
+(fast-path-lock-uitputting op de 6-join-views) schaalt mee met het aantal leaves. Ten
+derde: **de leeskant wint er niets bij** — elke index begint met `project_id` en elke query
+draagt het predicaat (de regel van §12), dus de rijen van een project liggen binnen hun
+gedeelde hash-leaf al aaneengesloten; de gepruned probes van 0,061 ms uit §14 worden er
+niet sneller van. De afweging kantelt pas voor een deployment met weinig (orde tientallen)
+grote, langlevende projects en *frequente* project-offboarding — dáár begint
+drop-partition-archivering de vereiste DDL-machinerie terug te verdienen.
+
 **Versiebeleid.** De vloer is PostgreSQL **16** — een deployability-keuze, geen technische:
 niets in het schema heeft iets nieuwers nodig, en de vloer op de nieuwste major leggen zou
 het gros van de echte enterprise-installaties uitsluiten voor nul functionele winst. Alle
@@ -1788,6 +1809,7 @@ soepel aanvoelt of om gek van te worden is:
     | Impact radius per commit | `derived_version`-rijen per `commit_id` | > enkele % van de modelgrootte | derived bursts hebben het R5-bulkpad nodig (GIN-pending-list-tuning) |
     | CAS-conflict- + auto-merge-ratio | service-metrics: 409's en collection-merge-rebases per branch | stijgende trend | hot-container-contentie (§18.3.6) holt de gebruikerservaring uit |
     | Seq-scan-tellers op elementtabellen | `pg_stat_user_tables.seq_scan`-delta's op de gepartitioneerde leaves | klimt boven ~0 in stabiele toestand | een planner-regressie van de R2/R3-klasse is terug — de stille faalmodus van §14 |
+    | Set-read-inlining (paginering) | `EXPLAIN` op de keyset-paginaquery over `get_elements_at_branch_head` (§16.5) | het plan toont `Function Scan on get_elements_at_branch_head` | de SQL-function-inlining is gebroken — elke pagina degradeert geruisloos naar materialiseren-dan-limit, O(model) per pagina |
 
 16. **Release-conversie (§6.4).** Het schema dwingt de release-invarianten op de commit-DAG
     af (`trg_commit_parent_version`), maar de conversion commit zelf is servicewerk: bouw de
@@ -1876,6 +1898,60 @@ ORDER BY dv.name;
 Elk predicaat komt terecht op een echte, geïndexeerde kolom met eigen statistieken — en dat
 is precies de winst van promoted derived columns plus de catalogus.
 
+### 16.5 Een snapshot pagineren
+
+De set read is O(model) — ~1,1 s bij 1M elementen — en het oordeel van §14 staat: **API
+pagination is bij 1M verplicht**. Het recept voor de service telt twee regels, één
+kanttekening en één waakhond.
+
+**Regel 1 — veranker aan een commit, nooit aan HEAD.** Los branch → commit één keer op, stop
+het `commitId` in het page token, en serveer elke pagina tegen die immutable commit (de
+multi-user-valkuil die dit vermijdt is valkuil 2 van §18). Omdat commits nooit kunnen
+veranderen is de paginareeks voorgoed scheurvrij, zonder server-side cursor-state — het
+token *is* de cursor.
+
+**Regel 2 — keyset, nooit OFFSET.** Een pagina is een range-vervolg, geen rijen overslaan:
+
+```sql
+SELECT h.identity_id, h.payload
+FROM sysml2.get_elements_at_branch_head($branch) h
+WHERE h.identity_id > $last_seen          -- uit het page token
+ORDER BY h.identity_id
+LIMIT $page_size;
+```
+
+Dit is by construction index-geprijsd: beide benen van de union in de functie eindigen op
+`identity_id` in hun primary key (`branch_head (project_id, branch_id, identity_id)`,
+`commit_checkpoint (project_id, commit_id, identity_id)`), dus elke pagina range-scant vanaf
+de cursor en stopt na `LIMIT` rijen — het model wordt nooit opnieuw gematerialiseerd. Voor
+*gesorteerde* pagina's (spec-Query `orderBy`): keyset over een promoted derived column met de
+identity als tiebreaker: `WHERE (dv.name, h.identity_id) > ($last_name, $last_id) ORDER BY
+dv.name, h.identity_id LIMIT n`. `OFFSET`-paginering scant alles vóór de pagina opnieuw en
+is hier nooit het juiste antwoord.
+
+**De historische kanttekening.** `resolve_commit_state` is een plpgsql-fold — die lost het
+hele snapshot op *voordat* enig paginapredicaat aan bod komt, dus wie een diepe historische
+commit naïef pagineert, betaalt de fold per pagina opnieuw. Pagineer een historische commit
+door de resolutie voor de levensduur van het token te cachen, of door
+`build_commit_checkpoint` te draaien op een commit die zwaar gepagineerd gaat worden —
+daarna pagineert hij precies als het branch-head-geval, rechtstreeks van de checkpoint-PK.
+
+**De waakhond — SQL function inlining.** Alles hierboven rust op één planner-mechanisme:
+`get_elements_at_branch_head` is een single-`SELECT` `LANGUAGE sql STABLE`-functie, die
+PostgreSQL **inlinet** in de aanroepende query — de functiegrens verdwijnt en het
+keyset-predicaat plus `LIMIT` bereiken de binnenste index-scans. Breekt de inlining ooit
+(een `OFFSET 0`, `SECURITY DEFINER`, een herschrijving naar plpgsql, een gematerialiseerde
+CTE in de body), dan degradeert paginering geruisloos naar alles-materialiseren-dan-limit —
+O(model) per pagina — en verpest de default-schatting van ~1000 rijen van een niet-geïnlinede
+functie bovendien het buitenplan. Dit is precies waarom de functie **geen
+`LIMIT`-parameter** heeft: een limit alleen is geen paginering, de geïnlinede buitenquery is
+plan-identiek aan een geparametriseerde variant, en de O(model)-consumenten (de
+queryvertaling van §16.4, bulk-exports) willen juist de onbegrensde vorm. Het signaal is één
+`EXPLAIN` op de keyset-paginaquery: een gezond plan toont index-scans rechtstreeks op
+`branch_head` en `commit_checkpoint`; een gebroken plan toont `Function Scan on
+get_elements_at_branch_head`. Die check zit in de monitoring-signaalset van §15, plicht 15 —
+dezelfde familie als R10's "Subplans Removed: 15"-verificatie.
+
 ---
 
 ## 17. Codegeneratie: wat uit het UML-model wordt gegenereerd en hoe
@@ -1906,7 +1982,7 @@ aangestuurd vanuit
 De verificatielus, van begin tot eind: draai de fixture → zet `schema2.generated.sql` op een
 PostgreSQL 18 (`max_locks_per_transaction=4096`; beide schema's zijn geverifieerd op 17 én
 18.6, het recept volgt het prefereer-18-versiebeleid van §13) → draai `schema.smoke.sql`
-(32 assertions) → en zowel het golden als het gegenereerde schema moet daar identiek doorheen
+(40 assertions) → en zowel het golden als het gegenereerde schema moet daar identiek doorheen
 komen.
 
 ---
@@ -2026,7 +2102,9 @@ schrijfstorm liep: de MVCC-belofte van §18.1, gemeten.
    laat een collega committen, en "lees de head opnieuw" geeft voor pagina 2 een gescheurde
    verzameling terug. De remedie: los branch → commit één keer op, stop het `commitId` in het
    page token, en pagineer tegen de immutable commit. Het schema is er klaar voor — daar zíjn
-   commits voor — maar de service moet het wel echt zo doen.
+   commits voor — maar de service moet het wel echt zo doen. Het volledige recept — de
+   keyset-paginavorm, gesorteerde cursors, de historische kanttekening en de inlining-waakhond
+   die pagina's index-geprijsd houdt — staat in §16.5.
 3. **De kale-uuid-PK van `data_identity` maakt `@id`s globaal per instantie, niet per
    project** — de bewust betaalde prijs voor FK-bare cross-project-references (sectie 7).
    Gevolg: twee projecten kunnen niet allebei een element met hetzelfde `@id` hebben. Voor
@@ -2108,6 +2186,7 @@ dat de term alleen terloops voorkomt.
 | **Fold** | De `versionedData`-berekening uit de spec: de eigen wijzigingen van een commit plus alles wat hij uit de snapshots van zijn parents erft. | 6.2 |
 | **Foreign key (FK)** | Een referentiële constraint; voor element-references altijd → `data_identity`, nooit → een version. | 7 |
 | **Full conformance** | Derived values berekend en actueel in elk antwoord, en querybaar; het ontwerpdoel. | 9.1, 9.4 |
+| **Function inlining (SQL)** | PostgreSQL's expansie van een single-`SELECT` `LANGUAGE sql`-functie in de aanroepende query, zodat buitenpredicaten en `LIMIT` de binnenste index-scans bereiken; wat keyset-pagina's index-geprijsd houdt. | 16.5 |
 | **GIN-index** | Een inverted index over jsonb-sleutels en -waarden; bedient containment-probes op niet-gepromote derived properties. | 9.3 |
 | **Hash-partitionering** | Elke tabel opknippen in N stukken via `hash(project_id)`; over alle elementtabellen gelijk. | 13 |
 | **HOT update** | Een heap-only update die de indexen ongemoeid laat; vraagt om fillfactor-ruimte. | 13 |
@@ -2117,7 +2196,9 @@ dat de term alleen terloops voorkomt.
 | **Invariant** | Een regel die altijd waar moet zijn; de vier merge-invarianten schragen de resolver. | 6.1 |
 | **jsonb** | PostgreSQL's binaire JSON-kolomtype. | — |
 | **KerML** | Kernel Modeling Language — de fundamentlaag onder SysML v2. | 1 |
+| **Keyset pagination** | Pagineren met een `WHERE key > last-seen … ORDER BY key LIMIT n`-cursor in plaats van `OFFSET`, verankerd aan een immutable commit die in het page token meereist. | 16.5, 18 |
 | **Link-tabel** | Een geordende `(version, ordinal, target)`-tabel voor een multi-valued stored property; er zijn er 7. | 8.2 |
+| **LIST partitioning (per project)** | Het verworpen alternatief van één leaf per `project_id`: O(1) project-drop, maar runtime-DDL bij elke project-aanmaak en een onbegrensde catalog. | 13 |
 | **lz4** | Snelle compressie voor geTOASTe waarden; toegepast op beide jsonb-kolommen. | 13 |
 | **max_locks_per_transaction** | De maat van de locktabel; ≥ 4096 is een deployment-eis voor schema-brede DDL. | 13 |
 | **Merge (commit)** | Een commit met twee of meer parents, waar branches samenkomen. | 6.1 |

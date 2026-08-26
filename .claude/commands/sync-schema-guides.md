@@ -13,6 +13,7 @@ Keep the SQL-schema documentation set consistent with the code and with itself. 
 | `SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.md` | Long-form architectural guide (English) — 19 sections + glossary appendix (§19) |
 | `SysML2.NET.CodeGenerator/SQLSCHEMA-GUIDE.nl.md` | Dutch translation of the guide — MUST stay structurally identical (same sections, same anchors pattern, same tables) |
 | `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md` | Design sketch for the impact-radius engine (guide obligation §15.1). English-only. Update when propagation kinds, the `derived_dependency` catalog concept, closure indexes, or the §15/§18 obligations it cites change. |
+| **Schema Atlas artifact** (`https://claude.ai/code/artifact/02fcfe37-e5b2-473d-9716-679b2ac34b26`) | Published interactive visualization of the generated schema — all tables/columns/FKs/indexes/triggers, parsed live from `schema2.generated.sql`. Regeneration assets and refresh procedure: `.claude/schema-atlas/` (see its README.md). |
 
 **Language policy for the Dutch guide:** Dutch prose, English conceptual terms (derived
 properties, stored state, fold, checkpoint, overlay, impact radius, census, …). Never
@@ -70,10 +71,23 @@ If nothing relevant changed and the argument is not "audit": report "no sync nee
    numbering space. If a banner is added/renumbered in `schema.golden.sql`, update the
    template in lockstep (hand-written sections must stay byte-identical) and fix the `(§N)`
    suffixes in the guides' section headings.
+6. **Republish the Schema Atlas artifact** whenever `Sql/schema2.generated.sql` changed
+   (its content is parsed from that file):
+   - run `.claude/schema-atlas/build-schema-atlas.ps1` (writes `%TEMP%\schema-atlas.html`
+     and prints the freshly parsed counts);
+   - if any printed count differs from the literals hard-coded in
+     `.claude/schema-atlas/template.html` (masthead lede, layer blurbs, SVG annotations:
+     175 class kinds, 47 subtype / 7 link tables, 58 × 16 = 928 partitions, 2,629 cloned
+     FKs, 167 views, 3 triggers), fix the template first and rebuild;
+   - publish the output file with the Artifact tool, passing
+     `url: https://claude.ai/code/artifact/02fcfe37-e5b2-473d-9716-679b2ac34b26` so the
+     existing artifact updates in place (favicon stays `🐘`).
 
 ## 3. Verification before reporting done
 
 - The three documents agree on every shared number and section reference.
+- If `schema2.generated.sql` changed: the Schema Atlas artifact was republished (step 6) and
+  its stats strip matches the build script's printed counts.
 - Both guides have identical section structure (`grep -c "^## " both files` — counts match).
 - If the schema itself changed: the generator fixture passes and the smoke test passes
   against both golden and generated schema (see SQLSCHEMA.md → Verification).
