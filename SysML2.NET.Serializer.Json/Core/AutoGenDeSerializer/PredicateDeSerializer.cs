@@ -33,6 +33,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Kernel.Functions;
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Utility;
 
     /// <summary>
     /// The purpose of the <see cref="PredicateDeSerializer"/> is to provide deserialization capabilities
@@ -41,10 +42,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     internal static class PredicateDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="IPredicate"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="IPredicate"/> from the provided <see cref="Utf8JsonReader"/>
         /// </summary>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IPredicate"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IPredicate"/> json object. On return the reader is positioned on the matching
+        /// <see cref="JsonTokenType.EndObject"/>
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -58,43 +61,25 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <returns>
         /// an instance of <see cref="IPredicate"/>
         /// </returns>
-        internal static IPredicate DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
+        /// <remarks>
+        /// The <c>@type</c> property is the discriminator that the caller dispatched on, so it is skipped rather
+        /// than re-validated here
+        /// </remarks>
+        internal static IPredicate DeSerialize(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("PredicateDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type"u8, out var @type))
-            {
-                throw new InvalidOperationException("The @type property is not available, the PredicateDeSerializer cannot be used to deserialize this JsonElement");
-            }
-
-            if (@type.GetString() != "Predicate")
-            {
-                throw new InvalidOperationException($"The PredicateDeSerializer can only be used to deserialize objects of type IPredicate, a {@type.GetString()} was provided");
-            }
+            Utf8JsonReaderHelper.Expect(ref reader, JsonTokenType.StartObject);
 
             var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Predicate();
 
-            if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
-            {
-                var propertyValue = idProperty.GetString();
-
-                if (propertyValue == null)
-                {
-                    throw new JsonException("The @id property is not present, the Predicate cannot be deserialized");
-                }
-                else
-                {
-                    dtoInstance.Id = Guid.Parse(propertyValue);
-                }
-            }
-
             if (deserializeDerivedProperties)
             {
-                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, ref reader, logger);
             }
             else
             {
-                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, ref reader, logger);
             }
 
             return dtoInstance;
@@ -102,1142 +87,1416 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
         /// <summary>
         /// Deserializes properties of a <see cref="Predicate" />
-        /// from a <see cref="JsonElement" />, including derived properties
+        /// from a <see cref="Utf8JsonReader" />, including derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="Predicate"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IPredicate"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IPredicate"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Kernel.Functions.Predicate dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Kernel.Functions.Predicate dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var differencingTypeSeen = false;
+            var documentationSeen = false;
+            var elementIdSeen = false;
+            var endFeatureSeen = false;
+            var expressionSeen = false;
+            var featureSeen = false;
+            var featureMembershipSeen = false;
+            var importedMembershipSeen = false;
+            var inheritedFeatureSeen = false;
+            var inheritedMembershipSeen = false;
+            var inputSeen = false;
+            var intersectingTypeSeen = false;
+            var isAbstractSeen = false;
+            var isConjugatedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isLibraryElementSeen = false;
+            var isModelLevelEvaluableSeen = false;
+            var isSufficientSeen = false;
+            var memberSeen = false;
+            var membershipSeen = false;
+            var multiplicitySeen = false;
+            var nameSeen = false;
+            var outputSeen = false;
+            var ownedAnnotationSeen = false;
+            var ownedConjugatorSeen = false;
+            var ownedDifferencingSeen = false;
+            var ownedDisjoiningSeen = false;
+            var ownedElementSeen = false;
+            var ownedEndFeatureSeen = false;
+            var ownedFeatureSeen = false;
+            var ownedFeatureMembershipSeen = false;
+            var ownedImportSeen = false;
+            var ownedIntersectingSeen = false;
+            var ownedMemberSeen = false;
+            var ownedMembershipSeen = false;
+            var ownedRelationshipSeen = false;
+            var ownedSpecializationSeen = false;
+            var ownedSubclassificationSeen = false;
+            var ownedUnioningSeen = false;
+            var ownerSeen = false;
+            var owningMembershipSeen = false;
+            var owningNamespaceSeen = false;
+            var owningRelationshipSeen = false;
+            var parameterSeen = false;
+            var qualifiedNameSeen = false;
+            var resultSeen = false;
+            var shortNameSeen = false;
+            var stepSeen = false;
+            var textualRepresentationSeen = false;
+            var unioningTypeSeen = false;
 
-                    if (propertyValue != null)
-                    {
-                        dtoInstance.AliasIds.Add(propertyValue);
-                    }
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the Predicate json object.");
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
-            {
-                foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("@id"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var differencingTypeExternalIdProperty))
-                    {
-                        var propertyValue = differencingTypeExternalIdProperty.GetString();
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        throw new JsonException("The @id property is not present, the Predicate cannot be deserialized");
+                    }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("aliasIds"u8))
+                {
+                    aliasIdsSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        var aliasIdsValue = reader.GetString();
+
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.differencingType.Add(Guid.Parse(propertyValue));
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the differencingType Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
-            {
-                foreach (var arrayItem in documentationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var documentationExternalIdProperty))
-                    {
-                        var propertyValue = documentationExternalIdProperty.GetString();
+                    declaredNameSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("differencingType"u8))
+                {
+                    differencingTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var differencingTypeValue))
                         {
-                            dtoInstance.documentation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.differencingType.Add(differencingTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the documentation Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("documentation"u8))
                 {
-                    dtoInstance.ElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
+                    documentationSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
-            {
-                foreach (var arrayItem in endFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var endFeatureExternalIdProperty))
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = endFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var documentationValue))
                         {
-                            dtoInstance.endFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.documentation.Add(documentationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the endFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("expression"u8, out var expressionProperty))
-            {
-                foreach (var arrayItem in expressionProperty.EnumerateArray())
+                if (reader.ValueTextEquals("elementId"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var expressionExternalIdProperty))
-                    {
-                        var propertyValue = expressionExternalIdProperty.GetString();
+                    elementIdSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
+                    {
+                        dtoInstance.ElementId = elementIdValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("endFeature"u8))
+                {
+                    endFeatureSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var endFeatureValue))
                         {
-                            dtoInstance.expression.Add(Guid.Parse(propertyValue));
+                            dtoInstance.endFeature.Add(endFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the expression Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
-            {
-                foreach (var arrayItem in featureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("expression"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var featureExternalIdProperty))
-                    {
-                        var propertyValue = featureExternalIdProperty.GetString();
+                    expressionSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var expressionValue))
                         {
-                            dtoInstance.feature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.expression.Add(expressionValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the feature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("featureMembership"u8, out var featureMembershipProperty))
-            {
-                foreach (var arrayItem in featureMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("feature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var featureMembershipExternalIdProperty))
-                    {
-                        var propertyValue = featureMembershipExternalIdProperty.GetString();
+                    featureSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var featureValue))
                         {
-                            dtoInstance.featureMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.feature.Add(featureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the featureMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
-            {
-                foreach (var arrayItem in importedMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("featureMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var importedMembershipExternalIdProperty))
-                    {
-                        var propertyValue = importedMembershipExternalIdProperty.GetString();
+                    featureMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var featureMembershipValue))
                         {
-                            dtoInstance.importedMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.featureMembership.Add(featureMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the importedMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("inheritedFeature"u8, out var inheritedFeatureProperty))
-            {
-                foreach (var arrayItem in inheritedFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("importedMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var inheritedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = inheritedFeatureExternalIdProperty.GetString();
+                    importedMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var importedMembershipValue))
                         {
-                            dtoInstance.inheritedFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.importedMembership.Add(importedMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the inheritedFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("inheritedMembership"u8, out var inheritedMembershipProperty))
-            {
-                foreach (var arrayItem in inheritedMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("inheritedFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var inheritedMembershipExternalIdProperty))
-                    {
-                        var propertyValue = inheritedMembershipExternalIdProperty.GetString();
+                    inheritedFeatureSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var inheritedFeatureValue))
                         {
-                            dtoInstance.inheritedMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.inheritedFeature.Add(inheritedFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the inheritedMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("input"u8, out var inputProperty))
-            {
-                foreach (var arrayItem in inputProperty.EnumerateArray())
+                if (reader.ValueTextEquals("inheritedMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var inputExternalIdProperty))
-                    {
-                        var propertyValue = inputExternalIdProperty.GetString();
+                    inheritedMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var inheritedMembershipValue))
                         {
-                            dtoInstance.input.Add(Guid.Parse(propertyValue));
+                            dtoInstance.inheritedMembership.Add(inheritedMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the input Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
-            {
-                foreach (var arrayItem in intersectingTypeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("input"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var intersectingTypeExternalIdProperty))
-                    {
-                        var propertyValue = intersectingTypeExternalIdProperty.GetString();
+                    inputSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var inputValue))
                         {
-                            dtoInstance.intersectingType.Add(Guid.Parse(propertyValue));
+                            dtoInstance.input.Add(inputValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the intersectingType Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
-            {
-                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isAbstract Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isConjugated"u8, out var isConjugatedProperty))
-            {
-                if (isConjugatedProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("intersectingType"u8))
                 {
-                    dtoInstance.isConjugated = isConjugatedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isConjugated Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
+                    intersectingTypeSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-            if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
-            {
-                if (isLibraryElementProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.isLibraryElement = isLibraryElementProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isLibraryElement Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isModelLevelEvaluable"u8, out var isModelLevelEvaluableProperty))
-            {
-                if (isModelLevelEvaluableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.isModelLevelEvaluable = isModelLevelEvaluableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isModelLevelEvaluable Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
-            {
-                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isSufficient Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
-            {
-                foreach (var arrayItem in memberProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var memberExternalIdProperty))
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = memberExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var intersectingTypeValue))
                         {
-                            dtoInstance.member.Add(Guid.Parse(propertyValue));
+                            dtoInstance.intersectingType.Add(intersectingTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the member Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
-            {
-                foreach (var arrayItem in membershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("isAbstract"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var membershipExternalIdProperty))
-                    {
-                        var propertyValue = membershipExternalIdProperty.GetString();
+                    isAbstractSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsAbstract = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isConjugated"u8))
+                {
+                    isConjugatedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isConjugated = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isLibraryElement"u8))
+                {
+                    isLibraryElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isLibraryElement = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isModelLevelEvaluable"u8))
+                {
+                    isModelLevelEvaluableSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isModelLevelEvaluable = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isSufficient"u8))
+                {
+                    isSufficientSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsSufficient = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("member"u8))
+                {
+                    memberSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var memberValue))
                         {
-                            dtoInstance.membership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.member.Add(memberValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the membership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("multiplicity"u8, out var multiplicityProperty))
-            {
-                if (multiplicityProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.multiplicity = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("membership"u8))
                 {
-                    if (multiplicityProperty.TryGetProperty("@id"u8, out var multiplicityExternalIdProperty))
+                    membershipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = multiplicityExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var membershipValue))
                         {
-                            dtoInstance.multiplicity = Guid.Parse(propertyValue);
+                            dtoInstance.membership.Add(membershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the multiplicity Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
-            {
-                dtoInstance.name = nameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the name Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
-            {
-                foreach (var arrayItem in outputProperty.EnumerateArray())
+                if (reader.ValueTextEquals("multiplicity"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var outputExternalIdProperty))
-                    {
-                        var propertyValue = outputExternalIdProperty.GetString();
+                    multiplicitySeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.multiplicity = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var multiplicityValue))
+                    {
+                        dtoInstance.multiplicity = multiplicityValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("name"u8))
+                {
+                    nameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.name = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("output"u8))
+                {
+                    outputSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var outputValue))
                         {
-                            dtoInstance.output.Add(Guid.Parse(propertyValue));
+                            dtoInstance.output.Add(outputValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the output Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
-            {
-                foreach (var arrayItem in ownedAnnotationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedAnnotation"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotationExternalIdProperty))
-                    {
-                        var propertyValue = ownedAnnotationExternalIdProperty.GetString();
+                    ownedAnnotationSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAnnotationValue))
                         {
-                            dtoInstance.ownedAnnotation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAnnotation.Add(ownedAnnotationValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
-            {
-                if (ownedConjugatorProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ownedConjugator = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedConjugator"u8))
                 {
-                    if (ownedConjugatorProperty.TryGetProperty("@id"u8, out var ownedConjugatorExternalIdProperty))
+                    ownedConjugatorSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = ownedConjugatorExternalIdProperty.GetString();
+                        dtoInstance.ownedConjugator = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedConjugatorValue))
+                    {
+                        dtoInstance.ownedConjugator = ownedConjugatorValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedDifferencing"u8))
+                {
+                    ownedDifferencingSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedDifferencingValue))
                         {
-                            dtoInstance.ownedConjugator = Guid.Parse(propertyValue);
+                            dtoInstance.ownedDifferencing.Add(ownedDifferencingValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedConjugator Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedDifferencing"u8, out var ownedDifferencingProperty))
-            {
-                foreach (var arrayItem in ownedDifferencingProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedDisjoining"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedDifferencingExternalIdProperty))
-                    {
-                        var propertyValue = ownedDifferencingExternalIdProperty.GetString();
+                    ownedDisjoiningSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedDisjoiningValue))
                         {
-                            dtoInstance.ownedDifferencing.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedDisjoining.Add(ownedDisjoiningValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedDifferencing Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedDisjoining"u8, out var ownedDisjoiningProperty))
-            {
-                foreach (var arrayItem in ownedDisjoiningProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedDisjoiningExternalIdProperty))
-                    {
-                        var propertyValue = ownedDisjoiningExternalIdProperty.GetString();
+                    ownedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedElementValue))
                         {
-                            dtoInstance.ownedDisjoining.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedElement.Add(ownedElementValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedDisjoining Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
-            {
-                foreach (var arrayItem in ownedElementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedEndFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedElementExternalIdProperty))
-                    {
-                        var propertyValue = ownedElementExternalIdProperty.GetString();
+                    ownedEndFeatureSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedEndFeatureValue))
                         {
-                            dtoInstance.ownedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedEndFeature.Add(ownedEndFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedElement Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedEndFeature"u8, out var ownedEndFeatureProperty))
-            {
-                foreach (var arrayItem in ownedEndFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedEndFeatureExternalIdProperty))
-                    {
-                        var propertyValue = ownedEndFeatureExternalIdProperty.GetString();
+                    ownedFeatureSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedFeatureValue))
                         {
-                            dtoInstance.ownedEndFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedFeature.Add(ownedFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedEndFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedFeature"u8, out var ownedFeatureProperty))
-            {
-                foreach (var arrayItem in ownedFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedFeatureMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = ownedFeatureExternalIdProperty.GetString();
+                    ownedFeatureMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedFeatureMembershipValue))
                         {
-                            dtoInstance.ownedFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedFeatureMembership.Add(ownedFeatureMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedFeatureMembership"u8, out var ownedFeatureMembershipProperty))
-            {
-                foreach (var arrayItem in ownedFeatureMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedImport"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedFeatureMembershipExternalIdProperty))
-                    {
-                        var propertyValue = ownedFeatureMembershipExternalIdProperty.GetString();
+                    ownedImportSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedImportValue))
                         {
-                            dtoInstance.ownedFeatureMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedImport.Add(ownedImportValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedFeatureMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
-            {
-                foreach (var arrayItem in ownedImportProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedIntersecting"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedImportExternalIdProperty))
-                    {
-                        var propertyValue = ownedImportExternalIdProperty.GetString();
+                    ownedIntersectingSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedIntersectingValue))
                         {
-                            dtoInstance.ownedImport.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedIntersecting.Add(ownedIntersectingValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedImport Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedIntersecting"u8, out var ownedIntersectingProperty))
-            {
-                foreach (var arrayItem in ownedIntersectingProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedMember"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedIntersectingExternalIdProperty))
-                    {
-                        var propertyValue = ownedIntersectingExternalIdProperty.GetString();
+                    ownedMemberSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedMemberValue))
                         {
-                            dtoInstance.ownedIntersecting.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedMember.Add(ownedMemberValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedIntersecting Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
-            {
-                foreach (var arrayItem in ownedMemberProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMemberExternalIdProperty))
-                    {
-                        var propertyValue = ownedMemberExternalIdProperty.GetString();
+                    ownedMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedMembershipValue))
                         {
-                            dtoInstance.ownedMember.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedMembership.Add(ownedMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedMember Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
-            {
-                foreach (var arrayItem in ownedMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMembershipExternalIdProperty))
-                    {
-                        var propertyValue = ownedMembershipExternalIdProperty.GetString();
+                    ownedRelationshipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.ownedMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedSpecialization"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                    ownedSpecializationSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedSpecializationValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedSpecialization.Add(ownedSpecializationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedSpecialization"u8, out var ownedSpecializationProperty))
-            {
-                foreach (var arrayItem in ownedSpecializationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedSubclassification"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedSpecializationExternalIdProperty))
-                    {
-                        var propertyValue = ownedSpecializationExternalIdProperty.GetString();
+                    ownedSubclassificationSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedSubclassificationValue))
                         {
-                            dtoInstance.ownedSpecialization.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedSubclassification.Add(ownedSubclassificationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedSpecialization Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedSubclassification"u8, out var ownedSubclassificationProperty))
-            {
-                foreach (var arrayItem in ownedSubclassificationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedUnioning"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedSubclassificationExternalIdProperty))
-                    {
-                        var propertyValue = ownedSubclassificationExternalIdProperty.GetString();
+                    ownedUnioningSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedUnioningValue))
                         {
-                            dtoInstance.ownedSubclassification.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedUnioning.Add(ownedUnioningValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedSubclassification Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedUnioning"u8, out var ownedUnioningProperty))
-            {
-                foreach (var arrayItem in ownedUnioningProperty.EnumerateArray())
+                if (reader.ValueTextEquals("owner"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedUnioningExternalIdProperty))
-                    {
-                        var propertyValue = ownedUnioningExternalIdProperty.GetString();
+                    ownerSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owner = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownerValue))
+                    {
+                        dtoInstance.owner = ownerValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningMembership"u8))
+                {
+                    owningMembershipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningMembership = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningMembershipValue))
+                    {
+                        dtoInstance.owningMembership = owningMembershipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningNamespace"u8))
+                {
+                    owningNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningNamespace = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningNamespaceValue))
+                    {
+                        dtoInstance.owningNamespace = owningNamespaceValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("parameter"u8))
+                {
+                    parameterSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var parameterValue))
                         {
-                            dtoInstance.ownedUnioning.Add(Guid.Parse(propertyValue));
+                            dtoInstance.parameter.Add(parameterValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedUnioning Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
-            {
-                if (ownerProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owner = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("qualifiedName"u8))
                 {
-                    if (ownerProperty.TryGetProperty("@id"u8, out var ownerExternalIdProperty))
+                    qualifiedNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.qualifiedName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("result"u8))
+                {
+                    resultSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = ownerExternalIdProperty.GetString();
+                        dtoInstance.result = Guid.Empty;
 
-                        if (propertyValue != null)
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.owner = Guid.Parse(propertyValue);
+                            logger.LogDebug("the Predicate.result property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owner Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
-            {
-                if (owningMembershipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningMembership = null;
-                }
-                else
-                {
-                    if (owningMembershipProperty.TryGetProperty("@id"u8, out var owningMembershipExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var resultValue))
                     {
-                        var propertyValue = owningMembershipExternalIdProperty.GetString();
+                        dtoInstance.result = resultValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("shortName"u8))
+                {
+                    shortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.shortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("step"u8))
+                {
+                    stepSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var stepValue))
                         {
-                            dtoInstance.owningMembership = Guid.Parse(propertyValue);
+                            dtoInstance.step.Add(stepValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
-            {
-                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningNamespace = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("textualRepresentation"u8))
                 {
-                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
+                    textualRepresentationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var textualRepresentationValue))
                         {
-                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
+                            dtoInstance.textualRepresentation.Add(textualRepresentationValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningNamespace Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelationship = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("unioningType"u8))
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    unioningTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var unioningTypeValue))
                         {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                            dtoInstance.unioningType.Add(unioningTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+
+
+                reader.Read();
+                reader.Skip();
             }
 
-            if (jsonElement.TryGetProperty("parameter"u8, out var parameterProperty))
+            if (logger.IsEnabled(LogLevel.Debug))
             {
-                foreach (var arrayItem in parameterProperty.EnumerateArray())
+                if (!aliasIdsSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var parameterExternalIdProperty))
-                    {
-                        var propertyValue = parameterExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.parameter.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the aliasIds Json property was not found in the Predicate: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the parameter Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
-            {
-                dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the qualifiedName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("result"u8, out var resultProperty))
-            {
-                if (resultProperty.ValueKind == JsonValueKind.Null)
+                if (!declaredNameSeen)
                 {
-                    dtoInstance.result = Guid.Empty;
-                    logger.LogDebug($"the Predicate.result property was not found in the Json. The value is set to Guid.Empty");
+                    logger.LogDebug("the declaredName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
                 }
-                else
+                if (!declaredShortNameSeen)
                 {
-                    if (resultProperty.TryGetProperty("@id"u8, out var resultExternalIdProperty))
-                    {
-                        var propertyValue = resultExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.result = Guid.Parse(propertyValue);
-                        }
-                    }
+                    logger.LogDebug("the declaredShortName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the result Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
-            {
-                dtoInstance.shortName = shortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the shortName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("step"u8, out var stepProperty))
-            {
-                foreach (var arrayItem in stepProperty.EnumerateArray())
+                if (!differencingTypeSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var stepExternalIdProperty))
-                    {
-                        var propertyValue = stepExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.step.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the differencingType Json property was not found in the Predicate: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the step Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
-            {
-                foreach (var arrayItem in textualRepresentationProperty.EnumerateArray())
+                if (!documentationSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var textualRepresentationExternalIdProperty))
-                    {
-                        var propertyValue = textualRepresentationExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.textualRepresentation.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the documentation Json property was not found in the Predicate: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the textualRepresentation Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
-            {
-                foreach (var arrayItem in unioningTypeProperty.EnumerateArray())
+                if (!elementIdSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var unioningTypeExternalIdProperty))
-                    {
-                        var propertyValue = unioningTypeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.unioningType.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the elementId Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!endFeatureSeen)
+                {
+                    logger.LogDebug("the endFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!expressionSeen)
+                {
+                    logger.LogDebug("the expression Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!featureSeen)
+                {
+                    logger.LogDebug("the feature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!featureMembershipSeen)
+                {
+                    logger.LogDebug("the featureMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!importedMembershipSeen)
+                {
+                    logger.LogDebug("the importedMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!inheritedFeatureSeen)
+                {
+                    logger.LogDebug("the inheritedFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!inheritedMembershipSeen)
+                {
+                    logger.LogDebug("the inheritedMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!inputSeen)
+                {
+                    logger.LogDebug("the input Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!intersectingTypeSeen)
+                {
+                    logger.LogDebug("the intersectingType Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isAbstractSeen)
+                {
+                    logger.LogDebug("the isAbstract Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isConjugatedSeen)
+                {
+                    logger.LogDebug("the isConjugated Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isLibraryElementSeen)
+                {
+                    logger.LogDebug("the isLibraryElement Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isModelLevelEvaluableSeen)
+                {
+                    logger.LogDebug("the isModelLevelEvaluable Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isSufficientSeen)
+                {
+                    logger.LogDebug("the isSufficient Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!memberSeen)
+                {
+                    logger.LogDebug("the member Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!membershipSeen)
+                {
+                    logger.LogDebug("the membership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!multiplicitySeen)
+                {
+                    logger.LogDebug("the multiplicity Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!nameSeen)
+                {
+                    logger.LogDebug("the name Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!outputSeen)
+                {
+                    logger.LogDebug("the output Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAnnotationSeen)
+                {
+                    logger.LogDebug("the ownedAnnotation Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedConjugatorSeen)
+                {
+                    logger.LogDebug("the ownedConjugator Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedDifferencingSeen)
+                {
+                    logger.LogDebug("the ownedDifferencing Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedDisjoiningSeen)
+                {
+                    logger.LogDebug("the ownedDisjoining Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedElementSeen)
+                {
+                    logger.LogDebug("the ownedElement Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedEndFeatureSeen)
+                {
+                    logger.LogDebug("the ownedEndFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedFeatureSeen)
+                {
+                    logger.LogDebug("the ownedFeature Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedFeatureMembershipSeen)
+                {
+                    logger.LogDebug("the ownedFeatureMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedImportSeen)
+                {
+                    logger.LogDebug("the ownedImport Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedIntersectingSeen)
+                {
+                    logger.LogDebug("the ownedIntersecting Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedMemberSeen)
+                {
+                    logger.LogDebug("the ownedMember Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedMembershipSeen)
+                {
+                    logger.LogDebug("the ownedMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedSpecializationSeen)
+                {
+                    logger.LogDebug("the ownedSpecialization Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedSubclassificationSeen)
+                {
+                    logger.LogDebug("the ownedSubclassification Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedUnioningSeen)
+                {
+                    logger.LogDebug("the ownedUnioning Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownerSeen)
+                {
+                    logger.LogDebug("the owner Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!owningMembershipSeen)
+                {
+                    logger.LogDebug("the owningMembership Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!owningNamespaceSeen)
+                {
+                    logger.LogDebug("the owningNamespace Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!parameterSeen)
+                {
+                    logger.LogDebug("the parameter Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!qualifiedNameSeen)
+                {
+                    logger.LogDebug("the qualifiedName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!resultSeen)
+                {
+                    logger.LogDebug("the result Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!shortNameSeen)
+                {
+                    logger.LogDebug("the shortName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!stepSeen)
+                {
+                    logger.LogDebug("the step Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!textualRepresentationSeen)
+                {
+                    logger.LogDebug("the textualRepresentation Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!unioningTypeSeen)
+                {
+                    logger.LogDebug("the unioningType Json property was not found in the Predicate: {Id}", dtoInstance.Id);
                 }
             }
-            else
-            {
-                logger.LogDebug("the unioningType Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
         }
 
         /// <summary>
         /// Deserializes properties of a <see cref="Predicate" />
-        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// from a <see cref="Utf8JsonReader" />, excluding derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="Predicate"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IPredicate"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IPredicate"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Kernel.Functions.Predicate dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Kernel.Functions.Predicate dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var elementIdSeen = false;
+            var isAbstractSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isSufficientSeen = false;
+            var ownedRelationshipSeen = false;
+            var owningRelationshipSeen = false;
 
-                    if (propertyValue != null)
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the Predicate json object.");
+                }
+
+                if (reader.ValueTextEquals("@id"u8))
+                {
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        dtoInstance.AliasIds.Add(propertyValue);
+                        throw new JsonException("The @id property is not present, the Predicate cannot be deserialized");
                     }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("aliasIds"u8))
                 {
-                    dtoInstance.ElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
+                    aliasIdsSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
-            {
-                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isAbstract Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
-            {
-                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isSufficient Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                        var aliasIdsValue = reader.GetString();
 
-                        if (propertyValue != null)
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelationship = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    declaredNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("elementId"u8))
+                {
+                    elementIdSeen = true;
+                    reader.Read();
+
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
                     {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
+                        dtoInstance.ElementId = elementIdValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isAbstract"u8))
+                {
+                    isAbstractSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsAbstract = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isSufficient"u8))
+                {
+                    isSufficientSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsSufficient = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedRelationship"u8))
+                {
+                    ownedRelationshipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+
+                reader.Read();
+                reader.Skip();
             }
 
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (!aliasIdsSeen)
+                {
+                    logger.LogDebug("the aliasIds Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!declaredNameSeen)
+                {
+                    logger.LogDebug("the declaredName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!declaredShortNameSeen)
+                {
+                    logger.LogDebug("the declaredShortName Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!elementIdSeen)
+                {
+                    logger.LogDebug("the elementId Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isAbstractSeen)
+                {
+                    logger.LogDebug("the isAbstract Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!isSufficientSeen)
+                {
+                    logger.LogDebug("the isSufficient Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the Predicate: {Id}", dtoInstance.Id);
+                }
+            }
         }
     }
 }

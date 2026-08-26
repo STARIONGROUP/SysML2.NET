@@ -33,6 +33,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Utility;
 
     /// <summary>
     /// The purpose of the <see cref="MembershipDeSerializer"/> is to provide deserialization capabilities
@@ -41,10 +42,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     internal static class MembershipDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="IMembership"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="IMembership"/> from the provided <see cref="Utf8JsonReader"/>
         /// </summary>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IMembership"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IMembership"/> json object. On return the reader is positioned on the matching
+        /// <see cref="JsonTokenType.EndObject"/>
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -58,43 +61,25 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <returns>
         /// an instance of <see cref="IMembership"/>
         /// </returns>
-        internal static IMembership DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
+        /// <remarks>
+        /// The <c>@type</c> property is the discriminator that the caller dispatched on, so it is skipped rather
+        /// than re-validated here
+        /// </remarks>
+        internal static IMembership DeSerialize(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("MembershipDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type"u8, out var @type))
-            {
-                throw new InvalidOperationException("The @type property is not available, the MembershipDeSerializer cannot be used to deserialize this JsonElement");
-            }
-
-            if (@type.GetString() != "Membership")
-            {
-                throw new InvalidOperationException($"The MembershipDeSerializer can only be used to deserialize objects of type IMembership, a {@type.GetString()} was provided");
-            }
+            Utf8JsonReaderHelper.Expect(ref reader, JsonTokenType.StartObject);
 
             var dtoInstance = new SysML2.NET.Core.DTO.Root.Namespaces.Membership();
 
-            if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
-            {
-                var propertyValue = idProperty.GetString();
-
-                if (propertyValue == null)
-                {
-                    throw new JsonException("The @id property is not present, the Membership cannot be deserialized");
-                }
-                else
-                {
-                    dtoInstance.Id = Guid.Parse(propertyValue);
-                }
-            }
-
             if (deserializeDerivedProperties)
             {
-                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, ref reader, logger);
             }
             else
             {
-                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, ref reader, logger);
             }
 
             return dtoInstance;
@@ -102,712 +87,933 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
         /// <summary>
         /// Deserializes properties of a <see cref="Membership" />
-        /// from a <see cref="JsonElement" />, including derived properties
+        /// from a <see cref="Utf8JsonReader" />, including derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="Membership"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IMembership"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IMembership"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Root.Namespaces.Membership dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Root.Namespaces.Membership dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var documentationSeen = false;
+            var elementIdSeen = false;
+            var isImpliedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isLibraryElementSeen = false;
+            var memberElementSeen = false;
+            var memberElementIdSeen = false;
+            var memberNameSeen = false;
+            var membershipOwningNamespaceSeen = false;
+            var memberShortNameSeen = false;
+            var nameSeen = false;
+            var ownedAnnotationSeen = false;
+            var ownedElementSeen = false;
+            var ownedRelatedElementSeen = false;
+            var ownedRelationshipSeen = false;
+            var ownerSeen = false;
+            var owningMembershipSeen = false;
+            var owningNamespaceSeen = false;
+            var owningRelatedElementSeen = false;
+            var owningRelationshipSeen = false;
+            var qualifiedNameSeen = false;
+            var relatedElementSeen = false;
+            var shortNameSeen = false;
+            var textualRepresentationSeen = false;
+            var visibilitySeen = false;
 
-                    if (propertyValue != null)
-                    {
-                        dtoInstance.AliasIds.Add(propertyValue);
-                    }
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the Membership json object.");
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
-            {
-                foreach (var arrayItem in documentationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("@id"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var documentationExternalIdProperty))
-                    {
-                        var propertyValue = documentationExternalIdProperty.GetString();
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        throw new JsonException("The @id property is not present, the Membership cannot be deserialized");
+                    }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("aliasIds"u8))
+                {
+                    aliasIdsSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        var aliasIdsValue = reader.GetString();
+
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.documentation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the documentation Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
-                {
-                    dtoInstance.ElementId = propertyValue;
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
-            {
-                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImplied Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
+                    declaredNameSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
+                    dtoInstance.DeclaredName = reader.GetString();
 
-            if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
-            {
-                if (isLibraryElementProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.isLibraryElement = isLibraryElementProperty.GetBoolean();
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isLibraryElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("memberElement"u8, out var memberElementProperty))
-            {
-                if (memberElementProperty.ValueKind == JsonValueKind.Null)
+                if (reader.ValueTextEquals("declaredShortName"u8))
                 {
-                    dtoInstance.MemberElement = Guid.Empty;
-                    logger.LogDebug($"the Membership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("documentation"u8))
                 {
-                    if (memberElementProperty.TryGetProperty("@id"u8, out var memberElementExternalIdProperty))
+                    documentationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = memberElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var documentationValue))
                         {
-                            dtoInstance.MemberElement = Guid.Parse(propertyValue);
+                            dtoInstance.documentation.Add(documentationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the memberElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("memberElementId"u8, out var memberElementIdProperty))
-            {
-                var propertyValue = memberElementIdProperty.GetString();
-
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("elementId"u8))
                 {
-                    dtoInstance.memberElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the memberElementId Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
+                    elementIdSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("memberName"u8, out var memberNameProperty))
-            {
-                dtoInstance.MemberName = memberNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
+                    var elementIdValue = reader.GetString();
 
-            if (jsonElement.TryGetProperty("membershipOwningNamespace"u8, out var membershipOwningNamespaceProperty))
-            {
-                if (membershipOwningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.membershipOwningNamespace = Guid.Empty;
-                    logger.LogDebug($"the Membership.membershipOwningNamespace property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (membershipOwningNamespaceProperty.TryGetProperty("@id"u8, out var membershipOwningNamespaceExternalIdProperty))
+                    if (elementIdValue != null)
                     {
-                        var propertyValue = membershipOwningNamespaceExternalIdProperty.GetString();
+                        dtoInstance.ElementId = elementIdValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImplied"u8))
+                {
+                    isImpliedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImplied = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isLibraryElement"u8))
+                {
+                    isLibraryElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isLibraryElement = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberElement"u8))
+                {
+                    memberElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.MemberElement = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.membershipOwningNamespace = Guid.Parse(propertyValue);
+                            logger.LogDebug("the Membership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the membershipOwningNamespace Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberShortName"u8, out var memberShortNameProperty))
-            {
-                dtoInstance.MemberShortName = memberShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
-            {
-                dtoInstance.name = nameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the name Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
-            {
-                foreach (var arrayItem in ownedAnnotationProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotationExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var memberElementValue))
                     {
-                        var propertyValue = ownedAnnotationExternalIdProperty.GetString();
+                        dtoInstance.MemberElement = memberElementValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberElementId"u8))
+                {
+                    memberElementIdSeen = true;
+                    reader.Read();
+
+                    var memberElementIdValue = reader.GetString();
+
+                    if (memberElementIdValue != null)
+                    {
+                        dtoInstance.memberElementId = memberElementIdValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberName"u8))
+                {
+                    memberNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.MemberName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("membershipOwningNamespace"u8))
+                {
+                    membershipOwningNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.membershipOwningNamespace = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.ownedAnnotation.Add(Guid.Parse(propertyValue));
+                            logger.LogDebug("the Membership.membershipOwningNamespace property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
-            {
-                foreach (var arrayItem in ownedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedElementExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var membershipOwningNamespaceValue))
                     {
-                        var propertyValue = ownedElementExternalIdProperty.GetString();
+                        dtoInstance.membershipOwningNamespace = membershipOwningNamespaceValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberShortName"u8))
+                {
+                    memberShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.MemberShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("name"u8))
+                {
+                    nameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.name = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedAnnotation"u8))
+                {
+                    ownedAnnotationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAnnotationValue))
                         {
-                            dtoInstance.ownedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAnnotation.Add(ownedAnnotationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
-            {
-                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+                    ownedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedElementValue))
                         {
-                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedElement.Add(ownedElementValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRelatedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                    ownedRelatedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelatedElementValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelatedElement.Add(ownedRelatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
-            {
-                if (ownerProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owner = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (ownerProperty.TryGetProperty("@id"u8, out var ownerExternalIdProperty))
+                    ownedRelationshipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = ownerExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.owner = Guid.Parse(propertyValue);
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owner Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
-            {
-                if (owningMembershipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningMembership = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owner"u8))
                 {
-                    if (owningMembershipProperty.TryGetProperty("@id"u8, out var owningMembershipExternalIdProperty))
+                    ownerSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = owningMembershipExternalIdProperty.GetString();
+                        dtoInstance.owner = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownerValue))
+                    {
+                        dtoInstance.owner = ownerValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningMembership"u8))
+                {
+                    owningMembershipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningMembership = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningMembershipValue))
+                    {
+                        dtoInstance.owningMembership = owningMembershipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningNamespace"u8))
+                {
+                    owningNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningNamespace = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningNamespaceValue))
+                    {
+                        dtoInstance.owningNamespace = owningNamespaceValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelatedElement"u8))
+                {
+                    owningRelatedElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelatedElement = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelatedElementValue))
+                    {
+                        dtoInstance.OwningRelatedElement = owningRelatedElementValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("qualifiedName"u8))
+                {
+                    qualifiedNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.qualifiedName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("relatedElement"u8))
+                {
+                    relatedElementSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var relatedElementValue))
                         {
-                            dtoInstance.owningMembership = Guid.Parse(propertyValue);
+                            dtoInstance.relatedElement.Add(relatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningMembership Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
-            {
-                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningNamespace = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("shortName"u8))
                 {
-                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
+                    shortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.shortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("textualRepresentation"u8))
+                {
+                    textualRepresentationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var textualRepresentationValue))
                         {
-                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
+                            dtoInstance.textualRepresentation.Add(textualRepresentationValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningNamespace Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
-            {
-                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("visibility"u8))
                 {
-                    dtoInstance.OwningRelatedElement = null;
+                    visibilitySeen = true;
+                    reader.Read();
+
+                    dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(reader.GetString());
+
+                    continue;
                 }
-                else
+
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (!aliasIdsSeen)
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
-                        }
-                    }
+                    logger.LogDebug("the aliasIds Json property was not found in the Membership: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
+                if (!declaredNameSeen)
                 {
-                    dtoInstance.OwningRelationship = null;
+                    logger.LogDebug("the declaredName Json property was not found in the Membership: {Id}", dtoInstance.Id);
                 }
-                else
+                if (!declaredShortNameSeen)
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
-                        }
-                    }
+                    logger.LogDebug("the declaredShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
-            {
-                dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the qualifiedName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("relatedElement"u8, out var relatedElementProperty))
-            {
-                foreach (var arrayItem in relatedElementProperty.EnumerateArray())
+                if (!documentationSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var relatedElementExternalIdProperty))
-                    {
-                        var propertyValue = relatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.relatedElement.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the documentation Json property was not found in the Membership: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the relatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
-            {
-                dtoInstance.shortName = shortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the shortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
-            {
-                foreach (var arrayItem in textualRepresentationProperty.EnumerateArray())
+                if (!elementIdSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var textualRepresentationExternalIdProperty))
-                    {
-                        var propertyValue = textualRepresentationExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.textualRepresentation.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the elementId Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedSeen)
+                {
+                    logger.LogDebug("the isImplied Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!isLibraryElementSeen)
+                {
+                    logger.LogDebug("the isLibraryElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberElementSeen)
+                {
+                    logger.LogDebug("the memberElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberElementIdSeen)
+                {
+                    logger.LogDebug("the memberElementId Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberNameSeen)
+                {
+                    logger.LogDebug("the memberName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!membershipOwningNamespaceSeen)
+                {
+                    logger.LogDebug("the membershipOwningNamespace Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberShortNameSeen)
+                {
+                    logger.LogDebug("the memberShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!nameSeen)
+                {
+                    logger.LogDebug("the name Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAnnotationSeen)
+                {
+                    logger.LogDebug("the ownedAnnotation Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownedElementSeen)
+                {
+                    logger.LogDebug("the ownedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelatedElementSeen)
+                {
+                    logger.LogDebug("the ownedRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownerSeen)
+                {
+                    logger.LogDebug("the owner Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!owningMembershipSeen)
+                {
+                    logger.LogDebug("the owningMembership Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!owningNamespaceSeen)
+                {
+                    logger.LogDebug("the owningNamespace Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelatedElementSeen)
+                {
+                    logger.LogDebug("the owningRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!qualifiedNameSeen)
+                {
+                    logger.LogDebug("the qualifiedName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!relatedElementSeen)
+                {
+                    logger.LogDebug("the relatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!shortNameSeen)
+                {
+                    logger.LogDebug("the shortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!textualRepresentationSeen)
+                {
+                    logger.LogDebug("the textualRepresentation Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!visibilitySeen)
+                {
+                    logger.LogDebug("the visibility Json property was not found in the Membership: {Id}", dtoInstance.Id);
                 }
             }
-            else
-            {
-                logger.LogDebug("the textualRepresentation Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("visibility"u8, out var visibilityProperty))
-            {
-                dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(visibilityProperty.GetString());
-            }
-            else
-            {
-                logger.LogDebug("the visibility Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
         }
 
         /// <summary>
         /// Deserializes properties of a <see cref="Membership" />
-        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// from a <see cref="Utf8JsonReader" />, excluding derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="Membership"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IMembership"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IMembership"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Root.Namespaces.Membership dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Root.Namespaces.Membership dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var elementIdSeen = false;
+            var isImpliedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var memberElementSeen = false;
+            var memberNameSeen = false;
+            var memberShortNameSeen = false;
+            var ownedRelatedElementSeen = false;
+            var ownedRelationshipSeen = false;
+            var owningRelatedElementSeen = false;
+            var owningRelationshipSeen = false;
+            var visibilitySeen = false;
 
-                    if (propertyValue != null)
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the Membership json object.");
+                }
+
+                if (reader.ValueTextEquals("@id"u8))
+                {
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        dtoInstance.AliasIds.Add(propertyValue);
+                        throw new JsonException("The @id property is not present, the Membership cannot be deserialized");
                     }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("aliasIds"u8))
                 {
-                    dtoInstance.ElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
+                    aliasIdsSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
-            {
-                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImplied Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberElement"u8, out var memberElementProperty))
-            {
-                if (memberElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.MemberElement = Guid.Empty;
-                    logger.LogDebug($"the Membership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (memberElementProperty.TryGetProperty("@id"u8, out var memberElementExternalIdProperty))
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = memberElementExternalIdProperty.GetString();
+                        var aliasIdsValue = reader.GetString();
 
-                        if (propertyValue != null)
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.MemberElement = Guid.Parse(propertyValue);
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the memberElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("memberName"u8, out var memberNameProperty))
-            {
-                dtoInstance.MemberName = memberNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberShortName"u8, out var memberShortNameProperty))
-            {
-                dtoInstance.MemberShortName = memberShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
-            {
-                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+                    declaredNameSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("elementId"u8))
+                {
+                    elementIdSeen = true;
+                    reader.Read();
+
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
+                    {
+                        dtoInstance.ElementId = elementIdValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImplied"u8))
+                {
+                    isImpliedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImplied = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberElement"u8))
+                {
+                    memberElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.MemberElement = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                            logger.LogDebug("the Membership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var memberElementValue))
                     {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                        dtoInstance.MemberElement = memberElementValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberName"u8))
+                {
+                    memberNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.MemberName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberShortName"u8))
+                {
+                    memberShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.MemberShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedRelatedElement"u8))
+                {
+                    ownedRelatedElementSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelatedElementValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelatedElement.Add(ownedRelatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
-            {
-                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelatedElement = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
+                    ownedRelationshipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelationship = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owningRelatedElement"u8))
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    owningRelatedElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
-                        }
+                        dtoInstance.OwningRelatedElement = null;
                     }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelatedElementValue))
+                    {
+                        dtoInstance.OwningRelatedElement = owningRelatedElementValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("visibility"u8))
+                {
+                    visibilitySeen = true;
+                    reader.Read();
+
+                    dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(reader.GetString());
+
+                    continue;
+                }
+
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (!aliasIdsSeen)
+                {
+                    logger.LogDebug("the aliasIds Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!declaredNameSeen)
+                {
+                    logger.LogDebug("the declaredName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!declaredShortNameSeen)
+                {
+                    logger.LogDebug("the declaredShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!elementIdSeen)
+                {
+                    logger.LogDebug("the elementId Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedSeen)
+                {
+                    logger.LogDebug("the isImplied Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberElementSeen)
+                {
+                    logger.LogDebug("the memberElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberNameSeen)
+                {
+                    logger.LogDebug("the memberName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!memberShortNameSeen)
+                {
+                    logger.LogDebug("the memberShortName Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelatedElementSeen)
+                {
+                    logger.LogDebug("the ownedRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelatedElementSeen)
+                {
+                    logger.LogDebug("the owningRelatedElement Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
+                }
+                if (!visibilitySeen)
+                {
+                    logger.LogDebug("the visibility Json property was not found in the Membership: {Id}", dtoInstance.Id);
                 }
             }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("visibility"u8, out var visibilityProperty))
-            {
-                dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(visibilityProperty.GetString());
-            }
-            else
-            {
-                logger.LogDebug("the visibility Json property was not found in the Membership: {Id}", dtoInstance.Id);
-            }
-
         }
     }
 }

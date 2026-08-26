@@ -29,7 +29,29 @@ dotnet-coverage collect "dotnet test SysML2.NET.sln --no-build" -f xml -o covera
 
 Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attributes.
 
-**When writing or modifying unit tests** in any `*.Tests/` project: read `TESTING.md` at the repo root for the NUnit conventions (one `[Test]` per method-under-test, `Assert.That` everywhere, `Assert.EnterMultipleScope` only for consecutive asserts, mandatory positive + negative coverage, assertion idiom preferences, `Verify{MethodUnderTest}` naming).
+## Reading `TESTING.md` is MANDATORY
+
+**Before you write or modify a single line in any `*.Tests/` project, you MUST `Read` `TESTING.md` at the repo root — in full, in the current session.** It is the authoritative, binding specification for every NUnit fixture in this solution.
+
+This applies to *every* test change, including ones that feel too small to warrant it: adding one `[Test]`, adding an assertion to an existing one, or creating a new fixture alongside a production change. There is no "obvious enough to skip it" case.
+
+**Do NOT author tests from memory, from the conventions of another .NET project, or by copying the shape of a neighbouring fixture.** Several fixtures in the repo predate `TESTING.md` and violate it — imitating them reproduces the violation. `TESTING.md` wins over any existing file you are looking at.
+
+The rules most often got wrong, all of which have caused review churn:
+
+| Rule | Section | Get-it-wrong symptom |
+| --- | --- | --- |
+| One `[Test]` per method-under-test, all scenarios packed inside | §2, §10 | a family of `…_WhenX_DoesY` tests that share setup |
+| Name it `Verify{MethodUnderTest}` — no scenario suffix | §6, §10 | `Verify_that_foo_returns_bar`, `VerifyComputeFooWhenNull` |
+| One fixture per production type, mirroring its namespace | §1 | a second `…AspectTestFixture` bolted on beside the real one |
+| Every `[Test]` covers positive AND negative | §3, §10 | a happy-path-only test (very easy to do for an async overload) |
+| `Assert.That` only — never `Assert.Throws` / `IsTrue` / `AreEqual` | §4 | legacy NUnit API |
+| `Has.Count.EqualTo(n)`, not `result.Count, Is.EqualTo(n)` | §8 | asserting on `.Count` directly |
+| `Assert.EnterMultipleScope` only around **2+ consecutive** asserts | §5, §10 | a scope wrapping one long fluent chain |
+| Indexer / range over LINQ; `Is.SameAs` for POCO identity; `Is.EquivalentTo` when order is irrelevant | §8 | `.First()`, `.Last()`, `Is.EqualTo` on a POCO |
+| Assert an out-of-scope `NotSupportedException` stub — don't implement it | §9 | scope creep out of the test project |
+
+The table is a checklist, **not a substitute for reading the file** — it omits the reference fixtures (§11) and the criteria for when separated `[Test]` methods *are* allowed (§2).
 
 ## Architecture
 

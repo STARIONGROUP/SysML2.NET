@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.Json.PIM.DTO
 {
     using System;
+    using System.Text;
     using System.Text.Json;
 
     using Microsoft.Extensions.Logging;
@@ -122,7 +123,13 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     var typeName = typeElement.GetString();
 
                     var func = DeSerializationProvider.Provide(typeName);
-                    dtoInstance.Payload = func(payloadObject, serializationModeKind,deserializeDerivedProperties, loggerFactory);
+
+                    // the core deserializers read straight from the utf-8 payload, so the nested element is
+                    // re-encoded to hand them a reader positioned on its opening brace
+                    var payloadReader = new Utf8JsonReader(Encoding.UTF8.GetBytes(payloadObject.GetRawText()));
+                    payloadReader.Read();
+
+                    dtoInstance.Payload = func(ref payloadReader, serializationModeKind, deserializeDerivedProperties, loggerFactory);
                 }
             }
             else

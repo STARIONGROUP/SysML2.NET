@@ -33,6 +33,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Systems.Interfaces;
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Utility;
 
     /// <summary>
     /// The purpose of the <see cref="InterfaceDefinitionDeSerializer"/> is to provide deserialization capabilities
@@ -41,10 +42,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     internal static class InterfaceDefinitionDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="IInterfaceDefinition"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="IInterfaceDefinition"/> from the provided <see cref="Utf8JsonReader"/>
         /// </summary>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IInterfaceDefinition"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IInterfaceDefinition"/> json object. On return the reader is positioned on the matching
+        /// <see cref="JsonTokenType.EndObject"/>
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -58,43 +61,25 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <returns>
         /// an instance of <see cref="IInterfaceDefinition"/>
         /// </returns>
-        internal static IInterfaceDefinition DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
+        /// <remarks>
+        /// The <c>@type</c> property is the discriminator that the caller dispatched on, so it is skipped rather
+        /// than re-validated here
+        /// </remarks>
+        internal static IInterfaceDefinition DeSerialize(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("InterfaceDefinitionDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type"u8, out var @type))
-            {
-                throw new InvalidOperationException("The @type property is not available, the InterfaceDefinitionDeSerializer cannot be used to deserialize this JsonElement");
-            }
-
-            if (@type.GetString() != "InterfaceDefinition")
-            {
-                throw new InvalidOperationException($"The InterfaceDefinitionDeSerializer can only be used to deserialize objects of type IInterfaceDefinition, a {@type.GetString()} was provided");
-            }
+            Utf8JsonReaderHelper.Expect(ref reader, JsonTokenType.StartObject);
 
             var dtoInstance = new SysML2.NET.Core.DTO.Systems.Interfaces.InterfaceDefinition();
 
-            if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
-            {
-                var propertyValue = idProperty.GetString();
-
-                if (propertyValue == null)
-                {
-                    throw new JsonException("The @id property is not present, the InterfaceDefinition cannot be deserialized");
-                }
-                else
-                {
-                    dtoInstance.Id = Guid.Parse(propertyValue);
-                }
-            }
-
             if (deserializeDerivedProperties)
             {
-                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, ref reader, logger);
             }
             else
             {
-                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, ref reader, logger);
             }
 
             return dtoInstance;
@@ -102,1909 +87,2304 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
         /// <summary>
         /// Deserializes properties of a <see cref="InterfaceDefinition" />
-        /// from a <see cref="JsonElement" />, including derived properties
+        /// from a <see cref="Utf8JsonReader" />, including derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="InterfaceDefinition"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IInterfaceDefinition"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IInterfaceDefinition"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Interfaces.InterfaceDefinition dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Interfaces.InterfaceDefinition dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var differencingTypeSeen = false;
+            var directedFeatureSeen = false;
+            var directedUsageSeen = false;
+            var documentationSeen = false;
+            var elementIdSeen = false;
+            var featureSeen = false;
+            var featureMembershipSeen = false;
+            var importedMembershipSeen = false;
+            var inheritedFeatureSeen = false;
+            var inheritedMembershipSeen = false;
+            var inputSeen = false;
+            var interfaceEndSeen = false;
+            var intersectingTypeSeen = false;
+            var isAbstractSeen = false;
+            var isConjugatedSeen = false;
+            var isImpliedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isIndividualSeen = false;
+            var isLibraryElementSeen = false;
+            var isSufficientSeen = false;
+            var isVariationSeen = false;
+            var memberSeen = false;
+            var membershipSeen = false;
+            var multiplicitySeen = false;
+            var nameSeen = false;
+            var outputSeen = false;
+            var ownedActionSeen = false;
+            var ownedAllocationSeen = false;
+            var ownedAnalysisCaseSeen = false;
+            var ownedAnnotationSeen = false;
+            var ownedAttributeSeen = false;
+            var ownedCalculationSeen = false;
+            var ownedCaseSeen = false;
+            var ownedConcernSeen = false;
+            var ownedConjugatorSeen = false;
+            var ownedConnectionSeen = false;
+            var ownedConstraintSeen = false;
+            var ownedDifferencingSeen = false;
+            var ownedDisjoiningSeen = false;
+            var ownedElementSeen = false;
+            var ownedEndFeatureSeen = false;
+            var ownedEnumerationSeen = false;
+            var ownedFeatureSeen = false;
+            var ownedFeatureMembershipSeen = false;
+            var ownedFlowSeen = false;
+            var ownedImportSeen = false;
+            var ownedInterfaceSeen = false;
+            var ownedIntersectingSeen = false;
+            var ownedItemSeen = false;
+            var ownedMemberSeen = false;
+            var ownedMembershipSeen = false;
+            var ownedMetadataSeen = false;
+            var ownedOccurrenceSeen = false;
+            var ownedPartSeen = false;
+            var ownedPortSeen = false;
+            var ownedReferenceSeen = false;
+            var ownedRelatedElementSeen = false;
+            var ownedRelationshipSeen = false;
+            var ownedRenderingSeen = false;
+            var ownedRequirementSeen = false;
+            var ownedSpecializationSeen = false;
+            var ownedStateSeen = false;
+            var ownedSubclassificationSeen = false;
+            var ownedTransitionSeen = false;
+            var ownedUnioningSeen = false;
+            var ownedUsageSeen = false;
+            var ownedUseCaseSeen = false;
+            var ownedVerificationCaseSeen = false;
+            var ownedViewSeen = false;
+            var ownedViewpointSeen = false;
+            var ownerSeen = false;
+            var owningMembershipSeen = false;
+            var owningNamespaceSeen = false;
+            var owningRelatedElementSeen = false;
+            var owningRelationshipSeen = false;
+            var qualifiedNameSeen = false;
+            var relatedTypeSeen = false;
+            var shortNameSeen = false;
+            var sourceTypeSeen = false;
+            var targetTypeSeen = false;
+            var textualRepresentationSeen = false;
+            var unioningTypeSeen = false;
+            var usageSeen = false;
+            var variantSeen = false;
+            var variantMembershipSeen = false;
+
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the InterfaceDefinition json object.");
+                }
+
+                if (reader.ValueTextEquals("@id"u8))
                 {
-                    var propertyValue = arrayItem.GetString();
+                    reader.Read();
 
-                    if (propertyValue != null)
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        dtoInstance.AliasIds.Add(propertyValue);
+                        throw new JsonException("The @id property is not present, the InterfaceDefinition cannot be deserialized");
                     }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                if (reader.ValueTextEquals("aliasIds"u8))
+                {
+                    aliasIdsSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-            if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
-            {
-                foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var differencingTypeExternalIdProperty))
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = differencingTypeExternalIdProperty.GetString();
+                        var aliasIdsValue = reader.GetString();
 
-                        if (propertyValue != null)
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.differencingType.Add(Guid.Parse(propertyValue));
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the differencingType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
+                    declaredNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("differencingType"u8))
+                {
+                    differencingTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var differencingTypeValue))
                         {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.differencingType.Add(differencingTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
-            {
-                foreach (var arrayItem in directedUsageProperty.EnumerateArray())
+                if (reader.ValueTextEquals("directedFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedUsageExternalIdProperty))
-                    {
-                        var propertyValue = directedUsageExternalIdProperty.GetString();
+                    directedFeatureSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var directedFeatureValue))
                         {
-                            dtoInstance.directedUsage.Add(Guid.Parse(propertyValue));
+                            dtoInstance.directedFeature.Add(directedFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the directedUsage Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
-            {
-                foreach (var arrayItem in documentationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("directedUsage"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var documentationExternalIdProperty))
-                    {
-                        var propertyValue = documentationExternalIdProperty.GetString();
+                    directedUsageSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var directedUsageValue))
                         {
-                            dtoInstance.documentation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.directedUsage.Add(directedUsageValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the documentation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
+                    continue;
+                }
 
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("documentation"u8))
                 {
-                    dtoInstance.ElementId = propertyValue;
+                    documentationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var documentationValue))
+                        {
+                            dtoInstance.documentation.Add(documentationValue);
+                        }
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
-            {
-                foreach (var arrayItem in featureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("elementId"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var featureExternalIdProperty))
+                    elementIdSeen = true;
+                    reader.Read();
+
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
                     {
-                        var propertyValue = featureExternalIdProperty.GetString();
+                        dtoInstance.ElementId = elementIdValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("feature"u8))
+                {
+                    featureSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var featureValue))
                         {
-                            dtoInstance.feature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.feature.Add(featureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the feature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("featureMembership"u8, out var featureMembershipProperty))
-            {
-                foreach (var arrayItem in featureMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("featureMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var featureMembershipExternalIdProperty))
-                    {
-                        var propertyValue = featureMembershipExternalIdProperty.GetString();
+                    featureMembershipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var featureMembershipValue))
                         {
-                            dtoInstance.featureMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.featureMembership.Add(featureMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the featureMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
-            {
-                foreach (var arrayItem in importedMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("importedMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var importedMembershipExternalIdProperty))
-                    {
-                        var propertyValue = importedMembershipExternalIdProperty.GetString();
+                    importedMembershipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var importedMembershipValue))
                         {
-                            dtoInstance.importedMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.importedMembership.Add(importedMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the importedMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("inheritedFeature"u8, out var inheritedFeatureProperty))
-            {
-                foreach (var arrayItem in inheritedFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("inheritedFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var inheritedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = inheritedFeatureExternalIdProperty.GetString();
+                    inheritedFeatureSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var inheritedFeatureValue))
                         {
-                            dtoInstance.inheritedFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.inheritedFeature.Add(inheritedFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the inheritedFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("inheritedMembership"u8, out var inheritedMembershipProperty))
-            {
-                foreach (var arrayItem in inheritedMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("inheritedMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var inheritedMembershipExternalIdProperty))
-                    {
-                        var propertyValue = inheritedMembershipExternalIdProperty.GetString();
+                    inheritedMembershipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var inheritedMembershipValue))
                         {
-                            dtoInstance.inheritedMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.inheritedMembership.Add(inheritedMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the inheritedMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("input"u8, out var inputProperty))
-            {
-                foreach (var arrayItem in inputProperty.EnumerateArray())
+                if (reader.ValueTextEquals("input"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var inputExternalIdProperty))
-                    {
-                        var propertyValue = inputExternalIdProperty.GetString();
+                    inputSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var inputValue))
                         {
-                            dtoInstance.input.Add(Guid.Parse(propertyValue));
+                            dtoInstance.input.Add(inputValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the input Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("interfaceEnd"u8, out var interfaceEndProperty))
-            {
-                foreach (var arrayItem in interfaceEndProperty.EnumerateArray())
+                if (reader.ValueTextEquals("interfaceEnd"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var interfaceEndExternalIdProperty))
-                    {
-                        var propertyValue = interfaceEndExternalIdProperty.GetString();
+                    interfaceEndSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var interfaceEndValue))
                         {
-                            dtoInstance.interfaceEnd.Add(Guid.Parse(propertyValue));
+                            dtoInstance.interfaceEnd.Add(interfaceEndValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the interfaceEnd Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
-            {
-                foreach (var arrayItem in intersectingTypeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("intersectingType"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var intersectingTypeExternalIdProperty))
-                    {
-                        var propertyValue = intersectingTypeExternalIdProperty.GetString();
+                    intersectingTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var intersectingTypeValue))
                         {
-                            dtoInstance.intersectingType.Add(Guid.Parse(propertyValue));
+                            dtoInstance.intersectingType.Add(intersectingTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the intersectingType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
-            {
-                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isAbstract"u8))
                 {
-                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                    isAbstractSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsAbstract = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isAbstract Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isConjugated"u8, out var isConjugatedProperty))
-            {
-                if (isConjugatedProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isConjugated"u8))
                 {
-                    dtoInstance.isConjugated = isConjugatedProperty.GetBoolean();
+                    isConjugatedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isConjugated = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isConjugated Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
-            {
-                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isImplied"u8))
                 {
-                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
+                    isImpliedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImplied = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isImplied Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
                 {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
-            {
-                if (isIndividualProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isIndividual"u8))
                 {
-                    dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
+                    isIndividualSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsIndividual = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isIndividual Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
-            {
-                if (isLibraryElementProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isLibraryElement"u8))
                 {
-                    dtoInstance.isLibraryElement = isLibraryElementProperty.GetBoolean();
+                    isLibraryElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isLibraryElement = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isLibraryElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
-            {
-                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isSufficient"u8))
                 {
-                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                    isSufficientSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsSufficient = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isSufficient Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
-            {
-                if (isVariationProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("isVariation"u8))
                 {
-                    dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+                    isVariationSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsVariation = reader.GetBoolean();
+                    }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isVariation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
-            {
-                foreach (var arrayItem in memberProperty.EnumerateArray())
+                if (reader.ValueTextEquals("member"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var memberExternalIdProperty))
-                    {
-                        var propertyValue = memberExternalIdProperty.GetString();
+                    memberSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var memberValue))
                         {
-                            dtoInstance.member.Add(Guid.Parse(propertyValue));
+                            dtoInstance.member.Add(memberValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the member Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
-            {
-                foreach (var arrayItem in membershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("membership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var membershipExternalIdProperty))
-                    {
-                        var propertyValue = membershipExternalIdProperty.GetString();
+                    membershipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var membershipValue))
                         {
-                            dtoInstance.membership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.membership.Add(membershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the membership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("multiplicity"u8, out var multiplicityProperty))
-            {
-                if (multiplicityProperty.ValueKind == JsonValueKind.Null)
+                if (reader.ValueTextEquals("multiplicity"u8))
+                {
+                    multiplicitySeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.multiplicity = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var multiplicityValue))
+                    {
+                        dtoInstance.multiplicity = multiplicityValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("name"u8))
                 {
-                    dtoInstance.multiplicity = null;
+                    nameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.name = reader.GetString();
+
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("output"u8))
                 {
-                    if (multiplicityProperty.TryGetProperty("@id"u8, out var multiplicityExternalIdProperty))
-                    {
-                        var propertyValue = multiplicityExternalIdProperty.GetString();
+                    outputSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var outputValue))
                         {
-                            dtoInstance.multiplicity = Guid.Parse(propertyValue);
+                            dtoInstance.output.Add(outputValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the multiplicity Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
-            {
-                dtoInstance.name = nameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the name Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    continue;
+                }
 
-            if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
-            {
-                foreach (var arrayItem in outputProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedAction"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var outputExternalIdProperty))
-                    {
-                        var propertyValue = outputExternalIdProperty.GetString();
+                    ownedActionSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedActionValue))
                         {
-                            dtoInstance.output.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAction.Add(ownedActionValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the output Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedAction"u8, out var ownedActionProperty))
-            {
-                foreach (var arrayItem in ownedActionProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedAllocation"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedActionExternalIdProperty))
-                    {
-                        var propertyValue = ownedActionExternalIdProperty.GetString();
+                    ownedAllocationSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAllocationValue))
                         {
-                            dtoInstance.ownedAction.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAllocation.Add(ownedAllocationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAction Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedAllocation"u8, out var ownedAllocationProperty))
-            {
-                foreach (var arrayItem in ownedAllocationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedAnalysisCase"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAllocationExternalIdProperty))
-                    {
-                        var propertyValue = ownedAllocationExternalIdProperty.GetString();
+                    ownedAnalysisCaseSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAnalysisCaseValue))
                         {
-                            dtoInstance.ownedAllocation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAnalysisCase.Add(ownedAnalysisCaseValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAllocation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedAnalysisCase"u8, out var ownedAnalysisCaseProperty))
-            {
-                foreach (var arrayItem in ownedAnalysisCaseProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedAnnotation"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnalysisCaseExternalIdProperty))
-                    {
-                        var propertyValue = ownedAnalysisCaseExternalIdProperty.GetString();
+                    ownedAnnotationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAnnotationValue))
                         {
-                            dtoInstance.ownedAnalysisCase.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAnnotation.Add(ownedAnnotationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAnalysisCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
-            {
-                foreach (var arrayItem in ownedAnnotationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedAttribute"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotationExternalIdProperty))
-                    {
-                        var propertyValue = ownedAnnotationExternalIdProperty.GetString();
+                    ownedAttributeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAttributeValue))
                         {
-                            dtoInstance.ownedAnnotation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAttribute.Add(ownedAttributeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedAttribute"u8, out var ownedAttributeProperty))
-            {
-                foreach (var arrayItem in ownedAttributeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedCalculation"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAttributeExternalIdProperty))
-                    {
-                        var propertyValue = ownedAttributeExternalIdProperty.GetString();
+                    ownedCalculationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedCalculationValue))
                         {
-                            dtoInstance.ownedAttribute.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedCalculation.Add(ownedCalculationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAttribute Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedCalculation"u8, out var ownedCalculationProperty))
-            {
-                foreach (var arrayItem in ownedCalculationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedCase"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedCalculationExternalIdProperty))
-                    {
-                        var propertyValue = ownedCalculationExternalIdProperty.GetString();
+                    ownedCaseSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedCaseValue))
                         {
-                            dtoInstance.ownedCalculation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedCase.Add(ownedCaseValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedCalculation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedCase"u8, out var ownedCaseProperty))
-            {
-                foreach (var arrayItem in ownedCaseProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedConcern"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedCaseExternalIdProperty))
-                    {
-                        var propertyValue = ownedCaseExternalIdProperty.GetString();
+                    ownedConcernSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedConcernValue))
                         {
-                            dtoInstance.ownedCase.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedConcern.Add(ownedConcernValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedConcern"u8, out var ownedConcernProperty))
-            {
-                foreach (var arrayItem in ownedConcernProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedConjugator"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedConcernExternalIdProperty))
+                    ownedConjugatorSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.ownedConjugator = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedConjugatorValue))
                     {
-                        var propertyValue = ownedConcernExternalIdProperty.GetString();
+                        dtoInstance.ownedConjugator = ownedConjugatorValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedConnection"u8))
+                {
+                    ownedConnectionSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedConnectionValue))
                         {
-                            dtoInstance.ownedConcern.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedConnection.Add(ownedConnectionValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedConcern Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
-            {
-                if (ownedConjugatorProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ownedConjugator = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedConstraint"u8))
                 {
-                    if (ownedConjugatorProperty.TryGetProperty("@id"u8, out var ownedConjugatorExternalIdProperty))
-                    {
-                        var propertyValue = ownedConjugatorExternalIdProperty.GetString();
+                    ownedConstraintSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedConstraintValue))
                         {
-                            dtoInstance.ownedConjugator = Guid.Parse(propertyValue);
+                            dtoInstance.ownedConstraint.Add(ownedConstraintValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedConjugator Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedConnection"u8, out var ownedConnectionProperty))
-            {
-                foreach (var arrayItem in ownedConnectionProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedDifferencing"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedConnectionExternalIdProperty))
-                    {
-                        var propertyValue = ownedConnectionExternalIdProperty.GetString();
+                    ownedDifferencingSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedDifferencingValue))
                         {
-                            dtoInstance.ownedConnection.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedDifferencing.Add(ownedDifferencingValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedConnection Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedConstraint"u8, out var ownedConstraintProperty))
-            {
-                foreach (var arrayItem in ownedConstraintProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedDisjoining"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedConstraintExternalIdProperty))
-                    {
-                        var propertyValue = ownedConstraintExternalIdProperty.GetString();
+                    ownedDisjoiningSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedDisjoiningValue))
                         {
-                            dtoInstance.ownedConstraint.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedDisjoining.Add(ownedDisjoiningValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedConstraint Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedDifferencing"u8, out var ownedDifferencingProperty))
-            {
-                foreach (var arrayItem in ownedDifferencingProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedDifferencingExternalIdProperty))
-                    {
-                        var propertyValue = ownedDifferencingExternalIdProperty.GetString();
+                    ownedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedElementValue))
                         {
-                            dtoInstance.ownedDifferencing.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedElement.Add(ownedElementValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedDifferencing Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedDisjoining"u8, out var ownedDisjoiningProperty))
-            {
-                foreach (var arrayItem in ownedDisjoiningProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedEndFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedDisjoiningExternalIdProperty))
-                    {
-                        var propertyValue = ownedDisjoiningExternalIdProperty.GetString();
+                    ownedEndFeatureSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedEndFeatureValue))
                         {
-                            dtoInstance.ownedDisjoining.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedEndFeature.Add(ownedEndFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedDisjoining Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
-            {
-                foreach (var arrayItem in ownedElementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedEnumeration"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedElementExternalIdProperty))
-                    {
-                        var propertyValue = ownedElementExternalIdProperty.GetString();
+                    ownedEnumerationSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedEnumerationValue))
                         {
-                            dtoInstance.ownedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedEnumeration.Add(ownedEnumerationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedEndFeature"u8, out var ownedEndFeatureProperty))
-            {
-                foreach (var arrayItem in ownedEndFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedFeature"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedEndFeatureExternalIdProperty))
-                    {
-                        var propertyValue = ownedEndFeatureExternalIdProperty.GetString();
+                    ownedFeatureSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedFeatureValue))
                         {
-                            dtoInstance.ownedEndFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedFeature.Add(ownedFeatureValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedEndFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedEnumeration"u8, out var ownedEnumerationProperty))
-            {
-                foreach (var arrayItem in ownedEnumerationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedFeatureMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedEnumerationExternalIdProperty))
-                    {
-                        var propertyValue = ownedEnumerationExternalIdProperty.GetString();
+                    ownedFeatureMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedFeatureMembershipValue))
                         {
-                            dtoInstance.ownedEnumeration.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedFeatureMembership.Add(ownedFeatureMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedEnumeration Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedFeature"u8, out var ownedFeatureProperty))
-            {
-                foreach (var arrayItem in ownedFeatureProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedFlow"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = ownedFeatureExternalIdProperty.GetString();
+                    ownedFlowSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedFlowValue))
                         {
-                            dtoInstance.ownedFeature.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedFlow.Add(ownedFlowValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedFeatureMembership"u8, out var ownedFeatureMembershipProperty))
-            {
-                foreach (var arrayItem in ownedFeatureMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedImport"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedFeatureMembershipExternalIdProperty))
-                    {
-                        var propertyValue = ownedFeatureMembershipExternalIdProperty.GetString();
+                    ownedImportSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedImportValue))
                         {
-                            dtoInstance.ownedFeatureMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedImport.Add(ownedImportValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedFeatureMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedFlow"u8, out var ownedFlowProperty))
-            {
-                foreach (var arrayItem in ownedFlowProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedInterface"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedFlowExternalIdProperty))
-                    {
-                        var propertyValue = ownedFlowExternalIdProperty.GetString();
+                    ownedInterfaceSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedInterfaceValue))
                         {
-                            dtoInstance.ownedFlow.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedInterface.Add(ownedInterfaceValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedFlow Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
-            {
-                foreach (var arrayItem in ownedImportProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedIntersecting"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedImportExternalIdProperty))
-                    {
-                        var propertyValue = ownedImportExternalIdProperty.GetString();
+                    ownedIntersectingSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedIntersectingValue))
                         {
-                            dtoInstance.ownedImport.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedIntersecting.Add(ownedIntersectingValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedImport Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedInterface"u8, out var ownedInterfaceProperty))
-            {
-                foreach (var arrayItem in ownedInterfaceProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedItem"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedInterfaceExternalIdProperty))
-                    {
-                        var propertyValue = ownedInterfaceExternalIdProperty.GetString();
+                    ownedItemSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedItemValue))
                         {
-                            dtoInstance.ownedInterface.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedItem.Add(ownedItemValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedInterface Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedIntersecting"u8, out var ownedIntersectingProperty))
-            {
-                foreach (var arrayItem in ownedIntersectingProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedMember"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedIntersectingExternalIdProperty))
-                    {
-                        var propertyValue = ownedIntersectingExternalIdProperty.GetString();
+                    ownedMemberSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedMemberValue))
                         {
-                            dtoInstance.ownedIntersecting.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedMember.Add(ownedMemberValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedIntersecting Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedItem"u8, out var ownedItemProperty))
-            {
-                foreach (var arrayItem in ownedItemProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedItemExternalIdProperty))
-                    {
-                        var propertyValue = ownedItemExternalIdProperty.GetString();
+                    ownedMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedMembershipValue))
                         {
-                            dtoInstance.ownedItem.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedMembership.Add(ownedMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedItem Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
-            {
-                foreach (var arrayItem in ownedMemberProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedMetadata"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMemberExternalIdProperty))
-                    {
-                        var propertyValue = ownedMemberExternalIdProperty.GetString();
+                    ownedMetadataSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedMetadataValue))
                         {
-                            dtoInstance.ownedMember.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedMetadata.Add(ownedMetadataValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedMember Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
-            {
-                foreach (var arrayItem in ownedMembershipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedOccurrence"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMembershipExternalIdProperty))
-                    {
-                        var propertyValue = ownedMembershipExternalIdProperty.GetString();
+                    ownedOccurrenceSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedOccurrenceValue))
                         {
-                            dtoInstance.ownedMembership.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedOccurrence.Add(ownedOccurrenceValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedMetadata"u8, out var ownedMetadataProperty))
-            {
-                foreach (var arrayItem in ownedMetadataProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedPart"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMetadataExternalIdProperty))
-                    {
-                        var propertyValue = ownedMetadataExternalIdProperty.GetString();
+                    ownedPartSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedPartValue))
                         {
-                            dtoInstance.ownedMetadata.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedPart.Add(ownedPartValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedMetadata Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedOccurrence"u8, out var ownedOccurrenceProperty))
-            {
-                foreach (var arrayItem in ownedOccurrenceProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedPort"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedOccurrenceExternalIdProperty))
-                    {
-                        var propertyValue = ownedOccurrenceExternalIdProperty.GetString();
+                    ownedPortSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedPortValue))
                         {
-                            dtoInstance.ownedOccurrence.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedPort.Add(ownedPortValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedOccurrence Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedPart"u8, out var ownedPartProperty))
-            {
-                foreach (var arrayItem in ownedPartProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedReference"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedPartExternalIdProperty))
-                    {
-                        var propertyValue = ownedPartExternalIdProperty.GetString();
+                    ownedReferenceSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedReferenceValue))
                         {
-                            dtoInstance.ownedPart.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedReference.Add(ownedReferenceValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedPart Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedPort"u8, out var ownedPortProperty))
-            {
-                foreach (var arrayItem in ownedPortProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRelatedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedPortExternalIdProperty))
-                    {
-                        var propertyValue = ownedPortExternalIdProperty.GetString();
+                    ownedRelatedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelatedElementValue))
                         {
-                            dtoInstance.ownedPort.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelatedElement.Add(ownedRelatedElementValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedPort Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedReference"u8, out var ownedReferenceProperty))
-            {
-                foreach (var arrayItem in ownedReferenceProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedReferenceExternalIdProperty))
-                    {
-                        var propertyValue = ownedReferenceExternalIdProperty.GetString();
+                    ownedRelationshipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.ownedReference.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedReference Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
-            {
-                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRendering"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+                    ownedRenderingSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRenderingValue))
                         {
-                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedRendering.Add(ownedRenderingValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRequirement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                    ownedRequirementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRequirementValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedRequirement.Add(ownedRequirementValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRendering"u8, out var ownedRenderingProperty))
-            {
-                foreach (var arrayItem in ownedRenderingProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedSpecialization"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRenderingExternalIdProperty))
-                    {
-                        var propertyValue = ownedRenderingExternalIdProperty.GetString();
+                    ownedSpecializationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedSpecializationValue))
                         {
-                            dtoInstance.ownedRendering.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedSpecialization.Add(ownedSpecializationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRendering Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRequirement"u8, out var ownedRequirementProperty))
-            {
-                foreach (var arrayItem in ownedRequirementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedState"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRequirementExternalIdProperty))
-                    {
-                        var propertyValue = ownedRequirementExternalIdProperty.GetString();
+                    ownedStateSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedStateValue))
                         {
-                            dtoInstance.ownedRequirement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedState.Add(ownedStateValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRequirement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedSpecialization"u8, out var ownedSpecializationProperty))
-            {
-                foreach (var arrayItem in ownedSpecializationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedSubclassification"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedSpecializationExternalIdProperty))
-                    {
-                        var propertyValue = ownedSpecializationExternalIdProperty.GetString();
+                    ownedSubclassificationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedSubclassificationValue))
                         {
-                            dtoInstance.ownedSpecialization.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedSubclassification.Add(ownedSubclassificationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedSpecialization Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedState"u8, out var ownedStateProperty))
-            {
-                foreach (var arrayItem in ownedStateProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedTransition"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedStateExternalIdProperty))
-                    {
-                        var propertyValue = ownedStateExternalIdProperty.GetString();
+                    ownedTransitionSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedTransitionValue))
                         {
-                            dtoInstance.ownedState.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedTransition.Add(ownedTransitionValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedState Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedSubclassification"u8, out var ownedSubclassificationProperty))
-            {
-                foreach (var arrayItem in ownedSubclassificationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedUnioning"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedSubclassificationExternalIdProperty))
-                    {
-                        var propertyValue = ownedSubclassificationExternalIdProperty.GetString();
+                    ownedUnioningSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedUnioningValue))
                         {
-                            dtoInstance.ownedSubclassification.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedUnioning.Add(ownedUnioningValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedSubclassification Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedTransition"u8, out var ownedTransitionProperty))
-            {
-                foreach (var arrayItem in ownedTransitionProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedUsage"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedTransitionExternalIdProperty))
-                    {
-                        var propertyValue = ownedTransitionExternalIdProperty.GetString();
+                    ownedUsageSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedUsageValue))
                         {
-                            dtoInstance.ownedTransition.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedUsage.Add(ownedUsageValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedTransition Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedUnioning"u8, out var ownedUnioningProperty))
-            {
-                foreach (var arrayItem in ownedUnioningProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedUseCase"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedUnioningExternalIdProperty))
-                    {
-                        var propertyValue = ownedUnioningExternalIdProperty.GetString();
+                    ownedUseCaseSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedUseCaseValue))
                         {
-                            dtoInstance.ownedUnioning.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedUseCase.Add(ownedUseCaseValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedUnioning Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedUsage"u8, out var ownedUsageProperty))
-            {
-                foreach (var arrayItem in ownedUsageProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedVerificationCase"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedUsageExternalIdProperty))
-                    {
-                        var propertyValue = ownedUsageExternalIdProperty.GetString();
+                    ownedVerificationCaseSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedVerificationCaseValue))
                         {
-                            dtoInstance.ownedUsage.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedVerificationCase.Add(ownedVerificationCaseValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedUsage Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedUseCase"u8, out var ownedUseCaseProperty))
-            {
-                foreach (var arrayItem in ownedUseCaseProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedView"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedUseCaseExternalIdProperty))
-                    {
-                        var propertyValue = ownedUseCaseExternalIdProperty.GetString();
+                    ownedViewSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedViewValue))
                         {
-                            dtoInstance.ownedUseCase.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedView.Add(ownedViewValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedUseCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedVerificationCase"u8, out var ownedVerificationCaseProperty))
-            {
-                foreach (var arrayItem in ownedVerificationCaseProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedViewpoint"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedVerificationCaseExternalIdProperty))
-                    {
-                        var propertyValue = ownedVerificationCaseExternalIdProperty.GetString();
+                    ownedViewpointSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedViewpointValue))
                         {
-                            dtoInstance.ownedVerificationCase.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedViewpoint.Add(ownedViewpointValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedVerificationCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedView"u8, out var ownedViewProperty))
-            {
-                foreach (var arrayItem in ownedViewProperty.EnumerateArray())
+                if (reader.ValueTextEquals("owner"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedViewExternalIdProperty))
-                    {
-                        var propertyValue = ownedViewExternalIdProperty.GetString();
+                    ownerSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.ownedView.Add(Guid.Parse(propertyValue));
-                        }
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owner = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownerValue))
+                    {
+                        dtoInstance.owner = ownerValue;
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedView Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedViewpoint"u8, out var ownedViewpointProperty))
-            {
-                foreach (var arrayItem in ownedViewpointProperty.EnumerateArray())
+                if (reader.ValueTextEquals("owningMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedViewpointExternalIdProperty))
-                    {
-                        var propertyValue = ownedViewpointExternalIdProperty.GetString();
+                    owningMembershipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.ownedViewpoint.Add(Guid.Parse(propertyValue));
-                        }
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningMembership = null;
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedViewpoint Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningMembershipValue))
+                    {
+                        dtoInstance.owningMembership = owningMembershipValue;
+                    }
 
-            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
-            {
-                if (ownerProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owner = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owningNamespace"u8))
                 {
-                    if (ownerProperty.TryGetProperty("@id"u8, out var ownerExternalIdProperty))
-                    {
-                        var propertyValue = ownerExternalIdProperty.GetString();
+                    owningNamespaceSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.owner = Guid.Parse(propertyValue);
-                        }
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningNamespace = null;
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owner Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningNamespaceValue))
+                    {
+                        dtoInstance.owningNamespace = owningNamespaceValue;
+                    }
 
-            if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
-            {
-                if (owningMembershipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningMembership = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owningRelatedElement"u8))
                 {
-                    if (owningMembershipProperty.TryGetProperty("@id"u8, out var owningMembershipExternalIdProperty))
-                    {
-                        var propertyValue = owningMembershipExternalIdProperty.GetString();
+                    owningRelatedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.owningMembership = Guid.Parse(propertyValue);
-                        }
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelatedElement = null;
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelatedElementValue))
+                    {
+                        dtoInstance.OwningRelatedElement = owningRelatedElementValue;
+                    }
 
-            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
-            {
-                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningNamespace = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
                 {
-                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
-                    {
-                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
+                    owningRelationshipSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
-                        }
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningNamespace Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
-            {
-                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
+                if (reader.ValueTextEquals("qualifiedName"u8))
                 {
-                    dtoInstance.OwningRelatedElement = null;
+                    qualifiedNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.qualifiedName = reader.GetString();
+
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("relatedType"u8))
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
+                    relatedTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var relatedTypeValue))
                         {
-                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                            dtoInstance.relatedType.Add(relatedTypeValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelationship = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("shortName"u8))
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
+                    shortNameSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    dtoInstance.shortName = reader.GetString();
 
-            if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
-            {
-                dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the qualifiedName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    continue;
+                }
 
-            if (jsonElement.TryGetProperty("relatedType"u8, out var relatedTypeProperty))
-            {
-                foreach (var arrayItem in relatedTypeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("sourceType"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var relatedTypeExternalIdProperty))
-                    {
-                        var propertyValue = relatedTypeExternalIdProperty.GetString();
+                    sourceTypeSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.relatedType.Add(Guid.Parse(propertyValue));
-                        }
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.sourceType = null;
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the relatedType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
-            {
-                dtoInstance.shortName = shortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the shortName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var sourceTypeValue))
+                    {
+                        dtoInstance.sourceType = sourceTypeValue;
+                    }
 
-            if (jsonElement.TryGetProperty("sourceType"u8, out var sourceTypeProperty))
-            {
-                if (sourceTypeProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.sourceType = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("targetType"u8))
                 {
-                    if (sourceTypeProperty.TryGetProperty("@id"u8, out var sourceTypeExternalIdProperty))
-                    {
-                        var propertyValue = sourceTypeExternalIdProperty.GetString();
+                    targetTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var targetTypeValue))
                         {
-                            dtoInstance.sourceType = Guid.Parse(propertyValue);
+                            dtoInstance.targetType.Add(targetTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the sourceType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("targetType"u8, out var targetTypeProperty))
-            {
-                foreach (var arrayItem in targetTypeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("textualRepresentation"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetTypeExternalIdProperty))
-                    {
-                        var propertyValue = targetTypeExternalIdProperty.GetString();
+                    textualRepresentationSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var textualRepresentationValue))
                         {
-                            dtoInstance.targetType.Add(Guid.Parse(propertyValue));
+                            dtoInstance.textualRepresentation.Add(textualRepresentationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the targetType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
-            {
-                foreach (var arrayItem in textualRepresentationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("unioningType"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var textualRepresentationExternalIdProperty))
-                    {
-                        var propertyValue = textualRepresentationExternalIdProperty.GetString();
+                    unioningTypeSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var unioningTypeValue))
                         {
-                            dtoInstance.textualRepresentation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.unioningType.Add(unioningTypeValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the textualRepresentation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
-            {
-                foreach (var arrayItem in unioningTypeProperty.EnumerateArray())
+                if (reader.ValueTextEquals("usage"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var unioningTypeExternalIdProperty))
-                    {
-                        var propertyValue = unioningTypeExternalIdProperty.GetString();
+                    usageSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var usageValue))
                         {
-                            dtoInstance.unioningType.Add(Guid.Parse(propertyValue));
+                            dtoInstance.usage.Add(usageValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the unioningType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("usage"u8, out var usageProperty))
-            {
-                foreach (var arrayItem in usageProperty.EnumerateArray())
+                if (reader.ValueTextEquals("variant"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var usageExternalIdProperty))
-                    {
-                        var propertyValue = usageExternalIdProperty.GetString();
+                    variantSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var variantValue))
                         {
-                            dtoInstance.usage.Add(Guid.Parse(propertyValue));
+                            dtoInstance.variant.Add(variantValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the usage Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("variant"u8, out var variantProperty))
-            {
-                foreach (var arrayItem in variantProperty.EnumerateArray())
+                if (reader.ValueTextEquals("variantMembership"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var variantExternalIdProperty))
-                    {
-                        var propertyValue = variantExternalIdProperty.GetString();
+                    variantMembershipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-                        if (propertyValue != null)
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var variantMembershipValue))
                         {
-                            dtoInstance.variant.Add(Guid.Parse(propertyValue));
+                            dtoInstance.variantMembership.Add(variantMembershipValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the variant Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+
+
+                reader.Read();
+                reader.Skip();
             }
 
-            if (jsonElement.TryGetProperty("variantMembership"u8, out var variantMembershipProperty))
+            if (logger.IsEnabled(LogLevel.Debug))
             {
-                foreach (var arrayItem in variantMembershipProperty.EnumerateArray())
+                if (!aliasIdsSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var variantMembershipExternalIdProperty))
-                    {
-                        var propertyValue = variantMembershipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.variantMembership.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the aliasIds Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the variantMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                if (!declaredNameSeen)
+                {
+                    logger.LogDebug("the declaredName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!declaredShortNameSeen)
+                {
+                    logger.LogDebug("the declaredShortName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!differencingTypeSeen)
+                {
+                    logger.LogDebug("the differencingType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!directedFeatureSeen)
+                {
+                    logger.LogDebug("the directedFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!directedUsageSeen)
+                {
+                    logger.LogDebug("the directedUsage Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!documentationSeen)
+                {
+                    logger.LogDebug("the documentation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!elementIdSeen)
+                {
+                    logger.LogDebug("the elementId Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!featureSeen)
+                {
+                    logger.LogDebug("the feature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!featureMembershipSeen)
+                {
+                    logger.LogDebug("the featureMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!importedMembershipSeen)
+                {
+                    logger.LogDebug("the importedMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!inheritedFeatureSeen)
+                {
+                    logger.LogDebug("the inheritedFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!inheritedMembershipSeen)
+                {
+                    logger.LogDebug("the inheritedMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!inputSeen)
+                {
+                    logger.LogDebug("the input Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!interfaceEndSeen)
+                {
+                    logger.LogDebug("the interfaceEnd Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!intersectingTypeSeen)
+                {
+                    logger.LogDebug("the intersectingType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isAbstractSeen)
+                {
+                    logger.LogDebug("the isAbstract Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isConjugatedSeen)
+                {
+                    logger.LogDebug("the isConjugated Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedSeen)
+                {
+                    logger.LogDebug("the isImplied Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isIndividualSeen)
+                {
+                    logger.LogDebug("the isIndividual Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isLibraryElementSeen)
+                {
+                    logger.LogDebug("the isLibraryElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isSufficientSeen)
+                {
+                    logger.LogDebug("the isSufficient Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isVariationSeen)
+                {
+                    logger.LogDebug("the isVariation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!memberSeen)
+                {
+                    logger.LogDebug("the member Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!membershipSeen)
+                {
+                    logger.LogDebug("the membership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!multiplicitySeen)
+                {
+                    logger.LogDebug("the multiplicity Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!nameSeen)
+                {
+                    logger.LogDebug("the name Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!outputSeen)
+                {
+                    logger.LogDebug("the output Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedActionSeen)
+                {
+                    logger.LogDebug("the ownedAction Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAllocationSeen)
+                {
+                    logger.LogDebug("the ownedAllocation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAnalysisCaseSeen)
+                {
+                    logger.LogDebug("the ownedAnalysisCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAnnotationSeen)
+                {
+                    logger.LogDebug("the ownedAnnotation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAttributeSeen)
+                {
+                    logger.LogDebug("the ownedAttribute Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedCalculationSeen)
+                {
+                    logger.LogDebug("the ownedCalculation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedCaseSeen)
+                {
+                    logger.LogDebug("the ownedCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedConcernSeen)
+                {
+                    logger.LogDebug("the ownedConcern Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedConjugatorSeen)
+                {
+                    logger.LogDebug("the ownedConjugator Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedConnectionSeen)
+                {
+                    logger.LogDebug("the ownedConnection Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedConstraintSeen)
+                {
+                    logger.LogDebug("the ownedConstraint Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedDifferencingSeen)
+                {
+                    logger.LogDebug("the ownedDifferencing Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedDisjoiningSeen)
+                {
+                    logger.LogDebug("the ownedDisjoining Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedElementSeen)
+                {
+                    logger.LogDebug("the ownedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedEndFeatureSeen)
+                {
+                    logger.LogDebug("the ownedEndFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedEnumerationSeen)
+                {
+                    logger.LogDebug("the ownedEnumeration Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedFeatureSeen)
+                {
+                    logger.LogDebug("the ownedFeature Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedFeatureMembershipSeen)
+                {
+                    logger.LogDebug("the ownedFeatureMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedFlowSeen)
+                {
+                    logger.LogDebug("the ownedFlow Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedImportSeen)
+                {
+                    logger.LogDebug("the ownedImport Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedInterfaceSeen)
+                {
+                    logger.LogDebug("the ownedInterface Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedIntersectingSeen)
+                {
+                    logger.LogDebug("the ownedIntersecting Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedItemSeen)
+                {
+                    logger.LogDebug("the ownedItem Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedMemberSeen)
+                {
+                    logger.LogDebug("the ownedMember Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedMembershipSeen)
+                {
+                    logger.LogDebug("the ownedMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedMetadataSeen)
+                {
+                    logger.LogDebug("the ownedMetadata Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedOccurrenceSeen)
+                {
+                    logger.LogDebug("the ownedOccurrence Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedPartSeen)
+                {
+                    logger.LogDebug("the ownedPart Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedPortSeen)
+                {
+                    logger.LogDebug("the ownedPort Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedReferenceSeen)
+                {
+                    logger.LogDebug("the ownedReference Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelatedElementSeen)
+                {
+                    logger.LogDebug("the ownedRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRenderingSeen)
+                {
+                    logger.LogDebug("the ownedRendering Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRequirementSeen)
+                {
+                    logger.LogDebug("the ownedRequirement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedSpecializationSeen)
+                {
+                    logger.LogDebug("the ownedSpecialization Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedStateSeen)
+                {
+                    logger.LogDebug("the ownedState Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedSubclassificationSeen)
+                {
+                    logger.LogDebug("the ownedSubclassification Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedTransitionSeen)
+                {
+                    logger.LogDebug("the ownedTransition Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedUnioningSeen)
+                {
+                    logger.LogDebug("the ownedUnioning Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedUsageSeen)
+                {
+                    logger.LogDebug("the ownedUsage Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedUseCaseSeen)
+                {
+                    logger.LogDebug("the ownedUseCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedVerificationCaseSeen)
+                {
+                    logger.LogDebug("the ownedVerificationCase Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedViewSeen)
+                {
+                    logger.LogDebug("the ownedView Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedViewpointSeen)
+                {
+                    logger.LogDebug("the ownedViewpoint Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownerSeen)
+                {
+                    logger.LogDebug("the owner Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!owningMembershipSeen)
+                {
+                    logger.LogDebug("the owningMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!owningNamespaceSeen)
+                {
+                    logger.LogDebug("the owningNamespace Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelatedElementSeen)
+                {
+                    logger.LogDebug("the owningRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!qualifiedNameSeen)
+                {
+                    logger.LogDebug("the qualifiedName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!relatedTypeSeen)
+                {
+                    logger.LogDebug("the relatedType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!shortNameSeen)
+                {
+                    logger.LogDebug("the shortName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!sourceTypeSeen)
+                {
+                    logger.LogDebug("the sourceType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!targetTypeSeen)
+                {
+                    logger.LogDebug("the targetType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!textualRepresentationSeen)
+                {
+                    logger.LogDebug("the textualRepresentation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!unioningTypeSeen)
+                {
+                    logger.LogDebug("the unioningType Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!usageSeen)
+                {
+                    logger.LogDebug("the usage Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!variantSeen)
+                {
+                    logger.LogDebug("the variant Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!variantMembershipSeen)
+                {
+                    logger.LogDebug("the variantMembership Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
             }
-
         }
 
         /// <summary>
         /// Deserializes properties of a <see cref="InterfaceDefinition" />
-        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// from a <see cref="Utf8JsonReader" />, excluding derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="InterfaceDefinition"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IInterfaceDefinition"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="IInterfaceDefinition"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Interfaces.InterfaceDefinition dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Interfaces.InterfaceDefinition dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var elementIdSeen = false;
+            var isAbstractSeen = false;
+            var isImpliedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isIndividualSeen = false;
+            var isSufficientSeen = false;
+            var isVariationSeen = false;
+            var ownedRelatedElementSeen = false;
+            var ownedRelationshipSeen = false;
+            var owningRelatedElementSeen = false;
+            var owningRelationshipSeen = false;
 
-                    if (propertyValue != null)
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the InterfaceDefinition json object.");
+                }
+
+                if (reader.ValueTextEquals("@id"u8))
+                {
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        dtoInstance.AliasIds.Add(propertyValue);
+                        throw new JsonException("The @id property is not present, the InterfaceDefinition cannot be deserialized");
                     }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("aliasIds"u8))
                 {
-                    dtoInstance.ElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    aliasIdsSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
-            {
-                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isAbstract Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
 
-            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
-            {
-                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImplied Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
-            {
-                if (isIndividualProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isIndividual Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
-            {
-                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isSufficient Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
-            {
-                if (isVariationProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariation = isVariationProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
-            {
-                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+                        var aliasIdsValue = reader.GetString();
 
-                        if (propertyValue != null)
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                    declaredNameSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("elementId"u8))
+                {
+                    elementIdSeen = true;
+                    reader.Read();
+
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
+                    {
+                        dtoInstance.ElementId = elementIdValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isAbstract"u8))
+                {
+                    isAbstractSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsAbstract = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImplied"u8))
+                {
+                    isImpliedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImplied = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isIndividual"u8))
+                {
+                    isIndividualSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsIndividual = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isSufficient"u8))
+                {
+                    isSufficientSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsSufficient = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isVariation"u8))
+                {
+                    isVariationSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsVariation = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedRelatedElement"u8))
+                {
+                    ownedRelatedElementSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelatedElementValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelatedElement.Add(ownedRelatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
-            {
-                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelatedElement = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
+                    ownedRelationshipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelationship = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owningRelatedElement"u8))
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    owningRelatedElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
-                        }
+                        dtoInstance.OwningRelatedElement = null;
                     }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelatedElementValue))
+                    {
+                        dtoInstance.OwningRelatedElement = owningRelatedElementValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (!aliasIdsSeen)
+                {
+                    logger.LogDebug("the aliasIds Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!declaredNameSeen)
+                {
+                    logger.LogDebug("the declaredName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!declaredShortNameSeen)
+                {
+                    logger.LogDebug("the declaredShortName Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!elementIdSeen)
+                {
+                    logger.LogDebug("the elementId Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isAbstractSeen)
+                {
+                    logger.LogDebug("the isAbstract Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedSeen)
+                {
+                    logger.LogDebug("the isImplied Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isIndividualSeen)
+                {
+                    logger.LogDebug("the isIndividual Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isSufficientSeen)
+                {
+                    logger.LogDebug("the isSufficient Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!isVariationSeen)
+                {
+                    logger.LogDebug("the isVariation Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelatedElementSeen)
+                {
+                    logger.LogDebug("the ownedRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelatedElementSeen)
+                {
+                    logger.LogDebug("the owningRelatedElement Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
                 }
             }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the InterfaceDefinition: {Id}", dtoInstance.Id);
-            }
-
         }
     }
 }
