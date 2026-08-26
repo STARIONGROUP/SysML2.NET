@@ -70,11 +70,12 @@ namespace SysML2.NET.Dal
 
             poco.AliasIds = dto.AliasIds;
 
-            var clientToDelete = poco.Client.Select(x => x.Id).Except(dto.Client);
+            var clientRetained = new HashSet<Guid>(dto.Client);
+            var clientToDelete = poco.Client.Where(x => !clientRetained.Contains(x.Id)).ToList();
 
-            foreach (var identifier in clientToDelete)
+            foreach (var client in clientToDelete)
             {
-                poco.Client.Remove(poco.Client.Single(x => x.Id == identifier));
+                poco.Client.Remove(client);
             }
 
 
@@ -88,29 +89,32 @@ namespace SysML2.NET.Dal
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
-            var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
+            var ownedRelatedElementRetained = new HashSet<Guid>(dto.OwnedRelatedElement);
+            var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Where(x => !ownedRelatedElementRetained.Contains(x.Id)).ToList();
 
-            foreach (var identifier in ownedRelatedElementToDelete)
+            foreach (var ownedRelatedElement in ownedRelatedElementToDelete)
             {
-                ((IContainedRelationship)poco).OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
+                ((IContainedRelationship)poco).OwnedRelatedElement.Remove(ownedRelatedElement);
             }
 
-            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
+            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete.Select(x => x.Id));
 
-            var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+            var ownedRelationshipRetained = new HashSet<Guid>(dto.OwnedRelationship);
+            var ownedRelationshipToDelete = poco.OwnedRelationship.Where(x => !ownedRelationshipRetained.Contains(x.Id)).ToList();
 
-            foreach (var identifier in ownedRelationshipToDelete)
+            foreach (var ownedRelationship in ownedRelationshipToDelete)
             {
-                ((IContainedElement)poco).OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
+                ((IContainedElement)poco).OwnedRelationship.Remove(ownedRelationship);
             }
 
-            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
+            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete.Select(x => x.Id));
 
-            var supplierToDelete = poco.Supplier.Select(x => x.Id).Except(dto.Supplier);
+            var supplierRetained = new HashSet<Guid>(dto.Supplier);
+            var supplierToDelete = poco.Supplier.Where(x => !supplierRetained.Contains(x.Id)).ToList();
 
-            foreach (var identifier in supplierToDelete)
+            foreach (var supplier in supplierToDelete)
             {
-                poco.Supplier.Remove(poco.Supplier.Single(x => x.Id == identifier));
+                poco.Supplier.Remove(supplier);
             }
 
 
