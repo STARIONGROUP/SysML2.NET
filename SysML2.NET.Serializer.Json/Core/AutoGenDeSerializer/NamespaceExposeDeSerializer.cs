@@ -33,6 +33,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Systems.Views;
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Utility;
 
     /// <summary>
     /// The purpose of the <see cref="NamespaceExposeDeSerializer"/> is to provide deserialization capabilities
@@ -41,10 +42,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     internal static class NamespaceExposeDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="INamespaceExpose"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="INamespaceExpose"/> from the provided <see cref="Utf8JsonReader"/>
         /// </summary>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="INamespaceExpose"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="INamespaceExpose"/> json object. On return the reader is positioned on the matching
+        /// <see cref="JsonTokenType.EndObject"/>
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -58,43 +61,25 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <returns>
         /// an instance of <see cref="INamespaceExpose"/>
         /// </returns>
-        internal static INamespaceExpose DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
+        /// <remarks>
+        /// The <c>@type</c> property is the discriminator that the caller dispatched on, so it is skipped rather
+        /// than re-validated here
+        /// </remarks>
+        internal static INamespaceExpose DeSerialize(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("NamespaceExposeDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type"u8, out var @type))
-            {
-                throw new InvalidOperationException("The @type property is not available, the NamespaceExposeDeSerializer cannot be used to deserialize this JsonElement");
-            }
-
-            if (@type.GetString() != "NamespaceExpose")
-            {
-                throw new InvalidOperationException($"The NamespaceExposeDeSerializer can only be used to deserialize objects of type INamespaceExpose, a {@type.GetString()} was provided");
-            }
+            Utf8JsonReaderHelper.Expect(ref reader, JsonTokenType.StartObject);
 
             var dtoInstance = new SysML2.NET.Core.DTO.Systems.Views.NamespaceExpose();
 
-            if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
-            {
-                var propertyValue = idProperty.GetString();
-
-                if (propertyValue == null)
-                {
-                    throw new JsonException("The @id property is not present, the NamespaceExpose cannot be deserialized");
-                }
-                else
-                {
-                    dtoInstance.Id = Guid.Parse(propertyValue);
-                }
-            }
-
             if (deserializeDerivedProperties)
             {
-                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, ref reader, logger);
             }
             else
             {
-                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, ref reader, logger);
             }
 
             return dtoInstance;
@@ -102,735 +87,952 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
         /// <summary>
         /// Deserializes properties of a <see cref="NamespaceExpose" />
-        /// from a <see cref="JsonElement" />, including derived properties
+        /// from a <see cref="Utf8JsonReader" />, including derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="NamespaceExpose"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="INamespaceExpose"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="INamespaceExpose"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Views.NamespaceExpose dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Views.NamespaceExpose dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var documentationSeen = false;
+            var elementIdSeen = false;
+            var importedElementSeen = false;
+            var importedNamespaceSeen = false;
+            var importOwningNamespaceSeen = false;
+            var isImpliedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isImportAllSeen = false;
+            var isLibraryElementSeen = false;
+            var isRecursiveSeen = false;
+            var nameSeen = false;
+            var ownedAnnotationSeen = false;
+            var ownedElementSeen = false;
+            var ownedRelatedElementSeen = false;
+            var ownedRelationshipSeen = false;
+            var ownerSeen = false;
+            var owningMembershipSeen = false;
+            var owningNamespaceSeen = false;
+            var owningRelatedElementSeen = false;
+            var owningRelationshipSeen = false;
+            var qualifiedNameSeen = false;
+            var relatedElementSeen = false;
+            var shortNameSeen = false;
+            var textualRepresentationSeen = false;
+            var visibilitySeen = false;
 
-                    if (propertyValue != null)
-                    {
-                        dtoInstance.AliasIds.Add(propertyValue);
-                    }
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the NamespaceExpose json object.");
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
-            {
-                foreach (var arrayItem in documentationProperty.EnumerateArray())
+                if (reader.ValueTextEquals("@id"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var documentationExternalIdProperty))
-                    {
-                        var propertyValue = documentationExternalIdProperty.GetString();
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        throw new JsonException("The @id property is not present, the NamespaceExpose cannot be deserialized");
+                    }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("aliasIds"u8))
+                {
+                    aliasIdsSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        var aliasIdsValue = reader.GetString();
+
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.documentation.Add(Guid.Parse(propertyValue));
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the documentation Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
-                {
-                    dtoInstance.ElementId = propertyValue;
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("importedElement"u8, out var importedElementProperty))
-            {
-                if (importedElementProperty.ValueKind == JsonValueKind.Null)
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    dtoInstance.importedElement = Guid.Empty;
-                    logger.LogDebug($"the NamespaceExpose.importedElement property was not found in the Json. The value is set to Guid.Empty");
+                    declaredNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
                 {
-                    if (importedElementProperty.TryGetProperty("@id"u8, out var importedElementExternalIdProperty))
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("documentation"u8))
+                {
+                    documentationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = importedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var documentationValue))
                         {
-                            dtoInstance.importedElement = Guid.Parse(propertyValue);
+                            dtoInstance.documentation.Add(documentationValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the importedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("importedNamespace"u8, out var importedNamespaceProperty))
-            {
-                if (importedNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ImportedNamespace = Guid.Empty;
-                    logger.LogDebug($"the NamespaceExpose.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("elementId"u8))
                 {
-                    if (importedNamespaceProperty.TryGetProperty("@id"u8, out var importedNamespaceExternalIdProperty))
+                    elementIdSeen = true;
+                    reader.Read();
+
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
                     {
-                        var propertyValue = importedNamespaceExternalIdProperty.GetString();
+                        dtoInstance.ElementId = elementIdValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("importedElement"u8))
+                {
+                    importedElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.importedElement = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.ImportedNamespace = Guid.Parse(propertyValue);
+                            logger.LogDebug("the NamespaceExpose.importedElement property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the importedNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("importOwningNamespace"u8, out var importOwningNamespaceProperty))
-            {
-                if (importOwningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.importOwningNamespace = Guid.Empty;
-                    logger.LogDebug($"the NamespaceExpose.importOwningNamespace property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (importOwningNamespaceProperty.TryGetProperty("@id"u8, out var importOwningNamespaceExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var importedElementValue))
                     {
-                        var propertyValue = importOwningNamespaceExternalIdProperty.GetString();
+                        dtoInstance.importedElement = importedElementValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("importedNamespace"u8))
+                {
+                    importedNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.ImportedNamespace = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.importOwningNamespace = Guid.Parse(propertyValue);
+                            logger.LogDebug("the NamespaceExpose.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the importOwningNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
-            {
-                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImplied Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isImportAll"u8, out var isImportAllProperty))
-            {
-                if (isImportAllProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImportAll = isImportAllProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isImportAll Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
-            {
-                if (isLibraryElementProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.isLibraryElement = isLibraryElementProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isLibraryElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isRecursive"u8, out var isRecursiveProperty))
-            {
-                if (isRecursiveProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsRecursive = isRecursiveProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isRecursive Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
-            {
-                dtoInstance.name = nameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the name Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
-            {
-                foreach (var arrayItem in ownedAnnotationProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotationExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var importedNamespaceValue))
                     {
-                        var propertyValue = ownedAnnotationExternalIdProperty.GetString();
+                        dtoInstance.ImportedNamespace = importedNamespaceValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("importOwningNamespace"u8))
+                {
+                    importOwningNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.importOwningNamespace = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.ownedAnnotation.Add(Guid.Parse(propertyValue));
+                            logger.LogDebug("the NamespaceExpose.importOwningNamespace property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
-            {
-                foreach (var arrayItem in ownedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedElementExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var importOwningNamespaceValue))
                     {
-                        var propertyValue = ownedElementExternalIdProperty.GetString();
+                        dtoInstance.importOwningNamespace = importOwningNamespaceValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImplied"u8))
+                {
+                    isImpliedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImplied = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImportAll"u8))
+                {
+                    isImportAllSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImportAll = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isLibraryElement"u8))
+                {
+                    isLibraryElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.isLibraryElement = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isRecursive"u8))
+                {
+                    isRecursiveSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsRecursive = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("name"u8))
+                {
+                    nameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.name = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedAnnotation"u8))
+                {
+                    ownedAnnotationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedAnnotationValue))
                         {
-                            dtoInstance.ownedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedAnnotation.Add(ownedAnnotationValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
-            {
-                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+                    ownedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedElementValue))
                         {
-                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                            dtoInstance.ownedElement.Add(ownedElementValue);
                         }
                     }
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                if (reader.ValueTextEquals("ownedRelatedElement"u8))
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                    ownedRelatedElementSeen = true;
+                    reader.Read();
 
-                        if (propertyValue != null)
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelatedElementValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelatedElement.Add(ownedRelatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
-            {
-                if (ownerProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owner = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (ownerProperty.TryGetProperty("@id"u8, out var ownerExternalIdProperty))
+                    ownedRelationshipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = ownerExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.owner = Guid.Parse(propertyValue);
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owner Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
-            {
-                if (owningMembershipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningMembership = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owner"u8))
                 {
-                    if (owningMembershipProperty.TryGetProperty("@id"u8, out var owningMembershipExternalIdProperty))
+                    ownerSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = owningMembershipExternalIdProperty.GetString();
+                        dtoInstance.owner = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownerValue))
+                    {
+                        dtoInstance.owner = ownerValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningMembership"u8))
+                {
+                    owningMembershipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningMembership = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningMembershipValue))
+                    {
+                        dtoInstance.owningMembership = owningMembershipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningNamespace"u8))
+                {
+                    owningNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.owningNamespace = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningNamespaceValue))
+                    {
+                        dtoInstance.owningNamespace = owningNamespaceValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelatedElement"u8))
+                {
+                    owningRelatedElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelatedElement = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelatedElementValue))
+                    {
+                        dtoInstance.OwningRelatedElement = owningRelatedElementValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("qualifiedName"u8))
+                {
+                    qualifiedNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.qualifiedName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("relatedElement"u8))
+                {
+                    relatedElementSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var relatedElementValue))
                         {
-                            dtoInstance.owningMembership = Guid.Parse(propertyValue);
+                            dtoInstance.relatedElement.Add(relatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningMembership Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
-            {
-                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningNamespace = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("shortName"u8))
                 {
-                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
+                    shortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.shortName = reader.GetString();
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("textualRepresentation"u8))
+                {
+                    textualRepresentationSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var textualRepresentationValue))
                         {
-                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
+                            dtoInstance.textualRepresentation.Add(textualRepresentationValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
-            {
-                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("visibility"u8))
                 {
-                    dtoInstance.OwningRelatedElement = null;
+                    visibilitySeen = true;
+                    reader.Read();
+
+                    dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(reader.GetString());
+
+                    continue;
                 }
-                else
+
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (!aliasIdsSeen)
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
-                    {
-                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
-                        }
-                    }
+                    logger.LogDebug("the aliasIds Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
+                if (!declaredNameSeen)
                 {
-                    dtoInstance.OwningRelationship = null;
+                    logger.LogDebug("the declaredName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
                 }
-                else
+                if (!declaredShortNameSeen)
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
-                    {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
-                        }
-                    }
+                    logger.LogDebug("the declaredShortName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
-            {
-                dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the qualifiedName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("relatedElement"u8, out var relatedElementProperty))
-            {
-                foreach (var arrayItem in relatedElementProperty.EnumerateArray())
+                if (!documentationSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var relatedElementExternalIdProperty))
-                    {
-                        var propertyValue = relatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.relatedElement.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the documentation Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
                 }
-            }
-            else
-            {
-                logger.LogDebug("the relatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
-            {
-                dtoInstance.shortName = shortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the shortName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
-            {
-                foreach (var arrayItem in textualRepresentationProperty.EnumerateArray())
+                if (!elementIdSeen)
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var textualRepresentationExternalIdProperty))
-                    {
-                        var propertyValue = textualRepresentationExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.textualRepresentation.Add(Guid.Parse(propertyValue));
-                        }
-                    }
+                    logger.LogDebug("the elementId Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!importedElementSeen)
+                {
+                    logger.LogDebug("the importedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!importedNamespaceSeen)
+                {
+                    logger.LogDebug("the importedNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!importOwningNamespaceSeen)
+                {
+                    logger.LogDebug("the importOwningNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedSeen)
+                {
+                    logger.LogDebug("the isImplied Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isImportAllSeen)
+                {
+                    logger.LogDebug("the isImportAll Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isLibraryElementSeen)
+                {
+                    logger.LogDebug("the isLibraryElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isRecursiveSeen)
+                {
+                    logger.LogDebug("the isRecursive Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!nameSeen)
+                {
+                    logger.LogDebug("the name Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownedAnnotationSeen)
+                {
+                    logger.LogDebug("the ownedAnnotation Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownedElementSeen)
+                {
+                    logger.LogDebug("the ownedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelatedElementSeen)
+                {
+                    logger.LogDebug("the ownedRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownerSeen)
+                {
+                    logger.LogDebug("the owner Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!owningMembershipSeen)
+                {
+                    logger.LogDebug("the owningMembership Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!owningNamespaceSeen)
+                {
+                    logger.LogDebug("the owningNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelatedElementSeen)
+                {
+                    logger.LogDebug("the owningRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!qualifiedNameSeen)
+                {
+                    logger.LogDebug("the qualifiedName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!relatedElementSeen)
+                {
+                    logger.LogDebug("the relatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!shortNameSeen)
+                {
+                    logger.LogDebug("the shortName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!textualRepresentationSeen)
+                {
+                    logger.LogDebug("the textualRepresentation Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!visibilitySeen)
+                {
+                    logger.LogDebug("the visibility Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
                 }
             }
-            else
-            {
-                logger.LogDebug("the textualRepresentation Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("visibility"u8, out var visibilityProperty))
-            {
-                dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(visibilityProperty.GetString());
-            }
-            else
-            {
-                logger.LogDebug("the visibility Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
         }
 
         /// <summary>
         /// Deserializes properties of a <see cref="NamespaceExpose" />
-        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// from a <see cref="Utf8JsonReader" />, excluding derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="NamespaceExpose"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="INamespaceExpose"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="INamespaceExpose"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Views.NamespaceExpose dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Views.NamespaceExpose dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
-            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
-            {
-                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
-                {
-                    var propertyValue = arrayItem.GetString();
+            var aliasIdsSeen = false;
+            var declaredNameSeen = false;
+            var declaredShortNameSeen = false;
+            var elementIdSeen = false;
+            var importedNamespaceSeen = false;
+            var isImpliedSeen = false;
+            var isImpliedIncludedSeen = false;
+            var isImportAllSeen = false;
+            var isRecursiveSeen = false;
+            var ownedRelatedElementSeen = false;
+            var ownedRelationshipSeen = false;
+            var owningRelatedElementSeen = false;
+            var owningRelationshipSeen = false;
+            var visibilitySeen = false;
 
-                    if (propertyValue != null)
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException("Expected a property name in the NamespaceExpose json object.");
+                }
+
+                if (reader.ValueTextEquals("@id"u8))
+                {
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        dtoInstance.AliasIds.Add(propertyValue);
+                        throw new JsonException("The @id property is not present, the NamespaceExpose cannot be deserialized");
                     }
+
+                    dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the aliasIds Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
-            {
-                var propertyValue = elementIdProperty.GetString();
-
-                if (propertyValue != null)
+                if (reader.ValueTextEquals("aliasIds"u8))
                 {
-                    dtoInstance.ElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the elementId Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
+                    aliasIdsSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("importedNamespace"u8, out var importedNamespaceProperty))
-            {
-                if (importedNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ImportedNamespace = Guid.Empty;
-                    logger.LogDebug($"the NamespaceExpose.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (importedNamespaceProperty.TryGetProperty("@id"u8, out var importedNamespaceExternalIdProperty))
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = importedNamespaceExternalIdProperty.GetString();
+                        var aliasIdsValue = reader.GetString();
 
-                        if (propertyValue != null)
+                        if (aliasIdsValue != null)
                         {
-                            dtoInstance.ImportedNamespace = Guid.Parse(propertyValue);
+                            dtoInstance.AliasIds.Add(aliasIdsValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the importedNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
-            {
-                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isImplied Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
-            {
-                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("declaredName"u8))
                 {
-                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                    declaredNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredName = reader.GetString();
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isImportAll"u8, out var isImportAllProperty))
-            {
-                if (isImportAllProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("declaredShortName"u8))
                 {
-                    dtoInstance.IsImportAll = isImportAllProperty.GetBoolean();
+                    declaredShortNameSeen = true;
+                    reader.Read();
+
+                    dtoInstance.DeclaredShortName = reader.GetString();
+
+                    continue;
                 }
-            }
-            else
-            {
-                logger.LogDebug("the isImportAll Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("isRecursive"u8, out var isRecursiveProperty))
-            {
-                if (isRecursiveProperty.ValueKind != JsonValueKind.Null)
+                if (reader.ValueTextEquals("elementId"u8))
                 {
-                    dtoInstance.IsRecursive = isRecursiveProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isRecursive Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
+                    elementIdSeen = true;
+                    reader.Read();
 
-            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
-            {
-                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
+                    var elementIdValue = reader.GetString();
+
+                    if (elementIdValue != null)
                     {
-                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+                        dtoInstance.ElementId = elementIdValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("importedNamespace"u8))
+                {
+                    importedNamespaceSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.ImportedNamespace = Guid.Empty;
+
+                        if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                            logger.LogDebug("the NamespaceExpose.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
-            {
-                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var importedNamespaceValue))
                     {
-                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+                        dtoInstance.ImportedNamespace = importedNamespaceValue;
+                    }
 
-                        if (propertyValue != null)
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImplied"u8))
+                {
+                    isImpliedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImplied = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImpliedIncluded"u8))
+                {
+                    isImpliedIncludedSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImpliedIncluded = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isImportAll"u8))
+                {
+                    isImportAllSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsImportAll = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("isRecursive"u8))
+                {
+                    isRecursiveSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        dtoInstance.IsRecursive = reader.GetBoolean();
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("ownedRelatedElement"u8))
+                {
+                    ownedRelatedElementSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelatedElementValue))
                         {
-                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                            dtoInstance.OwnedRelatedElement.Add(ownedRelatedElementValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
-            {
-                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelatedElement = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("ownedRelationship"u8))
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
+                    ownedRelationshipSeen = true;
+                    reader.Read();
+
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                     {
-                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var ownedRelationshipValue))
                         {
-                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                            dtoInstance.OwnedRelationship.Add(ownedRelationshipValue);
                         }
                     }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
 
-            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
-            {
-                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OwningRelationship = null;
+                    continue;
                 }
-                else
+
+                if (reader.ValueTextEquals("owningRelatedElement"u8))
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    owningRelatedElementSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
-                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
-                        }
+                        dtoInstance.OwningRelatedElement = null;
                     }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelatedElementValue))
+                    {
+                        dtoInstance.OwningRelatedElement = owningRelatedElementValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("owningRelationship"u8))
+                {
+                    owningRelationshipSeen = true;
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        dtoInstance.OwningRelationship = null;
+                    }
+                    else if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var owningRelationshipValue))
+                    {
+                        dtoInstance.OwningRelationship = owningRelationshipValue;
+                    }
+
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("visibility"u8))
+                {
+                    visibilitySeen = true;
+                    reader.Read();
+
+                    dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(reader.GetString());
+
+                    continue;
+                }
+
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (!aliasIdsSeen)
+                {
+                    logger.LogDebug("the aliasIds Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!declaredNameSeen)
+                {
+                    logger.LogDebug("the declaredName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!declaredShortNameSeen)
+                {
+                    logger.LogDebug("the declaredShortName Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!elementIdSeen)
+                {
+                    logger.LogDebug("the elementId Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!importedNamespaceSeen)
+                {
+                    logger.LogDebug("the importedNamespace Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedSeen)
+                {
+                    logger.LogDebug("the isImplied Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isImpliedIncludedSeen)
+                {
+                    logger.LogDebug("the isImpliedIncluded Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isImportAllSeen)
+                {
+                    logger.LogDebug("the isImportAll Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!isRecursiveSeen)
+                {
+                    logger.LogDebug("the isRecursive Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelatedElementSeen)
+                {
+                    logger.LogDebug("the ownedRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!ownedRelationshipSeen)
+                {
+                    logger.LogDebug("the ownedRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelatedElementSeen)
+                {
+                    logger.LogDebug("the owningRelatedElement Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!owningRelationshipSeen)
+                {
+                    logger.LogDebug("the owningRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
+                }
+                if (!visibilitySeen)
+                {
+                    logger.LogDebug("the visibility Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
                 }
             }
-            else
-            {
-                logger.LogDebug("the owningRelationship Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("visibility"u8, out var visibilityProperty))
-            {
-                dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(visibilityProperty.GetString());
-            }
-            else
-            {
-                logger.LogDebug("the visibility Json property was not found in the NamespaceExpose: {Id}", dtoInstance.Id);
-            }
-
         }
     }
 }

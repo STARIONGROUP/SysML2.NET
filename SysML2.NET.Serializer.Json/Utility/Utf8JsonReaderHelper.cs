@@ -167,5 +167,108 @@ namespace SysML2.NET.Serializer.Json.Utility
         /// while remaining forward-compatible with newer schema versions.
         /// </remarks>
         public static void SkipValue(ref Utf8JsonReader reader) => reader.Skip();
+
+        /// <summary>
+        /// Reads the current JSON value as a <see cref="Guid"/>.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the value token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/> that the current value represents.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the current token is not a <see cref="JsonTokenType.String"/>.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown when the string value is not a recognized <see cref="Guid"/> representation.
+        /// </exception>
+        /// <remarks>
+        /// <see cref="Utf8JsonReader.TryGetGuid(out Guid)"/> parses the 16 bytes straight out of the UTF-8
+        /// payload and only recognizes the hyphenated "D" format that the SysML v2 API emits. The
+        /// <see cref="Guid.Parse(string)"/> fall-back preserves support for the remaining formats at the cost
+        /// of transcoding the value, so that no payload that used to deserialize starts failing.
+        /// </remarks>
+        public static Guid ReadGuid(ref Utf8JsonReader reader)
+        {
+            return reader.TryGetGuid(out var value) ? value : Guid.Parse(reader.GetString());
+        }
+
+        /// <summary>
+        /// Reads a reference value, which the SysML v2 JSON representation writes either as
+        /// <c>null</c> or as an object carrying a single <c>@id</c> property.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the value token. On return the reader is
+        /// positioned on the last token of that value, so that the caller's loop advances normally.
+        /// </param>
+        /// <param name="value">
+        /// The identifier that the reference carries, or <see cref="Guid.Empty"/> when the method returns
+        /// <see langword="false"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> when an <c>@id</c> was read, <see langword="false"/> when the reference is
+        /// <c>null</c> or carries no non-null <c>@id</c>.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the value is neither an object nor <c>null</c>, mirroring what
+        /// <see cref="JsonElement.TryGetProperty(System.ReadOnlySpan{byte}, out JsonElement)"/> does for a
+        /// non-object element.
+        /// </exception>
+        public static bool TryReadReferenceIdentifier(ref Utf8JsonReader reader, out Guid value)
+        {
+            value = Guid.Empty;
+
+            if (reader.TokenType == JsonTokenType.Null)
+            {
+                return false;
+            }
+
+            if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new InvalidOperationException($"The requested operation requires an element of type 'Object', but the target element has type '{reader.TokenType}'.");
+            }
+
+            var found = false;
+
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (!found && reader.ValueTextEquals("@id"u8))
+                {
+                    reader.Read();
+
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        value = ReadGuid(ref reader);
+                        found = true;
+                    }
+
+                    continue;
+                }
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            return found;
+        }
+
+        /// <summary>
+        /// Asserts that the reader is positioned on the start of an array.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the value token.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the current token is not <see cref="JsonTokenType.StartArray"/>, mirroring what
+        /// <see cref="JsonElement.EnumerateArray"/> does for a non-array element.
+        /// </exception>
+        public static void ExpectArrayStart(ref Utf8JsonReader reader)
+        {
+            if (reader.TokenType != JsonTokenType.StartArray)
+            {
+                throw new InvalidOperationException($"The requested operation requires an element of type 'Array', but the target element has type '{reader.TokenType}'.");
+            }
+        }
     }
 }

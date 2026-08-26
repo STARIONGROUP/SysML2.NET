@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="{{this.Name}}DeSerializer.cs" company="Starion Group S.A.">
     //
     //   Copyright 2022-2026 Starion Group S.A.
@@ -26,13 +26,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
     using System.Text.Json;
-    
+
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
-    
+
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Utility;
 
     /// <summary>
     /// The purpose of the <see cref="{{ this.Name }}DeSerializer"/> is to provide deserialization capabilities
@@ -41,10 +42,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     internal static class {{ this.Name }}DeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="I{{ this.Name }}"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="I{{ this.Name }}"/> from the provided <see cref="Utf8JsonReader"/>
         /// </summary>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="I{{ this.Name }}"/> json object. On return the reader is positioned on the matching
+        /// <see cref="JsonTokenType.EndObject"/>
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -58,65 +61,76 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <returns>
         /// an instance of <see cref="I{{ this.Name }}"/>
         /// </returns>
-        internal static I{{ this.Name }} DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
+        /// <remarks>
+        /// The <c>@type</c> property is the discriminator that the caller dispatched on, so it is skipped rather
+        /// than re-validated here
+        /// </remarks>
+        internal static I{{ this.Name }} DeSerialize(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("{{ this.Name }}DeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type"u8, out var @type))
-            {
-                throw new InvalidOperationException("The @type property is not available, the {{ this.Name }}DeSerializer cannot be used to deserialize this JsonElement");
-            }
-
-            if (@type.GetString() != "{{ this.Name }}")
-            {
-                throw new InvalidOperationException($"The {{ this.Name }}DeSerializer can only be used to deserialize objects of type I{{ this.Name }}, a {@type.GetString()} was provided");
-            }
+            Utf8JsonReaderHelper.Expect(ref reader, JsonTokenType.StartObject);
 
             var dtoInstance = new SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
 
-            if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
-            {
-                var propertyValue = idProperty.GetString();
-                
-                if (propertyValue == null)
-                {
-                    throw new JsonException("The @id property is not present, the {{ this.Name }} cannot be deserialized");
-                }
-                else
-                {
-                    dtoInstance.Id = Guid.Parse(propertyValue);
-                }
-            }
-
             if(deserializeDerivedProperties)
             {
-                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, ref reader, logger);
             }
             else
             {
-                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, ref reader, logger);
             }
 
             return dtoInstance;
         }
-            
+
         /// <summary>
         /// Deserializes properties of a <see cref="{{ this.Name }}" />
-        /// from a <see cref="JsonElement" />, including derived properties
+        /// from a <see cref="Utf8JsonReader" />, including derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="{{ this.Name }}"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="I{{ this.Name }}"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
             {{#with this as |class| }}
-                {{ #each (Class.QueryAllProperties this) as | property | }}
+            {{ #each (Class.QueryAllProperties this) as | property | }}
+                {{#unless this.IsTransient}}
+                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                        var {{ property.Name }}Seen = false;
+                    {{/unless}}
+                {{/unless}}
+            {{/each}}
+
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+            if (reader.TokenType != JsonTokenType.PropertyName)
+            {
+            throw new JsonException("Expected a property name in the {{ class.Name }} json object.");
+            }
+
+            if (reader.ValueTextEquals("@id"u8))
+            {
+            reader.Read();
+
+            if (reader.TokenType == JsonTokenType.Null)
+            {
+            throw new JsonException("The @id property is not present, the {{ class.Name }} cannot be deserialized");
+            }
+
+            dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+            continue;
+            }
+
+            {{ #each (Class.QueryAllProperties this) as | property | }}
                 {{#unless this.IsTransient}}
                     {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                         {{#withPropertyClassContext property class}}
@@ -125,25 +139,74 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     {{/unless}}
                 {{/unless}}
             {{/each}}
+
+            reader.Read();
+            reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+            {{ #each (Class.QueryAllProperties this) as | property | }}
+                {{#unless this.IsTransient}}
+                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                        if (!{{ property.Name }}Seen)
+                        {
+                        logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: {Id}", dtoInstance.Id);
+                        }
+                    {{/unless}}
+                {{/unless}}
+            {{/each}}
+            }
             {{/with}}
         }
 
         /// <summary>
         /// Deserializes properties of a <see cref="{{ this.Name }}" />
-        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// from a <see cref="Utf8JsonReader" />, excluding derived properties
         /// </summary>
         /// <param name="dtoInstance">
         /// The <see cref="{{ this.Name }}"/> instance holding deserialized values
         /// </param>
-        /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
+        /// <see cref="I{{ this.Name }}"/> json object
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/> to produce logging statement
         /// </param>
-        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, JsonElement jsonElement, ILogger logger)
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
         {{#with this as |class| }}
+            {{ #each (Class.QueryAllProperties this) as | property | }}
+            {{#unless this.IsTransient}}
+            {{#unless this.IsDerived}}
+                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                    var {{ property.Name }}Seen = false;
+                {{/unless}}
+            {{/unless}}
+            {{/unless}}
+        {{/each}}
+
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+            if (reader.TokenType != JsonTokenType.PropertyName)
+            {
+            throw new JsonException("Expected a property name in the {{ class.Name }} json object.");
+            }
+
+            if (reader.ValueTextEquals("@id"u8))
+            {
+            reader.Read();
+
+            if (reader.TokenType == JsonTokenType.Null)
+            {
+            throw new JsonException("The @id property is not present, the {{ class.Name }} cannot be deserialized");
+            }
+
+            dtoInstance.Id = Utf8JsonReaderHelper.ReadGuid(ref reader);
+            continue;
+            }
+
             {{ #each (Class.QueryAllProperties this) as | property | }}
             {{#unless this.IsTransient}}
             {{#unless this.IsDerived}}
@@ -155,6 +218,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{/unless}}
             {{/unless}}
         {{/each}}
+
+            reader.Read();
+            reader.Skip();
+            }
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+            {{ #each (Class.QueryAllProperties this) as | property | }}
+            {{#unless this.IsTransient}}
+            {{#unless this.IsDerived}}
+                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                    if (!{{ property.Name }}Seen)
+                    {
+                    logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: {Id}", dtoInstance.Id);
+                    }
+                {{/unless}}
+            {{/unless}}
+            {{/unless}}
+        {{/each}}
+            }
 {{/with}}
         }
     }

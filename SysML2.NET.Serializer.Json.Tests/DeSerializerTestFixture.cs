@@ -21,13 +21,18 @@
 namespace SysML2.NET.Serializer.Json.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+    using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
 
     using NUnit.Framework;
 
+    using SysML2.NET.Common;
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.DTO.Core.Features;
     using SysML2.NET.PIM.DTO;
@@ -39,6 +44,25 @@ namespace SysML2.NET.Serializer.Json.Tests
     [TestFixture]
     public class DeSerializerTestFixture
     {
+        /// <summary>
+        /// A single element json object
+        /// </summary>
+        private const string Element = """{"@type":"Feature","@id":"00a6ef10-d3dc-4741-9029-2c9978c2f083","elementId":"00a6ef10-d3dc-4741-9029-2c9978c2f083"}""";
+
+        /// <summary>
+        /// The identifier that <see cref="Element"/> carries
+        /// </summary>
+        private static readonly Guid ElementIdentifier = Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083");
+
+        /// <summary>
+        /// The number of elements of the payload that forces the pooled input buffer to grow
+        /// </summary>
+        /// <remarks>
+        /// Each element serializes to roughly 130 bytes, so 4000 of them is about 520 kB. A non seekable
+        /// stream starts on an 81 920 byte buffer, which therefore has to double three times.
+        /// </remarks>
+        private const int LargePayloadElementCount = 4000;
+
         private DeSerializer deSerializer;
 
         [SetUp]
@@ -233,6 +257,283 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(branch.Head, Is.EqualTo(Guid.Parse("6d7ad9fd-6520-4ff2-885b-8c5c129e6c27")));
                 Assert.That(branch.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:50.188295-04:00")));
             }
+        }
+
+        [Test]
+        public void VerifyDeSerialize()
+        {
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(() => this.DeSerializeJson(string.Empty), Throws.InstanceOf<JsonException>(), "empty stream");
+                Assert.That(() => this.DeSerializeJson("   "), Throws.InstanceOf<JsonException>(), "white space only");
+                Assert.That(() => this.DeSerializeJson($"[{Element}] [{Element}]"), Throws.InstanceOf<JsonException>(), "trailing content");
+                Assert.That(() => this.DeSerializeJson("42"), Throws.TypeOf<SerializationException>(), "scalar root");
+                Assert.That(() => this.DeSerializeJson("[{}]"), Throws.TypeOf<SerializationException>(), "element without an @type");
+            }
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.DeSerializeJson("[]"), Has.Count.EqualTo(0), "empty array");
+                Assert.That(this.DeSerializeJson($"[{Element}]"), Has.Count.EqualTo(1), "array root");
+                Assert.That(this.DeSerializeJson(Element), Has.Count.EqualTo(1), "single object root");
+                Assert.That(this.DeSerializeJson($"  [ {Element} ]  "), Has.Count.EqualTo(1), "surrounding white space");
+                Assert.That(this.DeSerializeJson($"﻿[{Element}]"), Has.Count.EqualTo(1), "utf-8 byte order mark");
+                Assert.That(this.DeSerializeJson($"[{Element}]", dribble: true), Has.Count.EqualTo(1), "non seekable stream that dribbles bytes");
+            }
+
+            var feature = (IFeature)this.DeSerializeJson($"﻿[{Element}]")[0];
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(feature.Id, Is.EqualTo(ElementIdentifier));
+                Assert.That(feature.ElementId, Is.EqualTo("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
+            }
+
+            var grown = this.DeSerializeJson(CreateLargePayload(LargePayloadElementCount), dribble: true, chunkSize: 8192);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(grown, Has.Count.EqualTo(LargePayloadElementCount));
+                Assert.That(grown[0].Id, Is.EqualTo(LargePayloadIdentifier(0)), "the first element survives the buffer growth");
+                Assert.That(grown[^1].Id, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount - 1)), "the last element survives the buffer growth");
+                Assert.That(((IFeature)grown[LargePayloadElementCount / 2]).ElementId, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount / 2).ToString()), "an element spanning a growth boundary is not corrupted");
+            }
+        }
+
+        [Test]
+        public async Task VerifyDeSerializeAsync()
+        {
+            await Assert.ThatAsync(async () => { await this.DeSerializeJsonAsync(string.Empty); }, Throws.InstanceOf<JsonException>());
+
+            await Assert.ThatAsync(async () => { await this.DeSerializeJsonAsync($"[{Element}] [{Element}]"); }, Throws.InstanceOf<JsonException>());
+
+            await Assert.ThatAsync(async () => { await this.DeSerializeJsonAsync("42"); }, Throws.TypeOf<SerializationException>());
+
+            var emptyArray = await this.DeSerializeJsonAsync("[]");
+            var arrayRoot = await this.DeSerializeJsonAsync($"[{Element}]");
+            var singleObject = await this.DeSerializeJsonAsync(Element);
+            var byteOrderMark = await this.DeSerializeJsonAsync($"﻿[{Element}]");
+            var dribbled = await this.DeSerializeJsonAsync($"[{Element}]", dribble: true);
+            var grown = await this.DeSerializeJsonAsync(CreateLargePayload(LargePayloadElementCount), dribble: true, chunkSize: 8192);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(emptyArray, Has.Count.EqualTo(0), "empty array");
+                Assert.That(arrayRoot, Has.Count.EqualTo(1), "array root");
+                Assert.That(singleObject, Has.Count.EqualTo(1), "single object root");
+                Assert.That(byteOrderMark, Has.Count.EqualTo(1), "utf-8 byte order mark");
+                Assert.That(dribbled, Has.Count.EqualTo(1), "non seekable stream that dribbles bytes");
+                Assert.That(((IFeature)arrayRoot[0]).Id, Is.EqualTo(ElementIdentifier));
+                Assert.That(grown, Has.Count.EqualTo(LargePayloadElementCount), "payload larger than the initial buffer");
+                Assert.That(grown[^1].Id, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount - 1)), "the last element survives the buffer growth");
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the provided json
+        /// </summary>
+        /// <param name="json">
+        /// the json to deserialize
+        /// </param>
+        /// <param name="dribble">
+        /// when true the json is presented through a non seekable stream
+        /// </param>
+        /// <param name="chunkSize">
+        /// the number of bytes that the non seekable stream yields per read
+        /// </param>
+        /// <returns>
+        /// the deserialized <see cref="IData"/> items
+        /// </returns>
+        private List<IData> DeSerializeJson(string json, bool dribble = false, int chunkSize = 1)
+        {
+            using var stream = CreateStream(json, dribble, chunkSize);
+
+            return this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, false).ToList();
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the provided json
+        /// </summary>
+        /// <param name="json">
+        /// the json to deserialize
+        /// </param>
+        /// <param name="dribble">
+        /// when true the json is presented through a non seekable stream
+        /// </param>
+        /// <param name="chunkSize">
+        /// the number of bytes that the non seekable stream yields per read
+        /// </param>
+        /// <returns>
+        /// the deserialized <see cref="IData"/> items
+        /// </returns>
+        private async Task<List<IData>> DeSerializeJsonAsync(string json, bool dribble = false, int chunkSize = 1)
+        {
+            await using var stream = CreateStream(json, dribble, chunkSize);
+
+            var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, false, CancellationToken.None);
+
+            return data.ToList();
+        }
+
+        /// <summary>
+        /// Creates the input <see cref="Stream"/> for the provided json
+        /// </summary>
+        /// <param name="json">
+        /// the json that the stream exposes
+        /// </param>
+        /// <param name="dribble">
+        /// when true a non seekable stream is returned
+        /// </param>
+        /// <param name="chunkSize">
+        /// the number of bytes that the non seekable stream yields per read
+        /// </param>
+        /// <returns>
+        /// the input <see cref="Stream"/>
+        /// </returns>
+        private static Stream CreateStream(string json, bool dribble, int chunkSize)
+        {
+            var bytes = new UTF8Encoding(false).GetBytes(json);
+
+            return dribble ? new DribblingStream(bytes, chunkSize) : new MemoryStream(bytes, false);
+        }
+
+        /// <summary>
+        /// Builds a json array of <paramref name="elementCount"/> distinct elements
+        /// </summary>
+        /// <param name="elementCount">
+        /// the number of elements the array carries
+        /// </param>
+        /// <returns>
+        /// the json payload
+        /// </returns>
+        /// <remarks>
+        /// Every element carries its own identifier so that a payload that was assembled across several
+        /// growths of the pooled input buffer can be shown to be free of corruption, rather than merely
+        /// having the expected number of elements.
+        /// </remarks>
+        private static string CreateLargePayload(int elementCount)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append('[');
+
+            for (var elementIndex = 0; elementIndex < elementCount; elementIndex++)
+            {
+                if (elementIndex > 0)
+                {
+                    builder.Append(',');
+                }
+
+                var identifier = LargePayloadIdentifier(elementIndex);
+
+                builder.Append("{\"@type\":\"Feature\",\"@id\":\"").Append(identifier).Append("\",\"elementId\":\"").Append(identifier).Append("\"}");
+            }
+
+            builder.Append(']');
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Computes the identifier that the element at <paramref name="elementIndex"/> of the payload built by
+        /// <see cref="CreateLargePayload"/> carries
+        /// </summary>
+        /// <param name="elementIndex">
+        /// the index of the element
+        /// </param>
+        /// <returns>
+        /// the identifier of the element
+        /// </returns>
+        private static Guid LargePayloadIdentifier(int elementIndex)
+        {
+            return new Guid(elementIndex, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+
+        /// <summary>
+        /// A non seekable <see cref="Stream"/> that yields a single byte per read, so that the buffer growth and
+        /// continuation handling of the deserializer's read loop is exercised
+        /// </summary>
+        private sealed class DribblingStream : Stream
+        {
+            /// <summary>
+            /// The bytes that the stream exposes
+            /// </summary>
+            private readonly byte[] bytes;
+
+            /// <summary>
+            /// The number of bytes yielded per read
+            /// </summary>
+            private readonly int chunkSize;
+
+            /// <summary>
+            /// The index of the next byte to yield
+            /// </summary>
+            private int index;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DribblingStream"/> class.
+            /// </summary>
+            /// <param name="bytes">
+            /// The bytes that the stream exposes
+            /// </param>
+            /// <param name="chunkSize">
+            /// The number of bytes yielded per read
+            /// </param>
+            public DribblingStream(byte[] bytes, int chunkSize)
+            {
+                this.bytes = bytes;
+                this.chunkSize = chunkSize;
+            }
+
+            /// <inheritdoc/>
+            public override bool CanRead => true;
+
+            /// <inheritdoc/>
+            public override bool CanSeek => false;
+
+            /// <inheritdoc/>
+            public override bool CanWrite => false;
+
+            /// <inheritdoc/>
+            public override long Length => throw new NotSupportedException();
+
+            /// <inheritdoc/>
+            public override long Position
+            {
+                get => throw new NotSupportedException();
+                set => throw new NotSupportedException();
+            }
+
+            /// <inheritdoc/>
+            public override void Flush()
+            {
+            }
+
+            /// <inheritdoc/>
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                if (this.index == this.bytes.Length || count == 0)
+                {
+                    return 0;
+                }
+
+                var read = Math.Min(Math.Min(this.chunkSize, count), this.bytes.Length - this.index);
+
+                Buffer.BlockCopy(this.bytes, this.index, buffer, offset, read);
+
+                this.index += read;
+
+                return read;
+            }
+
+            /// <inheritdoc/>
+            public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+            /// <inheritdoc/>
+            public override void SetLength(long value) => throw new NotSupportedException();
+
+            /// <inheritdoc/>
+            public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
         }
     }
 }

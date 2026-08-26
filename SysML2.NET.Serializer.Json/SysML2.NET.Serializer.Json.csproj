@@ -14,6 +14,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
+            [Update] Deserialization performance (#352) — the deserializers now read straight from a Utf8JsonReader and no JsonDocument is materialised at any point, Guids are read from the UTF-8 bytes, and the redundant @type re-validation was dropped. Roughly twice as fast with half the allocation on a 100k element payload. Deserialized content is unchanged.
             [Update] Deserializers regenerated from updated UML abstract syntax model (#285) — covers AcceptActionUsage, ActionUsage, AnalysisCaseUsage, AssignmentActionUsage, CalculationUsage, CaseUsage, DecisionNode, ExhibitStateUsage, FlowUsage, ForLoopActionUsage, ForkNode, IfActionUsage, IncludeUseCaseUsage, JoinNode, MergeNode, MetadataUsage, PerformActionUsage, SendActionUsage, StateUsage, SuccessionFlowUsage, TerminateActionUsage, TransitionUsage, UseCaseUsage, VerificationCaseUsage, WhileLoopActionUsage
             [Update] Aligned with SysML2.NET.Extensions 0.22.0
         </PackageReleaseNotes>

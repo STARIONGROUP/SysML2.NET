@@ -41,7 +41,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <summary>
         /// a dictionary that provides delegates for deserialization
         /// </summary>
-        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData>> DeSerializerActionMap = new Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData>>
+        private static readonly Dictionary<string, DeSerializeDelegate> DeSerializerActionMap = new Dictionary<string, DeSerializeDelegate>
         {
             { "AcceptActionUsage", AcceptActionUsageDeSerializer.DeSerialize },
             { "ActionDefinition", ActionDefinitionDeSerializer.DeSerialize },
@@ -213,19 +213,19 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         };
 
         /// <summary>
-        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, IData}"/> for the
+        /// Provides the <see cref="DeSerializeDelegate"/> for the
         /// <see cref="System.Type"/> that is to be deserialized
         /// </summary>
         /// <param name="typeName">
         /// The name of the subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A Delegate of <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, IData}"/>
+        /// A <see cref="DeSerializeDelegate"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
         /// </exception>
-        internal static Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData> Provide(string typeName)
+        internal static DeSerializeDelegate Provide(string typeName)
         {
             if (!DeSerializerActionMap.TryGetValue(typeName, out var func))
             {
