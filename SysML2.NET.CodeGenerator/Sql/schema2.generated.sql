@@ -453,9 +453,17 @@ CREATE TABLE sysml2.branch (
 
     created         timestamptz NOT NULL DEFAULT now(),
     deleted         timestamptz NULL,
-    PRIMARY KEY (id),
-    UNIQUE (project_id, name)
+    PRIMARY KEY (id)
 );
+
+-- Names are unique among LIVE refs only. `deleted` is the spec's own recorded-event deletion
+-- (Branch.deleted / Tag.deleted are spec properties): the API's DELETE soft-deletes the ref so
+-- the audit story survives (name, lifetime, final head), and PURGES the branch_head overlay
+-- (a rebuildable cache, the only expensive part). A plain UNIQUE would block re-creating a
+-- name after its soft delete — silently pushing implementations toward the audit-hostile hard
+-- DELETE, which is reserved for administrative purge (project offboarding, §4's procedure).
+CREATE UNIQUE INDEX ux_branch_project_name_live
+    ON sysml2.branch (project_id, name) WHERE deleted IS NULL;
 
 ALTER TABLE sysml2.project
     ADD CONSTRAINT project_default_branch_fk
@@ -469,9 +477,11 @@ CREATE TABLE sysml2.tag (
     tagged_commit_id   uuid        NOT NULL REFERENCES sysml2.commit (id),
     created            timestamptz NOT NULL DEFAULT now(),
     deleted            timestamptz NULL,
-    PRIMARY KEY (id),
-    UNIQUE (project_id, name)
+    PRIMARY KEY (id)
 );
+
+CREATE UNIQUE INDEX ux_tag_project_name_live
+    ON sysml2.tag (project_id, name) WHERE deleted IS NULL;
 
 CREATE TABLE sysml2.project_usage (
     id                     uuid NOT NULL,
@@ -480,6 +490,26 @@ CREATE TABLE sysml2.project_usage (
     used_project_commit_id uuid NOT NULL REFERENCES sysml2.commit (id),
     PRIMARY KEY (id)
 );
+
+-- Query is the spec's stored-query record (Clause 7): a saved select/where/orderBy definition,
+-- executed on demand against a commit or branch head. Mutable + destructible — the API exposes
+-- PUT and DELETE for it. The definition is stored as the spec's own JSON shape; the service's
+-- Query translator compiles it against the commit's release descriptors at EXECUTION time, so
+-- the stored form stays release-agnostic. The live-only partial unique index doubles as the
+-- project-scoped listing index (name is optional; NULLs never collide).
+CREATE TABLE sysml2.query (
+    id           uuid        NOT NULL,
+    project_id   uuid        NOT NULL REFERENCES sysml2.project (id) ON DELETE CASCADE,
+    name         text        NULL,
+    description  text        NULL,
+    query_json   jsonb       NOT NULL,
+    created      timestamptz NOT NULL DEFAULT now(),
+    deleted      timestamptz NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX ux_query_project_name_live
+    ON sysml2.query (project_id, name) WHERE deleted IS NULL;
 
 ------------------------------------------------------------------------------------------------
 -- 4. DATA IDENTITY
@@ -504,6 +534,8 @@ CREATE TABLE sysml2.project_usage (
 --     DELETE FROM sysml2.element_version        WHERE project_id = $1;
 --     DELETE FROM sysml2.branch_head            WHERE project_id = $1;
 --     DELETE FROM sysml2.commit_checkpoint      WHERE project_id = $1;
+--     DELETE FROM sysml2.commit_checkpoint_registry WHERE project_id = $1;  -- its NO ACTION FK
+--                                            -- to commit would otherwise block the cascade
 --     DELETE FROM sysml2.data_identity          WHERE project_id = $1;
 --     DELETE FROM sysml2.project                WHERE id = $1;      -- cascades only PIM rows
 --

@@ -982,3 +982,415 @@ BEGIN
     RAISE NOTICE 'PASS 18b: reverse lookup by target finds the membership through the snapshot';
 END;
 $$;
+
+----------------------------------------------------------------------------------------------
+-- PIM RECORD READS — the plain CRUD routes (GET/POST/PUT /projects, GET /branches,
+-- GET /commits, GET .../changes, /meta/datatypes). Trivial storage, asserted anyway: the
+-- devil is in the details.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    proj2     constant uuid := '22222222-0000-0000-0000-000000000000';
+    b1        constant uuid := 'b1111111-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    v_e1_c2   constant uuid := 'a3333333-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    txt       text;
+    n         int;
+    ts        timestamptz;
+    head_at   uuid;
+    ident     uuid;
+BEGIN
+    -- 19a. GET /projects + GET /projects/{p}: both smoke projects list and read back by id.
+    SELECT count(*) INTO n FROM sysml2.project WHERE id IN (proj, proj2);
+    SELECT p.name INTO txt FROM sysml2.project p WHERE p.id = proj;
+
+    IF n <> 2 OR txt IS DISTINCT FROM 'SmokeProject' THEN
+        RAISE EXCEPTION 'FAIL 19a: project list/read-back wrong (% rows, name %)', n, txt;
+    END IF;
+    RAISE NOTICE 'PASS 19a: projects list and read back by id';
+
+    -- 19b. PUT /projects/{p}: Project is mutable — rename and read back, then restore.
+    UPDATE sysml2.project SET name = 'SmokeProjectRenamed' WHERE id = proj;
+
+    SELECT p.name INTO txt FROM sysml2.project p WHERE p.id = proj;
+
+    IF txt IS DISTINCT FROM 'SmokeProjectRenamed' THEN
+        RAISE EXCEPTION 'FAIL 19b: project rename not visible (got %)', txt;
+    END IF;
+
+    UPDATE sysml2.project SET name = 'SmokeProject' WHERE id = proj;
+    RAISE NOTICE 'PASS 19b: project update (mutable per the Clause 7.1.2 table) reads back';
+
+    -- 20a. GET /branches/{b}: the branch record resolves name and head.
+    SELECT b.name, b.head_commit_id INTO txt, head_at FROM sysml2.branch b WHERE b.id = b1;
+
+    IF txt IS DISTINCT FROM 'main' OR head_at IS DISTINCT FROM c2 THEN
+        RAISE EXCEPTION 'FAIL 20a: branch record wrong (name %, head %)', txt, head_at;
+    END IF;
+    RAISE NOTICE 'PASS 20a: branch record reads back name and head commit';
+
+    -- 21a. GET /commits/{c}: the commit record itself.
+    SELECT c.description, c.created INTO txt, ts FROM sysml2.commit c WHERE c.id = c2;
+
+    IF txt IS DISTINCT FROM 'rename package' OR ts IS DISTINCT FROM '2026-01-01T11:00:00Z'::timestamptz THEN
+        RAISE EXCEPTION 'FAIL 21a: commit record wrong (description %, created %)', txt, ts;
+    END IF;
+    RAISE NOTICE 'PASS 21a: commit record reads back description and created';
+
+    -- 21b. GET .../commits/{c}/changes: the change set of c2 is exactly the Package rename.
+    SELECT count(*), min(ev.identity_id::text)::uuid INTO n, ident
+    FROM sysml2.element_version ev
+    WHERE ev.project_id = proj AND ev.commit_id = c2;
+
+    IF n <> 1 OR ident IS DISTINCT FROM e1 THEN
+        RAISE EXCEPTION 'FAIL 21b: change set of c2 wrong (% rows, first %)', n, ident;
+    END IF;
+    RAISE NOTICE 'PASS 21b: change set of c2 is exactly the renamed Package';
+
+    -- 21c. GET .../changes/{changeId}: one DataVersion by its id, payload intact.
+    SELECT ev.stored_json ->> 'declaredName' INTO txt
+    FROM sysml2.element_version ev
+    WHERE ev.project_id = proj AND ev.version_id = v_e1_c2;
+
+    IF txt IS DISTINCT FROM 'New' THEN
+        RAISE EXCEPTION 'FAIL 21c: DataVersion payload wrong (declaredName %)', txt;
+    END IF;
+    RAISE NOTICE 'PASS 21c: DataVersion by id carries the expected payload';
+
+    -- 22a. GET /meta/datatypes: the registry-frozen metaclass ids are what the registry says.
+    SELECT count(*) INTO n
+    FROM sysml2.class_kind ck
+    WHERE (ck.name, ck.id) IN (('OwningMembership', 116), ('Package', 117), ('PartUsage', 120))
+      AND NOT ck.is_abstract;
+
+    IF n <> 3 THEN
+        RAISE EXCEPTION 'FAIL 22a: frozen class_kind ids drifted (% of 3 matched)', n;
+    END IF;
+    RAISE NOTICE 'PASS 22a: class_kind ids match the frozen registry';
+
+    -- 22b. The model_version catalog resolves ordinal 1.
+    SELECT count(*) INTO n FROM sysml2.model_version WHERE id = 1;
+
+    IF n <> 1 THEN
+        RAISE EXCEPTION 'FAIL 22b: model_version ordinal 1 missing';
+    END IF;
+    RAISE NOTICE 'PASS 22b: model_version catalog resolves ordinal 1';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- STORED-QUERY SCENARIO — GET/POST /queries, GET/PUT/DELETE /queries/{q}, and execution
+-- (GET .../results). The query table stores the spec's own JSON shape; execution is the §16.4
+-- translation: predicates land on class_kind and the promoted derived columns.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    q1        constant uuid := 'ea111111-0000-0000-0000-000000000000';
+    txt       text;
+    n         int;
+BEGIN
+    -- 23a. POST + GET: create a stored query and read its definition back.
+    INSERT INTO sysml2.query (id, project_id, name, description, query_json)
+    VALUES (q1, proj, 'all-wheels', 'every PartUsage named wheel',
+            '{"@type":"Query","select":["@id"],"where":{"@type":"PrimitiveConstraint","property":"name","value":"wheel"}}');
+
+    SELECT q.query_json -> 'where' ->> 'property' INTO txt FROM sysml2.query q WHERE q.id = q1;
+
+    IF txt IS DISTINCT FROM 'name' THEN
+        RAISE EXCEPTION 'FAIL 23a: stored query definition did not read back (property %)', txt;
+    END IF;
+    RAISE NOTICE 'PASS 23a: stored query created and its definition reads back';
+
+    -- 23b. PUT: Query is mutable — update the definition and read it back.
+    UPDATE sysml2.query
+       SET name = 'all-wheels-v2',
+           query_json = jsonb_set(query_json, '{where,value}', '"wheel"'::jsonb)
+     WHERE id = q1;
+
+    SELECT q.name INTO txt FROM sysml2.query q WHERE q.id = q1;
+
+    IF txt IS DISTINCT FROM 'all-wheels-v2' THEN
+        RAISE EXCEPTION 'FAIL 23b: stored query update did not read back (name %)', txt;
+    END IF;
+    RAISE NOTICE 'PASS 23b: stored query updated (mutable per the API''s PUT)';
+
+    -- 23c. DELETE: Query is destructible.
+    DELETE FROM sysml2.query WHERE id = q1;
+
+    SELECT count(*) INTO n FROM sysml2.query WHERE id = q1;
+
+    IF n <> 0 THEN
+        RAISE EXCEPTION 'FAIL 23c: stored query not deleted';
+    END IF;
+    RAISE NOTICE 'PASS 23c: stored query deleted (destructible per the API''s DELETE)';
+END;
+$$;
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    b1        constant uuid := 'b1111111-0000-0000-0000-000000000000';
+    e2        constant uuid := 'e2222222-0000-0000-0000-000000000000';
+    n         int;
+    hits_e2   int;
+BEGIN
+    -- 24a. Query EXECUTION, end to end: the all-wheels definition translated per §16.4 —
+    --      class_kind from the catalog, the name predicate on the promoted derived column,
+    --      evaluated over the branch-head state. Exactly the wheel matches.
+    SELECT count(*), count(*) FILTER (WHERE bh.identity_id = e2) INTO n, hits_e2
+    FROM sysml2.branch_head bh
+    JOIN sysml2.element_version ev
+      ON ev.project_id = bh.project_id AND ev.version_id = bh.version_id
+    JOIN sysml2.derived_version dv
+      ON dv.project_id = bh.project_id AND dv.derived_id = bh.derived_id
+    WHERE bh.project_id = proj AND bh.branch_id = b1
+      AND NOT bh.is_tombstone
+      AND ev.class_kind = (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage')
+      AND dv.name = 'wheel';
+
+    IF n <> 1 OR hits_e2 <> 1 THEN
+        RAISE EXCEPTION 'FAIL 24a: translated query returned % rows (% matching the wheel)', n, hits_e2;
+    END IF;
+    RAISE NOTICE 'PASS 24a: translated stored query returns exactly the wheel at branch head';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- DIFF SCENARIO — GET /commits/{compareCommitId}/diff?baseCommitId=...
+--
+-- The storage shape: FULL JOIN of two resolved snapshots on identity. Between c1 and c2 only
+-- the Package changed (the rename); the wheel resolves to the SAME version row in both.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c1        constant uuid := 'c1111111-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    changed   int;
+    added     int;
+    removed   int;
+    e1_hits   int;
+BEGIN
+    SELECT count(*) FILTER (WHERE b.version_id IS NOT NULL AND c.version_id IS NOT NULL
+                              AND b.version_id <> c.version_id),
+           count(*) FILTER (WHERE b.version_id IS NULL),
+           count(*) FILTER (WHERE c.version_id IS NULL),
+           count(*) FILTER (WHERE b.version_id IS NOT NULL AND c.version_id IS NOT NULL
+                              AND b.version_id <> c.version_id AND identity_id = e1)
+      INTO changed, added, removed, e1_hits
+    FROM sysml2.resolve_commit_state(proj, c2) c
+    FULL JOIN sysml2.resolve_commit_state(proj, c1) b USING (identity_id);
+
+    IF changed <> 1 OR added <> 0 OR removed <> 0 OR e1_hits <> 1 THEN
+        RAISE EXCEPTION 'FAIL 25a: diff c1->c2 wrong (changed %, added %, removed %, e1 %)',
+            changed, added, removed, e1_hits;
+    END IF;
+    RAISE NOTICE 'PASS 25a: diff of two resolved snapshots reports exactly the renamed Package';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- PROJECT-DELETION SCENARIO — DELETE /projects/{p}, the documented ordered procedure.
+--
+-- The library project (proj2) gets a small model, a branch, a tag, and a CHECKPOINT. Then:
+-- inbound project_usage blocks deletion (26a); with the usage gone, a direct DELETE is STILL
+-- blocked — commit_checkpoint_registry's NO ACTION FK to commit is exactly the out-of-order
+-- guard the procedure comment promises (26b; this FK is why the registry line is part of the
+-- documented order); the full ordered procedure then completes, and the neighbor project is
+-- untouched (26c).
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    proj2     constant uuid := '22222222-0000-0000-0000-000000000000';
+    cu1       constant uuid := 'cf111111-0000-0000-0000-000000000000';
+    e9        constant uuid := 'e9999999-0000-0000-0000-000000000000';
+    v9        constant uuid := 'ae111111-0000-0000-0000-000000000000';
+    d9        constant uuid := 'df111111-0000-0000-0000-000000000000';
+    b3        constant uuid := 'ba111111-0000-0000-0000-000000000000';
+    t2        constant uuid := 'fb111111-0000-0000-0000-000000000000';
+    neighbor_versions_before int;
+    neighbor_versions_after  int;
+    n         int;
+BEGIN
+    -- Give the library project a small but complete footprint: identity + stored + derived
+    -- state, a link row, a branch with overlay, a tag, and a materialized checkpoint.
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind)
+    VALUES (e9, proj2, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'));
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
+         element_id, declared_name, is_implied_included, stored_json)
+    VALUES
+        (proj2, v9, e9, cu1, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false,
+         'e9999999-0000-0000-0000-000000000000', 'LibRoot', false,
+         '{"@id":"e9999999-0000-0000-0000-000000000000","@type":"Package","declaredName":"LibRoot"}');
+
+    INSERT INTO sysml2.derived_version
+        (project_id, derived_id, identity_id, commit_id, owner, qualified_name, name, derived_json)
+    VALUES
+        (proj2, d9, e9, cu1, NULL, 'LibRoot', 'LibRoot',
+         '{"qualifiedName":"LibRoot","name":"LibRoot","owner":null}');
+
+    INSERT INTO sysml2.element_owned_relationship (project_id, version_id, ordinal, target_identity)
+    VALUES (proj2, v9, 0, e9);
+
+    INSERT INTO sysml2.branch (id, project_id, name, head_commit_id)
+    VALUES (b3, proj2, 'lib-main', cu1);
+
+    INSERT INTO sysml2.branch_head (project_id, branch_id, identity_id, version_id, derived_id)
+    VALUES (proj2, b3, e9, v9, d9);
+
+    INSERT INTO sysml2.tag (id, project_id, name, tagged_commit_id)
+    VALUES (t2, proj2, 'lib-v1', cu1);
+
+    PERFORM sysml2.build_commit_checkpoint(proj2, cu1);
+
+    SELECT count(*) INTO neighbor_versions_before
+    FROM sysml2.element_version WHERE project_id = proj;
+
+    -- 26a. An inbound project_usage (from PASS 16) blocks deletion of the used project.
+    BEGIN
+        DELETE FROM sysml2.project WHERE id = proj2;
+
+        RAISE EXCEPTION 'FAIL 26a: deleting a USED project was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 26a: inbound project_usage blocks deletion of the used project';
+    END;
+
+    DELETE FROM sysml2.project_usage WHERE used_project_id = proj2;
+
+    -- 26b. Out-of-order deletion is still blocked, loudly: the checkpoint registry's
+    --      NO ACTION FK to commit refuses the cascade — the guard that makes the ordered
+    --      procedure's registry step mandatory.
+    BEGIN
+        DELETE FROM sysml2.project WHERE id = proj2;
+
+        RAISE EXCEPTION 'FAIL 26b: out-of-order project deletion was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 26b: out-of-order deletion blocked by the NO ACTION FKs';
+    END;
+
+    -- 26c. The documented ordered procedure (data_identity DDL comment), verbatim order.
+    DELETE FROM sysml2.element_owned_relationship       WHERE project_id = proj2;
+    DELETE FROM sysml2.derived_version                  WHERE project_id = proj2;
+    DELETE FROM sysml2.element_version                  WHERE project_id = proj2;
+    DELETE FROM sysml2.branch_head                      WHERE project_id = proj2;
+    DELETE FROM sysml2.commit_checkpoint                WHERE project_id = proj2;
+    DELETE FROM sysml2.commit_checkpoint_registry       WHERE project_id = proj2;
+    DELETE FROM sysml2.data_identity                    WHERE project_id = proj2;
+    DELETE FROM sysml2.project                          WHERE id = proj2;
+
+    SELECT (SELECT count(*) FROM sysml2.project        WHERE id = proj2)
+         + (SELECT count(*) FROM sysml2.commit         WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.branch         WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.tag            WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.data_identity  WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.element_version WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.derived_version WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.branch_head    WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.commit_checkpoint          WHERE project_id = proj2)
+         + (SELECT count(*) FROM sysml2.commit_checkpoint_registry WHERE project_id = proj2)
+      INTO n;
+
+    SELECT count(*) INTO neighbor_versions_after
+    FROM sysml2.element_version WHERE project_id = proj;
+
+    IF n <> 0 OR neighbor_versions_after <> neighbor_versions_before THEN
+        RAISE EXCEPTION 'FAIL 26c: ordered deletion left % rows, neighbor % -> %',
+            n, neighbor_versions_before, neighbor_versions_after;
+    END IF;
+    RAISE NOTICE 'PASS 26c: ordered project deletion completes; the neighbor project is intact';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- REF SOFT-DELETE SCENARIO — the audit-preserving deletion protocol for CommitReferences.
+--
+-- The API's DELETE on a branch/tag is the spec's RECORDED EVENT (Branch.deleted /
+-- Tag.deleted are spec properties): soft-delete the ref row so the audit story survives
+-- (name, lifetime, final head), purge only the branch_head overlay (a rebuildable cache).
+-- The live-only partial unique index makes the retired name immediately reusable — without
+-- it, name reuse would fail and push implementations toward the audit-hostile hard DELETE,
+-- which is reserved for administrative purge.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c2        constant uuid := 'c2222222-0000-0000-0000-000000000000';
+    b4        constant uuid := 'bb111111-0000-0000-0000-000000000000';
+    b5        constant uuid := 'bc111111-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    t3        constant uuid := 'fc111111-0000-0000-0000-000000000000';
+    t4        constant uuid := 'fd111111-0000-0000-0000-000000000000';
+    n         int;
+    audit_head uuid;
+BEGIN
+    -- A short-lived feature branch with one overlay row.
+    INSERT INTO sysml2.branch (id, project_id, name, head_commit_id)
+    VALUES (b4, proj, 'feature/x', c2);
+
+    INSERT INTO sysml2.branch_head (project_id, branch_id, identity_id, version_id, derived_id)
+    VALUES (proj, b4, e1, 'a3333333-0000-0000-0000-000000000000', 'd3333333-0000-0000-0000-000000000000');
+
+    -- 27a. The API delete: soft-delete the ref, purge the overlay. The audit record — name,
+    --      final head, deletion time — survives; the cache is gone.
+    UPDATE sysml2.branch SET deleted = now() WHERE id = b4;
+    DELETE FROM sysml2.branch_head WHERE project_id = proj AND branch_id = b4;
+
+    SELECT b.head_commit_id INTO audit_head
+    FROM sysml2.branch b
+    WHERE b.id = b4 AND b.name = 'feature/x' AND b.deleted IS NOT NULL;
+
+    SELECT count(*) INTO n FROM sysml2.branch_head WHERE project_id = proj AND branch_id = b4;
+
+    IF audit_head IS DISTINCT FROM c2 OR n <> 0 THEN
+        RAISE EXCEPTION 'FAIL 27a: soft delete lost the audit record (head %) or kept overlay (% rows)', audit_head, n;
+    END IF;
+    RAISE NOTICE 'PASS 27a: soft-deleted branch keeps its audit record; overlay purged';
+
+    -- 27b. The retired name is immediately reusable — live-only uniqueness.
+    INSERT INTO sysml2.branch (id, project_id, name, head_commit_id)
+    VALUES (b5, proj, 'feature/x', c2);
+
+    SELECT count(*) INTO n FROM sysml2.branch b WHERE b.project_id = proj AND b.name = 'feature/x';
+
+    IF n <> 2 THEN
+        RAISE EXCEPTION 'FAIL 27b: expected retired + live branch under the same name, got %', n;
+    END IF;
+
+    -- ...while two LIVE branches with one name are still rejected.
+    BEGIN
+        INSERT INTO sysml2.branch (id, project_id, name, head_commit_id)
+        VALUES ('bd111111-0000-0000-0000-000000000000', proj, 'feature/x', c2);
+
+        RAISE EXCEPTION 'FAIL 27b: duplicate LIVE branch name was ACCEPTED';
+    EXCEPTION WHEN unique_violation THEN
+        NULL;
+    END;
+    RAISE NOTICE 'PASS 27b: retired branch name reusable; duplicate live names still rejected';
+
+    -- 27c. Same protocol for tags.
+    INSERT INTO sysml2.tag (id, project_id, name, tagged_commit_id) VALUES (t3, proj, 'audit-tag', c2);
+
+    UPDATE sysml2.tag SET deleted = now() WHERE id = t3;
+
+    INSERT INTO sysml2.tag (id, project_id, name, tagged_commit_id) VALUES (t4, proj, 'audit-tag', c2);
+
+    SELECT count(*) INTO n FROM sysml2.tag t WHERE t.project_id = proj AND t.name = 'audit-tag';
+
+    IF n <> 2 THEN
+        RAISE EXCEPTION 'FAIL 27c: expected retired + live tag under the same name, got %', n;
+    END IF;
+    RAISE NOTICE 'PASS 27c: soft-deleted tag keeps its record; the name is reusable';
+END;
+$$;

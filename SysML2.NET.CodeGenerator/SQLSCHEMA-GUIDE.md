@@ -539,7 +539,7 @@ version row.
 This algorithm is correct and hopeless to run per read at scale — it is a fold over the entire
 commit history. The whole of §9 (section 10 of this guide) exists to make it cheap.
 
-### 6.3 Branches and tags
+### 6.3 Branches, tags, and stored queries
 
 ```sql
 CREATE TABLE sysml2.branch (
@@ -551,15 +551,42 @@ CREATE TABLE sysml2.branch (
     base_commit_id  uuid        NULL REFERENCES sysml2.commit (id),   -- see section 10.2
     created         timestamptz NOT NULL DEFAULT now(),
     deleted         timestamptz NULL,
-    PRIMARY KEY (id),
-    UNIQUE (project_id, name)
+    PRIMARY KEY (id)
 );
+
+CREATE UNIQUE INDEX ux_branch_project_name_live
+    ON sysml2.branch (project_id, name) WHERE deleted IS NULL;
 ```
 
 Per the spec's mutability table: branches are mutable and destructible (the *only* mutable
 thing in the versioning core — `head_commit_id` moves on every commit); tags are immutable but
 destructible; commits are neither. `deleted` is a nullable timestamp rather than a hard delete
-because the spec models CommitReference deletion as a recorded event.
+because the spec models CommitReference deletion as a recorded event — `Branch.deleted` and
+`Tag.deleted` are properties of the spec's own records.
+
+That recorded event is also the schema's audit answer to destructible refs, so the deletion
+protocol is worth stating normatively. **The API's DELETE on a branch is a soft delete plus a
+cache purge**: set `deleted = now()` on the ref row (the audit story survives — name, lifetime,
+final head; and since commits are indestructible, the branch's commits stay in the DAG forever,
+merely unattributed if the ref were lost), and physically delete only its `branch_head` overlay
+rows (a rebuildable cache, the only part whose size matters). Hard `DELETE FROM branch` — which
+cascades the overlay — is the *administrative purge* path, not the API path. Names are unique
+**among live refs only** (the partial unique indexes above, same for `tag` and `query`): a plain
+UNIQUE would block re-creating a name after its soft delete, silently pushing implementations
+toward the audit-hostile hard delete under routine branch churn. Smoke PASS 27a–27c prove the
+protocol: audit record retained, overlay purged, retired names reusable, duplicate *live* names
+still rejected. One honest limit: no spec record carries an actor — *who* created or deleted a
+ref (or committed) is not auditable at this layer at all; a deployment that needs who-did-what
+needs a service-side audit trail regardless.
+
+The last Clause-7 record with persistence is the **stored Query** (`query`): a saved
+select/where/orderBy definition the API exposes full CRUD for (`GET/POST/PUT/DELETE
+/queries`). Mutable and destructible — the PUT and DELETE routes say so. The definition is
+stored as the spec's own JSON shape in `query_json`; nothing in the database interprets it —
+the service's Query translator (§16.4) compiles it against the *executing commit's* release
+descriptors at execution time, which keeps the stored form release-agnostic across metamodel
+upgrades. The live-only partial unique index doubles as the project-scoped listing index.
+Smoke PASS 23a–23c cover the lifecycle; PASS 24a executes a translated definition end to end.
 
 `base_commit_id` is a performance structure, not a spec concept — it anchors the branch-head
 *overlay* and is explained fully in section 10.2.
@@ -705,7 +732,12 @@ per-table* `DELETE … WHERE project_id = $1` (each statement prunes to one part
 PK prefix), finishing with `data_identity` and `project`. The remaining `NO ACTION` FKs act as
 a safety net — they *block* out-of-order deletion loudly instead of scanning silently. That
 trade (explicit procedure + loud guard, instead of convenient + catastrophic) is the schema's
-general FK philosophy.
+general FK philosophy. One guard is easy to overlook and is therefore an explicit line in the
+procedure: `commit_checkpoint_registry`'s NO ACTION FK to `commit` — nothing cascades registry
+rows, so a checkpointed project cannot be deleted until they are. The whole procedure is
+executable smoke coverage now: an inbound `project_usage` blocks first (PASS 26a), the registry
+FK blocks an out-of-order attempt (PASS 26b), and the documented order completes with the
+neighbor project untouched (PASS 26c).
 
 ---
 
@@ -1596,7 +1628,9 @@ design assumes they exist:
    the project's best tests. A full design sketch for this engine — the five propagation
    kinds, the `derived_dependency` catalog, early cutoff, and the differential-testing
    oracle — is `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md`.
-2. **Checkpoint cadence, retention, and overlay compaction** — the policies of sections 10.1
+2. **Checkpoint cadence, retention, overlay compaction — and the ref-deletion protocol of
+   §6.3** (API delete = soft-delete the ref + purge its overlay; hard delete is administrative
+   purge only) — the policies of sections 10.1
    and 10.2, executed asynchronously.
 3. **The commit transaction discipline**: one transaction writes `commit` + `commit_parent`
    (+ the trigger validates), `element_version` + subtype + link rows, `stored_json`,
@@ -1843,7 +1877,7 @@ declared-property computation per the two traps of section 3) and the emitters i
 
 Verification loop, end to end: run the fixture → apply `schema2.generated.sql` to PostgreSQL 18
 (`max_locks_per_transaction=4096`; both schemas are verified on 17 and 18.6, the recipe follows
-the prefer-18 version policy of §13) → run `schema.smoke.sql` (40 assertions) → both the golden
+the prefer-18 version policy of §13) → run `schema.smoke.sql` (59 assertions) → both the golden
 and the generated schema must pass identically.
 
 ---
@@ -1977,8 +2011,8 @@ at 0% conflicts — contention is branch-local, as designed. Reads stayed at ~1.
    keeps this workable; without it, concurrent editing degrades into serial editing on
    exactly the containers people share. (The same coupling is the R7 write-amplification
    hotspot: each new container version rewrites its full collection rows.)
-7. **Small print.** `UNIQUE (project_id, name)` turns concurrent same-name branch creation
-   into a constraint violation (map to 409, fine). GIN pending-list flushes on
+7. **Small print.** The live-only unique index on `(project_id, name)` turns concurrent
+   same-name branch creation into a constraint violation (map to 409, fine). GIN pending-list flushes on
    `derived_version` can briefly serialize concurrent derived-heavy commits on a shared
    partition (audit finding R5). `fillfactor = 90` on `branch_head` exists precisely to absorb
    per-commit overlay churn from many concurrently active branches without index bloat.
@@ -2063,6 +2097,7 @@ sections** (not the schema files' § banners); "—" means the term is used only
 | **PIM** | Platform-Independent Model: the spec's repository machinery (Project, Commit, Branch, …); hand-written layer. | 2, 6 |
 | **Promoted column** | One of the six derived properties given a real indexed column (`owner`, `qualified_name`, `name`, `short_name`, `owning_namespace`, `is_library_element`). | 9.3 |
 | **Property catalog** | The former database table mapping every API property name to its physical storage; dropped in favor of the per-release model-version descriptors. | 12.2 |
+| **Query (stored)** | The spec's saved select/where/orderBy record (`query` table); definition kept as the spec's own JSON, compiled by the service's translator against the executing commit's release at execution time. | 6.3, 16.4 |
 | **READ COMMITTED** | PostgreSQL's default isolation level — sufficient everywhere here, by design. | 18.1 |
 | **Redefinition (same-name / new-name)** | Same-name redefinitions are storage-free (resolve to the root's column); new-name redefinitions get their own storage (generator trap 2). | 3 |
 | **Reference validation (generated, two-tier)** | `validate_references_in_commit()` per commit (O(change set), including the reverse direction tombstones break) + `validate_references_at_commit()` as the periodic full audit (O(snapshot × log history)); wrong-type via the typed identity, dangling via the snapshot; functions by design, never constraints. | 7 |
@@ -2073,6 +2108,7 @@ sections** (not the schema files' § banners); "—" means the term is used only
 | **Sibling commits** | Commits on parallel branches sharing a parent; legally may share a timestamp — hence the tiebreaker. | 6.1, 10.4 |
 | **Skip scan** | A btree scan on a non-leading index column; only from PG18, and even there partition pruning still needs `project_id` — the rule stands. | 11 |
 | **Snapshot** | The full model state at one commit (`versionedData`); resolved via checkpoint + fold. | 6.2, 10 |
+| **Soft delete (`deleted`)** | The spec's recorded-event deletion of a ref (`Branch.deleted`/`Tag.deleted`): stamp the row, purge only the overlay cache; names stay unique among live refs via partial unique indexes. Hard delete is administrative purge. | 6.3 |
 | **Specialization closure** | The transitive supertype/subtype set of a type; what `Type::feature` folds over. | 3 |
 | **Stored property** | A non-derived metamodel property persisted in columns/link tables (2,698 flattened; 97 declarations). | 3 |
 | **Storage-declaring metaclass** | A metaclass declaring ≥ 1 stored scalar of its own → gets a subtype table (47 of them). | 8.3 |

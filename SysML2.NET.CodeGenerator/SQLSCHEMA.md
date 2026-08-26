@@ -21,7 +21,7 @@ The pipeline artifacts:
 |---|---|
 | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Hand-written, annotated reference design. Carries the rationale comments. |
 | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | The actual generator output, checked in for review. Supersedes the golden's `[GENERATED]` excerpts. |
-| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 40 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
+| `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functional test. 59 assertions; raises on any wrong answer. Runs against golden AND generated schema. |
 | `SysML2.NET.CodeGenerator/Sql/schema.concurrency.{setup,hot,spread,read,verify}.sql` | Multi-user suite: pgbench scenarios racing the §18.2 CAS protocol (hot branch / spread / reads-under-write-storm) + invariant verifier C1–C5 (linear chains, losers write nothing, overlay coherence). |
 | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | Handlebars template: hand-written sections verbatim, `[GENERATED]` sections via helpers. |
 | `SysML2.NET.CodeGenerator/HandleBarHelpers/SqlSchemaHelpers.cs` | The eight `uml_template.SQL2.*` helpers. |
@@ -55,7 +55,8 @@ force everything else:
 ## Architecture (four layers)
 
 1. **PIM / versioning** (hand-written): `project`, `commit`, `commit_parent` (the DAG — a commit
-   has a SET of parents; merges are real), `branch`, `tag`, `project_usage`, `data_identity`.
+   has a SET of parents; merges are real), `branch`, `tag`, `project_usage`, `query` (the spec's
+   stored Query records, definitions kept as the spec's own JSON shape), `data_identity`.
    A trigger enforces the spec's monotonic-commit-timestamp invariant because the snapshot
    resolver depends on it ("newest ancestor wins"); `trg_commit_immutable` rejects every
    UPDATE of a commit row (Clause 7.1.2: commits are immutable) — with `created` frozen, the
@@ -330,7 +331,7 @@ Deliberately NOT DTO properties: `Commit.versionedData` (derived, unbounded — 
 dotnet test SysML2.NET.CodeGenerator.Tests/SysML2.NET.CodeGenerator.Tests.csproj \
     --filter "FullyQualifiedName~SQLSchemaGeneratorTestFixture"
 
-# install + functional smoke (40 assertions) against a real PostgreSQL 18
+# install + functional smoke (59 assertions) against a real PostgreSQL 18
 # (both schemas verified on 17 AND 18.6; the recipe follows the prefer-18 version policy)
 docker run -d --name sysml2pg -e POSTGRES_PASSWORD=pg postgres:18 -c max_locks_per_transaction=4096
 docker cp <schema file> sysml2pg:/tmp/schema.sql
@@ -380,4 +381,17 @@ shapes — the tag lifecycle (create/read, dangling-commit FK guard, destructibl
 15a–15c), `project_usage` pinning a used project at a commit with its FK guard (PASS
 16a/16b), the `GET /roots` query over the promoted `owner` column (PASS 17), and the
 reverse relationship lookup by related element through the `ix_{link}_target` indexes and
-the snapshot (PASS 18a/18b).
+the snapshot (PASS 18a/18b). The remaining API-route surface is asserted too: the plain PIM
+record reads and updates — project list/read/rename, branch record, commit record, change set
+and DataVersion by id, and the registry-frozen `class_kind`/`model_version` catalogs behind
+`/meta/datatypes` (PASS 19a–22b); the stored-Query lifecycle — create/read, mutable update,
+destructible delete — plus an end-to-end §16.4-translated execution returning exactly the
+expected element at branch head (PASS 23a–24a); the commit-diff shape as a FULL JOIN of two
+resolved snapshots (PASS 25a); and the ordered project-deletion procedure — blocked first by
+an inbound `project_usage`, then by the checkpoint registry's NO ACTION FK when attempted out
+of order (the guard that makes the registry step part of the documented order), then completing
+cleanly with the neighbor project untouched (PASS 26a–26c). Finally the ref-deletion
+protocol (guide §6.3): a soft-deleted branch keeps its audit record while its overlay is
+purged, retired names are immediately reusable through the live-only partial unique
+indexes, duplicate live names are still rejected, and the same holds for tags
+(PASS 27a–27c).

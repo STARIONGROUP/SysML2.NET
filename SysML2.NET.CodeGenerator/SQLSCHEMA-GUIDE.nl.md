@@ -17,7 +17,7 @@
 > |---|---|
 > | `SysML2.NET.CodeGenerator/Sql/schema.golden.sql` | Handgeschreven, geannoteerd referentieontwerp |
 > | `SysML2.NET.CodeGenerator/Sql/schema2.generated.sql` | Echte generator-output (ingecheckt ter review) |
-> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functionele test met 40 assertions |
+> | `SysML2.NET.CodeGenerator/Sql/schema.smoke.sql` | Functionele test met 59 assertions |
 > | `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs` | De Handlebars-template die het schema genereert |
 >
 > Sectienummers zoals **§5** verwijzen naar de genummerde banners in de schemabestanden zelf.
@@ -330,7 +330,7 @@ P) en **N + 1** nieuwe `derived_version`-rijen (voor P plus elk element dat door
 hernoeming werd geraakt — de "impact radius"). De stored state van W blijft onaangeroerd; de
 derived state van W krijgt een nieuwe rij.
 
-De smoke-test met zijn 40 assertions (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) heeft
+De smoke-test met zijn 59 assertions (`SysML2.NET.CodeGenerator/Sql/schema.smoke.sql`) heeft
 precies dit scenario als eerste en belangrijkste assertion-paar (PASS 2a/2b): na de
 hernoeming levert W's `qualifiedName` netjes `"New::wheel"` op, *terwijl W nog steeds naar
 zijn oorspronkelijke version-rij verwijst*. Wie dit schema ooit gaat verbouwen: zorg dat die
@@ -586,7 +586,7 @@ Het algoritme is correct, maar per leesactie uitvoeren is op schaal volstrekt ka
 is een fold over de complete commit-historie. Heel §9 (sectie 10 van deze gids) bestaat om
 dat betaalbaar te maken.
 
-### 6.3 Branches en tags
+### 6.3 Branches, tags en stored queries
 
 ```sql
 CREATE TABLE sysml2.branch (
@@ -598,16 +598,46 @@ CREATE TABLE sysml2.branch (
     base_commit_id  uuid        NULL REFERENCES sysml2.commit (id),   -- zie sectie 10.2
     created         timestamptz NOT NULL DEFAULT now(),
     deleted         timestamptz NULL,
-    PRIMARY KEY (id),
-    UNIQUE (project_id, name)
+    PRIMARY KEY (id)
 );
+
+CREATE UNIQUE INDEX ux_branch_project_name_live
+    ON sysml2.branch (project_id, name) WHERE deleted IS NULL;
 ```
 
 De mutability-tabel van de spec is helder: branches zijn muteerbaar en verwijderbaar — het
 *enige* muteerbare in de hele versioneringskern, want `head_commit_id` schuift bij elke
 commit op. Tags zijn immutable maar verwijderbaar; commits geen van beide. `deleted` is een
 nullable timestamp en geen harde delete, omdat de spec het verwijderen van een
-CommitReference als een vastgelegde gebeurtenis behandelt.
+CommitReference als een vastgelegde gebeurtenis behandelt — `Branch.deleted` en `Tag.deleted`
+zijn properties van de spec-records zelf.
+
+Die vastgelegde gebeurtenis is meteen het audit-antwoord van het schema op verwijderbare refs,
+dus het deletieprotocol verdient een normatieve formulering. **De DELETE van de API op een
+branch is een soft delete plus een cache-purge**: zet `deleted = now()` op de ref-rij (het
+audit-verhaal blijft — naam, levensduur, laatste head; en omdat commits onverwoestbaar zijn,
+blijven de commits van de branch sowieso voorgoed in de DAG, hooguit zonder attributie als de
+ref verloren zou gaan), en verwijder fysiek alleen de `branch_head`-overlay-rijen (een
+herbouwbare cache, het enige deel waarvan de omvang ertoe doet). Een harde
+`DELETE FROM branch` — die de overlay cascadeert — is het *administratieve purge-pad*, niet
+het API-pad. Namen zijn alleen uniek **onder levende refs** (de partial unique indexes
+hierboven, idem voor `tag` en `query`): een gewone UNIQUE zou het hergebruiken van een naam na
+een soft delete blokkeren en implementaties bij routinematige branch-churn geruisloos richting
+de audit-vijandige harde delete duwen. Smoke PASS 27a–27c bewijzen het protocol: audit-record
+behouden, overlay gepurged, uitgediende namen herbruikbaar, dubbele *levende* namen nog steeds
+geweigerd. Eén eerlijke grens: geen enkel spec-record draagt een actor — *wie* een ref
+aanmaakte of verwijderde (of committe) is op deze laag helemaal niet auditbaar; wie
+who-did-what nodig heeft, heeft hoe dan ook een service-side audit trail nodig.
+
+Het laatste Clause-7-record met persistentie is de **stored Query** (`query`): een opgeslagen
+select/where/orderBy-definitie waar de API volledige CRUD voor biedt (`GET/POST/PUT/DELETE
+/queries`). Mutable én destructible — de PUT- en DELETE-routes zeggen het zelf. De definitie
+staat als de eigen JSON-vorm van de spec in `query_json`; niets in de database interpreteert
+hem — de Query-vertaler van de service (§16.4) compileert hem op uitvoeringsmoment tegen de
+release-descriptors van de *uitvoerende commit*, waardoor de opgeslagen vorm release-agnostisch
+blijft over metamodel-upgrades heen. De live-only partial unique index is meteen de
+projectgebonden listing-index. Smoke PASS 23a–23c dekken de levenscyclus; PASS 24a voert een
+vertaalde definitie end-to-end uit.
 
 `base_commit_id` is puur een performancestructuur en komt niet uit de spec — hij verankert de
 branch-head-*overlay*; sectie 10.2 legt hem volledig uit.
@@ -764,7 +794,13 @@ partitie en gebruikt een PK-prefix), afgesloten met `data_identity` en `project`
 overgebleven `NO ACTION`-FK's zijn het vangnet: wie in de verkeerde volgorde verwijdert,
 loopt luidkeels tegen een fout aan in plaats van stilletjes tegen een tablescan. Die ruil —
 expliciete procedure plus luide bewaking, in plaats van gemak plus rampspoed — is meteen de
-FK-filosofie van het hele schema.
+FK-filosofie van het hele schema. Eén bewaker wordt makkelijk over het hoofd gezien en heeft
+daarom een expliciete regel in de procedure: de NO ACTION-FK van `commit_checkpoint_registry`
+naar `commit` — niets cascadeert registry-rijen, dus een project mét checkpoint is pas
+verwijderbaar als die eerst weg zijn. De hele procedure is nu uitvoerbare smoke-dekking: een
+inkomende `project_usage` blokkeert eerst (PASS 26a), de registry-FK blokkeert een poging in
+de verkeerde volgorde (PASS 26b), en de gedocumenteerde volgorde rondt af met het buurproject
+onaangetast (PASS 26c).
 
 ---
 
@@ -1718,8 +1754,9 @@ en het ontwerp rekent erop dat ze worden ingevuld:
    project. Een volledige ontwerpschets voor deze engine — de vijf voortplantingssoorten, de
    `derived_dependency`-catalogus, early cutoff en het differentiële test-orakel — staat in
    `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md`.
-2. **Checkpoint-cadence, retentie en overlay-compaction** — het beleid van secties 10.1 en
-   10.2, asynchroon uitgevoerd.
+2. **Checkpoint-cadence, retentie, overlay-compaction — en het ref-deletieprotocol van §6.3**
+   (API-delete = soft-delete de ref + purge zijn overlay; harde delete is uitsluitend
+   administratieve purge) — het beleid van secties 10.1 en 10.2, asynchroon uitgevoerd.
 3. **De discipline van de committransactie**: één transactie schrijft `commit` +
    `commit_parent` (de trigger valideert), de `element_version`- + subtype- + link-rijen,
    `stored_json`, de `derived_version`-rijen en de `branch_head`-overlay-upserts, en verzet
@@ -1982,7 +2019,7 @@ aangestuurd vanuit
 De verificatielus, van begin tot eind: draai de fixture → zet `schema2.generated.sql` op een
 PostgreSQL 18 (`max_locks_per_transaction=4096`; beide schema's zijn geverifieerd op 17 én
 18.6, het recept volgt het prefereer-18-versiebeleid van §13) → draai `schema.smoke.sql`
-(40 assertions) → en zowel het golden als het gegenereerde schema moet daar identiek doorheen
+(59 assertions) → en zowel het golden als het gegenereerde schema moet daar identiek doorheen
 komen.
 
 ---
@@ -2130,8 +2167,8 @@ schrijfstorm liep: de MVCC-belofte van §18.1, gemeten.
    auto-merge verwordt gelijktijdig werken tot om-de-beurt werken op precies de containers
    die iedereen deelt. (Dezelfde koppeling is ook de R7-write-amplification-hotspot: elke
    nieuwe container-version herschrijft zijn volledige collectierijen.)
-7. **De kleine lettertjes.** `UNIQUE (project_id, name)` maakt van twee gelijktijdige
-   branches met dezelfde naam een constraint-fout (vertaal naar 409, klaar). De
+7. **De kleine lettertjes.** De live-only unique index op `(project_id, name)` maakt van twee
+   gelijktijdige branches met dezelfde naam een constraint-fout (vertaal naar 409, klaar). De
    GIN-pending-list-flushes op `derived_version` kunnen gelijktijdige derived-zware commits
    op een gedeelde partitie heel even serialiseren (auditbevinding R5). En `fillfactor = 90`
    op `branch_head` is er precies om de overlay-churn van veel tegelijk actieve branches op
@@ -2218,6 +2255,7 @@ dat de term alleen terloops voorkomt.
 | **PIM** | Platform-Independent Model: de repository-machinerie van de spec (Project, Commit, Branch, …); de handgeschreven laag. | 2, 6 |
 | **Promoted column** | Eén van de zes derived properties met een echte geïndexeerde kolom (`owner`, `qualified_name`, `name`, `short_name`, `owning_namespace`, `is_library_element`). | 9.3 |
 | **Property catalog** | De voormalige databasetabel die elke API-property-naam naar zijn fysieke opslag wees; vervallen ten gunste van de per-release model-version descriptors. | 12.2 |
+| **Query (stored)** | Het opgeslagen select/where/orderBy-record van de spec (`query`-tabel); de definitie blijft de eigen JSON-vorm van de spec en wordt door de vertaler van de service pas op uitvoeringsmoment tegen de release van de uitvoerende commit gecompileerd. | 6.3, 16.4 |
 | **READ COMMITTED** | PostgreSQL's standaard isolatieniveau — hier overal toereikend, en dat is geen toeval. | 18.1 |
 | **Redefinition (same-name / new-name)** | Same-name redefinitions zijn opslagvrij (ze wijzen door naar de kolom van de root); new-name redefinitions krijgen eigen opslag (generatorvalkuil 2). | 3 |
 | **Referencevalidatie (gegenereerd, two-tier)** | `validate_references_in_commit()` per commit (O(change set), inclusief de omgekeerde richting die tombstones breken) + `validate_references_at_commit()` als periodieke volledige audit (O(snapshot × log historie)); wrong-type via de typed identity, dangling via het snapshot; bewust functies, nooit constraints. | 7 |
@@ -2228,6 +2266,7 @@ dat de term alleen terloops voorkomt.
 | **Sibling commits** | Commits op parallelle branches met dezelfde parent; mogen legaal een timestamp delen — vandaar de tiebreaker. | 6.1, 10.4 |
 | **Skip scan** | Een btree-scan op een niet-leidende indexkolom; bestaat pas vanaf PG18, en ook dáár heeft partition pruning nog steeds `project_id` nodig — de regel blijft dus staan. | 11 |
 | **Snapshot** | De volledige modeltoestand op één commit (`versionedData`); opgelost via checkpoint + fold. | 6.2, 10 |
+| **Soft delete (`deleted`)** | De vastgelegde-gebeurtenis-deletie van een ref uit de spec (`Branch.deleted`/`Tag.deleted`): stempel de rij, purge alleen de overlay-cache; namen blijven uniek onder levende refs via partial unique indexes. Harde delete is administratieve purge. | 6.3 |
 | **Specialization closure** | De transitieve verzameling super-/subtypen van een type; waar `Type::feature` overheen foldt. | 3 |
 | **Stored property** | Een niet-derived metamodel-property die echt wordt opgeslagen, in kolommen of link-tabellen (2.698 flattened; 97 declaraties). | 3 |
 | **Storage-declarerende metaclass** | Een metaclass die ≥ 1 eigen stored scalar declareert → krijgt een subtype-tabel (47 stuks). | 8.3 |
