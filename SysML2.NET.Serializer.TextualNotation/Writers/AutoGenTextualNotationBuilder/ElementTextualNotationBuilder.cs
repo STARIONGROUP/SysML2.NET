@@ -62,7 +62,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
         /// <summary>
         /// Builds the Textual Notation string for the rule DefinitionElement
-        /// <para>DefinitionElement:Element=Package|LibraryPackage|AnnotatingElement|Dependency|AttributeDefinition|EnumerationDefinition|OccurrenceDefinition|IndividualDefinition|ItemDefinition|PartDefinition|ConnectionDefinition|FlowDefinition|InterfaceDefinition|PortDefinition|ActionDefinition|CalculationDefinition|StateDefinition|ConstraintDefinition|RequirementDefinition|ConcernDefinition|CaseDefinition|AnalysisCaseDefinition|VerificationCaseDefinition|UseCaseDefinition|ViewDefinition|ViewpointDefinition|RenderingDefinition|MetadataDefinition|ExtendedDefinition</para>
+        /// <para>DefinitionElement:Element=Package|LibraryPackage|AnnotatingElement|Dependency|AttributeDefinition|EnumerationDefinition|OccurrenceDefinition|IndividualDefinition|ItemDefinition|PartDefinition|ConnectionDefinition|FlowDefinition|InterfaceDefinition|AllocationDefinition|PortDefinition|ActionDefinition|CalculationDefinition|StateDefinition|ConstraintDefinition|RequirementDefinition|ConcernDefinition|CaseDefinition|AnalysisCaseDefinition|VerificationCaseDefinition|UseCaseDefinition|ViewDefinition|ViewpointDefinition|RenderingDefinition|MetadataDefinition|ExtendedDefinition</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Elements.IElement" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
@@ -73,6 +73,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 case SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition pocoInterfaceDefinition:
                     InterfaceDefinitionTextualNotationBuilder.BuildInterfaceDefinition(pocoInterfaceDefinition, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Allocations.IAllocationDefinition pocoAllocationDefinition:
+                    AllocationDefinitionTextualNotationBuilder.BuildAllocationDefinition(pocoAllocationDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Connections.IConnectionDefinition pocoConnectionDefinition:
                     ConnectionDefinitionTextualNotationBuilder.BuildConnectionDefinition(pocoConnectionDefinition, writerContext, stringBuilder);
@@ -101,14 +104,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Cases.ICaseDefinition pocoCaseDefinition:
                     CaseDefinitionTextualNotationBuilder.BuildCaseDefinition(pocoCaseDefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition pocoRenderingDefinition:
-                    RenderingDefinitionTextualNotationBuilder.BuildRenderingDefinition(pocoRenderingDefinition, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition pocoMetadataDefinition:
+                    MetadataDefinitionTextualNotationBuilder.BuildMetadataDefinition(pocoMetadataDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Views.IViewDefinition pocoViewDefinition:
                     ViewDefinitionTextualNotationBuilder.BuildViewDefinition(pocoViewDefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition pocoMetadataDefinition:
-                    MetadataDefinitionTextualNotationBuilder.BuildMetadataDefinition(pocoMetadataDefinition, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition pocoRenderingDefinition:
+                    RenderingDefinitionTextualNotationBuilder.BuildRenderingDefinition(pocoRenderingDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition pocoCalculationDefinition:
                     CalculationDefinitionTextualNotationBuilder.BuildCalculationDefinition(pocoCalculationDefinition, writerContext, stringBuilder);
