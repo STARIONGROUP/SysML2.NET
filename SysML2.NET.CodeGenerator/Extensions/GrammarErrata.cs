@@ -89,7 +89,28 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 "alternative spelling: rendering the ReturnParameterMembership through the generic " +
                 "parameter path emits 'out verdict', which re-parses as a plain FeatureMembership with " +
                 "direction out and so loses the metaclass. CalculationBodyItem is already declared in the " +
-                "same file, so the replacement resolves without any further correction.")
+                "same file, so the replacement resolves without any further correction."),
+            new("DefinitionElement",
+                "    | InterfaceDefinition\n    | PortDefinition",
+                "    | InterfaceDefinition\n    | AllocationDefinition\n    | PortDefinition",
+                "SysML 8.2.2.5.2 declares 'AllocationDefinition = OccurrenceDefinitionPrefix 'allocation' " +
+                "'def' Definition' but no production references it: DefinitionElement lists " +
+                "ConnectionDefinition, FlowDefinition, InterfaceDefinition and PortDefinition, and omits " +
+                "AllocationDefinition, so there is no path to it from RootNamespace. OMG has CONFIRMED this " +
+                "as a specification error — Systems-Modeling/SysML-v2-Release issue 124 item 1, answered " +
+                "2026-07-29: 'I can confirm that all your items are specification errors, except for item " +
+                "5'; the correction is routed to a Revision Task Force, so it is not expected in the KEBNF " +
+                "for some time. The issue's own suggested fix is the one applied here. The pilot " +
+                "implementation already wires it exactly this way (org.omg.sysml.xtext SysML.xtext, rule " +
+                "DefinitionElement, AllocationDefinition listed directly after InterfaceDefinition), which " +
+                "is why the alternative is inserted at that position. There is no admissible alternative " +
+                "spelling: AllocationDefinition specializes ConnectionDefinition, so without the " +
+                "alternative the generator emits no dispatch arm and an AllocationDefinition renders " +
+                "through the ConnectionDefinition arm as 'connection def'. That re-parses to a DIFFERENT " +
+                "metaclass — AllocationUsage::allocationDefinition (which redefines " +
+                "ConnectionUsage::connectionDefinition) derives to empty, and the library grounding shifts " +
+                "from Allocations::Allocation to Connections::Connection. No OCL constraint flags the " +
+                "downgrade, so nothing but the validation corpus catches it.")
         ];
 
         /// <summary>
