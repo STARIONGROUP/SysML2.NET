@@ -117,6 +117,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("13-Model Containment", "13b-Safety and Security Features Element Group-1.sysmlx")]
         [TestCase("13-Model Containment", "13b-Safety and Security Features Element Group-2.sysmlx")]
         [TestCase("13-Model Containment", "13b-Safety and Security Features Element Group.sysmlx")]
+        [TestCase("14-Language Extensions", "14a-Language Extensions.sysmlx")]
+        [TestCase("14-Language Extensions", "14b-Language Extensions.sysmlx")]
+        [TestCase("14-Language Extensions", "14c-Language Extensions.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

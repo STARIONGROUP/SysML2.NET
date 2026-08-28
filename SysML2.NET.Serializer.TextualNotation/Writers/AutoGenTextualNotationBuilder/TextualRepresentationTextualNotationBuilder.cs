@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             stringBuilder.Append("language ");
-            stringBuilder.Append(poco.Language);
+            SharedTextualNotationBuilder.AppendStringValue(stringBuilder, poco.Language);
             SharedTextualNotationBuilder.AppendRegularComment(stringBuilder, poco.Body, surroundWithBlankLines: false);
 
         }

@@ -463,6 +463,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             {
                                 writer.WriteSafeString($"SharedTextualNotationBuilder.AppendName(stringBuilder, poco.{targetPropertyName});");
                             }
+                            else if (assignmentElement.Value is NonTerminalElement { Name: "STRING_VALUE" })
+                            {
+                                // STRING_VALUE carries its own quotes — '"' ( STRING_CHARACTER |
+                                // ESCAPE_SEQUENCE )* '"' — and the model holds the DECODED string, so the
+                                // writer owns re-encoding it. See AppendStringValue. Keyed on the TERMINAL
+                                // rather than the property type: a String-typed test would also quote
+                                // declaredName and every other string the grammar writes bare.
+                                writer.WriteSafeString($"SharedTextualNotationBuilder.AppendStringValue(stringBuilder, poco.{targetPropertyName});");
+                            }
                             else if (string.Equals(targetPropertyName, "Operator", StringComparison.Ordinal))
                             {
                                 // Operator tokens need a trailing space before the next operand, matching

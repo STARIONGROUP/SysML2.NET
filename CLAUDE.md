@@ -29,6 +29,16 @@ dotnet-coverage collect "dotnet test SysML2.NET.sln --no-build" -f xml -o covera
 
 Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attributes.
 
+## Reading `DEVELOPMENT_STANDARDS.md` is MANDATORY
+
+**`DEVELOPMENT_STANDARDS.md` at the repo root governs how code is written in this solution, and it applies to EVERY piece of code you write or modify — production, tests, generator, scripts.** It is the org-wide Starion Group engineering convention document: C# style, LINQ usage, test conventions, exception and validation boundaries, XML documentation, and repo hygiene.
+
+Read it before writing code in a session where you have not already done so. Do not author code from memory of "typical C#" conventions, or by copying the shape of a neighbouring file — parts of this repo predate the document and do not comply, so imitating them reproduces the deviation.
+
+**Precedence, per its own §0:** a configured `.editorconfig` entry, Roslyn/StyleCop analyzer, or linter rule always WINS over the document's prose where they cover the same concern. The written rules are the fallback for what tooling does not enforce. So before treating one of its rules as binding, check `.editorconfig`, `Directory.Build.props` / `Directory.Build.targets` and any `.globalconfig` — and never flag a diff as a violation of the document when it is actually compliant with the repo's own tool configuration.
+
+Where this `CLAUDE.md` and `DEVELOPMENT_STANDARDS.md` overlap, this file is the project-specific override and wins; the standards document is explicit that project-specific overrides belong in the repo's own `CLAUDE.md`. `TESTING.md` remains the binding authority for NUnit fixtures specifically.
+
 ## Reading `TESTING.md` is MANDATORY
 
 **Before you write or modify a single line in any `*.Tests/` project, you MUST `Read` `TESTING.md` at the repo root — in full, in the current session.** It is the authoritative, binding specification for every NUnit fixture in this solution.
