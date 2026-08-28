@@ -45,7 +45,17 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
             else
             {
-                BuildOwnedExpression(poco, writerContext, stringBuilder);
+                // Every rule that reaches SequenceExpressionList has already emitted the delimiters
+                // enclosing this single content expression — SequenceExpression ('(' … ')'),
+                // BracketExpression ('[' … ']') and IndexExpression ('#' '(' … ')') — so
+                // BuildOwnedExpression's operand-parenthesisation layer would double them, yielding
+                // ((as Safety)) or 25[(mi / gallon)]. Suspending the operator context for this call
+                // suppresses exactly that layer; operands nested DEEPER re-push their own context and
+                // still parenthesise normally.
+                using (writerContext.SuspendOperatorContext())
+                {
+                    BuildOwnedExpression(poco, writerContext, stringBuilder);
+                }
             }
         }
     }

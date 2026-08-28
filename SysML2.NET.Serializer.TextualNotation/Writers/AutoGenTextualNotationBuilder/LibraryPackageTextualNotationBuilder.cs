@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             stringBuilder.Append(' ');
             stringBuilder.Append("library ");
 
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship prefixMetadataMemberGuard0 && prefixMetadataMemberGuard0.IsValidForPrefixMetadataMember(writerContext))
             {
 
                 if (ownedRelationshipCursor.Current != null)

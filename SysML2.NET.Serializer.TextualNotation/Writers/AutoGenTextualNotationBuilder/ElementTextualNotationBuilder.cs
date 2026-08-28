@@ -104,8 +104,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Cases.ICaseDefinition pocoCaseDefinition:
                     CaseDefinitionTextualNotationBuilder.BuildCaseDefinition(pocoCaseDefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition pocoMetadataDefinition:
-                    MetadataDefinitionTextualNotationBuilder.BuildMetadataDefinition(pocoMetadataDefinition, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition pocoCalculationDefinition:
+                    CalculationDefinitionTextualNotationBuilder.BuildCalculationDefinition(pocoCalculationDefinition, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Constraints.IConstraintDefinition pocoConstraintDefinition:
+                    ConstraintDefinitionTextualNotationBuilder.BuildConstraintDefinition(pocoConstraintDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Views.IViewDefinition pocoViewDefinition:
                     ViewDefinitionTextualNotationBuilder.BuildViewDefinition(pocoViewDefinition, writerContext, stringBuilder);
@@ -113,11 +116,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition pocoRenderingDefinition:
                     RenderingDefinitionTextualNotationBuilder.BuildRenderingDefinition(pocoRenderingDefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Calculations.ICalculationDefinition pocoCalculationDefinition:
-                    CalculationDefinitionTextualNotationBuilder.BuildCalculationDefinition(pocoCalculationDefinition, writerContext, stringBuilder);
-                    break;
-                case SysML2.NET.Core.POCO.Systems.Constraints.IConstraintDefinition pocoConstraintDefinition:
-                    ConstraintDefinitionTextualNotationBuilder.BuildConstraintDefinition(pocoConstraintDefinition, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition pocoMetadataDefinition:
+                    MetadataDefinitionTextualNotationBuilder.BuildMetadataDefinition(pocoMetadataDefinition, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Parts.IPartDefinition pocoPartDefinition:
                     PartDefinitionTextualNotationBuilder.BuildPartDefinition(pocoPartDefinition, writerContext, stringBuilder);
@@ -152,11 +152,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage pocoLibraryPackage:
                     LibraryPackageTextualNotationBuilder.BuildLibraryPackage(pocoLibraryPackage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Root.Dependencies.IDependency pocoDependency:
-                    DependencyTextualNotationBuilder.BuildDependency(pocoDependency, writerContext, stringBuilder);
-                    break;
                 case SysML2.NET.Core.POCO.Kernel.Packages.IPackage pocoPackage:
                     PackageTextualNotationBuilder.BuildPackage(pocoPackage, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Dependencies.IDependency pocoDependency:
+                    DependencyTextualNotationBuilder.BuildDependency(pocoDependency, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement pocoAnnotatingElement:
                     AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(pocoAnnotatingElement, writerContext, stringBuilder);
@@ -260,12 +260,6 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Core.Features.IRedefinition pocoRedefinition:
                     RedefinitionTextualNotationBuilder.BuildRedefinition(pocoRedefinition, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.ISubsetting pocoSubsetting:
-                    SubsettingTextualNotationBuilder.BuildSubsetting(pocoSubsetting, writerContext, stringBuilder);
-                    break;
-                case SysML2.NET.Core.POCO.Core.Features.IFeatureTyping pocoFeatureTyping:
-                    FeatureTypingTextualNotationBuilder.BuildFeatureTyping(pocoFeatureTyping, writerContext, stringBuilder);
-                    break;
                 case SysML2.NET.Core.POCO.Core.Classifiers.IClassifier pocoClassifier:
                     ClassifierTextualNotationBuilder.BuildClassifier(pocoClassifier, writerContext, stringBuilder);
                     break;
@@ -275,8 +269,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification pocoSubclassification:
                     SubclassificationTextualNotationBuilder.BuildSubclassification(pocoSubclassification, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing pocoTypeFeaturing:
-                    TypeFeaturingTextualNotationBuilder.BuildTypeFeaturing(pocoTypeFeaturing, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Core.Features.IFeatureTyping pocoFeatureTyping:
+                    FeatureTypingTextualNotationBuilder.BuildFeatureTyping(pocoFeatureTyping, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Features.ISubsetting pocoSubsetting:
+                    SubsettingTextualNotationBuilder.BuildSubsetting(pocoSubsetting, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Dependencies.IDependency pocoDependency:
                     DependencyTextualNotationBuilder.BuildDependency(pocoDependency, writerContext, stringBuilder);
@@ -298,6 +295,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     break;
                 case SysML2.NET.Core.POCO.Core.Features.IFeatureInverting pocoFeatureInverting:
                     FeatureInvertingTextualNotationBuilder.BuildFeatureInverting(pocoFeatureInverting, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing pocoTypeFeaturing:
+                    TypeFeaturingTextualNotationBuilder.BuildTypeFeaturing(pocoTypeFeaturing, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Root.Namespaces.INamespace pocoNamespace:
                     NamespaceTextualNotationBuilder.BuildNamespace(pocoNamespace, writerContext, stringBuilder);

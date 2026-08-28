@@ -1688,5 +1688,26 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             return string.Equals(alternativeRuleName, "FunctionOperationExpression", StringComparison.Ordinal);
         }
+
+        /// <summary>
+        /// Returns true when a collection loop's CONTENT guard cannot be derived from the referenced rule's
+        /// body shape and must be supplied by a hand-coded <c>IsValidFor{Rule}</c> guard.
+        /// </summary>
+        /// <remarks>
+        /// Currently <c>PrefixMetadataMember</c>. The synthesised guard tests only the shape the rule states
+        /// — an <c>OwningMembership</c> whose <c>ownedRelatedElement</c> contains a <c>MetadataUsage</c> — but
+        /// what makes the prefix form applicable is what the usage does NOT own. <c>PrefixMetadataUsage :
+        /// MetadataUsage = ownedRelationship += OwnedFeatureTyping</c> has no <c>MetadataUsageDeclaration</c>
+        /// and no <c>MetadataBody</c>, so a usage carrying a body (<c>@Safety { ref :&gt;&gt; isMandatory =
+        /// false; }</c>) cannot be written with <c>#</c> and must fall through to the body form. Body-shape
+        /// analysis cannot express an ABSENCE constraint on the referenced element's own contents, so the
+        /// predicate is hand-coded.
+        /// </remarks>
+        /// <param name="contentRuleName">The KEBNF rule name supplying the loop's content</param>
+        /// <returns><c>true</c> if the codegen should emit a hand-coded <c>IsValidFor{Rule}</c> guard</returns>
+        private static bool RequiresHandCodedContentGuard(string contentRuleName)
+        {
+            return string.Equals(contentRuleName, "PrefixMetadataMember", StringComparison.Ordinal);
+        }
     }
 }

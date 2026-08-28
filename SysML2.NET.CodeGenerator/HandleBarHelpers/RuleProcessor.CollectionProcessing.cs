@@ -333,6 +333,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
+            // An allowlisted content rule needs an ABSENCE constraint on the referenced element's own
+            // contents, which body-shape analysis cannot express — delegate to the hand-coded predicate
+            // rather than emitting the shape-derived type check below.
+            if (RequiresHandCodedContentGuard(referencedRule.RuleName))
+            {
+                var handCodedGuardVariableName = $"{referencedRule.RuleName.LowerCaseFirstLetter()}Guard{ruleGenerationContext.NarrowedTypeCheckCounter}";
+                ruleGenerationContext.NarrowedTypeCheckCounter++;
+
+                return $"{cursorVariableName}.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship {handCodedGuardVariableName} && {handCodedGuardVariableName}.IsValidFor{referencedRule.RuleName}(writerContext)";
+            }
+
             var outerTargetName = referencedRule.EffectiveTarget;
             var outerTargetClass = RuleQueryUtilities.FindClass(umlClass.Cache, outerTargetName);
 
