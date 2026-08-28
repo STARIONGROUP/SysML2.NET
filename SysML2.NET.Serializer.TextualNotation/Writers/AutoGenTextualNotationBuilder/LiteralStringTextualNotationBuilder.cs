@@ -42,7 +42,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildLiteralString(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralString poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            stringBuilder.Append(poco.Value);
+            SharedTextualNotationBuilder.AppendStringValue(stringBuilder, poco.Value);
 
         }
     }

@@ -88,7 +88,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             if (!string.IsNullOrWhiteSpace(poco.Locale))
             {
                 stringBuilder.Append("locale ");
-                stringBuilder.Append(poco.Locale);
+                SharedTextualNotationBuilder.AppendStringValue(stringBuilder, poco.Locale);
                 stringBuilder.Append(' ');
             }
 

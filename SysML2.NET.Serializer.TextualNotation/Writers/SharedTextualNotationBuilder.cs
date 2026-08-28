@@ -196,6 +196,42 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Appends a string in the form the <c>STRING_VALUE</c> terminal accepts.
+        /// <para><c>STRING_VALUE = '"' ( STRING_CHARACTER | ESCAPE_SEQUENCE )* '"'</c></para>
+        /// </summary>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that contains the entire textual notation</param>
+        /// <param name="value">The decoded string to emit; may be <see langword="null" /></param>
+        /// <remarks>
+        /// The quotes are part of the TERMINAL, unlike <c>UNRESTRICTED_NAME</c> where the specification says
+        /// the surrounding quotes are not part of the represented name. The model holds the DECODED string,
+        /// so the writer owns re-encoding it: emitting the raw value turned <c>"High"</c> into <c>High</c>,
+        /// which re-parses as a <c>FeatureReferenceExpression</c> — a different metaclass that then fails
+        /// name resolution.
+        /// <para><c>STRING_CHARACTER</c> is any printable character other than backslash or <c>"</c>, so
+        /// those two are escaped, along with the non-printables KerML Table 4 gives escapes for. Backslash is
+        /// replaced FIRST so the backslashes introduced by the later replacements are not re-escaped.</para>
+        /// </remarks>
+        internal static void AppendStringValue(IndentedStringBuilder stringBuilder, string value)
+        {
+            stringBuilder.Append('"');
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                stringBuilder.Append(value
+                    .Replace("\\", "\\\\")
+                    .Replace("\"", "\\\"")
+                    .Replace("\b", "\\b")
+                    .Replace("\f", "\\f")
+                    .Replace("\t", "\\t")
+                    .Replace("\r\n", "\\n")
+                    .Replace("\n", "\\n")
+                    .Replace("\r", "\\n"));
+            }
+
+            stringBuilder.Append('"');
+        }
+
+        /// <summary>
         /// Builds the Textual Notation string for the shared two-ended connector declaration template
         /// used by <c>BindingConnectorDeclaration</c> (with <c>'of'</c>/<c>'='</c>) and
         /// <c>SuccessionDeclaration</c> (with <c>'first'</c>/<c>'then'</c>).
