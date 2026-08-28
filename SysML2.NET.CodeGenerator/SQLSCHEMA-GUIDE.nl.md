@@ -1466,11 +1466,14 @@ PASS 11a) en veilig opnieuw toe te passen op een gevulde database.
 
 **Het contract voor elke afnemer:** de canonieke identiteit van een metaclass is nog steeds
 zijn **naam** (het API-`@type`); de smallint is de interning daarvan door het register.
-Onderhoud nooit met de hand een C#-enum die deze ids naspiegelt — de geplande
-`ClassKind`-enum wordt *uit hetzelfde register gegenereerd*, waardoor de waarden per
-constructie stabiel zijn over releases heen, plus een startup-assertie in de service die de
-gecompileerde constanten vergelijkt met de `class_kind`-tabel en bij drift weigert te starten
-(genoteerd, nog niet gebouwd).
+Onderhoud nooit met de hand een C#-enum die deze ids naspiegelt — de gegenereerde
+`ClassKind`-enum (`SysML2.NET/Core/AutoGenEnum/ClassKind.cs`: `enum ClassKind : short`, alle
+175 members met expliciete waarden, geproduceerd uit hetzelfde register door
+`SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindEnumGenerator.cs`) is
+per constructie stabiel over releases heen, en een drift-test vergelijkt de gecompileerde
+enum met het register zodat een vergeten regeneratie de testsuite laat falen. De
+bijbehorende startup-assertie in de service — die de gecompileerde constanten vergelijkt met
+de `class_kind`-tabel en bij drift weigert te starten — blijft toekomstig werk.
 
 Het eerdere ontwerp had hier ook een `class_kind_table`-catalogus (de platgeslagen
 overervings-DAG: welke subtype-tabellen elke concrete metaclass joint). Die is uit de
@@ -1729,11 +1732,17 @@ meteen de moraal van deze sectie.
 - **R13 (SEV-4, stille-bugklasse)** — fold-determinisme bij timestamp-gelijkstanden tussen
   siblings (sectie 10.4).
 
-De poort die vóór productie nog genomen moet worden (hier bewust niet gebouwd): het volledige
-.NET-benchmarkharnas — drie projecten van 1M elementen met authentieke serializer-payloads op
-gedeelde partities, een replay van 20k commits, 500 branches, de root-hernoemingsburst
-gemeten *terwijl* de leeslatentie wordt bewaakt, een A/B van UUIDv4 tegen v7, en
-levensduurcontroles (`pgstattuple`-bloat, wait events, WAL per commit).
+De poort die vóór productie genomen moet worden — het volledige .NET-benchmarkharnas — is
+**gebouwd**:
+`SysML2.NET.CodeGenerator.Tests/Generators/UmlHandleBarsGenerators/SqlSchemaBenchmarkTestFixture.cs`
+(`TestCategory=Benchmark`) dekt alle zes de poortonderdelen — drie projecten met authentieke
+serializer-payloads (content + OwningMemberships) op gedeelde partities, de replay van de
+commit-historie met checkpoint-cadans, de branch-vloot, de root-hernoemingsburst gemeten
+*terwijl* de leeslatentie wordt bewaakt met wait-event-sampling, de A/B van UUIDv4 tegen v7
+met `pgstatindex`, en de `pgstattuple`/seq-scan-levensduurcontroles — plus een
+deterministische plan-vorm-assertion op de inlining-waakhond van §16.5. De schaal is een
+omgevingsknop (`SYSML2_BENCH_ELEMENTS`/`_COMMITS`/`_BRANCHES`; de volledige poort is 1M
+elementen, 20k commits); SQLSCHEMA.md bevat de aanroep.
 
 ---
 
@@ -2122,7 +2131,10 @@ per head-waarde, verliezers schrijven niets (83% CAS-conflictrate bij vol hamere
 §15.15-signaal in zijn slechtste geval), heads strikt lineair, nul deadlocks; dezelfde
 clients gespreid over 16 branches: ~2.200 commits/s bij 0% conflicten — contentie is
 branch-lokaal, zoals ontworpen. Reads bleven op ~1,2 ms (vanaf 0,8 ms in rust) terwijl de
-schrijfstorm liep: de MVCC-belofte van §18.1, gemeten.
+schrijfstorm liep: de MVCC-belofte van §18.1, gemeten. (Opnieuw gevalideerd op 2026-08-26,
+na de commit-immutability-trigger, de `query`-tabel en de live-only partial unique indexes:
+conflictpercentage identiek, spread-plafond en read-latencies binnen de run-tot-run-variantie,
+C1–C5 allemaal PASS — geen regressie.)
 
 ### 18.3 Nadelen en open keuzes
 
@@ -2200,6 +2212,7 @@ dat de term alleen terloops voorkomt.
 | **CHECK constraint** | Een geldigheidregel op rijniveau (bv. de elkaar uitsluitende tombstone/payload-vormen). | 8.1 |
 | **Checkpoint** | Een volledig gematerialiseerde fold van één commit (`commit_checkpoint`); begrenst resolver-wandelingen en fundeert overlays. | 10.1 |
 | **class_kind (interning)** | Het smallint-id per metaclass — interning van de canonieke NAAM, met ids die voor altijd vastliggen door het append-only register; afnemers laden de mapping at runtime of gebruiken de uit het register gegenereerde enum. | 12.1, 15 |
+| **ClassKind enum** | De gegenereerde C#-mirror van de class_kind-catalogus (`SysML2.NET/Core/AutoGenEnum/ClassKind.cs`): `enum ClassKind : short` met expliciete, door het register bevroren waarden, geëmitteerd door `ClassKindEnumGenerator`; een drift-test vergelijkt de gecompileerde enum met het register. | 12.1 |
 | **Class-kind register** | De ingecheckte, append-only bron van waarheid (`ClassKindRegistry.cs`) die class_kind-ids en model_version-ordinals over releases heen bevriest; de generator valideert het UML-model ertegen en faalt bij drift. | 12.1 |
 | **Commit** | Een immutable vastlegging van de wijzigingen op één moment; een knoop in de commit-DAG. | 6.1 |
 | **Commit-DAG** | De directed acyclic graph die commits vormen zodra branchen en mergen mag. | 6.1 |

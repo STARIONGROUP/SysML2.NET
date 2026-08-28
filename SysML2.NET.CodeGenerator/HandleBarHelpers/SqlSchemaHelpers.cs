@@ -408,12 +408,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// Asserts that the UML model on disk matches the newest release registered in the
         /// append-only <see cref="ClassKindRegistry" />. Any drift fails generation LOUDLY —
         /// silently renumbering class_kind ids would corrupt every populated database and every
-        /// consumer of the generated ClassKind enum.
+        /// consumer of the generated ClassKind enum. Public because the
+        /// <see cref="ClassKindEnumGenerator" /> shares this fail-fast with the SQL schema helpers.
         /// </summary>
         /// <param name="payload">
         /// The subject <see cref="HandlebarsPayload" />
         /// </param>
-        private static void AssertRegistryInSyncWithModel(HandlebarsPayload payload)
+        public static void AssertRegistryInSyncWithModel(HandlebarsPayload payload)
         {
             var newestVersion = ClassKindRegistry.ModelVersions[^1];
             var fingerprint = $"{payload.RootPackage.Name}:{payload.RootPackage.XmiId}";

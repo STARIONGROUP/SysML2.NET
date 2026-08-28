@@ -1360,10 +1360,14 @@ impossible by construction, which is also why the seed `INSERT`s are idempotent
 
 **The contract for every consumer:** the canonical identity of a metaclass is still its
 **name** (the API `@type`); the smallint is the registry's interning of it. Never
-hand-maintain a C# enum mirroring these ids — the planned `ClassKind` enum is *generated from
-the same registry*, so its values are stable across releases by construction, plus a startup
-assertion in the service that compares the compiled constants against the `class_kind` table
-and refuses to start on drift (noted, not yet built).
+hand-maintain a C# enum mirroring these ids — the generated `ClassKind` enum
+(`SysML2.NET/Core/AutoGenEnum/ClassKind.cs`: `enum ClassKind : short`, all 175 members with
+explicit values, emitted from the same registry by
+`SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindEnumGenerator.cs`) is
+stable across releases by construction, and a drift test compares the compiled enum against
+the registry so a forgotten regeneration fails the suite. The matching startup assertion in
+the service — comparing the compiled constants against the `class_kind` table and refusing
+to start on drift — remains future work.
 
 The earlier design also kept a `class_kind_table` catalog (the flattened inheritance DAG:
 which subtype tables each concrete metaclass joins). It is gone from the database — nothing
@@ -1605,10 +1609,16 @@ audit plus empirical runs — which is the meta-lesson of this section.
 - **R13 (SEV-4, silent-bug class)** — fold determinism on sibling-timestamp ties (section
   10.4).
 
-The follow-up gate before production, documented in SQLSCHEMA.md: a full .NET benchmark
-harness — 3×1M-element projects with authentic serializer payloads sharing partitions, 20k-
-commit replay, 500 branches, the root-rename burst measured *concurrently with* read latency,
-a UUIDv4-vs-v7 A/B, and longevity checks (`pgstattuple` bloat, wait events, WAL per commit).
+The follow-up gate before production — the full .NET benchmark harness — is **built**:
+`SysML2.NET.CodeGenerator.Tests/Generators/UmlHandleBarsGenerators/SqlSchemaBenchmarkTestFixture.cs`
+(`TestCategory=Benchmark`) covers all six gate items — three projects with authentic
+serializer payloads (content + OwningMemberships) sharing partitions, the commit-history
+replay with checkpoint cadence, the branch fleet, the root-rename burst measured
+*concurrently with* read latency and wait-event sampling, the UUIDv4-vs-v7 A/B with
+`pgstatindex`, and the `pgstattuple`/seq-scan longevity checks — plus a deterministic
+plan-shape assertion on the §16.5 inlining guard. Scale is an environment knob
+(`SYSML2_BENCH_ELEMENTS`/`_COMMITS`/`_BRANCHES`; the full gate is 1M elements, 20k commits);
+SQLSCHEMA.md carries the invocation.
 
 ---
 
@@ -1971,7 +1981,10 @@ clients on ONE branch: ~1,000 attempts/s, exactly one winner per head value, los
 nothing (83% CAS-conflict rate at full hammer — the §15.15 signal in its worst case), heads
 strictly linear, zero deadlocks; the same clients spread over 16 branches: ~2,200 commits/s
 at 0% conflicts — contention is branch-local, as designed. Reads stayed at ~1.2 ms (from
-0.8 ms idle) while the write storm ran: the MVCC promise of §18.1, measured.
+0.8 ms idle) while the write storm ran: the MVCC promise of §18.1, measured. (Re-validated
+2026-08-26 after the commit-immutability trigger, the `query` table, and the live-only
+partial unique indexes: conflict rate identical, spread ceiling and read latencies within
+run-to-run variance, C1–C5 all PASS — no regression.)
 
 ### 18.3 Drawbacks and open decisions
 
@@ -2042,6 +2055,7 @@ sections** (not the schema files' § banners); "—" means the term is used only
 | **CHECK constraint** | A row-level validity rule (e.g. the mutually exclusive tombstone/payload shapes). | 8.1 |
 | **Checkpoint** | A fully materialized fold of one commit (`commit_checkpoint`); bounds resolver walks and bases overlays. | 10.1 |
 | **class_kind (interning)** | The smallint id per metaclass — interning of the canonical NAME, with ids frozen forever by the append-only registry; consumers load the map at runtime or use the registry-generated enum. | 12.1, 15 |
+| **ClassKind enum** | The generated C# mirror of the class_kind catalog (`SysML2.NET/Core/AutoGenEnum/ClassKind.cs`): `enum ClassKind : short` with explicit registry-frozen values, emitted by `ClassKindEnumGenerator`; a drift test compares the compiled enum against the registry. | 12.1 |
 | **Class-kind registry** | The checked-in, append-only source of truth (`ClassKindRegistry.cs`) that freezes class_kind ids and model_version ordinals across releases; the generator validates the UML model against it and fails on drift. | 12.1 |
 | **Commit** | An immutable record of the changes made at a point in time; a node in the commit DAG. | 6.1 |
 | **Commit DAG** | The directed acyclic graph commits form once branching and merging are allowed. | 6.1 |

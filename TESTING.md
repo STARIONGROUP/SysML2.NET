@@ -244,6 +244,16 @@ follow these rules:
   assert only deterministic invariants (counts, win/loss tallies, verifier PASSes).
 - Expect the **first run to be slow** (docker image pull).
 
+The **benchmark harness** (`SqlSchemaBenchmarkTestFixture`) follows the same rules but is
+marked `[Category("Benchmark")]` — a separate opt-in from `Integration`, because a run loads
+hundreds of thousands of rows and takes minutes-to-hours depending on scale. Run it with
+`dotnet test … --filter TestCategory=Benchmark --logger "console;verbosity=detailed"`; scale
+is controlled by the `SYSML2_BENCH_ELEMENTS` / `SYSML2_BENCH_COMMITS` /
+`SYSML2_BENCH_BRANCHES` environment variables (defaults: 100000 / 2000 / 500; the full
+production gate of SQLSCHEMA.md is 1000000 / 20000 / 500). All throughput and latency numbers
+are reported, never asserted; its deterministic assertions are row counts, non-null reads,
+page sizes, and the plan-shape guard on SQL-function inlining.
+
 ## 11. Anti-pattern checklist (what NOT to do)
 
 - ❌ Splitting one method-under-test into many `…_WhenX_DoesY` tests **when the scenarios share setup and could trivially combine** (combined-form is the default — see §2). Splitting is acceptable when each scenario has a genuinely distinct, complex setup.

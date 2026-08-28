@@ -350,6 +350,7 @@
     <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\UsageComparer.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
+    <Compile Remove="Expected\UML\Core\AutoGenEnum\ClassKind.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs" />
     <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\AnnotatingElementMessagePackFormatter.cs" />
@@ -1139,6 +1140,9 @@
     <None Include="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Expected\UML\Core\AutoGenEnum\ClassKind.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1163,9 +1167,16 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="4.14.0" />
     <PackageReference Include="uml4net.Reporting" Version="8.2.1" />
+    <!-- explicit: these flow transitively from SysML2.NET.CodeGenerator, but the merged
+         restore graph drops them once SysML2.NET / SysML2.NET.Serializer.Json are also
+         referenced (their closures vanish from project.assets.json entirely) -->
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="5.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj" />
+    <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+    <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs">

@@ -28,6 +28,7 @@ The pipeline artifacts:
 | `SysML2.NET.CodeGenerator/Extensions/SqlSchemaExtensions.cs` | Naming, type mapping, and the stored-property census logic. |
 | `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/SQLSchemaGenerator.cs` | The generator (emits `schema2.sql`). |
 | `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs` | The checked-in APPEND-ONLY registry freezing `class_kind` ids and `model_version` ordinals across metamodel releases; the generator validates the UML model against it and fails on drift. |
+| `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindEnumGenerator.cs` | Emits the generated `ClassKind` C# enum (`SysML2.NET/Core/AutoGenEnum/ClassKind.cs`: `enum ClassKind : short`, all 175 registry members with explicit frozen values) from `ClassKindRegistry.cs` via `Templates/Uml/core-classkind-enum-template.hbs`; shares the registry-drift fail-fast with the SQL helpers. |
 | `SysML2.NET.CodeGenerator/IMPACT-RADIUS.md` | Design sketch for the derived-property impact-radius engine (obligation §15.1): propagation kinds, `derived_dependency` catalog, early cutoff, differential-testing oracle. |
 
 The old `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema.hbs` and the fully commented-out
@@ -245,6 +246,13 @@ for the SQL layer; service-level concurrency remains for the .NET harness):
 | SPREAD: same 16 clients on 16 branches | **2,182 commits/s, 0% conflicts** | all PASS — contention is branch-local, as designed (§18.3.6) |
 | READS during the hot write storm (8 clients) | 1.21 ms avg (0.79 ms idle baseline), 6,633 reads/s | MVCC promise measured: readers never block on writers |
 
+Re-validated 2026-08-26 after the commit-immutability trigger, the `query` table, and the
+live-only partial unique indexes landed: HOT conflict rate identical to the decimal (83.2%),
+HOT 902 attempts/s (within machine noise), SPREAD 3,483 commits/s at 0% conflicts on a warmed
+run (cold first runs measured as low as 1,174 — run-to-run warm-up variance dwarfs any schema
+effect), reads 1.28 ms under storm vs 1.16 ms idle, C1–C5 all PASS in every scenario, and the
+.NET fixtures 4/4. No regression from the schema changes.
+
 Protocol notes the suite surfaced (both now normative in guide §18.2): stamp `commit.created`
 with `clock_timestamp()`, not transaction-start `now()` — otherwise a transaction that began
 before the current head committed stamps its commit earlier than its parent and trips the
@@ -279,16 +287,34 @@ has a measured ceiling to calibrate against.
    proves the plans are sensitive to stale stats — which is why the §15.15 monitoring
    signals include seq-scan counters.
 
-Follow-up gate before production (not built here): the full .NET benchmark harness — 3×1M-element
-projects with authentic serializer payloads sharing hash partitions, 20k-commit history replay,
-500 branches, root-rename burst with concurrent read-latency measurement, UUIDv4-vs-v7 A/B, and
-`pgstattuple`/wait-event longevity checks.
+The full .NET benchmark harness for that gate is **built**:
+`SysML2.NET.CodeGenerator.Tests/Generators/UmlHandleBarsGenerators/SqlSchemaBenchmarkTestFixture.cs`
+(`TestCategory=Benchmark`, Testcontainers PostgreSQL 18, skips without Docker). It loads three
+projects with AUTHENTIC `SysML2.NET.Serializer.Json` payloads (content elements + their
+OwningMemberships) sharing the hash partitions, replays a commit history with checkpoint
+cadence, creates the branch fleet, and measures: bulk-load throughput, per-commit transaction
+latency (median/p95), checkpoint builds, branch creation, single-element head/historical
+reads, the full fold, the branch-head set read, a keyset page (with a DETERMINISTIC plan-shape
+assertion on the §16.5 inlining guard — no `Function Scan`), both validation tiers, the
+root-rename derived burst with concurrent read-latency measurement and wait-event sampling,
+a UUIDv4-vs-v7 bulk-insert A/B with `pgstatindex` density/fragmentation, and
+`pgstattuple`/seq-scan longevity checks. Latencies are reported, never asserted (TESTING.md
+§10); asserts cover only deterministic invariants. Scale knobs: `SYSML2_BENCH_ELEMENTS`
+(default 100000), `SYSML2_BENCH_COMMITS` (default 2000), `SYSML2_BENCH_BRANCHES` (default
+500) — the full production gate is `SYSML2_BENCH_ELEMENTS=1000000 SYSML2_BENCH_COMMITS=20000`.
 
-Also noted for the build-out phase (not built here): a **generated `ClassKind` C# enum** as an
-additional `SQLSchemaGenerator` output (emitted from `ClassKindRegistry.cs`, so its values are
-frozen across releases by construction) plus a service startup assertion against the
-`class_kind` table, turning the name-is-the-contract rule of guide §12.1/§15.14 into a
-fail-fast check.
+```bash
+dotnet test SysML2.NET.CodeGenerator.Tests/SysML2.NET.CodeGenerator.Tests.csproj \
+    --filter "TestCategory=Benchmark" --logger "console;verbosity=detailed"
+```
+
+The **generated `ClassKind` C# enum** is built: `ClassKindEnumGenerator` emits
+`SysML2.NET/Core/AutoGenEnum/ClassKind.cs` (`enum ClassKind : short`, all 175 registry members
+with explicit frozen values) from `ClassKindRegistry.cs`, so its values are frozen across
+releases by construction, and a drift test (`ClassKindEnumGeneratorTestFixture`) compares the
+compiled enum against the registry. Still noted for the build-out phase: the service startup
+assertion against the `class_kind` table, turning the name-is-the-contract rule of guide
+§12.1/§15.14 into a runtime fail-fast check.
 
 ## Operational requirements
 
