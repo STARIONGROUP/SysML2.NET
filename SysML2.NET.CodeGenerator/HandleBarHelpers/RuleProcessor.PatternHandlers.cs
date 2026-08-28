@@ -812,26 +812,25 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     var defaultElement = mappedNonTerminalElements
                         .LastOrDefault(x => x.UmlClass == ruleGenerationContext.NamedElementToGenerate && !whenGuards.ContainsKey(x.RuleElement));
 
-                    mappedNonTerminalElements.Sort((a, b) =>
-                    {
-                        var aIsDefault = defaultElement.RuleElement != null && a.RuleElement == defaultElement.RuleElement;
-                        var bIsDefault = defaultElement.RuleElement != null && b.RuleElement == defaultElement.RuleElement;
-
-                        if (aIsDefault && !bIsDefault)
-                        {
-                            return 1;
-                        }
-
-                        if (bIsDefault && !aIsDefault)
-                        {
-                            return -1;
-                        }
-
-                        var depthA = a.UmlClass.QueryAllGeneralClassifiers().Count;
-                        var depthB = b.UmlClass.QueryAllGeneralClassifiers().Count;
-
-                        return depthB.CompareTo(depthA);
-                    });
+                    // Ordered by: non-default arms first (the rule's own target class is the catch-all and
+                    // must sit last), then most-derived first so a subtype arm always precedes an arm
+                    // targeting its supertype.
+                    //
+                    // OrderBy/ThenByDescending is STABLE, which is load-bearing rather than incidental:
+                    // arms of equal inheritance depth are mutually disjoint, so their relative order does
+                    // not affect dispatch — but it does affect the emitted TEXT. The previous
+                    // List<T>.Sort is introsort and therefore unstable, and the comparison carried no
+                    // secondary key, so adding one alternative anywhere in a rule could reshuffle unrelated
+                    // equal-depth arms and produce diff noise that reads like a behavioural change but is
+                    // not. Adding AllocationDefinition to DefinitionElement did exactly that, silently
+                    // reordering MetadataDefinition / ViewDefinition / RenderingDefinition. Falling back to
+                    // declaration order keeps every regeneration minimal and deterministic.
+                    mappedNonTerminalElements =
+                    [
+                        .. mappedNonTerminalElements
+                            .OrderBy(element => defaultElement.RuleElement != null && element.RuleElement == defaultElement.RuleElement)
+                            .ThenByDescending(element => element.UmlClass.QueryAllGeneralClassifiers().Count)
+                    ];
 
                     var variableName = "poco";
 

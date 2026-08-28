@@ -6,7 +6,7 @@ package '12b-Allocation-1' {
     package RequirementModel {
         requirement torqueGeneration {
             subject generator: TorqueGenerator;
-            require constraint { generator.generateTorque.torque > 0.0[(N * m)] }
+            require constraint { generator.generateTorque.torque > 0.0[N * m] }
         }
     }
     package LogicalModel {

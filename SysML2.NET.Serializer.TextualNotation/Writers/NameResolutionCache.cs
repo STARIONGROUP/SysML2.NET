@@ -150,19 +150,45 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case null:
                     return string.Empty;
 
-                // Membership imports keep the full path, using the SHORTEST declared name per
-                // segment (`import SI::kg`, not `SI::kilogram` as qualifiedName would give).
                 case IMembership membership:
-                    return membership.MemberElement != null
-                        ? QueryShortQualifiedName(membership.MemberElement, sourcePoco)
-                        : string.Empty;
+                    if (membership.MemberElement == null)
+                    {
+                        return string.Empty;
+                    }
+
+                    // A MembershipImport names its target THROUGH a Membership, so resolving the
+                    // Membership itself would never reach the simple-name index and every membership
+                    // import was emitted ownership-relative — `import PartsTree::vehicle::**` where the
+                    // enclosing namespace already imports `PartsTree::*` and `vehicle` resolves bare.
+                    // Continue with the member element so the ordinary path applies; the import
+                    // self-containment guard immediately below still runs, and the index still declines
+                    // to shorten a name that is shadowed or ambiguous at the reference site.
+                    // Narrowed to IMembershipImport deliberately, so this guard and the self-binding
+                    // exclusion in QuerySelfBinding — which also keys on IMembershipImport — cannot drift
+                    // apart. A rewrite here without the matching exclusion there would reintroduce exactly
+                    // the self-referential match the exclusion exists to prevent.
+                    if (sourcePoco is IMembershipImport)
+                    {
+                        target = membership.MemberElement;
+                        break;
+                    }
+
+                    // Elsewhere a Membership target keeps the full path, using the SHORTEST declared name
+                    // per segment (`import SI::kg`, not `SI::kilogram` as qualifiedName would give).
+                    return QueryShortQualifiedName(membership.MemberElement, sourcePoco);
             }
 
-            // A namespace import keeps a SELF-CONTAINED path unless the target is reachable by
+            // A NAMESPACE import keeps a SELF-CONTAINED path unless the target is reachable by
             // containment: shortest-name resolution would emit a name that only resolves while a
             // SIBLING import of the same namespace remains (`import 'provide power'::*` rather than
             // `import '3a-Function-based Behavior-1'::'provide power'::*`).
-            if (sourcePoco is IImport { OwningRelatedElement: { } importOwner }
+            // <para>A MEMBERSHIP import is deliberately exempt. It names ONE element, so the ordinary
+            // path can shorten it to whatever actually resolves at the reference site and declines
+            // wherever the name is shadowed or ambiguous — which is what keeps the colliding
+            // `Engine` / `Transmission` / `vehicle1_c1` qualified in `13a-Model Containment` while
+            // letting the unambiguous ones match the pilot. The self-referential match that shortening
+            // would otherwise expose is handled by QuerySelfBinding, not by this guard.</para>
+            if (sourcePoco is IImport { OwningRelatedElement: { } importOwner } and not IMembershipImport
                 && !IsReachableByContainment(target, importOwner))
             {
                 return this.QueryImportPath(target);
@@ -226,6 +252,21 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return this.ResolveFresh(target, this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localReferencer), escapedName);
             }
 
+            var referenceSite = this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localRedefiner: null);
+
+            // The memo key is (target, localScope, matchFloor) — it does NOT capture the SELF BINDING, which
+            // is derived from sourcePoco. Two sites sharing that triple but differing in self-binding status
+            // resolve differently, so caching either one would answer for the other. That shape is ordinary:
+            // `import Foo::Bar;` and a `part p : Bar;` in the SAME package share the triple, yet the import
+            // must discount its own binding and the usage must not. Whichever ran first would win — emitting
+            // either a needlessly long name for the usage, or `import Bar;` that resolves only because of
+            // itself. Self-binding sites are just import declarations and bare re-export memberships, so
+            // resolving them fresh costs nothing measurable.
+            if (referenceSite.SelfBinding != null)
+            {
+                return this.ResolveFresh(target, referenceSite, escapedName);
+            }
+
             var cacheKey = (target.Id, sourceLocalScope?.Id ?? Guid.Empty, matchFloorScope?.Id ?? Guid.Empty);
 
             if (this.resolvedReferences.TryGetValue(cacheKey, out var cached))
@@ -233,7 +274,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 return cached;
             }
 
-            var resolved = this.ResolveFresh(target, this.BuildReferenceSite(sourcePoco, sourceLocalScope, matchFloorScope, localRedefiner: null), escapedName);
+            var resolved = this.ResolveFresh(target, referenceSite, escapedName);
             this.resolvedReferences[cacheKey] = resolved;
             return resolved;
         }
@@ -264,7 +305,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             // (`'10a-Analysis'::VehicleDesignModel::Vehicle` from inside `'10a-Analysis'`), which is redundant
             // self-prefixing. Elements from a separate resource (a library) share no ancestor and still
             // correctly return false.
-            for (var scope = importOwner; scope != null; scope = QueryOwningContainer(scope))
+            for (var scope = importOwner; scope != null; scope = QueryEnclosingContainer(scope))
             {
                 for (var candidate = declaringNamespace; candidate != null; candidate = QueryOwningContainer(candidate))
                 {
@@ -276,6 +317,44 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns the namespace enclosing <paramref name="element" />, continuing through the CONTAINMENT
+        /// tree when <c>owningNamespace</c> is null.
+        /// </summary>
+        /// <param name="element">The element to climb from; may be <see langword="null" />.</param>
+        /// <returns>The enclosing namespace, or <see langword="null" /> at a true root.</returns>
+        /// <remarks>
+        /// A <c>FilterPackage</c> is an <c>ownedRelatedElement</c> of its <c>Import</c>
+        /// (<c>NamespaceImport = … | importedNamespace = FilterPackage { ownedRelatedElement +=
+        /// importedNamespace }</c>), and an <c>Import</c> is not a <c>Membership</c> — so the FilterPackage
+        /// has no <c>owningMembership</c> and therefore no <c>owningNamespace</c>, even though it is plainly
+        /// nested in the model. Climbing by <c>owningNamespace</c> alone dead-ends there and makes every
+        /// name inside a filtered import look unreachable, forcing the fully root-qualified form.
+        /// <para>KerML §7.2.5.3 (normative) defines a root namespace as one that has no OWNER, which the
+        /// FilterPackage has; the <c>owningNamespace</c>-based phrasing in §8.2.3.4.1 is informative. The
+        /// pilot climbs containment too (<c>NamespaceUtil.getParentNamespaceOf</c> walks
+        /// <c>eContainer()</c>). A true root still terminates the climb, because it has neither.</para>
+        /// </remarks>
+        private static INamespace QueryEnclosingContainer(IElement element)
+        {
+            if (QueryOwningContainer(element) is { } owningNamespace)
+            {
+                return owningNamespace;
+            }
+
+            var visited = new HashSet<IElement>();
+
+            for (var container = QueryOwnerSafe(element); container != null && visited.Add(container); container = QueryOwnerSafe(container))
+            {
+                if (container is INamespace enclosingNamespace)
+                {
+                    return enclosingNamespace;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -365,6 +444,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <returns>The self binding, or <see langword="null" /> when the source is not one.</returns>
         private static SelfBinding QuerySelfBinding(IElement sourcePoco)
         {
+            // A MembershipImport binds its imported Membership into the importing Namespace, and that
+            // binding likewise does not exist yet while the import declaration itself is being written.
+            // Without discounting it, `public import vehicle1_c1::interior::seatBelt;` resolves its own
+            // target trivially at depth 0 and emits `public import seatBelt;` — a name that resolves
+            // ONLY because of the very import it is the declaration of, so it does not re-parse.
+            if (sourcePoco is IMembershipImport { ImportedMembership: { } importedMembership, OwningRelatedElement: INamespace importScope })
+            {
+                return new SelfBinding(importScope, importedMembership);
+            }
+
             return sourcePoco is IMembership membership and not IOwningMembership
                    && string.IsNullOrWhiteSpace(membership.MemberName)
                    && string.IsNullOrWhiteSpace(membership.MemberShortName)

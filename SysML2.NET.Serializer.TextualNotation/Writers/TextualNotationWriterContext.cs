@@ -135,6 +135,33 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         public Stack<IExpression> OperatorContextStack { get; }
 
         /// <summary>
+        /// Suspends the operator context for the lifetime of the returned scope, so the next operand
+        /// emission behaves as though its expression were not nested in an operator and adds no
+        /// parentheses of its own.
+        /// </summary>
+        /// <returns>A scope that restores the operator context when disposed.</returns>
+        /// <remarks>
+        /// For a rule that has ALREADY emitted delimiters around a single content expression —
+        /// <c>SequenceExpression</c> (<c>'(' … ')'</c>), <c>BracketExpression</c> (<c>'[' … ']'</c>) and
+        /// <c>IndexExpression</c> (<c>'#' '(' … ')'</c>) — the operand-parenthesisation layer would
+        /// double the delimiters it already wrote, giving <c>((as Safety))</c> or
+        /// <c>25[(mi / gallon)]</c>.
+        /// <para>Suspension is scoped rather than global because it must apply to the IMMEDIATE operand
+        /// only. Every operator builder pushes its own poco onto the stack on entry, so an operand
+        /// nested deeper inside the suspended expression sees a non-empty context again and
+        /// parenthesises normally.</para>
+        /// <para>It deliberately does NOT extend to <c>ArgumentList</c> (<c>'(' ( PositionalArgumentList |
+        /// NamedArgumentList )? ')'</c>), whose parentheses delimit a comma-separated LIST rather than a
+        /// single operand — an argument that is itself a sequence needs its own parentheses there, which
+        /// is why the pilot writes <c>sum((a, b, c))</c>. <c>ArgumentList</c> does not route through
+        /// <c>SequenceExpressionList</c>, so it never opens this scope.</para>
+        /// </remarks>
+        public IDisposable SuspendOperatorContext()
+        {
+            return new SuspendedOperatorContext(this.OperatorContextStack);
+        }
+
+        /// <summary>
         /// Gets the <see cref="ICursorCache"/> used for cursor-based element traversal.
         /// </summary>
         public ICursorCache CursorCache { get; }
@@ -160,6 +187,46 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             this.CursorCache.Dispose();
             this.inheritanceScope.Dispose();
+        }
+
+        /// <summary>
+        /// The scope opened by <see cref="SuspendOperatorContext"/>: drains the operator context on
+        /// construction and restores it, in its original order, on disposal.
+        /// </summary>
+        private sealed class SuspendedOperatorContext : IDisposable
+        {
+            /// <summary>
+            /// The suspended stack.
+            /// </summary>
+            private readonly Stack<IExpression> operatorContextStack;
+
+            /// <summary>
+            /// The drained entries, top of stack first.
+            /// </summary>
+            private readonly IExpression[] suspendedEntries;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SuspendedOperatorContext"/> class.
+            /// </summary>
+            /// <param name="operatorContextStack">The stack to suspend.</param>
+            internal SuspendedOperatorContext(Stack<IExpression> operatorContextStack)
+            {
+                this.operatorContextStack = operatorContextStack;
+                this.suspendedEntries = operatorContextStack.ToArray();
+                operatorContextStack.Clear();
+            }
+
+            /// <summary>
+            /// Restores the suspended operator context.
+            /// </summary>
+            public void Dispose()
+            {
+                // ToArray yields top-first, so pushing in reverse restores the original ordering.
+                for (var entryIndex = this.suspendedEntries.Length - 1; entryIndex >= 0; entryIndex--)
+                {
+                    this.operatorContextStack.Push(this.suspendedEntries[entryIndex]);
+                }
+            }
         }
     }
 }

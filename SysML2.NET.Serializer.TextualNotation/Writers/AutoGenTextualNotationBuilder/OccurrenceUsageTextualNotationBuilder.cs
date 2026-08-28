@@ -60,7 +60,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship prefixMetadataMemberGuard0 && prefixMetadataMemberGuard0.IsValidForPrefixMetadataMember(writerContext))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.Append(" individual ");
             }
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship prefixMetadataMemberGuard0 && prefixMetadataMemberGuard0.IsValidForPrefixMetadataMember(writerContext))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
@@ -116,7 +116,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             stringBuilder.Append(poco.PortionKind.ToString().ToLower());
             stringBuilder.Append(' ');
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship prefixMetadataMemberGuard0 && prefixMetadataMemberGuard0.IsValidForPrefixMetadataMember(writerContext))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);
@@ -155,7 +155,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
-            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership owningMembershipGuard && owningMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>().Any())
+            while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Elements.IRelationship prefixMetadataMemberGuard0 && prefixMetadataMemberGuard0.IsValidForPrefixMetadataMember(writerContext))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, writerContext, stringBuilder);

@@ -46,6 +46,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Systems.Flows;
     using SysML2.NET.Core.POCO.Systems.Interfaces;
     using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
     using SysML2.NET.Core.POCO.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Ports;
@@ -744,6 +745,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <see cref="IConstructorExpression"/>); false otherwise. An <see cref="IOperatorExpression"/>
         /// whose operator is <c>,</c> is admitted despite being an <see cref="IInvocationExpression"/> —
         /// that IS the sequence form this rule exists to render.
+        /// <para>So is any OTHER <see cref="IOperatorExpression"/> that only <c>OwnedExpression</c> can
+        /// render — see <see cref="IsOwnedExpressionOnlyForm"/>. <c>OperatorExpression</c> IS-A
+        /// <c>InvocationExpression</c> in the metamodel, so excluding every invocation sent a
+        /// parenthesised <c>(as Safety)</c> to <c>BaseExpression</c>'s <c>InvocationExpression</c> arm,
+        /// which rendered it as <c>()</c> — an empty instantiated-type name plus an empty argument list.
+        /// That re-parses as <c>NullExpression</c> (<c>'null' | '(' ')'</c>), a different metaclass, so a
+        /// filter written over it selects nothing.</para>
         /// </returns>
         internal static bool IsValidForSequenceExpression(this IExpression expression, TextualNotationWriterContext writerContext)
         {
@@ -753,7 +761,94 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 && expression is not IFeatureReferenceExpression
                 && expression is not IMetadataAccessExpression
                 && expression is not IConstructorExpression
-                && (expression is not IInvocationExpression || expression is IOperatorExpression { Operator: "," });
+                && (expression is not IInvocationExpression
+                    || expression is IOperatorExpression { Operator: "," }
+                    || (expression is IOperatorExpression operatorExpression && operatorExpression.IsOwnedExpressionOnlyForm(writerContext)));
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IOperatorExpression"/> is a form only <c>OwnedExpression</c> renders,
+        /// and which therefore needs <c>SequenceExpression</c>'s parentheses to appear in a primary position.
+        /// <para><c>NonFeatureChainPrimaryExpression : Expression = BracketExpression | IndexExpression |
+        /// SequenceExpression | SelectExpression | CollectExpression | FunctionOperationExpression |
+        /// BaseExpression</c> — none of those alternatives reaches <c>ConditionalExpression</c>,
+        /// <c>BinaryOperatorExpression</c>, <c>UnaryOperatorExpression</c>, <c>ClassificationExpression</c>,
+        /// <c>MetaclassificationExpression</c> or <c>ExtentExpression</c>. The only route is
+        /// <c>SequenceExpression = '(' SequenceExpressionList ')'</c> →
+        /// <c>SequenceExpressionList = OwnedExpression ','? | SequenceOperatorExpression</c>.</para>
+        /// <para>The test is deliberately the DISJUNCTION of the arms <c>BuildOwnedExpression</c> dispatches
+        /// on, not a blanket "is an OperatorExpression". <c>BuildSequenceExpressionList</c> calls
+        /// <c>BuildOwnedExpression</c> on the SAME poco, so admitting a form whose <c>OwnedExpression</c>
+        /// guards all fail would emit <c>(</c>, recurse to <c>NonFeatureChainPrimaryExpression</c>, match here
+        /// again, and never terminate. Every arm below is one <c>BuildOwnedExpression</c> can actually take,
+        /// so the recursion always makes progress.</para>
+        /// <para>The more specific primary forms — <c>BracketExpression</c> (operator <c>[</c>),
+        /// <c>IndexExpression</c>, <c>SelectExpression</c>, <c>CollectExpression</c> and
+        /// <c>FunctionOperationExpression</c> — are matched by earlier arms of
+        /// <c>BuildNonFeatureChainPrimaryExpression</c>, so widening this last-before-default guard cannot
+        /// steal them.</para>
+        /// </summary>
+        /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True when only <c>OwnedExpression</c> can render the expression</returns>
+        private static bool IsOwnedExpressionOnlyForm(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
+        {
+            return operatorExpression.IsValidForConditionalExpression(writerContext)
+                   || operatorExpression.IsValidForConditionalBinaryOperatorExpression(writerContext)
+                   || operatorExpression.IsValidForBinaryOperatorExpression(writerContext)
+                   || operatorExpression.IsValidForUnaryOperatorExpression(writerContext)
+                   || operatorExpression.IsValidForClassificationExpression(writerContext)
+                   || operatorExpression.IsValidForMetaclassificationExpression(writerContext)
+                   || operatorExpression.IsValidForExtentExpression(writerContext);
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IOperatorExpression"/> is valid for the ExtentExpression rule.
+        /// <para><c>ExtentExpression : OperatorExpression = operator = 'all' ownedRelationship += TypeReferenceMember</c></para>
+        /// <para>Mirrors the inline condition the generated <c>BuildOwnedExpression</c> arm applies, so
+        /// <see cref="IsOwnedExpressionOnlyForm"/> tests exactly what that dispatch would take.</para>
+        /// </summary>
+        /// <param name="operatorExpression">The <see cref="IOperatorExpression"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/></param>
+        /// <returns>True when the operator is <c>all</c> and the cursor is at a TypeReferenceMember</returns>
+        private static bool IsValidForExtentExpression(this IOperatorExpression operatorExpression, TextualNotationWriterContext writerContext)
+        {
+            return operatorExpression.Operator == "all"
+                   && writerContext.CursorCache
+                       .GetOrCreateCursor(operatorExpression.Id, "ownedRelationship", operatorExpression.OwnedRelationship)
+                       .Current is IParameterMembership;
+        }
+
+        /// <summary>
+        /// Asserts that the <see cref="IRelationship"/> is valid for the PrefixMetadataMember rule.
+        /// <para><c>PrefixMetadataMember : OwningMembership = '#' ownedRelatedElement = PrefixMetadataUsage</c></para>
+        /// <para><c>PrefixMetadataUsage : MetadataUsage = ownedRelationship += OwnedFeatureTyping</c></para>
+        /// <para>The prefix form carries NOTHING but the typing: <c>PrefixMetadataUsage</c> has no
+        /// <c>MetadataUsageDeclaration</c> and no <c>MetadataBody</c>, so it cannot express a name or a
+        /// body. A <see cref="IMetadataUsage"/> that owns anything besides its
+        /// <see cref="IFeatureTyping"/> — typically a <c>FeatureMembership</c> holding a
+        /// <c>MetadataBodyUsage</c> such as <c>ref :&gt;&gt; isMandatory = false</c> — must therefore be
+        /// declined here so it falls through to the body form <c>@Safety { … }</c>, which can carry it.</para>
+        /// <para>Without this the dispatch matched on the MetadataUsage's mere presence and emitted
+        /// <c>#Safety part driverAirBag;</c>, silently discarding the <c>isMandatory</c> value. SysML
+        /// §7.27.2 is normative that a metadata definition with features requires a body.</para>
+        /// </summary>
+        /// <param name="relationship">The <see cref="IRelationship"/> at the cursor</param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True when the relationship is a prefix-expressible metadata membership</returns>
+        internal static bool IsValidForPrefixMetadataMember(this IRelationship relationship, TextualNotationWriterContext writerContext)
+        {
+            if (relationship is not IOwningMembership owningMembership)
+            {
+                return false;
+            }
+
+            var metadataUsage = owningMembership.OwnedRelatedElement.OfType<IMetadataUsage>().FirstOrDefault();
+
+            return metadataUsage != null
+                   && string.IsNullOrWhiteSpace(metadataUsage.DeclaredName)
+                   && string.IsNullOrWhiteSpace(metadataUsage.DeclaredShortName)
+                   && metadataUsage.OwnedRelationship.All(owned => owned is IFeatureTyping);
         }
 
         /// <summary>
