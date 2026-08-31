@@ -2346,7 +2346,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 // the names it owns resolvable.
                 pending.Enqueue((impliedGeneral, isGlobal));
 
-                AddImpliedLookupEntries(impliedGeneral, index, isGlobal);
+                AddImpliedLookupEntries(type, impliedGeneral, index, isGlobal);
             }
         }
 
@@ -2475,10 +2475,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <summary>
         /// Indexes, for lookup only, the members an implied general contributes.
         /// </summary>
+        /// <param name="inheritingType">The Type that reaches the general through an implied Specialization.</param>
         /// <param name="impliedGeneral">The Type reached through an implied Specialization.</param>
         /// <param name="index">The destination index.</param>
         /// <param name="isGlobal">Whether the owning scope is reached through the global namespace.</param>
-        private static void AddImpliedLookupEntries(IType impliedGeneral, Dictionary<string, HashSet<IElement>> index, bool isGlobal)
+        /// <remarks>
+        /// The contribution is filtered through <c>Type::removeRedefinedFeatures</c>, because a member the
+        /// inheriting Type REDEFINES is not one of that Type's Memberships. KerML §8.3.3.1.10 derives
+        /// <c>inheritedMemberships</c> as <c>removeRedefinedFeatures(inheritableMemberships(…))</c>, whose
+        /// second condition rejects a Membership one of whose redefined Features is a directly
+        /// <c>redefinedFeature</c> of an <c>ownedFeature</c> of the Type.
+        /// <para>Without the filter the redefined library member and the local redefinition both land in the
+        /// same simple-name bucket, so the name reads as shadowed and a reference that should be bare is
+        /// emitted fully qualified — <c>first 'provide transportation'::start</c> for <c>first start</c>.</para>
+        /// <para>The declared-supertype path needs no such filter: it reads <c>inheritedMembership</c>, which
+        /// has already applied it. Only this path bypasses that derivation, because an implied Specialization
+        /// is detached and its members have to be gathered directly.</para>
+        /// </remarks>
+        private static void AddImpliedLookupEntries(IType inheritingType, IType impliedGeneral, Dictionary<string, HashSet<IElement>> index, bool isGlobal)
         {
             if (impliedGeneral == null)
             {
@@ -2498,6 +2512,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             catch (NotSupportedException)
             {
                 // Same atomicity as above: an unimplemented derivation costs this general's contribution.
+            }
+
+            try
+            {
+                contributed = inheritingType.RemoveRedefinedFeatures(contributed);
+            }
+            catch (NotSupportedException)
+            {
+                // Same atomicity again, and it fails safe: an unfiltered redefined member can only lengthen
+                // a name, never make one resolve to the wrong element.
             }
 
             foreach (var member in contributed.Where(member => PassesVisibilityFilter(member, isGlobal)))

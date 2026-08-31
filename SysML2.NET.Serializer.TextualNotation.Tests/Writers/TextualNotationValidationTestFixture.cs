@@ -36,6 +36,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
     using SysML2.NET.Serializer.Xmi;
 
     [TestFixture]
+    [Parallelizable(ParallelScope.Children)]
     public class TextualNotationValidationTestFixture
     {
         /// <summary>
@@ -136,6 +137,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("15-Properties-Values-Expressions", "15_19a-Materials with Properties.sysmlx")]
         [TestCase("17-Sequence Modeling", "17a-Sequence-Modeling.sysmlx")]
         [TestCase("17-Sequence Modeling", "17b-Sequence-Modeling.sysmlx")]
+        [TestCase("18-Use Case", "18-Use Case.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

@@ -15,6 +15,12 @@
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>true</PreserveCompilationContext>
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+        <!-- The validation corpus runs its cases in parallel and each one allocates a large POCO graph while
+             deserializing the library XMI it references. Workstation GC gives those threads a single heap to
+             contend on, which is what caps the speed-up; Server GC gives each core its own heap. Test-host
+             only - it does not affect the shipped libraries. -->
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
     </PropertyGroup>
 
     <ItemGroup>
