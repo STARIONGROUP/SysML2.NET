@@ -250,6 +250,9 @@
     <None Update="Templates\Uml\core-lexical-symbolic-keyword-kind-extensions-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-model-level-evaluable-functions-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />
@@ -278,6 +281,9 @@
     </Content>
     <Content Include="..\Resources\SysML-textual-bnf.kebnf">
       <Link>datamodel\SysML-textual-bnf.kebnf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\SysML2.NET.Serializer.Xmi.Tests\Resources\Kernel Libraries\Kernel Function Library\*.kermlx" Link="datamodel\Kernel Function Library\%(Filename)%(Extension)">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

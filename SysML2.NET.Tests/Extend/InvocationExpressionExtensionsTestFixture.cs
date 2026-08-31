@@ -75,21 +75,25 @@ namespace SysML2.NET.Tests.Extend
             argumentFeature.AssignOwnership(new FeatureValue(), falseArgument);
             falseSubject.AssignOwnership(new FeatureMembership(), argumentFeature);
 
-            // #322 stub-blocker branch: empty arguments -> All(...) over an empty source -> true, so the
-            // && evaluates the right operand and reaches function.isModelLevelEvaluable. A FeatureTyping to
-            // a Function is wired so function resolves non-null (else the access would NRE, not reach the
-            // stub); the Function's ComputeIsModelLevelEvaluable is still a NotSupportedException stub.
-            var stubSubject = new InvocationExpression();
-            stubSubject.AssignOwnership(new FeatureTyping { Type = new Function() });
+            // Empty arguments -> All(...) over an empty source -> true, so the && evaluates the right
+            // operand and reaches function.isModelLevelEvaluable. A Function outside the Kernel Functions
+            // Library is not model-level evaluable.
+            var nonLibrarySubject = new InvocationExpression();
+            nonLibrarySubject.AssignOwnership(new FeatureTyping { Type = new Function() });
+
+            // The same shape, but invoking BaseFunctions::'==' — model-level evaluable per KerML Table 5.
+            var libraryPackage = new Namespace { DeclaredName = "BaseFunctions" };
+            var equalityFunction = new Function { DeclaredName = "==" };
+            libraryPackage.AssignOwnership(new OwningMembership(), equalityFunction);
+
+            var librarySubject = new InvocationExpression();
+            librarySubject.AssignOwnership(new FeatureTyping { Type = equalityFunction });
 
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(falseSubject.ComputeRedefinedModelLevelEvaluableOperation([]), Is.False);
-
-                // For later: reaches function.isModelLevelEvaluable, deferred (GitHub #322).
-                Assert.That(
-                    () => stubSubject.ComputeRedefinedModelLevelEvaluableOperation([]),
-                    Throws.TypeOf<NotSupportedException>());
+                Assert.That(nonLibrarySubject.ComputeRedefinedModelLevelEvaluableOperation([]), Is.False);
+                Assert.That(librarySubject.ComputeRedefinedModelLevelEvaluableOperation([]), Is.True);
             }
         }
     }
