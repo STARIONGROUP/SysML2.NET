@@ -120,6 +120,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("14-Language Extensions", "14a-Language Extensions.sysmlx")]
         [TestCase("14-Language Extensions", "14b-Language Extensions.sysmlx")]
         [TestCase("14-Language Extensions", "14c-Language Extensions.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_01-Constants.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_02-Basic Value Properties.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_03-Value Expression.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_04-Logical Expressions.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_05-Unification of Expression and Constraint Definition.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_06-System of Quantities.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_07-System of Units and Scales.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_08-Range Restriction.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_10-Primitive Data Types.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_11-Variable Length Collection Types.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_12-Compound Value Type.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_13-Discretely Sampled Function Value.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_19-Materials with Properties.sysmlx")]
+        [TestCase("15-Properties-Values-Expressions", "15_19a-Materials with Properties.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
