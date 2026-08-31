@@ -36,6 +36,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
     using SysML2.NET.Serializer.Xmi;
 
     [TestFixture]
+    [Parallelizable(ParallelScope.Children)]
     public class TextualNotationValidationTestFixture
     {
         /// <summary>
