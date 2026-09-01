@@ -30,9 +30,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.KernelFunctions;
 
     /// <summary>
     /// The <see cref="FunctionExtensions"/> class provides extensions methods for
@@ -57,18 +59,27 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         }
 
         /// <summary>
-        /// Computes the derived property.
+        /// Computes whether this <see cref="IFunction"/> is one of the Kernel Functions Library
+        /// functions that may be invoked by a model-level evaluable <see cref="IInvocationExpression"/>.
         /// </summary>
+        /// <remarks>
+        /// There is no OCL derivation: KerML 1.0 §8.3.4.7.4 makes this a library-membership test, and
+        /// the member set is enumerated by Table 5 (§8.2.5.8.1) and Table 7 (§8.2.5.8.2).
+        /// </remarks>
         /// <param name="functionSubject">
         /// The subject <see cref="IFunction"/>
         /// </param>
         /// <returns>
-        /// the computed result
+        /// <c>true</c> when the subject is a model-level evaluable library function, <c>false</c> otherwise
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="functionSubject"/> is <c>null</c>.
+        /// </exception>
         internal static bool ComputeIsModelLevelEvaluable(this IFunction functionSubject)
         {
-            throw new NotSupportedException("Create a GitHub issue when this method is required");
+            return functionSubject == null
+                ? throw new ArgumentNullException(nameof(functionSubject))
+                : ModelLevelEvaluableFunctions.Contains(functionSubject.owningNamespace?.name, functionSubject.name);
         }
 
         /// <summary>

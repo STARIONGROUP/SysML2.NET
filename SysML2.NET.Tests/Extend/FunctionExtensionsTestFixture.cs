@@ -27,6 +27,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -91,9 +92,57 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void VerifyComputeIsModelLevelEvaluable()
         {
-            // For later: deferred — Kernel Functions Library registry membership test (see GitHub #322).
-            var subject = new Function();
-            Assert.That(subject.ComputeIsModelLevelEvaluable, Throws.TypeOf<NotSupportedException>());
+            // Null subject:
+            Assert.That(() => ((IFunction)null).ComputeIsModelLevelEvaluable(), Throws.TypeOf<ArgumentNullException>());
+
+            // Empty: no owning namespace and no name → not a library function.
+            Assert.That(new Function().ComputeIsModelLevelEvaluable(), Is.False);
+
+            // Positive: the operators KerML Table 5 and Table 7 mark as model-level evaluable.
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(LibraryFunction("BaseFunctions", "==").ComputeIsModelLevelEvaluable(), Is.True);
+                Assert.That(LibraryFunction("BaseFunctions", "as").ComputeIsModelLevelEvaluable(), Is.True);
+                Assert.That(LibraryFunction("BaseFunctions", "#").ComputeIsModelLevelEvaluable(), Is.True);
+                Assert.That(LibraryFunction("DataFunctions", "^").ComputeIsModelLevelEvaluable(), Is.True);
+                Assert.That(LibraryFunction("DataFunctions", "**").ComputeIsModelLevelEvaluable(), Is.True);
+                Assert.That(LibraryFunction("ControlFunctions", "select").ComputeIsModelLevelEvaluable(), Is.True);
+                Assert.That(LibraryFunction("ControlFunctions", ".").ComputeIsModelLevelEvaluable(), Is.True);
+            }
+
+            // Negative: the three operators the tables mark as NOT model-level evaluable.
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(LibraryFunction("BaseFunctions", "all").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("BaseFunctions", "[").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("DataFunctions", "~").ComputeIsModelLevelEvaluable(), Is.False);
+            }
+
+            // Negative: library functions that no operator maps to, and a function outside the library.
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(LibraryFunction("DataFunctions", "max").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("ControlFunctions", "reduce").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("BaseFunctions", "ToString").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("SomePackage", "==").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("BaseFunctions", null).ComputeIsModelLevelEvaluable(), Is.False);
+            }
+
+            // '==' and '===' are declared by BaseFunctions AND DataFunctions; the probe order elects BaseFunctions.
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(LibraryFunction("DataFunctions", "==").ComputeIsModelLevelEvaluable(), Is.False);
+                Assert.That(LibraryFunction("DataFunctions", "===").ComputeIsModelLevelEvaluable(), Is.False);
+            }
+
+            static IFunction LibraryFunction(string packageName, string functionName)
+            {
+                var libraryPackage = new Namespace { DeclaredName = packageName };
+                var function = new Function { DeclaredName = functionName };
+                libraryPackage.AssignOwnership(new OwningMembership(), function);
+
+                return function;
+            }
         }
     }
 }
