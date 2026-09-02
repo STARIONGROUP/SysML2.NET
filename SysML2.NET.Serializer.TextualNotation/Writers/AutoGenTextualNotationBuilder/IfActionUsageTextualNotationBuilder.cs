@@ -46,26 +46,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("if ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any(), out var elementAsParameterMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(elementAsParameterMembership0, writerContext, stringBuilder);
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.IActionUsage>().Any(), out var elementAsParameterMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership1, writerContext, stringBuilder);
             }
 
             if (ownedRelationshipCursor.Current != null)

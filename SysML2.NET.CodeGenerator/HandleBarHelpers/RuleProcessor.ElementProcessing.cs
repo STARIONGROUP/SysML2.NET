@@ -383,18 +383,25 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
                     {
                         var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
-                        var usedVariable = $"{cursorToUse.CursorVariableName}.Current";
-
-                        var previousVariableName = ruleGenerationContext.CurrentVariableName;
-                        ruleGenerationContext.CurrentVariableName = usedVariable;
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        ruleGenerationContext.CallerRule = assignmentElement;
 
                         // Route Move() through PendingCursorMove so it lands INSIDE the type-discrimination
                         // block — the cursor advances only on real += consumption (Golden Rule). Collection
                         // groups and multi-alternative dispatchers emit their own move.
                         var shouldEmitCursorMove = !isPartOfMultipleAlternative
                             && assignmentElement.Container is not GroupElement { IsCollection: true };
+
+                        if (shouldEmitCursorMove
+                            && TryEmitPinnedRuleConsumption(writer, umlClass, nonTerminalElement, cursorToUse, ruleGenerationContext))
+                        {
+                            return;
+                        }
+
+                        var usedVariable = $"{cursorToUse.CursorVariableName}.Current";
+
+                        var previousVariableName = ruleGenerationContext.CurrentVariableName;
+                        ruleGenerationContext.CurrentVariableName = usedVariable;
+                        var previousCaller = ruleGenerationContext.CallerRule;
+                        ruleGenerationContext.CallerRule = assignmentElement;
 
                         if (shouldEmitCursorMove)
                         {
@@ -644,6 +651,59 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
                 EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
+        }
+
+        /// <summary>
+        /// Emits the role-based consumption for a <c>+=</c> assignment whose referenced rule carries a
+        /// role discriminator (a pinned enum constant like <c>{ kind = 'guard' }</c>, or a structural
+        /// signature) — <c>TryTake</c> with the rule's predicate — locating the element by ROLE instead
+        /// of by cursor position. The matching guard condition is emitted by
+        /// <see cref="TryResolveRoleBasedContainsCondition" /> with the IDENTICAL predicate, so condition
+        /// and consumption agree on the element they select.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="nonTerminalElement">The referenced rule's <see cref="NonTerminalElement" />.</param>
+        /// <param name="cursorDefinition">The cursor the assignment consumes from.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns><c>true</c> when the consumption was emitted; <c>false</c> when the rule is not discriminating and the positional path must run.</returns>
+        private static bool TryEmitPinnedRuleConsumption(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, CursorDefinition cursorDefinition, RuleGenerationContext ruleGenerationContext)
+        {
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+            var typeTarget = referencedRule?.EffectiveTarget;
+
+            if (typeTarget == null)
+            {
+                return false;
+            }
+
+            var targetClass = RuleQueryUtilities.FindClass(umlClass.Cache, typeTarget);
+            var targetTypeName = targetClass?.QueryFullyQualifiedTypeName();
+
+            if (targetTypeName == null)
+            {
+                return false;
+            }
+
+            var predicate = ResolveRoleBasedPredicate(referencedRule, targetClass, ruleGenerationContext);
+
+            if (predicate == null)
+            {
+                return false;
+            }
+
+            var takenVariableName = $"elementAs{targetClass.Name}{ruleGenerationContext.TakenElementCounter++}";
+
+            var builderCall = string.Equals(typeTarget, ruleGenerationContext.NamedElementToGenerate.Name, StringComparison.Ordinal)
+                ? $"Build{nonTerminalElement.Name}({takenVariableName}, writerContext, stringBuilder);"
+                : $"{typeTarget}TextualNotationBuilder.Build{nonTerminalElement.Name}({takenVariableName}, writerContext, stringBuilder);";
+
+            writer.WriteSafeString($"{Environment.NewLine}if ({cursorDefinition.CursorVariableName}.TryTake<{targetTypeName}>({predicate}, out var {takenVariableName})){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            writer.WriteSafeString(builderCall);
+            writer.WriteSafeString($"{Environment.NewLine}}}");
+
+            return true;
         }
 
         /// <summary>

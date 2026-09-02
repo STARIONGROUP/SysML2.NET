@@ -49,18 +49,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 SharedTextualNotationBuilder.BuildBasicDefinitionPrefix(poco, writerContext, stringBuilder);
             }
 
-            if (poco.IsIndividual && ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            if (poco.IsIndividual && ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.IMultiplicity>().Any()))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.IMultiplicity>().Any(), out var elementAsOwningMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                    {
-                        OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership0, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(" individual ");
                 stringBuilder.Append(' ');
@@ -87,15 +81,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.IMultiplicity>().Any(), out var elementAsOwningMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(elementAsOwningMembership0, writerContext, stringBuilder);
             }
 
             if (poco.IsAbstract || poco.IsVariation)

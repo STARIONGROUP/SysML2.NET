@@ -124,15 +124,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IImport>(candidate => candidate.Visibility == SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public, out var elementAsImport0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IImport elementAsImport)
-                {
-                    ImportTextualNotationBuilder.BuildFilterPackageImport(elementAsImport, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ImportTextualNotationBuilder.BuildFilterPackageImport(elementAsImport0, writerContext, stringBuilder);
             }
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership elementFilterMembershipGuard && elementFilterMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any())

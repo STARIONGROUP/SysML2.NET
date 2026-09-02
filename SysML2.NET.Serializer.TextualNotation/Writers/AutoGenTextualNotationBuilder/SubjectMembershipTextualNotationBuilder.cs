@@ -69,15 +69,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue>().Any(), out var elementAsReferenceUsage0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage elementAsReferenceUsage)
-                {
-                    ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(elementAsReferenceUsage, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                ReferenceUsageTextualNotationBuilder.BuildSatisfactionParameter(elementAsReferenceUsage0, writerContext, stringBuilder);
             }
 
         }

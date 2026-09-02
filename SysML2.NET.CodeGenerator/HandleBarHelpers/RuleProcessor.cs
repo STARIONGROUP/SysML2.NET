@@ -29,6 +29,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
+    using uml4net.Classification;
     using uml4net.Extensions;
     using uml4net.SimpleClassifiers;
     using uml4net.StructuredClassifiers;
@@ -376,6 +377,44 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>The property pattern, or <see langword="null" /> when nothing enum-typed is pinned.</returns>
         private static string ResolvePinnedConstantPattern(TextualNotationRule referencedRule, IClass targetClass)
         {
+            return TryResolvePinnedConstant(referencedRule, targetClass, out var propertyName, out var enumTypeName, out var literalName)
+                ? $"{{ {propertyName}: {enumTypeName}.{literalName} }}"
+                : null;
+        }
+
+        /// <summary>
+        /// Builds the C# lambda predicate testing a constant a rule pins via a non-parsing assignment
+        /// (<c>{ kind = 'guard' }</c>), for use with the role-based cursor primitives
+        /// <c>Contains</c> and <c>TryTake</c>. The condition site and the consumption site MUST both use
+        /// this identical predicate so they agree on the element they select.
+        /// </summary>
+        /// <param name="referencedRule">The rule whose pinned constant is sought.</param>
+        /// <param name="targetClass">The rule's target <see cref="IClass" />.</param>
+        /// <returns>The lambda predicate, or <see langword="null" /> when nothing enum-typed is pinned.</returns>
+        private static string ResolvePinnedConstantPredicate(TextualNotationRule referencedRule, IClass targetClass)
+        {
+            return TryResolvePinnedConstant(referencedRule, targetClass, out var propertyName, out var enumTypeName, out var literalName)
+                ? $"candidate => candidate.{propertyName} == {enumTypeName}.{literalName}"
+                : null;
+        }
+
+        /// <summary>
+        /// Resolves the components of a constant a rule pins to an enum-typed property through a
+        /// non-parsing assignment (<c>{ kind = 'guard' }</c>). Sibling rules sharing one target type are
+        /// distinguishable ONLY by such a constant, so it is the rule's role discriminator.
+        /// </summary>
+        /// <param name="referencedRule">The rule whose pinned constant is sought.</param>
+        /// <param name="targetClass">The rule's target <see cref="IClass" />.</param>
+        /// <param name="propertyName">The pinned property's C# name.</param>
+        /// <param name="enumTypeName">The fully-qualified name of the property's enumeration type.</param>
+        /// <param name="literalName">The pinned enumeration literal's C# name.</param>
+        /// <returns><c>true</c> when the rule pins an enum-typed constant; <c>false</c> otherwise.</returns>
+        private static bool TryResolvePinnedConstant(TextualNotationRule referencedRule, IClass targetClass, out string propertyName, out string enumTypeName, out string literalName)
+        {
+            propertyName = null;
+            enumTypeName = null;
+            literalName = null;
+
             var pinnedAssignment = referencedRule.Alternatives
                 .SelectMany(alternative => alternative.Elements)
                 .OfType<NonParsingAssignmentElement>()
@@ -383,7 +422,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (pinnedAssignment == null)
             {
-                return null;
+                return false;
             }
 
             var property = targetClass.QueryAllProperties()
@@ -391,11 +430,166 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (property?.Type is not IEnumeration)
             {
+                return false;
+            }
+
+            propertyName = property.Name.CapitalizeFirstLetter();
+            enumTypeName = property.Type.QueryFullyQualifiedTypeName();
+            literalName = pinnedAssignment.Value.Trim('\'').CapitalizeFirstLetter();
+            return true;
+        }
+
+        /// <summary>
+        /// Builds the non-consuming, role-based guard condition for a <c>+=</c> assignment whose
+        /// referenced rule carries a role discriminator — <c>{cursor}.Contains&lt;T&gt;(predicate)</c> —
+        /// locating the element by ROLE instead of by cursor position. Returns <see langword="null" />
+        /// when no discriminating predicate resolves, so the caller falls back to positional access.
+        /// </summary>
+        /// <param name="assignmentElement">The <c>+=</c> assignment to build the condition for.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <param name="cursorVariableName">The cursor variable the condition probes.</param>
+        /// <returns>The <c>Contains</c> condition, or <see langword="null" /> when not applicable.</returns>
+        private static string TryResolveRoleBasedContainsCondition(AssignmentElement assignmentElement, IClass umlClass, RuleGenerationContext ruleGenerationContext, string cursorVariableName)
+        {
+            if (assignmentElement.Value is not NonTerminalElement nonTerminalElement)
+            {
                 return null;
             }
 
-            var literalName = pinnedAssignment.Value.Trim('\'').CapitalizeFirstLetter();
-            return $"{{ {property.Name.CapitalizeFirstLetter()}: {property.Type.QueryFullyQualifiedTypeName()}.{literalName} }}";
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+            var typeTarget = referencedRule?.EffectiveTarget;
+
+            if (typeTarget == null)
+            {
+                return null;
+            }
+
+            var targetClass = RuleQueryUtilities.FindClass(umlClass.Cache, typeTarget);
+            var targetTypeName = targetClass?.QueryFullyQualifiedTypeName();
+
+            if (targetTypeName == null)
+            {
+                return null;
+            }
+
+            var predicate = ResolveRoleBasedPredicate(referencedRule, targetClass, ruleGenerationContext);
+
+            return predicate == null ? null : $"{cursorVariableName}.Contains<{targetTypeName}>({predicate})";
+        }
+
+        /// <summary>
+        /// Resolves the role predicate for a referenced rule: the enum constant the rule pins takes
+        /// precedence (the metamodel-provided discriminator); otherwise the rule's structural signature
+        /// is synthesised from its body. Returns <see langword="null" /> when neither is discriminating,
+        /// in which case the caller MUST stay positional — scanning ahead on a weak predicate steals
+        /// elements that belong to later consumptions.
+        /// </summary>
+        /// <param name="referencedRule">The rule whose role predicate is sought.</param>
+        /// <param name="targetClass">The rule's target <see cref="IClass" />.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The lambda predicate, or <see langword="null" /> when the rule is not discriminating.</returns>
+        private static string ResolveRoleBasedPredicate(TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext)
+        {
+            return ResolvePinnedConstantPredicate(referencedRule, targetClass)
+                   ?? ResolveStructuralSignaturePredicate(referencedRule, targetClass, ruleGenerationContext);
+        }
+
+        /// <summary>
+        /// Synthesises a candidate-level structural-signature predicate from a rule's body: one clause
+        /// per mandatory discriminating assignment (owned-content shape or literal equality), clauses
+        /// AND-combined per alternative, alternatives OR-combined. EVERY alternative must contribute at
+        /// least one clause — an alternative without one admits any instance of the target type, which
+        /// would make the scan-ahead greedy — otherwise the whole rule is deemed non-discriminating.
+        /// </summary>
+        /// <param name="referencedRule">The rule whose structural signature is synthesised.</param>
+        /// <param name="targetClass">The rule's target <see cref="IClass" /> (the candidate's type).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The lambda predicate, or <see langword="null" /> when any alternative is non-discriminating.</returns>
+        private static string ResolveStructuralSignaturePredicate(TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext)
+        {
+            var targetProperties = targetClass.QueryAllProperties();
+            var alternativePredicates = new List<string>();
+
+            foreach (var alternative in referencedRule.Alternatives)
+            {
+                var clauses = alternative.Elements
+                    .Select(element => TryBuildCandidateSignatureClause(element, targetProperties, targetClass, ruleGenerationContext))
+                    .Where(clause => clause != null)
+                    .ToList();
+
+                if (clauses.Count == 0)
+                {
+                    return null;
+                }
+
+                alternativePredicates.Add(clauses.Count == 1 ? clauses[0] : $"({string.Join(" && ", clauses)})");
+            }
+
+            var distinctPredicates = alternativePredicates.Distinct(StringComparer.Ordinal).ToList();
+            var combined = distinctPredicates.Count == 1 ? distinctPredicates[0] : string.Join(" || ", distinctPredicates);
+
+            return $"candidate => {combined}";
+        }
+
+        /// <summary>
+        /// Builds one candidate-level signature clause for a rule-body element, or <see langword="null" />
+        /// when the element carries no discriminating information. Discriminating shapes: a mandatory
+        /// <c>prop += NonTerminal</c> owned-content projection (excluding root metaclasses, whose
+        /// <c>OfType</c> test is tautological) and a mandatory <c>prop = 'literal'</c> equality on an
+        /// enum- or string-typed property.
+        /// </summary>
+        /// <param name="ruleElement">The rule-body element to translate.</param>
+        /// <param name="targetProperties">All properties of the candidate's target class.</param>
+        /// <param name="targetClass">The candidate's target <see cref="IClass" />.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The clause over <c>candidate</c>, or <see langword="null" />.</returns>
+        private static string TryBuildCandidateSignatureClause(RuleElement ruleElement, IEnumerable<IProperty> targetProperties, IClass targetClass, RuleGenerationContext ruleGenerationContext)
+        {
+            if (ruleElement is not AssignmentElement { IsOptional: false, IsCollection: false } assignment)
+            {
+                return null;
+            }
+
+            var matchingProperty = targetProperties.FirstOrDefault(property => string.Equals(property.Name, assignment.Property, StringComparison.OrdinalIgnoreCase));
+
+            if (matchingProperty == null)
+            {
+                return null;
+            }
+
+            switch (assignment)
+            {
+                case { Operator: "+=", Value: NonTerminalElement rhsNonTerminal } when matchingProperty.QueryIsEnumerable():
+                {
+                    var rhsRule = ruleGenerationContext.FindRule(rhsNonTerminal.Name);
+                    var rhsTarget = rhsRule?.EffectiveTarget ?? rhsNonTerminal.Name;
+                    var rhsClass = RuleQueryUtilities.FindClass(targetClass.Cache, rhsTarget);
+
+                    // OfType over a root metaclass admits ANY populated collection — no discrimination.
+                    if (rhsClass == null || rhsClass.Name is "Element" or "Relationship")
+                    {
+                        return null;
+                    }
+
+                    return $"candidate.{matchingProperty.QueryPropertyNameBasedOnUmlProperties()}.OfType<{rhsClass.QueryFullyQualifiedTypeName()}>().Any()";
+                }
+
+                case { Operator: "=", Value: TerminalElement literalTerminal } when !string.IsNullOrWhiteSpace(literalTerminal.Value):
+                {
+                    if (matchingProperty.Type is IEnumeration)
+                    {
+                        return $"candidate.{matchingProperty.Name.CapitalizeFirstLetter()} == {matchingProperty.Type.QueryFullyQualifiedTypeName()}.{literalTerminal.Value.Trim('\'').CapitalizeFirstLetter()}";
+                    }
+
+                    return matchingProperty.QueryIsString()
+                        ? $"candidate.{matchingProperty.QueryPropertyNameBasedOnUmlProperties()} == \"{literalTerminal.Value}\""
+                        : null;
+                }
+
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
@@ -492,14 +686,38 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 if (consumptionAssignments.Count > 1)
                                 {
                                     var conditionParts = new List<string>();
+                                    var emittedPinnedCondition = false;
 
                                     for (var consumptionIndex = 0; consumptionIndex < consumptionAssignments.Count; consumptionIndex++)
                                     {
+                                        var consumptionAssignment = consumptionAssignments[consumptionIndex];
+
+                                        // A role-based (Contains) part establishes the pinned element's presence
+                                        // regardless of cursor position, so a positional tail-walk corroboration
+                                        // (a GetNext offset over PARENT siblings) no longer lines up with it —
+                                        // keeping it re-introduces the silent drop for out-of-order storage.
+                                        if (emittedPinnedCondition && !elements.Contains(consumptionAssignment))
+                                        {
+                                            continue;
+                                        }
+
+                                        // A discriminating rule is located by ROLE (Contains + predicate),
+                                        // not by cursor position — its consumption site takes the element
+                                        // with TryTake and the identical predicate.
+                                        var pinnedCondition = TryResolveRoleBasedContainsCondition(consumptionAssignment, umlClass, ruleGenerationContext, iterator.CursorVariableName);
+
+                                        if (pinnedCondition != null)
+                                        {
+                                            conditionParts.Add(pinnedCondition);
+                                            emittedPinnedCondition = true;
+                                            continue;
+                                        }
+
                                         var cursorAccess = consumptionIndex == 0
                                             ? $"{iterator.CursorVariableName}.Current"
                                             : $"{iterator.CursorVariableName}.GetNext({consumptionIndex})";
 
-                                        var typeName = ResolveAssignmentTargetTypeName(consumptionAssignments[consumptionIndex], umlClass, ruleGenerationContext);
+                                        var typeName = ResolveAssignmentTargetTypeName(consumptionAssignment, umlClass, ruleGenerationContext);
 
                                         conditionParts.Add(typeName == null
                                             ? $"{cursorAccess} != null"
@@ -510,14 +728,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                                 else
                                 {
+                                    // A discriminating rule is located by ROLE (Contains + predicate), not by
+                                    // cursor position — its consumption site takes the element with TryTake
+                                    // and the identical predicate.
+                                    var pinnedSingleCondition = TryResolveRoleBasedContainsCondition(assigment, umlClass, ruleGenerationContext, iterator.CursorVariableName);
+
                                     // Guard on the TYPE the assignment consumes, not on mere cursor non-emptiness —
                                     // a bare non-null test also passes for the next UNRELATED relationship and emits
                                     // the group's terminals spuriously (e.g. AcceptParameterPart's `via`).
                                     var singleTypeName = ResolveAssignmentTargetTypeName(assigment, umlClass, ruleGenerationContext);
 
-                                    ifStatementContent.Add(singleTypeName == null
+                                    ifStatementContent.Add(pinnedSingleCondition ?? (singleTypeName == null
                                         ? property.QueryIfStatementContentForNonEmpty(iterator.CursorVariableName)
-                                        : $"{iterator.CursorVariableName}.Current is {singleTypeName}");
+                                        : $"{iterator.CursorVariableName}.Current is {singleTypeName}"));
                                 }
                             }
                         }

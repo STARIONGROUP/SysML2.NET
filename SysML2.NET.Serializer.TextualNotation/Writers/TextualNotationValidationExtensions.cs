@@ -557,10 +557,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="parameterMembership">The <see cref="IParameterMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns an <see cref="IActionUsage"/></returns>
+        /// <returns>True if the membership owns an <see cref="IActionUsage"/> that is not an <see cref="IIfActionUsage"/></returns>
+        /// <remarks>
+        /// An <see cref="IIfActionUsage"/> is excluded even though it is an <see cref="IActionUsage"/>: in the
+        /// <c>else</c> position of <c>IfNode</c> the two alternatives are
+        /// <c>( ActionBodyParameterMember | IfNodeParameterMember )</c>, and only the second reproduces the
+        /// <c>else if</c> chain. Admitting an if-node here makes the first alternative always win, which
+        /// flattens the chain into a single <c>else</c> block.
+        /// </remarks>
         internal static bool IsValidForActionBodyParameterMember(this IParameterMembership parameterMembership, TextualNotationWriterContext writerContext)
         {
-            return parameterMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any() == true;
+            return parameterMembership?.OwnedRelatedElement
+                .OfType<IActionUsage>()
+                .Any(actionUsage => actionUsage is not IIfActionUsage) == true;
         }
 
         /// <summary>

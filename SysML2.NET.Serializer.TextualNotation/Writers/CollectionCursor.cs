@@ -37,10 +37,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         private readonly IReadOnlyList<T> elements;
 
         /// <summary>
+        /// Gets the indices of elements consumed ahead of the cursor by <see cref="TryTake{TDerived}" />;
+        /// every traversal member skips them so a taken element is never visited twice.
+        /// </summary>
+        private readonly HashSet<int> consumedOutOfOrder = [];
+
+        /// <summary>
         /// Gets the value of the current index.
         /// </summary>
         private int index;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionCursor{T}"/> class.
         /// </summary>
@@ -54,13 +60,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// Gets the current <typeparamref name="T"/> element at the cursor position.
         /// <remarks>Returns <c>default</c> if the cursor is out of range.</remarks>
         /// </summary>
-        public T Current => this.GetCurrent(this.index);
+        public T Current => this.GetCurrent(this.SkipConsumed(this.index));
 
         /// <summary>
-        /// Gets the cursor's current offset into the collection. Exposed so a caller iterating this cursor
+        /// Gets the cursor's current offset into the collection, skipping over elements already consumed
+        /// out of order by <see cref="TryTake{TDerived}" />. Exposed so a caller iterating this cursor
         /// can prove its loop body made forward progress; see <see cref="AssertAdvancedSince" />.
         /// </summary>
-        public int Position => this.index;
+        public int Position => this.SkipConsumed(this.index);
 
         /// <summary>
         /// Throws when the cursor has not moved past <paramref name="positionBeforeIteration"/>, i.e. the
@@ -83,7 +90,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </remarks>
         public void AssertAdvancedSince(int positionBeforeIteration, string ruleName)
         {
-            if (this.index != positionBeforeIteration)
+            if (this.Position != positionBeforeIteration)
             {
                 return;
             }
@@ -122,7 +129,91 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </exception>
         public T GetNext(int amount)
         {
-            return amount < 0 ? throw new ArgumentException("Not able to get previous element in the collection") : this.GetCurrent(this.index + amount);
+            if (amount < 0)
+            {
+                throw new ArgumentException("Not able to get previous element in the collection");
+            }
+
+            var probeIndex = this.SkipConsumed(this.index);
+
+            for (var stepIndex = 0; stepIndex < amount; stepIndex++)
+            {
+                probeIndex = this.SkipConsumed(probeIndex + 1);
+            }
+
+            return this.GetCurrent(probeIndex);
+        }
+
+        /// <summary>
+        /// Determines whether an element the cursor has not yet consumed — at the cursor position or
+        /// anywhere ahead of it — is a <typeparamref name="TDerived"/> satisfying
+        /// <paramref name="predicate"/>, without consuming anything. This is the non-consuming companion
+        /// of <see cref="TryTake{TDerived}" /> for use in guard conditions; both MUST be called with the
+        /// identical predicate so the condition and the consumption agree on the element they select.
+        /// </summary>
+        /// <param name="predicate">The role discriminator the sought element must satisfy.</param>
+        /// <typeparam name="TDerived">Any class inheriting from <typeparamref name="T"/>.</typeparam>
+        /// <returns><c>true</c> when a matching unconsumed element exists; <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="predicate"/> is <c>null</c>.</exception>
+        public bool Contains<TDerived>(Func<TDerived, bool> predicate) where TDerived : class, T
+        {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            for (var probeIndex = this.SkipConsumed(this.index); probeIndex < this.elements.Count; probeIndex = this.SkipConsumed(probeIndex + 1))
+            {
+                if (this.elements[probeIndex] is TDerived candidate && predicate(candidate))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Takes the first unconsumed element — at the cursor position or anywhere ahead of it — that is a
+        /// <typeparamref name="TDerived"/> satisfying <paramref name="predicate"/>, locating the element by
+        /// its ROLE rather than by its position. A match at the cursor advances the cursor exactly like
+        /// <see cref="Move" />; a match ahead of it is recorded as consumed out of order and skipped by all
+        /// later traversal, while the cursor itself stays put.
+        /// </summary>
+        /// <param name="predicate">The role discriminator the sought element must satisfy.</param>
+        /// <param name="value">The taken element, or <c>default</c> when nothing matched.</param>
+        /// <typeparam name="TDerived">Any class inheriting from <typeparamref name="T"/>.</typeparam>
+        /// <returns><c>true</c> when a matching element was taken; <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="predicate"/> is <c>null</c>.</exception>
+        public bool TryTake<TDerived>(Func<TDerived, bool> predicate, out TDerived value) where TDerived : class, T
+        {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            var startIndex = this.SkipConsumed(this.index);
+
+            for (var probeIndex = startIndex; probeIndex < this.elements.Count; probeIndex = this.SkipConsumed(probeIndex + 1))
+            {
+                if (this.elements[probeIndex] is TDerived candidate && predicate(candidate))
+                {
+                    if (probeIndex == startIndex)
+                    {
+                        this.Move();
+                    }
+                    else
+                    {
+                        this.consumedOutOfOrder.Add(probeIndex);
+                    }
+
+                    value = candidate;
+                    return true;
+                }
+            }
+
+            value = default;
+            return false;
         }
 
         /// <summary>
@@ -140,7 +231,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }
 
-            this.index = Math.Min(this.index + amount, this.elements.Count);
+            for (var stepIndex = 0; stepIndex < amount; stepIndex++)
+            {
+                this.index = Math.Min(this.SkipConsumed(this.index) + 1, this.elements.Count);
+            }
+        }
+
+        /// <summary>
+        /// Returns the first index at or after <paramref name="from"/> that has not been consumed out of
+        /// order by <see cref="TryTake{TDerived}" />. Identity while nothing was taken out of order, so
+        /// every traversal member behaves exactly as it did before the primitive existed.
+        /// </summary>
+        /// <param name="from">The index to start probing at.</param>
+        /// <returns>The first unconsumed index at or after <paramref name="from"/>.</returns>
+        private int SkipConsumed(int from)
+        {
+            var unconsumedIndex = from;
+
+            while (this.consumedOutOfOrder.Contains(unconsumedIndex))
+            {
+                unconsumedIndex++;
+            }
+
+            return unconsumedIndex;
         }
         
         /// <summary>

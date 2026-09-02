@@ -84,19 +84,13 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
             }
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any()))
             {
                 stringBuilder.Append("by ");
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsSubjectMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership elementAsSubjectMembership)
-                    {
-                        SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(elementAsSubjectMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(elementAsSubjectMembership0, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }

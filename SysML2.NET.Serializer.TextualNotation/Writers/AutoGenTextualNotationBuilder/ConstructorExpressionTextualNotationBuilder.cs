@@ -56,15 +56,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any(), out var elementAsReturnParameterMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                {
-                    ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(elementAsReturnParameterMembership0, writerContext, stringBuilder);
             }
 
         }
