@@ -24,6 +24,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.States;
@@ -71,11 +72,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                         // ( ownedRelationship += ActionTargetSuccessionMember )* belongs to THIS alternative,
                         // so the trailing loop stays inside the item.
-                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
-                        {
-                            FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                        }
+                        EmitActionTargetSuccessionRun(membershipForInitialNode.MemberElement as IFeature, ownedRelationshipCursor, writerContext, stringBuilder);
 
                         break;
                     }
@@ -88,14 +85,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         {
                             FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
-                            FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember((IFeatureMembership)ownedRelationshipCursor.Current, writerContext, stringBuilder);
+                            var anchoredActionMember = (IFeatureMembership)ownedRelationshipCursor.Current;
+                            FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember(anchoredActionMember, writerContext, stringBuilder);
                             ownedRelationshipCursor.Move();
 
-                            while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
-                            {
-                                FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
-                                ownedRelationshipCursor.Move();
-                            }
+                            EmitActionTargetSuccessionRun(anchoredActionMember.OwnedRelatedElement.OfType<IFeature>().FirstOrDefault(), ownedRelationshipCursor, writerContext, stringBuilder);
                         }
                         else if (nextElement is IFeatureMembership nextForStructure && nextForStructure.IsValidForStructureUsageMember(writerContext))
                         {
@@ -112,24 +106,24 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                         break;
                     }
 
+                    // Tested BEFORE ActionBehaviorMember: a guard-carrying TransitionUsage IS an
+                    // IActionUsage, so the broader behavior guard would otherwise claim it. The shorthand
+                    // run never reaches this switch (EmitActionTargetSuccessionRun consumes anchored
+                    // successions directly), so any guarded succession arriving here is the explicit form.
+                    case IFeatureMembership featureMembershipForGuarded when featureMembershipForGuarded.IsValidForGuardedSuccessionMember(writerContext):
+                        FeatureMembershipTextualNotationBuilder.BuildGuardedSuccessionMember(featureMembershipForGuarded, writerContext, stringBuilder);
+                        ownedRelationshipCursor.Move();
+                        break;
+
                     case IFeatureMembership featureMembershipForActionBehavior when featureMembershipForActionBehavior.IsValidForActionBehaviorMember(writerContext):
                     {
                         FeatureMembershipTextualNotationBuilder.BuildActionBehaviorMember(featureMembershipForActionBehavior, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();
 
-                        while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
-                        {
-                            FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-                        }
+                        EmitActionTargetSuccessionRun(featureMembershipForActionBehavior.OwnedRelatedElement.OfType<IFeature>().FirstOrDefault(), ownedRelationshipCursor, writerContext, stringBuilder);
 
                         break;
                     }
-
-                    case IFeatureMembership featureMembershipForGuarded when featureMembershipForGuarded.IsValidForGuardedSuccessionMember(writerContext):
-                        FeatureMembershipTextualNotationBuilder.BuildGuardedSuccessionMember(featureMembershipForGuarded, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-                        break;
 
                     // NonBehaviorBodyItem cases — shared with StateBodyItem; see Shared helper.
                     default:
@@ -379,6 +373,52 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     .Move();
 
                 FeatureMembershipTextualNotationBuilder.BuildTargetTransitionUsageMember(targetTransition, writerContext, stringBuilder);
+                ownedRelationshipCursor.Move();
+            }
+        }
+
+        /// <summary>
+        /// Emits the <c>( ownedRelationship += ActionTargetSuccessionMember )*</c> run that may follow an
+        /// <c>InitialNodeMember</c> or <c>ActionBehaviorMember</c>, using the shorthand forms
+        /// (<c>if g then t;</c> / <c>else t;</c> / <c>then t;</c>) whose source is implied by the anchor.
+        /// </summary>
+        /// <param name="anchorFeature">The feature the run's implied sources must reference; may be <see langword="null"/>.</param>
+        /// <param name="ownedRelationshipCursor">The body cursor, positioned after the anchor member.</param>
+        /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> for the current write.</param>
+        /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> accumulating the notation.</param>
+        /// <remarks>
+        /// <c>GuardedTargetSuccession</c> and <c>DefaultTargetSuccession</c> have no notation for the
+        /// implied source membership NOR for the empty payload parameter, but the model records both, so
+        /// the transition's own cursor steps past them unemitted — the same Golden-Rule exception as
+        /// <see cref="EmitTargetTransitionRun" />, conditional on <see cref="QueryImpliedSourceTransition" />
+        /// confirming position 0 is the implied source. A transition whose source is NOT the anchor must
+        /// keep the explicit <c>GuardedSuccessionMember</c> form (<c>succession S first A1 if g then t;</c>),
+        /// so it terminates the run and re-dispatches through <c>BuildActionBodyItemHandCoded</c>.
+        /// </remarks>
+        private static void EmitActionTargetSuccessionRun(IFeature anchorFeature, CollectionCursor<IElement> ownedRelationshipCursor, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
+        {
+            while (ownedRelationshipCursor.Current is IFeatureMembership targetSuccession
+                   && targetSuccession.IsValidForActionTargetSuccessionMember(writerContext))
+            {
+                var impliedTransition = QueryImpliedSourceTransition(targetSuccession, anchorFeature);
+
+                if (impliedTransition == null && targetSuccession.OwnedRelatedElement.OfType<ITransitionUsage>().Any())
+                {
+                    break;
+                }
+
+                if (impliedTransition != null)
+                {
+                    var transitionCursor = writerContext.CursorCache.GetOrCreateCursor(impliedTransition.Id, OwnedRelationshipCollection, impliedTransition.OwnedRelationship);
+                    transitionCursor.Move();
+
+                    if (transitionCursor.Current is IParameterMembership)
+                    {
+                        transitionCursor.Move();
+                    }
+                }
+
+                FeatureMembershipTextualNotationBuilder.BuildActionTargetSuccessionMember(targetSuccession, writerContext, stringBuilder);
                 ownedRelationshipCursor.Move();
             }
         }

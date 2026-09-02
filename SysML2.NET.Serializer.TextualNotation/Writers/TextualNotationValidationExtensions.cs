@@ -1318,10 +1318,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 IImport => true,
                 IVariantMembership => true,
+                // An EmptyParameterMember is the grammar's placeholder for an omitted slot (see
+                // IsEmptyParameterMember) — it has no notation of its own, so a body containing only
+                // one must not open a block to render it as a spurious 'in;'.
+                IParameterMembership parameterMembership when parameterMembership.IsEmptyParameterMember() => false,
+
+                // The content-free anonymous ReferenceUsage the pilot's transform attaches to every
+                // TransitionUsage / action node has no notation ANYWHERE — same exclusion as
+                // IsValidForActionBodyItem, or a target succession's UsageBody opens a block just to
+                // render it as a bare ';'.
                 IFeatureMembership featureMembership =>
-                    featureMembership.IsValidForSourceSuccessionMember(writerContext)
-                    || featureMembership.IsValidForOccurrenceUsageMember(writerContext)
-                    || featureMembership.IsValidForNonOccurrenceUsageMember(writerContext),
+                    !IsContentFreeAnonymousReferenceUsage(featureMembership)
+                    && (featureMembership.IsValidForSourceSuccessionMember(writerContext)
+                        || featureMembership.IsValidForOccurrenceUsageMember(writerContext)
+                        || featureMembership.IsValidForNonOccurrenceUsageMember(writerContext)),
                 IOwningMembership owningMembership => owningMembership.IsValidForDefinitionMember(writerContext),
                 IMembership => true,
                 _ => false,
