@@ -235,7 +235,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage>(candidate => (candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any() && candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any()), out var elementAsIfActionUsage0))
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any(), out var elementAsIfActionUsage0))
             {
                 IfActionUsageTextualNotationBuilder.BuildIfNode(elementAsIfActionUsage0, writerContext, stringBuilder);
             }

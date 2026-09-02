@@ -513,9 +513,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             foreach (var alternative in referencedRule.Alternatives)
             {
+                // Two assignments in ONE alternative can resolve the same clause (e.g. TransitionSuccession's
+                // EmptyEndMember and ConnectorEndMember both target EndFeatureMembership) — `A && A` is just
+                // `A`, so dedupe here as the OR-side already does.
                 var clauses = alternative.Elements
                     .Select(element => TryBuildCandidateSignatureClause(element, targetProperties, targetClass, ruleGenerationContext))
                     .Where(clause => clause != null)
+                    .Distinct(StringComparer.Ordinal)
                     .ToList();
 
                 if (clauses.Count == 0)

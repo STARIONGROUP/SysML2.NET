@@ -266,7 +266,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>(candidate => (candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>().Any() && candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>().Any()), out var elementAsSuccession0))
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>().Any(), out var elementAsSuccession0))
             {
                 SuccessionTextualNotationBuilder.BuildTransitionSuccession(elementAsSuccession0, writerContext, stringBuilder);
             }
