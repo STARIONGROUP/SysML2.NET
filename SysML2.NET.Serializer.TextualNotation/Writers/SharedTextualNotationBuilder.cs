@@ -392,8 +392,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>Dispatches on <c>cursor.Current</c>'s runtime type and delegates to the corresponding
         /// membership builder: <c>Import</c>, <c>VariantUsageMember</c>, <c>StructureUsageMember</c>,
         /// <c>NonOccurrenceUsageMember</c>, <c>DefinitionMember</c> (for <see cref="IOwningMembership"/>),
-        /// <c>AliasMember</c> (for plain <see cref="IMembership"/>). The cursor is always advanced — when
-        /// no alternative matches, the default branch simply moves it.</para>
+        /// <c>AliasMember</c> (for plain <see cref="IMembership"/>). An element no alternative claims is a
+        /// dispatch defect and throws instead of being silently dropped.</para>
         /// <para>Callers invoke this helper from the <c>default:</c> branch of their behavior-specific
         /// outer switch so that all behavior-specific cases (e.g. <c>InitialNodeMember</c>,
         /// <c>ActionBehaviorMember</c>, <c>EntryActionMember</c>) are matched first.</para>
@@ -438,8 +438,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     break;
 
                 default:
-                    ownedRelationshipCursor.Move();
-                    break;
+                    throw new System.InvalidOperationException($"The textual notation writer cannot place the current element ({ownedRelationshipCursor.Current?.GetType().Name}) in the body of '{poco.GetType().Name}' — no NonBehaviorBodyItem alternative claims it, so it would be silently dropped.");
             }
         }
 

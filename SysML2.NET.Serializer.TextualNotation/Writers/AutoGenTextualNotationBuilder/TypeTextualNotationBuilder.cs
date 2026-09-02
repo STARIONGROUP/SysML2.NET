@@ -458,8 +458,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             ownedRelationshipCursor.Move();
                             break;
                         default:
-                            ownedRelationshipCursor.Move();
-                            break;
+                            throw new System.InvalidOperationException($"The textual notation writer cannot place the current element ({ownedRelationshipCursor.Current?.GetType().Name}) while building 'Type' — no alternative of the rule claims it, so it would be silently dropped.");
                     }
                     ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "MetadataBody");
                 }

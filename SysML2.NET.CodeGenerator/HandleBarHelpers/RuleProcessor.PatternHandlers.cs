@@ -789,6 +789,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
+                    AssertDuplicateGroupGuardsAreDisjoint(duplicateClasses, whenGuards);
+
                     var reorderedElements = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
                     var processedDuplicateClasses = new HashSet<IClass>();
 
@@ -1350,6 +1352,47 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             foreach (var nestedNonTerminal in rule.Alternatives.Select(alternative => alternative.Elements[0]).OfType<NonTerminalElement>())
             {
                 CollectReachableTargetClasses(nestedNonTerminal.Name, cache, allRules, reachableClasses, visitedRules);
+            }
+        }
+
+        /// <summary>
+        /// Fails generation when a duplicate dispatch group's arms cannot be told apart — more than one
+        /// arm without a guard, or two arms carrying the IDENTICAL guard — because C# <c>when</c> clauses
+        /// evaluate in order and the first arm would silently claim every instance the second one owns.
+        /// This is the first tranche of the disjointness safety net: it proves nothing about guards that
+        /// differ textually but overlap semantically, only that no arm is TRIVIALLY unreachable.
+        /// </summary>
+        /// <param name="duplicateClasses">The duplicate dispatch groups, keyed by their shared target class.</param>
+        /// <param name="whenGuards">The resolved <c>when</c> guard per alternative, after every guard tier ran.</param>
+        /// <exception cref="InvalidOperationException">When a group's arms are not trivially disjoint.</exception>
+        private static void AssertDuplicateGroupGuardsAreDisjoint(Dictionary<IClass, List<(NonTerminalElement RuleElement, IClass UmlClass)>> duplicateClasses, Dictionary<NonTerminalElement, string> whenGuards)
+        {
+            foreach (var duplicateGroup in duplicateClasses)
+            {
+                var unguardedRuleNames = duplicateGroup.Value
+                    .Where(element => !whenGuards.ContainsKey(element.RuleElement))
+                    .Select(element => element.RuleElement.Name)
+                    .ToList();
+
+                if (unguardedRuleNames.Count > 1)
+                {
+                    throw new InvalidOperationException(
+                        $"Alternatives '{string.Join("', '", unguardedRuleNames)}' all target '{duplicateGroup.Key.Name}' and none of them resolved a distinguishing guard — the first arm would silently claim every instance. Add a discriminator (pinned constant, boolean assignment, or IsValidFor guard) for all but one.");
+                }
+
+                var collidingGuardGroups = duplicateGroup.Value
+                    .Where(element => whenGuards.ContainsKey(element.RuleElement))
+                    .GroupBy(element => whenGuards[element.RuleElement], StringComparer.Ordinal)
+                    .Where(guardGroup => guardGroup.Count() > 1)
+                    .ToList();
+
+                foreach (var collidingGuardGroup in collidingGuardGroups)
+                {
+                    var collidingRuleNames = collidingGuardGroup.Select(element => element.RuleElement.Name);
+
+                    throw new InvalidOperationException(
+                        $"Alternatives '{string.Join("', '", collidingRuleNames)}' targeting '{duplicateGroup.Key.Name}' resolved the IDENTICAL guard '{collidingGuardGroup.Key}' — the first arm would silently claim every instance. Their discriminators must be disjoint.");
+                }
             }
         }
 

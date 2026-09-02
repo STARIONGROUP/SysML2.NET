@@ -509,7 +509,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         private static string ResolveStructuralSignaturePredicate(TextualNotationRule referencedRule, IClass targetClass, RuleGenerationContext ruleGenerationContext)
         {
             var targetProperties = targetClass.QueryAllProperties();
-            var alternativePredicates = new List<string>();
+            var alternativeClauseSets = new List<List<string>>();
 
             foreach (var alternative in referencedRule.Alternatives)
             {
@@ -523,10 +523,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return null;
                 }
 
-                alternativePredicates.Add(clauses.Count == 1 ? clauses[0] : $"({string.Join(" && ", clauses)})");
+                alternativeClauseSets.Add(clauses);
             }
 
-            var distinctPredicates = alternativePredicates.Distinct(StringComparer.Ordinal).ToList();
+            // OR-ing a stronger conjunction with a weaker sibling is just the weaker sibling —
+            // `(B && A) || A` ≡ `A` — so drop every alternative whose clause set strictly contains
+            // another alternative's set.
+            var retainedClauseSets = alternativeClauseSets
+                .Where(clauseSet => !alternativeClauseSets.Any(otherSet => otherSet.Count < clauseSet.Count && otherSet.All(clauseSet.Contains)))
+                .ToList();
+
+            var distinctPredicates = retainedClauseSets
+                .Select(clauseSet => clauseSet.Count == 1 ? clauseSet[0] : $"({string.Join(" && ", clauseSet)})")
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+
             var combined = distinctPredicates.Count == 1 ? distinctPredicates[0] : string.Join(" || ", distinctPredicates);
 
             return $"candidate => {combined}";

@@ -193,7 +193,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="dispatcherNonTerminals">The group's bare (non-assignment) non-terminal alternatives</param>
         /// <param name="cursorVariableName">The cursor driving the repeated group</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        private static void EmitCollectionGroupFallThrough(EncodedTextWriter writer, IClass umlClass, List<NonTerminalElement> dispatcherNonTerminals, string cursorVariableName, RuleGenerationContext ruleGenerationContext)
+        private static bool EmitCollectionGroupFallThrough(EncodedTextWriter writer, IClass umlClass, List<NonTerminalElement> dispatcherNonTerminals, string cursorVariableName, RuleGenerationContext ruleGenerationContext)
         {
             var dispatcherCalls = dispatcherNonTerminals
                 .Select(nonTerminal =>
@@ -209,15 +209,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (dispatcherCalls.Count == 0)
             {
-                writer.WriteSafeString($"{cursorVariableName}.Move();{Environment.NewLine}");
+                // With location by role, an element no alternative claims is a dispatch defect, not a
+                // formatting variance — fail loudly instead of advancing past it and silently dropping
+                // it from the output.
+                var ruleName = ruleGenerationContext.NamedElementToGenerate?.Name ?? "Unknown";
+                writer.WriteSafeString($"throw new System.InvalidOperationException($\"The textual notation writer cannot place the current element ({{{cursorVariableName}.Current?.GetType().Name}}) while building '{ruleName}' — no alternative of the rule claims it, so it would be silently dropped.\");{Environment.NewLine}");
 
-                return;
+                return true;
             }
 
             foreach (var dispatcherCall in dispatcherCalls)
             {
                 writer.WriteSafeString($"{dispatcherCall}{Environment.NewLine}");
             }
+
+            return false;
         }
 
         /// <summary>

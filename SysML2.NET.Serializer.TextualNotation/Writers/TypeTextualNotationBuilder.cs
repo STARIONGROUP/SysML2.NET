@@ -404,6 +404,10 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 if (impliedTransition == null && targetSuccession.OwnedRelatedElement.OfType<ITransitionUsage>().Any())
                 {
+                    // A guard-carrying transition re-dispatches to the explicit GuardedSuccessionMember
+                    // form. A NON-guarded transition with a foreign source has no explicit production at
+                    // ActionBodyItem level — the grammar cannot express it, so the re-dispatch renders it
+                    // through the broader behavior arm as the least-wrong available notation.
                     break;
                 }
 
@@ -412,7 +416,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     var transitionCursor = writerContext.CursorCache.GetOrCreateCursor(impliedTransition.Id, OwnedRelationshipCollection, impliedTransition.OwnedRelationship);
                     transitionCursor.Move();
 
-                    if (transitionCursor.Current is IParameterMembership)
+                    if (transitionCursor.Current is IParameterMembership parameterMembership && parameterMembership.IsEmptyParameterMember())
                     {
                         transitionCursor.Move();
                     }

@@ -225,8 +225,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
 
                                 writer.WriteSafeString($"default:{Environment.NewLine}");
-                                EmitCollectionGroupFallThrough(writer, umlClass, groupDispatcherNonTerminals, groupCursorVarName, ruleGenerationContext);
-                                writer.WriteSafeString($"break;{Environment.NewLine}");
+                                if (!EmitCollectionGroupFallThrough(writer, umlClass, groupDispatcherNonTerminals, groupCursorVarName, ruleGenerationContext))
+                                {
+                                    writer.WriteSafeString($"break;{Environment.NewLine}");
+                                }
 
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
                                 EmitLoopProgressAssertion(writer, groupCursorVarName, groupPositionVariableName, groupElement.TextualNotationRule?.RuleName ?? groupPropertyName);

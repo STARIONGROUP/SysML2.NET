@@ -44,7 +44,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any() || (candidate.Kind == SysML2.NET.Core.Systems.Actions.TriggerKind.When && candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any()), out var elementAsTriggerInvocationExpression0))
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any(), out var elementAsTriggerInvocationExpression0))
             {
                 TriggerInvocationExpressionTextualNotationBuilder.BuildTriggerExpression(elementAsTriggerInvocationExpression0, writerContext, stringBuilder);
             }
