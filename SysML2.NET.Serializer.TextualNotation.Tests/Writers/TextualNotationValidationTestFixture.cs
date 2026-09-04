@@ -138,6 +138,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("17-Sequence Modeling", "17a-Sequence-Modeling.sysmlx")]
         [TestCase("17-Sequence Modeling", "17b-Sequence-Modeling.sysmlx")]
         [TestCase("18-Use Case", "18-Use Case.sysmlx")]
+        [TestCase("Simple Tests", "ControlNodeTest.sysmlx")]
+        [TestCase("Simple Tests", "DefaultValueTest.sysmlx")]
+        [TestCase("Simple Tests", "MultiplicityTest.sysmlx")]
+        [TestCase("Simple Tests", "ParameterTest.sysmlx")]
+        [TestCase("Simple Tests", "UseCaseTest.sysmlx")]
+        [TestCase("Simple Tests", "VariabilityTest.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
@@ -186,7 +192,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             TestContext.WriteLine("=== Textual Notation Output ===");
             TestContext.WriteLine(textualNotation);
             TestContext.WriteLine("=== End ===");
-            
+
+            // The console logger strips trailing whitespace from every line it captures, so the log is
+            // not a faithful copy of the emitted text. Re-baselining and any round-trip check must read
+            // the bytes from here instead.
+            var emittedDirectory = Environment.GetEnvironmentVariable("SYSML2_TN_EMIT_DIR");
+
+            if (!string.IsNullOrWhiteSpace(emittedDirectory))
+            {
+                var emittedFilePath = Path.Combine(emittedDirectory, folderName, fileName.Replace(".sysmlx", ".sysml"));
+                Directory.CreateDirectory(Path.GetDirectoryName(emittedFilePath));
+                await File.WriteAllTextAsync(emittedFilePath, textualNotation);
+            }
+
+
             var expectedFilePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Expected", folderName, fileName.Replace(".sysmlx", ".sysml"));
 
             var expectedContent = await File.ReadAllTextAsync(expectedFilePath);
