@@ -35,14 +35,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     {
         /// <summary>
         /// Builds the Textual Notation string for the rule OccurrenceUsagePrefix
-        /// <para>OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*</para>
+        /// <para>OccurrenceUsagePrefix:OccurrenceUsage=UnextendedUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*</para>
         /// </summary>
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
         public static void BuildOccurrenceUsagePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
-            UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, writerContext, stringBuilder);
+            UsageTextualNotationBuilder.BuildUnextendedUsagePrefix(poco, writerContext, stringBuilder);
 
             if (poco.IsIndividual)
             {

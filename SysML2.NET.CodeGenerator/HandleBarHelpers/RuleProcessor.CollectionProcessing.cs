@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.CollectionProcessing.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -76,10 +76,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         var whileTypeExclusion = this.ResolveCollectionWhileTypeCondition(cursorVariableName, umlClass, referencedRule, propertyName, ruleGenerationContext);
 
+                        // A dispatcher loop must test the types it can consume; a wider condition stalls it.
+                        var dispatcherTypeCondition = TryResolveDispatcherConsumedTypeCondition(cursorVariableName, referencedRule, propertyName, umlClass, ruleGenerationContext);
+
                         string whileCondition;
                         var whileConditionIsBareNullTest = false;
 
-                        if (!string.IsNullOrWhiteSpace(whileTypeExclusion))
+                        if (dispatcherTypeCondition != null)
+                        {
+                            whileCondition = dispatcherTypeCondition;
+                        }
+                        else if (!string.IsNullOrWhiteSpace(whileTypeExclusion))
                         {
                             whileCondition = whileTypeExclusion;
                         }
@@ -136,14 +143,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                         }
 
-                        // A guarded body-item rule (IsGuardedBodyItemRule) admits elements that have no
-                        // notation, and its per-item builder refuses to consume them WITHOUT advancing the
-                        // cursor. The loop must therefore test the same predicate as the enclosing entry
-                        // guard: a bare non-null test spins forever on the first refused element. The
-                        // guarded form only replaces the BARE null-test fallback: when a type-derived
-                        // while-condition already bounds the loop (next-type exclusion or content-type
-                        // guard, e.g. CalculationBodyPart's `is not IResultExpressionMembership`), that
-                        // stronger structural bound stays.
+                        // A guarded body-item rule refuses elements without advancing, so the loop must test the same
+                        // predicate as the entry guard.
                         if (whileConditionIsBareNullTest && IsGuardedBodyItemRule(nonTerminalElement.Name))
                         {
                             var guardVariableName = $"{targetProperty.Name.LowerCaseFirstLetter()}BodyItem";
@@ -209,9 +210,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (dispatcherCalls.Count == 0)
             {
-                // With location by role, an element no alternative claims is a dispatch defect, not a
-                // formatting variance — fail loudly instead of advancing past it and silently dropping
-                // it from the output.
                 var ruleName = ruleGenerationContext.NamedElementToGenerate?.Name ?? "Unknown";
                 writer.WriteSafeString($"throw new System.InvalidOperationException($\"The textual notation writer cannot place the current element ({{{cursorVariableName}.Current?.GetType().Name}}) while building '{ruleName}' — no alternative of the rule claims it, so it would be silently dropped.\");{Environment.NewLine}");
 
@@ -229,6 +227,144 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Resolves the type condition for a collection while loop.
         /// </summary>
+        /// <summary>
+        /// Builds a POSITIVE <c>while</c> condition for a <c>*</c> loop whose body is a pure dispatcher
+        /// rule (every alternative a bare non-terminal), testing exactly the element types that dispatcher
+        /// consumes from the loop's cursor — e.g. <c>FeatureSpecialization</c> consumes the
+        /// <c>Specialization</c> kinds, so a <c>FeatureMembership</c> must not enter the loop.
+        /// </summary>
+        /// <param name="cursorVariableName">The cursor the loop reads.</param>
+        /// <param name="referencedRule">The rule invoked per iteration.</param>
+        /// <param name="propertyName">The collection property the loop consumes from.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The condition, or <see langword="null" /> when the rule is not a resolvable dispatcher.</returns>
+        /// <remarks>
+        /// Declines when the consumed set cannot be fully resolved, or when a following sibling consumes a
+        /// type the set also admits — the existing next-type exclusion is the correct guard there, and a
+        /// positive test would let the loop swallow the sibling's element.
+        /// </remarks>
+        private static string TryResolveDispatcherConsumedTypeCondition(string cursorVariableName, TextualNotationRule referencedRule, string propertyName, IClass umlClass, RuleGenerationContext ruleGenerationContext)
+        {
+            var isPureDispatcher = referencedRule.Alternatives.Count > 1
+                && referencedRule.Alternatives.All(alternative => alternative.Elements.Count == 1 && alternative.Elements[0] is NonTerminalElement);
+
+            if (!isPureDispatcher)
+            {
+                return null;
+            }
+
+            var consumedClasses = new List<IClass>();
+
+            foreach (var alternative in referencedRule.Alternatives)
+            {
+                var alternativeClasses = CollectCursorConsumedClasses((NonTerminalElement)alternative.Elements[0], propertyName, umlClass, ruleGenerationContext, new HashSet<string>(StringComparer.Ordinal));
+
+                // An incomplete set would silently skip the elements it failed to account for.
+                if (alternativeClasses.Count == 0)
+                {
+                    return null;
+                }
+
+                consumedClasses.AddRange(alternativeClasses.Where(consumedClass => !consumedClasses.Contains(consumedClass)));
+            }
+
+            var siblings = ruleGenerationContext.CurrentSiblingElements;
+            var nextIndex = ruleGenerationContext.CurrentElementIndex + 1;
+
+            if (siblings != null && nextIndex < siblings.Count && siblings[nextIndex] is AssignmentElement { Operator: "+=" } nextAssignment)
+            {
+                var nextTypeName = ResolveAssignmentTargetTypeName(nextAssignment, umlClass, ruleGenerationContext);
+
+                if (nextTypeName != null && consumedClasses.Any(consumedClass => nextTypeName.StartsWith(consumedClass.QueryFullyQualifiedTypeName(), StringComparison.Ordinal)))
+                {
+                    return null;
+                }
+            }
+
+            var typeNames = consumedClasses.Select(consumedClass => consumedClass.QueryFullyQualifiedTypeName()).ToList();
+
+            return typeNames.Count == 1
+                ? $"{cursorVariableName}.Current is {typeNames[0]}"
+                : $"{cursorVariableName}.Current is ({string.Join(" or ", typeNames)})";
+        }
+
+        /// <summary>
+        /// Recursively collects the element classes a rule consumes from <paramref name="propertyName" />
+        /// via <c>+=</c>, descending through bare non-terminal references.
+        /// </summary>
+        /// <param name="nonTerminalElement">The rule reference to walk.</param>
+        /// <param name="propertyName">The collection property whose consumption is collected.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <param name="visitedRules">Rule names already walked, preventing infinite recursion.</param>
+        /// <returns>The distinct consumed classes; empty when none resolve.</returns>
+        private static List<IClass> CollectCursorConsumedClasses(NonTerminalElement nonTerminalElement, string propertyName, IClass umlClass, RuleGenerationContext ruleGenerationContext, HashSet<string> visitedRules)
+        {
+            var consumedClasses = new List<IClass>();
+
+            if (!visitedRules.Add(nonTerminalElement.Name))
+            {
+                return consumedClasses;
+            }
+
+            var rule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+
+            if (rule == null)
+            {
+                return consumedClasses;
+            }
+
+            foreach (var element in rule.Alternatives.SelectMany(alternative => FlattenRuleElements(alternative.Elements)))
+            {
+                switch (element)
+                {
+                    case AssignmentElement { Operator: "+=", Value: NonTerminalElement valueNonTerminal } assignment
+                        when string.Equals(assignment.Property, propertyName, StringComparison.OrdinalIgnoreCase):
+                    {
+                        var itemRule = ruleGenerationContext.FindRule(valueNonTerminal.Name);
+                        var itemClass = RuleQueryUtilities.FindClass(umlClass.Cache, itemRule?.EffectiveTarget ?? valueNonTerminal.Name);
+
+                        if (itemClass != null && !consumedClasses.Contains(itemClass))
+                        {
+                            consumedClasses.Add(itemClass);
+                        }
+
+                        break;
+                    }
+
+                    case NonTerminalElement nestedNonTerminal:
+                        consumedClasses.AddRange(CollectCursorConsumedClasses(nestedNonTerminal, propertyName, umlClass, ruleGenerationContext, visitedRules)
+                            .Where(nestedClass => !consumedClasses.Contains(nestedClass)));
+                        break;
+                }
+            }
+
+            return consumedClasses;
+        }
+
+        /// <summary>
+        /// Flattens a rule-element sequence, expanding group alternatives so nested assignments and
+        /// references are visited.
+        /// </summary>
+        /// <param name="elements">The elements to flatten.</param>
+        /// <returns>The flattened element sequence.</returns>
+        private static IEnumerable<RuleElement> FlattenRuleElements(IEnumerable<RuleElement> elements)
+        {
+            foreach (var element in elements)
+            {
+                yield return element;
+
+                if (element is GroupElement groupElement)
+                {
+                    foreach (var nested in FlattenRuleElements(groupElement.Alternatives.SelectMany(alternative => alternative.Elements)))
+                    {
+                        yield return nested;
+                    }
+                }
+            }
+        }
+
         private string ResolveCollectionWhileTypeCondition(string cursorVariableName, IClass umlClass, TextualNotationRule collectionRule, string outerPropertyName, RuleGenerationContext ruleGenerationContext)
         {
             var siblings = ruleGenerationContext.CurrentSiblingElements;
@@ -257,12 +393,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     var itemRule = ruleGenerationContext.FindRule(assignmentNonTerminals[0].Name);
                     var itemTypeTarget = itemRule != null ? itemRule.EffectiveTarget : null;
 
-                    // The item rule's own target is the WRAPPER type for a thin owning wrapper
-                    // (X : OwningMembership = … ownedRelatedElement = Y), which every sibling wrapper on this
-                    // cursor also satisfies — `individual def` consumed its own EmptyMultiplicityMember as a
-                    // DefinitionExtensionKeyword and emitted a stray '#'. Prefer the wrapped-type guard when
-                    // one is available; otherwise keep the coarse test rather than falling through to a
-                    // weaker condition that could admit elements the loop body will not consume.
+                    // A thin owning wrapper's own target is satisfied by every sibling wrapper on this cursor.
                     var wrappedTypeGuard = this.ResolveContentTypeGuard(cursorVariableName, collectionRule, outerPropertyName, umlClass, ruleGenerationContext);
 
                     if (!string.IsNullOrWhiteSpace(wrappedTypeGuard))
@@ -339,9 +470,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            // An allowlisted content rule needs an ABSENCE constraint on the referenced element's own
-            // contents, which body-shape analysis cannot express — delegate to the hand-coded predicate
-            // rather than emitting the shape-derived type check below.
+            // An absence constraint on the referenced element's contents is not derivable from body shape.
             if (RequiresHandCodedContentGuard(referencedRule.RuleName))
             {
                 var handCodedGuardVariableName = $"{referencedRule.RuleName.LowerCaseFirstLetter()}Guard{ruleGenerationContext.NarrowedTypeCheckCounter}";
@@ -539,8 +668,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            // Inner is non-null for thin owning wrappers; the wrapped type is the discriminator that
-            // distinguishes the wrapper from sibling OwningMembership subtypes on the same cursor.
             var resolvedTypes = new List<(string Wrapper, string Inner)>();
 
             foreach (var assignmentElement in collectionAssignments)

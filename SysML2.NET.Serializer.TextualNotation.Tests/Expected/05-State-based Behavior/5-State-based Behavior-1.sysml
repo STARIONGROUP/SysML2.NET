@@ -38,7 +38,7 @@ package '5-State-based Behavior-1' {
     package Usages {
         private import Definitions::*;
         /*
-         * These actions are used enabled in the state usage
+         * These actions are used enabled in the state usage 
          * 'vehicle states', in addition to 'provide power'.
          */
         action 'perform self test': 'Perform Self Test';

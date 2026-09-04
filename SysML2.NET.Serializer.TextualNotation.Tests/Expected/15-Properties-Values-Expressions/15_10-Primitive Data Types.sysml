@@ -1,7 +1,7 @@
 package '15.10-Primitive Data Types' {
     /*
      * Primitive data types are defined in normative model libraries.
-     * Any more specialized data types can be declared in user-defined
+     * Any more specialized data types can be declared in user-defined 
      * model libraries or models as needed.
      */
     private import ScalarValues::Integer {

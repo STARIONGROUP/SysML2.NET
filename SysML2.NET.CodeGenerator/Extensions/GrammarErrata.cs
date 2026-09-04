@@ -90,6 +90,22 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 "parameter path emits 'out verdict', which re-parses as a plain FeatureMembership with " +
                 "direction out and so loses the metaclass. CalculationBodyItem is already declared in the " +
                 "same file, so the replacement resolves without any further correction."),
+            new("OccurrenceUsagePrefix",
+                "OccurrenceUsagePrefix : OccurrenceUsage =\n    BasicUsagePrefix",
+                "OccurrenceUsagePrefix : OccurrenceUsage =\n    UnextendedUsagePrefix",
+                "SysML 8.2.2.9.2 builds OccurrenceUsagePrefix on 'BasicUsagePrefix', which contains no " +
+                "'EndUsagePrefix', so 'isEnd' is UNREACHABLE for every occurrence usage — 'end port p1: P;' " +
+                "and 'end item a;' cannot be written at all. This is issue #124 item 7, already recorded as " +
+                "an accepted divergence in SysML2.NET.CodeGenerator/GRAMMAR.md. Three sources say the " +
+                "notation is real: (1) the pilot's own grammar reaches the end prefix here (org.omg.sysml.xtext " +
+                "SysML.xtext, OccurrenceUsagePrefix); (2) the corpus writes it — 'end port p1: P;' in the " +
+                "Simple Tests ConjugationTest and 'end [1] item a : A' in ConnectionTest; (3) the metamodel " +
+                "sets isEnd on exactly those elements. There is no admissible alternative spelling: " +
+                "'BasicUsagePrefix' reaches 'RefPrefix', whose 'isConstant ?= constant' then renders the " +
+                "pilot's transform-set isConstant as 'constant port p1: P' — which drops isEnd AND asserts a " +
+                "constant the source never wrote. 'UnextendedUsagePrefix = EndUsagePrefix | BasicUsagePrefix' " +
+                "is declared in the same file and dispatches on isEnd, so a non-end usage keeps the exact " +
+                "BasicUsagePrefix behaviour and only an end usage changes."),
             new("DefinitionElement",
                 "    | InterfaceDefinition\n    | PortDefinition",
                 "    | InterfaceDefinition\n    | AllocationDefinition\n    | PortDefinition",

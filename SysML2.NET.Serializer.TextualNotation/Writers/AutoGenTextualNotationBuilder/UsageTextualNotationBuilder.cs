@@ -366,11 +366,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
                     PortUsageTextualNotationBuilder.BuildPortUsage(pocoPortUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsIndividual:
-                    OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
-                    break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsage(pocoOccurrenceUsageOccurrenceUsage, writerContext, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage(writerContext):
+                    OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsage:
                     OccurrenceUsageTextualNotationBuilder.BuildPortionUsage(pocoOccurrenceUsage, writerContext, stringBuilder);
@@ -513,7 +513,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage pocoAttributeUsage:
                     AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsIndividual:
+                case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageIndividualUsage when pocoOccurrenceUsageIndividualUsage.IsValidForIndividualUsage(writerContext):
                     OccurrenceUsageTextualNotationBuilder.BuildIndividualUsage(pocoOccurrenceUsageIndividualUsage, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage pocoOccurrenceUsageOccurrenceUsage when pocoOccurrenceUsageOccurrenceUsage.IsValidForOccurrenceUsage(writerContext):
@@ -570,8 +570,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             switch (poco)
             {
-                case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsage:
-                    PortUsageTextualNotationBuilder.BuildDefaultInterfaceEnd(pocoPortUsage, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Systems.Ports.IPortUsage pocoPortUsageDefaultInterfaceEnd when pocoPortUsageDefaultInterfaceEnd.IsValidForDefaultInterfaceEnd(writerContext):
+                    PortUsageTextualNotationBuilder.BuildDefaultInterfaceEnd(pocoPortUsageDefaultInterfaceEnd, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage pocoUsageStructureUsageElement when pocoUsageStructureUsageElement.IsValidForStructureUsageElement(writerContext):
                     BuildStructureUsageElement(pocoUsageStructureUsageElement, writerContext, stringBuilder);

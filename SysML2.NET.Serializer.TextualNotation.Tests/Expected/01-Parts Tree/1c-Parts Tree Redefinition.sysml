@@ -34,7 +34,7 @@ package '1c-Parts Tree Redefinition' {
         }
         part vehicle1_c1 :> vehicle1 {
             /*
-             * 'vehicle1_c1' is a specialization of 'vehicle1' (technically
+             * 'vehicle1_c1' is a specialization of 'vehicle1' (technically 
              * a subset). It inherits all the parts of 'vehicle1' and
              * only needs to specify additional or redefined parts.
              */

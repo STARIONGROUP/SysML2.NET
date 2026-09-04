@@ -11,9 +11,9 @@ package '18-Use Case' {
         objective {
             doc
             /*
-             * Satisfy mission requirements to transport driver and passengers
-             * from starting location to ending location in conformance with
-             * the driving profile and meet the mission requirements for safety,
+             * Satisfy mission requirements to transport driver and passengers 
+             * from starting location to ending location in conformance with 
+             * the driving profile and meet the mission requirements for safety, 
              * reliability, comfort, and affordability.
              */
 

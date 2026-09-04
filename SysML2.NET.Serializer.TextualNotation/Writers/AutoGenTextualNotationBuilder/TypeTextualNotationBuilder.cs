@@ -535,7 +535,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             BuildTypeDeclarationHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.Append(' ');
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is (SysML2.NET.Core.POCO.Core.Types.IDisjoining or SysML2.NET.Core.POCO.Core.Types.IUnioning or SysML2.NET.Core.POCO.Core.Types.IIntersecting or SysML2.NET.Core.POCO.Core.Types.IDifferencing))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 BuildTypeRelationshipPart(poco, writerContext, stringBuilder);

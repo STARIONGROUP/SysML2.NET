@@ -84,7 +84,7 @@ package '2a-Parts Interconnection' {
             part engine: Engine;
             interface : EngineToTransmissionInterface connect engine.drivePwrPort to transmission.clutchPort {
                 /*
-                 * A usage of an interface definition connects two ports relative to
+                 * A usage of an interface definition connects two ports relative to 
                  * a containing context.
                  */
             }
@@ -117,7 +117,7 @@ package '2a-Parts Interconnection' {
                 }
                 interface differential.leftDiffPort to rearAxle.leftHalfAxle.axleToDiffPort {
                     /*
-                     * A connection can be to a port that is arbitrarily deeply nested, on either end.
+                     * A connection can be to a port that is arbitrarily deeply nested, on either end. 
                      */
                 }
                 interface differential.rightDiffPort to rearAxle.rightHalfAxle.axleToDiffPort;

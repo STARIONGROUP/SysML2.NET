@@ -82,7 +82,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
                 }
             }
-            while (ownedRelationshipCursor.Current is not null and not SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)
+            while (ownedRelationshipCursor.Current is (SysML2.NET.Core.POCO.Core.Features.IFeatureTyping or SysML2.NET.Core.POCO.Core.Features.ISubsetting or SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting or SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting or SysML2.NET.Core.POCO.Core.Features.IRedefinition))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, writerContext, stringBuilder);

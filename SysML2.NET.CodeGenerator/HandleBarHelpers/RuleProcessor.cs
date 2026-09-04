@@ -114,14 +114,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Text-free members the pilot is KNOWN to store before the elements the production declares ahead of
-        /// them, verified against real pilot output.
-        /// <para>Deliberately an allowlist, not a structural rule. Emitting no text does NOT imply the model
-        /// may store the element anywhere: storage order is a per-rule implementation detail and it goes BOTH
-        /// ways. <c>EmptyMultiplicityMember</c> is stored FIRST though declared last, while
-        /// <c>EmptyResultMember</c> / <c>ReturnParameterMembership</c> is stored LAST as declared (in the
-        /// <c>OperatorExpression</c> family, <c>InvocationExpression</c> and <c>FeatureReferenceExpression</c>).
-        /// Hoisting the latter would strand the cursor on it. Only add a name here after checking real output.</para>
+        /// Text-free members stored before the elements the production declares ahead of them.
+        /// <para>An allowlist, not a structural rule: emitting no text does not imply the element may be
+        /// stored anywhere, and storage order goes both ways.</para>
         /// </summary>
         private static readonly HashSet<string> HoistableTextFreeMembers = new(StringComparer.Ordinal)
         {
@@ -131,11 +126,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Moves a lone <c>+=</c> element whose production emits NO text to the front of the alternative.
         /// <para>Such an element has no observable position in the notation, so the grammar cannot constrain
-        /// where the parser puts it in the collection — and the pilot does not always put it where the
-        /// production does. Consuming it first keeps the cursor aligned for the elements that DO emit text;
-        /// leaving it in place strands the cursor on it (e.g. <c>IndividualDefinition</c> declares
-        /// <c>EmptyMultiplicityMember</c> last but the model stores it first, hiding the Subclassification
-        /// that <c>Definition</c> must read).</para>
+        /// where it is stored. Consuming it first keeps the cursor aligned for the elements that do emit
+        /// text; leaving it in place strands the cursor on it.</para>
         /// <para>Only a LONE such element is hoisted: when several appear (e.g. <c>TransitionUsage</c>'s two
         /// <c>EmptyParameterMember</c>s) their relative order decides which pairs with which sibling, so
         /// moving them would change meaning.</para>
@@ -153,10 +145,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                      && EmitsNoNotation(ruleGenerationContext.FindRule(nonTerminal.Name), ruleGenerationContext, []))
                 .ToList();
 
-            // Only a TRAILING text-free element is hoisted. Declared last, it has nothing after it whose
-            // position it could encode, so moving it is meaning-preserving; declared mid-sequence its order
-            // relative to the following elements is significant (TransitionUsage's EmptyParameterMember
-            // pairs with the TriggerActionMember that follows it).
+            // Only a TRAILING text-free element is hoisted; mid-sequence its order is significant.
             if (textFree.Count != 1
                 || !ReferenceEquals(elements[^1], textFree[0])
                 || ReferenceEquals(elements[0], textFree[0]))
@@ -359,10 +348,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            // A rule may PIN a property to a constant through a non-parsing assignment, e.g.
-            // `GuardExpressionMember : TransitionFeatureMembership = 'if' { kind = 'guard' } …`.
-            // Sibling rules then share one target type and are distinguishable ONLY by that constant,
-            // so it has to be part of the guard or the first sibling swallows them all.
+            // Sibling rules sharing a target type are distinguishable only by a pinned constant, so it must
+            // be part of the guard.
             var pinnedConstantPattern = ResolvePinnedConstantPattern(referencedRule, targetClass);
 
             return pinnedConstantPattern == null ? targetTypeName : $"{targetTypeName} {pinnedConstantPattern}";
@@ -513,9 +500,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             foreach (var alternative in referencedRule.Alternatives)
             {
-                // Two assignments in ONE alternative can resolve the same clause (e.g. TransitionSuccession's
-                // EmptyEndMember and ConnectorEndMember both target EndFeatureMembership) — `A && A` is just
-                // `A`, so dedupe here as the OR-side already does.
+                // `A && A` is `A`, so dedupe as the OR-side already does.
                 var clauses = alternative.Elements
                     .Select(element => TryBuildCandidateSignatureClause(element, targetProperties, targetClass, ruleGenerationContext))
                     .Where(clause => clause != null)
@@ -707,10 +692,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     {
                                         var consumptionAssignment = consumptionAssignments[consumptionIndex];
 
-                                        // A role-based (Contains) part establishes the pinned element's presence
-                                        // regardless of cursor position, so a positional tail-walk corroboration
-                                        // (a GetNext offset over PARENT siblings) no longer lines up with it —
-                                        // keeping it re-introduces the silent drop for out-of-order storage.
+                                        // A role-based part holds regardless of cursor position, so a positional tail-walk conjunct no
+                                        // longer lines up with it and would reintroduce the silent drop.
                                         if (emittedPinnedCondition && !elements.Contains(consumptionAssignment))
                                         {
                                             continue;
@@ -743,14 +726,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                                 else
                                 {
-                                    // A discriminating rule is located by ROLE (Contains + predicate), not by
-                                    // cursor position — its consumption site takes the element with TryTake
-                                    // and the identical predicate.
                                     var pinnedSingleCondition = TryResolveRoleBasedContainsCondition(assigment, umlClass, ruleGenerationContext, iterator.CursorVariableName);
 
-                                    // Guard on the TYPE the assignment consumes, not on mere cursor non-emptiness —
-                                    // a bare non-null test also passes for the next UNRELATED relationship and emits
-                                    // the group's terminals spuriously (e.g. AcceptParameterPart's `via`).
+                                    // Guard on the consumed TYPE: a bare non-null test emits the group's terminals spuriously.
                                     var singleTypeName = ResolveAssignmentTargetTypeName(assigment, umlClass, ruleGenerationContext);
 
                                     ifStatementContent.Add(pinnedSingleCondition ?? (singleTypeName == null
@@ -814,6 +792,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
+                    // A nested optional group can carry the only notation for its content, so the outer group must
+                    // be entered whenever that content is present.
+                    var nestedGroupCondition = TryResolveNestedGroupCursorCondition(umlClass, elements, ruleGenerationContext);
+
+                    if (nestedGroupCondition != null)
+                    {
+                        inlineConditionParts.Add(nestedGroupCondition);
+                    }
+
                     var optionalCollectionCondition = TryResolveOptionalCollectionGroupCondition(umlClass, elements, ruleGenerationContext);
 
                     if (optionalCollectionCondition != null)
@@ -848,15 +835,40 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Resolves the guard for an optional group whose only variable content is a <c>*</c>-quantified
-        /// bare non-terminal — e.g. <c>( '{' ActionBodyItem* '}' )?</c>. Such a group must be emitted only
-        /// when its loop would iterate at least once: the group's own terminals carry no information, so a
-        /// property-based condition wrongly emits an empty <c>{ }</c> whenever any unrelated property is set.
+        /// Builds the condition testing whether a NESTED optional group inside an optional group has
+        /// content on the cursor — the outer group must be entered to emit it, even when the outer
+        /// group's own elements would all be empty.
         /// </summary>
-        /// <param name="umlClass">The related <see cref="IClass" /></param>
-        /// <param name="elements">The optional group's elements</param>
-        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
-        /// <returns>The cursor-based condition, or <see langword="null" /> when the group is not that shape.</returns>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="elements">The outer optional group's elements.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns>The condition, or <see langword="null" /> when no nested group consumes a cursor.</returns>
+        private static string TryResolveNestedGroupCursorCondition(IClass umlClass, List<RuleElement> elements, RuleGenerationContext ruleGenerationContext)
+        {
+            var nestedAssignment = elements
+                .OfType<GroupElement>()
+                .Where(group => group.IsOptional)
+                .SelectMany(group => group.Alternatives.SelectMany(groupAlternative => groupAlternative.Elements))
+                .OfType<AssignmentElement>()
+                .FirstOrDefault(assignment => assignment is { Operator: "+=", Value: NonTerminalElement });
+
+            if (nestedAssignment == null)
+            {
+                return null;
+            }
+
+            var cursor = ruleGenerationContext.DefinedCursors.FirstOrDefault(definedCursor => definedCursor.ApplicableRuleElements.Contains(nestedAssignment));
+
+            if (cursor == null)
+            {
+                return null;
+            }
+
+            var typeName = ResolveAssignmentTargetTypeName(nestedAssignment, umlClass, ruleGenerationContext);
+
+            return typeName == null ? null : $"{cursor.CursorVariableName}.Current is {typeName}";
+        }
+
         private static string TryResolveOptionalCollectionGroupCondition(IClass umlClass, List<RuleElement> elements, RuleGenerationContext ruleGenerationContext)
         {
             var nonTerminals = elements.OfType<NonTerminalElement>().ToList();
@@ -881,8 +893,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return null;
             }
 
-            // The cursor is declared up-front by DeclareAllRequiredCursors; if it is absent this is not the
-            // shape we handle, so fall back rather than emit a second declaration.
             var existingCursor = ruleGenerationContext.DefinedCursors.SingleOrDefault(x => x.IsCursorValidForProperty(targetProperty));
 
             if (existingCursor == null)
@@ -1123,20 +1133,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" /></param>
         private void ProcessMultiElementAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
-            // When all alternatives consist exclusively of terminal elements (and optionally non-parsing assignments), handle via code-gen
             if (alternatives.All(alt => alt.Elements.Count > 0 && alt.Elements.All(element => element is TerminalElement or NonParsingAssignmentElement)))
             {
                 EmitTerminalOnlyAlternatives(writer, umlClass, alternatives, ruleGenerationContext);
                 return;
             }
 
-            // Detect pattern: property=[QualifiedName] | property=NonTerminal{containment+=property}
             if (alternatives.Count == 2 && TryEmitQualifiedNameOrChainAlternatives(writer, umlClass, alternatives, ruleGenerationContext))
             {
                 return;
             }
 
-            // Multi-element alternatives (e.g., ';' | '{' NamespaceBodyElement* '}')
             var firstAlt = alternatives.ElementAt(0);
             var hasTerminalOnlyFirstAlt = firstAlt.Elements.Count == 1 && firstAlt.Elements[0] is TerminalElement;
 
@@ -1146,7 +1153,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                // Try each pattern handler in order; fall back to HandCoded if none match
                 if (this.TryHandleOperatorLiteralAlternation(writer, umlClass, alternatives, ruleGenerationContext))
                 {
                     return;
@@ -1305,16 +1311,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var chainTypeName = chainTargetClass.QueryFullyQualifiedTypeName();
             var chainVarName = $"chained{resolvedPropertyName}As{chainTargetClass.Name}";
 
-            string builderCallString;
-
-            if (typeTarget == ruleGenerationContext.NamedElementToGenerate.Name)
-            {
-                builderCallString = $"Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
-            }
-            else
-            {
-                builderCallString = $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
-            }
+            var builderCallString = typeTarget == ruleGenerationContext.NamedElementToGenerate.Name ? $"Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);" 
+                : $"{typeTarget}TextualNotationBuilder.Build{chainNonTerminal.Name}({chainVarName}, writerContext, stringBuilder);";
 
             writer.WriteSafeString($"if ({variableName}.{resolvedContainmentName}.Contains({variableName}.{resolvedPropertyName}) && {variableName}.{resolvedPropertyName} is {chainTypeName} {chainVarName}){Environment.NewLine}");
             writer.WriteSafeString($"{{{Environment.NewLine}");
@@ -1324,10 +1322,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"SharedTextualNotationBuilder.AppendQualifiedName(stringBuilder,{variableName}.{resolvedPropertyName}, writerContext, poco);{Environment.NewLine}");
 
-            // Both alternatives denote the same notational prefix, so when the chain rule ends in a
-            // terminal (FeatureChainPrefix's trailing '.') the [QualifiedName] branch must emit it too.
-            // The kebnf omits that '.' on the reference alternative of FlowEndSubsetting; the pilot's
-            // Xtext grammar spells it out on both, and the kebnf is immutable, so it is recovered here.
+            // Both alternatives denote the same notational prefix, so a trailing terminal must be emitted on
+            // both. The KEBNF omits it on one and is immutable, so it is recovered here.
             var chainTrailingTerminal = QueryTrailingTerminal(referencedRule);
 
             if (chainTrailingTerminal == null)
@@ -1433,14 +1429,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             // A NonTerminal-valued assignment emits its own null guard inside ProcessAssignmentElement;
             // only a value-literal assignment (e.g. [QualifiedName]) needs the guard supplied here.
-            if (assignmentElement.Value is ValueLiteralElement)
-            {
-                writer.WriteSafeString($"else if ({targetProperty.QueryIfStatementContentForNonEmpty(variableName)}){Environment.NewLine}");
-            }
-            else
-            {
-                writer.WriteSafeString($"else{Environment.NewLine}");
-            }
+            writer.WriteSafeString(assignmentElement.Value is ValueLiteralElement ? $"else if ({targetProperty.QueryIfStatementContentForNonEmpty(variableName)}){Environment.NewLine}" : $"else{Environment.NewLine}");
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             this.ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
@@ -1679,14 +1668,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 ? $".IsValidFor{collectionNonTerminals[0].Name}(writerContext)"
                 : string.Empty;
 
-            if (requiresIsValidForGuard)
-            {
-                writer.WriteSafeString($"if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current is not SysML2.NET.Core.POCO.Root.Elements.IRelationship emptyBodyCandidate || !emptyBodyCandidate{guardCallSuffix}){Environment.NewLine}");
-            }
-            else
-            {
-                writer.WriteSafeString($"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
-            }
+            writer.WriteSafeString(requiresIsValidForGuard ? $"if (writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current is not SysML2.NET.Core.POCO.Root.Elements.IRelationship emptyBodyCandidate || !emptyBodyCandidate{guardCallSuffix}){Environment.NewLine}"
+                : $"if(writerContext.CursorCache.GetOrCreateCursor(poco.Id, \"{targetProperty.Name}\", poco.{propertyAccessName}).Current == null){Environment.NewLine}");
 
             writer.WriteSafeString($"{{{Environment.NewLine}");
             writer.WriteSafeString($"stringBuilder.AppendLine(\"{terminalValue}\");{Environment.NewLine}");
@@ -1834,37 +1817,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// by an <c>IsValidFor{Rule}</c> predicate instead of a bare null-test.
         /// </summary>
         /// <remarks>
-        /// Allowlisted by name, deliberately, because the four entries encode TWO unrelated concerns and no
-        /// single predicate can derive both:
-        /// <list type="table">
-        /// <item>
-        /// <term><c>CaseBodyItem</c>, <c>DefinitionBodyItem</c></term>
-        /// <description>A trailing consumer reads the SAME cursor after the loop, so an unguarded loop
-        /// swallows it — <c>CaseBody</c>'s own <c>( ownedRelationship += ResultExpressionMember )?</c>, and
-        /// <c>PortDefinition</c>'s trailing <c>ConjugatedPortDefinitionMember</c> reached through
-        /// <c>Definition → DefinitionBody</c>. This is a property OF THE GRAMMAR and
-        /// <see cref="GuardedBodyItemRuleAnalysis" /> derives it.</description>
-        /// </item>
-        /// <item>
-        /// <term><c>InterfaceBodyItem</c>, <c>ActionBodyItem</c></term>
-        /// <description>The item builder declines an element it cannot render WITHOUT advancing the cursor
-        /// — <c>SharedTextualNotationBuilder</c>'s <c>default:</c> arm, and <c>ActionBodyItem</c>'s outer
-        /// <c>if (IsValidForActionBodyItem)</c>. The guard is what keeps such an element from ever reaching
-        /// the dispatcher. <c>InterfaceBody</c> is the clean witness that this is NOT the grammar concern:
-        /// it is the last element of both <c>InterfaceDefinition</c> and <c>InterfaceUsage</c>, so no
-        /// trailing consumer exists, yet the guard is still load-bearing.</description>
-        /// </item>
-        /// </list>
-        /// <para>The second concern is not derivable. It depends on the internal control flow of a
-        /// hand-written method: <c>BuildStateBodyItemHandCoded</c> is equally hand-coded yet DRAINS the
-        /// cursor in its own <c>while</c>, so it can never stall its caller — a "the item builder is
-        /// hand-coded" heuristic would over-guard it. Deciding it would mean analysing that C#.</para>
-        /// <para>What removes the risk instead is <c>CollectionCursor.AssertAdvancedSince</c>, emitted by
-        /// <see cref="EmitLoopProgressAssertion" /> at the foot of every generated cursor loop: a stalled
-        /// iteration now throws immediately instead of hanging. That matters because a hang is invisible to
-        /// a corpus that compares output — dropping <c>InterfaceBodyItem</c> from this list once produced a
-        /// fully green 33-case run. With the assertion in place this allowlist governs OUTPUT CORRECTNESS
-        /// (do not swallow the result expression, do not emit a bare <c>ref;</c>) rather than termination.</para>
+        /// Allowlisted by name because the entries encode two unrelated concerns: a trailing consumer reading
+        /// the same cursor after the loop (derivable, see <see cref="GuardedBodyItemRuleAnalysis" />), and an
+        /// item builder that declines an element without advancing the cursor (not derivable — it depends on
+        /// the control flow of a hand-written method). The allowlist governs output correctness;
+        /// <c>CollectionCursor.AssertAdvancedSince</c> covers termination.
         /// </remarks>
         /// <summary>
         /// Emits the capture of a cursor's position immediately before a loop body, and returns the name of
@@ -1911,20 +1868,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// be supplied by a hand-coded <c>IsValidFor{Rule}</c> guard.
         /// </summary>
         /// <remarks>
-        /// Currently <c>FunctionOperationExpression</c>. Its arm in <c>NonFeatureChainPrimaryExpression</c>
+        /// <para><c>DefaultInterfaceEnd</c>. Its own body yields only <c>isEnd ?= 'end'</c>, but SysML 2.0
+        /// §7.14.2 makes the <c>port</c> keyword optional on an interface end "if no owned cross feature is
+        /// declared on the end" — so an end carrying one must fall through to the sibling
+        /// <c>StructureUsageElement</c> arm, which reaches <c>PortUsage</c> and its <c>EndUsagePrefix</c>
+        /// cross-feature slot. An absence constraint on the element's own contents is not expressible as a
+        /// body-shape predicate.</para>
+        /// <para><c>FunctionOperationExpression</c>. Its arm in <c>NonFeatureChainPrimaryExpression</c>
         /// targets <c>InvocationExpression</c> and sits above the <c>SequenceExpression</c> arm, which
         /// targets the supertype <c>Expression</c>. A sequence <c>(a, b, c)</c> is an <c>OperatorExpression</c>
         /// with <c>operator = ","</c> — hence an <c>InvocationExpression</c> whose first owned relationship is
         /// an <c>IParameterMembership</c>, which is all the unguarded arm tested — so every sequence was
         /// swallowed and rendered with a spurious <c>-&gt;</c>. Telling the two apart needs the SECOND owned
         /// relationship (<c>Membership</c> for <c>x-&gt;f()</c>, <c>ParameterMembership</c> for a sequence),
-        /// i.e. cursor lookahead, which no body-shape analysis can produce.
+        /// i.e. cursor lookahead, which no body-shape analysis can produce.</para>
         /// </remarks>
         /// <param name="alternativeRuleName">The KEBNF rule name of the alternative</param>
         /// <returns><c>true</c> if the codegen should emit a hand-coded <c>IsValidFor{Rule}</c> guard</returns>
         private static bool RequiresHandCodedAlternativeGuard(string alternativeRuleName)
         {
-            return string.Equals(alternativeRuleName, "FunctionOperationExpression", StringComparison.Ordinal);
+            return string.Equals(alternativeRuleName, "FunctionOperationExpression", StringComparison.Ordinal)
+                || string.Equals(alternativeRuleName, "DefaultInterfaceEnd", StringComparison.Ordinal);
         }
 
         /// <summary>

@@ -104,7 +104,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
             BuildClassifierDeclarationHandCoded(poco, writerContext, stringBuilder);
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is (SysML2.NET.Core.POCO.Core.Types.IDisjoining or SysML2.NET.Core.POCO.Core.Types.IUnioning or SysML2.NET.Core.POCO.Core.Types.IIntersecting or SysML2.NET.Core.POCO.Core.Types.IDifferencing))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, writerContext, stringBuilder);

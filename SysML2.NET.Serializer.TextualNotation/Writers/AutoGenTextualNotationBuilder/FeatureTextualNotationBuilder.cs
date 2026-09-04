@@ -518,29 +518,29 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 case SysML2.NET.Core.POCO.Kernel.Interactions.ISuccessionFlow pocoSuccessionFlow:
                     SuccessionFlowTextualNotationBuilder.BuildSuccessionFlow(pocoSuccessionFlow, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IInvariant pocoInvariantInvariant when (pocoInvariantInvariant.DeclaredShortName != null || pocoInvariantInvariant.DeclaredName != null):
-                    InvariantTextualNotationBuilder.BuildInvariant(pocoInvariantInvariant, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Functions.IInvariant pocoInvariant:
+                    InvariantTextualNotationBuilder.BuildInvariant(pocoInvariant, writerContext, stringBuilder);
                     break;
                 case SysML2.NET.Core.POCO.Kernel.Interactions.IFlow pocoFlow:
                     FlowTextualNotationBuilder.BuildFlow(pocoFlow, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression pocoBooleanExpressionBooleanExpression when (pocoBooleanExpressionBooleanExpression.DeclaredShortName != null || pocoBooleanExpressionBooleanExpression.DeclaredName != null):
-                    BooleanExpressionTextualNotationBuilder.BuildBooleanExpression(pocoBooleanExpressionBooleanExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression pocoBooleanExpression:
+                    BooleanExpressionTextualNotationBuilder.BuildBooleanExpression(pocoBooleanExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector pocoBindingConnectorBindingConnector when (pocoBindingConnectorBindingConnector.DeclaredShortName != null || pocoBindingConnectorBindingConnector.DeclaredName != null):
-                    BindingConnectorTextualNotationBuilder.BuildBindingConnector(pocoBindingConnectorBindingConnector, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector pocoBindingConnector:
+                    BindingConnectorTextualNotationBuilder.BuildBindingConnector(pocoBindingConnector, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession pocoSuccessionSuccession when (pocoSuccessionSuccession.DeclaredShortName != null || pocoSuccessionSuccession.DeclaredName != null):
-                    SuccessionTextualNotationBuilder.BuildSuccession(pocoSuccessionSuccession, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession pocoSuccession:
+                    SuccessionTextualNotationBuilder.BuildSuccession(pocoSuccession, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpressionExpression when (pocoExpressionExpression.DeclaredShortName != null || pocoExpressionExpression.DeclaredName != null):
-                    ExpressionTextualNotationBuilder.BuildExpression(pocoExpressionExpression, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Functions.IExpression pocoExpression:
+                    ExpressionTextualNotationBuilder.BuildExpression(pocoExpression, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnectorConnector when (pocoConnectorConnector.DeclaredShortName != null || pocoConnectorConnector.DeclaredName != null):
-                    ConnectorTextualNotationBuilder.BuildConnector(pocoConnectorConnector, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Connectors.IConnector pocoConnector:
+                    ConnectorTextualNotationBuilder.BuildConnector(pocoConnector, writerContext, stringBuilder);
                     break;
-                case SysML2.NET.Core.POCO.Kernel.Behaviors.IStep pocoStepStep when (pocoStepStep.DeclaredShortName != null || pocoStepStep.DeclaredName != null):
-                    StepTextualNotationBuilder.BuildStep(pocoStepStep, writerContext, stringBuilder);
+                case SysML2.NET.Core.POCO.Kernel.Behaviors.IStep pocoStep:
+                    StepTextualNotationBuilder.BuildStep(pocoStep, writerContext, stringBuilder);
                     break;
                 default:
                     BuildFeature(poco, writerContext, stringBuilder);

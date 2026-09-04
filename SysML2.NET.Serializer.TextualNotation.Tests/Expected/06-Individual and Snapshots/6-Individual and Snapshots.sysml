@@ -91,8 +91,8 @@ package '6-Individual and Snapshots' {
                     :>> acceleration = a0;
                     exhibit vehicleStates.on {
                         /*
-                         * This asserts that the snapshot exhibits the referenced
-                         * state, which means that the vehicle must me in the state
+                         * This asserts that the snapshot exhibits the referenced 
+                         * state, which means that the vehicle must me in the state 
                          * at the time of the snapshot.
                          */
                     }

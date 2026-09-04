@@ -297,6 +297,25 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Asserts that the <see cref="IPortUsage"/> is valid for the DefaultInterfaceEnd rule.
+        /// <para><c>DefaultInterfaceEnd : PortUsage = isEnd ?= 'end' Usage</c> — the interface-body end
+        /// form WITHOUT the <c>'port'</c> keyword. The sibling <c>StructureUsageElement</c> alternative
+        /// reaches <c>PortUsage = OccurrenceUsagePrefix 'port' Usage</c>, whose <c>EndUsagePrefix</c>
+        /// carries the optional <c>ownedRelationship += OwnedCrossFeatureMember</c> slot.</para>
+        /// <para>Both forms round-trip to the same metaclass, so the choice is only constrained where one
+        /// form cannot express the model: OMG SysML v2 spec, Clause 7.14.2 states the <c>port</c> keyword
+        /// is optional on an interface end "if no owned cross feature is declared on the end". An end
+        /// carrying one therefore has to take the <c>'port'</c> form.</para>
+        /// </summary>
+        /// <param name="portUsage">The <see cref="IPortUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if the port usage is an end whose cross feature, if any, is not owned</returns>
+        internal static bool IsValidForDefaultInterfaceEnd(this IPortUsage portUsage, TextualNotationWriterContext writerContext)
+        {
+            return portUsage is { IsEnd: true } && portUsage.OwnedCrossFeature() == null;
+        }
+
+        /// <summary>
         /// Asserts that the <see cref="IUsage"/> is valid for the NonOccurrenceUsageElement rule.
         /// <para><c>NonOccurrenceUsageElement : Usage = DefaultReferenceUsage | ReferenceUsage |
         /// AttributeUsage | EnumerationUsage | BindingConnectorAsUsage | SuccessionAsUsage | ExtendedUsage</c></para>
@@ -1141,7 +1160,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 ITransitionUsage transitionUsage => transitionUsage.OwnedRelationship
                     .OfType<ITransitionFeatureMembership>()
                     .Any(transitionFeature => transitionFeature.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard),
-                ISuccessionAsUsage => true,
+                // TargetSuccession names its target end and leads with an ANONYMOUS SourceEndMember; a named
+                // source end marks the standalone `first X then Y` form, whose `first` this rule cannot emit.
+                ISuccessionAsUsage succession => HasNamedTargetEnd(succession) && !HasNamedSourceEnd(succession),
                 _ => false,
             }) == true;
         }
