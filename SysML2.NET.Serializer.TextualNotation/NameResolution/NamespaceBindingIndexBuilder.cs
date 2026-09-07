@@ -95,14 +95,113 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         }
 
         /// <summary>
-        /// Runs the walk and returns the index it produced.
+        /// Records the facade edges eagerly, then returns an index that builds each scope's bindings on
+        /// first probe through <see cref="BuildScopeIndex" />.
         /// </summary>
-        /// <returns>The immutable index.</returns>
+        /// <returns>The lazily-populated index.</returns>
+        /// <remarks>
+        /// Per-scope bindings are independent of every other scope's, so they can be built on demand — and
+        /// resolution only ever probes the scopes on reference-site chains and candidate descents, a tiny
+        /// fraction of the reachable graph. The facade index is the one cross-scope product: an edge is
+        /// discovered on the IMPORTING namespace but queried by the imported one, so it cannot be found
+        /// on demand and is recorded up front from raw containment.
+        /// </remarks>
         internal NamespaceBindingIndex Build()
         {
-            var simpleNameIndices = this.BuildSimpleNameIndices(this.rootNamespace);
+            this.BuildFacadeIndex();
 
-            return new NamespaceBindingIndex(this.rootNamespace, this.globalNamespaces, simpleNameIndices, this.layeredBindings, this.directFacadeIndex, this.aliasIndex, this.resolutionGraph);
+            return new NamespaceBindingIndex(this.rootNamespace, this.globalNamespaces, this, this.layeredBindings, this.directFacadeIndex, this.aliasIndex, this.resolutionGraph);
+        }
+
+        /// <summary>
+        /// Builds the simple-name index of one scope, recording its layered bindings and aliases as a side
+        /// effect.
+        /// </summary>
+        /// <param name="scope">The <see cref="INamespace" /> to index.</param>
+        /// <returns>The simple-name → member-set lookup for <paramref name="scope" />.</returns>
+        internal IReadOnlyDictionary<string, HashSet<IElement>> BuildScopeIndex(INamespace scope)
+        {
+            var index = new Dictionary<string, HashSet<IElement>>(StringComparer.Ordinal);
+            var discardedQueue = new Queue<(INamespace Scope, bool IsGlobal)>();
+            var isGlobal = this.IsGlobalScope(scope);
+
+            this.currentScopeBindings = new ScopeBindingTable();
+            this.layeredBindings[scope] = this.currentScopeBindings;
+
+            this.BuildOwnedAndImportedEntries(scope, index, discardedQueue, isGlobal);
+
+            if (scope is IType type)
+            {
+                this.currentRecordingLayer = BindingLayer.Inherited;
+                this.BuildInheritedEntries(type, index, discardedQueue, isGlobal);
+            }
+
+            this.currentScopeBindings = null;
+
+            return index;
+        }
+
+        /// <summary>
+        /// Records every facade edge — a public <see cref="INamespaceImport" /> re-exporting its imported
+        /// namespace — by walking raw containment from the root and global Namespaces.
+        /// </summary>
+        /// <remarks>
+        /// The walk reads only the <c>OwnedRelationship</c> / <c>OwnedRelatedElement</c> storage lists;
+        /// derived properties are never touched, which keeps this pass proportional to element count
+        /// rather than to inheritance depth.
+        /// </remarks>
+        private void BuildFacadeIndex()
+        {
+            var pending = new Stack<IElement>();
+            var visited = new HashSet<IElement>();
+
+            foreach (var seed in this.globalNamespaces.Prepend(this.rootNamespace).Where(seed => seed != null))
+            {
+                pending.Push(seed);
+            }
+
+            while (pending.Count != 0)
+            {
+                var element = pending.Pop();
+
+                if (!visited.Add(element))
+                {
+                    continue;
+                }
+
+                foreach (var relationship in element.OwnedRelationship)
+                {
+                    if (element is INamespace importOwner
+                        && relationship is INamespaceImport { Visibility: VisibilityKind.Public, ImportedNamespace: { } imported })
+                    {
+                        this.RecordDirectFacade(imported, importOwner);
+                    }
+
+                    foreach (var ownedElement in relationship.OwnedRelatedElement)
+                    {
+                        pending.Push(ownedElement);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Asserts whether <paramref name="scope" /> is reached through the global Namespace: its
+        /// containment root is not the root Namespace being serialized (KerML §8.2.3.5.2).
+        /// </summary>
+        /// <param name="scope">The scope about to be indexed.</param>
+        /// <returns><see langword="true" /> when only VISIBLE members of <paramref name="scope" /> may be indexed.</returns>
+        private bool IsGlobalScope(INamespace scope)
+        {
+            var visited = new HashSet<IElement>();
+            IElement current = scope;
+
+            while (current.owningNamespace != null && visited.Add(current))
+            {
+                current = current.owningNamespace;
+            }
+
+            return !ReferenceEquals(current, this.rootNamespace);
         }
 
         /// <summary>
@@ -301,55 +400,6 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
                     pending.Enqueue((memberOwner, isGlobal));
                 }
             }
-        }
-
-        /// <summary>
-        /// Eagerly indexes every namespace reachable from <paramref name="rootNamespaceForSimpleNameIndices" /> via
-        /// containment and imports, then the global namespaces (visible memberships only).
-        /// </summary>
-        /// <param name="rootNamespaceForSimpleNameIndices">The root namespace.</param>
-        /// <returns>The full structural cache.</returns>
-        private Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> BuildSimpleNameIndices(INamespace rootNamespaceForSimpleNameIndices)
-        {
-            var result = new Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>>();
-            var pending = new Queue<(INamespace Scope, bool IsGlobal)>();
-            var visited = new HashSet<INamespace>();
-
-            pending.Enqueue((rootNamespaceForSimpleNameIndices, false));
-
-            foreach (var globalNamespace in this.globalNamespaces)
-            {
-                pending.Enqueue((globalNamespace, true));
-            }
-
-            while (pending.Count != 0)
-            {
-                var (scope, isGlobal) = pending.Dequeue();
-
-                if (scope == null || !visited.Add(scope))
-                {
-                    continue;
-                }
-
-                var index = new Dictionary<string, HashSet<IElement>>(StringComparer.Ordinal);
-
-                this.currentScopeBindings = new ScopeBindingTable();
-                this.layeredBindings[scope] = this.currentScopeBindings;
-
-                this.BuildOwnedAndImportedEntries(scope, index, pending, isGlobal);
-
-                if (scope is IType type)
-                {
-                    this.currentRecordingLayer = BindingLayer.Inherited;
-                    this.BuildInheritedEntries(type, index, pending, isGlobal);
-                }
-
-                this.currentScopeBindings = null;
-
-                result[scope] = index;
-            }
-
-            return result;
         }
 
         /// <summary>

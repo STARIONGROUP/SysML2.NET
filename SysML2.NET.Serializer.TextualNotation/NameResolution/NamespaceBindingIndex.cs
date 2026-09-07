@@ -68,24 +68,29 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         private readonly Dictionary<INamespace, ScopeBindingTable> layeredBindings;
 
         /// <summary>
-        /// Namespace to (simple name to member set).
+        /// Namespace to (simple name to member set), populated on first probe of each scope.
         /// </summary>
-        private readonly Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> simpleNameIndices;
+        private readonly Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> simpleNameIndices = new();
+
+        /// <summary>
+        /// Builds a scope's bindings on its first probe.
+        /// </summary>
+        private readonly NamespaceBindingIndexBuilder scopeIndexBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NamespaceBindingIndex" /> class.
         /// </summary>
         /// <param name="rootNamespace">The indexed root Namespace.</param>
         /// <param name="globalNamespaces">The other root Namespaces forming the global Namespace.</param>
-        /// <param name="simpleNameIndices">Namespace to simple-name index.</param>
-        /// <param name="layeredBindings">Namespace to layered binding table.</param>
+        /// <param name="scopeIndexBuilder">The builder invoked to index a scope on its first probe.</param>
+        /// <param name="layeredBindings">Namespace to layered binding table, filled by <paramref name="scopeIndexBuilder" />.</param>
         /// <param name="directFacadeIndex">Owning Namespace to its re-exporting Namespaces.</param>
-        /// <param name="aliasIndex">Scope to its alias bindings.</param>
+        /// <param name="aliasIndex">Scope to its alias bindings, filled by <paramref name="scopeIndexBuilder" />.</param>
         /// <param name="resolutionGraph">Maps implied generals onto the graph being written.</param>
         internal NamespaceBindingIndex(
             INamespace rootNamespace,
             List<INamespace> globalNamespaces,
-            Dictionary<INamespace, IReadOnlyDictionary<string, HashSet<IElement>>> simpleNameIndices,
+            NamespaceBindingIndexBuilder scopeIndexBuilder,
             Dictionary<INamespace, ScopeBindingTable> layeredBindings,
             Dictionary<INamespace, HashSet<INamespace>> directFacadeIndex,
             Dictionary<INamespace, Dictionary<IElement, List<string>>> aliasIndex,
@@ -93,7 +98,7 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         {
             this.RootNamespace = rootNamespace;
             this.globalNamespaces = globalNamespaces;
-            this.simpleNameIndices = simpleNameIndices;
+            this.scopeIndexBuilder = scopeIndexBuilder;
             this.layeredBindings = layeredBindings;
             this.directFacadeIndex = directFacadeIndex;
             this.aliasIndex = aliasIndex;
@@ -120,8 +125,23 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         internal bool TryGetAliases(INamespace scope, IElement target, out List<string> aliasNames)
         {
             aliasNames = null;
+            this.EnsureIndexed(scope);
 
             return this.aliasIndex.TryGetValue(scope, out var scopeAliases) && scopeAliases.TryGetValue(target, out aliasNames);
+        }
+
+        /// <summary>
+        /// Indexes <paramref name="scope" /> on its first probe.
+        /// </summary>
+        /// <param name="scope">The scope being probed; may be <see langword="null" />.</param>
+        private void EnsureIndexed(INamespace scope)
+        {
+            if (scope == null || this.simpleNameIndices.ContainsKey(scope))
+            {
+                return;
+            }
+
+            this.simpleNameIndices[scope] = this.scopeIndexBuilder.BuildScopeIndex(scope);
         }
 
         /// <summary>
@@ -135,13 +155,15 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         }
 
         /// <summary>
-        /// Returns the eagerly-built simple-name index for <paramref name="scope" />, or
-        /// <see cref="EmptyIndex" /> when the scope was not reached.
+        /// Returns the simple-name index for <paramref name="scope" />, building it on first probe, or
+        /// <see cref="EmptyIndex" /> for <see langword="null" />.
         /// </summary>
         /// <param name="scope">The <see cref="INamespace" /> whose index is requested.</param>
         /// <returns>The simple-name → member-set lookup.</returns>
         internal IReadOnlyDictionary<string, HashSet<IElement>> GetSimpleNameIndex(INamespace scope)
         {
+            this.EnsureIndexed(scope);
+
             return scope == null ? EmptyIndex : this.simpleNameIndices.GetValueOrDefault(scope, EmptyIndex);
         }
 
@@ -157,6 +179,8 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         /// <returns>The outcome kind and, when bound, the elected element.</returns>
         internal (LayeredOutcomeKind Kind, IElement Element) ResolveNameInScope(INamespace scope, string rawName, IMembership excludedMembership, IFeature localRedefiner, bool insideView)
         {
+            this.EnsureIndexed(scope);
+
             if (scope == null
                 || !this.layeredBindings.TryGetValue(scope, out var table)
                 || !table.ByName.TryGetValue(rawName, out var bindings))
