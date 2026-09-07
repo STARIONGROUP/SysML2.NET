@@ -297,10 +297,38 @@ applies to production code, tests, and the generator alike.
   belongs in `GrammarErrata.cs` with its rationale, not scattered through the writers.
 - **No notes to future editors** ("keep in step with X", "do not remove"). Encode it in a guard or a
   test.
-- **Keep only** a non-obvious *why* that changes what a reader would do: a spec constraint being
-  honoured, a deliberate deviation, or a real trap. One or two lines.
 - **XML docs still required on every type and member** (`DEVELOPMENT_STANDARDS.md` §5.1), but held to
   one sentence per tag, two as the ceiling — no `<para>` elaborations, no essays.
+
+### The bright line — the ONLY test for keeping an inline comment
+
+Earlier wording said to keep "a non-obvious *why*". That is not testable and gets self-served. The
+rule is:
+
+> **A comment may ONLY state a constraint that would cause a reader to break something if they did
+> not know it. A comment may NEVER explain why the change was made.**
+
+Apply it as a question with a yes/no answer: *if a reader deleted or rewrote this code without the
+comment, would they introduce a defect?* No → delete the comment. "It helps the reviewer understand
+my change" is not a yes; that belongs in the commit message.
+
+**Budget: at most 2 added comment lines per change.** Over that, delete until it fits or ask first.
+
+**Signature words that mean you are writing a commit message, not a comment.** If an added comment
+line contains any of `now`, `previously`, `rather than`, `instead of`, `used to`, `was `, `no
+longer`, `we `, `I `, or restates a `<remarks>` already on the same member — delete it. A
+`PreToolUse` hook rejects these on `Edit`/`Write`, so it fails loudly rather than reaching review.
+
+Worked example of the failure, from this repo:
+
+```csharp
+// The supplier now records each resource's root as it is read rather than re-deriving it, so
+// interior elements no longer reach this list and no metaclass filter is needed to keep them out.
+var otherRootNamespaces = globalNamespaces?.Where(c => c != null && !ReferenceEquals(c, rootNamespace))
+```
+
+Two banned signatures (`now`, `rather than`), it annotates a self-evident `Where`, and deleting it
+costs a reader nothing. The commit message was the right home for all of it.
 
 ## Quality rules
 
