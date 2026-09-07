@@ -66,10 +66,11 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         /// Resolves the local scope of <paramref name="sourcePoco" />: the first <see cref="INamespace" />
         /// reached by climbing <c>OwningRelatedElement</c>, <c>owningNamespace</c>, then <c>owner</c>.
         /// An anonymous nested namespace (no upward chain of its own) is skipped via <c>owner</c> so the
-        /// reference site's real enclosing scope is found. Falls back to <see cref="RootNamespace" />.
+        /// reference site's real enclosing scope is found. Falls back to <paramref name="rootNamespace" />.
         /// </summary>
         /// <param name="sourcePoco">The source POCO; may be <see langword="null" />.</param>
-        /// <returns>The local scope or <see cref="RootNamespace" />.</returns>
+        /// <param name="rootNamespace">The scope returned when no enclosing namespace is reached.</param>
+        /// <returns>The local scope or <paramref name="rootNamespace" />.</returns>
         internal static INamespace GetSourceLocalScope(IElement sourcePoco, INamespace rootNamespace)
         {
             if (sourcePoco == null)
@@ -426,7 +427,7 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
                 return null;
             }
 
-            return membership is IFeatureValue && scope?.owningNamespace is IInstantiationExpression invocation
+            return membership is IFeatureValue && scope.owningNamespace is IInstantiationExpression invocation
                 ? invocation
                 : scope;
         }

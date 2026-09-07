@@ -107,9 +107,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     }
 
                     // Tested BEFORE ActionBehaviorMember: a guard-carrying TransitionUsage IS an
-                    // IActionUsage, so the broader behavior guard would otherwise claim it. The shorthand
-                    // run never reaches this switch (EmitActionTargetSuccessionRun consumes anchored
-                    // successions directly), so any guarded succession arriving here is the explicit form.
+                    // IActionUsage, so the broader behavior guard would otherwise claim it.
                     case IFeatureMembership featureMembershipForGuarded when featureMembershipForGuarded.IsValidForGuardedSuccessionMember(writerContext):
                         FeatureMembershipTextualNotationBuilder.BuildGuardedSuccessionMember(featureMembershipForGuarded, writerContext, stringBuilder);
                         ownedRelationshipCursor.Move();

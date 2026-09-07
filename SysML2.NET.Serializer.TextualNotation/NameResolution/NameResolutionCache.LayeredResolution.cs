@@ -243,7 +243,7 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
 
             // A Namespace publicly importing the owner re-exports it (§8.2.3.5.3) and can anchor the
             // qualification part. The specification ranks neither spelling, so the shorter name wins.
-            if (target?.owningNamespace is { } owner)
+            if (target.owningNamespace is { } owner)
             {
                 var targetSegmentRaw = SegmentNaming.QueryPreferredRawName(target);
                 var targetSegment = SegmentNaming.QueryPreferredEscapedSegment(target);
@@ -298,7 +298,7 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
             rawPathDown.Add(pathRaw);
             escapedPathDown.Add(pathEscaped);
 
-            var ancestor = (IElement)target?.owningNamespace;
+            var ancestor = (IElement)target.owningNamespace;
             var visitedAncestors = new HashSet<IElement>();
 
             if (ancestor != null && visitedAncestors.Add(ancestor))
@@ -352,12 +352,14 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         /// <returns>The spelling to emit.</returns>
         private string ResolveViaLayeredScopes(IElement target, ReferenceSite site, string escapedName)
         {
-            foreach (var candidate in this.GenerateCandidates(target, site))
+            var verifiedText = this.GenerateCandidates(target, site)
+                .Where(candidate => this.TryVerifyCandidate(site, candidate, target))
+                .Select(candidate => candidate.Text)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(verifiedText))
             {
-                if (this.TryVerifyCandidate(site, candidate, target))
-                {
-                    return candidate.Text;
-                }
+                return verifiedText;
             }
 
             if (this.TryBuildGlobalQualifiedName(target) is { } globalQualifiedName)

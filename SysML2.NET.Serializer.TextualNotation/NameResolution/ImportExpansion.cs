@@ -122,11 +122,6 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
 
             List<IMembership> ownedMemberships = [..importedNamespace.ownedMembership.Where(ownedMember => !publicOnly || ownedMember.Visibility == VisibilityKind.Public)];
 
-            if (ownedMemberships == null)
-            {
-                throw new ArgumentNullException(nameof(ownedMemberships));
-            }
-
             foreach (var ownedMembership in ownedMemberships)
             {
                 yield return ownedMembership;
@@ -322,7 +317,7 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
 
         /// <summary>
         /// Returns the Memberships <paramref name="scope" />'s own Imports contribute, mirroring
-        /// <see cref="BuildOwnedAndImportedEntries" /> minus its collision filter — a colliding import
+        /// <see cref="NamespaceBindingIndexBuilder.BuildOwnedAndImportedEntries" /> minus its collision filter — a colliding import
         /// cannot be the INDEPENDENT binding anyway, since the owned member it collides with is.
         /// </summary>
         /// <param name="scope">The importing scope; must be non-null.</param>

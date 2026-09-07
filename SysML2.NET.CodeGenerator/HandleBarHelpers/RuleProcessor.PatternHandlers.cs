@@ -1365,13 +1365,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         $"Alternatives '{string.Join("', '", unguardedRuleNames)}' all target '{duplicateGroup.Key.Name}' and none of them resolved a distinguishing guard — the first arm would silently claim every instance. Add a discriminator (pinned constant, boolean assignment, or IsValidFor guard) for all but one.");
                 }
 
-                var collidingGuardGroups = duplicateGroup.Value
+                var collidingGuardGroup = duplicateGroup.Value
                     .Where(element => whenGuards.ContainsKey(element.RuleElement))
                     .GroupBy(element => whenGuards[element.RuleElement], StringComparer.Ordinal)
-                    .Where(guardGroup => guardGroup.Count() > 1)
-                    .ToList();
+                    .FirstOrDefault(guardGroup => guardGroup.Count() > 1);
 
-                foreach (var collidingGuardGroup in collidingGuardGroups)
+                if (collidingGuardGroup != null)
                 {
                     var collidingRuleNames = collidingGuardGroup.Select(element => element.RuleElement.Name);
 

@@ -259,7 +259,7 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
         {
             var namedAncestors = new List<IElement>();
 
-            for (var ancestor = target?.owningNamespace; ancestor != null; ancestor = ancestor.owningNamespace)
+            for (var ancestor = target.owningNamespace; ancestor != null; ancestor = ancestor.owningNamespace)
             {
                 if (string.IsNullOrWhiteSpace(SegmentNaming.QueryPreferredEscapedSegment(ancestor)))
                 {
