@@ -120,6 +120,18 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
 
                     if (sourcePoco is IMembershipImport)
                     {
+                        // §8.2.3.5.1: a MembershipImport's qualified name identifies the MEMBERSHIP itself,
+                        // the one case where it is not the memberElement. The two coincide for an owning
+                        // Membership, but an alias binds the element under its own name in its own
+                        // Namespace, so naming the element would import a DIFFERENT Membership and bind a
+                        // different name into the importing Namespace.
+                        var aliasPath = this.ResolveAliasMembership(membership, sourcePoco);
+
+                        if (!string.IsNullOrWhiteSpace(aliasPath))
+                        {
+                            return aliasPath;
+                        }
+
                         target = membership.MemberElement;
                         break;
                     }
@@ -467,6 +479,40 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
             this.sourceScopeChains[sourcePoco.Id] = chain;
 
             return chain;
+        }
+
+        /// <summary>
+        /// Names an ALIAS <see cref="IMembership" /> through the alias itself, as
+        /// <c>{owning namespace}::{memberName}</c>.
+        /// </summary>
+        /// <remarks>
+        /// Returns <see langword="null" /> for an owning Membership, where the Membership and its
+        /// <c>memberElement</c> denote the same binding and the ordinary element path already names it.
+        /// </remarks>
+        /// <param name="membership">The Membership being imported.</param>
+        /// <param name="sourcePoco">The POCO at whose syntactic position the reference appears.</param>
+        /// <returns>The alias path, or <see langword="null" /> when the Membership is not an alias.</returns>
+        private string ResolveAliasMembership(IMembership membership, IElement sourcePoco)
+        {
+            if (ReferenceEquals(membership, membership.MemberElement.owningMembership))
+            {
+                return null;
+            }
+
+            var aliasName = !string.IsNullOrWhiteSpace(membership.MemberName)
+                ? membership.MemberName
+                : membership.MemberShortName;
+
+            if (string.IsNullOrWhiteSpace(aliasName) || membership.membershipOwningNamespace == null)
+            {
+                return null;
+            }
+
+            var namespacePath = this.Resolve(membership.membershipOwningNamespace, sourcePoco);
+
+            return string.IsNullOrWhiteSpace(namespacePath)
+                ? SegmentNaming.Escape(aliasName)
+                : $"{namespacePath}::{SegmentNaming.Escape(aliasName)}";
         }
 
         /// <summary>
