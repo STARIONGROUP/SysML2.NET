@@ -82,20 +82,12 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
                 throw new ArgumentNullException(nameof(rootNamespace));
             }
 
-            // KerML §8.2.3.5.2 forms the global Namespace from root Namespaces, and §7.2.5.3 makes
-            // root-ness structural — no owner — with no exclusion by metaclass. The Feature test is
-            // therefore NOT that rule: it is an interim guard against a defect in the supplier. Callers
-            // pass XmiReadResult.ReferencedNamespaces, which XmiDataCache.QueryRootNamespaces derives by
-            // scanning the whole flat cache for owningNamespace == null; an element whose owningMembership
-            // was never wired while resolving an external reference satisfies that test and is admitted as
-            // a root. Such a Feature contributes its INHERITED members as global bindings, so full
-            // resolution accepts a bare name no reader can resolve. Remove this once the deserializer
-            // tracks each resource's actual root instead of re-deriving it.
+            // KerML §8.2.3.5.2 forms the global Namespace from root Namespaces, root-ness being structural
+            // (§7.2.5.3 — a Namespace with no owner) with no exclusion by metaclass. The supplier now
+            // records each resource's root as it is read rather than re-deriving it, so interior elements
+            // no longer reach this list and no metaclass filter is needed to keep them out.
             var otherRootNamespaces = globalNamespaces?
-                .Where(candidate => candidate != null
-                                    && !ReferenceEquals(candidate, rootNamespace)
-                                    && candidate is not IFeature
-                                    && candidate.owningNamespace == null)
+                .Where(candidate => candidate != null && !ReferenceEquals(candidate, rootNamespace))
                 .Distinct()
                 .ToList() ?? [];
 

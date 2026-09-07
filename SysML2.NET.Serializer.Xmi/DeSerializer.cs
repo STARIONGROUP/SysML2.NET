@@ -278,6 +278,8 @@ namespace SysML2.NET.Serializer.Xmi
             if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
             {
                 this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
+                this.cache.RegisterRootNamespace(fileLocation, existingNamespace);
+
                 stopWatch.Stop();
                 return existingNamespace;
             }
@@ -285,6 +287,7 @@ namespace SysML2.NET.Serializer.Xmi
             var readNamespace = (INamespace)await this.xmiDataReaderFacade.QueryXmiDataAsync(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name, elementOriginMap);
 
             elementOriginMap?.RegisterRootNamespace(fileLocation, readNamespace.Id);
+            this.cache.RegisterRootNamespace(fileLocation, readNamespace);
 
             stopWatch.Stop();
             this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
@@ -362,6 +365,8 @@ namespace SysML2.NET.Serializer.Xmi
             if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
             {
                 this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
+                this.cache.RegisterRootNamespace(fileLocation, existingNamespace);
+
                 stopWatch.Stop();
                 return existingNamespace;
             }
@@ -369,6 +374,7 @@ namespace SysML2.NET.Serializer.Xmi
             var readNamespace = (INamespace)this.xmiDataReaderFacade.QueryXmiData(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name, elementOriginMap);
 
             elementOriginMap?.RegisterRootNamespace(fileLocation, readNamespace.Id);
+            this.cache.RegisterRootNamespace(fileLocation, readNamespace);
 
             stopWatch.Stop();
             this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);

@@ -55,6 +55,11 @@ namespace SysML2.NET.Serializer.Xmi
         private readonly Dictionary<Guid, Dictionary<string, Guid>> singleReferenceCache = [];
 
         /// <summary>
+        /// Gets the root <see cref="INamespace"/> of each resource read, keyed by that resource's <see cref="Uri"/>
+        /// </summary>
+        private readonly Dictionary<Uri, INamespace> rootNamespaces = [];
+
+        /// <summary>
         /// Gets the injected <see cref="ILogger{TCategoryName}"/> used to produce logs
         /// </summary>
         private readonly ILogger<XmiDataCache> logger;
@@ -163,7 +168,28 @@ namespace SysML2.NET.Serializer.Xmi
         }
 
         /// <summary>
-        /// Queries the cached root <see cref="INamespace"/>s — those without an <c>owningNamespace</c>.
+        /// Records the root <see cref="INamespace"/> of a resource that has been read.
+        /// </summary>
+        /// <param name="fileLocation">The <see cref="Uri"/> of the resource, which keys the record so a resource re-entered through a circular reference is registered once</param>
+        /// <param name="rootNamespace">The root <see cref="INamespace"/> that resource yielded</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="fileLocation"/> or <paramref name="rootNamespace"/> is null.</exception>
+        public void RegisterRootNamespace(Uri fileLocation, INamespace rootNamespace)
+        {
+            if (fileLocation == null)
+            {
+                throw new ArgumentNullException(nameof(fileLocation));
+            }
+
+            if (rootNamespace == null)
+            {
+                throw new ArgumentNullException(nameof(rootNamespace));
+            }
+
+            this.rootNamespaces[fileLocation] = rootNamespace;
+        }
+
+        /// <summary>
+        /// Queries the cached root <see cref="INamespace"/>s — one per resource read.
         /// <para>Because a de-serialization transitively reads every referenced resource, this returns the
         /// root of EVERY loaded resource, which per KerML 1.0 §8.2.3.5.2 is what constitutes the global
         /// <see cref="INamespace"/> available to the model being read.</para>
@@ -171,30 +197,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <returns>The cached root <see cref="INamespace"/>s; empty when nothing has been read</returns>
         public IReadOnlyCollection<INamespace> QueryRootNamespaces()
         {
-            return this.cache.Values
-                .OfType<INamespace>()
-                .Where(IsRootNamespace)
-                .ToList();
-        }
-
-        /// <summary>
-        /// Determines whether <paramref name="candidate"/> is a root <see cref="INamespace"/>, i.e. it has no
-        /// <c>owningNamespace</c>. The derived property is not implemented for every metaclass, so a
-        /// <see cref="NotSupportedException"/> is treated as "cannot be established as a root" rather than
-        /// being allowed to escape a query over the whole cache.
-        /// </summary>
-        /// <param name="candidate">The <see cref="INamespace"/> to test</param>
-        /// <returns>True when the candidate has no owning namespace</returns>
-        private static bool IsRootNamespace(INamespace candidate)
-        {
-            try
-            {
-                return candidate.owningNamespace == null;
-            }
-            catch (NotSupportedException)
-            {
-                return false;
-            }
+            return this.rootNamespaces.Values.ToList();
         }
 
         /// <summary>

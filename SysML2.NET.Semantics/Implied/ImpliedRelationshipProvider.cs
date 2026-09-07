@@ -285,6 +285,15 @@ namespace SysML2.NET.Semantics.Implied
             {
                 return [];
             }
+            catch (NotSupportedException)
+            {
+                // Same trade for the same reason: a rule whose derivation resolves a qualified name reaches
+                // Package::importedMemberships and evaluates any filterCondition on the way, and an
+                // Expression with no model-level evaluation throws. The precondition cannot be established,
+                // so the rule cannot contribute a Relationship — but one missing Relationship costs a longer
+                // name, whereas letting this escape truncates the whole document.
+                return [];
+            }
         }
 
         /// <summary>
