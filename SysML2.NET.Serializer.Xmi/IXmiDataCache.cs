@@ -72,7 +72,14 @@ namespace SysML2.NET.Serializer.Xmi
         bool TryGetData(Guid dataId, out IData data);
 
         /// <summary>
-        /// Queries the cached root <see cref="INamespace"/>s — those without an <c>owningNamespace</c>.
+        /// Records the root <see cref="INamespace"/> of a resource that has been read.
+        /// </summary>
+        /// <param name="fileLocation">The <see cref="Uri"/> of the resource, which keys the record so a resource re-entered through a circular reference is registered once</param>
+        /// <param name="rootNamespace">The root <see cref="INamespace"/> that resource yielded</param>
+        void RegisterRootNamespace(Uri fileLocation, INamespace rootNamespace);
+
+        /// <summary>
+        /// Queries the cached root <see cref="INamespace"/>s — one per resource read.
         /// <para>A single de-serialization transitively reads every referenced resource (a model that
         /// references one library element pulls in that library and its own dependencies), so the cache
         /// holds the root <see cref="INamespace"/> of EVERY loaded resource, not only the one returned by

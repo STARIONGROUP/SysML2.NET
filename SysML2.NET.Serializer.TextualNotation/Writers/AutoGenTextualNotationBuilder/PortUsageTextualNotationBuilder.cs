@@ -61,18 +61,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any()))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any(), out var elementAsOwningMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                    {
-                        OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(elementAsOwningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(elementAsOwningMembership0, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }

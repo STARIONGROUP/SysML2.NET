@@ -297,6 +297,25 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Asserts that the <see cref="IPortUsage"/> is valid for the DefaultInterfaceEnd rule.
+        /// <para><c>DefaultInterfaceEnd : PortUsage = isEnd ?= 'end' Usage</c> — the interface-body end
+        /// form WITHOUT the <c>'port'</c> keyword. The sibling <c>StructureUsageElement</c> alternative
+        /// reaches <c>PortUsage = OccurrenceUsagePrefix 'port' Usage</c>, whose <c>EndUsagePrefix</c>
+        /// carries the optional <c>ownedRelationship += OwnedCrossFeatureMember</c> slot.</para>
+        /// <para>Both forms round-trip to the same metaclass, so the choice is only constrained where one
+        /// form cannot express the model: OMG SysML v2 spec, Clause 7.14.2 states the <c>port</c> keyword
+        /// is optional on an interface end "if no owned cross feature is declared on the end". An end
+        /// carrying one therefore has to take the <c>'port'</c> form.</para>
+        /// </summary>
+        /// <param name="portUsage">The <see cref="IPortUsage"/></param>
+        /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
+        /// <returns>True if the port usage is an end whose cross feature, if any, is not owned</returns>
+        internal static bool IsValidForDefaultInterfaceEnd(this IPortUsage portUsage, TextualNotationWriterContext writerContext)
+        {
+            return portUsage is { IsEnd: true } && portUsage.OwnedCrossFeature() == null;
+        }
+
+        /// <summary>
         /// Asserts that the <see cref="IUsage"/> is valid for the NonOccurrenceUsageElement rule.
         /// <para><c>NonOccurrenceUsageElement : Usage = DefaultReferenceUsage | ReferenceUsage |
         /// AttributeUsage | EnumerationUsage | BindingConnectorAsUsage | SuccessionAsUsage | ExtendedUsage</c></para>
@@ -557,10 +576,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// </summary>
         /// <param name="parameterMembership">The <see cref="IParameterMembership"/></param>
         /// <param name="writerContext">The active <see cref="TextualNotationWriterContext"/> (unused for this guard)</param>
-        /// <returns>True if the membership owns an <see cref="IActionUsage"/></returns>
+        /// <returns>True if the membership owns an <see cref="IActionUsage"/> that is not an <see cref="IIfActionUsage"/></returns>
+        /// <remarks>
+        /// An <see cref="IIfActionUsage"/> is excluded even though it is an <see cref="IActionUsage"/>: in the
+        /// <c>else</c> position of <c>IfNode</c> the two alternatives are
+        /// <c>( ActionBodyParameterMember | IfNodeParameterMember )</c>, and only the second reproduces the
+        /// <c>else if</c> chain. Admitting an if-node here makes the first alternative always win, which
+        /// flattens the chain into a single <c>else</c> block.
+        /// </remarks>
         internal static bool IsValidForActionBodyParameterMember(this IParameterMembership parameterMembership, TextualNotationWriterContext writerContext)
         {
-            return parameterMembership?.OwnedRelatedElement.OfType<IActionUsage>().Any() == true;
+            return parameterMembership?.OwnedRelatedElement
+                .OfType<IActionUsage>()
+                .Any(actionUsage => actionUsage is not IIfActionUsage) == true;
         }
 
         /// <summary>
@@ -1132,7 +1160,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 ITransitionUsage transitionUsage => transitionUsage.OwnedRelationship
                     .OfType<ITransitionFeatureMembership>()
                     .Any(transitionFeature => transitionFeature.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard),
-                ISuccessionAsUsage => true,
+                // TargetSuccession names its target end and leads with an ANONYMOUS SourceEndMember; a named
+                // source end marks the standalone `first X then Y` form, whose `first` this rule cannot emit.
+                ISuccessionAsUsage succession => HasNamedTargetEnd(succession) && !HasNamedSourceEnd(succession),
                 _ => false,
             }) == true;
         }
@@ -1309,10 +1339,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 IImport => true,
                 IVariantMembership => true,
+                // An EmptyParameterMember is the grammar's placeholder for an omitted slot (see
+                // IsEmptyParameterMember) — it has no notation of its own, so a body containing only
+                // one must not open a block to render it as a spurious 'in;'.
+                IParameterMembership parameterMembership when parameterMembership.IsEmptyParameterMember() => false,
+
+                // The content-free anonymous ReferenceUsage the pilot's transform attaches to every
+                // TransitionUsage / action node has no notation ANYWHERE — same exclusion as
+                // IsValidForActionBodyItem, or a target succession's UsageBody opens a block just to
+                // render it as a bare ';'.
                 IFeatureMembership featureMembership =>
-                    featureMembership.IsValidForSourceSuccessionMember(writerContext)
-                    || featureMembership.IsValidForOccurrenceUsageMember(writerContext)
-                    || featureMembership.IsValidForNonOccurrenceUsageMember(writerContext),
+                    !IsContentFreeAnonymousReferenceUsage(featureMembership)
+                    && (featureMembership.IsValidForSourceSuccessionMember(writerContext)
+                        || featureMembership.IsValidForOccurrenceUsageMember(writerContext)
+                        || featureMembership.IsValidForNonOccurrenceUsageMember(writerContext)),
                 IOwningMembership owningMembership => owningMembership.IsValidForDefinitionMember(writerContext),
                 IMembership => true,
                 _ => false,

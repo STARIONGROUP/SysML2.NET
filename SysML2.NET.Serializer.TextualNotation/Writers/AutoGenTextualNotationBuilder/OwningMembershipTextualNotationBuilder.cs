@@ -146,15 +146,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>().Any(), out var elementAsMultiplicityRange0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange elementAsMultiplicityRange)
-                {
-                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(elementAsMultiplicityRange, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(elementAsMultiplicityRange0, writerContext, stringBuilder);
             }
 
         }
@@ -218,15 +212,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.Ports.IPortConjugation>().Any(), out var elementAsConjugatedPortDefinition0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition elementAsConjugatedPortDefinition)
-                {
-                    ConjugatedPortDefinitionTextualNotationBuilder.BuildConjugatedPortDefinition(elementAsConjugatedPortDefinition, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                ConjugatedPortDefinitionTextualNotationBuilder.BuildConjugatedPortDefinition(elementAsConjugatedPortDefinition0, writerContext, stringBuilder);
             }
 
         }
@@ -242,15 +230,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IFeature>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>().Any(), out var elementAsFeature0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
-                {
-                    FeatureTextualNotationBuilder.BuildOwnedCrossMultiplicity(elementAsFeature, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                FeatureTextualNotationBuilder.BuildOwnedCrossMultiplicity(elementAsFeature0, writerContext, stringBuilder);
             }
 
         }
@@ -266,15 +248,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IFeature>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IFeatureChaining>().Any(), out var elementAsFeature0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Core.Features.IFeature elementAsFeature)
-                {
-                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                FeatureTextualNotationBuilder.BuildOwnedFeatureChain(elementAsFeature0, writerContext, stringBuilder);
             }
 
         }
@@ -290,15 +266,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>().Any(), out var elementAsSuccession0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession elementAsSuccession)
-                {
-                    SuccessionTextualNotationBuilder.BuildTransitionSuccession(elementAsSuccession, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                SuccessionTextualNotationBuilder.BuildTransitionSuccession(elementAsSuccession0, writerContext, stringBuilder);
             }
 
         }
@@ -315,15 +285,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
             stringBuilder.Append("#");
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.IFeatureTyping>().Any(), out var elementAsMetadataUsage0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Metadata.IMetadataUsage elementAsMetadataUsage)
-                {
-                    MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(elementAsMetadataUsage, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(elementAsMetadataUsage0, writerContext, stringBuilder);
             }
 
         }

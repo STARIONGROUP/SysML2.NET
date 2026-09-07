@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualNotationWriterContext.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Extensions;
     using SysML2.NET.Semantics.Implied;
+    using SysML2.NET.Serializer.TextualNotation.NameResolution;
 
     /// <summary>
     /// Provides the serialization context for the textual notation builders. Carries the

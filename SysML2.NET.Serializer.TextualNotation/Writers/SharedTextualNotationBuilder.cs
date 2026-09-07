@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SharedTextualNotationBuilder.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.Serializer.TextualNotation.Writers
 {
+    using SysML2.NET.Serializer.TextualNotation.NameResolution;
     using System;
     using System.Linq;
 
@@ -392,8 +393,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para>Dispatches on <c>cursor.Current</c>'s runtime type and delegates to the corresponding
         /// membership builder: <c>Import</c>, <c>VariantUsageMember</c>, <c>StructureUsageMember</c>,
         /// <c>NonOccurrenceUsageMember</c>, <c>DefinitionMember</c> (for <see cref="IOwningMembership"/>),
-        /// <c>AliasMember</c> (for plain <see cref="IMembership"/>). The cursor is always advanced — when
-        /// no alternative matches, the default branch simply moves it.</para>
+        /// <c>AliasMember</c> (for plain <see cref="IMembership"/>). An element no alternative claims is a
+        /// dispatch defect and throws instead of being silently dropped.</para>
         /// <para>Callers invoke this helper from the <c>default:</c> branch of their behavior-specific
         /// outer switch so that all behavior-specific cases (e.g. <c>InitialNodeMember</c>,
         /// <c>ActionBehaviorMember</c>, <c>EntryActionMember</c>) are matched first.</para>
@@ -438,8 +439,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     break;
 
                 default:
-                    ownedRelationshipCursor.Move();
-                    break;
+                    throw new System.InvalidOperationException($"The textual notation writer cannot place the current element ({ownedRelationshipCursor.Current?.GetType().Name}) in the body of '{poco.GetType().Name}' — no NonBehaviorBodyItem alternative claims it, so it would be silently dropped.");
             }
         }
 
@@ -646,19 +646,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.AppendLine();
             }
 
-            if (string.IsNullOrWhiteSpace(body))
-            {
-                stringBuilder.AppendLine("/* */");
-                return;
-            }
+            var lines = (body ?? string.Empty).Replace("\r\n", "\n").Split('\n');
 
-            var lines = body.Split('\n');
+            // §8.2.3.3.2 strips the white-space run following `/*` on re-read, so a body that opens with
+            // white space cannot survive the one-line form and takes the block form below instead. The
+            // body itself is appended as a literal: the normalising path collapses its consecutive
+            // spaces, which are content here.
+            var opensWithWhiteSpace = lines[0].Length > 0 && char.IsWhiteSpace(lines[0][0]);
 
-            if (lines.Length == 1)
+            if (lines.Length == 1 && !opensWithWhiteSpace)
             {
                 stringBuilder.Append("/* ");
-                stringBuilder.Append(lines[0].TrimEnd('\r'));
-                stringBuilder.AppendLine(" */");
+                stringBuilder.AppendIndentedLiteral(lines[0] + "*/");
+                stringBuilder.AppendLine();
                 return;
             }
 
@@ -672,20 +672,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 stringBuilder.AppendLine("/*");
 
-                // Only the leading/trailing blank lines are dropped (the body of a block comment always
-                // ends with one). Interior blank lines are CONTENT and must survive — filtering every
-                // blank line collapses deliberate paragraph breaks in the comment.
-                var firstContentIndex = Array.FindIndex(lines, line => !string.IsNullOrWhiteSpace(line));
-                var lastContentIndex = Array.FindLastIndex(lines, line => !string.IsNullOrWhiteSpace(line));
+                // Every line is emitted verbatim behind a ` * ` prefix, which KerML §8.2.3.3.2 strips back
+                // off on re-read. Blank lines and trailing white space are body CONTENT — note 2 keeps
+                // "all line terminators and white space included as entered" — so neither may be trimmed.
+                // The closing delimiter carries the last line terminator: a body that ends with one puts
+                // `*/` on its own line, and a body that does not must close on the last content line.
+                var closesOnOwnLine = lines[^1].Length == 0;
+                var emittedLines = closesOnOwnLine ? lines[..^1] : lines;
 
-                foreach (var rawLine in lines[firstContentIndex..(lastContentIndex + 1)])
+                for (var lineIndex = 0; lineIndex < emittedLines.Length; lineIndex++)
                 {
-                    var trimmedLine = rawLine.TrimEnd();
-                    stringBuilder.AppendIndentedLiteral(trimmedLine.Length == 0 ? " *" : " * " + trimmedLine);
-                    stringBuilder.AppendLine();
+                    var line = emittedLines[lineIndex];
+                    stringBuilder.AppendIndentedLiteral(line.Length == 0 ? " *" : " * " + line);
+
+                    if (closesOnOwnLine || lineIndex < emittedLines.Length - 1)
+                    {
+                        stringBuilder.AppendLiteralLine();
+                    }
                 }
 
-                stringBuilder.AppendIndentedLiteral(" */");
+                stringBuilder.AppendIndentedLiteral(closesOnOwnLine ? " */" : "*/");
                 stringBuilder.AppendLine();
             }
             finally

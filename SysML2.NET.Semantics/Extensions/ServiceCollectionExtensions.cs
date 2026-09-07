@@ -73,6 +73,7 @@ namespace SysML2.NET.Semantics.Extensions
             services.AddScoped<IImpliedSpecializationReducer, ImpliedSpecializationReducer>();
             services.AddScoped<IImpliedRuleGuardRegistry>(serviceProvider => new ImpliedRuleGuardRegistry(serviceProvider.GetServices<IImpliedRuleGuard>()));
             services.AddScoped<IImpliedRelationshipProvider, ImpliedRelationshipProvider>();
+            services.AddScoped(serviceProvider => new Lazy<IImpliedRelationshipProvider>(serviceProvider.GetRequiredService<IImpliedRelationshipProvider>));
 
             services.AddImpliedRelationshipRule<VariationUsageSpecializationRule>();
             services.AddImpliedRelationshipRule<VariationDefinitionSpecializationRule>();

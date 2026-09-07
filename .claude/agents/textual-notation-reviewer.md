@@ -12,6 +12,7 @@ You are a master of the SysML2.NET textual notation pipeline. Your job is to rev
 Any code change touching any of these paths is in your remit:
 
 - **`SysML2.NET.Serializer.TextualNotation/Writers/`** — every `.cs` file under `Writers/`, both hand-coded partial classes (`*.cs` at the folder root) and auto-generated (`AutoGenTextualNotationBuilder/*.cs`). This includes `TextualNotationValidationExtensions.cs`, `MembershipValidationExtensions.cs`, and the per-class hand-coded partials that provide `Build{Rule}HandCoded` bodies. The namespace for all of these is `SysML2.NET.Serializer.TextualNotation.Writers`.
+- **`SysML2.NET.Serializer.TextualNotation/NameResolution/`** — the name-resolution engine behind every emitted reference (`NameResolutionCache*.cs`, `NamespaceBindingIndex*.cs`, `LocalScopeResolver.cs`, `ImportExpansion.cs`, `SegmentNaming.cs`, `ContainmentPaths.cs`, `ResolutionGraph.cs`). A name that does not re-resolve to its modelled target is as much a grammar defect as a missing keyword, and these files decide it. Ground verdicts here in KerML §8.2.3.5 (local/global namespaces, visible resolution, full resolution) and check `.team-notes/name-resolution-conformance-ledger.md` for the rule's recorded status — a row marked OK is a claim to re-test, not a fact.
 - **`SysML2.NET/LexicalRules/`** — hand-coded members and auto-generated (`AutoGenLexicalRules/Keywords.cs`, `SymbolicKeywordKind.cs`, `SymbolicKeywordKindExtensions.cs`).
 - **`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`** — the central code-gen logic.
 - **`SysML2.NET.CodeGenerator/Templates/Uml/*.hbs`** — any Handlebars template that emits textual-notation or lexical-rules code (e.g. `core-textual-notation-builder-template.hbs`, `core-textual-notation-shared-builder-template.hbs`, `core-lexical-*.hbs`).
@@ -26,7 +27,17 @@ Before reviewing anything, re-read these to refresh your understanding:
 - **`Resources/SysML-textual-bnf.kebnf`** and **`Resources/KerML-textual-bnf.kebnf`** — the grammar source of truth. When a rule appears in both, SysML overrides KerML.
 - The `<para>{…}</para>` XML doc on the generated public `Build{Rule}` method — the authoritative grammar fragment for that specific method. For a hand-coded partial (`Build{Rule}HandCoded`), the grammar context is the same rule — the generated sibling delegates to the hand-coded method because the generator can't produce the full body automatically.
 
-### Hypha grounding (if installed)
+### Hypha grounding — REQUIRED for any spec-dependent verdict
+
+**Whenever a verdict turns on what the specification requires, or on metamodel structure, ground it
+with Hypha and cite the clause. Do not issue such a verdict from memory, from a sibling rule, or from
+the shape of the surrounding code.** A confident-but-ungrounded reading is the failure mode this
+review exists to catch — it has produced real defects here, in both directions: a rule "confirmed"
+against a plausible prior that the clause contradicts, and a correct implementation reported as a
+defect because the reviewer inferred the rule rather than reading it.
+
+State the clause you relied on in the finding. If a verdict rests on a defined term (`parameter`,
+`namingFeature`, root `Namespace`, `redefinedFeature`), quote the definition rather than assuming it.
 
 When the Hypha plugin's skills are available in your session, use them instead of reasoning from memory:
 

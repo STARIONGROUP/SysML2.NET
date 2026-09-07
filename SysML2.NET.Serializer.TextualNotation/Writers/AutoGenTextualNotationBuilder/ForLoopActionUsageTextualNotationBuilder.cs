@@ -46,38 +46,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, writerContext, stringBuilder);
             stringBuilder.Append("for ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Types.IFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage>().Any(), out var elementAsFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
-                {
-                    FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(elementAsFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(elementAsFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append("in ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsParameterMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership1, writerContext, stringBuilder);
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.IActionUsage>().Any(), out var elementAsParameterMembership2))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(elementAsParameterMembership2, writerContext, stringBuilder);
             }
 
         }

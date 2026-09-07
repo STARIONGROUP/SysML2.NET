@@ -230,18 +230,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any()))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any(), out var elementAsResultExpressionMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership elementAsResultExpressionMembership)
-                    {
-                        ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership0, writerContext, stringBuilder);
                 }
             }
 
@@ -375,18 +369,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
 
 
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
+                if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any()))
                 {
 
-                    if (ownedRelationshipCursor.Current != null)
+                    if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any(), out var elementAsResultExpressionMembership0))
                     {
-
-                        if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership elementAsResultExpressionMembership)
-                        {
-                            ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership, writerContext, stringBuilder);
-                            ownedRelationshipCursor.Move();
-
-                        }
+                        ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership0, writerContext, stringBuilder);
                     }
                     stringBuilder.Append(' ');
                 }
@@ -470,8 +458,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                             ownedRelationshipCursor.Move();
                             break;
                         default:
-                            ownedRelationshipCursor.Move();
-                            break;
+                            throw new System.InvalidOperationException($"The textual notation writer cannot place the current element ({ownedRelationshipCursor.Current?.GetType().Name}) while building 'Type' — no alternative of the rule claims it, so it would be silently dropped.");
                     }
                     ownedRelationshipCursor.AssertAdvancedSince(positionBeforeItem0, "MetadataBody");
                 }
@@ -536,25 +523,19 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             ElementTextualNotationBuilder.BuildIdentification(poco, writerContext, stringBuilder);
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange>().Any()))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange>().Any(), out var elementAsOwningMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                    {
-                        OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(elementAsOwningMembership0, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
 
             BuildTypeDeclarationHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.Append(' ');
-            while (ownedRelationshipCursor.Current != null)
+            while (ownedRelationshipCursor.Current is (SysML2.NET.Core.POCO.Core.Types.IDisjoining or SysML2.NET.Core.POCO.Core.Types.IUnioning or SysML2.NET.Core.POCO.Core.Types.IIntersecting or SysML2.NET.Core.POCO.Core.Types.IDifferencing))
             {
                 var positionBeforeItem0 = ownedRelationshipCursor.Position;
                 BuildTypeRelationshipPart(poco, writerContext, stringBuilder);
@@ -953,18 +934,12 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any()))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.IExpression>().Any(), out var elementAsResultExpressionMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IResultExpressionMembership elementAsResultExpressionMembership)
-                    {
-                        ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(elementAsResultExpressionMembership0, writerContext, stringBuilder);
                 }
             }
 

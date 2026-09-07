@@ -79,30 +79,18 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsParameterMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(elementAsParameterMembership0, writerContext, stringBuilder);
             }
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any()))
             {
                 stringBuilder.Append("via ");
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsParameterMembership1))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(elementAsParameterMembership1, writerContext, stringBuilder);
                 }
             }
 

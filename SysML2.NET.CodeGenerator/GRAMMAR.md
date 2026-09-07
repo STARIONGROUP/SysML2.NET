@@ -231,9 +231,39 @@ re-diagnosed:
 | #3 | `MetadataUsage` not wired into any dispatch point | 14-Language Extensions |
 | #9 | `SatisfyRequirementUsage` requires `assert` | 08-Requirements |
 | #10 | `CaseBodyItem` admits no `ReturnParameterMember` | 10-Analysis and Trades |
-| #11 | `EnumeratedValue` cannot carry prefix metadata (`#Security enum secret`) | 13-Model Containment, 14-Language Extensions |
+| #11 | `EnumeratedValue` cannot carry prefix metadata (`#Security enum secret`) | **CONFIRMED** — see below | 13-Model Containment, 14-Language Extensions, `Simple Tests/MetadataTest` |
 
 Items #2, #4, #5, #6 concern productions with no corpus coverage.
+
+### #124 item 11 — confirmed, and it silently DROPS a FeatureTyping
+
+```
+EnumerationUsageMember : VariantMembership = MemberPrefix ownedRelatedElement += EnumeratedValue
+EnumeratedValue : EnumerationUsage = 'enum'? Usage        ← no prefix slot
+EnumerationUsage : EnumerationUsage = UsagePrefix 'enum' Usage
+```
+
+`EnumeratedValue` has no `UsagePrefix`, so — unlike `EnumerationUsage` — nothing consumes a
+`PrefixMetadataMember` from the cursor. The consequence is worse than an unwritable keyword: the
+annotation is the FIRST entry in the value's `ownedRelationship`, so the cursor is still parked on it
+when `BuildUsage` reaches the positional `FeatureSpecializationPart` guard
+(`cursor.Current is IFeatureTyping || …`). That guard fails and **the typing is never emitted**.
+
+`Simple Tests/MetadataTest` shows it exactly — all three values carry a `FeatureTyping` to
+`ClassificationLevel`, but only the annotated one loses it:
+
+```
+enum uncl: ClassificationLevel = 0;      ← [FeatureTyping, FeatureValue]
+enum conf: ClassificationLevel = 1;      ← [FeatureTyping, FeatureValue]
+enum secret = 2 { @ Security; }          ← [OwningMembership(MetadataUsage), FeatureTyping, FeatureValue]
+```
+
+**Fix when this is taken up:** emit the annotation as a prefix and advance the cursor past it before
+delegating to `Usage`, which yields the pilot's `#Security enum secret : ClassificationLevel = 2;`.
+That is the deviation this item already licenses, and it restores the typing as a side effect.
+`BuildEnumeratedValue` is generated, so the change belongs in the generator — as a HandCoded fallback
+for this rule, the way `EntryTransitionMember` (item 8) is handled. `MetadataTest` stays out of
+validation until then.
 
 ## Model ↔ notation reconciliations (NOT divergences)
 
@@ -305,3 +335,40 @@ Each condition alone is refuted by one of the three; the conjunction fits all of
 
 `IsValidForDefaultReferenceUsage` still encodes the one spec-mandated case (`!IsEnd &&
 Direction.HasValue`): a directed usage is always referential, so the keyword is redundant there.
+
+### `DefaultInterfaceEnd` vs `PortUsage` — the optional `port` keyword on an interface end
+
+```
+InterfaceOccurrenceUsageElement : Usage = DefaultInterfaceEnd | StructureUsageElement | BehaviorUsageElement
+DefaultInterfaceEnd : PortUsage = isEnd ?= 'end' Usage      ← end p1: P;
+PortUsage                       = OccurrenceUsagePrefix 'port' Usage   ← end port p1: P;
+```
+
+Both alternatives of `InterfaceOccurrenceUsageElement` reach `PortUsage`, so `end p1: P;` and
+`end port p1: P;` round-trip to the same metaclass and nothing records which the author wrote.
+
+The spec settles the OPTIONALITY and one hard condition on it. SysML 2.0 §7.14.2 Interface
+Definitions and Usages (p. 109, normative): "All the end features of an interface definition or
+usage must be port usages, so the use of the `port` keyword is optional on such end features if no
+owned cross feature is declared on the end."
+
+`DefaultInterfaceEnd` has no notation for a cross feature — only `EndUsagePrefix` carries the
+`( ownedRelationship += OwnedCrossFeatureMember )?` slot — so an end that owns one MUST take the
+`port` form. `IsValidForDefaultInterfaceEnd` implements exactly that condition
+(`IsEnd && OwnedCrossFeature() == null`); where both forms are open the writer takes the
+keyword-less one, the production's first alternative. That choice is ours, not a requirement.
+
+### `BinaryConnectorPart` vs `NaryConnectorPart` — a two-end connector
+
+```
+ConnectorPart : ConnectionUsage = BinaryConnectorPart | NaryConnectorPart
+BinaryConnectorPart = ownedRelationship += ConnectorEndMember 'to' ownedRelationship += ConnectorEndMember
+NaryConnectorPart   = '(' ownedRelationship += ConnectorEndMember ',' ownedRelationship += ConnectorEndMember
+                      ( ',' ownedRelationship += ConnectorEndMember )* ')'
+```
+
+`NaryConnectorPart` admits exactly two ends, so for a two-end connector `connect a to b` and
+`connect (a, b)` are both conformant and produce the same model. Three or more ends leave only the
+n-ary form. The writer prefers the binary form at exactly two ends — a house convention, not a
+requirement. `IsValidForBinaryConnectorPart`, `IsValidForBinaryConnectorDeclaration` and
+`IsValidForBinaryInterfacePart` each count `EndFeatureMembership` children for it.

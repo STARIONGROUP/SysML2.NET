@@ -138,6 +138,38 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("17-Sequence Modeling", "17a-Sequence-Modeling.sysmlx")]
         [TestCase("17-Sequence Modeling", "17b-Sequence-Modeling.sysmlx")]
         [TestCase("18-Use Case", "18-Use Case.sysmlx")]
+        [TestCase("Simple Tests", "ConnectionTest.sysmlx")]
+        [TestCase("Simple Tests", "EnumerationTest.sysmlx")]
+        [TestCase("Simple Tests", "StructuredControlTest.sysmlx")]
+        [TestCase("Simple Tests", "AliasTest.sysmlx")]
+        [TestCase("Simple Tests", "FeaturePathTest.sysmlx")]
+        [TestCase("Simple Tests", "AnalysisTest.sysmlx")]
+        [TestCase("Simple Tests", "StateTest.sysmlx")]
+        [TestCase("Simple Tests", "RequirementTest.sysmlx")]
+        [TestCase("Simple Tests", "ViewTest.sysmlx")]
+        [TestCase("Simple Tests", "DecisionTest.sysmlx")]
+        [TestCase("Simple Tests", "PartTest.sysmlx")]
+        [TestCase("Simple Tests", "ActionTest.sysmlx")]
+        [TestCase("Simple Tests", "AssignmentTest.sysmlx")]
+        [TestCase("Simple Tests", "CommentTest.sysmlx")]
+        [TestCase("Simple Tests", "ConstraintTest.sysmlx")]
+        [TestCase("Simple Tests", "TextualRepresentationTest.sysmlx")]
+        [TestCase("Simple Tests", "VerificationTest.sysmlx")]
+        [TestCase("Simple Tests", "AllocationTest.sysmlx")]
+        [TestCase("Simple Tests", "CalculationTest.sysmlx")]
+        [TestCase("Simple Tests", "ConjugationTest.sysmlx")]
+        [TestCase("Simple Tests", "DependencyTest.sysmlx")]
+        [TestCase("Simple Tests", "IndividualTest.sysmlx")]
+        [TestCase("Simple Tests", "ItemTest.sysmlx")]
+        [TestCase("Simple Tests", "OccurrenceTest.sysmlx")]
+        [TestCase("Simple Tests", "RootPackageTest.sysmlx")]
+        [TestCase("Simple Tests", "TradeStudyTest.sysmlx")]
+        [TestCase("Simple Tests", "ControlNodeTest.sysmlx")]
+        [TestCase("Simple Tests", "DefaultValueTest.sysmlx")]
+        [TestCase("Simple Tests", "MultiplicityTest.sysmlx")]
+        [TestCase("Simple Tests", "ParameterTest.sysmlx")]
+        [TestCase("Simple Tests", "UseCaseTest.sysmlx")]
+        [TestCase("Simple Tests", "VariabilityTest.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
@@ -186,7 +218,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
             TestContext.WriteLine("=== Textual Notation Output ===");
             TestContext.WriteLine(textualNotation);
             TestContext.WriteLine("=== End ===");
-            
+
+            // The console logger strips trailing whitespace from every line it captures, so the log is
+            // not a faithful copy of the emitted text. Re-baselining and any round-trip check must read
+            // the bytes from here instead.
+            var emittedDirectory = Environment.GetEnvironmentVariable("SYSML2_TN_EMIT_DIR");
+
+            if (!string.IsNullOrWhiteSpace(emittedDirectory))
+            {
+                var emittedFilePath = Path.Combine(emittedDirectory, folderName, fileName.Replace(".sysmlx", ".sysml"));
+                Directory.CreateDirectory(Path.GetDirectoryName(emittedFilePath));
+                await File.WriteAllTextAsync(emittedFilePath, textualNotation);
+            }
+
+
             var expectedFilePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Expected", folderName, fileName.Replace(".sysmlx", ".sysml"));
 
             var expectedContent = await File.ReadAllTextAsync(expectedFilePath);

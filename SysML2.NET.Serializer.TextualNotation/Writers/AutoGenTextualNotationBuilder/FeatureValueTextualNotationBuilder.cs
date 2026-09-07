@@ -44,15 +44,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>().Any(), out var elementAsTriggerInvocationExpression0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression elementAsTriggerInvocationExpression)
-                {
-                    TriggerInvocationExpressionTextualNotationBuilder.BuildTriggerExpression(elementAsTriggerInvocationExpression, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                TriggerInvocationExpressionTextualNotationBuilder.BuildTriggerExpression(elementAsTriggerInvocationExpression0, writerContext, stringBuilder);
             }
 
         }
@@ -85,15 +79,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.IFeatureMembership>().Any(), out var elementAsFeatureReferenceExpression0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
-                {
-                    FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(elementAsFeatureReferenceExpression, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(elementAsFeatureReferenceExpression0, writerContext, stringBuilder);
             }
 
         }
@@ -157,15 +145,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelatedElementCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelatedElement", poco.OwnedRelatedElement);
 
-            if (ownedRelatedElementCursor.Current != null)
+            if (ownedRelatedElementCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression>(candidate => candidate.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.IMembership>().Any(), out var elementAsFeatureReferenceExpression0))
             {
-
-                if (ownedRelatedElementCursor.Current is SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression elementAsFeatureReferenceExpression)
-                {
-                    FeatureReferenceExpressionTextualNotationBuilder.BuildSatisfactionReferenceExpression(elementAsFeatureReferenceExpression, writerContext, stringBuilder);
-                    ownedRelatedElementCursor.Move();
-
-                }
+                FeatureReferenceExpressionTextualNotationBuilder.BuildSatisfactionReferenceExpression(elementAsFeatureReferenceExpression0, writerContext, stringBuilder);
             }
 
         }

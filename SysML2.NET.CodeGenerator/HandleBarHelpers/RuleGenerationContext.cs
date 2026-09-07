@@ -126,6 +126,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         public int LoopProgressCheckCounter { get; set; }
 
         /// <summary>
+        /// Monotonically-incrementing counter used to produce unique role-based-consumption variable
+        /// names (e.g. <c>elementAsOwningMembership0</c>) across the emission of a single rule body.
+        /// Required because a <c>TryTake</c> out-variable shares the enclosing scope, so two role-based
+        /// consumptions of the same target type in one generated method would collide (CS0136).
+        /// Incremented by <c>RuleProcessor.TryEmitPinnedRuleConsumption</c>.
+        /// </summary>
+        public int TakenElementCounter { get; set; }
+
+        /// <summary>
         /// Determines whether the next sibling element is a terminal that uses <c>AppendLine</c>
         /// (e.g., <c>{</c>, <c>}</c>, <c>;</c>), in which case a trailing space would be unnecessary.
         /// </summary>

@@ -61,38 +61,20 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
                 stringBuilder.Append("? ");
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any(), out var elementAsParameterMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(elementAsParameterMembership0, writerContext, stringBuilder);
                 }
                 stringBuilder.Append("else ");
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any(), out var elementAsParameterMembership1))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(elementAsParameterMembership1, writerContext, stringBuilder);
                 }
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsReturnParameterMembership2))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                    {
-                        ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership2, writerContext, stringBuilder);
                 }
             }
             finally
@@ -129,26 +111,14 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 stringBuilder.Append(poco.Operator);
                 stringBuilder.Append(' ');
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any(), out var elementAsParameterMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(elementAsParameterMembership0, writerContext, stringBuilder);
                 }
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsReturnParameterMembership1))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                    {
-                        ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership1, writerContext, stringBuilder);
                 }
             }
             finally
@@ -196,15 +166,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     }
                 }
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsReturnParameterMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                    {
-                        ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership0, writerContext, stringBuilder);
                 }
             }
             finally
@@ -241,15 +205,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                     }
                 }
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsReturnParameterMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                    {
-                        ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership0, writerContext, stringBuilder);
                 }
             }
             finally
@@ -292,15 +250,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 BuildClassificationExpressionHandCoded(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsReturnParameterMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                    {
-                        ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership0, writerContext, stringBuilder);
                 }
             }
             finally
@@ -324,28 +276,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             {
                 var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.IFeature>().Any(), out var elementAsParameterMembership0))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildMetadataArgumentMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ParameterMembershipTextualNotationBuilder.BuildMetadataArgumentMember(elementAsParameterMembership0, writerContext, stringBuilder);
                 }
                 BuildMetaclassificationExpressionHandCoded(poco, writerContext, stringBuilder);
                 stringBuilder.Append(' ');
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsReturnParameterMembership1))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Functions.IReturnParameterMembership elementAsReturnParameterMembership)
-                    {
-                        ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(elementAsReturnParameterMembership1, writerContext, stringBuilder);
                 }
             }
             finally

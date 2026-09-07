@@ -44,7 +44,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership)
+            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting && ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Core.Types.IFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any()))
             {
 
                 if (ownedRelationshipCursor.Current != null)
@@ -61,15 +61,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             }
 
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Types.IFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Types.IFeatureMembership elementAsFeatureMembership)
-                {
-                    FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(elementAsFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(elementAsFeatureMembership0, writerContext, stringBuilder);
             }
 
         }

@@ -5,9 +5,9 @@ package '1a-Parts Tree' {
             attribute mass :> ISQ::mass {
                 doc
                 /*
-                 * The 'mass' attribute property is declared here to be a
-                 * specialization (subset) of the general 'mass' quantity
-                 * from the 'ISQ' (International System of Quantities)
+                 * The 'mass' attribute property is declared here to be a 
+                 * specialization (subset) of the general 'mass' quantity 
+                 * from the 'ISQ' (International System of Quantities) 
                  * library model.
                  */
 
@@ -35,7 +35,7 @@ package '1a-Parts Tree' {
              */
             attribute mass :>> Vehicle::mass = 1750[kg] {
                 /*
-                 * This redefines the 'mass' attribute property from 'Vehicle' to
+                 * This redefines the 'mass' attribute property from 'Vehicle' to 
                  * give it a fixed attribute.
                  */
             }

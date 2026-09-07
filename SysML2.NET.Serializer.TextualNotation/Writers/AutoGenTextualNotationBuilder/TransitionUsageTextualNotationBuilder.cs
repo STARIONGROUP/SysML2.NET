@@ -44,27 +44,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard, out var elementAsTransitionFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership elementAsTransitionFeatureMembership)
-                {
-                    TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append("then ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>().Any(), out var elementAsOwningMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership1, writerContext, stringBuilder);
             }
 
         }
@@ -81,15 +69,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("else ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>().Any(), out var elementAsOwningMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership0, writerContext, stringBuilder);
             }
 
         }
@@ -125,27 +107,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard, out var elementAsTransitionFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership elementAsTransitionFeatureMembership)
-                {
-                    TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append("then ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>().Any(), out var elementAsOwningMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership1, writerContext, stringBuilder);
             }
             UsageTextualNotationBuilder.BuildUsageBody(poco, writerContext, stringBuilder);
 
@@ -162,28 +132,16 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsParameterMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership0, writerContext, stringBuilder);
             }
             BuildTargetTransitionUsageHandCoded(poco, writerContext, stringBuilder);
             stringBuilder.Append("then ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>().Any(), out var elementAsOwningMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership1, writerContext, stringBuilder);
             }
             TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 
@@ -220,89 +178,53 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                 }
             }
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsParameterMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                {
-                    ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership0, writerContext, stringBuilder);
             }
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Trigger })
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any()) && ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Trigger))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsParameterMembership1))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership elementAsParameterMembership)
-                    {
-                        ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(elementAsParameterMembership1, writerContext, stringBuilder);
                 }
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Trigger, out var elementAsTransitionFeatureMembership2))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership elementAsTransitionFeatureMembership)
-                    {
-                        TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(elementAsTransitionFeatureMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(elementAsTransitionFeatureMembership2, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
 
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard })
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Guard, out var elementAsTransitionFeatureMembership3))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership elementAsTransitionFeatureMembership)
-                    {
-                        TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(elementAsTransitionFeatureMembership3, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
 
 
-            if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership { Kind: SysML2.NET.Core.Systems.States.TransitionFeatureKind.Effect } && ownedRelationshipCursor.GetNext(1) is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership)
+            if (ownedRelationshipCursor.Contains<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Effect))
             {
 
-                if (ownedRelationshipCursor.Current != null)
+                if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership>(candidate => candidate.Kind == SysML2.NET.Core.Systems.States.TransitionFeatureKind.Effect, out var elementAsTransitionFeatureMembership4))
                 {
-
-                    if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership elementAsTransitionFeatureMembership)
-                    {
-                        TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(elementAsTransitionFeatureMembership, writerContext, stringBuilder);
-                        ownedRelationshipCursor.Move();
-
-                    }
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(elementAsTransitionFeatureMembership4, writerContext, stringBuilder);
                 }
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("then ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.ISuccession>().Any(), out var elementAsOwningMembership5))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(elementAsOwningMembership5, writerContext, stringBuilder);
             }
             TypeTextualNotationBuilder.BuildActionBody(poco, writerContext, stringBuilder);
 

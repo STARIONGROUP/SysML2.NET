@@ -56,14 +56,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
                                  || ownedRelationshipCursor.Current is ISpecialization
                                  || ownedRelationshipCursor.Current is IConjugation;
 
-            if (hasDeclaration)
+            var hasConnectorPart = poco.OwnedRelationship.OfType<IEndFeatureMembership>().Count() >= 2;
+
+            if (hasDeclaration || !hasConnectorPart)
             {
-                // Alt 1: 'connection' UsageDeclaration ValuePart? ('connect' ConnectorPart)?
                 stringBuilder.Append("connection ");
                 UsageTextualNotationBuilder.BuildUsageDeclaration(poco, writerContext, stringBuilder);
                 FeatureTextualNotationBuilder.BuildValuePart(poco, writerContext, stringBuilder);
 
-                if (poco.OwnedRelationship.OfType<IEndFeatureMembership>().Any())
+                if (hasConnectorPart)
                 {
                     stringBuilder.Append("connect ");
                     BuildConnectorPart(poco, writerContext, stringBuilder);

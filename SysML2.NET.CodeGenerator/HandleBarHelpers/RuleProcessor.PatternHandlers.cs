@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RuleProcessor.PatternHandlers.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -230,9 +230,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var typeName = emptyTarget.QueryFullyQualifiedTypeName();
             var cursorVarName = cursor.CursorVariableName;
 
-            // An "Empty" wrapper rule usually still ASSIGNS its collection (EmptyUsage = {}), so a
-            // Count-based discriminator can never select the empty branch. When the branches wrap
-            // different classes, discriminate on the WRAPPED element type instead.
+            // An "Empty" wrapper rule usually still assigns its collection, so a Count-based discriminator
+            // cannot select the empty branch; discriminate on the wrapped element type instead.
             var wrappedNonEmptyTypeName = QueryWrappedElementTypeName(nonEmptyBranch.NonTerminal, umlClass, ruleGenerationContext);
             var wrappedEmptyTypeName = QueryWrappedElementTypeName(emptyBranch.NonTerminal, umlClass, ruleGenerationContext);
 
@@ -594,13 +593,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         var allProperties = duplicateGroup.Key.QueryAllProperties();
 
-                        var elementBoolProps = new List<(NonTerminalElement RuleElement, List<string> BoolProps)>();
+                        var elementBoolProps = new List<(NonTerminalElement RuleElement, List<string> BoolProps, List<string> SettableBoolProps)>();
 
                         foreach (var ruleElement in duplicateGroup.Value.Select(x => x.RuleElement))
                         {
                             var referencedRule = ruleGenerationContext.AllRules.Single(x => x.RuleName == ruleElement.Name);
                             var booleanProperties = RuleQueryUtilities.QueryBooleanAssignmentProperties(referencedRule, ruleGenerationContext.AllRules);
-                            elementBoolProps.Add((ruleElement, booleanProperties));
+
+                            // A sibling that may set the property optionally can satisfy a guard on it too.
+                            var settableBooleanProperties = RuleQueryUtilities.QueryAllBooleanAssignmentProperties(referencedRule, ruleGenerationContext.AllRules);
+                            elementBoolProps.Add((ruleElement, booleanProperties, settableBooleanProperties));
                         }
 
                         for (var elementIndex = 0; elementIndex < elementBoolProps.Count; elementIndex++)
@@ -612,7 +614,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             {
                                 if (otherIndex != elementIndex)
                                 {
-                                    foreach (var prop in elementBoolProps[otherIndex].BoolProps)
+                                    foreach (var prop in elementBoolProps[otherIndex].SettableBoolProps)
                                     {
                                         othersProperties.Add(prop);
                                     }
@@ -695,10 +697,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
-                    // Subtype-overlap guard synthesis: a duplicate group's unguarded fall-through case
-                    // is only safe when no sibling alternative targets a SUPERTYPE of the group's class
-                    // (whose dispatcher may handle this group's subtypes internally). When overlap is
-                    // detected, synthesise a `when` guard from the rule's parsed body.
+                    // An unguarded fall-through is only safe when no sibling alternative targets a supertype.
                     foreach (var duplicateGroup in duplicateClasses)
                     {
                         var stillUnguarded = duplicateGroup.Value
@@ -740,9 +739,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
-                    // Hand-coded alternative guards: an alternative whose discriminator cannot be derived
-                    // from the rule body at all (it needs cursor lookahead, not a property test) is
-                    // allowlisted by rule name and delegates to a hand-coded IsValidFor{Rule}.
+                    // A discriminator needing cursor lookahead cannot be derived from the rule body.
                     foreach (var unguarded in mappedNonTerminalElements
                         .Select(element => element.RuleElement)
                         .Where(ruleElement => RequiresHandCodedAlternativeGuard(ruleElement.Name)
@@ -751,12 +748,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         whenGuards[unguarded] = $"{{0}}.IsValidFor{unguarded.Name}(writerContext)";
                     }
 
-                    // Self-default guard synthesis: when the rule uses its own target class as one
-                    // alternative (e.g. `FeatureElement : Feature = Feature | Step | …`), that arm is the
-                    // catch-all for inline subclass forms — sibling arms need property-derived `when`
-                    // guards (e.g. `DeclaredName != null`) so an anonymous subclass instance declines the
-                    // match and falls through. Without the self-default shape, most-derived-first
-                    // ordering alone suffices and no guards are emitted.
+                    // A rule using its own target class as an alternative makes that arm the catch-all, so sibling
+                    // arms need guards to let an anonymous subclass instance fall through.
                     var generatingClassForSelfDefault = ruleGenerationContext.NamedElementToGenerate as IClass;
                     var isSelfDefault = generatingClassForSelfDefault != null
                         && mappedNonTerminalElements.Any(element => element.UmlClass == generatingClassForSelfDefault);
@@ -789,6 +782,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                     }
 
+                    AssertDuplicateGroupGuardsAreDisjoint(duplicateClasses, whenGuards);
+
                     var reorderedElements = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
                     var processedDuplicateClasses = new HashSet<IClass>();
 
@@ -812,19 +807,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     var defaultElement = mappedNonTerminalElements
                         .LastOrDefault(x => x.UmlClass == ruleGenerationContext.NamedElementToGenerate && !whenGuards.ContainsKey(x.RuleElement));
 
-                    // Ordered by: non-default arms first (the rule's own target class is the catch-all and
-                    // must sit last), then most-derived first so a subtype arm always precedes an arm
-                    // targeting its supertype.
-                    //
-                    // OrderBy/ThenByDescending is STABLE, which is load-bearing rather than incidental:
-                    // arms of equal inheritance depth are mutually disjoint, so their relative order does
-                    // not affect dispatch — but it does affect the emitted TEXT. The previous
-                    // List<T>.Sort is introsort and therefore unstable, and the comparison carried no
-                    // secondary key, so adding one alternative anywhere in a rule could reshuffle unrelated
-                    // equal-depth arms and produce diff noise that reads like a behavioural change but is
-                    // not. Adding AllocationDefinition to DefinitionElement did exactly that, silently
-                    // reordering MetadataDefinition / ViewDefinition / RenderingDefinition. Falling back to
-                    // declaration order keeps every regeneration minimal and deterministic.
+                    // Ordered by: non-default arms first (the rule's own target class is the catch-all and must sit
+                    // last), then most-derived first so a subtype arm precedes an arm targeting its supertype.
+                    // The sort must be STABLE: equal-depth arms are mutually disjoint, so their relative order does
+                    // not affect dispatch but does affect the emitted text, and an unstable sort makes regeneration
+                    // non-deterministic.
                     mappedNonTerminalElements =
                     [
                         .. mappedNonTerminalElements
@@ -1354,6 +1341,46 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Fails generation when a duplicate dispatch group's arms cannot be told apart — more than one
+        /// arm without a guard, or two arms carrying the IDENTICAL guard — because C# <c>when</c> clauses
+        /// evaluate in order and the first arm would silently claim every instance the second one owns.
+        /// This is the first tranche of the disjointness safety net: it proves nothing about guards that
+        /// differ textually but overlap semantically, only that no arm is TRIVIALLY unreachable.
+        /// </summary>
+        /// <param name="duplicateClasses">The duplicate dispatch groups, keyed by their shared target class.</param>
+        /// <param name="whenGuards">The resolved <c>when</c> guard per alternative, after every guard tier ran.</param>
+        /// <exception cref="InvalidOperationException">When a group's arms are not trivially disjoint.</exception>
+        private static void AssertDuplicateGroupGuardsAreDisjoint(Dictionary<IClass, List<(NonTerminalElement RuleElement, IClass UmlClass)>> duplicateClasses, Dictionary<NonTerminalElement, string> whenGuards)
+        {
+            foreach (var duplicateGroup in duplicateClasses)
+            {
+                var unguardedRuleNames = duplicateGroup.Value
+                    .Where(element => !whenGuards.ContainsKey(element.RuleElement))
+                    .Select(element => element.RuleElement.Name)
+                    .ToList();
+
+                if (unguardedRuleNames.Count > 1)
+                {
+                    throw new InvalidOperationException(
+                        $"Alternatives '{string.Join("', '", unguardedRuleNames)}' all target '{duplicateGroup.Key.Name}' and none of them resolved a distinguishing guard — the first arm would silently claim every instance. Add a discriminator (pinned constant, boolean assignment, or IsValidFor guard) for all but one.");
+                }
+
+                var collidingGuardGroup = duplicateGroup.Value
+                    .Where(element => whenGuards.ContainsKey(element.RuleElement))
+                    .GroupBy(element => whenGuards[element.RuleElement], StringComparer.Ordinal)
+                    .FirstOrDefault(guardGroup => guardGroup.Count() > 1);
+
+                if (collidingGuardGroup != null)
+                {
+                    var collidingRuleNames = collidingGuardGroup.Select(element => element.RuleElement.Name);
+
+                    throw new InvalidOperationException(
+                        $"Alternatives '{string.Join("', '", collidingRuleNames)}' targeting '{duplicateGroup.Key.Name}' resolved the IDENTICAL guard '{collidingGuardGroup.Key}' — the first arm would silently claim every instance. Their discriminators must be disjoint.");
+                }
+            }
+        }
+
+        /// <summary>
         /// Runs the structural-predicate walk for <paramref name="rule"/> and returns the raw clause
         /// list, seeding the per-walk visited-rules set and cursor-state bookkeeping.
         /// </summary>
@@ -1395,25 +1422,24 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// Combines per-alternative clause lists into one predicate: each alternative's clauses joined
         /// by <c>&amp;&amp;</c>, alternatives joined by <c>||</c> (exactly one parses at runtime).
-        /// Empty alternatives are dropped and identical ones collapse.
+        /// Identical alternatives collapse. A clauseless alternative constrains nothing, so the whole
+        /// disjunction it belongs to is unconstrained and yields no predicate.
         /// </summary>
         /// <param name="perAlternativeClauses">One list of synthesized clauses per grammar alternative.</param>
-        /// <returns>A single combined predicate string, or <c>null</c> when every alternative is empty.</returns>
+        /// <returns>A single combined predicate string, or <c>null</c> when any alternative is unconstrained.</returns>
         private static string CombineAlternativesAsOr(List<List<string>> perAlternativeClauses)
         {
-            var nonEmpty = perAlternativeClauses
-                .Where(altClauses => altClauses.Count > 0)
-                .Select(altClauses => altClauses.Count == 1
-                    ? altClauses[0]
-                    : "(" + string.Join(" && ", altClauses) + ")")
-                .ToList();
-
-            if (nonEmpty.Count == 0)
+            if (perAlternativeClauses.Count == 0 || perAlternativeClauses.Any(altClauses => altClauses.Count == 0))
             {
                 return null;
             }
 
-            var distinct = nonEmpty.Distinct(StringComparer.Ordinal).ToList();
+            var distinct = perAlternativeClauses
+                .Select(altClauses => altClauses.Count == 1
+                    ? altClauses[0]
+                    : "(" + string.Join(" && ", altClauses) + ")")
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
 
             if (distinct.Count == 1)
             {
@@ -1499,8 +1525,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                         }
 
-                        // Depth exhausted, rule not found, or already visited — conservatively
-                        // suppress later cursor predicates.
                         cursorMayHaveAdvanced = true;
                         break;
                     }
@@ -1547,7 +1571,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         ///   <item><c>prop = NonTerminal</c> → <c>{0}.{Prop} is I{RHS-target}</c> (narrows when possible, else <c>!= null</c>)</item>
         ///   <item><c>ownedRelationship += NonTerminal</c> (first occurrence) → cursor predicate</item>
         ///   <item><c>prop += NonTerminal</c> for any other collection → <c>{0}.{Prop}.OfType&lt;I{RHS-target}&gt;().Any()</c></item>
-        ///   <item><c>prop ?= 'kw'</c> → <c>null</c> (already handled by the boolean discriminator pass)</item>
+        ///   <item><c>prop ?= 'kw'</c> → <c>{0}.{Prop}</c> — the keyword is mandatory within its production, so the property is necessarily set</item>
         /// </list>
         /// </summary>
         /// <param name="assignment">The <see cref="AssignmentElement"/> to translate</param>
@@ -1559,7 +1583,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>A <see cref="string.Format(string, object?)"/> template clause, or <c>null</c> when no clause applies.</returns>
         private static string TryBuildClauseForAssignment(AssignmentElement assignment, IEnumerable<IProperty> targetProperties, IXmiElementCache cache, IReadOnlyList<TextualNotationRule> allRules, ref bool firstCursorEmitted, bool cursorMayHaveAdvanced)
         {
-            if (assignment?.Property == null || assignment.Operator == "?=")
+            if (assignment?.Property == null)
             {
                 return null;
             }
@@ -1588,6 +1612,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return BuildScalarAssignmentClause(assignment, matchingProperty, propertyAccessor, cache, allRules);
                 case "+=":
                     return BuildCollectionAssignmentClause(assignment, propertyAccessor, cache, allRules, ref firstCursorEmitted, cursorMayHaveAdvanced);
+                case "?=":
+                    return $"{{0}}.{propertyAccessor}";
                 default:
                     return null;
             }
@@ -1635,7 +1661,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     if (rhsTargetClass != null)
                     {
-                        // `is I{Rhs}` needs a reference-typed property to compile.
                         return matchingProperty.QueryIsReferenceType()
                             ? $"{{0}}.{propertyAccessor} is {rhsTargetClass.QueryFullyQualifiedTypeName()}"
                             : null;

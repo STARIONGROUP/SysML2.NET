@@ -35,7 +35,7 @@ package '5-State-based Behavior-2' {
                 entry;
                 then off;
                 /*
-                 * The following uses a shorthand for a transition whose source
+                 * The following uses a shorthand for a transition whose source 
                  * is the immediately preceding state.
                  */
                 state off;

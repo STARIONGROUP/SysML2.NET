@@ -406,6 +406,26 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         }
 
         /// <summary>
+        /// Appends the default line terminator WITHOUT stripping the line's trailing white space,
+        /// unlike <see cref="AppendLine()"/>.
+        /// <para>Use this only where trailing white space is content rather than layout — inside a
+        /// REGULAR_COMMENT body, which KerML §8.2.3.3.2 stores with all white space as entered.</para>
+        /// </summary>
+        /// <returns>The current <see cref="IndentedStringBuilder"/> instance, to allow chaining.</returns>
+        public IndentedStringBuilder AppendLiteralLine()
+        {
+            if (this.inlineBlockDepth > 0)
+            {
+                this.AppendCharNormalized(' ');
+                return this;
+            }
+
+            this.builder.AppendLine();
+            this.atLineStart = true;
+            return this;
+        }
+
+        /// <summary>
         /// Converts the accumulated content of the underlying <see cref="StringBuilder"/> to
         /// a <see cref="string"/>.
         /// </summary>

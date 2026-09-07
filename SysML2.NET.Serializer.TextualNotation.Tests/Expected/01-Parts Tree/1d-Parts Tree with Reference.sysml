@@ -13,7 +13,7 @@ package '1d-Parts Tree with Reference' {
                 ref hitchBall: HitchBall {
                     /*
                      * 'vehicle1_c1'::'hitchBall' is a reference property that
-                     * references a hitch ball that is not part of this vehicle.
+                     * references a hitch ball that is not part of this vehicle. 
                      * If 'vehicle1_c1' is removed or destroyed, this does not
                      * effect the hitchBall referenced here.
                      */
@@ -35,7 +35,7 @@ package '1d-Parts Tree with Reference' {
                      * This is a shorthand for a binding connector between the
                      * 'trailerCoupler' here and the 'trailerCoupler' in 'trailerHitch'.
                      * The binding connector is now contained within the 'trailer1'
-                     * part, though, rather than being at the system level.
+                     * part, though, rather than being at the system level. 
                      */
                 }
             }

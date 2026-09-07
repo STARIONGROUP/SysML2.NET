@@ -9,7 +9,7 @@ package '15_05-Unification of Expression and Constraint Definition' {
         attribute length: LengthValue[1] = 4.82[m];
         part wheelAssy: WheelAssy[4];
         constraint discBrakeConstraint: DiscBrakeConstraint { doc /*
-         * This constraint is computed, but not asserted. This means a tool can identify
+         * This constraint is computed, but not asserted. This means a tool can identify 
          * when it is violated without the model being inconsistent.
          */
         in wheelAssy = Vehicle_2::wheelAssy; }

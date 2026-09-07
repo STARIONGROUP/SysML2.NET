@@ -26,10 +26,12 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Systems.Actions;
@@ -106,6 +108,53 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
                 // The OCL guards with `endFeature->size() >= i`, so a supertype without an end at this
                 // position contributes nothing rather than throwing.
                 Assert.That(rule.Apply(secondEnd), Is.Empty);
+            }
+        }
+
+        [Test]
+        public void VerifyFeatureParameterRedefinitionRule()
+        {
+            var rule = new FeatureParameterRedefinitionRule(this.factory, new Lazy<IImpliedRelationshipProvider>(() => NullImpliedRelationshipProvider.Instance));
+
+            // KerML 7.4.7.2 matches a subclassifier's OWNED parameters against each superclassifier's
+            // `parameter`, which is `directedFeature` — so `base` contributes its inherited parameters,
+            // ordered after the one it owns, and the return parameter is excluded on both sides.
+            var baseBehavior = new Behavior { Id = Guid.NewGuid() };
+            var baseFirst = AddParameter(baseBehavior);
+            var baseSecond = AddParameter(baseBehavior);
+
+            var middle = new Behavior { Id = Guid.NewGuid() };
+            var middleOwned = AddParameter(middle);
+            var middleResult = AddResult(middle);
+            middleResult.Direction = FeatureDirectionKind.Out;
+            Specialize(middle, baseBehavior);
+
+            var subtype = new Behavior { Id = Guid.NewGuid() };
+            var first = AddParameter(subtype);
+            var second = AddParameter(subtype);
+            var third = AddParameter(subtype);
+            var result = AddResult(subtype);
+            result.Direction = FeatureDirectionKind.Out;
+            Specialize(subtype, middle);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(rule.ConstraintName, Is.EqualTo("checkFeatureParameterRedefinition"));
+
+                // `parameter` is every directed Feature, so it carries the return parameter and the
+                // inherited ones; the constraint rejects only the former.
+                Assert.That(middle.parameter, Is.EqualTo(new[] { middleOwned, middleResult, baseFirst, baseSecond }));
+
+                Assert.That(RedefinedBy(rule, first), Is.EqualTo(new[] { middleOwned }));
+                Assert.That(RedefinedBy(rule, second), Is.EqualTo(new[] { baseFirst }));
+                Assert.That(RedefinedBy(rule, third), Is.EqualTo(new[] { baseSecond }));
+
+                // A return parameter is not a parameter for this constraint, on either side.
+                Assert.That(rule.Apply(result), Is.Empty);
+
+                Assert.That(() => rule.Apply(null), Throws.TypeOf<ArgumentNullException>());
+                Assert.That(rule.Apply(new Feature { Id = Guid.NewGuid() }), Is.Empty);
+                Assert.That(rule.Apply(AddParameter(new Classifier { Id = Guid.NewGuid() })), Is.Empty);
             }
         }
 
@@ -208,7 +257,7 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             [
                 new FeatureEndRedefinitionRule(this.factory),
                 new FeatureResultRedefinitionRule(this.factory),
-                new FeatureParameterRedefinitionRule(this.factory),
+                new FeatureParameterRedefinitionRule(this.factory, new Lazy<IImpliedRelationshipProvider>(() => NullImpliedRelationshipProvider.Instance)),
                 new RequirementUsageObjectiveRedefinitionRule(this.factory),
                 new AssignmentActionUsageReferentRedefinitionRule(this.factory),
                 new FeatureChainExpressionSourceTargetRedefinitionRule(this.factory),
@@ -269,6 +318,14 @@ namespace SysML2.NET.Semantics.Tests.Implied.Rules
             Own(owner, result, new ReturnParameterMembership { Id = Guid.NewGuid() });
 
             return result;
+        }
+
+        private static Feature AddParameter(IType owner)
+        {
+            var parameter = new Feature { Id = Guid.NewGuid(), Direction = FeatureDirectionKind.In };
+            Own(owner, parameter, new FeatureMembership { Id = Guid.NewGuid() });
+
+            return parameter;
         }
 
         private static void Own(IElement owner, IElement owned, IRelationship membership = null)

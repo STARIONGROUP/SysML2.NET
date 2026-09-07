@@ -44,15 +44,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsEndFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(elementAsEndFeatureMembership0, writerContext, stringBuilder);
             }
 
         }
@@ -68,27 +62,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsEndFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(elementAsEndFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append("then ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsEndFeatureMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership1, writerContext, stringBuilder);
             }
 
         }
@@ -114,27 +96,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
 
             stringBuilder.Append("first ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsEndFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append("then ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage>().Any(), out var elementAsEndFeatureMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(elementAsEndFeatureMembership1, writerContext, stringBuilder);
             }
             UsageTextualNotationBuilder.BuildUsageBody(poco, writerContext, stringBuilder);
 

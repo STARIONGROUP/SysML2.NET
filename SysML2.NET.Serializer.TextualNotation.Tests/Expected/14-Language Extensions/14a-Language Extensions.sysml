@@ -7,7 +7,7 @@ package '14a-Language Extensions' {
             enum secret;
         }
         metadata def Classified {
-            :>> annotatedElement : SysML::Systems::PartUsage;
+            :>> annotatedElement : SysML::PartUsage;
             attribute classificationLevel: ClassificationLevel[1];
         }
     }

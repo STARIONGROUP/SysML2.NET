@@ -35,7 +35,7 @@ package '15_01-Constants' {
          * The reference source is:
          * CODATA - Task Group on Fundamental Physical Constants (TGFC) - 2018 CODATA recommended values
          * See https://codata.org/initiatives/strategic-programme/fundamental-physical-constants/
-         * For the actual values see https://pml.nist.gov/cuu/Constants/
+         * For the actual values see https://pml.nist.gov/cuu/Constants/ 
          */
 
         attribute 'fine structure constant': DimensionOneValue = 0.0072973525693[one];

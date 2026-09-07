@@ -285,6 +285,10 @@ namespace SysML2.NET.Semantics.Implied
             {
                 return [];
             }
+            catch (NotSupportedException)
+            {
+                return [];
+            }
         }
 
         /// <summary>

@@ -106,8 +106,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                             }
 
-                            // A `( X )+ X` shape must leave one element for the mandatory tail, or the
-                            // tail emits its terminals against an exhausted cursor (`a.b.` became `a.b..`).
+                            // A `( X )+ X` shape must leave one element for the mandatory tail.
                             var reservationGuard = ResolveTrailingConsumptionReservation(cursorToUse, umlClass, ruleGenerationContext);
 
                             if (groupTypeGuard.StartsWith("__FULL_GUARD__"))
@@ -145,12 +144,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             .OfType<NonTerminalElement>()
                             .ToList();
 
-                        // Alternatives of the repeated group that are a BARE non-terminal rather than a
-                        // `+=` assignment (e.g. `TypeBodyElement` in
-                        // `( TypeBodyElement | ownedRelationship += ReturnFeatureMember )*`). Such a rule is a
-                        // per-item dispatcher over the SAME cursor that advances the cursor itself, so it
-                        // becomes the loop's fall-through arm — without it the group's switch has no case for
-                        // those elements and the trailing `Move()` silently discards them.
+                        // A bare non-terminal alternative is a per-item dispatcher that advances the cursor itself, so
+                        // it becomes the loop's fall-through arm.
                         var groupDispatcherNonTerminals = groupElement.Alternatives
                             .SelectMany(alternative => alternative.Elements)
                             .OfType<NonTerminalElement>()
@@ -187,10 +182,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                 var groupOrderedElements = RuleQueryUtilities.OrderElementsByInheritance(groupNonTerminals, umlClass.Cache, ruleGenerationContext);
 
-                                // A `*` group must not swallow an element that a FOLLOWING sibling consumes
-                                // from the same cursor — `( … )* ( ownedRelationship += ResultExpressionMember )?`
-                                // left the trailing optional facing an exhausted cursor and dropped the result
-                                // expression. Exclude the next sibling's target type from the loop condition.
+                                // Exclude the next sibling's target type, or the group swallows the element it consumes.
                                 var groupWhileCondition = this.ResolveCollectionWhileTypeCondition(groupCursorVarName, umlClass, null, groupPropertyName, ruleGenerationContext);
 
                                 if (string.IsNullOrWhiteSpace(groupWhileCondition))
@@ -225,8 +217,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
 
                                 writer.WriteSafeString($"default:{Environment.NewLine}");
-                                EmitCollectionGroupFallThrough(writer, umlClass, groupDispatcherNonTerminals, groupCursorVarName, ruleGenerationContext);
-                                writer.WriteSafeString($"break;{Environment.NewLine}");
+                                if (!EmitCollectionGroupFallThrough(writer, umlClass, groupDispatcherNonTerminals, groupCursorVarName, ruleGenerationContext))
+                                {
+                                    writer.WriteSafeString($"break;{Environment.NewLine}");
+                                }
 
                                 writer.WriteSafeString($"}}{Environment.NewLine}");
                                 EmitLoopProgressAssertion(writer, groupCursorVarName, groupPositionVariableName, groupElement.TextualNotationRule?.RuleName ?? groupPropertyName);
@@ -327,24 +321,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
         /// <returns>The additional guard clause, or an empty string when the repetition cannot match one.</returns>
         /// <remarks>
-        /// The grammar never repeats a result member: it always gives one its OWN slot in the enclosing rule
-        /// (<c>EmptyResultMember</c>, <c>ConstructorResultMember</c>, <c>ReturnParameterMember</c>), never a
-        /// comma-separated repetition. A repetition that shares the enclosing rule's cursor will therefore
-        /// swallow it whenever the repetition's guard type happens to be one of its supertypes:
-        /// <code>
-        /// InvocationExpression = ownedRelationship += InstantiatedTypeMember
-        ///                        ArgumentList
-        ///                        ownedRelationship += EmptyResultMember
-        /// PositionalArgumentList = ownedRelationship += ArgumentMember
-        ///                          ( ',' ownedRelationship += ArgumentMember )*
-        /// </code>
-        /// <c>ArgumentMember : ParameterMembership</c> and <c>EmptyResultMember : ReturnParameterMembership</c>
-        /// — a ParameterMembership — so the loop emits a separator for it and then renders nothing:
-        /// <c>f(a, )</c>.
-        /// <para>Gating on subtype overlap keeps this general without touching repetitions it cannot affect.
-        /// Of the fifteen comma-repetition shapes across both grammars only two — <c>ArgumentMember</c> and
-        /// <c>NamedArgumentMember</c> — guard on a supertype of ReturnParameterMembership; the rest test
-        /// relationship types or sibling membership subtypes, for which the clause would be dead code.</para>
+        /// The grammar never repeats a result member — it always gives one its own slot in the enclosing rule
+        /// — so a repetition sharing that cursor swallows it whenever the repetition's guard type is one of
+        /// its supertypes. Gated on subtype overlap, which leaves repetitions it cannot affect untouched.
         /// </remarks>
         private static string ResolveResultMemberExclusion(CursorDefinition cursorDefinition, IClass itemTargetClass, IClass umlClass)
         {
@@ -383,18 +362,24 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
                     {
                         var cursorToUse = ruleGenerationContext.DefinedCursors.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+
+                        // PendingCursorMove lands the Move() inside the type-discrimination block, so the cursor
+                        // advances only on real `+=` consumption.
+                        var shouldEmitCursorMove = !isPartOfMultipleAlternative
+                            && assignmentElement.Container is not GroupElement { IsCollection: true };
+
+                        if (shouldEmitCursorMove
+                            && TryEmitPinnedRuleConsumption(writer, umlClass, nonTerminalElement, cursorToUse, ruleGenerationContext))
+                        {
+                            return;
+                        }
+
                         var usedVariable = $"{cursorToUse.CursorVariableName}.Current";
 
                         var previousVariableName = ruleGenerationContext.CurrentVariableName;
                         ruleGenerationContext.CurrentVariableName = usedVariable;
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = assignmentElement;
-
-                        // Route Move() through PendingCursorMove so it lands INSIDE the type-discrimination
-                        // block — the cursor advances only on real += consumption (Golden Rule). Collection
-                        // groups and multi-alternative dispatchers emit their own move.
-                        var shouldEmitCursorMove = !isPartOfMultipleAlternative
-                            && assignmentElement.Container is not GroupElement { IsCollection: true };
 
                         if (shouldEmitCursorMove)
                         {
@@ -465,11 +450,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                             else if (assignmentElement.Value is NonTerminalElement { Name: "STRING_VALUE" })
                             {
-                                // STRING_VALUE carries its own quotes — '"' ( STRING_CHARACTER |
-                                // ESCAPE_SEQUENCE )* '"' — and the model holds the DECODED string, so the
-                                // writer owns re-encoding it. See AppendStringValue. Keyed on the TERMINAL
-                                // rather than the property type: a String-typed test would also quote
-                                // declaredName and every other string the grammar writes bare.
+                                // STRING_VALUE carries its own quotes and the model holds the DECODED string, so the writer owns
+                                // re-encoding it. Keyed on the TERMINAL, not the property type, which would also quote every
+                                // string the grammar writes bare.
                                 writer.WriteSafeString($"SharedTextualNotationBuilder.AppendStringValue(stringBuilder, poco.{targetPropertyName});");
                             }
                             else if (string.Equals(targetPropertyName, "Operator", StringComparison.Ordinal))
@@ -515,13 +498,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         }
                         else if (targetProperty.QueryIsEnum())
                         {
-                            // A result member's own keyword already conveys the direction, so writing it
-                            // again emits `return out verdict` where the notation is `return verdict`.
-                            // Testing the owning Membership follows the metamodel's own idiom — Feature's
-                            // parameter-redefinition constraint selects parameters with `direction <> null`
-                            // and then rejects those whose owningFeatureMembership is a result membership.
-                            // Both OMG names come from NotationInvariants, which reports either of them
-                            // going missing rather than letting this rule switch itself off.
+                            // A result member's own keyword already conveys the direction.
                             var impliedDirectionProperty = NotationInvariants.QueryMetamodelName(NotationInvariants.ImpliedDirectionProperty);
                             var isImpliedDirectionProperty = string.Equals(targetProperty.Name, impliedDirectionProperty, StringComparison.Ordinal);
 
@@ -639,11 +616,63 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                // The grammar's property does not resolve against the metamodel class (e.g. the kebnf's
-                // `ownedFeatureMember` typo) — delegate to the HandCoded sibling.
+                // The grammar's property does not resolve against the metamodel class.
                 var handCodedRuleName = assignmentElement.TextualNotationRule?.RuleName ?? "Unknown";
                 EmitHandCodedFallback(writer, handCodedRuleName, ruleGenerationContext);
             }
+        }
+
+        /// <summary>
+        /// Emits the role-based consumption for a <c>+=</c> assignment whose referenced rule carries a
+        /// role discriminator (a pinned enum constant like <c>{ kind = 'guard' }</c>, or a structural
+        /// signature) — <c>TryTake</c> with the rule's predicate — locating the element by ROLE instead
+        /// of by cursor position. The matching guard condition is emitted by
+        /// <see cref="TryResolveRoleBasedContainsCondition" /> with the IDENTICAL predicate, so condition
+        /// and consumption agree on the element they select.
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter" /> used to write output.</param>
+        /// <param name="umlClass">The class hosting the current rule (provides the UML cache).</param>
+        /// <param name="nonTerminalElement">The referenced rule's <see cref="NonTerminalElement" />.</param>
+        /// <param name="cursorDefinition">The cursor the assignment consumes from.</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext" />.</param>
+        /// <returns><c>true</c> when the consumption was emitted; <c>false</c> when the rule is not discriminating and the positional path must run.</returns>
+        private static bool TryEmitPinnedRuleConsumption(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, CursorDefinition cursorDefinition, RuleGenerationContext ruleGenerationContext)
+        {
+            var referencedRule = ruleGenerationContext.FindRule(nonTerminalElement.Name);
+            var typeTarget = referencedRule?.EffectiveTarget;
+
+            if (typeTarget == null)
+            {
+                return false;
+            }
+
+            var targetClass = RuleQueryUtilities.FindClass(umlClass.Cache, typeTarget);
+            var targetTypeName = targetClass?.QueryFullyQualifiedTypeName();
+
+            if (targetTypeName == null)
+            {
+                return false;
+            }
+
+            var predicate = ResolveRoleBasedPredicate(referencedRule, targetClass, ruleGenerationContext);
+
+            if (predicate == null)
+            {
+                return false;
+            }
+
+            var takenVariableName = $"elementAs{targetClass.Name}{ruleGenerationContext.TakenElementCounter++}";
+
+            var builderCall = string.Equals(typeTarget, ruleGenerationContext.NamedElementToGenerate.Name, StringComparison.Ordinal)
+                ? $"Build{nonTerminalElement.Name}({takenVariableName}, writerContext, stringBuilder);"
+                : $"{typeTarget}TextualNotationBuilder.Build{nonTerminalElement.Name}({takenVariableName}, writerContext, stringBuilder);";
+
+            writer.WriteSafeString($"{Environment.NewLine}if ({cursorDefinition.CursorVariableName}.TryTake<{targetTypeName}>({predicate}, out var {takenVariableName})){Environment.NewLine}");
+            writer.WriteSafeString($"{{{Environment.NewLine}");
+            writer.WriteSafeString(builderCall);
+            writer.WriteSafeString($"{Environment.NewLine}}}");
+
+            return true;
         }
 
         /// <summary>

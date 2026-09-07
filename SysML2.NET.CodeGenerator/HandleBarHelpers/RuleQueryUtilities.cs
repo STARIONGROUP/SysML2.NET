@@ -146,6 +146,33 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Collects every <c>?=</c> property a rule can set, INCLUDING the conditional ones
+        /// (inside an optional / repeating / alternation position).
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>The property names the rule may set.</returns>
+        /// <remarks>
+        /// This is the set to test a SIBLING against when deciding whether a boolean is a valid
+        /// discriminator: a property the sibling merely MAY set is still one it can satisfy at runtime,
+        /// so guarding on it lets the first arm claim the sibling's instances. <c>PortionUsage</c> takes
+        /// <c>( isIndividual ?= 'individual' )?</c> optionally while <c>IndividualUsage</c> takes it
+        /// unconditionally — testing only unconditional assignments made <c>isIndividual</c> look unique
+        /// and every <c>individual snapshot</c> was written as a plain <c>individual</c>.
+        /// </remarks>
+        internal static List<string> QueryAllBooleanAssignmentProperties(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var result = new List<string>();
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectBooleanAssignmentProperties(alternative.Elements, allRules, result, new HashSet<string>(), isConditional: false, includeConditional: true);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Recursively collects boolean <c>?=</c> assignment property names from a
         /// list of <see cref="RuleElement" />. Only assignments at
         /// <em>unconditional</em> positions (<paramref name="isConditional" />
@@ -161,13 +188,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// repeating / alternation group (directly or transitively) so any
         /// <c>?=</c> reached from here cannot serve as a guaranteed discriminator.
         /// </param>
-        internal static void CollectBooleanAssignmentProperties(IReadOnlyList<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, List<string> result, HashSet<string> visited, bool isConditional)
+        /// <param name="includeConditional">
+        /// <c>true</c> to collect conditional <c>?=</c> assignments as well — used when testing what a
+        /// SIBLING alternative may set; see <see cref="QueryAllBooleanAssignmentProperties" />.
+        /// </param>
+        internal static void CollectBooleanAssignmentProperties(IReadOnlyList<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, List<string> result, HashSet<string> visited, bool isConditional, bool includeConditional = false)
         {
             foreach (var element in elements)
             {
                 switch (element)
                 {
-                    case AssignmentElement { Operator: "?=" } assignment when !isConditional:
+                    case AssignmentElement { Operator: "?=" } assignment when includeConditional || !isConditional:
                         result.Add(assignment.Property);
                         break;
 
@@ -180,7 +211,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         foreach (var groupAlternative in groupElement.Alternatives)
                         {
-                            CollectBooleanAssignmentProperties(groupAlternative.Elements, allRules, result, visited, groupIsConditional);
+                            CollectBooleanAssignmentProperties(groupAlternative.Elements, allRules, result, visited, groupIsConditional, includeConditional);
                         }
 
                         break;
@@ -199,7 +230,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                             foreach (var alternative in referencedRule.Alternatives)
                             {
-                                CollectBooleanAssignmentProperties(alternative.Elements, allRules, result, visited, nonTerminalIsConditional);
+                                CollectBooleanAssignmentProperties(alternative.Elements, allRules, result, visited, nonTerminalIsConditional, includeConditional);
                             }
                         }
 

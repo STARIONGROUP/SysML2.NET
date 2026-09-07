@@ -77,27 +77,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.IPortUsage>().Any(), out var elementAsEndFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append("to ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.IPortUsage>().Any(), out var elementAsEndFeatureMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership1, writerContext, stringBuilder);
             }
 
         }
@@ -114,27 +102,15 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
             stringBuilder.Append("(");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.IPortUsage>().Any(), out var elementAsEndFeatureMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership0, writerContext, stringBuilder);
             }
             stringBuilder.Append(", ");
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.IPortUsage>().Any(), out var elementAsEndFeatureMembership1))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership elementAsEndFeatureMembership)
-                {
-                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(elementAsEndFeatureMembership1, writerContext, stringBuilder);
             }
 
             while (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership endFeatureMembershipGuard && endFeatureMembershipGuard.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.IPortUsage>().Any())

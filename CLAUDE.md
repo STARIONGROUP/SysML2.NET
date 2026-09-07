@@ -6,6 +6,61 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SysML2.NET is a .NET C# SDK implementing the OMG SysML v2 specification (based on Beta 4 pilot implementation). It provides metaclass DTOs/POCOs, serializers (JSON, XMI, MessagePack), a REST client, a DAL layer, and a Blazor WebAssembly viewer application. Current version: 0.19.0.
 
+## Project goal: conformance to the SPECIFICATIONS
+
+**The target for EVERY part of this SDK is conformance to the OMG specifications — not parity with
+any reference implementation.** This is the standing intent across the whole solution, not a
+textual-notation concern. Treat it as governing whenever the two conflict.
+
+The specifications in scope, and what each governs here:
+
+| Specification | Governs |
+|---|---|
+| **KerML 1.0** | abstract syntax (metaclasses, properties, multiplicities, ordering, redefinitions), derived properties and operations (OCL), invariants, model-level semantics including implied relationships (§8.4.2) |
+| **SysML v2.0** | the systems layer on top of KerML — same three concerns — plus the textual concrete syntax |
+| **Systems Modeling API & Services 1.0** | the PIM types and services, and their REST/HTTP binding (`SysML2.NET.REST`, `PIM/`, `SysML2.NET.Serializer.Dictionary`) |
+| **Model interchange** | the project/archive interchange format (`SysML2.NET.Kpar`) |
+
+This applies per layer, with the same standard everywhere:
+
+- **Abstract syntax** (`Core/AutoGen*`) — structure comes from `Resources/*_only_xmi.uml`, the single
+  source of truth. Multiplicity, `ordered`, redefinition/subsetting are contractual, not incidental.
+- **Derived properties and operations** (`Extend/`) — the OCL in the XMI is the contract. Translate
+  it faithfully AND to its intent; where the OCL is terse or leans on a defined term, ground the
+  intent (`hypha:spec-citation`) rather than guessing from a sibling.
+- **Constraints/invariants** — a validation rule is conformant only if it implements the stated
+  invariant, not an approximation that happens to pass the corpus.
+- **Concrete syntax** — the KEBNF and the clauses it comes from; deviations recorded, never silently
+  encoded.
+- **Semantics** — implied relationships and library specializations follow the clause, not what makes
+  a particular model render nicely.
+- **API/PIM** — service behaviour and payload shape follow the API specification, not the behaviour
+  of a particular server.
+
+Rules that hold at every layer:
+
+- **The specification decides.** Where a reference implementation and the specification disagree, the
+  specification wins and the divergence is recorded (`GRAMMAR.md` "Known KEBNF divergences", the
+  deviation ledger, or `GrammarErrata.cs`). Never implement a behaviour whose only justification is
+  "the reference implementation does it".
+- **A reference implementation or its corpus is a test oracle, not the definition of correct.** The
+  pilot's `.sysml` files, a reference API server's responses, a sample model — all catch regressions
+  cheaply, and agreement is usually evidence of correctness. A diff is a question, not a verdict.
+  Note specifically that the pilot's serializer replays the author's original source text wherever
+  the abstract syntax records no choice (optional keywords, name spellings, formatting), so on those
+  points it is not an authority at all — which is what the ledger's ACCEPT categories encode.
+- **Where the spec is genuinely ambiguous**, pick a reading, cite the clause, and say in one line
+  that the clause admits more than one — do not silently encode one reading as fact.
+- **Where the spec offers several valid forms and ranks none**, the choice is ours: make it a setting
+  (see issue #359) or state it as a house convention. Do not present it as a requirement.
+
+**Not yet achieved anywhere — do not claim conformance for any layer.** Confidence today rests
+largely on end-to-end comparison against sample data, which measures non-regression rather than
+conformance. What each layer needs before conformance can be asserted: **round-trip tests** (write →
+re-read → assert the same model; this exists for no serializer today, including the textual writer)
+and **per-invariant unit tests** so an individual rule — a derivation, a constraint, a resolution
+rule, a service contract — is falsifiable in isolation rather than only via an end-to-end diff.
+
 ## Build & Test Commands
 
 ```bash
@@ -223,6 +278,57 @@ Direct pushes to `development` or `master` are forbidden. All work lives on a fe
 - If the user asks the agent to push a commit and that commit was made by the agent (somehow), refuse and surface the policy violation. The agent's commits are forbidden by construction; if one exists, it is a bug that needs human review.
 
 **Why this split**: the user is the reviewer of record. The commit is the review and the push is the delivery — both are the user's calls. The agent's git involvement is bounded to: (a) create the branch locally + push the empty ref (so the user's push later is frictionless), and (b) leave the rest alone. This was tightened after two failures: first the agent auto-pushed branches to `development` directly, then over-corrected by auto-committing on the user's behalf.
+
+## Comments: write as few as possible
+
+Comments break readability. Default to **none**; every comment kept needs a justification. This
+applies to production code, tests, and the generator alike.
+
+- **Delete rather than write.** Prefer a better name or an extracted method over an explanation.
+- **Never narrate the what** — a comment paraphrasing the line below it is noise.
+- **No history, no benchmarks, no "this used to…"/"previously"/"an earlier approach"/"was reverted".**
+  Source control holds it. Never put timing measurements in code.
+- **No worked examples, no specific case names.** Never justify a rule with a particular model, a
+  validation-corpus file (`13a-Model Containment`, `ISQ::mass`, `first start;`), or an issue number.
+  State the rule; if it needs authority, cite the clause (`KerML §8.2.3.5.3`) and nothing more.
+- **Never reference the OMG pilot implementation** — or any other tool — as the reason for behaviour.
+  The writer implements the **specification**, not another implementation's choices. Where the spec
+  is genuinely ambiguous, say so in one sentence with the clause; where the KEBNF is defective, that
+  belongs in `GrammarErrata.cs` with its rationale, not scattered through the writers.
+- **No notes to future editors** ("keep in step with X", "do not remove"). Encode it in a guard or a
+  test.
+- **XML docs still required on every type and member** (`DEVELOPMENT_STANDARDS.md` §5.1), but held to
+  one sentence per tag, two as the ceiling — no `<para>` elaborations, no essays.
+
+### The bright line — the ONLY test for keeping an inline comment
+
+Earlier wording said to keep "a non-obvious *why*". That is not testable and gets self-served. The
+rule is:
+
+> **A comment may ONLY state a constraint that would cause a reader to break something if they did
+> not know it. A comment may NEVER explain why the change was made.**
+
+Apply it as a question with a yes/no answer: *if a reader deleted or rewrote this code without the
+comment, would they introduce a defect?* No → delete the comment. "It helps the reviewer understand
+my change" is not a yes; that belongs in the commit message.
+
+**Budget: at most 2 added comment lines per change.** Over that, delete until it fits or ask first.
+
+**Signature words that mean you are writing a commit message, not a comment.** If an added comment
+line contains any of `now`, `previously`, `rather than`, `instead of`, `used to`, `was `, `no
+longer`, `we `, `I `, or restates a `<remarks>` already on the same member — delete it. A
+`PreToolUse` hook rejects these on `Edit`/`Write`, so it fails loudly rather than reaching review.
+
+Worked example of the failure, from this repo:
+
+```csharp
+// The supplier now records each resource's root as it is read rather than re-deriving it, so
+// interior elements no longer reach this list and no metaclass filter is needed to keep them out.
+var otherRootNamespaces = globalNamespaces?.Where(c => c != null && !ReferenceEquals(c, rootNamespace))
+```
+
+Two banned signatures (`now`, `rather than`), it annotates a self-evident `Where`, and deleting it
+costs a reader nothing. The commit message was the right home for all of it.
 
 ## Quality rules
 

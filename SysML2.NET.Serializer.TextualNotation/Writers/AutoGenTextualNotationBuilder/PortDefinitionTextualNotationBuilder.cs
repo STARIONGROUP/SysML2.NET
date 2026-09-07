@@ -48,15 +48,9 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinition(poco, writerContext, stringBuilder);
 
-            if (ownedRelationshipCursor.Current != null)
+            if (ownedRelationshipCursor.TryTake<SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership>(candidate => candidate.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition>().Any(), out var elementAsOwningMembership0))
             {
-
-                if (ownedRelationshipCursor.Current is SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership elementAsOwningMembership)
-                {
-                    OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(elementAsOwningMembership, writerContext, stringBuilder);
-                    ownedRelationshipCursor.Move();
-
-                }
+                OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(elementAsOwningMembership0, writerContext, stringBuilder);
             }
             // NonParsing Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this => Does not have to be process
 
