@@ -138,6 +138,8 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("17-Sequence Modeling", "17a-Sequence-Modeling.sysmlx")]
         [TestCase("17-Sequence Modeling", "17b-Sequence-Modeling.sysmlx")]
         [TestCase("18-Use Case", "18-Use Case.sysmlx")]
+        [TestCase("Simple Tests", "ViewTest.sysmlx")]
+        [TestCase("Simple Tests", "DecisionTest.sysmlx")]
         [TestCase("Simple Tests", "AllocationTest.sysmlx")]
         [TestCase("Simple Tests", "CalculationTest.sysmlx")]
         [TestCase("Simple Tests", "ConjugationTest.sysmlx")]
