@@ -516,10 +516,12 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
                 return generalScopes[0];
             }
 
-            // Only a scope that actually binds the name can be the one the redefinition's own binding
-            // would occupy.
+            // The parser stops at the first general that binds the name AT ALL, whatever it binds to, so
+            // that scope is the one to resolve against. Selecting the first scope binding it to the TARGET
+            // instead would skip an earlier general that shadows it, and the bare name emitted on that
+            // basis would re-read as the shadowing feature.
             return generalScopes.FirstOrDefault(scope =>
-                this.ResolveSimpleNameInScope(scope, target, rawName, null, null) == SimpleNameResolution.Matched);
+                this.ResolveSimpleNameInScope(scope, target, rawName, null, null) != SimpleNameResolution.NotBound);
         }
 
         /// <summary>
