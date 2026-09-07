@@ -231,9 +231,39 @@ re-diagnosed:
 | #3 | `MetadataUsage` not wired into any dispatch point | 14-Language Extensions |
 | #9 | `SatisfyRequirementUsage` requires `assert` | 08-Requirements |
 | #10 | `CaseBodyItem` admits no `ReturnParameterMember` | 10-Analysis and Trades |
-| #11 | `EnumeratedValue` cannot carry prefix metadata (`#Security enum secret`) | 13-Model Containment, 14-Language Extensions |
+| #11 | `EnumeratedValue` cannot carry prefix metadata (`#Security enum secret`) | **CONFIRMED** — see below | 13-Model Containment, 14-Language Extensions, `Simple Tests/MetadataTest` |
 
 Items #2, #4, #5, #6 concern productions with no corpus coverage.
+
+### #124 item 11 — confirmed, and it silently DROPS a FeatureTyping
+
+```
+EnumerationUsageMember : VariantMembership = MemberPrefix ownedRelatedElement += EnumeratedValue
+EnumeratedValue : EnumerationUsage = 'enum'? Usage        ← no prefix slot
+EnumerationUsage : EnumerationUsage = UsagePrefix 'enum' Usage
+```
+
+`EnumeratedValue` has no `UsagePrefix`, so — unlike `EnumerationUsage` — nothing consumes a
+`PrefixMetadataMember` from the cursor. The consequence is worse than an unwritable keyword: the
+annotation is the FIRST entry in the value's `ownedRelationship`, so the cursor is still parked on it
+when `BuildUsage` reaches the positional `FeatureSpecializationPart` guard
+(`cursor.Current is IFeatureTyping || …`). That guard fails and **the typing is never emitted**.
+
+`Simple Tests/MetadataTest` shows it exactly — all three values carry a `FeatureTyping` to
+`ClassificationLevel`, but only the annotated one loses it:
+
+```
+enum uncl: ClassificationLevel = 0;      ← [FeatureTyping, FeatureValue]
+enum conf: ClassificationLevel = 1;      ← [FeatureTyping, FeatureValue]
+enum secret = 2 { @ Security; }          ← [OwningMembership(MetadataUsage), FeatureTyping, FeatureValue]
+```
+
+**Fix when this is taken up:** emit the annotation as a prefix and advance the cursor past it before
+delegating to `Usage`, which yields the pilot's `#Security enum secret : ClassificationLevel = 2;`.
+That is the deviation this item already licenses, and it restores the typing as a side effect.
+`BuildEnumeratedValue` is generated, so the change belongs in the generator — as a HandCoded fallback
+for this rule, the way `EntryTransitionMember` (item 8) is handled. `MetadataTest` stays out of
+validation until then.
 
 ## Model ↔ notation reconciliations (NOT divergences)
 
