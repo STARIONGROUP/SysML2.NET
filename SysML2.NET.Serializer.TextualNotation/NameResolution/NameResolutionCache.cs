@@ -516,12 +516,14 @@ namespace SysML2.NET.Serializer.TextualNotation.NameResolution
                 return generalScopes[0];
             }
 
-            // The parser stops at the first general that binds the name AT ALL, whatever it binds to, so
-            // that scope is the one to resolve against. Selecting the first scope binding it to the TARGET
-            // instead would skip an earlier general that shadows it, and the bare name emitted on that
-            // basis would re-read as the shadowing feature.
+            // §8.2.3.5.1 stops at the first general where "a resolution is found" — a resolution being one
+            // whose Element also has the proper type for the context, here Redefinition::redefinedFeature,
+            // so any Feature qualifies and a non-Feature binding does not stop the walk. Selecting the
+            // first scope binding the name to the TARGET instead would skip an earlier general that
+            // shadows it, and a bare name emitted on that basis re-reads as the shadowing feature.
             return generalScopes.FirstOrDefault(scope =>
-                this.ResolveSimpleNameInScope(scope, target, rawName, null, null) != SimpleNameResolution.NotBound);
+                this.ResolveSimpleNameInScope(scope, target, rawName, null, null, static element => element is IFeature)
+                    == SimpleNameResolution.Matched);
         }
 
         /// <summary>
