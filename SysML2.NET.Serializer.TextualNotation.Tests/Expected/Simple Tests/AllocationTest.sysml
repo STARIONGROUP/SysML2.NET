@@ -1,0 +1,27 @@
+package AllocationTest {
+    part def Logical {
+        part component;
+    }
+    part def Physical {
+        part assembly {
+            part element;
+        }
+    }
+    part l: Logical {
+        part :>> component;
+    }
+    part p: Physical {
+        part :>> assembly {
+            part :>> element;
+        }
+        allocate l.component to assembly.element;
+    }
+    allocation def A;
+    allocation def Logical_to_Physical :> A {
+        end ref logical: Logical;
+        end ref physical: Physical;
+    }
+    allocation allocation1: Logical_to_Physical allocate l to p;
+    allocation allocation2: Logical_to_Physical allocate logical ::> l to physical ::> p;
+    allocate l.component to p.assembly.element;
+}
