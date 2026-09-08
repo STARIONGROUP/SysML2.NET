@@ -385,7 +385,7 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
-        /// Requests an <see cref="IEnumerable{IData}"/> from the SysML2 model server REST API
+        /// Requests an <see cref="IEnumerable{IIdentified}"/> from the SysML2 model server REST API
         /// </summary>
         /// <param name="requestUri">
         /// The request <see cref="Uri"/> including the query parameters
@@ -394,7 +394,7 @@ namespace SySML2.NET.REST
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns></returns>
-        private async Task<IEnumerable<IData>> RequestData(Uri requestUri, CancellationToken cancellationToken)
+        private async Task<IEnumerable<IIdentified>> RequestData(Uri requestUri, CancellationToken cancellationToken)
         {
             this.logger.LogDebug("request data from: {0}", requestUri);
 

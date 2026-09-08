@@ -59,7 +59,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 Id = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
                 Alias = new List<string> { "project alias 1", "project alias 2"},
-                Created = new DateTime(1976, 8, 20),
+                Created = new DateTime(1976, 8, 20, 0, 0, 0, DateTimeKind.Utc),
                 DefaultBranch = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
                 Description = "this is a description",
                 Name = "test project",
@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 Id = Guid.Parse("94e5b40e-741e-49ca-bd7f-f3138c071bf9"),
                 Alias = new List<string> { "commit alias 1", "commit alias 2" },
-                Created = new DateTime(1976, 8, 20),
+                Created = new DateTime(1976, 8, 20, 0, 0, 0, DateTimeKind.Utc),
                 Description = "",
                 OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
                 PreviousCommit = Guid.Empty,
@@ -81,7 +81,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 Id = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
                 Alias = null,
-                Created = new DateTime(1976, 8, 20),
+                Created = new DateTime(1976, 8, 20, 0, 0, 0, DateTimeKind.Utc),
                 Description = "branch description",
                 Head = Guid.Parse("94e5b40e-741e-49ca-bd7f-f3138c071bf9"),
                 Name = "branch name",
@@ -95,12 +95,12 @@ namespace SysML2.NET.Serializer.Json.Tests
         [TestCase(true)]
         public void Verify_that_PIM_IDatas_can_be_serialized(bool includeDerivedProperties)
         {
-            var dataItems = new List<IData> { this.project, this.commit, this.branch };
+            var dataItems = new List<IIdentified> { this.project, this.commit, this.branch };
 
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
-            Assert.That(() => this.serializer.Serialize(dataItems, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions), Throws.Nothing); ;
+            Assert.That(() => this.serializer.Serialize(dataItems, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
@@ -131,7 +131,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         [TestCase(true)]
         public async Task Verify_that_PIM_IDatas_can_be_serialized_async(bool includeDerivedProperties)
         {
-            var dataItems = new List<IData> { this.project, this.commit, this.branch };
+            var dataItems = new List<IIdentified> { this.project, this.commit, this.branch };
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
@@ -141,6 +141,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
+            cts.Dispose();
         }
 
         [Test]
@@ -157,6 +158,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
+            cts.Dispose();
         }
     }
 }

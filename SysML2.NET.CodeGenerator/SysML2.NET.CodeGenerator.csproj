@@ -21,6 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
       <PackageReference Include="Microsoft.CodeAnalysis" Version="5.9.0" />
+      <PackageReference Include="Microsoft.OpenApi" Version="3.10.2" />
       <PackageReference Include="uml4net.HandleBars" Version="8.4.0" />
     <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.6.0" />
   </ItemGroup>
@@ -253,6 +254,15 @@
     <None Update="Templates\Uml\core-model-level-evaluable-functions-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\OpenAPI\psm-dto-class-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-dto-interface-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-enumeration-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />
@@ -277,6 +287,10 @@
     </Content>
     <Content Include="..\Resources\KerML-textual-bnf.kebnf">
       <Link>datamodel\KerML-textual-bnf.kebnf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\ptc-25-02-30.json">
+      <Link>datamodel\ptc-25-02-30.json</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Resources\SysML-textual-bnf.kebnf">

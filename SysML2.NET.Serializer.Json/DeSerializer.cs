@@ -39,7 +39,7 @@ namespace SysML2.NET.Serializer.Json
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
-    /// an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
+    /// an <see cref="IIdentified"/> and <see cref="IEnumerable{IIdentified}"/>
     /// </summary>
     /// <remarks>
     /// The JSON payload is read into a pooled buffer and then walked with a <see cref="Utf8JsonReader"/>. No
@@ -82,7 +82,7 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
+        /// Deserializes the JSON stream to an <see cref="IEnumerable{IIdentified}"/>
         /// </summary>
         /// <param name="stream">
         /// the JSON input stream
@@ -95,9 +95,9 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>
-        /// an <see cref="IEnumerable{IData}"/>
+        /// an <see cref="IEnumerable{IIdentified}"/>
         /// </returns>
-        public IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
+        public IEnumerable<IIdentified> DeSerialize(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             var sw = Stopwatch.StartNew();
 
@@ -118,7 +118,7 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
+        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IIdentified}"/>
         /// </summary>
         /// <param name="stream">
         /// the JSON input stream
@@ -134,9 +134,9 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{IData}"/>
+        /// an <see cref="IEnumerable{IIdentified}"/>
         /// </returns>
-        public async Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IIdentified>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
@@ -157,7 +157,7 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Deserializes the UTF-8 encoded JSON payload to a <see cref="List{IData}"/>
+        /// Deserializes the UTF-8 encoded JSON payload to a <see cref="List{IIdentified}"/>
         /// </summary>
         /// <param name="utf8Json">
         /// the buffer that contains the UTF-8 encoded JSON payload
@@ -173,20 +173,20 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>
-        /// a <see cref="List{IData}"/>
+        /// a <see cref="List{IIdentified}"/>
         /// </returns>
         /// <remarks>
         /// No <see cref="JsonDocument"/> is materialized at any point. Each element is handed to its generated
         /// deserializer as a <see cref="Utf8JsonReader"/> positioned on its <see cref="JsonTokenType.StartObject"/>,
         /// and the deserializer consumes it through to the matching <see cref="JsonTokenType.EndObject"/>.
         /// </remarks>
-        private List<IData> DeSerializeUtf8Json(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
+        private List<IIdentified> DeSerializeUtf8Json(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             var offset = HasUtf8ByteOrderMark(utf8Json, length) ? 3 : 0;
 
             var reader = new Utf8JsonReader(new ReadOnlySpan<byte>(utf8Json, offset, length - offset));
 
-            var result = new List<IData>();
+            var result = new List<IIdentified>();
 
             if (!reader.Read())
             {
@@ -221,7 +221,7 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Deserializes the json object that the <see cref="Utf8JsonReader"/> is positioned on to an <see cref="IData"/> object
+        /// Deserializes the json object that the <see cref="Utf8JsonReader"/> is positioned on to an <see cref="IIdentified"/> object
         /// </summary>
         /// <param name="reader">
         /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the json
@@ -235,9 +235,9 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>
-        /// an instance of <see cref="IData"/>
+        /// an instance of <see cref="IIdentified"/>
         /// </returns>
-        private IData DeserializeObject(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
+        private IIdentified DeserializeObject(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
             {

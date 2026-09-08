@@ -86,7 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// Gets or sets the unique identifier
         /// </summary>
         [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [Implements(implementation: "IData.Id")]
+        [Implements(implementation: "IIdentified.Id")]
         public Guid Id { get; set; }
 
         /// <summary>
