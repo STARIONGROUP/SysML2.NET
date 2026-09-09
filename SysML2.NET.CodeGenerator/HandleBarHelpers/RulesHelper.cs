@@ -51,6 +51,23 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             var processor = new RuleProcessor();
 
+            handlebars.RegisterHelper("RulesHelper.IsRuleUnreachable", (_, arguments) =>
+            {
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("RulesHelper.IsRuleUnreachable expects to have 2 arguments");
+                }
+
+                if (arguments[0] is not string ruleName)
+                {
+                    throw new ArgumentException("RulesHelper.IsRuleUnreachable expects a rule name string as first argument");
+                }
+
+                return arguments[1] is not IReadOnlySet<string> unreachableRuleNames
+                    ? throw new ArgumentException("RulesHelper.IsRuleUnreachable expects a set of unreachable rule names as second argument")
+                    : unreachableRuleNames.Contains(ruleName);
+            });
+
             handlebars.RegisterHelper("RulesHelper.ContainsAnyDispatcherRules", (_, arguments) =>
             {
                 if (arguments.Length != 1)
@@ -182,6 +199,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             return string.Equals(ruleName, "FunctionOperationExpression", StringComparison.Ordinal);
         }
+
+        /// <summary>
+        /// Rule names the KEBNF-text-only reachability walk cannot see being reached, because the
+        /// only remaining reference to them lives in a hand-coded Build{Rule}HandCoded companion
+        /// rather than in the merged grammar. PayloadFeatureMember is called from
+        /// SharedTextualNotationBuilder.BuildFlowDeclarationHandCoded, which reimplements KerML's
+        /// FlowDeclaration : Flow - a rule the SysML-overrides-KerML merge (keyed on bare rule name)
+        /// drops in favour of SysML's unrelated FlowDeclaration : FlowUsage, taking with it the
+        /// merged grammar's only textual reference to PayloadFeatureMember.
+        /// </summary>
+        public static readonly IReadOnlySet<string> HandCodedReachableRuleNames = new HashSet<string> { "PayloadFeatureMember" };
 
         /// <summary>
         /// Determines whether <paramref name="rule"/> targets an <c>IOperatorExpression</c>

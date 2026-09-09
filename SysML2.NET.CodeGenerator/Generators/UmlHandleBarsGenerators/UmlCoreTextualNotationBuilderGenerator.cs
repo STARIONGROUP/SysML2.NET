@@ -60,6 +60,12 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         private const string SharedBuilderTemplateName = "core-textual-notation-shared-builder-template";
 
         /// <summary>
+        /// The root rule from which grammar reachability is computed to flag
+        /// <see cref="SysML2.NET.Serializer.TextualNotation.Writers.GrammarUnreachableAttribute" /> methods.
+        /// </summary>
+        private const string RootRuleName = "RootNamespace";
+
+        /// <summary>
         /// Register the custom helpers
         /// </summary>
         protected override void RegisterHelpers()
@@ -173,6 +179,10 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[BuilderTemplateName];
 
+            var unreachableRuleNames = textualNotationSpecification.ComputeUnreachableRuleNames(RootRuleName)
+                .Except(RulesHelper.HandCodedReachableRuleNames)
+                .ToHashSet();
+
             var namedElements = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<INamedElement>())
                 .ToList();
@@ -202,7 +212,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             {
                 var targetClassContext = namedElements.Single(x => x.Name == rulesPerType.Key);
 
-                var generatedBuilder = template(new {Context = targetClassContext, Rules = rulesPerType.Value, AllRules = textualNotationSpecification.Rules});
+                var generatedBuilder = template(new {Context = targetClassContext, Rules = rulesPerType.Value, AllRules = textualNotationSpecification.Rules, UnreachableRuleNames = unreachableRuleNames});
                 generatedBuilder = this.CodeCleanup(generatedBuilder);
 
                 var fileName = $"{targetClassContext.Name.CapitalizeFirstLetter()}TextualNotationBuilder.cs";
@@ -282,7 +292,11 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                 return;
             }
 
-            var generatedBuilder = template(new { Entries = entries, AllRules = textualNotationSpecification.Rules });
+            var unreachableRuleNames = textualNotationSpecification.ComputeUnreachableRuleNames(RootRuleName)
+                .Except(RulesHelper.HandCodedReachableRuleNames)
+                .ToHashSet();
+
+            var generatedBuilder = template(new { Entries = entries, AllRules = textualNotationSpecification.Rules, UnreachableRuleNames = unreachableRuleNames });
             generatedBuilder = this.CodeCleanup(generatedBuilder);
 
             await WriteAsync(generatedBuilder, outputDirectory, $"{RulesHelper.SharedBuilderClassName}.cs");

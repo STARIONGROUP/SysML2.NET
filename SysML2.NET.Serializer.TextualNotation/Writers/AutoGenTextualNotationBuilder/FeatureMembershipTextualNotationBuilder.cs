@@ -478,6 +478,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        [GrammarUnreachable("No production in the effective SysML v2 textual grammar (SysML definitions override same-named KerML ones) references this rule, so it can never be reached from RootNamespace.")]
         public static void BuildOwnedExpressionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var ownedRelationshipCursor = writerContext.CursorCache.GetOrCreateCursor(poco.Id, "ownedRelationship", poco.OwnedRelationship);
@@ -601,6 +602,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IFeatureMembership" /> from which the rule should be build</param>
         /// <param name="writerContext">The <see cref="TextualNotationWriterContext" /> providing the serialization context for the current <paramref name="poco"/></param>
         /// <param name="stringBuilder">The <see cref="IndentedStringBuilder" /> that accumulates the entire textual notation with indentation</param>
+        [GrammarUnreachable("No production in the effective SysML v2 textual grammar (SysML definitions override same-named KerML ones) references this rule, so it can never be reached from RootNamespace.")]
         public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, TextualNotationWriterContext writerContext, IndentedStringBuilder stringBuilder)
         {
             var effectiveOwnedMemberFeature = SysML2.NET.Serializer.TextualNotation.Writers.SharedTextualNotationBuilder.QueryEffectiveOwnedMemberFeature(poco);
