@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
     using Microsoft.Extensions.Logging;
 
-    using SysML2.NET.Common;
+    using SysML2.NET.PIM;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -38,9 +38,9 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <summary>
         /// a dictionary that provides delegates for deserialization
         /// </summary>
-        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData>>
+        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, Record>>
             DeSerializerActionMap =
-                new Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData>>
+                new Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, Record>>
                 {
                     { "Branch", BranchDeserializer.DeSerialize },
                     { "Commit", CommitDeSerializer.DeSerialize },
@@ -50,19 +50,19 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 };
     
         /// <summary>
-        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, bool,  ILoggerFactory, IData}"/> for the
+        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, bool,  ILoggerFactory, Record}"/> for the
         /// <see cref="System.Type"/> that is to be deserialized
         /// </summary>
         /// <param name="typeName">
         /// The name of the subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A delegate for <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, IData}"/>
+        /// A delegate for <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, Record}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
         /// </exception>
-        internal static Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData> Provide(string typeName)
+        internal static Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, Record> Provide(string typeName)
         {
             if (!DeSerializerActionMap.TryGetValue(typeName, out var func))
             {

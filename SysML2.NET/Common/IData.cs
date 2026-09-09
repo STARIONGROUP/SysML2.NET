@@ -20,17 +20,14 @@
 
 namespace SysML2.NET.Common
 {
-    using System;
-
     /// <summary>
     /// Data represents any entity that can be created, updated, deleted, and queried by the Systems Modeling API
     /// and Services
     /// </summary>
-    public interface IData
+    /// <remarks>
+    /// Realized by Element, ExternalData, ExternalRelationship and ProjectUsage; a Record is not a Data.
+    /// </remarks>
+    public interface IData : IIdentified
     {
-        /// <summary>
-        /// Gets or sets the unique identifier
-        /// </summary>
-        Guid Id { get; set; }
     }
 }

@@ -25,6 +25,7 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
 
     using NUnit.Framework;
 
+    using SysML2.NET.Common;
     using SysML2.NET.Serializer.Json;
     using SysML2.NET.Extensions.Core.DTO.Comparers;
 
@@ -59,7 +60,7 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
 
             var messagePackStream = new MemoryStream();
 
-            this.messagePackSerializer.Serialize(jsonData, messagePackStream);
+            this.messagePackSerializer.Serialize(jsonData.Cast<IData>(), messagePackStream);
 
             messagePackStream.Position = 0;
 
@@ -84,10 +85,10 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
                         Is.EqualTo(left.GetType()),
                         $"Type mismatch for id {id}. Left={left.GetType().FullName}, Right={right.GetType().FullName}");
 
-                    var comparer = ComparerProvider.Resolve(left);
+                    var comparer = ComparerProvider.Resolve((IData)left);
 
                     Assert.That(
-                        comparer.Equals(left, right),
+                        comparer.Equals((IData)left, right),
                         Is.True,
                         $"Round-trip semantic mismatch for id {id} ({left.GetType().Name}).");
                 }

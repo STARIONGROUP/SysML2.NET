@@ -1,397 +1,209 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
 ## Project Overview
 
-SysML2.NET is a .NET C# SDK implementing the OMG SysML v2 specification (based on Beta 4 pilot implementation). It provides metaclass DTOs/POCOs, serializers (JSON, XMI, MessagePack), a REST client, a DAL layer, and a Blazor WebAssembly viewer application. Current version: 0.19.0.
+SysML2.NET is a .NET C# SDK implementing the OMG SysML v2 specification. It provides metaclass DTOs/POCOs, serializers (JSON, XMI, MessagePack, Textual Notation), a REST client, a DAL layer, and a Blazor WebAssembly viewer. Current version: 0.19.0.
 
 ## Project goal: conformance to the SPECIFICATIONS
 
-**The target for EVERY part of this SDK is conformance to the OMG specifications — not parity with
-any reference implementation.** This is the standing intent across the whole solution, not a
-textual-notation concern. Treat it as governing whenever the two conflict.
-
-The specifications in scope, and what each governs here:
+**The target for EVERY layer is conformance to the OMG specifications — not parity with any reference implementation.** Where the two conflict, the specification wins.
 
 | Specification | Governs |
 |---|---|
-| **KerML 1.0** | abstract syntax (metaclasses, properties, multiplicities, ordering, redefinitions), derived properties and operations (OCL), invariants, model-level semantics including implied relationships (§8.4.2) |
-| **SysML v2.0** | the systems layer on top of KerML — same three concerns — plus the textual concrete syntax |
-| **Systems Modeling API & Services 1.0** | the PIM types and services, and their REST/HTTP binding (`SysML2.NET.REST`, `PIM/`, `SysML2.NET.Serializer.Dictionary`) |
+| **KerML 1.0** | abstract syntax (metaclasses, properties, multiplicities, ordering, redefinitions), derived properties/operations (OCL), invariants, implied relationships (§8.4.2) |
+| **SysML v2.0** | the systems layer on top of KerML — plus the textual concrete syntax |
+| **Systems Modeling API & Services 1.0** | PIM types and services, REST/HTTP binding (`SysML2.NET.REST`, `PIM/`, `SysML2.NET.Serializer.Dictionary`) |
 | **Model interchange** | the project/archive interchange format (`SysML2.NET.Kpar`) |
-
-This applies per layer, with the same standard everywhere:
-
-- **Abstract syntax** (`Core/AutoGen*`) — structure comes from `Resources/*_only_xmi.uml`, the single
-  source of truth. Multiplicity, `ordered`, redefinition/subsetting are contractual, not incidental.
-- **Derived properties and operations** (`Extend/`) — the OCL in the XMI is the contract. Translate
-  it faithfully AND to its intent; where the OCL is terse or leans on a defined term, ground the
-  intent (`hypha:spec-citation`) rather than guessing from a sibling.
-- **Constraints/invariants** — a validation rule is conformant only if it implements the stated
-  invariant, not an approximation that happens to pass the corpus.
-- **Concrete syntax** — the KEBNF and the clauses it comes from; deviations recorded, never silently
-  encoded.
-- **Semantics** — implied relationships and library specializations follow the clause, not what makes
-  a particular model render nicely.
-- **API/PIM** — service behaviour and payload shape follow the API specification, not the behaviour
-  of a particular server.
 
 Rules that hold at every layer:
 
-- **The specification decides.** Where a reference implementation and the specification disagree, the
-  specification wins and the divergence is recorded (`GRAMMAR.md` "Known KEBNF divergences", the
-  deviation ledger, or `GrammarErrata.cs`). Never implement a behaviour whose only justification is
-  "the reference implementation does it".
-- **A reference implementation or its corpus is a test oracle, not the definition of correct.** The
-  pilot's `.sysml` files, a reference API server's responses, a sample model — all catch regressions
-  cheaply, and agreement is usually evidence of correctness. A diff is a question, not a verdict.
-  Note specifically that the pilot's serializer replays the author's original source text wherever
-  the abstract syntax records no choice (optional keywords, name spellings, formatting), so on those
-  points it is not an authority at all — which is what the ledger's ACCEPT categories encode.
-- **Where the spec is genuinely ambiguous**, pick a reading, cite the clause, and say in one line
-  that the clause admits more than one — do not silently encode one reading as fact.
-- **Where the spec offers several valid forms and ranks none**, the choice is ours: make it a setting
-  (see issue #359) or state it as a house convention. Do not present it as a requirement.
+- **The specification decides.** Never implement a behaviour whose only justification is "the reference implementation does it". Record divergences in `GRAMMAR.md` ("Known KEBNF divergences"), the deviation ledger, or `GrammarErrata.cs`.
+- **A reference implementation or its corpus is a test oracle, not the definition of correct.** A diff is a question, not a verdict. The pilot's serializer replays the author's original source text wherever the abstract syntax records no choice (optional keywords, name spellings, formatting) — on those points it is no authority at all.
+- **Where the spec is genuinely ambiguous**, pick a reading, cite the clause, and note in one line that the clause admits more than one.
+- **Where the spec offers several valid forms and ranks none**, the choice is ours: make it a setting (issue #359) or state it as a house convention — never as a requirement.
+- **Do not claim conformance for any layer.** Confidence today rests on end-to-end comparison against sample data, which measures non-regression. Conformance needs round-trip tests (write → re-read → same model; exists for no serializer today) and per-invariant unit tests.
 
-**Not yet achieved anywhere — do not claim conformance for any layer.** Confidence today rests
-largely on end-to-end comparison against sample data, which measures non-regression rather than
-conformance. What each layer needs before conformance can be asserted: **round-trip tests** (write →
-re-read → assert the same model; this exists for no serializer today, including the textual writer)
-and **per-invariant unit tests** so an individual rule — a derivation, a constraint, a resolution
-rule, a service contract — is falsifiable in isolation rather than only via an end-to-end diff.
-
-## Build & Test Commands
+## Build & Test
 
 ```bash
-# Restore and build entire solution
-dotnet restore SysML2.NET.sln
-dotnet build SysML2.NET.sln
-
-# Run all tests
+dotnet restore SysML2.NET.sln && dotnet build SysML2.NET.sln
 dotnet test SysML2.NET.sln
-
-# Run tests for a specific project
-dotnet test SysML2.NET.Tests/SysML2.NET.Tests.csproj
-dotnet test SysML2.NET.Serializer.Json.Tests/SysML2.NET.Serializer.Json.Tests.csproj
-
-# Run a single test by name
 dotnet test SysML2.NET.Tests/SysML2.NET.Tests.csproj --filter "FullyQualifiedName~AcceptActionUsageExtensionsTestFixture"
-
-# Run with coverage (as CI does)
-dotnet-coverage collect "dotnet test SysML2.NET.sln --no-build" -f xml -o coverage.xml
+dotnet-coverage collect "dotnet test SysML2.NET.sln --no-build" -f xml -o coverage.xml   # as CI does
 ```
 
-Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attributes.
+Test framework: **NUnit** (`[TestFixture]`, `[Test]`).
 
-## Reading `DEVELOPMENT_STANDARDS.md` is MANDATORY
+## Mandatory reading
 
-**`DEVELOPMENT_STANDARDS.md` at the repo root governs how code is written in this solution, and it applies to EVERY piece of code you write or modify — production, tests, generator, scripts.** It is the org-wide Starion Group engineering convention document: C# style, LINQ usage, test conventions, exception and validation boundaries, XML documentation, and repo hygiene.
+**`DEVELOPMENT_STANDARDS.md`** (repo root) governs how code is written across the whole solution — production, tests, generator, scripts. Read it before authoring code in a session where you have not already done so; do not code from memory of "typical C#" or by copying a neighbouring file, since parts of this repo predate it.
 
-Read it before writing code in a session where you have not already done so. Do not author code from memory of "typical C#" conventions, or by copying the shape of a neighbouring file — parts of this repo predate the document and do not comply, so imitating them reproduces the deviation.
+**`TESTING.md`** (repo root) is the binding specification for every NUnit fixture. `Read` it in full, in the current session, before touching a single line in any `*.Tests/` project — including one-assertion changes. Several existing fixtures predate it and violate it; `TESTING.md` wins over any file you are looking at.
 
-**Precedence, per its own §0:** a configured `.editorconfig` entry, Roslyn/StyleCop analyzer, or linter rule always WINS over the document's prose where they cover the same concern. The written rules are the fallback for what tooling does not enforce. So before treating one of its rules as binding, check `.editorconfig`, `Directory.Build.props` / `Directory.Build.targets` and any `.globalconfig` — and never flag a diff as a violation of the document when it is actually compliant with the repo's own tool configuration.
+**Precedence:** `.editorconfig` / analyzer / linter configuration beats prose in either document. This `CLAUDE.md` beats `DEVELOPMENT_STANDARDS.md` where they overlap. `TESTING.md` is authoritative for fixtures.
 
-Where this `CLAUDE.md` and `DEVELOPMENT_STANDARDS.md` overlap, this file is the project-specific override and wins; the standards document is explicit that project-specific overrides belong in the repo's own `CLAUDE.md`. `TESTING.md` remains the binding authority for NUnit fixtures specifically.
+`TESTING.md` rules most often got wrong (a checklist, not a substitute for reading it):
 
-## Reading `TESTING.md` is MANDATORY
-
-**Before you write or modify a single line in any `*.Tests/` project, you MUST `Read` `TESTING.md` at the repo root — in full, in the current session.** It is the authoritative, binding specification for every NUnit fixture in this solution.
-
-This applies to *every* test change, including ones that feel too small to warrant it: adding one `[Test]`, adding an assertion to an existing one, or creating a new fixture alongside a production change. There is no "obvious enough to skip it" case.
-
-**Do NOT author tests from memory, from the conventions of another .NET project, or by copying the shape of a neighbouring fixture.** Several fixtures in the repo predate `TESTING.md` and violate it — imitating them reproduces the violation. `TESTING.md` wins over any existing file you are looking at.
-
-The rules most often got wrong, all of which have caused review churn:
-
-| Rule | Section | Get-it-wrong symptom |
+| Rule | § | Get-it-wrong symptom |
 | --- | --- | --- |
-| One `[Test]` per method-under-test, all scenarios packed inside | §2, §10 | a family of `…_WhenX_DoesY` tests that share setup |
-| Name it `Verify{MethodUnderTest}` — no scenario suffix | §6, §10 | `Verify_that_foo_returns_bar`, `VerifyComputeFooWhenNull` |
-| One fixture per production type, mirroring its namespace | §1 | a second `…AspectTestFixture` bolted on beside the real one |
-| Every `[Test]` covers positive AND negative | §3, §10 | a happy-path-only test (very easy to do for an async overload) |
-| `Assert.That` only — never `Assert.Throws` / `IsTrue` / `AreEqual` | §4 | legacy NUnit API |
-| `Has.Count.EqualTo(n)`, not `result.Count, Is.EqualTo(n)` | §8 | asserting on `.Count` directly |
-| `Assert.EnterMultipleScope` only around **2+ consecutive** asserts | §5, §10 | a scope wrapping one long fluent chain |
-| Indexer / range over LINQ; `Is.SameAs` for POCO identity; `Is.EquivalentTo` when order is irrelevant | §8 | `.First()`, `.Last()`, `Is.EqualTo` on a POCO |
-| Assert an out-of-scope `NotSupportedException` stub — don't implement it | §9 | scope creep out of the test project |
+| One `[Test]` per method-under-test, all scenarios packed inside | 2, 10 | a family of `…_WhenX_DoesY` tests sharing setup |
+| Name it `Verify{MethodUnderTest}` — no scenario suffix | 6, 10 | `VerifyComputeFooWhenNull` |
+| One fixture per production type, mirroring its namespace | 1 | a second `…AspectTestFixture` beside the real one |
+| Every `[Test]` covers positive AND negative | 3, 10 | happy-path-only test |
+| `Assert.That` only — never `Assert.Throws` / `IsTrue` / `AreEqual` | 4 | legacy NUnit API |
+| `Has.Count.EqualTo(n)` | 8 | asserting on `.Count` directly |
+| `Assert.EnterMultipleScope` only around 2+ consecutive asserts | 5, 10 | scope wrapping one fluent chain |
+| Indexer/range over LINQ; `Is.SameAs` for POCO identity; `Is.EquivalentTo` when order is irrelevant | 8 | `.First()`, `Is.EqualTo` on a POCO |
+| Assert an out-of-scope `NotSupportedException` stub — don't implement it | 9 | scope creep |
 
-The table is a checklist, **not a substitute for reading the file** — it omits the reference fixtures (§11) and the criteria for when separated `[Test]` methods *are* allowed (§2).
+## Grounding SysML v2 / KerML work with the Hypha plugin
+
+If the **Hypha** plugin is installed it is the **preferred grounding source for every SysML v2 / KerML semantic question**. Use it **before** implementing or reviewing anything depending on the metamodel — never a sibling analogue, the doc-comment OCL, or prior knowledge. Applies whenever you are about to: implement/modify a `Compute*` under `SysML2.NET/Extend/`; reason about features, multiplicities, ordering, redefinitions or constraints; implement/review a textual-notation or lexical rule; or claim what the specification requires.
+
+- **`hypha:metamodel-lookup` — structure (always).** Type, multiplicity, **ordering**, redefinitions/subsettings, supertypes/subtypes, derivation and constraint OCL. Use the `hypha:metamodel-navigator` agent for cross-cutting fan-out across many metaclasses.
+- **`hypha:spec-citation` — intent (whenever interpretation is involved).** The OCL is a formalization, not an explanation. Consult the spec when the OCL is terse, ambiguous, or leans on a defined term (`namingFeature`, `redefinedFeature`, connector `end`, typing/inheritance resolution). Skip only when the OCL is mechanical and unambiguous.
+- **`hypha:sysml-validation`** — validate `.sysml` / `.kerml` textual notation.
+
+Cite spec content by document name and clause ("OMG SysML v2 spec, Clause 8.2.2.1.1"), never by file path — this repo does not carry the specification texts.
+
+Why both axes: `ActionDefinition::action` is declared `ordered`, a fact the OCL comment does not surface; and an OCL `->first()` picks one of many, but only the prose says on what basis (e.g. the most specific redefinition).
+
+**If Hypha is not installed:** fall back to `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` (structure, OCL bodies, `ownedComment` prose). Mention once per session that installing Hypha is recommended, then proceed.
 
 ## Architecture
 
-### Code Generation
+### Code generation pipeline
 
-- favour duplicated code in codegeneration to have staticaly defined methods that provide performance over reflection based code.
-- code generation is done by processing the UML model and creating handlebars templates
-- **When working on the grammar/textual notation code generator** (`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and related grammar processing): read `SysML2.NET.CodeGenerator/GRAMMAR.md` for the KEBNF grammar model, cursor/builder conventions, and code-gen patterns already handled.
+Files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.
+
+1. **Input**: `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` — the single source of truth for all generated code, including every OCL derivation, invariant, and operation body.
+2. **Generator**: `SysML2.NET.CodeGenerator` reads them via `uml4net.xmi` and applies Handlebars templates (`Templates/Uml/*.hbs`).
+3. **Output**: `AutoGen*` directories — DTOs/interfaces → `SysML2.NET/Core/AutoGenDto/`; POCOs → `Core/AutoGenPoco/`; enums → `Core/AutoGenEnum/`; JSON (de)serializers → `SysML2.NET.Serializer.Json/Core/AutoGen*/`; MessagePack formatters; extension methods → `SysML2.NET/Extend/`; DAL factories → `SysML2.NET.Dal/Core/`.
+
+Favour duplicated, statically-defined generated methods over reflection-based code. To add a metaclass: update the XMI, then run the generators.
+
+When working on the grammar/textual-notation generator (`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`), read `SysML2.NET.CodeGenerator/GRAMMAR.md` for the KEBNF model, cursor/builder conventions, and existing code-gen patterns.
 
 ### Textual notation reviewer is MANDATORY
 
-**Every code change touching any of the following paths MUST be verified by the `textual-notation-reviewer` agent before reporting the change as complete or committing:**
+**Every change touching these paths MUST be verified by the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) before being reported complete or committed:**
 
-- Every file under `SysML2.NET.Serializer.TextualNotation/Writers/` — both hand-coded partials (`*.cs`), the generated `AutoGenTextualNotationBuilder/*.cs`, `IsValidFor` guard extensions (`TextualNotationValidationExtensions.cs`), and any membership / string / cursor helpers that sit beside them.
-- Every file under `SysML2.NET/LexicalRules/` — both hand-coded members and the generated `AutoGenLexicalRules/*.cs` (`Keywords`, `SymbolicKeywordKind`, `SymbolicKeywordKindExtensions`).
-- `SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs` and any Handlebars template under `SysML2.NET.CodeGenerator/Templates/Uml/` that emits textual-notation or lexical-rules code.
+- anything under `SysML2.NET.Serializer.TextualNotation/Writers/` (hand-coded partials, `AutoGenTextualNotationBuilder/*.cs`, `TextualNotationValidationExtensions.cs`, membership/string/cursor helpers)
+- anything under `SysML2.NET/LexicalRules/` (including `AutoGenLexicalRules/*.cs`)
+- `RulesHelper.cs` and any `Templates/Uml/*.hbs` emitting textual-notation or lexical-rules code
 
-**The KEBNF grammar context applies to ALL of these locations** — not just the generator. When implementing or reviewing hand-coded methods in `SysML2.NET.Serializer.TextualNotation/Writers/`, the author and the reviewer must re-ground in:
-- `SysML2.NET.CodeGenerator/GRAMMAR.md` — the cursor / builder conventions and patterns
-- `Resources/SysML-textual-bnf.kebnf` and `Resources/KerML-textual-bnf.kebnf` — the grammar source of truth
-- The rule's `<para>{…}</para>` XML doc on the generated sibling method (if the method is a HandCoded companion)
+Author and reviewer both re-ground in `SysML2.NET.CodeGenerator/GRAMMAR.md`, `Resources/SysML-textual-bnf.kebnf` / `Resources/KerML-textual-bnf.kebnf`, and the rule's `<para>{…}</para>` XML doc on the generated sibling method. The agent enforces the `Move()` ↔ `+=` Golden Rule, EBNF quantifier semantics (`?` → single `if`; `*` → `while`; `+` → emit-once then loop), correct runtime type discriminators, absence of greedy-builder element drops, and consistency with the grammar rule. Reviewer passes have caught real bugs that no existing test would have failed on.
 
-The agent is defined at `.claude/agents/textual-notation-reviewer.md`. Invoke it with the rule(s) being implemented, the KEBNF text, and the file paths to review. It enforces:
-- the `Move()` ↔ `+=` Golden Rule (cursor advances only on `+=` consumption; direct `cursor.Move()` calls are forbidden after any callee that already advances the cursor internally)
-- EBNF quantifier semantics (`?` = 0..1 → single `if`; `*` = 0+ → `while` loop; `+` = 1+ → emit-once then loop)
-- correct runtime type discriminators (e.g. `ISpecialization` IS the cursor element, not wrapped in `IOwningMembership`)
-- absence of greedy-builder pitfalls that silently drop interleaved elements
-- consistency between the hand-coded method and the grammar rule it implements (name, target type, element order, alternatives)
-
-Reason this is mandatory: reviewer passes have caught real grammar-correctness bugs (wrong discriminator, silent element drop, missing `*` loop, spurious double-`Move()` in `FeatureSpecialization*` loops) that would have shipped broken textual notation without failing any existing test.
-
-### Code Generation Pipeline
-
-Most code in this repo is **auto-generated** — files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.
-
-The pipeline:
-1. **Input**: `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` — these two UML-based XMI files define the KerML and SysML v2 specification respectively. They are the **single source of truth** for all generated DTOs, POCOs, serializers, extension methods, and other auto-generated code. All OCL constraints (derivation rules, validation invariants, and operation body conditions) for each metaclass are also defined within these XMI files.
-2. **Generator**: `SysML2.NET.CodeGenerator` reads these via `uml4net.xmi`, uses Handlebars templates (`Templates/Uml/*.hbs`) to generate code
-3. **Output**: `AutoGen*` directories across multiple projects
-
-Generator classes in `SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/` produce:
-- DTOs and interfaces → `SysML2.NET/Core/AutoGenDto/`
-- POCOs → `SysML2.NET/Core/AutoGenPoco/`
-- Enums → `SysML2.NET/Core/AutoGenEnum/`
-- JSON serializers/deserializers → `SysML2.NET.Serializer.Json/Core/AutoGenSerializer/` and `AutoGenDeSerializer/`
-- MessagePack formatters → `SysML2.NET.Serializer.MessagePack/`
-- Extension methods (Extend) → `SysML2.NET/Extend/`
-- DAL factories → `SysML2.NET.Dal/Core/`
-
-### Grounding SysML v2 / KerML work with the Hypha plugin
-
-If the **Hypha** plugin is installed, it is the **preferred grounding source for every SysML v2 / KerML semantic question** — metamodel structure (`hypha:metamodel-lookup`, or the `hypha:metamodel-navigator` agent for cross-cutting fan-out), normative specification intent (`hypha:spec-citation`), and textual-notation validity (`hypha:sysml-validation`). Use it **before** implementing or reviewing anything that depends on the SysML v2 / KerML metamodel — do not rely on a sibling analogue, the doc-comment OCL, or prior knowledge as the source of truth. The metamodel is large and precise; a plausible prior is exactly what produces confident-but-wrong derivations.
-
-This repository does **not** carry the OMG specification texts. Spec-intent lookups go through `hypha:spec-citation`; cite spec content by document name and clause (e.g. "OMG SysML v2 spec, Clause 8.2.2.1.1"), never by a file path.
-
-**If the Hypha plugin is *not* installed:** the fallback source of truth is the XMI metamodel only — `Resources/KerML_only_xmi.uml` and `Resources/SysML_only_xmi.uml` — for structure, OCL bodies, and the `ownedComment` prose they carry. The first time a task in the session would have benefited from Hypha grounding (any of the situations below), tell the user once, in one or two lines, that installing the Hypha plugin is recommended for accurate SysML v2 / KerML work; then proceed with the XMI. Do not repeat the recommendation on every subsequent task.
-
-This applies whenever you are about to:
-- implement or modify a `Compute*` derived-property / OCL computation under `SysML2.NET/Extend/`,
-- reason about a metaclass's features, multiplicities, ordering, redefinitions/subsettings, or constraints,
-- implement or review a textual-notation / lexical rule, or
-- make a claim about what the SysML v2 / KerML specification requires.
-
-Ground on **two axes** — structure *and* intent — because the metamodel gives you the *what* but not the *why*:
-
-- **`hypha:metamodel-lookup` — structure (always).** A metaclass's type, multiplicity, **ordering**, redefinitions/subsettings, supertypes/subtypes, and the derivation/constraint OCL. This is the default, always-on step. (For cross-cutting fan-out questions spanning many metaclasses, the `hypha:metamodel-navigator` agent.)
-- **`hypha:spec-citation` — intent (when the derivation involves interpretation).** The OCL is a *formalization, not an explanation*: it says what to compute, not why the concept exists, what a defined term means, or how an underspecified edge case should behave. Consult the specification for the rationale and semantics whenever the OCL is terse, ambiguous, leans on a defined term (e.g. `namingFeature`, `redefinedFeature`, connector `end`, feature typing/inheritance resolution), or otherwise needs interpretation beyond a mechanical filter — so the C# translation is not merely syntactically faithful but semantically correct. Skip it only when the OCL is genuinely mechanical (e.g. a plain `selectByKind`) and unambiguous.
-- **`hypha:sysml-validation`** — validate `.sysml` / `.kerml` textual notation against the grammar and metamodel.
-
-Ground first, then implement against the verified contract. Two concrete examples of why:
-- **Structure the OCL comment hides:** `ActionDefinition::action` is declared `ordered` in the metamodel — a fact the OCL comment alone does not surface and a sibling analogue may satisfy only by accident. Confirm via `hypha:metamodel-lookup`.
-- **Intent the OCL comment cannot express:** an OCL body that reads `->first()` or `->at(1)` is picking *one* of many, but only the spec prose says *on what basis* (e.g. the most specific redefinition) — translate it faithfully to that intent, not as an arbitrary first-element grab. Confirm via `hypha:spec-citation`.
-
-### Project Dependency Graph
+### Project dependency graph
 
 ```
 SysML2.NET (core: netstandard2.1)
-  ├── Core/AutoGenDto/     - 342 files: DTO classes + interfaces (171 metaclasses × 2)
+  ├── Core/AutoGenDto/     - DTO classes + interfaces (171 metaclasses × 2)
   ├── Core/AutoGenPoco/    - POCO classes + interfaces
-  ├── Core/AutoGenEnum/    - Enums (FeatureDirectionKind, VisibilityKind, etc.)
+  ├── Core/AutoGenEnum/    - Enums (FeatureDirectionKind, VisibilityKind, …)
   ├── Core/DTO/            - Hand-coded base: IElement : IData
   ├── Core/POCO/           - Hand-coded: IContainedElement, IContainedRelationship
   ├── Extend/              - Auto-generated extension methods per metaclass
-  ├── Decorators/          - [Class], [Property], [Implements] attributes from UML
+  ├── Decorators/          - [Class], [Property], [Implements] attributes
   ├── PIM/                 - Platform-Independent Model DTOs (REST API types)
-  ├── ModelInterchange/    - Archive/project interchange types (kpar support)
+  ├── ModelInterchange/    - Archive/project interchange types (kpar)
   └── Common/IData.cs      - Base interface with Id property
 
 SysML2.NET.Extensions        - Comparers, utilities across metaclasses
-SysML2.NET.Serializer.Json   - JSON (de)serialization via System.Text.Json
-SysML2.NET.Serializer.Xmi    - XMI (de)serialization
-SysML2.NET.Serializer.MessagePack - MessagePack binary serialization
-SysML2.NET.Serializer.Dictionary  - Dictionary-based serialization (PIM)
-SysML2.NET.Serializer.TextualNotation - Writers/, Writers/AutoGenTextualNotationBuilder/, validation extensions, cursor helpers
+SysML2.NET.Serializer.Json / .Xmi / .MessagePack / .Dictionary (PIM)
+SysML2.NET.Serializer.TextualNotation - Writers/, AutoGenTextualNotationBuilder/, validation extensions, cursor helpers
 SysML2.NET.Dal               - Data Access Layer (Assembler, ElementFactory)
-SysML2.NET.REST              - REST client + Session for SysML2 API servers
-SysML2.NET.Kpar              - Reader/Writer for .kpar archive format
+SysML2.NET.REST              - REST client + Session
+SysML2.NET.Kpar              - Reader/Writer for .kpar archives
 SysML2.NET.Viewer            - Blazor WebAssembly app (net9.0)
 SysML2.NET.CodeGenerator     - Code generation tool (net10.0, not packaged)
 ```
 
-### DTO vs POCO Pattern
+Target frameworks: core `netstandard2.1`; tests and CodeGenerator `net10.0`; Viewer `net9.0`.
 
-Each metaclass exists in two forms:
-- **DTO** (Data Transfer Object): Lightweight, uses `Guid` references for relationships. Used for serialization/transport. Properties reference other elements by `Guid` ID.
-- **POCO** (Plain Old CLR Object): Rich object model with resolved object references. Used for in-memory manipulation. Uses `ContainerList<T>` for containment relationships.
+### DTO vs POCO
 
-Both share the same `I{MetaclassName}` interface from `AutoGenDto/`. The hand-coded `Core/DTO/IElement.cs` adds `IData` (which provides `Guid Id`) to the root interface.
+Each metaclass exists twice: **DTO** (lightweight, relationships by `Guid`, for serialization/transport) and **POCO** (resolved object references, `ContainerList<T>` for containment, for in-memory manipulation). Both share the `I{MetaclassName}` interface from `AutoGenDto/`; hand-coded `Core/DTO/IElement.cs` adds `IData` (`Guid Id`).
 
-### Namespace Convention
+Generated namespaces mirror the KerML/SysML package hierarchy: `SysML2.NET.Core.DTO.Root.Elements`, `…Core.Types`, `…Systems.Actions`.
 
-Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package hierarchy:
-- `SysML2.NET.Core.DTO.Root.Elements` (Element, Annotation, etc.)
-- `SysML2.NET.Core.DTO.Core.Types` (Type, Feature, Classifier, etc.)
-- `SysML2.NET.Core.DTO.Systems.Actions` (ActionUsage, etc.)
+## Key conventions
 
-### Target Frameworks
-
-- Core library (`SysML2.NET`): `netstandard2.1`
-- Test projects and CodeGenerator: `net10.0`
-- Viewer: `net9.0` (Blazor WebAssembly)
-
-## Key Conventions
-
-- **Paths are ALWAYS repo-relative — NEVER absolute.** This rule applies to every path the agent writes anywhere: code comments, XML doc `<see cref="…"/>` and prose, source-string citations, error/log messages, commit messages, PR bodies, GitHub issue bodies, `.team-notes/` spec files, plan files, skill prompts and agent briefs (e.g. say `SysML2.NET/Extend/FooExtensions.cs`, NOT `C:\CODE\SysML2.NET\SysML2.NET\Extend\FooExtensions.cs` and NOT `/c/CODE/SysML2.NET/...`). Use forward slashes. Reason: absolute paths are user-/machine-specific and leak the local filesystem into the repo and into communication with other contributors — they break for anyone else, get stale on rename/move, and are noisy. The ONLY exception is the `Read` / `Edit` / `Write` tool `file_path` parameter, which the tool implementation requires to be absolute — those tool arguments are not user-visible artifacts. Everything you author as content must be repo-relative.
-- Commit messages use prefix tags: `[Add]`, `[Update]`, `[Remove]`, `[Fix]` — except for issue-fixing commits produced by `/implement-extensions` and `/implement-extensions-batch`, which use the canonical short form `Fix #<n>` (single issue) or `Fix #<n1> #<n2> …` (batch) so GitHub auto-closes the issues on merge.
-- Main branch: `master`. Development branch: `development`. **All feature work targets `development`** via PR; `master` is downstream only.
-- CI: GitHub Actions (`CodeQuality.yml`) — builds, tests, and runs SonarQube analysis
-- License: Apache 2.0 (code), LGPL v3.0 (metamodel files)
-- To add a new metaclass: update the UML XMI source files, then run the code generators — do not manually create AutoGen files
+- **Paths are ALWAYS repo-relative — NEVER absolute**, in every artifact you author: code comments, XML docs, error messages, commit/PR/issue bodies, plan files, agent briefs. Use forward slashes (`SysML2.NET/Extend/FooExtensions.cs`). The ONLY exception is the `Read`/`Edit`/`Write` `file_path` parameter, which the tools require to be absolute.
+- Commit messages use `[Add]`, `[Update]`, `[Remove]`, `[Fix]` — except issue-fixing commits from `/implement-extensions[-batch]`, which use `Fix #<n>` / `Fix #<n1> #<n2> …` so GitHub auto-closes on merge.
+- Branches: `master` is downstream only; **all feature work targets `development`** via PR.
+- CI: GitHub Actions (`CodeQuality.yml`) — build, test, SonarQube.
+- License: Apache 2.0 (code), LGPL v3.0 (metamodel files).
 
 ## Branch & PR workflow (MANDATORY)
 
-Direct pushes to `development` or `master` are forbidden. All work lives on a feature branch.
+Direct pushes to `development` or `master` are forbidden. All work lives on a feature branch. **Why: the user is the reviewer of record — the commit is the review and the push is the delivery.**
 
-**Agent boundaries are strict and minimal**:
+1. The agent **must NOT commit, EVER.** No exceptions, no asking, no "for convenience".
+2. The agent **must NOT push commits, open PRs, or merge** unless the user explicitly asks in-conversation.
+3. **When the agent creates a branch**: `git switch -c <branch> origin/development`, then immediately `git push -u origin <branch>` so the empty ref exists and the user's later push is a fast-forward. This is the only push the agent performs by default. If that push fails because the branch already exists on origin → abort and surface it; never force.
+4. **At the end of any task that creates a branch**, stop with a summary: in-scope files, test counts, reviewer verdict, a pre-filled commit message (single line, no body, no trailers, no footer), and a handoff line — e.g. *"Review `git diff`, stage the in-scope files (`git add <path> …` — NEVER `-A` / `.`), commit with the message above, then `git push` (fast-forward, no `-u` needed). Open the PR yourself or via `gh pr create --base development`."* That is the end of the agent's involvement.
 
-1. The agent **must NOT auto-commit, EVER.** `git commit` is the user's responsibility — no exceptions, no asking, no "for convenience". The user reviews `git diff` and commits manually.
-2. The agent **must NOT push commits, open PRs, or merge by default.** Push + PR + merge are the user's job too. The agent only performs push/PR if the user explicitly asks for them in-conversation; otherwise it stays out of git remote operations entirely.
-3. **When the agent creates a branch** (typically inside `/implement-extensions-batch` step 6), it must:
-   - create it locally with `git switch -c <branch> origin/development`, AND
-   - **immediately push the empty branch to `origin`** with `git push -u origin <branch>`, so the remote ref exists at the same commit as `origin/development` and the user's later push of the actual commit becomes a trivial fast-forward.
-   This is the only push the agent performs by default. It is safe because the branch tip equals `origin/development`'s tip — no new commits, no force flags, no risk of overwriting.
-4. **At the end of any task that creates a branch**, the agent stops with a final summary that includes:
-   - the in-scope files modified, the test counts, the reviewer verdict, etc.,
-   - a **pre-filled commit message** (`Fix #<n>` for single-issue runs, `Fix #<n1> #<n2> …` for batches — single line, no body, no `Co-Authored-By` trailer, no "🤖 Generated with …" footer),
-   - a handoff line telling the user how to stage + commit + push the resulting commit themselves. Example:
-     > Review `git diff`, stage the in-scope files (`git add <path> …` — NEVER `-A` / `.`), commit with the message above, then `git push` (the remote branch already exists, so this is a fast-forward — no `-u` needed). Open the PR yourself via the GitHub UI or `gh pr create --base development`.
-   - This is the end of the agent's involvement. **The agent does NOT proceed to push the commit, does NOT open the PR**, unless the user explicitly asks. Typical case: the user handles both.
+If the user does explicitly ask for push/PR: verify the branch is not `development`/`master`, `git log -1` matches the canonical form, and `git status --porcelain` is empty. Then `git push origin <branch>` — NEVER `--force`, `--force-with-lease`, or `--no-verify` — and `gh pr create --base development --head <branch> --title "Fix #<n>…" --body-file <tmp>` — NEVER `--base master`, never `--draft` unless asked.
 
-**If the user does explicitly ask the agent to push or open the PR** (rare; user-initiated only):
-- The agent verifies: current branch is not `development`/`master`, `git log -1` matches the canonical `Fix #<n>…` form, `git status --porcelain` is empty.
-- Then `git push origin <branch>` — NEVER `--force`, NEVER `--force-with-lease`, NEVER `--no-verify`.
-- Then `gh pr create --base development --head <branch> --title "Fix #<n>…" --body-file <pr-body-tmp>` — NEVER `--base master`, NEVER `--draft` unless the user asked.
-
-**Failure modes**:
-- `git push -u origin <branch>` (step 3) fails because the branch already exists on origin → abort, surface to user, do not force.
-- Branch creation requested but the current branch is `development` or `master` AND the user asked for in-place work → REFUSE. Feature work must live on a feature branch first.
-- If the user asks the agent to push a commit and that commit was made by the agent (somehow), refuse and surface the policy violation. The agent's commits are forbidden by construction; if one exists, it is a bug that needs human review.
-
-**Why this split**: the user is the reviewer of record. The commit is the review and the push is the delivery — both are the user's calls. The agent's git involvement is bounded to: (a) create the branch locally + push the empty ref (so the user's push later is frictionless), and (b) leave the rest alone. This was tightened after two failures: first the agent auto-pushed branches to `development` directly, then over-corrected by auto-committing on the user's behalf.
+Refuse: in-place feature work on `development`/`master`; pushing a commit the agent itself made (that is a policy violation needing human review).
 
 ## Comments: write as few as possible
 
-Comments break readability. Default to **none**; every comment kept needs a justification. This
-applies to production code, tests, and the generator alike.
+Default to **none**, in production code, tests, and the generator alike. Prefer a better name or an extracted method over an explanation. Never narrate the what. No history, benchmarks, or "this used to…". No worked examples or case names — state the rule and, if it needs authority, cite the clause (`KerML §8.2.3.5.3`) and nothing more. Never reference the OMG pilot or any other tool as the reason for behaviour; grammar defects belong in `GrammarErrata.cs` with their rationale. No notes to future editors — encode the constraint in a guard or a test.
 
-- **Delete rather than write.** Prefer a better name or an extracted method over an explanation.
-- **Never narrate the what** — a comment paraphrasing the line below it is noise.
-- **No history, no benchmarks, no "this used to…"/"previously"/"an earlier approach"/"was reverted".**
-  Source control holds it. Never put timing measurements in code.
-- **No worked examples, no specific case names.** Never justify a rule with a particular model, a
-  validation-corpus file (`13a-Model Containment`, `ISQ::mass`, `first start;`), or an issue number.
-  State the rule; if it needs authority, cite the clause (`KerML §8.2.3.5.3`) and nothing more.
-- **Never reference the OMG pilot implementation** — or any other tool — as the reason for behaviour.
-  The writer implements the **specification**, not another implementation's choices. Where the spec
-  is genuinely ambiguous, say so in one sentence with the clause; where the KEBNF is defective, that
-  belongs in `GrammarErrata.cs` with its rationale, not scattered through the writers.
-- **No notes to future editors** ("keep in step with X", "do not remove"). Encode it in a guard or a
-  test.
-- **XML docs still required on every type and member** (`DEVELOPMENT_STANDARDS.md` §5.1), but held to
-  one sentence per tag, two as the ceiling — no `<para>` elaborations, no essays.
+**The only test for keeping an inline comment:**
 
-### The bright line — the ONLY test for keeping an inline comment
+> A comment may ONLY state a constraint that would cause a reader to break something if they did not know it. A comment may NEVER explain why the change was made.
 
-Earlier wording said to keep "a non-obvious *why*". That is not testable and gets self-served. The
-rule is:
+Ask: *if a reader deleted or rewrote this code without the comment, would they introduce a defect?* No → delete it. "It helps the reviewer" is not a yes; that is the commit message's job.
 
-> **A comment may ONLY state a constraint that would cause a reader to break something if they did
-> not know it. A comment may NEVER explain why the change was made.**
+**Budget: at most 2 added comment lines per change.** A `PreToolUse` hook rejects comments containing `now`, `previously`, `rather than`, `instead of`, `used to`, `was `, `no longer`, `we `, `I ` — those signature words mean you are writing a commit message.
 
-Apply it as a question with a yes/no answer: *if a reader deleted or rewrote this code without the
-comment, would they introduce a defect?* No → delete the comment. "It helps the reviewer understand
-my change" is not a yes; that belongs in the commit message.
-
-**Budget: at most 2 added comment lines per change.** Over that, delete until it fits or ask first.
-
-**Signature words that mean you are writing a commit message, not a comment.** If an added comment
-line contains any of `now`, `previously`, `rather than`, `instead of`, `used to`, `was `, `no
-longer`, `we `, `I `, or restates a `<remarks>` already on the same member — delete it. A
-`PreToolUse` hook rejects these on `Edit`/`Write`, so it fails loudly rather than reaching review.
-
-Worked example of the failure, from this repo:
-
-```csharp
-// The supplier now records each resource's root as it is read rather than re-deriving it, so
-// interior elements no longer reach this list and no metaclass filter is needed to keep them out.
-var otherRootNamespaces = globalNamespaces?.Where(c => c != null && !ReferenceEquals(c, rootNamespace))
-```
-
-Two banned signatures (`now`, `rather than`), it annotates a self-evident `Where`, and deleting it
-costs a reader nothing. The commit message was the right home for all of it.
+XML docs remain required on every type and member (`DEVELOPMENT_STANDARDS.md` §5.1), held to one sentence per tag, two as the ceiling.
 
 ## Quality rules
 
-- **OCL index base is 1-based; translate positional access accordingly and NEVER mix the two forms.** OCL collections are 1-based (`->at(1)` is the first element; `->first()` ≡ `->at(1)`). Two correct C# forms, applied by target:
-  - **Metamodel positional OPERATIONS** — `IActionUsage.Argument(int)` and `IActionUsage.InputParameter(int)` are themselves **1-based** (the C# operation does the `-1` + bounds-check internally, mirroring the OMG metamodel and the pilot). So OCL `argument(N)` / `inputParameter(N)` → `subject.Argument(N)` / `subject.InputParameter(N)` with **N passed through UNCHANGED**. Subtracting 1 here re-introduces the off-by-one it looks like it avoids. (Documented in `README.md` → "API conventions".)
-  - **Direct 0-based `List<T>` indexing** — when translating `->at(N)` into a raw list index, convert to **`[N-1]`** (`->at(2)` → `list[1]`); `->first()` → `list[0]` / `FirstOrDefault()`. Guard the count first (`Count >= N ? list[N-1] : null`) to honor the OCL's implicit null.
-  Do not translate a 1-based operation call as if it were a 0-based indexer, and do not index a 0-based list with the raw OCL N. Both conventions coexist in the codebase; keep each call site internally consistent.
-- Prefer comparing 'Count' to 0 rather than using 'Any()', both for clarity and for performance
-- Use 'StringBuilder.Append(char)' instead of 'StringBuilder.Append(string)' when the input is a constant unit string
-- Prefer 'string.IsNullOrWhiteSpace' over 'string.IsNullOrEmpty' when checking the non-nullable value of a string
-- Prefer switch expressions/statements over if-else chains when applicable
-- Prefer LINQ as much as possible — including for projection / filter / aggregation over collections (`items.Where(...).Select(...).ToList()`, `result.AddRange(items.Select(...))`, `items.Any(predicate)`, etc.) instead of hand-rolled `foreach` + `if` + `.Add()` loops. The ONE exception is straightforward positional or range access on a concrete `List`/array: `list[^1]` beats `list.Last()`, `array[1..^1]` beats `array.Skip(1).SkipLast(1)` — indexer/range syntax is more performant there. Outside that narrow exception, LINQ wins for clarity AND maintainability.
-- **Flatten a `foreach` with a leading-`if` filter by pushing the predicate into a `.Where(...)` clause on the iterated source.** When a `foreach` body opens with `if (predicate) { … }` or `if (!predicate) { continue; }` and that's the only thing gating the body, move the predicate into a `.Where(...)` on the foreach source so the loop body is the unguarded action: write `foreach (var x in xs.Where(x => predicate))` instead of `foreach (var x in xs) { if (!predicate) { continue; } … }`. Same for `.OfType<T>()` instead of a runtime `is`-check + cast. Applies to nested loops too — push each level's filter onto its own iterator. The body should be the action, not the guard. The narrow exceptions are: (a) the predicate has observable side-effects (e.g. `visited.Add(x)`) and the iteration order must be preserved, where the LINQ form changes timing; (b) the predicate is too long to read inline — extract it to a named local function or method and still call it from the `.Where(...)`.
-- Prefer C# collection expressions (`[a, b, c]`, `[..xs]`, `[]`) over `new[] { ... }`, `new List<T> { ... }`, `new T[] { ... }` when constructing a collection. Applies to both production code AND tests (e.g. `Is.EqualTo([classifier1, classifier2])` not `Is.EqualTo(new[] { classifier1, classifier2 })`, `return [];` not `return new List<T>();`). Fall back to explicit construction only when type inference cannot pick the right collection type.
-- Use meaningful variable names instead of single-letter names in any context (e.g., 'charIndex' instead of 'i', 'currentChar' instead of 'c', 'element' instead of 'e')
-- Use 'NotSupportedException' (not 'NotImplementedException') for placeholder/stub methods that require manual implementation
-- Prefer C# property patterns ('x is IType { Prop: value }') over declared-variable-plus-predicate form ('x is IType name && name.Prop == value') when the narrowed variable is only consulted once; the property-pattern form is more concise and intent-revealing
-- **Always use C# auto-properties** (`public T Foo { get; private set; }`, `public T Foo { get; init; }`, `public T Foo { get; }`) — NEVER pair a private backing field with an expression-bodied or full-getter property when there is no non-trivial logic (validation, normalisation, lazy init, event firing). Mere storage is never a justification for a backing field; the compiler collapses auto-properties to the same IL.
-- **For test fixtures: default to ONE `[Test]` method per class / method-under-test** packing every scenario (happy path, edge cases, null guards, alternate inputs) into multiple `Assert.That` calls inside that one test — per `TESTING.md` §2. Do NOT write one `[Test]` per scenario when the setup is shared; that produces a bloated test list and duplicated arrange boilerplate. Split into separate `[Test]` methods only when each scenario has a genuinely distinct, complex setup.
-- **Prefer method-group syntax over lambda when the lambda merely invokes a no-arg method.** Both in production code and in tests, write `Assert.That(subject.ComputeFoo, Throws.TypeOf<X>())` rather than `Assert.That(() => subject.ComputeFoo(), Throws.TypeOf<X>())`; pass `subject.Handle` rather than `x => subject.Handle(x)` when wiring up an event handler; pass `string.IsNullOrWhiteSpace` rather than `s => string.IsNullOrWhiteSpace(s)` to a LINQ predicate. The method group is more concise, allocates no closure, and reads as the action itself rather than as a delegate that calls the action. Fall back to a lambda only when (a) the lambda's body does more than the bare call (transforms args, captures locals, adds null-handling), (b) the target method is overloaded and the compiler can't infer which overload to bind, or (c) the call needs explicit type arguments the method-group form cannot supply.
-- Surround every braced block (`if`, `else if`, `while`, `for`, `foreach`, `switch`, `using`, `try`/`catch`/`finally`, `lock`, `do…while`, anonymous `{ }`) with a blank line on both sides — the rule does NOT apply at the very start/end of a method body, nor between a `}` and a continuation keyword (`else`, `catch`, `finally`, `while` of `do…while`) that belongs to the same control flow
-- When invoking an operation or derived property on a POCO from inside an extension method, call the POCO's instance member (e.g. `subject.IsDistinguishableFrom(other)`, `subject.qualifiedName`), NOT the static `ComputeXxxOperation` / `ComputeXxx` extension method. Virtual dispatch on the POCO honors operation/property REDEFINITION in subclass POCOs; calling the static extension directly bypasses dispatch and silently skips overrides. The static-extension form is reserved EXCLUSIVELY for the C# translation of OCL `self.oclAsType(SuperType).method()` — an explicit upcast that mandates targeting the SuperType's body (e.g. `Usage::namingFeature()` → `FeatureExtensions.ComputeNamingFeatureOperation(usage)`; `OwningMembership::path()` → `RelationshipExtensions.ComputeRedefinedPathOperation(owningMembership)`)
-- **`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` storage collections are `[0..*]` — NEVER cardinality-limited.** The [1..1] / [0..1] multiplicities that appear in the metamodel apply to *derived* / *redefined* properties (e.g. `OwningMembership::ownedMemberElement`, `FeatureMembership::ownedMemberFeature`, `SubjectMembership::ownedSubjectParameter`), NOT to the underlying storage. When implementing such a derivation, **project from the collection — do not assume positional indexing**. Two canonical shared helpers in `SysML2.NET/Extensions/ElementExtensions.cs` cover the common cases (all early-exit on the second match, no full materialisation), each with two overloads:
+- **OCL is 1-based; never mix the two forms.** Metamodel positional *operations* (`IActionUsage.Argument(int)`, `InputParameter(int)`) are themselves 1-based — pass OCL's N through UNCHANGED. Raw `List<T>` indexing is 0-based — `->at(N)` becomes `[N-1]`, `->first()` becomes `[0]`/`FirstOrDefault()`, guarded on count to honour OCL's implicit null.
+- **Call the POCO's instance member, not the static `Compute*` extension**, when invoking an operation or derived property from inside an extension method (`subject.IsDistinguishableFrom(other)`, `subject.qualifiedName`). Virtual dispatch honours redefinition in subclass POCOs. The static form is reserved exclusively for OCL `self.oclAsType(SuperType).method()`.
+- Compare `Count` to 0 rather than calling `Any()`.
+- `StringBuilder.Append(char)` over `Append(string)` for constant single-character input.
+- `string.IsNullOrWhiteSpace` over `string.IsNullOrEmpty`.
+- Switch expressions/statements over if-else chains.
+- **LINQ by default** for projection/filter/aggregation instead of hand-rolled `foreach` + `if` + `.Add()`. The one exception is positional or range access on a concrete `List`/array (`list[^1]` over `list.Last()`, `array[1..^1]` over `.Skip(1).SkipLast(1)`).
+- **Push a leading-`if` filter into the iterator**: `foreach (var x in xs.Where(…))`, not `foreach (var x in xs) { if (!p) continue; … }`; `.OfType<T>()` over an `is`-check plus cast. Exceptions: the predicate has observable side-effects and order matters, or it is too long to read inline (extract it and still call it from `.Where(...)`).
+- Collection expressions (`[a, b, c]`, `[..xs]`, `[]`) over `new[] { … }` / `new List<T> { … }`, in production and tests alike.
+- Meaningful variable names, never single letters (`charIndex`, not `i`).
+- `NotSupportedException` (not `NotImplementedException`) for stubs.
+- Property patterns (`x is IType { Prop: value }`) when the narrowed variable is consulted once.
+- **Auto-properties always** — never a backing field plus a full-getter property when there is no non-trivial logic.
+- **Method-group syntax over a lambda that merely invokes a no-arg method**: `Assert.That(subject.ComputeFoo, Throws.TypeOf<X>())`, `.Where(string.IsNullOrWhiteSpace)`. Fall back to a lambda only when the body does more than the bare call, the target is overloaded, or explicit type arguments are needed.
+- Blank line on both sides of every braced block (`if`, `while`, `foreach`, `switch`, `using`, `try`/`catch`, `lock`, `do…while`) — except at the very start/end of a method body, and between a `}` and a continuation keyword of the same control flow.
+- **One `[Test]` per class/method-under-test** packing every scenario into multiple `Assert.That` calls (`TESTING.md` §2). Split only when a scenario has a genuinely distinct, complex setup.
 
-  - **`SingleStrict<T>`** — `[1..1]` semantics. Empty → `throw IncompleteModelException` (lower-bound violation, missing required). Single → return. 2+ → `throw MultiplicityViolationException` (upper-bound violation).
-    - `SingleStrict<T>(this IEnumerable<T>, string)` — homogeneous: source is already typed `T`.
-    - `SingleStrict<TResult>(this IEnumerable, string)` — heterogeneous: source is wider; bundles a `OfType<TResult>()` filter before the strict-single check.
-  - **`SingleOrDefaultStrict<T>`** — `[0..1]` semantics. Empty → `return null`. Single → return. 2+ → `throw MultiplicityViolationException`.
-    - `SingleOrDefaultStrict<T>(this IEnumerable<T>, string)` — homogeneous.
-    - `SingleOrDefaultStrict<TResult>(this IEnumerable, string)` — heterogeneous with implicit `OfType<TResult>()`.
+### Deriving `[0..1]` / `[1..1]` properties from `[0..*]` storage
 
-  ```csharp
-  // [1..1] type-narrowed redefinition (e.g. SubjectMembership::ownedSubjectParameter : IUsage)
-  return subject.OwnedRelatedElement.SingleStrict<ITargetType>(nameof(subject));
+`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` are **always `[0..*]` storage**. The `[1..1]` / `[0..1]` multiplicities in the metamodel belong to *derived*/*redefined* properties (`OwningMembership::ownedMemberElement`, `FeatureMembership::ownedMemberFeature`, …). **Project from the collection — never index positionally.** Use the shared helpers in `SysML2.NET/Extensions/ElementExtensions.cs` (all early-exit on the second match):
 
-  // [1..1] non-narrowing redefinition (e.g. OwningMembership::ownedMemberElement : IElement)
-  return subject.OwnedRelatedElement.SingleStrict<IElement>(nameof(subject));
+- **`SingleStrict<T>`** — `[1..1]`: empty → `IncompleteModelException`; one → return; 2+ → `MultiplicityViolationException`.
+- **`SingleOrDefaultStrict<T>`** — `[0..1]`: empty → `null`; one → return; 2+ → `MultiplicityViolationException`.
 
-  // [0..1] type-narrowed projection over a storage collection (e.g. ConstraintUsage::constraintDefinition : IPredicate)
-  return subject.type.SingleOrDefaultStrict<IPredicate>(nameof(subject));
+Each has a homogeneous overload (`IEnumerable<T>`) and a heterogeneous one (`IEnumerable`, bundling an `OfType<TResult>()` filter).
 
-  // [0..1] over an already-projected stream (multi-hop chain ending in a Select/predicate)
-  return subject.OwnedRelationship.OfType<ISomeRelationship>().Select(r => r.something).SingleOrDefaultStrict(nameof(subject));
-  ```
+```csharp
+return subject.OwnedRelatedElement.SingleStrict<ITargetType>(nameof(subject));            // [1..1] type-narrowed
+return subject.OwnedRelatedElement.SingleStrict<IElement>(nameof(subject));               // [1..1] non-narrowing
+return subject.type.SingleOrDefaultStrict<IPredicate>(nameof(subject));                   // [0..1] type-narrowed
+return subject.OwnedRelationship.OfType<ISomeRelationship>()
+              .Select(r => r.something).SingleOrDefaultStrict(nameof(subject));           // [0..1] multi-hop
+```
 
-  All four signatures accept `IEnumerable` / `IEnumerable<T>`; storage collections (`IElement.OwnedRelationship`, `IRelationship.OwnedRelatedElement`) and derived enumerables (e.g. `Feature::type`) bind directly — no `IReadOnlyList` overload needed.
+Pick the helper from the `[Property(lowerValue:…, upperValue:…)]` attribute on the generated POCO interface. Strictness applies **only to the final filter** of the chain — intermediate `OfType<…>()` hops may legitimately match many.
 
-  The failure mode each helper produces matches the **derived property's declared multiplicity** as recorded in the `[Property(lowerValue:…, upperValue:…)]` attribute on the generated POCO interface (or in the UML XMI):
+**OCL gate (overrides the `[0..1]` rule):** when the OCL body explicitly elects the first of many (`->first()`, `->at(1)`), the contract is "pick the first" — keep `FirstOrDefault`. Strict `[0..1]` applies only when the OCL has no first-picking call, or has no body at all.
 
-  | Multiplicity | Empty projection | Single-match projection | 2+ match projection |
-  |---|---|---|---|
-  | `[1..1]` (lowerValue=1, upperValue=1) | `throw IncompleteModelException` (lower-bound violation, missing required) | return the match | `throw MultiplicityViolationException` (upper-bound violation) |
-  | `[0..1]` (lowerValue=0, upperValue=1) | `return null` (use `SingleOrDefaultStrict<TResult>` for direct `OfType<TResult>` over a storage collection or derived enumerable; chain explicit projections then `SingleOrDefaultStrict()` for multi-hop / predicate-filtered) | return the match | `throw MultiplicityViolationException` |
-  | `[0..*]` / `[1..*]` | (use `List<T>` projection; not this pattern) | n/a | n/a |
+`IncompleteModelException` (lower-bound: required element missing) and `MultiplicityViolationException` (upper-bound: too many) are the loud signals that a model is malformed. Do not swallow them as `null` when the multiplicity demands a throw, and do not raise them for the empty case of a legitimately-optional `[0..1]`.
 
-  Strictness applies **only to the final filter** of the projection chain. Intermediate filters (e.g. `OwnedRelationship.OfType<IFeatureTyping>()` in a `FeatureTyping → Type → IXxxDefinition` chain) may legitimately match many elements; the upper-bound check applies to the last `.OfType<T>()` whose result is the `[0..1]` / `[1..1]` derived value.
-
-  **OCL gate (overrides the table for `[0..1]`):** when the OCL derivation body in the property's `<remarks><code>` block explicitly elects the first of many (`->first()`, `->at(1)`), the spec contract is "pick the first if multiple" — keep `FirstOrDefault`. The strict `[0..1]` rule applies only when the OCL has no first-picking call (or no OCL body at all), in which case the multiplicity `[0..1]` is the only contract and 2+ must surface as `MultiplicityViolationException`.
-
-  `IncompleteModelException` and `MultiplicityViolationException` are the loud signals to SDK users that the model is malformed:
-  - `IncompleteModelException` — lower-bound violation: the model is missing a required element (0 matches against a `[1..1]` property).
-  - `MultiplicityViolationException` — upper-bound violation: the model carries more elements than the upper bound allows (2+ matches against a `[0..1]` or `[1..1]` property).
-
-  DO NOT swallow them as `null` when the multiplicity demands a throw, and DO NOT raise them for the empty case when the multiplicity is `[0..1]` (a legitimately-optional property).
-
-  Do NOT use `.Count != 1 → throw` followed by `OwnedRelatedElement[0] as ITargetType` — that pattern (a) silently drops the correctly-typed element when it does not sit at index 0 (`AssignOwnership` allows owned related elements for both `IOwningMembership` AND `IAnnotation`, so a Membership can carry annotation targets alongside the member element), and (b) always allocates a `List<T>` via `OfType<T>().ToList()` even when the answer is decidable after the first two elements.
+Never use `.Count != 1 → throw` plus `OwnedRelatedElement[0] as ITargetType`: a Membership can carry annotation targets alongside the member element, so the correctly-typed element need not sit at index 0.

@@ -29,16 +29,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Common;
 
     /// <summary>
-    /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
+    /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IIdentified"/> and <see cref="IEnumerable{IIdentified}"/>
     /// as JSON to a <see cref="Stream"/>
     /// </summary>
     public interface ISerializer
     {
         /// <summary>
-        /// Serialize an <see cref="IEnumerable{IData}"/> as JSON to a target <see cref="Stream"/>
+        /// Serialize an <see cref="IEnumerable{IIdentified}"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
         /// <param name="dataItems">
-        /// The <see cref="IEnumerable{IData}"/> that shall be serialized
+        /// The <see cref="IEnumerable{IIdentified}"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -52,13 +52,13 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        void Serialize(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions);
+        void Serialize(IEnumerable<IIdentified> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions);
 
         /// <summary>
-        /// Serialize an <see cref="IData"/> as JSON to a target <see cref="Stream"/>
+        /// Serialize an <see cref="IIdentified"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
         /// <param name="dataItem">
-        /// The <see cref="IData"/> that shall be serialized
+        /// The <see cref="IIdentified"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -72,13 +72,13 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        void Serialize(IData dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions);
+        void Serialize(IIdentified dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions);
 
         /// <summary>
-        /// Asynchronously serialize an <see cref="IEnumerable{IData}"/> as JSON to a target <see cref="Stream"/>
+        /// Asynchronously serialize an <see cref="IEnumerable{IIdentified}"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
         /// <param name="dataItems">
-        /// The <see cref="IEnumerable{IData}"/> that shall be serialized
+        /// The <see cref="IEnumerable{IIdentified}"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -95,13 +95,13 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
+        Task SerializeAsync(IEnumerable<IIdentified> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Asynchronously serialize an <see cref="IData"/> as JSON to a target <see cref="Stream"/>
+        /// Asynchronously serialize an <see cref="IIdentified"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
         /// <param name="dataItem">
-        /// The <see cref="IData"/> that shall be serialized
+        /// The <see cref="IIdentified"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -118,6 +118,6 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(IData dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
+        Task SerializeAsync(IIdentified dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
     }
 }

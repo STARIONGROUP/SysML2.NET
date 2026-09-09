@@ -22,6 +22,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
@@ -143,6 +144,8 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(feature.DeclaredShortName, Is.Null);
                 Assert.That(feature.Direction, Is.EqualTo(FeatureDirectionKind.Out));
             }
+            
+            cts.Dispose();
         }
 
         [Test]
@@ -208,7 +211,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
                 Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
                 Assert.That(firstCommit.Description, Is.Null);
-                Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00")));
+                Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00", CultureInfo.InvariantCulture)));
             }
         }
 
@@ -231,7 +234,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
                 Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
                 Assert.That(firstCommit.Description, Is.Null);
-                Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00")));
+                Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00", CultureInfo.InvariantCulture)));
             }
         }
 
@@ -255,7 +258,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(branch.Name, Is.EqualTo("main"));
                 Assert.That(branch.Description, Is.Null);
                 Assert.That(branch.Head, Is.EqualTo(Guid.Parse("6d7ad9fd-6520-4ff2-885b-8c5c129e6c27")));
-                Assert.That(branch.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:50.188295-04:00")));
+                Assert.That(branch.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:50.188295-04:00", CultureInfo.InvariantCulture)));
             }
         }
 
@@ -344,7 +347,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// <returns>
         /// the deserialized <see cref="IData"/> items
         /// </returns>
-        private List<IData> DeSerializeJson(string json, bool dribble = false, int chunkSize = 1)
+        private List<IIdentified> DeSerializeJson(string json, bool dribble = false, int chunkSize = 1)
         {
             using var stream = CreateStream(json, dribble, chunkSize);
 
@@ -366,7 +369,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// <returns>
         /// the deserialized <see cref="IData"/> items
         /// </returns>
-        private async Task<List<IData>> DeSerializeJsonAsync(string json, bool dribble = false, int chunkSize = 1)
+        private async Task<List<IIdentified>> DeSerializeJsonAsync(string json, bool dribble = false, int chunkSize = 1)
         {
             await using var stream = CreateStream(json, dribble, chunkSize);
 
