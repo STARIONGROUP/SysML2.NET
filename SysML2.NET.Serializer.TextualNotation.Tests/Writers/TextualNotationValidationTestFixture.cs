@@ -171,6 +171,11 @@ namespace SysML2.NET.Serializer.TextualNotation.Tests.Writers
         [TestCase("Simple Tests", "UseCaseTest.sysmlx")]
         [TestCase("Simple Tests", "VariabilityTest.sysmlx")]
         [TestCase("Arrowhead Framework Example", "AHFNorwayTopics.sysmlx")]
+        [TestCase("Redefinition Example", "RedefinitionExample.sysmlx")]
+        [TestCase("Generalization Example", "GeneralizationExample.sysmlx")]
+        [TestCase("Flow Usage Example", "FlowUsageExample.sysmlx")]
+        [TestCase("Binding Connectors Example", "BindingConnectorsExample.sysmlx")]
+        [TestCase("Interface Example", "InterfaceExample.sysmlx")]
         public async Task VerifyValidationTextualNotationXmi(string folderName, string fileName)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

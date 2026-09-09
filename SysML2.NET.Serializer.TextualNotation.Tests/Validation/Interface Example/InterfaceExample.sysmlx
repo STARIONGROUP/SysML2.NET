@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sysml:Namespace xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sysml="https://www.omg.org/spec/SysML/20250201" xmi:id="b5939d20-212f-4478-b794-a55b95aaf46f" elementId="b5939d20-212f-4478-b794-a55b95aaf46f">
+  <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="8c2c1096-be61-4056-91e2-0ae827f9e0b3" elementId="8c2c1096-be61-4056-91e2-0ae827f9e0b3">
+    <ownedRelatedElement xsi:type="sysml:Package" xmi:id="4996d846-a204-42e1-ba6f-3a84e257bdf5" declaredName="Interface Example" elementId="4996d846-a204-42e1-ba6f-3a84e257bdf5">
+      <ownedRelationship xsi:type="sysml:NamespaceImport" xmi:id="cfd989f7-81cd-4e8d-9722-5e7e18715c6f" elementId="cfd989f7-81cd-4e8d-9722-5e7e18715c6f">
+        <importedNamespace href="PortExample.sysmlx#13b51584-f626-4075-a9a5-64e38a804dbb"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="6334a8c8-d0af-4c00-93f7-22c061f65a9c" elementId="6334a8c8-d0af-4c00-93f7-22c061f65a9c">
+        <ownedRelatedElement xsi:type="sysml:PartDefinition" xmi:id="f0b25566-b4a3-4401-b4c9-46edc57b71e2" declaredName="Vehicle" elementId="f0b25566-b4a3-4401-b4c9-46edc57b71e2"/>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="e1fea9e2-f47e-4e1b-86d3-3a680fad8493" elementId="e1fea9e2-f47e-4e1b-86d3-3a680fad8493">
+        <ownedRelatedElement xsi:type="sysml:InterfaceDefinition" xmi:id="b412458c-8342-4106-88f8-6542f284b802" declaredName="FuelInterface" elementId="b412458c-8342-4106-88f8-6542f284b802">
+          <ownedRelationship xsi:type="sysml:FeatureMembership" xmi:id="8f23ba02-eb99-47fa-a0a9-db4d882de334" elementId="8f23ba02-eb99-47fa-a0a9-db4d882de334">
+            <ownedRelatedElement xsi:type="sysml:PortUsage" xmi:id="d146e635-d24c-415d-912f-37e32377b470" declaredName="supplierPort" elementId="d146e635-d24c-415d-912f-37e32377b470" isEnd="true">
+              <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="a5854a50-891f-4e66-ad66-ff6e659bca4c" elementId="a5854a50-891f-4e66-ad66-ff6e659bca4c" typedFeature="d146e635-d24c-415d-912f-37e32377b470">
+                <type href="PortExample.sysmlx#4b1ee6a4-8dc1-4ba4-85d3-e0e4d4ea43ee"/>
+              </ownedRelationship>
+              <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="70f7705b-f878-4434-ae54-b174e397fcbe" elementId="70f7705b-f878-4434-ae54-b174e397fcbe">
+                <ownedRelatedElement xsi:type="sysml:Multiplicity" xmi:id="8d3004c2-db22-4488-912b-f2e6f0268853" elementId="8d3004c2-db22-4488-912b-f2e6f0268853"/>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:FeatureMembership" xmi:id="033b213f-89ce-4d84-be9b-2aa73d9f4da9" elementId="033b213f-89ce-4d84-be9b-2aa73d9f4da9">
+            <ownedRelatedElement xsi:type="sysml:PortUsage" xmi:id="425e7eee-0853-4308-8654-8995dbcca9fa" declaredName="consumerPort" elementId="425e7eee-0853-4308-8654-8995dbcca9fa" isEnd="true">
+              <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="80ad551a-a278-4e19-bfd7-44c8ad0f13b5" elementId="80ad551a-a278-4e19-bfd7-44c8ad0f13b5" typedFeature="425e7eee-0853-4308-8654-8995dbcca9fa">
+                <type href="PortExample.sysmlx#9ba1be2c-1b37-4320-b990-5aa81ab95698"/>
+              </ownedRelationship>
+              <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="aa54d444-2a33-4153-93c0-92f201e54ed6" elementId="aa54d444-2a33-4153-93c0-92f201e54ed6">
+                <ownedRelatedElement xsi:type="sysml:Multiplicity" xmi:id="c3f3d6fc-7c52-475c-9c25-dda3b415e5e6" elementId="c3f3d6fc-7c52-475c-9c25-dda3b415e5e6"/>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+        </ownedRelatedElement>
+      </ownedRelationship>
+      <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="4b448b6b-38fd-4a3b-a521-45b7ea160a47" elementId="4b448b6b-38fd-4a3b-a521-45b7ea160a47">
+        <ownedRelatedElement xsi:type="sysml:PartUsage" xmi:id="8ccb5b0d-da4c-4125-9aa7-38cab9d3f2f5" declaredName="vehicle" elementId="8ccb5b0d-da4c-4125-9aa7-38cab9d3f2f5">
+          <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="4f1167c7-8fd9-4bcb-a68f-0239ba193873" elementId="4f1167c7-8fd9-4bcb-a68f-0239ba193873" type="f0b25566-b4a3-4401-b4c9-46edc57b71e2" typedFeature="8ccb5b0d-da4c-4125-9aa7-38cab9d3f2f5"/>
+          <ownedRelationship xsi:type="sysml:FeatureMembership" xmi:id="8893b18b-9a0f-474a-b04b-f9e6855542e4" elementId="8893b18b-9a0f-474a-b04b-f9e6855542e4">
+            <ownedRelatedElement xsi:type="sysml:PartUsage" xmi:id="50569b34-d09d-4e54-82c3-7404e273b489" declaredName="tankAssy" elementId="50569b34-d09d-4e54-82c3-7404e273b489" isComposite="true">
+              <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="83da543b-b6d0-44be-a0dc-f6b66890df72" elementId="83da543b-b6d0-44be-a0dc-f6b66890df72" typedFeature="50569b34-d09d-4e54-82c3-7404e273b489">
+                <type href="PortExample.sysmlx#e783d6d4-5e22-4dca-9ac8-236ae0a33a1e"/>
+              </ownedRelationship>
+              <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="17b0a57d-1f65-4b90-ac1d-5fd33f82cf39" elementId="17b0a57d-1f65-4b90-ac1d-5fd33f82cf39">
+                <ownedRelatedElement xsi:type="sysml:Multiplicity" xmi:id="4370587f-9e3a-49a3-b6d8-0d2a7a65e6ca" elementId="4370587f-9e3a-49a3-b6d8-0d2a7a65e6ca"/>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:FeatureMembership" xmi:id="882bf4bb-62e7-4a9a-b1fd-cbeca7d6fa63" elementId="882bf4bb-62e7-4a9a-b1fd-cbeca7d6fa63">
+            <ownedRelatedElement xsi:type="sysml:PartUsage" xmi:id="51c12b20-4591-4a12-9e38-3bddb25c35b5" declaredName="eng" elementId="51c12b20-4591-4a12-9e38-3bddb25c35b5" isComposite="true">
+              <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="9ed6087c-d85f-462a-ad4a-9255de85acf0" elementId="9ed6087c-d85f-462a-ad4a-9255de85acf0" typedFeature="51c12b20-4591-4a12-9e38-3bddb25c35b5">
+                <type href="PortExample.sysmlx#b4921189-8360-4f80-8e63-1fdec7b6afbf"/>
+              </ownedRelationship>
+              <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="fecacbed-0d4f-42ef-a0f1-6e4dc530dde0" elementId="fecacbed-0d4f-42ef-a0f1-6e4dc530dde0">
+                <ownedRelatedElement xsi:type="sysml:Multiplicity" xmi:id="b9d2f5a1-2963-4f08-ba6d-66f6a165d301" elementId="b9d2f5a1-2963-4f08-ba6d-66f6a165d301"/>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+          <ownedRelationship xsi:type="sysml:FeatureMembership" xmi:id="4fa75feb-cbc5-4c67-9e98-1b3ea29edf74" elementId="4fa75feb-cbc5-4c67-9e98-1b3ea29edf74">
+            <ownedRelatedElement xsi:type="sysml:InterfaceUsage" xmi:id="ce0fb338-b722-4f5a-bf0f-08dfc2d512fc" elementId="ce0fb338-b722-4f5a-bf0f-08dfc2d512fc" isComposite="true">
+              <ownedRelationship xsi:type="sysml:FeatureTyping" xmi:id="56c89dec-8eb0-4a61-9372-efb9f02c3c8c" elementId="56c89dec-8eb0-4a61-9372-efb9f02c3c8c" type="b412458c-8342-4106-88f8-6542f284b802" typedFeature="ce0fb338-b722-4f5a-bf0f-08dfc2d512fc"/>
+              <ownedRelationship xsi:type="sysml:EndFeatureMembership" xmi:id="32e66346-be9e-4cfc-a0bf-d31232315153" elementId="32e66346-be9e-4cfc-a0bf-d31232315153">
+                <ownedRelatedElement xsi:type="sysml:PortUsage" xmi:id="493a1d25-9441-41ea-8592-110e649c23d5" declaredName="supplierPort" elementId="493a1d25-9441-41ea-8592-110e649c23d5" isEnd="true">
+                  <ownedRelationship xsi:type="sysml:ReferenceSubsetting" xmi:id="d06809bc-06e4-4d95-825a-1fdd368730fe" elementId="d06809bc-06e4-4d95-825a-1fdd368730fe" referencedFeature="f6ba8706-d138-4601-8a6a-9c931b5d88dc">
+                    <ownedRelatedElement xsi:type="sysml:Feature" xmi:id="f6ba8706-d138-4601-8a6a-9c931b5d88dc" elementId="f6ba8706-d138-4601-8a6a-9c931b5d88dc">
+                      <ownedRelationship xsi:type="sysml:FeatureChaining" xmi:id="8463e24d-c2a3-47f4-a493-1f92131acb0a" elementId="8463e24d-c2a3-47f4-a493-1f92131acb0a" chainingFeature="50569b34-d09d-4e54-82c3-7404e273b489"/>
+                      <ownedRelationship xsi:type="sysml:FeatureChaining" xmi:id="6e35b43e-a7d4-4e76-9854-94e7ebce3f54" elementId="6e35b43e-a7d4-4e76-9854-94e7ebce3f54">
+                        <chainingFeature href="PortExample.sysmlx#97b1e3f1-62bb-4dad-9f58-fce8de1a375c"/>
+                      </ownedRelationship>
+                    </ownedRelatedElement>
+                  </ownedRelationship>
+                  <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="f05521dd-0c84-460a-8c49-06c7745995cb" elementId="f05521dd-0c84-460a-8c49-06c7745995cb">
+                    <ownedRelatedElement xsi:type="sysml:Multiplicity" xmi:id="e3477e6c-3a06-4156-b9a7-fa48cb15d5a1" elementId="e3477e6c-3a06-4156-b9a7-fa48cb15d5a1"/>
+                  </ownedRelationship>
+                </ownedRelatedElement>
+              </ownedRelationship>
+              <ownedRelationship xsi:type="sysml:EndFeatureMembership" xmi:id="12f762ff-ec1e-4a1d-accd-b800c0a5a87c" elementId="12f762ff-ec1e-4a1d-accd-b800c0a5a87c">
+                <ownedRelatedElement xsi:type="sysml:PortUsage" xmi:id="35d517dd-33b4-4c79-beb0-18a39010f23e" declaredName="consumerPort" elementId="35d517dd-33b4-4c79-beb0-18a39010f23e" isEnd="true">
+                  <ownedRelationship xsi:type="sysml:ReferenceSubsetting" xmi:id="9799680e-cf33-4500-a46f-55133884fd7c" elementId="9799680e-cf33-4500-a46f-55133884fd7c" referencedFeature="8c255788-7e7c-4115-9497-8afb69fdbadb">
+                    <ownedRelatedElement xsi:type="sysml:Feature" xmi:id="8c255788-7e7c-4115-9497-8afb69fdbadb" elementId="8c255788-7e7c-4115-9497-8afb69fdbadb">
+                      <ownedRelationship xsi:type="sysml:FeatureChaining" xmi:id="48fabd4c-bbdc-4f43-af17-0e2bf9031a0d" elementId="48fabd4c-bbdc-4f43-af17-0e2bf9031a0d" chainingFeature="51c12b20-4591-4a12-9e38-3bddb25c35b5"/>
+                      <ownedRelationship xsi:type="sysml:FeatureChaining" xmi:id="9e994d65-bb11-479b-a2ac-9afcb7acd4ce" elementId="9e994d65-bb11-479b-a2ac-9afcb7acd4ce">
+                        <chainingFeature href="PortExample.sysmlx#fd94759a-e84f-42ce-913b-e3b3186accf4"/>
+                      </ownedRelationship>
+                    </ownedRelatedElement>
+                  </ownedRelationship>
+                  <ownedRelationship xsi:type="sysml:OwningMembership" xmi:id="c1459bea-7d18-470a-9bf1-11dd1095f9b1" elementId="c1459bea-7d18-470a-9bf1-11dd1095f9b1">
+                    <ownedRelatedElement xsi:type="sysml:Multiplicity" xmi:id="f4e6e475-63a9-4ebc-aaa0-feb7dd99bb17" elementId="f4e6e475-63a9-4ebc-aaa0-feb7dd99bb17"/>
+                  </ownedRelationship>
+                </ownedRelatedElement>
+              </ownedRelationship>
+            </ownedRelatedElement>
+          </ownedRelationship>
+        </ownedRelatedElement>
+      </ownedRelationship>
+    </ownedRelatedElement>
+  </ownedRelationship>
+</sysml:Namespace>
