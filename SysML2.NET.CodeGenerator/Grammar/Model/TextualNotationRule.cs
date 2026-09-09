@@ -359,5 +359,88 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
                 }
             }
         }
+
+        /// <summary>
+        /// Recursively resolves the names of all rules transitively reachable from this rule via
+        /// NonTerminal references, including this rule itself.
+        /// </summary>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <returns>The set of reachable rule names</returns>
+        public IReadOnlySet<string> QueryReachableRuleNames(IReadOnlyList<TextualNotationRule> allRules)
+        {
+            var visited = new HashSet<string>();
+            CollectReachableRuleNames(this, allRules, visited);
+            return visited;
+        }
+
+        /// <summary>
+        /// Recursively collects the names of rules reachable from <paramref name="rule"/>
+        /// </summary>
+        /// <param name="rule">The rule to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="visited">The accumulated set of reachable rule names</param>
+        private static void CollectReachableRuleNames(TextualNotationRule rule, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> visited)
+        {
+            if (!visited.Add(rule.RuleName))
+            {
+                return;
+            }
+
+            foreach (var alternative in rule.Alternatives)
+            {
+                CollectReachableRuleNamesFromElements(alternative.Elements, allRules, visited);
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects reachable rule names from a list of <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="elements">The elements to inspect</param>
+        /// <param name="allRules">All available rules for resolving NonTerminal references</param>
+        /// <param name="visited">The accumulated set of reachable rule names</param>
+        private static void CollectReachableRuleNamesFromElements(IEnumerable<RuleElement> elements, IReadOnlyList<TextualNotationRule> allRules, HashSet<string> visited)
+        {
+            foreach (var element in elements)
+            {
+                switch (element)
+                {
+                    case AssignmentElement { Value: NonTerminalElement valueNonTerminal }:
+                        var valueRule = allRules.SingleOrDefault(x => x.RuleName == valueNonTerminal.Name);
+
+                        if (valueRule != null)
+                        {
+                            CollectReachableRuleNames(valueRule, allRules, visited);
+                        }
+
+                        break;
+
+                    case AssignmentElement { Value: GroupElement valueGroupElement }:
+                        foreach (var valueGroupAlternative in valueGroupElement.Alternatives)
+                        {
+                            CollectReachableRuleNamesFromElements(valueGroupAlternative.Elements, allRules, visited);
+                        }
+
+                        break;
+
+                    case NonTerminalElement nonTerminalElement:
+                        var referencedRule = allRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+
+                        if (referencedRule != null)
+                        {
+                            CollectReachableRuleNames(referencedRule, allRules, visited);
+                        }
+
+                        break;
+
+                    case GroupElement groupElement:
+                        foreach (var groupAlternative in groupElement.Alternatives)
+                        {
+                            CollectReachableRuleNamesFromElements(groupAlternative.Elements, allRules, visited);
+                        }
+
+                        break;
+                }
+            }
+        }
     }
 }
