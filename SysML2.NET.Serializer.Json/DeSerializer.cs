@@ -222,7 +222,7 @@ namespace SysML2.NET.Serializer.Json
         /// <returns>an instance of <typeparamref name="T"/></returns>
         public Task<T> DeSerializeRequestAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest
         {
-            return ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
+            return ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true), cancellationToken);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace SysML2.NET.Serializer.Json
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
         public async Task<IEnumerable<T>> DeSerializeRequestsAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest
         {
-            return await ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
+            return await ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true), cancellationToken);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace SysML2.NET.Serializer.Json
         /// <returns>an instance of <typeparamref name="T"/></returns>
         public Task<T> DeSerializeResponseAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse
         {
-            return ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
+            return ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false), cancellationToken);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace SysML2.NET.Serializer.Json
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
         public async Task<IEnumerable<T>> DeSerializeResponsesAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse
         {
-            return await ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
+            return await ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false), cancellationToken);
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="isRequestFamily">Asserts that the payload is resolved against the request family</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
         /// <exception cref="JsonException">Thrown when the payload is neither an object nor an array</exception>
-        private IEnumerable<T> ReadMany<T>(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, bool isRequestFamily)
+        private List<T> ReadMany<T>(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, bool isRequestFamily)
         {
             var reader = CreateReader(utf8Json, length);
 
@@ -333,12 +333,7 @@ namespace SysML2.NET.Serializer.Json
                     throw new JsonException($"Expected a JSON object or array, got {reader.TokenType}.");
             }
 
-            if (reader.Read())
-            {
-                throw new JsonException("Additional text encountered after the top level JSON value.");
-            }
-
-            return result;
+            return reader.Read() ? throw new JsonException("Additional text encountered after the top level JSON value.") : result;
         }
 
         /// <summary>
@@ -412,10 +407,10 @@ namespace SysML2.NET.Serializer.Json
         /// </summary>
         /// <typeparam name="TResult">The type that the read function returns.</typeparam>
         /// <param name="stream">the JSON input stream</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <param name="read">the function that reads the payload</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>the result of the read function</returns>
-        private static async Task<TResult> ReadPooledAsync<TResult>(Stream stream, CancellationToken cancellationToken, Func<byte[], int, TResult> read)
+        private static async Task<TResult> ReadPooledAsync<TResult>(Stream stream, Func<byte[], int, TResult> read, CancellationToken cancellationToken)
         {
             var (buffer, length) = await ReadToPooledBufferAsync(stream, cancellationToken);
 
