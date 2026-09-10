@@ -167,7 +167,8 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
             this.Handlebars.RegisterSchemaHelper(
                 schemaName => this.implementedInterfaces[schemaName],
                 this.QueryPropertyTypeOverride);
-            this.Handlebars.RegisterPropertyHelper(QueryPropertyTypeOverride);
+
+            this.Handlebars.RegisterPropertyHelper(this.QueryPropertyTypeOverride);
             this.Handlebars.RegisterDocumentationHelper();
             this.Handlebars.RegisterEnumerationHelper();
         }

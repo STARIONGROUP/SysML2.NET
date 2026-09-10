@@ -44,7 +44,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
         private static readonly Guid ElementIdentifier = Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083");
 
-        private ISerializer serializer;
+        private Serializer serializer;
 
         private JsonWriterOptions jsonWriterOptions;
 
