@@ -34,7 +34,7 @@ namespace SysML2.NET.PSM.DTO
     /// Data transfer object that represents the ExternalData schema of the Systems Modeling API and Services
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial class ExternalData : IData, IResponse, SysML2.NET.Common.IIdentified
+    public partial class ExternalData : IResponse, SysML2.NET.Common.IData, SysML2.NET.Common.IIdentified
     {
         /// <summary>
         /// The value of the type discriminator of the ExternalData schema

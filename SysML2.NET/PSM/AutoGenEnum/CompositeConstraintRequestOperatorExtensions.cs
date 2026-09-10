@@ -1,0 +1,56 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="CompositeConstraintRequestOperatorExtensions.cs" company="Starion Group S.A.">
+//
+//    Copyright (C) 2022-2026 Starion Group S.A.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.PSM.Enumerations
+{
+    using System;
+    using System.CodeDom.Compiler;
+
+    /// <summary>
+    /// Extension methods for the <see cref="CompositeConstraintRequestOperator"/> enumeration
+    /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
+    public static class CompositeConstraintRequestOperatorExtensions
+    {
+        /// <summary>
+        /// Queries the value that represents the literal in the Systems Modeling API and Services
+        /// </summary>
+        /// <param name="value">The subject <see cref="CompositeConstraintRequestOperator"/>.</param>
+        /// <returns>The value as it appears on the wire.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the literal is not known.</exception>
+        public static string ToWireValue(this CompositeConstraintRequestOperator value)
+        {
+            return value switch
+            {
+                CompositeConstraintRequestOperator.and => "and",
+                CompositeConstraintRequestOperator.or => "or",
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

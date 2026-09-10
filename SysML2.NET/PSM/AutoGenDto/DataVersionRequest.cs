@@ -64,7 +64,7 @@ namespace SysML2.NET.PSM.DTO
         /// <summary>
         /// Gets or sets the payload of the DataVersionRequest
         /// </summary>
-        public IDataRequest Payload { get; set; }
+        public SysML2.NET.Common.IDataRequest Payload { get; set; }
     }
 }
 

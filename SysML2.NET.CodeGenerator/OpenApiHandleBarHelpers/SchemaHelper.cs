@@ -44,37 +44,14 @@ namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
         /// <param name="queryImplementedInterfaces">
         /// A function that returns the interfaces implemented by the class generated for a schema name
         /// </param>
-        /// <param name="queryBaseInterfaces">
-        /// A function that returns the interfaces extended by the interface generated for a union schema name
-        /// </param>
         /// <param name="queryTypeOverride">
         /// A function that returns the declared type of a property whose schema has no C# equivalent
         /// </param>
-        public static void RegisterSchemaHelper(this IHandlebars handlebars, Func<string, IEnumerable<string>> queryImplementedInterfaces, Func<string, IEnumerable<string>> queryBaseInterfaces, Func<string, string, string> queryTypeOverride)
+        public static void RegisterSchemaHelper(this IHandlebars handlebars, Func<string, IEnumerable<string>> queryImplementedInterfaces, Func<string, string, string> queryTypeOverride)
         {
             ArgumentNullException.ThrowIfNull(handlebars);
             ArgumentNullException.ThrowIfNull(queryImplementedInterfaces);
-            ArgumentNullException.ThrowIfNull(queryBaseInterfaces);
             ArgumentNullException.ThrowIfNull(queryTypeOverride);
-
-            handlebars.RegisterHelper("Schema.WriteBaseInterfaces", (writer, _, arguments) =>
-            {
-                if (arguments.Length != 1)
-                {
-                    throw new HandlebarsException("{{#Schema.WriteBaseInterfaces}} helper must have exactly one argument");
-                }
-
-                var schemaName = arguments[0] as string ?? throw new ArgumentException("supposed to be a schema name");
-
-                var baseInterfaces = queryBaseInterfaces(schemaName)
-                    .OrderBy(interfaceName => interfaceName, StringComparer.Ordinal)
-                    .ToList();
-
-                if (baseInterfaces.Count > 0)
-                {
-                    writer.WriteSafeString($" : {string.Join(", ", baseInterfaces)}");
-                }
-            });
 
             handlebars.RegisterHelper("Schema.WriteImplementedInterfaces", (writer, _, arguments) =>
             {

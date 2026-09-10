@@ -54,8 +54,12 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         /// <summary>
         /// The interfaces that the interface generated for a union schema extends
         /// </summary>
-        private static readonly Dictionary<string, string> BaseInterfaceNames =
-            new(StringComparer.Ordinal) { ["Data"] = "SysML2.NET.Common.IData" };
+        private static readonly Dictionary<string, string> SuppressedUnionInterfaces =
+            new(StringComparer.Ordinal)
+            {
+                ["Data"] = "SysML2.NET.Common.IData",
+                ["DataRequest"] = "SysML2.NET.Common.IDataRequest"
+            };
 
         /// <summary>
         /// The declared types of the properties whose schema has no C# equivalent, keyed by class and property name
@@ -66,6 +70,21 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
                 [("PrimitiveConstraint", "value")] = "List<ConstraintValue>",
                 [("PrimitiveConstraintRequest", "value")] = "List<ConstraintValue>"
             };
+
+        /// <summary>
+        /// The declared types of the properties that reference a union whose alternatives are not all generated
+        /// </summary>
+        private static readonly Dictionary<string, string> UnionTypeOverrides =
+            new(StringComparer.Ordinal)
+            {
+                ["Data"] = "SysML2.NET.Common.IData",
+                ["DataRequest"] = "SysML2.NET.Common.IDataRequest"
+            };
+
+        /// <summary>
+        /// The declared types of the properties that reference a mapped union, scoped to the current generation run
+        /// </summary>
+        private Dictionary<(string ClassName, string PropertyName), string> unionPropertyTypes = [];
 
         /// <summary>
         /// The interfaces implemented by the class generated for a schema name, scoped to the current generation run
@@ -147,9 +166,9 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         {
             this.Handlebars.RegisterSchemaHelper(
                 schemaName => this.implementedInterfaces[schemaName],
-                schemaName => BaseInterfaceNames.TryGetValue(schemaName, out var baseInterfaceName) ? [baseInterfaceName] : [],
-                QueryPropertyTypeOverride);
-            this.Handlebars.RegisterPropertyHelper(QueryPropertyTypeOverride);
+                this.QueryPropertyTypeOverride);
+
+            this.Handlebars.RegisterPropertyHelper(this.QueryPropertyTypeOverride);
             this.Handlebars.RegisterDocumentationHelper();
             this.Handlebars.RegisterEnumerationHelper();
         }
@@ -180,7 +199,8 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
                 .Where(schema => schema.Value.QueryIsUnion())
                 .SelectMany(union => union.Value.QueryUnionAlternativeNames()
                     .Where(schemaNames.Contains)
-                    .Select(alternativeName => (Alternative: alternativeName, Interface: OpenApiSchemaExtensions.QueryInterfaceName(union.Key))));
+                    .Select(alternativeName => (Alternative: alternativeName, Interface: QueryUnionInterfaceName(union.Key))))
+                .Where(pair => pair.Interface is not null);
 
             var familyMemberships = schemas
                 .Where(schema => !schema.Value.QueryIsUnion())
@@ -190,6 +210,38 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
             return unionMemberships
                 .Concat(familyMemberships)
                 .ToLookup(pair => pair.Alternative, pair => pair.Interface, StringComparer.Ordinal);
+        }
+
+        /// <summary>
+        /// Queries the interface that the alternatives of a union implement
+        /// </summary>
+        /// <param name="unionName">
+        /// The name of the union schema
+        /// </param>
+        /// <returns>
+        /// The generated interface, the type that replaces it, or <c>null</c> when the alternatives implement nothing
+        /// </returns>
+        private static string QueryUnionInterfaceName(string unionName)
+        {
+            return SuppressedUnionInterfaces.TryGetValue(unionName, out var replacementName)
+                ? replacementName
+                : OpenApiSchemaExtensions.QueryInterfaceName(unionName);
+        }
+
+        /// <summary>
+        /// Queries the union schemas that an interface is generated for
+        /// </summary>
+        /// <param name="schemas">
+        /// The in-scope schemas
+        /// </param>
+        /// <returns>
+        /// The union schemas whose interface is not suppressed
+        /// </returns>
+        private static IReadOnlyList<KeyValuePair<string, IOpenApiSchema>> QueryGeneratedInterfaceSchemas(IReadOnlyList<KeyValuePair<string, IOpenApiSchema>> schemas)
+        {
+            return schemas
+                .Where(schema => schema.Value.QueryIsUnion() && !SuppressedUnionInterfaces.ContainsKey(schema.Key))
+                .ToList();
         }
 
         /// <summary>
@@ -226,9 +278,49 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         /// <returns>
         /// The declared type, or <c>null</c> when the property is resolved from its schema
         /// </returns>
-        private static string QueryPropertyTypeOverride(string className, string propertyName)
+        private string QueryPropertyTypeOverride(string className, string propertyName)
         {
-            return PropertyTypeOverrides.TryGetValue((className, propertyName), out var typeName) ? typeName : null;
+            if (PropertyTypeOverrides.TryGetValue((className, propertyName), out var typeName))
+            {
+                return typeName;
+            }
+
+            return this.unionPropertyTypes.TryGetValue((className, propertyName), out var unionTypeName) ? unionTypeName : null;
+        }
+
+        /// <summary>
+        /// Queries the declared types of the properties that reference a union listed in <see cref="UnionTypeOverrides"/>
+        /// </summary>
+        /// <param name="schemas">
+        /// The in-scope schemas
+        /// </param>
+        /// <returns>
+        /// The declared type of each such property, keyed by class and property name
+        /// </returns>
+        private static Dictionary<(string ClassName, string PropertyName), string> QueryUnionPropertyTypes(IReadOnlyList<KeyValuePair<string, IOpenApiSchema>> schemas)
+        {
+            return schemas
+                .Where(schema => !schema.Value.QueryIsUnion() && schema.Value.Properties is not null)
+                .SelectMany(schema => schema.Value.Properties
+                    .Select(property => (Key: (schema.Key, property.Key), TypeName: QueryUnionTypeOverride(property.Value))))
+                .Where(entry => entry.TypeName is not null)
+                .ToDictionary(entry => entry.Key, entry => entry.TypeName);
+        }
+
+        /// <summary>
+        /// Queries the declared type that the union referenced by the property schema is mapped to
+        /// </summary>
+        /// <param name="propertySchema">
+        /// The <see cref="IOpenApiSchema"/> that defines the property
+        /// </param>
+        /// <returns>
+        /// The declared type, or <c>null</c> when the property does not reference a mapped union
+        /// </returns>
+        private static string QueryUnionTypeOverride(IOpenApiSchema propertySchema)
+        {
+            var referencedName = propertySchema.QueryTerminalReferenceName();
+
+            return referencedName is not null && UnionTypeOverrides.TryGetValue(referencedName, out var typeName) ? typeName : null;
         }
 
         /// <summary>
@@ -247,15 +339,13 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         {
             var schemas = this.AssignGenerationScope(openApiDocument);
 
-            foreach (var schema in schemas)
+            foreach (var schema in QueryGeneratedInterfaceSchemas(schemas))
             {
-                if (schema.Value.QueryIsUnion())
-                {
-                    await this.WriteInterfaceAsync(schema, outputDirectory);
+                await this.WriteInterfaceAsync(schema, outputDirectory);
+            }
 
-                    continue;
-                }
-
+            foreach (var schema in schemas.Where(schema => !schema.Value.QueryIsUnion()))
+            {
                 await this.WriteClassAsync(schema, outputDirectory);
             }
         }
@@ -301,7 +391,7 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         {
             var schemas = this.AssignGenerationScope(openApiDocument);
 
-            return await this.WriteInterfaceAsync(schemas.Single(schema => schema.Key == name), outputDirectory);
+            return await this.WriteInterfaceAsync(QueryGeneratedInterfaceSchemas(schemas).Single(schema => schema.Key == name), outputDirectory);
         }
 
         /// <summary>
@@ -318,6 +408,7 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
             var schemas = QuerySchemas(openApiDocument);
 
             this.implementedInterfaces = QueryImplementedInterfaces(schemas);
+            this.unionPropertyTypes = QueryUnionPropertyTypes(schemas);
 
             return schemas;
         }
