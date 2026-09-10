@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IData.cs" company="Starion Group S.A.">
+// <copyright file="CompositeConstraintOperatorExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
 //
@@ -22,19 +22,32 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PSM.DTO
+namespace SysML2.NET.PSM.Enumerations
 {
+    using System;
     using System.CodeDom.Compiler;
 
     /// <summary>
-    /// Marker interface implemented by the alternatives of the Data schema of the Systems Modeling API and Services
+    /// Extension methods for the <see cref="CompositeConstraintOperator"/> enumeration
     /// </summary>
-    /// <remarks>
-    /// The Data schema admits Element, ExternalData, ExternalRelationship, ProjectUsage
-    /// </remarks>
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IData : SysML2.NET.Common.IData
+    public static class CompositeConstraintOperatorExtensions
     {
+        /// <summary>
+        /// Queries the value that represents the literal in the Systems Modeling API and Services
+        /// </summary>
+        /// <param name="value">The subject <see cref="CompositeConstraintOperator"/>.</param>
+        /// <returns>The value as it appears on the wire.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the literal is not known.</exception>
+        public static string ToWireValue(this CompositeConstraintOperator value)
+        {
+            return value switch
+            {
+                CompositeConstraintOperator.and => "and",
+                CompositeConstraintOperator.or => "or",
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+        }
     }
 }
 

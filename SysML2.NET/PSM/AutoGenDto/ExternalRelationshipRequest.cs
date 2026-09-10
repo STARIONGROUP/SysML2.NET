@@ -34,7 +34,7 @@ namespace SysML2.NET.PSM.DTO
     /// Data transfer object that represents the ExternalRelationshipRequest schema of the Systems Modeling API and Services
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial class ExternalRelationshipRequest : IDataRequest, IRequest
+    public partial class ExternalRelationshipRequest : IRequest, SysML2.NET.Common.IDataRequest
     {
         /// <summary>
         /// The value of the type discriminator of the ExternalRelationshipRequest schema

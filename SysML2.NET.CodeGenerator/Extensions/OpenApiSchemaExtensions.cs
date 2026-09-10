@@ -102,6 +102,58 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
+        /// Queries whether the schema resolves to a reference that stands for the identifier of another element
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>True when the schema resolves to a reference to <see cref="IdentifiedSchemaName"/>.</returns>
+        public static bool QueryIsIdentifiedReference(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            return schema.QueryTerminalReferenceInternal()?.Reference?.Id == IdentifiedSchemaName;
+        }
+
+        /// <summary>
+        /// Queries whether the schema resolves to a reference to another generated class
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>True when the schema resolves to a reference that is neither an identifier nor a union.</returns>
+        public static bool QueryIsCompositeReference(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            var terminalReference = schema.QueryTerminalReferenceInternal();
+
+            return terminalReference is not null && terminalReference.Reference?.Id != IdentifiedSchemaName && !terminalReference.QueryIsUnion();
+        }
+
+        /// <summary>
+        /// Queries whether the schema resolves to a reference to a union, whose runtime type decides the serializer
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>True when the schema resolves to a reference to a union.</returns>
+        public static bool QueryIsPolymorphicReference(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            var terminalReference = schema.QueryTerminalReferenceInternal();
+
+            return terminalReference is not null && terminalReference.QueryIsUnion();
+        }
+
+        /// <summary>
+        /// Queries the name of the schema that the reference resolves to
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>The referenced schema name, or <c>null</c> when the schema does not resolve to a reference.</returns>
+        public static string QueryTerminalReferenceName(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            return schema.QueryTerminalReferenceInternal()?.Reference?.Id;
+        }
+
+        /// <summary>
         /// Queries whether the schema declares an identifier that it lists as required
         /// </summary>
         /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
@@ -334,7 +386,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             ArgumentNullException.ThrowIfNull(schema);
 
-            var annotated = schema.QueryAnnotatedReference();
+            var annotated = schema.QueryTerminalReferenceInternal();
 
             if (string.IsNullOrWhiteSpace(annotated?.Comment))
             {
@@ -401,11 +453,23 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
-        /// Queries the reference that carries the schema's annotation, looking through a nullable or list wrapper
+        /// Queries the reference that the schema resolves to, looking through a nullable or list wrapper
         /// </summary>
         /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
-        /// <returns>The annotated reference, or <c>null</c> when the schema does not resolve to one.</returns>
-        private static OpenApiSchemaReference QueryAnnotatedReference(this IOpenApiSchema schema)
+        /// <returns>The terminal reference, or <c>null</c> when the schema does not resolve to one.</returns>
+        public static OpenApiSchemaReference QueryTerminalReference(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            return schema.QueryTerminalReferenceInternal();
+        }
+
+        /// <summary>
+        /// Queries the reference that the schema resolves to, looking through a nullable or list wrapper
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>The terminal reference, or <c>null</c> when the schema does not resolve to one.</returns>
+        private static OpenApiSchemaReference QueryTerminalReferenceInternal(this IOpenApiSchema schema)
         {
             if (schema is OpenApiSchemaReference reference)
             {
@@ -420,7 +484,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             return unwrapped?.Type?.HasFlag(JsonSchemaType.Array) == true
-                ? unwrapped.Items?.QueryAnnotatedReference()
+                ? unwrapped.Items?.QueryTerminalReferenceInternal()
                 : null;
         }
 

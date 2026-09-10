@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="ExternalData.cs" company="Starion Group S.A.">
+// <copyright file="PrimitiveConstraintRequestOperatorExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
 //
@@ -22,34 +22,37 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PSM.DTO
+namespace SysML2.NET.PSM.Enumerations
 {
     using System;
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
-
-    using SysML2.NET.PSM.Enumerations;
 
     /// <summary>
-    /// Data transfer object that represents the ExternalData schema of the Systems Modeling API and Services
+    /// Extension methods for the <see cref="PrimitiveConstraintRequestOperator"/> enumeration
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial class ExternalData : IResponse, SysML2.NET.Common.IData, SysML2.NET.Common.IIdentified
+    public static class PrimitiveConstraintRequestOperatorExtensions
     {
         /// <summary>
-        /// The value of the type discriminator of the ExternalData schema
+        /// Queries the value that represents the literal in the Systems Modeling API and Services
         /// </summary>
-        public const string Type = "ExternalData";
-
-        /// <summary>
-        /// Gets or sets the unique identifier of the ExternalData
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the resourceIdentifier of the ExternalData
-        /// </summary>
-        public Uri ResourceIdentifier { get; set; }
+        /// <param name="value">The subject <see cref="PrimitiveConstraintRequestOperator"/>.</param>
+        /// <returns>The value as it appears on the wire.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the literal is not known.</exception>
+        public static string ToWireValue(this PrimitiveConstraintRequestOperator value)
+        {
+            return value switch
+            {
+                PrimitiveConstraintRequestOperator.lessthan => "<",
+                PrimitiveConstraintRequestOperator.lessthanorequalto => "<=",
+                PrimitiveConstraintRequestOperator.equalto => "=",
+                PrimitiveConstraintRequestOperator.greaterthan => ">",
+                PrimitiveConstraintRequestOperator.greaterthanorequalto => ">=",
+                PrimitiveConstraintRequestOperator.@in => "in",
+                PrimitiveConstraintRequestOperator.instanceOf => "instanceOf",
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+        }
     }
 }
 

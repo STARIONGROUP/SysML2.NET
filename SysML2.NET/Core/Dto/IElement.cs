@@ -25,7 +25,7 @@ namespace SysML2.NET.Core.DTO.Root.Elements
     /// <summary>
     /// Hand-coded <see cref="IElement"/> interface
     /// </summary>
-    public partial interface IElement : IData
+    public partial interface IElement : IData, IDataRequest
     {
     }
 }

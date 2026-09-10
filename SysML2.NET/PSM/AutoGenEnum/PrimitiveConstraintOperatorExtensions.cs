@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IDataRequest.cs" company="Starion Group S.A.">
+// <copyright file="PrimitiveConstraintOperatorExtensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
 //
@@ -22,19 +22,37 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PSM.DTO
+namespace SysML2.NET.PSM.Enumerations
 {
+    using System;
     using System.CodeDom.Compiler;
 
     /// <summary>
-    /// Marker interface implemented by the alternatives of the DataRequest schema of the Systems Modeling API and Services
+    /// Extension methods for the <see cref="PrimitiveConstraintOperator"/> enumeration
     /// </summary>
-    /// <remarks>
-    /// The DataRequest schema admits ElementRequest, ExternalDataRequest, ExternalRelationshipRequest, ProjectUsageRequest
-    /// </remarks>
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IDataRequest
+    public static class PrimitiveConstraintOperatorExtensions
     {
+        /// <summary>
+        /// Queries the value that represents the literal in the Systems Modeling API and Services
+        /// </summary>
+        /// <param name="value">The subject <see cref="PrimitiveConstraintOperator"/>.</param>
+        /// <returns>The value as it appears on the wire.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the literal is not known.</exception>
+        public static string ToWireValue(this PrimitiveConstraintOperator value)
+        {
+            return value switch
+            {
+                PrimitiveConstraintOperator.lessthan => "<",
+                PrimitiveConstraintOperator.lessthanorequalto => "<=",
+                PrimitiveConstraintOperator.equalto => "=",
+                PrimitiveConstraintOperator.greaterthan => ">",
+                PrimitiveConstraintOperator.greaterthanorequalto => ">=",
+                PrimitiveConstraintOperator.@in => "in",
+                PrimitiveConstraintOperator.instanceOf => "instanceOf",
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+        }
     }
 }
 

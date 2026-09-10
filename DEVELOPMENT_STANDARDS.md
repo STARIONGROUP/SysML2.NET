@@ -141,19 +141,29 @@ Each repository should reference this file from its own `CLAUDE.md` /
 
 ### 1.7 `var` for local variables
 
-- Use `var` for local variable declarations when the type is unambiguous from
-  the right-hand side (constructor call, cast, or literal initialiser).
+- Use `var` for every local variable declaration where the compiler accepts
+  it — including built-in types, `foreach` iteration variables and `out var`
+  declarations.
 
   ```csharp
   var person = new Person("Alice", 30);
-  var names  = new List<string>();
+  var count  = 0;
   var typed  = (IFoo)source;
+
+  foreach (var element in elements)
+  {
+      if (cache.TryGetValue(element.Id, out var cached))
+      {
+          …
+      }
+  }
   ```
 
-- Spell out the type explicitly when `var` would hide it — e.g. return
-  values from opaque method calls, LINQ chains where the element type is
-  not obvious to the reader, or local variables whose declared type matters
-  for overload resolution downstream.
+- Spell out the type only where `var` cannot express the declaration: no
+  initialiser, a `const`, a `null` / lambda / method-group /
+  collection-expression initialiser, or a declared type that must be wider
+  than the constructed one (`IFoo foo = new Foo();`).
+- Enforced by `.editorconfig` (`csharp_style_var_*`) — see §0.
 
 ### 1.8 Member ordering
 
