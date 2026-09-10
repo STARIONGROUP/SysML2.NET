@@ -59,6 +59,9 @@ namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
             handlebars.RegisterHelper("Property.WriteReferencedSerializer", (writer, _, arguments) =>
                 writer.WriteSafeString($"{QueryPropertySchema(arguments).QueryTerminalReferenceName()}Serializer"));
 
+            handlebars.RegisterHelper("Property.WriteEnumerationProvider", (writer, _, arguments) =>
+                writer.WriteSafeString($"{OpenApiSchemaExtensions.QueryEnumerationTypeName(QuerySchemaName(arguments, 1), QuerySchemaName(arguments, 0))}Provider"));
+
             handlebars.RegisterHelper("Property.WriteElementWriter", (writer, _, arguments) =>
                 writer.WriteSafeString(queryElementWriterOverride(QuerySchemaName(arguments, 1), QuerySchemaName(arguments, 0))));
 

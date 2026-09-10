@@ -34,8 +34,11 @@ namespace SysML2.NET.Serializer.Json
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
+    using SysML2.NET.PSM.DTO;
     using SysML2.NET.Serializer.Json.Core.DTO;
     using SysML2.NET.Serializer.Json.PIM.DTO;
+    using SysML2.NET.Serializer.Json.PSM;
+    using SysML2.NET.Serializer.Json.Utility;
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
@@ -157,6 +160,276 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
+        /// Deserializes the JSON stream to a single <typeparamref name="T"/> request
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IRequest"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <returns>an instance of <typeparamref name="T"/></returns>
+        public T DeSerializeRequest<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IRequest
+        {
+            return ReadPooled(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
+        }
+
+        /// <summary>
+        /// Deserializes the JSON stream to a collection of <typeparamref name="T"/> requests
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IRequest"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        public IEnumerable<T> DeSerializeRequests<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IRequest
+        {
+            return ReadPooled(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
+        }
+
+        /// <summary>
+        /// Deserializes the JSON stream to a single <typeparamref name="T"/> response
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IResponse"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <returns>an instance of <typeparamref name="T"/></returns>
+        public T DeSerializeResponse<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IResponse
+        {
+            return ReadPooled(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
+        }
+
+        /// <summary>
+        /// Deserializes the JSON stream to a collection of <typeparamref name="T"/> responses
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IResponse"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        public IEnumerable<T> DeSerializeResponses<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IResponse
+        {
+            return ReadPooled(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the JSON stream to a single <typeparamref name="T"/> request
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IRequest"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an instance of <typeparamref name="T"/></returns>
+        public Task<T> DeSerializeRequestAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest
+        {
+            return ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the JSON stream to a collection of <typeparamref name="T"/> requests
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IRequest"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        public async Task<IEnumerable<T>> DeSerializeRequestsAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest
+        {
+            return await ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the JSON stream to a single <typeparamref name="T"/> response
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IResponse"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an instance of <typeparamref name="T"/></returns>
+        public Task<T> DeSerializeResponseAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse
+        {
+            return ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the JSON stream to a collection of <typeparamref name="T"/> responses
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IResponse"/> type.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        public async Task<IEnumerable<T>> DeSerializeResponsesAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse
+        {
+            return await ReadPooledAsync(stream, cancellationToken, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
+        }
+
+        /// <summary>
+        /// Reads a single Systems Modeling API and Services object from the UTF-8 encoded JSON payload
+        /// </summary>
+        /// <typeparam name="T">The expected type.</typeparam>
+        /// <param name="utf8Json">the buffer that contains the UTF-8 encoded JSON payload</param>
+        /// <param name="length">the number of bytes of <paramref name="utf8Json"/> that make up the payload</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="isRequestFamily">Asserts that the payload is resolved against the request family</param>
+        /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not a single object of the expected type</exception>
+        private T ReadSingle<T>(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, bool isRequestFamily)
+        {
+            var reader = CreateReader(utf8Json, length);
+
+            if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException($"Expected a single JSON object, got {reader.TokenType}.");
+            }
+
+            var result = this.ReadFamilyObject<T>(ref reader, serializationModeKind, deserializeDerivedProperties, isRequestFamily);
+
+            if (reader.Read())
+            {
+                throw new JsonException("Additional text encountered after the top level JSON value.");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Reads a collection of Systems Modeling API and Services objects from the UTF-8 encoded JSON payload
+        /// </summary>
+        /// <typeparam name="T">The expected type.</typeparam>
+        /// <param name="utf8Json">the buffer that contains the UTF-8 encoded JSON payload</param>
+        /// <param name="length">the number of bytes of <paramref name="utf8Json"/> that make up the payload</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="isRequestFamily">Asserts that the payload is resolved against the request family</param>
+        /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is neither an object nor an array</exception>
+        private IEnumerable<T> ReadMany<T>(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, bool isRequestFamily)
+        {
+            var reader = CreateReader(utf8Json, length);
+
+            var result = new List<T>();
+
+            switch (reader.TokenType)
+            {
+                case JsonTokenType.StartObject:
+                    result.Add(this.ReadFamilyObject<T>(ref reader, serializationModeKind, deserializeDerivedProperties, isRequestFamily));
+                    break;
+
+                case JsonTokenType.StartArray:
+
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        result.Add(this.ReadFamilyObject<T>(ref reader, serializationModeKind, deserializeDerivedProperties, isRequestFamily));
+                    }
+
+                    break;
+
+                default:
+                    throw new JsonException($"Expected a JSON object or array, got {reader.TokenType}.");
+            }
+
+            if (reader.Read())
+            {
+                throw new JsonException("Additional text encountered after the top level JSON value.");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Reads the json object that the reader is positioned on and asserts that it is a <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">The expected type.</typeparam>
+        /// <param name="reader">The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/></param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="isRequestFamily">Asserts that the payload is resolved against the request family</param>
+        /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the resolved object is not a <typeparamref name="T"/></exception>
+        private T ReadFamilyObject<T>(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, bool isRequestFamily)
+        {
+            object resolved = isRequestFamily
+                ? PsmDeSerializationDispatcher.ReadRequest(ref reader, serializationModeKind, deserializeDerivedProperties, this.loggerFactory)
+                : PsmDeSerializationDispatcher.ReadResponse(ref reader, serializationModeKind, deserializeDerivedProperties, this.loggerFactory);
+
+            if (resolved is not T expected)
+            {
+                throw new JsonException($"Expected a {typeof(T).Name}, the payload declares a {resolved.GetType().Name}.");
+            }
+
+            return expected;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Utf8JsonReader"/> over the payload and advances it to the first token
+        /// </summary>
+        /// <param name="utf8Json">the buffer that contains the UTF-8 encoded JSON payload</param>
+        /// <param name="length">the number of bytes of <paramref name="utf8Json"/> that make up the payload</param>
+        /// <returns>a <see cref="Utf8JsonReader"/> positioned on the first token</returns>
+        /// <exception cref="JsonException">Thrown when the payload contains no token</exception>
+        private static Utf8JsonReader CreateReader(byte[] utf8Json, int length)
+        {
+            var offset = HasUtf8ByteOrderMark(utf8Json, length) ? 3 : 0;
+
+            var reader = new Utf8JsonReader(new ReadOnlySpan<byte>(utf8Json, offset, length - offset));
+
+            if (!reader.Read())
+            {
+                throw new JsonException("The input does not contain any JSON tokens.");
+            }
+
+            return reader;
+        }
+
+        /// <summary>
+        /// Reads the stream into a pooled buffer, applies the read function and returns the buffer to the pool
+        /// </summary>
+        /// <typeparam name="TResult">The type that the read function returns.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="read">the function that reads the payload</param>
+        /// <returns>the result of the read function</returns>
+        private static TResult ReadPooled<TResult>(Stream stream, Func<byte[], int, TResult> read)
+        {
+            var buffer = ReadToPooledBuffer(stream, out var length);
+
+            try
+            {
+                return read(buffer, length);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously reads the stream into a pooled buffer, applies the read function and returns the buffer
+        /// </summary>
+        /// <typeparam name="TResult">The type that the read function returns.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <param name="read">the function that reads the payload</param>
+        /// <returns>the result of the read function</returns>
+        private static async Task<TResult> ReadPooledAsync<TResult>(Stream stream, CancellationToken cancellationToken, Func<byte[], int, TResult> read)
+        {
+            var (buffer, length) = await ReadToPooledBufferAsync(stream, cancellationToken);
+
+            try
+            {
+                return read(buffer, length);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
+        }
+
+        /// <summary>
         /// Deserializes the UTF-8 encoded JSON payload to a <see cref="List{IIdentified}"/>
         /// </summary>
         /// <param name="utf8Json">
@@ -182,16 +455,9 @@ namespace SysML2.NET.Serializer.Json
         /// </remarks>
         private List<IIdentified> DeSerializeUtf8Json(byte[] utf8Json, int length, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
-            var offset = HasUtf8ByteOrderMark(utf8Json, length) ? 3 : 0;
-
-            var reader = new Utf8JsonReader(new ReadOnlySpan<byte>(utf8Json, offset, length - offset));
+            var reader = CreateReader(utf8Json, length);
 
             var result = new List<IIdentified>();
-
-            if (!reader.Read())
-            {
-                throw new JsonException("The input does not contain any JSON tokens.");
-            }
 
             switch (reader.TokenType)
             {
@@ -244,7 +510,7 @@ namespace SysML2.NET.Serializer.Json
                 throw new ArgumentException($"The {nameof(reader)} must be positioned on a JsonTokenType.StartObject", nameof(reader));
             }
 
-            if (!TryPeekTypeName(reader, out var typeName))
+            if (!Utf8JsonReaderHelper.TryPeekTypeName(reader, out var typeName))
             {
                 throw new SerializationException("The @type Json property is not available, the DeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -259,60 +525,6 @@ namespace SysML2.NET.Serializer.Json
             var func = DeSerializationProvider.Provide(typeName);
 
             return func(ref reader, serializationModeKind, deserializeDerivedProperties, this.loggerFactory);
-        }
-
-        /// <summary>
-        /// Reads ahead for the <c>@type</c> discriminator of the json object that the reader is positioned on
-        /// </summary>
-        /// <param name="reader">
-        /// A copy of the <see cref="Utf8JsonReader"/>, positioned on the <see cref="JsonTokenType.StartObject"/>
-        /// of the json object
-        /// </param>
-        /// <param name="typeName">
-        /// The value of the <c>@type</c> property, which is null when the property is present but null
-        /// </param>
-        /// <returns>
-        /// true when the object carries a <c>@type</c> property, false otherwise
-        /// </returns>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when the <c>@type</c> property is neither a string nor null
-        /// </exception>
-        /// <remarks>
-        /// The reader is taken by value on purpose: <see cref="Utf8JsonReader"/> is a struct, so the copy is a
-        /// free snapshot and the caller's reader stays parked on the <see cref="JsonTokenType.StartObject"/>.
-        /// The SysML v2 API does not guarantee that <c>@type</c> comes first — it is the first property of the
-        /// elements payload but the second of the projects payload — so the scan has to tolerate any position.
-        /// </remarks>
-        private static bool TryPeekTypeName(Utf8JsonReader reader, out string typeName)
-        {
-            typeName = null;
-
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
-            {
-                if (reader.ValueTextEquals("@type"u8))
-                {
-                    reader.Read();
-
-                    if (reader.TokenType == JsonTokenType.Null)
-                    {
-                        return true;
-                    }
-
-                    if (reader.TokenType != JsonTokenType.String)
-                    {
-                        throw new InvalidOperationException($"The requested operation requires an element of type 'String', but the target element has type '{reader.TokenType}'.");
-                    }
-
-                    typeName = reader.GetString();
-
-                    return true;
-                }
-
-                reader.Read();
-                reader.Skip();
-            }
-
-            return false;
         }
 
         /// <summary>

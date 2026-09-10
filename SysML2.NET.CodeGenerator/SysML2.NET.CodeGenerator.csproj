@@ -263,13 +263,19 @@
     <None Update="Templates\OpenAPI\psm-enumeration-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\OpenAPI\psm-enumeration-extensions-openapi-template.hbs">
+    <None Update="Templates\OpenAPI\psm-enumprovider-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\OpenAPI\psm-json-serializer-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\OpenAPI\psm-json-serialization-provider-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-json-deserializer-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-json-deserialization-provider-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

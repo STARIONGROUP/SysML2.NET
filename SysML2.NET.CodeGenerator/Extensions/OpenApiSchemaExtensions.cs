@@ -23,6 +23,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using Microsoft.OpenApi;
 
@@ -219,6 +220,32 @@ namespace SysML2.NET.CodeGenerator.Extensions
             return schema.Enum is null
                 ? []
                 : schema.Enum.Select(value => value.GetValue<string>()).ToList();
+        }
+
+        /// <summary>
+        /// Queries the length in UTF-8 bytes of the longest allowed value declared by the schema
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>The length of the longest allowed value, or zero when the schema declares none.</returns>
+        public static int QueryLongestEnumerationValueByteLength(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            var byteLengths = schema.QueryEnumerationValues().Select(QueryEnumerationValueByteLength).ToList();
+
+            return byteLengths.Count == 0 ? 0 : byteLengths.Max();
+        }
+
+        /// <summary>
+        /// Queries the length in UTF-8 bytes of an allowed value
+        /// </summary>
+        /// <param name="enumerationValue">The allowed value as it appears in the schema.</param>
+        /// <returns>The length in UTF-8 bytes.</returns>
+        public static int QueryEnumerationValueByteLength(string enumerationValue)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(enumerationValue);
+
+            return Encoding.UTF8.GetByteCount(enumerationValue);
         }
 
         /// <summary>

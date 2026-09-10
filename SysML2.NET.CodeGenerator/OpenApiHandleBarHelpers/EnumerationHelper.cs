@@ -21,6 +21,7 @@
 namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
 {
     using System;
+    using System.Globalization;
 
     using HandlebarsDotNet;
 
@@ -65,6 +66,42 @@ namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
                 var enumerationValue = arguments[0] as string ?? throw new ArgumentException("supposed to be an enumeration value");
 
                 writer.WriteSafeString(OpenApiSchemaExtensions.QueryEnumerationLiteralName(enumerationValue));
+            });
+
+            handlebars.RegisterHelper("Enumeration.WriteValueLength", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#Enumeration.WriteValueLength}} helper must have exactly one argument");
+                }
+
+                var enumerationValue = arguments[0] as string ?? throw new ArgumentException("supposed to be an enumeration value");
+
+                writer.WriteSafeString(enumerationValue.Length.ToString(CultureInfo.InvariantCulture));
+            });
+
+            handlebars.RegisterHelper("Enumeration.WriteValueByteLength", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#Enumeration.WriteValueByteLength}} helper must have exactly one argument");
+                }
+
+                var enumerationValue = arguments[0] as string ?? throw new ArgumentException("supposed to be an enumeration value");
+
+                writer.WriteSafeString(OpenApiSchemaExtensions.QueryEnumerationValueByteLength(enumerationValue).ToString(CultureInfo.InvariantCulture));
+            });
+
+            handlebars.RegisterHelper("Enumeration.WriteLongestValueByteLength", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#Enumeration.WriteLongestValueByteLength}} helper must have exactly one argument");
+                }
+
+                var schema = arguments[0] as IOpenApiSchema ?? throw new ArgumentException("supposed to be IOpenApiSchema");
+
+                writer.WriteSafeString(schema.QueryLongestEnumerationValueByteLength().ToString(CultureInfo.InvariantCulture));
             });
         }
     }
