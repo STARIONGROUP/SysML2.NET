@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -53,6 +55,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStep.behavior))]
         internal static List<IBehavior> ComputeBehavior(this IStep stepSubject)
         {
             return stepSubject == null
@@ -69,6 +72,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStep.parameter))]
         internal static List<IFeature> ComputeParameter(this IStep stepSubject)
         {
             return stepSubject == null

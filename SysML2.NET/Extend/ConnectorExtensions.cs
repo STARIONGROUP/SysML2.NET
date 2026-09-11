@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
@@ -43,6 +45,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnector.association))]
         internal static List<IAssociation> ComputeAssociation(this IConnector connectorSubject)
         {
             return connectorSubject == null
@@ -59,6 +62,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnector.connectorEnd))]
         internal static List<IFeature> ComputeConnectorEnd(this IConnector connectorSubject)
         {
             return connectorSubject == null
@@ -92,6 +96,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnector.defaultFeaturingType))]
         internal static IType ComputeDefaultFeaturingType(this IConnector connectorSubject)
         {
             if (connectorSubject == null)
@@ -142,6 +147,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnector.relatedFeature))]
         internal static List<IFeature> ComputeRelatedFeature(this IConnector connectorSubject)
         {
             return connectorSubject == null
@@ -170,6 +176,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnector.sourceFeature))]
         internal static IFeature ComputeSourceFeature(this IConnector connectorSubject)
         {
             if (connectorSubject == null)
@@ -203,6 +210,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnector.targetFeature))]
         internal static List<IFeature> ComputeTargetFeature(this IConnector connectorSubject)
         {
             if (connectorSubject == null)

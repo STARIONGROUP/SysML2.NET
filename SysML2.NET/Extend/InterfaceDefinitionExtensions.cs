@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.Ports;
 
     /// <summary>
@@ -41,6 +43,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IInterfaceDefinition.interfaceEnd))]
         internal static List<IPortUsage> ComputeInterfaceEnd(this IInterfaceDefinition interfaceDefinitionSubject)
         {
             return interfaceDefinitionSubject == null

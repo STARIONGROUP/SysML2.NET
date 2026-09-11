@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -83,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IVerificationCaseDefinition.verifiedRequirement))]
         internal static List<IRequirementUsage> ComputeVerifiedRequirement(this IVerificationCaseDefinition verificationCaseDefinitionSubject)
         {
             if (verificationCaseDefinitionSubject == null)

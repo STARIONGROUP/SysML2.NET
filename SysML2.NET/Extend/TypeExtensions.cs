@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -53,6 +55,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.differencingType))]
         internal static List<IType> ComputeDifferencingType(this IType typeSubject)
         {
             return typeSubject == null
@@ -75,6 +78,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.directedFeature))]
         internal static List<IFeature> ComputeDirectedFeature(this IType typeSubject)
         {
             return typeSubject == null
@@ -97,6 +101,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.endFeature))]
         internal static List<IFeature> ComputeEndFeature(this IType typeSubject)
         {
             return typeSubject == null
@@ -119,6 +124,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.feature))]
         internal static List<IFeature> ComputeFeature(this IType typeSubject)
         {
             return typeSubject == null
@@ -142,6 +148,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.featureMembership))]
         internal static List<IFeatureMembership> ComputeFeatureMembership(this IType typeSubject)
         {
             return typeSubject == null
@@ -165,6 +172,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.inheritedFeature))]
         internal static List<IFeature> ComputeInheritedFeature(this IType typeSubject)
         {
             return typeSubject == null
@@ -187,6 +195,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.inheritedMembership))]
         internal static List<IMembership> ComputeInheritedMembership(this IType typeSubject)
         {
             return typeSubject == null
@@ -212,6 +221,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.input))]
         internal static List<IFeature> ComputeInput(this IType typeSubject)
         {
             return typeSubject == null
@@ -234,6 +244,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.intersectingType))]
         internal static List<IType> ComputeIntersectingType(this IType typeSubject)
         {
             return typeSubject == null
@@ -250,6 +261,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.isConjugated))]
         internal static bool ComputeIsConjugated(this IType typeSubject)
         {
             return typeSubject == null
@@ -277,6 +289,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.multiplicity))]
         internal static IMultiplicity ComputeMultiplicity(this IType typeSubject)
         {
             return typeSubject == null
@@ -302,6 +315,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.output))]
         internal static List<IFeature> ComputeOutput(this IType typeSubject)
         {
             return typeSubject == null
@@ -328,6 +342,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedConjugator))]
         internal static IConjugation ComputeOwnedConjugator(this IType typeSubject)
         {
             return typeSubject == null
@@ -351,6 +366,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedDifferencing))]
         internal static List<IDifferencing> ComputeOwnedDifferencing(this IType typeSubject)
         {
             return typeSubject == null
@@ -374,6 +390,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedDisjoining))]
         internal static List<IDisjoining> ComputeOwnedDisjoining(this IType typeSubject)
         {
             return typeSubject == null
@@ -396,6 +413,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedEndFeature))]
         internal static List<IFeature> ComputeOwnedEndFeature(this IType typeSubject)
         {
             return typeSubject == null
@@ -418,6 +436,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedFeature))]
         internal static List<IFeature> ComputeOwnedFeature(this IType typeSubject)
         {
             return typeSubject == null
@@ -440,6 +459,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedFeatureMembership))]
         internal static List<IFeatureMembership> ComputeOwnedFeatureMembership(this IType typeSubject)
         {
             return typeSubject == null
@@ -462,6 +482,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedIntersecting))]
         internal static List<IIntersecting> ComputeOwnedIntersecting(this IType typeSubject)
         {
             return typeSubject == null
@@ -485,6 +506,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedSpecialization))]
         internal static List<ISpecialization> ComputeOwnedSpecialization(this IType typeSubject)
         {
             return typeSubject == null
@@ -508,6 +530,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.ownedUnioning))]
         internal static List<IUnioning> ComputeOwnedUnioning(this IType typeSubject)
         {
             return typeSubject == null
@@ -530,6 +553,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IType.unioningType))]
         internal static List<IType> ComputeUnioningType(this IType typeSubject)
         {
             return typeSubject == null
@@ -567,6 +591,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IType.VisibleMemberships))]
         internal static List<IMembership> ComputeRedefinedVisibleMembershipsOperation(this IType typeSubject, List<INamespace> excluded, bool isRecursive, bool includeAll)
         {
             if (typeSubject == null)
@@ -615,6 +640,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IType.InheritedMemberships))]
         internal static List<IMembership> ComputeInheritedMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
             if (typeSubject == null)
@@ -867,6 +893,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IType.InheritableMemberships))]
         internal static List<IMembership> ComputeInheritableMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
             if (typeSubject == null)
@@ -916,6 +943,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IType.NonPrivateMemberships))]
         internal static List<IMembership> ComputeNonPrivateMembershipsOperation(this IType typeSubject, List<INamespace> excludedNamespaces, List<IType> excludedTypes, bool excludeImplied)
         {
             if (typeSubject == null)
@@ -959,6 +987,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IType.RemoveRedefinedFeatures))]
         internal static List<IMembership> ComputeRemoveRedefinedFeaturesOperation(this IType typeSubject, List<IMembership> memberships)
         {
             if (typeSubject == null)
@@ -1030,6 +1059,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IType.AllRedefinedFeaturesOf))]
         internal static List<IFeature> ComputeAllRedefinedFeaturesOfOperation(this IType typeSubject, IMembership membership)
         {
             if (typeSubject == null)
@@ -1070,6 +1100,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
+        [Operation(name: nameof(IType.DirectionOf))]
         internal static FeatureDirectionKind? ComputeDirectionOfOperation(this IType typeSubject, IFeature feature)
         {
             if (typeSubject == null)
@@ -1122,6 +1153,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
+        [Operation(name: nameof(IType.DirectionOfExcluding))]
         internal static FeatureDirectionKind? ComputeDirectionOfExcludingOperation(this IType typeSubject, IFeature feature, List<IType> excluded)
         {
             if (typeSubject == null)
@@ -1198,6 +1230,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(IType.Supertypes))]
         internal static List<IType> ComputeSupertypesOperation(this IType typeSubject, bool excludeImplied)
         {
             if (typeSubject == null)
@@ -1235,6 +1268,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(IType.AllSupertypes))]
         internal static List<IType> ComputeAllSupertypesOperation(this IType typeSubject)
         {
             if (typeSubject == null)
@@ -1283,6 +1317,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IType.Specializes))]
         internal static bool ComputeSpecializesOperation(this IType typeSubject, IType supertype)
         {
             if (typeSubject == null)
@@ -1327,6 +1362,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IType.SpecializesFromLibrary))]
         internal static bool ComputeSpecializesFromLibraryOperation(this IType typeSubject, string libraryTypeName)
         {
             if (typeSubject == null)
@@ -1363,6 +1399,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IType.IsCompatibleWith))]
         internal static bool ComputeIsCompatibleWithOperation(this IType typeSubject, IType otherType)
         {
             if (typeSubject == null)
@@ -1399,6 +1436,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// The expected collection of <see cref="IMultiplicity" />
         /// </returns>
+        [Operation(name: nameof(IType.Multiplicities))]
         internal static List<IMultiplicity> ComputeMultiplicitiesOperation(this IType typeSubject)
         {
             if (typeSubject == null)

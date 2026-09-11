@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConjugatedPortDefinition.originalPortDefinition))]
         internal static IPortDefinition ComputeOriginalPortDefinition(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
             if (conjugatedPortDefinitionSubject == null)
@@ -61,6 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConjugatedPortDefinition.ownedPortConjugator))]
         internal static IPortConjugation ComputeOwnedPortConjugator(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
             if (conjugatedPortDefinitionSubject == null)
@@ -91,6 +95,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IConjugatedPortDefinition.EffectiveName))]
         internal static string ComputeRedefinedEffectiveNameOperation(this IConjugatedPortDefinition conjugatedPortDefinitionSubject)
         {
             if (conjugatedPortDefinitionSubject == null)

@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -42,6 +44,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConjugation.owningType))]
         internal static IType ComputeOwningType(this IConjugation conjugationSubject)
         {
             return conjugationSubject == null

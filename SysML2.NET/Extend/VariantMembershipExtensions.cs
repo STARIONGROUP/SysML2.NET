@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Extensions;
 
     /// <summary>
@@ -39,6 +41,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IVariantMembership.ownedVariantUsage))]
         internal static IUsage ComputeOwnedVariantUsage(this IVariantMembership variantMembershipSubject)
         {
             if (variantMembershipSubject == null)

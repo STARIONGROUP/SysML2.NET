@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -49,6 +51,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementVerificationMembership.ownedRequirement))]
         internal static IRequirementUsage ComputeOwnedRequirement(this IRequirementVerificationMembership requirementVerificationMembershipSubject)
         {
             if (requirementVerificationMembershipSubject == null)
@@ -68,6 +71,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementVerificationMembership.verifiedRequirement))]
         internal static IRequirementUsage ComputeVerifiedRequirement(this IRequirementVerificationMembership requirementVerificationMembershipSubject)
         {
             if (requirementVerificationMembershipSubject == null)

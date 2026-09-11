@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -84,6 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionUsage.effectAction))]
         internal static List<IActionUsage> ComputeEffectAction(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -116,6 +119,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionUsage.guardExpression))]
         internal static List<IExpression> ComputeGuardExpression(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -148,6 +152,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionUsage.source))]
         internal static IActionUsage ComputeSource(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -175,6 +180,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionUsage.succession))]
         internal static ISuccession ComputeSuccession(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -208,6 +214,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionUsage.target))]
         internal static IActionUsage ComputeTarget(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -247,6 +254,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionUsage.triggerAction))]
         internal static List<IAcceptActionUsage> ComputeTriggerAction(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -278,6 +286,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="IReferenceUsage" />
         /// </returns>
+        [Operation(name: nameof(ITransitionUsage.TriggerPayloadParameter))]
         internal static IReferenceUsage ComputeTriggerPayloadParameterOperation(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)
@@ -315,6 +324,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(ITransitionUsage.SourceFeature))]
         internal static IFeature ComputeSourceFeatureOperation(this ITransitionUsage transitionUsageSubject)
         {
             if (transitionUsageSubject == null)

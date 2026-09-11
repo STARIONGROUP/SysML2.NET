@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -81,6 +83,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IEventOccurrenceUsage.eventOccurrence))]
         internal static IOccurrenceUsage ComputeEventOccurrence(this IEventOccurrenceUsage eventOccurrenceUsageSubject)
         {
             if (eventOccurrenceUsageSubject == null)
@@ -104,6 +107,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IEventOccurrenceUsage.isReference))]
         internal static bool ComputeIsReference(this IEventOccurrenceUsage eventOccurrenceUsageSubject)
         {
             // EventOccurrenceUsage::isReference is always true (SysML 2.0 spec, Clause 8.3.9.2).

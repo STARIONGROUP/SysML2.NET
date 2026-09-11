@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -72,6 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IPerformActionUsage.performedAction))]
         internal static IActionUsage ComputePerformedAction(this IPerformActionUsage performActionUsageSubject)
         {
             if (performActionUsageSubject == null)
@@ -105,6 +108,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IPerformActionUsage.NamingFeature))]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IPerformActionUsage performActionUsageSubject)
         {
             if (performActionUsageSubject == null)

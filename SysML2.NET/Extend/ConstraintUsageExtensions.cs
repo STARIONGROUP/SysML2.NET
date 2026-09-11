@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -84,6 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// Thrown when more than one <see cref="IFeatureTyping"/> targets an <see cref="IPredicate"/>
         /// (upper-bound violation against the derived <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IConstraintUsage.constraintDefinition))]
         internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsageSubject)
         {
             return constraintUsageSubject == null
@@ -114,6 +117,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IConstraintUsage.NamingFeature))]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IConstraintUsage constraintUsageSubject)
         {
             if (constraintUsageSubject == null)
@@ -150,6 +154,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IConstraintUsage.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IConstraintUsage constraintUsageSubject, List<IFeature> visited)
         {
             if (constraintUsageSubject == null)

@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -51,6 +53,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFunction.expression))]
         internal static List<IExpression> ComputeExpression(this IFunction functionSubject)
         {
             return functionSubject == null
@@ -75,6 +78,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="functionSubject"/> is <c>null</c>.
         /// </exception>
+        [DerivedProperty(name: nameof(IFunction.isModelLevelEvaluable))]
         internal static bool ComputeIsModelLevelEvaluable(this IFunction functionSubject)
         {
             return functionSubject == null
@@ -104,6 +108,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFunction.result))]
         internal static IFeature ComputeResult(this IFunction functionSubject)
         {
             if (functionSubject == null)

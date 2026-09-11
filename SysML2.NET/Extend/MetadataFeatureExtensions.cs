@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -53,6 +55,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMetadataFeature.metaclass))]
         internal static IMetaclass ComputeMetaclass(this IMetadataFeature metadataFeatureSubject)
         {
             if (metadataFeatureSubject == null)
@@ -97,6 +100,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
+        [Operation(name: nameof(IMetadataFeature.EvaluateFeature))]
         internal static List<IElement> ComputeEvaluateFeatureOperation(this IMetadataFeature metadataFeatureSubject, IFeature baseFeature)
         {
             if (metadataFeatureSubject == null)
@@ -150,6 +154,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IMetadataFeature.IsSemantic))]
         internal static bool ComputeIsSemanticOperation(this IMetadataFeature metadataFeatureSubject)
         {
             return metadataFeatureSubject == null
@@ -173,6 +178,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IMetadataFeature.IsSyntactic))]
         internal static bool ComputeIsSyntacticOperation(this IMetadataFeature metadataFeatureSubject)
         {
             return metadataFeatureSubject == null
@@ -201,6 +207,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
         /// The expected <see cref="IElement" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [Operation(name: nameof(IMetadataFeature.SyntaxElement))]
         internal static IElement ComputeSyntaxElementOperation(this IMetadataFeature metadataFeatureSubject)
         {
             // Implementation deferred: requires a MOF reflective metaclass registry

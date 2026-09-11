@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -83,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IOccurrenceUsage.individualDefinition))]
         internal static IOccurrenceDefinition ComputeIndividualDefinition(this IOccurrenceUsage occurrenceUsageSubject)
         {
             return occurrenceUsageSubject == null
@@ -101,6 +104,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IOccurrenceUsage.occurrenceDefinition))]
         internal static List<IClass> ComputeOccurrenceDefinition(this IOccurrenceUsage occurrenceUsageSubject)
         {
             // occurrenceDefinition redefines Usage::definition -> Feature::type: reading subject.type

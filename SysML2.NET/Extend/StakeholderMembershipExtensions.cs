@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStakeholderMembership.ownedStakeholderParameter))]
         internal static IPartUsage ComputeOwnedStakeholderParameter(this IStakeholderMembership stakeholderMembershipSubject)
         {
             if (stakeholderMembershipSubject == null)

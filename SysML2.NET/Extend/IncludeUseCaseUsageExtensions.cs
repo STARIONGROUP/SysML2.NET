@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -72,6 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IIncludeUseCaseUsage.useCaseIncluded))]
         internal static IUseCaseUsage ComputeUseCaseIncluded(this IIncludeUseCaseUsage includeUseCaseUsageSubject)
         {
             if (includeUseCaseUsageSubject == null)

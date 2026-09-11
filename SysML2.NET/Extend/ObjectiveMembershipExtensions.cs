@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IObjectiveMembership.ownedObjectiveRequirement))]
         internal static IRequirementUsage ComputeOwnedObjectiveRequirement(this IObjectiveMembership objectiveMembershipSubject)
         {
             if (objectiveMembershipSubject == null)

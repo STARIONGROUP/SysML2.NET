@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -84,6 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IWhileLoopActionUsage.untilArgument))]
         internal static IExpression ComputeUntilArgument(this IWhileLoopActionUsage whileLoopActionUsageSubject)
         {
             return whileLoopActionUsageSubject == null
@@ -112,6 +115,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IWhileLoopActionUsage.whileArgument))]
         internal static IExpression ComputeWhileArgument(this IWhileLoopActionUsage whileLoopActionUsageSubject)
         {
             return whileLoopActionUsageSubject == null

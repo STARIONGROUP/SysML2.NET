@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -44,6 +46,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(ISubclassification.owningClassifier))]
         internal static IClassifier ComputeOwningClassifier(this ISubclassification subclassificationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

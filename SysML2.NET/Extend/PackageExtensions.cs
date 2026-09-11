@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IPackage.filterCondition))]
         internal static List<IExpression> ComputeFilterCondition(this IPackage packageSubject)
         {
             return packageSubject == null ? throw new ArgumentNullException(nameof(packageSubject)) : [..packageSubject.ownedMembership.OfType<IElementFilterMembership>().Select(x => x.condition)];
@@ -73,6 +76,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IPackage.ImportedMemberships))]
         internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IPackage packageSubject, List<INamespace> excluded)
         {
             if (packageSubject == null)
@@ -113,6 +117,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IPackage.IncludeAsMember))]
         internal static bool ComputeIncludeAsMemberOperation(this IPackage packageSubject, IElement element)
         {
             if (packageSubject == null)

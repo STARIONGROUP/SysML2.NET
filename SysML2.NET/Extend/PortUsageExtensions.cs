@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
 
     /// <summary>
@@ -41,6 +43,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IPortUsage.portDefinition))]
         internal static List<IPortDefinition> ComputePortDefinition(this IPortUsage portUsageSubject)
         {
             return portUsageSubject == null

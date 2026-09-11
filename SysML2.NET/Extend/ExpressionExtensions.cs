@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -55,6 +57,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Thrown when more than one <see cref="IType"/> on the subject is an <see cref="IFunction"/>
         /// (upper-bound violation against the derived <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IExpression.function))]
         internal static IFunction ComputeFunction(this IExpression expressionSubject)
         {
             return expressionSubject == null
@@ -77,6 +80,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IExpression.isModelLevelEvaluable))]
         internal static bool ComputeIsModelLevelEvaluable(this IExpression expressionSubject)
         {
             return expressionSubject?.ModelLevelEvaluable([]) ?? throw new ArgumentNullException(nameof(expressionSubject));
@@ -104,6 +108,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IExpression.result))]
         internal static IFeature ComputeResult(this IExpression expressionSubject)
         {
             if (expressionSubject == null)
@@ -149,6 +154,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IExpression.ModelLevelEvaluable))]
         internal static bool ComputeModelLevelEvaluableOperation(this IExpression expressionSubject, List<IFeature> visited)
         {
             if (expressionSubject == null)
@@ -217,6 +223,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
+        [Operation(name: nameof(IExpression.Evaluate))]
         internal static List<IElement> ComputeEvaluateOperation(this IExpression expressionSubject, IElement target)
         {
             if (expressionSubject == null)
@@ -256,6 +263,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IExpression.CheckCondition))]
         internal static bool ComputeCheckConditionOperation(this IExpression expressionSubject, IElement target)
         {
             if (expressionSubject == null)

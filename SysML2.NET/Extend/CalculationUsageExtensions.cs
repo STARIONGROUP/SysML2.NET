@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -84,6 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// Thrown when more than one <see cref="IFeatureTyping"/> targets an <see cref="IFunction"/>
         /// (upper-bound violation against the derived <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(ICalculationUsage.calculationDefinition))]
         internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsageSubject)
         {
             return calculationUsageSubject == null
@@ -109,6 +112,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(ICalculationUsage.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ICalculationUsage calculationUsageSubject, List<IFeature> visited)
         {
             if (calculationUsageSubject == null)

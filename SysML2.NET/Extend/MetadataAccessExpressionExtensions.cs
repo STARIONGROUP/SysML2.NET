@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
@@ -47,6 +49,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMetadataAccessExpression.referencedElement))]
         internal static IElement ComputeReferencedElement(this IMetadataAccessExpression metadataAccessExpressionSubject)
         {
             if (metadataAccessExpressionSubject == null)
@@ -86,6 +89,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IMetadataAccessExpression.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IMetadataAccessExpression metadataAccessExpressionSubject, List<IFeature> visited)
         {
             if (metadataAccessExpressionSubject == null)
@@ -121,6 +125,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
+        [Operation(name: nameof(IMetadataAccessExpression.Evaluate))]
         internal static List<IElement> ComputeRedefinedEvaluateOperation(this IMetadataAccessExpression metadataAccessExpressionSubject, IElement target)
         {
             if (metadataAccessExpressionSubject == null)
@@ -158,6 +163,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The expected <see cref="IMetadataFeature" />
         /// </returns>
         [ExcludeFromCodeCoverage]
+        [Operation(name: nameof(IMetadataAccessExpression.MetaclassFeature))]
         internal static IMetadataFeature ComputeMetaclassFeatureOperation(this IMetadataAccessExpression metadataAccessExpressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
