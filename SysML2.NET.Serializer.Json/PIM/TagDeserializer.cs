@@ -89,7 +89,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the alias Json property was not found in the Branch: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the alias Json property was not found in the Branch: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
@@ -98,7 +101,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the created Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the created Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -111,7 +117,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the name Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
@@ -124,7 +133,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the name Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("owningProject"u8, out JsonElement owningProjectProperty))
@@ -147,7 +159,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the owningProject Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the owningProject Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
@@ -156,7 +171,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the resourceIdentifier Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the resourceIdentifier Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("taggedCommit"u8, out JsonElement taggedCommitProperty))
@@ -172,7 +190,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the taggedCommit Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the taggedCommit Json property was not found in the Tag: {Id}", dtoInstance.Id);
+                }
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: Tag");

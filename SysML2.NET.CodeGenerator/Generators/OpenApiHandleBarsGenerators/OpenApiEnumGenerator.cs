@@ -42,11 +42,6 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         private const string EnumerationTemplateName = "psm-enumeration-openapi-template";
 
         /// <summary>
-        /// The name of the template that generates the extension methods of an enumeration
-        /// </summary>
-        private const string EnumerationExtensionsTemplateName = "psm-enumeration-extensions-openapi-template";
-
-        /// <summary>
         /// Generates the enumerations declared inline by the schemas of the OpenAPI document
         /// </summary>
         /// <param name="openApiDocument">
@@ -124,7 +119,6 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         protected override void RegisterTemplates()
         {
             this.RegisterTemplate(EnumerationTemplateName);
-            this.RegisterTemplate(EnumerationExtensionsTemplateName);
         }
 
         /// <summary>
@@ -186,10 +180,6 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
             var generatedCode = this.CodeCleanup(this.Templates[EnumerationTemplateName](enumeration));
 
             await WriteAsync(generatedCode, outputDirectory, $"{enumeration.Key}.cs");
-
-            var generatedExtensions = this.CodeCleanup(this.Templates[EnumerationExtensionsTemplateName](enumeration));
-
-            await WriteAsync(generatedExtensions, outputDirectory, $"{enumeration.Key}Extensions.cs");
 
             return generatedCode;
         }

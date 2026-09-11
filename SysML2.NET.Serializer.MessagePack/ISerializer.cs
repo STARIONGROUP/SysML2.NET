@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.MessagePack
     using System.Threading.Tasks;
 
     using SysML2.NET.Common;
+    using SysML2.NET.PSM.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
@@ -34,6 +35,54 @@ namespace SysML2.NET.Serializer.MessagePack
     /// </summary>
     public interface ISerializer
     {
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IRequest}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IRequest}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        void SerializeRequest(IEnumerable<IRequest> dataItems, Stream stream);
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IResponse}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IResponse}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        void SerializeResponse(IEnumerable<IResponse> dataItems, Stream stream);
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IRequest}"/> as MessagePack to a target <see cref="IBufferWriter{Byte}"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IRequest}"/> that shall be serialized</param>
+        /// <param name="writer">The target <see cref="IBufferWriter{Byte}"/>.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        void SerializeRequestToBufferWriter(IEnumerable<IRequest> dataItems, IBufferWriter<byte> writer, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IResponse}"/> as MessagePack to a target <see cref="IBufferWriter{Byte}"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IResponse}"/> that shall be serialized</param>
+        /// <param name="writer">The target <see cref="IBufferWriter{Byte}"/>.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        void SerializeResponseToBufferWriter(IEnumerable<IResponse> dataItems, IBufferWriter<byte> writer, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IEnumerable{IRequest}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IRequest}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        Task SerializeRequestAsync(IEnumerable<IRequest> dataItems, Stream stream, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IEnumerable{IResponse}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IResponse}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        Task SerializeResponseAsync(IEnumerable<IResponse> dataItems, Stream stream, CancellationToken cancellationToken);
+
         /// <summary>
         /// Serialize an <see cref="IEnumerable{IData}"/> as MessagePack to a target <see cref="Stream"/>
         /// </summary>

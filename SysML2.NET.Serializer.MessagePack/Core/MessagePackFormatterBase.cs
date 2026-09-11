@@ -145,5 +145,21 @@ namespace SysML2.NET.Serializer.MessagePack.Core
             seq.CopyTo(tmp);
             return new Guid(tmp);
         }
+
+        /// <summary>
+        /// Reads a <see cref="Uri"/> that was written as a string, or nil.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="MessagePackReader"/> positioned on the value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Uri"/>, or <see langword="null"/> when the value is nil or empty.
+        /// </returns>
+        protected static Uri ReadUriOrNull(ref MessagePackReader reader)
+        {
+            var value = reader.ReadString();
+
+            return string.IsNullOrWhiteSpace(value) ? null : new Uri(value, UriKind.RelativeOrAbsolute);
+        }
     }
 }

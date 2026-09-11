@@ -48,121 +48,53 @@ namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
             ArgumentNullException.ThrowIfNull(queryElementWriterOverride);
 
             handlebars.RegisterHelper("Serializer.WriteInstanceName", (writer, _, arguments) =>
-                writer.WriteSafeString(QueryInstanceName(QuerySchemaName(arguments, 0))));
+                writer.WriteSafeString(HandleBarArguments.QueryInstanceName(arguments.QuerySchemaName(0))));
 
             handlebars.RegisterHelper("Property.WriteName", (writer, _, arguments) =>
-                writer.WriteSafeString(OpenApiSchemaExtensions.QueryPropertyName(QuerySchemaName(arguments, 0))));
+                writer.WriteSafeString(OpenApiSchemaExtensions.QueryPropertyName(arguments.QuerySchemaName(0))));
 
             handlebars.RegisterHelper("Property.WriteAccessor", (writer, _, arguments) =>
-                writer.WriteSafeString($"{QueryInstanceName(QuerySchemaName(arguments, 1))}.{OpenApiSchemaExtensions.QueryPropertyName(QuerySchemaName(arguments, 0))}"));
+                writer.WriteSafeString($"{HandleBarArguments.QueryInstanceName(arguments.QuerySchemaName(1))}.{OpenApiSchemaExtensions.QueryPropertyName(arguments.QuerySchemaName(0))}"));
 
             handlebars.RegisterHelper("Property.WriteReferencedSerializer", (writer, _, arguments) =>
-                writer.WriteSafeString($"{QueryPropertySchema(arguments).QueryTerminalReferenceName()}Serializer"));
+                writer.WriteSafeString($"{arguments.QueryPropertySchema().QueryTerminalReferenceName()}Serializer"));
+
+            handlebars.RegisterHelper("Property.WriteEnumerationProvider", (writer, _, arguments) =>
+                writer.WriteSafeString($"{OpenApiSchemaExtensions.QueryEnumerationTypeName(arguments.QuerySchemaName(1), arguments.QuerySchemaName(0))}Provider"));
 
             handlebars.RegisterHelper("Property.WriteElementWriter", (writer, _, arguments) =>
-                writer.WriteSafeString(queryElementWriterOverride(QuerySchemaName(arguments, 1), QuerySchemaName(arguments, 0))));
+                writer.WriteSafeString(queryElementWriterOverride(arguments.QuerySchemaName(1), arguments.QuerySchemaName(0))));
 
             handlebars.RegisterHelper("Property.QueryIsOverridden", (_, arguments) =>
-                queryElementWriterOverride(QuerySchemaName(arguments, 1), QuerySchemaName(arguments, 0)) is not null);
+                queryElementWriterOverride(arguments.QuerySchemaName(1), arguments.QuerySchemaName(0)) is not null);
 
             handlebars.RegisterHelper("Property.QueryIsCollection", (_, arguments) =>
-                QueryPropertySchema(arguments).QueryIsCollection());
+                arguments.QueryPropertySchema().QueryIsCollection());
 
             handlebars.RegisterHelper("Property.QueryIsIdentifiedReference", (_, arguments) =>
-                QueryPropertySchema(arguments).QueryIsIdentifiedReference());
+                arguments.QueryPropertySchema().QueryIsIdentifiedReference());
 
             handlebars.RegisterHelper("Property.QueryIsComposite", (_, arguments) =>
-                QueryPropertySchema(arguments).QueryIsCompositeReference());
+                arguments.QueryPropertySchema().QueryIsCompositeReference());
 
             handlebars.RegisterHelper("Property.QueryIsPolymorphic", (_, arguments) =>
-                QueryPropertySchema(arguments).QueryIsPolymorphicReference());
+                arguments.QueryPropertySchema().QueryIsPolymorphicReference());
 
             handlebars.RegisterHelper("Property.QueryIsEnumeration", (_, arguments) =>
-                QueryCoreTypeName(arguments) == OpenApiSchemaExtensions.QueryEnumerationTypeName(QuerySchemaName(arguments, 1), QuerySchemaName(arguments, 0)));
+                arguments.QueryCoreTypeName() == OpenApiSchemaExtensions.QueryEnumerationTypeName(arguments.QuerySchemaName(1), arguments.QuerySchemaName(0)));
 
-            handlebars.RegisterHelper("Property.QueryIsBoolean", (_, arguments) => QueryCoreTypeName(arguments) == "bool");
+            handlebars.RegisterHelper("Property.QueryIsBoolean", (_, arguments) => arguments.QueryCoreTypeName() == "bool");
 
-            handlebars.RegisterHelper("Property.QueryIsNumeric", (_, arguments) => QueryCoreTypeName(arguments) is "double" or "int");
+            handlebars.RegisterHelper("Property.QueryIsNumeric", (_, arguments) => arguments.QueryCoreTypeName() is "double" or "int");
 
-            handlebars.RegisterHelper("Property.QueryIsUri", (_, arguments) => QueryCoreTypeName(arguments) == "Uri");
+            handlebars.RegisterHelper("Property.QueryIsUri", (_, arguments) => arguments.QueryCoreTypeName() == "Uri");
 
             handlebars.RegisterHelper("Property.QueryIsNullableValue", (_, arguments) =>
             {
-                var propertySchema = QueryPropertySchema(arguments);
+                var propertySchema = arguments.QueryPropertySchema();
 
-                return propertySchema.QueryIsValueType() && propertySchema.QueryIsNullable(QueryIsRequired(arguments));
+                return propertySchema.QueryIsValueType() && propertySchema.QueryIsNullable(arguments.QueryIsRequired());
             });
-        }
-
-        /// <summary>
-        /// Queries the name of the local variable that holds the instance being serialized
-        /// </summary>
-        /// <param name="className">The name of the class that is serialized.</param>
-        /// <returns>The name of the local variable.</returns>
-        private static string QueryInstanceName(string className)
-        {
-            return char.ToLowerInvariant(className[0]) + className[1..];
-        }
-
-        /// <summary>
-        /// Queries a name from the helper arguments
-        /// </summary>
-        /// <param name="arguments">The helper arguments, being the property name, the class name and the class schema.</param>
-        /// <param name="index">The index of the argument.</param>
-        /// <returns>The name.</returns>
-        private static string QuerySchemaName(Arguments arguments, int index)
-        {
-            if (arguments.Length < index + 1)
-            {
-                throw new HandlebarsException("the helper is missing arguments");
-            }
-
-            return arguments[index] as string ?? throw new ArgumentException("supposed to be a name");
-        }
-
-        /// <summary>
-        /// Queries the schema of the property that the helper arguments identify
-        /// </summary>
-        /// <param name="arguments">The helper arguments, being the property name, the class name and the class schema.</param>
-        /// <returns>The <see cref="IOpenApiSchema"/> of the property.</returns>
-        private static IOpenApiSchema QueryPropertySchema(Arguments arguments)
-        {
-            return QueryClassSchema(arguments).Properties[QuerySchemaName(arguments, 0)];
-        }
-
-        /// <summary>
-        /// Queries the schema of the class that the helper arguments identify
-        /// </summary>
-        /// <param name="arguments">The helper arguments, being the property name, the class name and the class schema.</param>
-        /// <returns>The <see cref="IOpenApiSchema"/> of the class.</returns>
-        private static IOpenApiSchema QueryClassSchema(Arguments arguments)
-        {
-            if (arguments.Length != 3)
-            {
-                throw new HandlebarsException("the helper must have exactly three arguments");
-            }
-
-            return arguments[2] as IOpenApiSchema ?? throw new ArgumentException("supposed to be IOpenApiSchema");
-        }
-
-        /// <summary>
-        /// Queries whether the class lists the property as required
-        /// </summary>
-        /// <param name="arguments">The helper arguments, being the property name, the class name and the class schema.</param>
-        /// <returns>True when the property is required.</returns>
-        private static bool QueryIsRequired(Arguments arguments)
-        {
-            return QueryClassSchema(arguments).Required?.Contains(QuerySchemaName(arguments, 0)) == true;
-        }
-
-        /// <summary>
-        /// Queries the C# type of the property that the helper arguments identify
-        /// </summary>
-        /// <param name="arguments">The helper arguments, being the property name, the class name and the class schema.</param>
-        /// <returns>The C# type without its list wrapper or nullable annotation.</returns>
-        private static string QueryCoreTypeName(Arguments arguments)
-        {
-            return QueryPropertySchema(arguments).QueryCoreTypeName(QuerySchemaName(arguments, 1), QuerySchemaName(arguments, 0));
         }
     }
 }

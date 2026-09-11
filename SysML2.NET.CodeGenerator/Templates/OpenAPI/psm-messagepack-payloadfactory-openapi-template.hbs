@@ -1,0 +1,115 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.PayloadName}}Factory.cs" company="Starion Group S.A.">
+//
+//    Copyright (C) 2022-2026 Starion Group S.A.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.MessagePack.PSM
+{
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.PSM.DTO;
+
+    /// <summary>
+    /// The purpose of the <see cref="{{this.PayloadName}}Factory"/> class is to create an
+    /// instance of <see cref="{{this.PayloadName}}"/>
+    /// </summary>
+    internal static class {{this.PayloadName}}Factory
+    {
+        /// <summary>
+        /// Creates an instance of <see cref="{{this.PayloadName}}"/> from the provided <see cref="IEnumerable{{"{"}}{{this.MarkerInterface}}{{"}"}}"/>
+        /// </summary>
+        /// <param name="dataItems">
+        /// The <see cref="IEnumerable{{"{"}}{{this.MarkerInterface}}{{"}"}}"/> on the bases of which the <see cref="{{this.PayloadName}}"/> will be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="{{this.PayloadName}}"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the data items are null
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// Thrown when a data item is of a type that the envelope does not carry
+        /// </exception>
+        internal static {{this.PayloadName}} To{{this.PayloadName}}(this IEnumerable<{{this.MarkerInterface}}> dataItems)
+        {
+            if (dataItems == null)
+            {
+                throw new ArgumentNullException(nameof(dataItems));
+            }
+
+            var payload = new {{this.PayloadName}}
+            {
+                Created = DateTime.UtcNow
+            };
+
+            foreach (var dataItem in dataItems)
+            {
+                switch (dataItem)
+                {
+                    {{#each this.Entries as | entry |}}
+                    case {{entry.SchemaName}} {{entry.InstanceName}}:
+                        payload.{{entry.SchemaName}}.Add({{entry.InstanceName}});
+                        break;
+
+                    {{/each}}
+                    default:
+                        throw new NotSupportedException($"The {dataItem.GetType().Name} is not carried by the {{this.PayloadName}}.");
+                }
+            }
+
+            return payload;
+        }
+
+        /// <summary>
+        /// Flattens the <see cref="{{this.PayloadName}}"/> into the data items that it carries
+        /// </summary>
+        /// <param name="payload">
+        /// The <see cref="{{this.PayloadName}}"/> that is to be flattened
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{{"{"}}{{this.MarkerInterface}}{{"}"}}"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the payload is null
+        /// </exception>
+        internal static IEnumerable<{{this.MarkerInterface}}> ToDataItems(this {{this.PayloadName}} payload)
+        {
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
+
+            var dataItems = new List<{{this.MarkerInterface}}>();
+
+            {{#each this.Entries as | entry |}}
+            dataItems.AddRange(payload.{{entry.SchemaName}});
+            {{/each}}
+
+            return dataItems;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

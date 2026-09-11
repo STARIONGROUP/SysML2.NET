@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="Reader.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -136,7 +136,10 @@ namespace SysML2.NET.Kpar
 
             var sw = Stopwatch.StartNew();
             
-            this.logger.LogDebug("starting to read kpar at {Path}", filePath);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("starting to read kpar at {Path}", filePath);
+            }
             
             options ??= new ReadOptions();
             using var fileStream = File.OpenRead(filePath);
@@ -147,7 +150,10 @@ namespace SysML2.NET.Kpar
             
             this.Path = filePath;
             
-            this.logger.LogDebug("kpar at {Path} read in {ElapsedMilliseconds} [ms]", filePath, sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("kpar at {Path} read in {ElapsedMilliseconds} [ms]", filePath, sw.ElapsedMilliseconds);
+            }
 
             return archive;
         }
@@ -180,7 +186,10 @@ namespace SysML2.NET.Kpar
             using var zip = OpenZip(source);
             var archive = ReadFromZip(zip, options);
             
-            this.logger.LogDebug("kpar read in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("kpar read in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
 
             return archive;
         }
@@ -207,7 +216,10 @@ namespace SysML2.NET.Kpar
 
             var sw = Stopwatch.StartNew();
             
-            this.logger.LogDebug("starting to read kpar at {Path}", filePath);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("starting to read kpar at {Path}", filePath);
+            }
             
             options ??= new ReadOptions();
             
@@ -219,7 +231,10 @@ namespace SysML2.NET.Kpar
             
             this.Path = filePath;
             
-            this.logger.LogDebug("kpar at {Path} read in {ElapsedMilliseconds} [ms]", filePath, sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("kpar at {Path} read in {ElapsedMilliseconds} [ms]", filePath, sw.ElapsedMilliseconds);
+            }
 
             return archive;
         }
@@ -256,7 +271,10 @@ namespace SysML2.NET.Kpar
             
             var archive = await ReadFromZipAsync(zip, options, cancellationToken).ConfigureAwait(false);
 
-            this.logger.LogDebug("kpar read in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("kpar read in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
 
             return archive;
         }

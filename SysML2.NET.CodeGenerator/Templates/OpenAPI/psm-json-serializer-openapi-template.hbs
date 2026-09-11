@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Json.PSM
     using System;
     using System.Text.Json;
 
+    using SysML2.NET.Extensions.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.PSM.Enumerations;
     using SysML2.NET.Serializer.Json;
@@ -105,7 +106,7 @@ namespace SysML2.NET.Serializer.Json.PSM
                     {{else if (Property.QueryIsComposite propertyName ../this.Key ../this.Value)}}
                     {{#Property.WriteReferencedSerializer propertyName ../this.Key ../this.Value}}.Serialize(item, writer, serializationModeKind, includeDerivedProperties);
                     {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
-                    writer.WriteStringValue(item.ToWireValue());
+                    writer.WriteStringValue({{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes(item));
                     {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
                     writer.WriteBooleanValue(item);
                     {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}
@@ -160,7 +161,7 @@ namespace SysML2.NET.Serializer.Json.PSM
             if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
             {
                 {{#if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
-                writer.WriteString("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value.ToWireValue());
+                writer.WriteString("{{propertyName}}"u8, {{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value));
                 {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
                 writer.WriteBoolean("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
                 {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}
@@ -174,7 +175,7 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WriteNull("{{propertyName}}"u8);
             }
             {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
-            writer.WriteString("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.ToWireValue());
+            writer.WriteString("{{propertyName}}"u8, {{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}));
             {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
             writer.WriteBoolean("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
             {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}

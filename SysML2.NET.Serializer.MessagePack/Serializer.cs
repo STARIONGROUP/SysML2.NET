@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="Serializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -31,9 +31,11 @@ namespace SysML2.NET.Serializer.MessagePack
 
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
-    
+
     using SysML2.NET.Common;
+    using SysML2.NET.PSM.DTO;
     using SysML2.NET.Serializer.MessagePack.Core;
+    using SysML2.NET.Serializer.MessagePack.PSM;
 
     /// <summary>
     /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
@@ -88,7 +90,10 @@ namespace SysML2.NET.Serializer.MessagePack
 
             sw.Stop();
 
-            this.logger.LogDebug("SerializeToStream finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("SerializeToStream finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
 
         /// <summary>
@@ -125,7 +130,10 @@ namespace SysML2.NET.Serializer.MessagePack
 
             sw.Stop();
 
-            this.logger.LogDebug("SerializeToBufferWriter finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("SerializeToBufferWriter finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
 
         /// <summary>
@@ -147,12 +155,172 @@ namespace SysML2.NET.Serializer.MessagePack
                 throw new ArgumentNullException(nameof(dataItems));
             }
 
+            return stream == null ? throw new ArgumentNullException(nameof(stream)) : this.SerializeInternalAsync(dataItems, stream, cancellationToken);
+        }
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IRequest}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IRequest}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        public void SerializeRequest(IEnumerable<IRequest> dataItems, Stream stream)
+        {
+            this.SerializePayload(dataItems, stream, items => items.ToRequestPayload());
+        }
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IResponse}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IResponse}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        public void SerializeResponse(IEnumerable<IResponse> dataItems, Stream stream)
+        {
+            this.SerializePayload(dataItems, stream, items => items.ToResponsePayload());
+        }
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IRequest}"/> as MessagePack to a target <see cref="IBufferWriter{Byte}"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IRequest}"/> that shall be serialized</param>
+        /// <param name="writer">The target <see cref="IBufferWriter{Byte}"/>.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        public void SerializeRequestToBufferWriter(IEnumerable<IRequest> dataItems, IBufferWriter<byte> writer, CancellationToken cancellationToken = default)
+        {
+            this.SerializePayloadToBufferWriter(dataItems, writer, items => items.ToRequestPayload(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IResponse}"/> as MessagePack to a target <see cref="IBufferWriter{Byte}"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IResponse}"/> that shall be serialized</param>
+        /// <param name="writer">The target <see cref="IBufferWriter{Byte}"/>.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        public void SerializeResponseToBufferWriter(IEnumerable<IResponse> dataItems, IBufferWriter<byte> writer, CancellationToken cancellationToken = default)
+        {
+            this.SerializePayloadToBufferWriter(dataItems, writer, items => items.ToResponsePayload(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IEnumerable{IRequest}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IRequest}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        public Task SerializeRequestAsync(IEnumerable<IRequest> dataItems, Stream stream, CancellationToken cancellationToken)
+        {
+            return this.SerializePayloadAsync(dataItems, stream, items => items.ToRequestPayload(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IEnumerable{IResponse}"/> as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="dataItems">The <see cref="IEnumerable{IResponse}"/> that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        public Task SerializeResponseAsync(IEnumerable<IResponse> dataItems, Stream stream, CancellationToken cancellationToken)
+        {
+            return this.SerializePayloadAsync(dataItems, stream, items => items.ToResponsePayload(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Serialize a Systems Modeling API and Services envelope as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <typeparam name="TItem">The marker interface of the family.</typeparam>
+        /// <typeparam name="TPayload">The envelope that carries the family.</typeparam>
+        /// <param name="dataItems">The data items that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        /// <param name="toPayload">The function that buckets the data items into the envelope</param>
+        private void SerializePayload<TItem, TPayload>(IEnumerable<TItem> dataItems, Stream stream, Func<IEnumerable<TItem>, TPayload> toPayload)
+        {
+            if (dataItems == null)
+            {
+                throw new ArgumentNullException(nameof(dataItems));
+            }
+
             if (stream == null)
             {
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            return this.SerializeInternalAsync(dataItems, stream, cancellationToken);
+            var sw = Stopwatch.StartNew();
+
+            global::MessagePack.MessagePackSerializer.Serialize(stream, toPayload(dataItems), CreateSerializerOptions());
+
+            sw.Stop();
+
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("SerializePayload finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
+        }
+
+        /// <summary>
+        /// Serialize a Systems Modeling API and Services envelope as MessagePack to a target <see cref="IBufferWriter{Byte}"/>
+        /// </summary>
+        /// <typeparam name="TItem">The marker interface of the family.</typeparam>
+        /// <typeparam name="TPayload">The envelope that carries the family.</typeparam>
+        /// <param name="dataItems">The data items that shall be serialized</param>
+        /// <param name="writer">The target <see cref="IBufferWriter{Byte}"/></param>
+        /// <param name="toPayload">The function that buckets the data items into the envelope</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        private void SerializePayloadToBufferWriter<TItem, TPayload>(IEnumerable<TItem> dataItems, IBufferWriter<byte> writer, Func<IEnumerable<TItem>, TPayload> toPayload, CancellationToken cancellationToken)
+        {
+            if (dataItems == null)
+            {
+                throw new ArgumentNullException(nameof(dataItems));
+            }
+
+            if (writer == null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
+
+            var sw = Stopwatch.StartNew();
+
+            global::MessagePack.MessagePackSerializer.Serialize(writer, toPayload(dataItems), CreateSerializerOptions(), cancellationToken);
+
+            sw.Stop();
+
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("SerializePayloadToBufferWriter finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously serialize a Systems Modeling API and Services envelope as MessagePack to a target <see cref="Stream"/>
+        /// </summary>
+        /// <typeparam name="TItem">The marker interface of the family.</typeparam>
+        /// <typeparam name="TPayload">The envelope that carries the family.</typeparam>
+        /// <param name="dataItems">The data items that shall be serialized</param>
+        /// <param name="stream">The target <see cref="Stream"/></param>
+        /// <param name="toPayload">The function that buckets the data items into the envelope</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an awaitable <see cref="Task"/></returns>
+        private async Task SerializePayloadAsync<TItem, TPayload>(IEnumerable<TItem> dataItems, Stream stream, Func<IEnumerable<TItem>, TPayload> toPayload, CancellationToken cancellationToken)
+        {
+            if (dataItems == null)
+            {
+                throw new ArgumentNullException(nameof(dataItems));
+            }
+
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            var sw = Stopwatch.StartNew();
+
+            await global::MessagePack.MessagePackSerializer.SerializeAsync(stream, toPayload(dataItems), CreateSerializerOptions(), cancellationToken);
+
+            sw.Stop();
+
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("SerializePayloadAsync finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
 
         /// <summary>
@@ -179,7 +347,10 @@ namespace SysML2.NET.Serializer.MessagePack
 
             sw.Stop();
 
-            this.logger.LogDebug("SerializeInternalAsync finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("SerializeInternalAsync finished in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
     }
 }

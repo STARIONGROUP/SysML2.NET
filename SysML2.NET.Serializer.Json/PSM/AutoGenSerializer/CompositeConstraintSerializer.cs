@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Json.PSM
     using System;
     using System.Text.Json;
 
+    using SysML2.NET.Extensions.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.PSM.Enumerations;
     using SysML2.NET.Serializer.Json;
@@ -86,7 +87,7 @@ namespace SysML2.NET.Serializer.Json.PSM
 
             writer.WriteEndArray();
 
-            writer.WriteString("operator"u8, compositeConstraint.Operator.ToWireValue());
+            writer.WriteString("operator"u8, CompositeConstraintOperatorProvider.ToUtf8Bytes(compositeConstraint.Operator));
 
             writer.WriteEndObject();
         }

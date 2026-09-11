@@ -254,6 +254,59 @@ namespace SysML2.NET.Serializer.Json.Utility
         }
 
         /// <summary>
+        /// Reads ahead for the <c>@type</c> discriminator of the json object that the reader is positioned on.
+        /// </summary>
+        /// <param name="reader">
+        /// A copy of the <see cref="Utf8JsonReader"/>, positioned on the <see cref="JsonTokenType.StartObject"/>
+        /// of the json object.
+        /// </param>
+        /// <param name="typeName">
+        /// The value of the <c>@type</c> property, which is null when the property is present but null.
+        /// </param>
+        /// <returns>
+        /// true when the object carries a <c>@type</c> property, false otherwise.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the <c>@type</c> property is neither a string nor null.
+        /// </exception>
+        /// <remarks>
+        /// The reader is taken by value on purpose: <see cref="Utf8JsonReader"/> is a struct, so the copy is a
+        /// free snapshot and the caller's reader stays parked on the <see cref="JsonTokenType.StartObject"/>.
+        /// The SysML v2 API does not guarantee that <c>@type</c> comes first, so the scan tolerates any position.
+        /// </remarks>
+        public static bool TryPeekTypeName(Utf8JsonReader reader, out string typeName)
+        {
+            typeName = null;
+
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
+            {
+                if (reader.ValueTextEquals("@type"u8))
+                {
+                    reader.Read();
+
+                    if (reader.TokenType == JsonTokenType.Null)
+                    {
+                        return true;
+                    }
+
+                    if (reader.TokenType != JsonTokenType.String)
+                    {
+                        throw new InvalidOperationException($"The requested operation requires an element of type 'String', but the target element has type '{reader.TokenType}'.");
+                    }
+
+                    typeName = reader.GetString();
+
+                    return true;
+                }
+
+                reader.Read();
+                reader.Skip();
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Asserts that the reader is positioned on the start of an array.
         /// </summary>
         /// <param name="reader">

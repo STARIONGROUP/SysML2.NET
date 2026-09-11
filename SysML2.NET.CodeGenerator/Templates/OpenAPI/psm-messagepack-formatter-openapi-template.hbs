@@ -1,0 +1,372 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.Key}}MessagePackFormatter.cs" company="Starion Group S.A.">
+//
+//    Copyright (C) 2022-2026 Starion Group S.A.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.MessagePack.PSM
+{
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Extensions.PSM;
+    using SysML2.NET.PSM.DTO;
+    using SysML2.NET.Serializer.MessagePack.Core;
+
+    using global::MessagePack;
+    using global::MessagePack.Formatters;
+
+    /// <summary>
+    /// The purpose of the <see cref="{{this.Key}}MessagePackFormatter"/> is to provide
+    /// the contract for MessagePack serialization of the <see cref="{{this.Key}}"/> type
+    /// </summary>
+    public class {{this.Key}}MessagePackFormatter : MessagePackFormatterBase, IMessagePackFormatter<{{this.Key}}>
+    {
+        /// <summary>
+        /// Serializes a <see cref="{{this.Key}}"/> DTO.
+        /// </summary>
+        /// <param name="writer">
+        /// The <see cref="MessagePackWriter"/> to use when serializing the value.
+        /// </param>
+        /// <param name="{{#Serializer.WriteInstanceName this.Key}}">
+        /// The <see cref="{{this.Key}}"/> that is to be serialized.
+        /// </param>
+        /// <param name="options">
+        /// The serialization settings to use.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the DTO is null
+        /// </exception>
+        public void Serialize(ref MessagePackWriter writer, {{this.Key}} {{#Serializer.WriteInstanceName this.Key}}, MessagePackSerializerOptions options)
+        {
+            if ({{#Serializer.WriteInstanceName this.Key}} == null)
+            {
+                throw new ArgumentNullException(nameof({{#Serializer.WriteInstanceName this.Key}}), "The {{this.Key}} may not be null");
+            }
+
+            writer.WriteArrayHeader({{#Schema.WritePropertyCount this.Value this.Key}});
+
+            {{#each (Schema.QueryPropertyNames this.Value this.Key) as | propertyName |}}
+            {{#if (Property.QueryIsOverridden propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} == null)
+            {
+                writer.WriteArrayHeader(0);
+            }
+            else
+            {
+                writer.WriteArrayHeader({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Count);
+
+                foreach (var item in {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}})
+                {
+                    {{#Property.WriteElementWriter propertyName ../this.Key ../this.Value}}(ref writer, item);
+                }
+            }
+            {{else if (Property.QueryIsCollection propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} == null)
+            {
+                writer.WriteArrayHeader(0);
+            }
+            else
+            {
+                writer.WriteArrayHeader({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Count);
+
+                foreach (var item in {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}})
+                {
+                    {{#if (Property.QueryIsIdentifiedReference propertyName ../this.Key ../this.Value)}}
+                    WriteGuidBin16(ref writer, item);
+                    {{else if (Property.QueryIsPolymorphic propertyName ../this.Key ../this.Value)}}
+                    PsmMessagePackDispatcher.Write(ref writer, item, options);
+                    {{else if (Property.QueryIsComposite propertyName ../this.Key ../this.Value)}}
+                    options.Resolver.GetFormatterWithVerify<{{#Property.WriteElementType propertyName ../this.Key ../this.Value}}>().Serialize(ref writer, item, options);
+                    {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
+                    writer.WriteString({{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes(item));
+                    {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
+                    writer.Write(item);
+                    {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}
+                    writer.Write(item);
+                    {{else if (Property.QueryIsUri propertyName ../this.Key ../this.Value)}}
+                    writer.Write(item?.ToString());
+                    {{else}}
+                    writer.Write(item);
+                    {{/if}}
+                }
+            }
+            {{else if (Property.QueryIsIdentifiedReference propertyName ../this.Key ../this.Value)}}
+            {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
+            {
+                WriteGuidBin16(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            {{else}}
+            WriteGuidBin16(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+            {{/if}}
+            {{else if (Property.QueryIsPolymorphic propertyName ../this.Key ../this.Value)}}
+            PsmMessagePackDispatcher.Write(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}, options);
+            {{else if (Property.QueryIsComposite propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} == null)
+            {
+                writer.WriteNil();
+            }
+            else
+            {
+                options.Resolver.GetFormatterWithVerify<{{#Property.WriteElementType propertyName ../this.Key ../this.Value}}>().Serialize(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}, options);
+            }
+            {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
+            {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
+            {
+                writer.WriteString({{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value));
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            {{else}}
+            writer.WriteString({{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}));
+            {{/if}}
+            {{else if (Property.QueryIsGuid propertyName ../this.Key ../this.Value)}}
+            {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
+            {
+                WriteGuidBin16(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            {{else}}
+            WriteGuidBin16(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+            {{/if}}
+            {{else if (Property.QueryIsDateTime propertyName ../this.Key ../this.Value)}}
+            {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
+            {
+                writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            {{else}}
+            writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+            {{/if}}
+            {{else if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
+            {
+                writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
+            }
+            else
+            {
+                writer.WriteNil();
+            }
+            {{else if (Property.QueryIsUri propertyName ../this.Key ../this.Value)}}
+            writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}?.ToString());
+            {{else}}
+            writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+            {{/if}}
+
+            {{/each}}
+            writer.Flush();
+        }
+
+        /// <summary>
+        /// Deserializes a <see cref="{{this.Key}}"/> DTO.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="MessagePackReader"/> to deserialize the <see cref="{{this.Key}}"/> from.
+        /// </param>
+        /// <param name="options">
+        /// The serialization settings to use.
+        /// </param>
+        /// <returns>
+        /// The deserialized <see cref="{{this.Key}}"/>.
+        /// </returns>
+        public {{this.Key}} Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+
+            var {{#Serializer.WriteInstanceName this.Key}} = new {{this.Key}}();
+
+            var propertyCounter = reader.ReadArrayHeader();
+
+            for (var i = 0; i < propertyCounter; i++)
+            {
+                switch (i)
+                {
+                    {{#each (Schema.QueryPropertyNames this.Value this.Key) as | propertyName |}}
+                    case {{@index}}:
+                        {{#if (Property.QueryIsOverridden propertyName ../this.Key ../this.Value)}}
+                        var {{#Property.WriteLocalName propertyName ../this.Key ../this.Value}}Length = reader.ReadArrayHeader();
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = new List<{{#Property.WriteElementType propertyName ../this.Key ../this.Value}}>({{#Property.WriteLocalName propertyName ../this.Key ../this.Value}}Length);
+
+                        for (var valueCounter = 0; valueCounter < {{#Property.WriteLocalName propertyName ../this.Key ../this.Value}}Length; valueCounter++)
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add({{#Property.WriteElementReader propertyName ../this.Key ../this.Value}}(ref reader));
+                        }
+
+                        {{else if (Property.QueryIsCollection propertyName ../this.Key ../this.Value)}}
+                        var {{#Property.WriteLocalName propertyName ../this.Key ../this.Value}}Length = reader.ReadArrayHeader();
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = new List<{{#Property.WriteElementType propertyName ../this.Key ../this.Value}}>({{#Property.WriteLocalName propertyName ../this.Key ../this.Value}}Length);
+
+                        for (var valueCounter = 0; valueCounter < {{#Property.WriteLocalName propertyName ../this.Key ../this.Value}}Length; valueCounter++)
+                        {
+                            {{#if (Property.QueryIsIdentifiedReference propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(ReadGuidBin16(ref reader));
+                            {{else if (Property.QueryIsPolymorphic propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(({{#Property.WriteElementType propertyName ../this.Key ../this.Value}})PsmMessagePackDispatcher.Read(ref reader, options));
+                            {{else if (Property.QueryIsComposite propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(options.Resolver.GetFormatterWithVerify<{{#Property.WriteElementType propertyName ../this.Key ../this.Value}}>().Deserialize(ref reader, options));
+                            {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add({{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.Parse(reader.ReadStringSequence().Value));
+                            {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(reader.ReadBoolean());
+                            {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(reader.ReadDouble());
+                            {{else if (Property.QueryIsUri propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(ReadUriOrNull(ref reader));
+                            {{else if (Property.QueryIsGuid propertyName ../this.Key ../this.Value)}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(ReadGuidBin16(ref reader));
+                            {{else}}
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Add(reader.ReadString());
+                            {{/if}}
+                        }
+
+                        {{else if (Property.QueryIsIdentifiedReference propertyName ../this.Key ../this.Value)}}
+                        {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+                        if (reader.TryReadNil())
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = null;
+                        }
+                        else
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadGuidBin16(ref reader);
+                        }
+
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadGuidBin16(ref reader);
+                        {{/if}}
+                        {{else if (Property.QueryIsPolymorphic propertyName ../this.Key ../this.Value)}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ({{#Property.WriteUnionType propertyName ../this.Key ../this.Value}})PsmMessagePackDispatcher.Read(ref reader, options);
+                        {{else if (Property.QueryIsComposite propertyName ../this.Key ../this.Value)}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = options.Resolver.GetFormatterWithVerify<{{#Property.WriteElementType propertyName ../this.Key ../this.Value}}>().Deserialize(ref reader, options);
+                        {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
+                        {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+                        if (reader.TryReadNil())
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = null;
+                        }
+                        else
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = {{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.Parse(reader.ReadStringSequence().Value);
+                        }
+
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = {{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.Parse(reader.ReadStringSequence().Value);
+                        {{/if}}
+                        {{else if (Property.QueryIsGuid propertyName ../this.Key ../this.Value)}}
+                        {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+                        if (reader.TryReadNil())
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = null;
+                        }
+                        else
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadGuidBin16(ref reader);
+                        }
+
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadGuidBin16(ref reader);
+                        {{/if}}
+                        {{else if (Property.QueryIsDateTime propertyName ../this.Key ../this.Value)}}
+                        {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+                        if (reader.TryReadNil())
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = null;
+                        }
+                        else
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadDateTime();
+                        }
+
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadDateTime();
+                        {{/if}}
+                        {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
+                        {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+                        if (reader.TryReadNil())
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = null;
+                        }
+                        else
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadBoolean();
+                        }
+
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadBoolean();
+                        {{/if}}
+                        {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}
+                        {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
+                        if (reader.TryReadNil())
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = null;
+                        }
+                        else
+                        {
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadDouble();
+                        }
+
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadDouble();
+                        {{/if}}
+                        {{else if (Property.QueryIsUri propertyName ../this.Key ../this.Value)}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadUriOrNull(ref reader);
+                        {{else}}
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadString();
+                        {{/if}}
+                        break;
+
+                    {{/each}}
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            reader.Depth--;
+
+            return {{#Serializer.WriteInstanceName this.Key}};
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

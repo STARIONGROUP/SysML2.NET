@@ -89,7 +89,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("The alias Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("The alias Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
@@ -98,7 +101,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("The created Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("The created Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -157,7 +163,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the owningProject Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the owningProject Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
