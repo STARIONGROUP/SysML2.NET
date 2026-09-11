@@ -31,9 +31,9 @@ namespace SysML2.NET.PIM.DTO
     /// a <see cref="Project"/>. A <see cref="Project"/> has 0 or more <see cref="Commit"/>s
     /// </summary>
     /// <remarks>
-    /// <see cref="Commit"/>s are immutable. For a given <see cref="Commit"/> record, the value of <see cref="Commit.Create"/>
+    /// <see cref="Commit"/>s are immutable. For a given <see cref="Commit"/> record, the value of <c>change</c>
     /// cannot be modified after a <see cref="Commit"/> has been created. If a modification is required, a new <see cref="Commit"/>
-    /// record can be created with a different value of <see cref="Commit.Change"/>.
+    /// record can be created with a different value of <c>change</c>.
     /// <see cref="Commit"/>s are not destructible1. A <see cref="Commit"/> record cannot be deleted during normal
     /// end-user operation. <see cref="Commit"/>s represent the history and evolution of a <see cref="Project"/>.
     /// Deleting and mutating <see cref="Commit"/> records must be disabled for the normal end-user operations

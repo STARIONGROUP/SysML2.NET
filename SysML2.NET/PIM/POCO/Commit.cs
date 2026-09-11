@@ -57,7 +57,7 @@ namespace SysML2.NET.PIM.POCO
         public List<Commit> PreviousCommit { get; set; } = new List<Commit>();
 
         /// <summary>
-        /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="IData"/> that is
+        /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="Common.IData"/> that is
         /// created, updated, or deleted in the <see cref="Commit"/>
         /// </summary>
         public List<DataVersion> Change { get; set; } = new List<DataVersion>();

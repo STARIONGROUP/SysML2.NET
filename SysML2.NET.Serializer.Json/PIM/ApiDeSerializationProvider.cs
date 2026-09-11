@@ -50,14 +50,14 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 };
     
         /// <summary>
-        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, bool,  ILoggerFactory, Record}"/> for the
+        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, Boolean, ILoggerFactory, Record}"/> for the
         /// <see cref="System.Type"/> that is to be deserialized
         /// </summary>
         /// <param name="typeName">
         /// The name of the subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A delegate for <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, Record}"/>
+        /// A delegate for <see cref="Func{JsonElement, SerializationModeKind, Boolean, ILoggerFactory, Record}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
@@ -78,7 +78,9 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <param name="typeName">
         /// The name of the subject <see cref="System.Type"/> for which support is asserted
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> when the provider carries a deserializer for <paramref name="typeName"/>, <c>false</c> otherwise
+        /// </returns>
         internal static bool IsTypeSupported(string typeName)
         {
             return DeSerializerActionMap.ContainsKey(typeName);

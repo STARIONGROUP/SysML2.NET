@@ -338,7 +338,7 @@ namespace SysML2.NET.Serializer.TextualNotation.Writers
         /// <para><c>DefaultReferenceUsage : ReferenceUsage = RefPrefix Usage</c> — the form
         /// WITHOUT the <c>'ref'</c> keyword.</para>
         /// <para><c>ReferenceUsage = ( EndUsagePrefix | RefPrefix ) 'ref' Usage</c> — the form
-        /// WITH the <c>'ref'</c> keyword, which sets <see cref="IUsage.IsReference"/> to <c>true</c>
+        /// WITH the <c>'ref'</c> keyword, which sets <see cref="IUsage.isReference"/> to <c>true</c>
         /// via <c>BasicUsagePrefix</c>'s <c>isReference ?= 'ref'</c>.</para>
         /// <para><c>isReference</c> CANNOT discriminate the two: it is derived as
         /// <c>not isComposite</c>, and per the OMG SysML v2 spec, Clause 7.6.4 a reference usage

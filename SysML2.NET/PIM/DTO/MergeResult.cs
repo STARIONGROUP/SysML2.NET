@@ -23,10 +23,19 @@ namespace SysML2.NET.PIM.DTO
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Represents the outcome of merging one <see cref="Commit"/> into another
+    /// </summary>
     public class MergeResult
     {
+        /// <summary>
+        /// Gets or sets the <see cref="DataIdentity"/> records that could not be merged automatically
+        /// </summary>
         public List<Guid> Conflict { get; set; } = [];
 
+        /// <summary>
+        /// Gets or sets the <see cref="Commit"/> that records the merge
+        /// </summary>
         public Guid MergeCommit { get; set; }
     }
 }
