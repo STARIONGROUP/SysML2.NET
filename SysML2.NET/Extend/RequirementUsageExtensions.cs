@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -57,6 +59,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.actorParameter))]
         internal static List<IPartUsage> ComputeActorParameter(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
@@ -82,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.assumedConstraint))]
         internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
@@ -109,6 +113,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.framedConcern))]
         internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
@@ -134,6 +139,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.requiredConstraint))]
         internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
@@ -163,6 +169,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <see cref="IRequirementDefinition"/> (upper-bound violation against the derived
         /// <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IRequirementUsage.requirementDefinition))]
         internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
@@ -187,6 +194,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.stakeholderParameter))]
         internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementUsage requirementUsageSubject)
         {
             // The OCL uses "AStakholderMembership" which is a typo in the XMI source; the correct C# type is IStakeholderMembership.
@@ -215,6 +223,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.subjectParameter))]
         internal static IUsage ComputeSubjectParameter(this IRequirementUsage requirementUsageSubject)
         {
             if (requirementUsageSubject == null)
@@ -244,6 +253,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementUsage.text))]
         internal static List<string> ComputeText(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null

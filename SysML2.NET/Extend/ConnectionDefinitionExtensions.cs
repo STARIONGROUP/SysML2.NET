@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -70,6 +72,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnectionDefinition.connectionEnd))]
         internal static List<IUsage> ComputeConnectionEnd(this IConnectionDefinition connectionDefinitionSubject)
         {
             return connectionDefinitionSubject == null

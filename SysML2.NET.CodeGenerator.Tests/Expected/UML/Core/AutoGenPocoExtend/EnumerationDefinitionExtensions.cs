@@ -23,6 +23,10 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -67,6 +71,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IEnumerationDefinition.enumeratedValue))]
         internal static List<IEnumerationUsage> ComputeEnumeratedValue(this IEnumerationDefinition enumerationDefinitionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

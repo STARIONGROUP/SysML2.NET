@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Extensions;
 
@@ -41,6 +43,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ISubjectMembership.ownedSubjectParameter))]
         internal static IUsage ComputeOwnedSubjectParameter(this ISubjectMembership subjectMembershipSubject)
         {
             if (subjectMembershipSubject == null)

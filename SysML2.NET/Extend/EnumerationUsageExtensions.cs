@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IEnumerationUsage.enumerationDefinition))]
         internal static IEnumerationDefinition ComputeEnumerationDefinition(this IEnumerationUsage enumerationUsageSubject)
         {
             return enumerationUsageSubject == null

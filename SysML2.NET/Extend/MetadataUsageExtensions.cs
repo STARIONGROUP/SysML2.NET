@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Extensions;
@@ -41,6 +43,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMetadataUsage.metadataDefinition))]
         internal static IMetaclass ComputeMetadataDefinition(this IMetadataUsage metadataUsageSubject)
         {
             return metadataUsageSubject == null

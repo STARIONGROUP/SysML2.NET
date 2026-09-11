@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementConstraintMembership.ownedConstraint))]
         internal static IConstraintUsage ComputeOwnedConstraint(this IRequirementConstraintMembership requirementConstraintMembershipSubject)
         {
             if (requirementConstraintMembershipSubject == null)
@@ -72,6 +75,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementConstraintMembership.referencedConstraint))]
         internal static IConstraintUsage ComputeReferencedConstraint(this IRequirementConstraintMembership requirementConstraintMembershipSubject)
         {
             if (requirementConstraintMembershipSubject == null)

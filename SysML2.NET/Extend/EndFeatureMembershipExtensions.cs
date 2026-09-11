@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Extensions;
 
     /// <summary>
@@ -39,6 +41,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IEndFeatureMembership.ownedMemberFeature))]
         internal static IFeature ComputeOwnedMemberFeature(this IEndFeatureMembership endFeatureMembershipSubject)
         {
             if (endFeatureMembershipSubject == null)

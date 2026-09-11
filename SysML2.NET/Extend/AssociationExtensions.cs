@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
 
@@ -42,6 +44,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssociation.associationEnd))]
         internal static List<IFeature> ComputeAssociationEnd(this IAssociation associationSubject)
         {
             return associationSubject == null
@@ -64,6 +67,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssociation.relatedType))]
         internal static List<IType> ComputeRelatedType(this IAssociation associationSubject)
         {
             return associationSubject == null
@@ -88,6 +92,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssociation.sourceType))]
         internal static IType ComputeSourceType(this IAssociation associationSubject)
         {
             if (associationSubject == null)
@@ -121,6 +126,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssociation.targetType))]
         internal static List<IType> ComputeTargetType(this IAssociation associationSubject)
         {
             if (associationSubject == null)

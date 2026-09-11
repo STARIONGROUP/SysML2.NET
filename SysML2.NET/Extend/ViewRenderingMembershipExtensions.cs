@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -47,6 +49,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewRenderingMembership.ownedRendering))]
         internal static IRenderingUsage ComputeOwnedRendering(this IViewRenderingMembership viewRenderingMembershipSubject)
         {
             if (viewRenderingMembershipSubject == null)
@@ -79,6 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewRenderingMembership.referencedRendering))]
         internal static IRenderingUsage ComputeReferencedRendering(this IViewRenderingMembership viewRenderingMembershipSubject)
         {
             if (viewRenderingMembershipSubject == null)

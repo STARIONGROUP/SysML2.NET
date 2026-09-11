@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -45,6 +47,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureMembership.ownedMemberFeature))]
         internal static IFeature ComputeOwnedMemberFeature(this IFeatureMembership featureMembershipSubject)
         {
             if (featureMembershipSubject == null)
@@ -64,6 +67,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureMembership.owningType))]
         internal static IType ComputeOwningType(this IFeatureMembership featureMembershipSubject)
         {
             return featureMembershipSubject == null

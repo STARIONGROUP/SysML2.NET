@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Actions;
@@ -63,6 +65,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.definition))]
         internal static List<IClassifier> ComputeDefinition(this IUsage usageSubject)
         {
             // Route through the shared static ComputeType (Pilot-style shared computation).
@@ -89,6 +92,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.directedUsage))]
         internal static List<IUsage> ComputeDirectedUsage(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -111,6 +115,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.isReference))]
         internal static bool ComputeIsReference(this IUsage usageSubject)
         {
             return !usageSubject?.IsComposite ?? throw new ArgumentNullException(nameof(usageSubject));
@@ -139,6 +144,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.mayTimeVary))]
         internal static bool ComputeMayTimeVary(this IUsage usageSubject)
         {
             if (usageSubject == null)
@@ -191,6 +197,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedAction))]
         internal static List<IActionUsage> ComputeNestedAction(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -213,6 +220,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedAllocation))]
         internal static List<IAllocationUsage> ComputeNestedAllocation(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -235,6 +243,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedAnalysisCase))]
         internal static List<IAnalysisCaseUsage> ComputeNestedAnalysisCase(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -257,6 +266,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedAttribute))]
         internal static List<IAttributeUsage> ComputeNestedAttribute(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -279,6 +289,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedCalculation))]
         internal static List<ICalculationUsage> ComputeNestedCalculation(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -301,6 +312,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedCase))]
         internal static List<ICaseUsage> ComputeNestedCase(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -323,6 +335,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedConcern))]
         internal static List<IConcernUsage> ComputeNestedConcern(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -345,6 +358,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedConnection))]
         internal static List<IConnectorAsUsage> ComputeNestedConnection(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -367,6 +381,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedConstraint))]
         internal static List<IConstraintUsage> ComputeNestedConstraint(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -389,6 +404,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedEnumeration))]
         internal static List<IEnumerationUsage> ComputeNestedEnumeration(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -411,6 +427,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedFlow))]
         internal static List<IFlowUsage> ComputeNestedFlow(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -433,6 +450,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedInterface))]
         internal static List<IInterfaceUsage> ComputeNestedInterface(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -455,6 +473,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedItem))]
         internal static List<IItemUsage> ComputeNestedItem(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -477,6 +496,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedMetadata))]
         internal static List<IMetadataUsage> ComputeNestedMetadata(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -499,6 +519,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedOccurrence))]
         internal static List<IOccurrenceUsage> ComputeNestedOccurrence(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -521,6 +542,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedPart))]
         internal static List<IPartUsage> ComputeNestedPart(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -543,6 +565,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedPort))]
         internal static List<IPortUsage> ComputeNestedPort(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -565,6 +588,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedReference))]
         internal static List<IReferenceUsage> ComputeNestedReference(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -587,6 +611,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedRendering))]
         internal static List<IRenderingUsage> ComputeNestedRendering(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -609,6 +634,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedRequirement))]
         internal static List<IRequirementUsage> ComputeNestedRequirement(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -631,6 +657,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedState))]
         internal static List<IStateUsage> ComputeNestedState(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -653,6 +680,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedTransition))]
         internal static List<ITransitionUsage> ComputeNestedTransition(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -675,6 +703,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedUsage))]
         internal static List<IUsage> ComputeNestedUsage(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -697,6 +726,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedUseCase))]
         internal static List<IUseCaseUsage> ComputeNestedUseCase(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -719,6 +749,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedVerificationCase))]
         internal static List<IVerificationCaseUsage> ComputeNestedVerificationCase(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -741,6 +772,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedView))]
         internal static List<IViewUsage> ComputeNestedView(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -763,6 +795,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.nestedViewpoint))]
         internal static List<IViewpointUsage> ComputeNestedViewpoint(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -779,6 +812,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.owningDefinition))]
         internal static IDefinition ComputeOwningDefinition(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -795,6 +829,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.owningUsage))]
         internal static IUsage ComputeOwningUsage(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -817,6 +852,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.usage))]
         internal static List<IUsage> ComputeUsage(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -839,6 +875,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.variant))]
         internal static List<IUsage> ComputeVariant(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -866,6 +903,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUsage.variantMembership))]
         internal static List<IVariantMembership> ComputeVariantMembership(this IUsage usageSubject)
         {
             return usageSubject == null
@@ -893,6 +931,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IUsage.NamingFeature))]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IUsage usageSubject)
         {
             if (usageSubject == null)
@@ -929,6 +968,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IUsage.ReferencedFeatureTarget))]
         internal static IFeature ComputeReferencedFeatureTargetOperation(this IUsage usageSubject)
         {
             return usageSubject == null

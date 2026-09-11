@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
@@ -42,6 +44,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(ITextualRepresentation.representedElement))]
         internal static IElement ComputeRepresentedElement(this ITextualRepresentation textualRepresentationSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

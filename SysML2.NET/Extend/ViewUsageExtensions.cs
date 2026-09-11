@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
@@ -59,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewUsage.exposedElement))]
         internal static List<IElement> ComputeExposedElement(this IViewUsage viewUsageSubject)
         {
             return viewUsageSubject == null
@@ -91,6 +94,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewUsage.satisfiedViewpoint))]
         internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewUsage viewUsageSubject)
         {
             return viewUsageSubject == null
@@ -115,6 +119,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewUsage.viewCondition))]
         internal static List<IExpression> ComputeViewCondition(this IViewUsage viewUsageSubject)
         {
             return viewUsageSubject == null
@@ -146,6 +151,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <see cref="IViewDefinition"/> (upper-bound violation against the derived
         /// <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IViewUsage.viewDefinition))]
         internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsageSubject)
         {
             return viewUsageSubject is null ? throw new ArgumentNullException(nameof(viewUsageSubject)) : FeatureExtensions.ComputeType(viewUsageSubject).SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
@@ -171,6 +177,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewUsage.viewRendering))]
         internal static IRenderingUsage ComputeViewRendering(this IViewUsage viewUsageSubject)
         {
             if (viewUsageSubject == null)
@@ -207,6 +214,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IViewUsage.IncludeAsExposed))]
         internal static bool ComputeIncludeAsExposedOperation(this IViewUsage viewUsageSubject, IElement element)
         {
             if (viewUsageSubject == null)

@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -83,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAnalysisCaseDefinition.resultExpression))]
         internal static IExpression ComputeResultExpression(this IAnalysisCaseDefinition analysisCaseDefinitionSubject)
         {
             if (analysisCaseDefinitionSubject == null)

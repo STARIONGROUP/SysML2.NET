@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
@@ -44,6 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IInstantiationExpression.argument))]
         internal static List<IExpression> ComputeArgument(this IInstantiationExpression instantiationExpressionSubject)
         {
             if (instantiationExpressionSubject == null)
@@ -89,6 +92,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IInstantiationExpression.instantiatedType))]
         internal static IType ComputeInstantiatedType(this IInstantiationExpression instantiationExpressionSubject)
         {
             if (instantiationExpressionSubject == null)
@@ -121,6 +125,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(IInstantiationExpression.InstantiatedType))]
         internal static IType ComputeInstantiatedTypeOperation(this IInstantiationExpression instantiationExpressionSubject)
         {
             if (instantiationExpressionSubject == null)

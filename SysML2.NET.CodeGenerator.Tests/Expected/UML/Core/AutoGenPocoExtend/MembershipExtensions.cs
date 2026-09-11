@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -36,6 +38,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// memberElementId = memberElement.elementId
+        /// </code>
+        /// </remarks>
         /// <param name="membershipSubject">
         /// The subject <see cref="IMembership"/>
         /// </param>
@@ -43,6 +51,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IMembership.memberElementId))]
         internal static string ComputeMemberElementId(this IMembership membershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -58,6 +67,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IMembership.membershipOwningNamespace))]
         internal static INamespace ComputeMembershipOwningNamespace(this IMembership membershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -70,6 +80,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// of the memberElement of this Membership and the memberElement of the other Membership conform to the
         /// other. But this may be overridden in specializations of Membership.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// not (memberElement.oclKindOf(other.memberElement.oclType()) or
+        ///      other.memberElement.oclKindOf(memberElement.oclType())) or
+        /// (shortMemberName = null or
+        ///     (shortMemberName &lt;&gt; other.shortMemberName and
+        ///      shortMemberName &lt;&gt; other.memberName)) and
+        /// (memberName = null or
+        ///     (memberName &lt;&gt; other.shortMemberName and
+        ///      memberName &lt;&gt; other.memberName)))
+        /// </code>
+        /// </remarks>
         /// <param name="membershipSubject">
         /// The subject <see cref="IMembership"/>
         /// </param>
@@ -80,6 +103,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The expected <see cref="bool" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [Operation(name: nameof(IMembership.IsDistinguishableFrom))]
         internal static bool ComputeIsDistinguishableFromOperation(this IMembership membershipSubject, IMembership other)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

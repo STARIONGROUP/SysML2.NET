@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -97,6 +99,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IControlNode.MultiplicityHasBounds))]
         internal static bool ComputeMultiplicityHasBoundsOperation(this IControlNode controlNodeSubject, IMultiplicity mult, int lower, string upper)
         {
             if (controlNodeSubject == null)

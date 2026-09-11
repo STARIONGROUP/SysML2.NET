@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -49,6 +51,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IActorMembership.ownedActorParameter))]
         internal static IPartUsage ComputeOwnedActorParameter(this IActorMembership actorMembershipSubject)
         {
             if (actorMembershipSubject == null)

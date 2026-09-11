@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -54,6 +56,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
+        [Operation(name: nameof(IReturnParameterMembership.ParameterDirection))]
         internal static FeatureDirectionKind ComputeRedefinedParameterDirectionOperation(this IReturnParameterMembership returnParameterMembershipSubject)
         {
             return returnParameterMembershipSubject == null

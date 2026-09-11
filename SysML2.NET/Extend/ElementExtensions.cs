@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Extensions;
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.documentation))]
         internal static List<IDocumentation> ComputeDocumentation(this IElement elementSubject)
         {
             return elementSubject == null ?  throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<IDocumentation>()];
@@ -71,6 +74,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.isLibraryElement))]
         internal static bool ComputeIsLibraryElement(this IElement elementSubject)
         {
             return elementSubject == null ?  throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.LibraryNamespace() != null;
@@ -92,6 +96,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.name))]
         internal static string ComputeName(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveName();
@@ -115,6 +120,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.ownedAnnotation))]
         internal static List<IAnnotation> ComputeOwnedAnnotation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.OwnedRelationship.OfType<IAnnotation>().Where(x => x.AnnotatedElement == elementSubject)];
@@ -136,6 +142,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.ownedElement))]
         internal static List<IElement> ComputeOwnedElement(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.OwnedRelationship.SelectMany(x => x.OwnedRelatedElement)];
@@ -157,6 +164,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.owner))]
         internal static IElement ComputeOwner(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) :elementSubject.OwningRelationship?.OwningRelatedElement;
@@ -175,6 +183,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.owningMembership))]
         internal static IOwningMembership ComputeOwningMembership(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship as IOwningMembership;
@@ -199,6 +208,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.owningNamespace))]
         internal static INamespace ComputeOwningNamespace(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.owningMembership?.membershipOwningNamespace;
@@ -229,6 +239,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.qualifiedName))]
         internal static string ComputeQualifiedName(this IElement elementSubject)
         {
             if (elementSubject == null)
@@ -283,6 +294,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.shortName))]
         internal static string ComputeShortName(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveShortName();
@@ -304,6 +316,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElement.textualRepresentation))]
         internal static List<ITextualRepresentation> ComputeTextualRepresentation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<ITextualRepresentation>()];
@@ -350,6 +363,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IElement.EscapedName))]
         internal static string ComputeEscapedNameOperation(this IElement elementSubject)
         {
             if (elementSubject == null)
@@ -389,6 +403,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IElement.EffectiveShortName))]
         internal static string ComputeEffectiveShortNameOperation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.DeclaredShortName;
@@ -410,6 +425,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IElement.EffectiveName))]
         internal static string ComputeEffectiveNameOperation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.DeclaredName;
@@ -432,6 +448,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
+        [Operation(name: nameof(IElement.LibraryNamespace))]
         internal static INamespace ComputeLibraryNamespaceOperation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship?.LibraryNamespace();
@@ -464,6 +481,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IElement.Path))]
         internal static string ComputePathOperation(this IElement elementSubject)
         {
             if (elementSubject == null)

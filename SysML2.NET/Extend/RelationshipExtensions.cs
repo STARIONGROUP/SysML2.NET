@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
@@ -49,6 +51,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRelationship.relatedElement))]
         internal static List<IElement> ComputeRelatedElement(this IRelationship relationshipSubject)
         {
             return relationshipSubject == null
@@ -75,6 +78,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
+        [Operation(name: nameof(IRelationship.LibraryNamespace))]
         internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this IRelationship relationshipSubject)
         {
             if (relationshipSubject == null)
@@ -108,6 +112,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IRelationship.Path))]
         internal static string ComputeRedefinedPathOperation(this IRelationship relationshipSubject)
         {
             if (relationshipSubject == null)

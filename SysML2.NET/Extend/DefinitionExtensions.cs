@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using System.Collections.Generic;
     using System.Linq;
     
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.Allocations;
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
@@ -67,6 +69,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.directedUsage))]
         internal static List<IUsage> ComputeDirectedUsage(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -89,6 +92,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedAction))]
         internal static List<IActionUsage> ComputeOwnedAction(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -111,6 +115,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedAllocation))]
         internal static List<IAllocationUsage> ComputeOwnedAllocation(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -133,6 +138,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedAnalysisCase))]
         internal static List<IAnalysisCaseUsage> ComputeOwnedAnalysisCase(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -155,6 +161,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedAttribute))]
         internal static List<IAttributeUsage> ComputeOwnedAttribute(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -177,6 +184,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedCalculation))]
         internal static List<ICalculationUsage> ComputeOwnedCalculation(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -199,6 +207,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedCase))]
         internal static List<ICaseUsage> ComputeOwnedCase(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -221,6 +230,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedConcern))]
         internal static List<IConcernUsage> ComputeOwnedConcern(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -243,6 +253,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedConnection))]
         internal static List<IConnectorAsUsage> ComputeOwnedConnection(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -265,6 +276,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedConstraint))]
         internal static List<IConstraintUsage> ComputeOwnedConstraint(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -287,6 +299,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedEnumeration))]
         internal static List<IEnumerationUsage> ComputeOwnedEnumeration(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -309,6 +322,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedFlow))]
         internal static List<IFlowUsage> ComputeOwnedFlow(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -331,6 +345,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedInterface))]
         internal static List<IInterfaceUsage> ComputeOwnedInterface(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -353,6 +368,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedItem))]
         internal static List<IItemUsage> ComputeOwnedItem(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -375,6 +391,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedMetadata))]
         internal static List<IMetadataUsage> ComputeOwnedMetadata(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -397,6 +414,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedOccurrence))]
         internal static List<IOccurrenceUsage> ComputeOwnedOccurrence(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -419,6 +437,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedPart))]
         internal static List<IPartUsage> ComputeOwnedPart(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -441,6 +460,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedPort))]
         internal static List<IPortUsage> ComputeOwnedPort(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -463,6 +483,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedReference))]
         internal static List<IReferenceUsage> ComputeOwnedReference(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -485,6 +506,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedRendering))]
         internal static List<IRenderingUsage> ComputeOwnedRendering(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -507,6 +529,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedRequirement))]
         internal static List<IRequirementUsage> ComputeOwnedRequirement(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -529,6 +552,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedState))]
         internal static List<IStateUsage> ComputeOwnedState(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -551,6 +575,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedTransition))]
         internal static List<ITransitionUsage> ComputeOwnedTransition(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -573,6 +598,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedUsage))]
         internal static List<IUsage> ComputeOwnedUsage(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -595,6 +621,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedUseCase))]
         internal static List<IUseCaseUsage> ComputeOwnedUseCase(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -617,6 +644,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedVerificationCase))]
         internal static List<IVerificationCaseUsage> ComputeOwnedVerificationCase(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -639,6 +667,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedView))]
         internal static List<IViewUsage> ComputeOwnedView(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -661,6 +690,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.ownedViewpoint))]
         internal static List<IViewpointUsage> ComputeOwnedViewpoint(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -683,6 +713,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.usage))]
         internal static List<IUsage> ComputeUsage(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -705,6 +736,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.variant))]
         internal static List<IUsage> ComputeVariant(this IDefinition definitionSubject)
         {
             return definitionSubject == null
@@ -727,6 +759,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IDefinition.variantMembership))]
         internal static List<IVariantMembership> ComputeVariantMembership(this IDefinition definitionSubject)
         {
             return definitionSubject == null

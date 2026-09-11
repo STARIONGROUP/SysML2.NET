@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Exceptions;
 
@@ -46,6 +48,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <returns>
         /// The <see cref="IElement"/> that is documented by this <see cref="IDocumentation"/>
         /// </returns>
+        [DerivedProperty(name: nameof(IDocumentation.documentedElement))]
         internal static IElement ComputeDocumentedElement(this IDocumentation documentationSubject)
         {
             if (documentationSubject == null)

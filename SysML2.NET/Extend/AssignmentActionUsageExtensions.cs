@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
@@ -56,6 +58,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssignmentActionUsage.referent))]
         internal static IFeature ComputeReferent(this IAssignmentActionUsage assignmentActionUsageSubject)
         {
             if (assignmentActionUsageSubject == null)
@@ -84,6 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssignmentActionUsage.targetArgument))]
         internal static IExpression ComputeTargetArgument(this IAssignmentActionUsage assignmentActionUsageSubject)
         {
             return assignmentActionUsageSubject == null
@@ -106,6 +110,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssignmentActionUsage.valueExpression))]
         internal static IExpression ComputeValueExpression(this IAssignmentActionUsage assignmentActionUsageSubject)
         {
             return assignmentActionUsageSubject == null

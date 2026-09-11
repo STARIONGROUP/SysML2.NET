@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -72,6 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IExhibitStateUsage.exhibitedState))]
         internal static IStateUsage ComputeExhibitedState(this IExhibitStateUsage exhibitStateUsageSubject)
         {
             if (exhibitStateUsageSubject == null)
