@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// The <see cref="SubsettingExtensions" /> class provides extensions methods for
     /// the <see cref="ISubsetting" /> interface
@@ -37,6 +39,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ISubsetting.owningFeature))]
         internal static IFeature ComputeOwningFeature(this ISubsetting subsettingSubject)
         {
             return subsettingSubject == null

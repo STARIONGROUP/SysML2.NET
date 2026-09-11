@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Functions;
@@ -46,6 +48,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureValue.featureWithValue))]
         internal static IFeature ComputeFeatureWithValue(this IFeatureValue featureValueSubject)
         {
             return featureValueSubject == null
@@ -62,6 +65,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureValue.value))]
         internal static IExpression ComputeValue(this IFeatureValue featureValueSubject)
         {
             if (featureValueSubject == null)

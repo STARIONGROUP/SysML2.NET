@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Systems.Actions;
@@ -57,6 +59,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateUsage.doAction))]
         internal static IActionUsage ComputeDoAction(this IStateUsage stateUsageSubject)
         {
             if (stateUsageSubject == null)
@@ -92,6 +95,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateUsage.entryAction))]
         internal static IActionUsage ComputeEntryAction(this IStateUsage stateUsageSubject)
         {
             if (stateUsageSubject == null)
@@ -127,6 +131,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateUsage.exitAction))]
         internal static IActionUsage ComputeExitAction(this IStateUsage stateUsageSubject)
         {
             if (stateUsageSubject == null)
@@ -149,6 +154,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateUsage.stateDefinition))]
         internal static List<IBehavior> ComputeStateDefinition(this IStateUsage stateUsageSubject)
         {
             return stateUsageSubject == null
@@ -182,6 +188,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IStateUsage.IsSubstateUsage))]
         internal static bool ComputeIsSubstateUsageOperation(this IStateUsage stateUsageSubject, bool isParallel)
         {
             if (stateUsageSubject == null)

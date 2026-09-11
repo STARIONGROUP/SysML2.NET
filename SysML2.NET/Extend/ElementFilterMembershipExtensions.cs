@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IElementFilterMembership.condition))]
         internal static IExpression ComputeCondition(this IElementFilterMembership elementFilterMembershipSubject)
         {
             if (elementFilterMembershipSubject == null)

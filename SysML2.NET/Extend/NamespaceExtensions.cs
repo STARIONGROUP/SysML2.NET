@@ -25,6 +25,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System.Linq;
     using System.Text;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -52,6 +54,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(INamespace.importedMembership))]
         internal static List<IMembership> ComputeImportedMembership(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : namespaceSubject.ImportedMemberships([]);
@@ -72,6 +75,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(INamespace.member))]
         internal static List<IElement> ComputeMember(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.membership.Select(x => x.MemberElement)];
@@ -86,6 +90,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(INamespace.membership))]
         internal static List<IMembership> ComputeMembership(this INamespace namespaceSubject)
         {
             if (namespaceSubject == null)
@@ -119,6 +124,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(INamespace.ownedImport))]
         internal static List<IImport> ComputeOwnedImport(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.OwnedRelationship.OfType<IImport>()];
@@ -139,6 +145,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(INamespace.ownedMember))]
         internal static List<IElement> ComputeOwnedMember(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.ownedMembership.OfType<IOwningMembership>().Select(x => x.ownedMemberElement)];
@@ -159,6 +166,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(INamespace.ownedMembership))]
         internal static List<IMembership> ComputeOwnedMembership(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.OwnedRelationship.OfType<IMembership>()];
@@ -183,6 +191,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(INamespace.NamesOf))]
         internal static List<string> ComputeNamesOfOperation(this INamespace namespaceSubject, IElement element)
         {
             if (namespaceSubject == null)
@@ -239,6 +248,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="VisibilityKind" />
         /// </returns>
+        [Operation(name: nameof(INamespace.VisibilityOf))]
         internal static VisibilityKind ComputeVisibilityOfOperation(this INamespace namespaceSubject, IMembership mem)
         {
             if (namespaceSubject == null)
@@ -302,6 +312,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.VisibleMemberships))]
         internal static List<IMembership> ComputeVisibleMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded, bool isRecursive, bool includeAll)
         {
             if (namespaceSubject == null)
@@ -362,6 +373,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.ImportedMemberships))]
         internal static List<IMembership> ComputeImportedMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded)
         {
             if (namespaceSubject == null)
@@ -413,6 +425,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.MembershipsOfVisibility))]
         internal static List<IMembership> ComputeMembershipsOfVisibilityOperation(this INamespace namespaceSubject, VisibilityKind? visibility, List<INamespace> excluded)
         {
             if (namespaceSubject == null)
@@ -481,6 +494,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.Resolve))]
         internal static IMembership ComputeResolveOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)
@@ -525,6 +539,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.ResolveGlobal))]
         internal static IMembership ComputeResolveGlobalOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)
@@ -589,6 +604,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.ResolveLocal))]
         internal static IMembership ComputeResolveLocalOperation(this INamespace namespaceSubject, string name)
         {
             if (namespaceSubject == null)
@@ -640,6 +656,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(INamespace.ResolveVisible))]
         internal static IMembership ComputeResolveVisibleOperation(this INamespace namespaceSubject, string name)
         {
             if (namespaceSubject == null)
@@ -671,6 +688,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(INamespace.QualificationOf))]
         internal static string ComputeQualificationOfOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)
@@ -702,6 +720,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(INamespace.UnqualifiedNameOf))]
         internal static string ComputeUnqualifiedNameOfOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)

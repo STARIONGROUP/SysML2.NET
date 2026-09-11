@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Items
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Structures;
 
@@ -48,6 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.Items
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IItemUsage.itemDefinition))]
         internal static List<IStructure> ComputeItemDefinition(this IItemUsage itemUsageSubject)
         {
             return itemUsageSubject == null

@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -42,6 +44,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureChaining.featureChained))]
         internal static IFeature ComputeFeatureChained(this IFeatureChaining featureChainingSubject)
         {
             return featureChainingSubject == null

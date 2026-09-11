@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Types;
 
     /// <summary>
@@ -53,6 +55,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(IOperatorExpression.InstantiatedType))]
         internal static IType ComputeRedefinedInstantiatedTypeOperation(this IOperatorExpression operatorExpressionSubject)
         {
             if (operatorExpressionSubject == null)

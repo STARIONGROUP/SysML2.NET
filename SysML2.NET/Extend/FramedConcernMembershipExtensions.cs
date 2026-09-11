@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -48,6 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFramedConcernMembership.ownedConcern))]
         internal static IConcernUsage ComputeOwnedConcern(this IFramedConcernMembership framedConcernMembershipSubject)
         {
             if (framedConcernMembershipSubject == null)
@@ -67,6 +70,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFramedConcernMembership.referencedConcern))]
         internal static IConcernUsage ComputeReferencedConcern(this IFramedConcernMembership framedConcernMembershipSubject)
         {
             if (framedConcernMembershipSubject == null)

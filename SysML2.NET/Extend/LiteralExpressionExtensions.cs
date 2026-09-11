@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(ILiteralExpression.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this ILiteralExpression literalExpressionSubject, List<IFeature> visited)
         {
             if (literalExpressionSubject == null)
@@ -78,6 +81,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
+        [Operation(name: nameof(ILiteralExpression.Evaluate))]
         internal static List<IElement> ComputeRedefinedEvaluateOperation(this ILiteralExpression literalExpressionSubject, IElement target)
         {
             if (literalExpressionSubject == null)

@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -60,6 +62,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
+        [Operation(name: nameof(IMembershipImport.ImportedMemberships))]
         internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IMembershipImport membershipImportSubject, List<INamespace> excluded)
         {
             if (membershipImportSubject == null)

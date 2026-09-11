@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -42,6 +44,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMembership.memberElementId))]
         internal static string ComputeMemberElementId(this IMembership membershipSubject)
         {
             return membershipSubject == null
@@ -58,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMembership.membershipOwningNamespace))]
         internal static INamespace ComputeMembershipOwningNamespace(this IMembership membershipSubject)
         {
             return membershipSubject == null ? throw new ArgumentNullException(nameof(membershipSubject)) : membershipSubject.OwningRelatedElement as INamespace;
@@ -79,6 +83,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IMembership.IsDistinguishableFrom))]
         internal static bool ComputeIsDistinguishableFromOperation(this IMembership membershipSubject, IMembership other)
         {
             if (membershipSubject == null)

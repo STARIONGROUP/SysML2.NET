@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -78,6 +80,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAttributeUsage.attributeDefinition))]
         internal static List<IDataType> ComputeAttributeDefinition(this IAttributeUsage attributeUsageSubject)
         {
             return attributeUsageSubject == null
@@ -94,6 +97,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAttributeUsage.isReference))]
         internal static bool ComputeIsReference(this IAttributeUsage attributeUsageSubject)
         {
             return attributeUsageSubject == null

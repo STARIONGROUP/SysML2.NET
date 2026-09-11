@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -74,6 +76,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ISatisfyRequirementUsage.satisfiedRequirement))]
         internal static IRequirementUsage ComputeSatisfiedRequirement(this ISatisfyRequirementUsage satisfyRequirementUsageSubject)
         {
             if (satisfyRequirementUsageSubject == null)
@@ -117,6 +120,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ISatisfyRequirementUsage.satisfyingFeature))]
         internal static IFeature ComputeSatisfyingFeature(this ISatisfyRequirementUsage satisfyRequirementUsageSubject)
         {
             if (satisfyRequirementUsageSubject == null)

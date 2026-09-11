@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -60,6 +62,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureReferenceExpression.referent))]
         internal static IFeature ComputeReferent(this IFeatureReferenceExpression featureReferenceExpressionSubject)
         {
             if (featureReferenceExpressionSubject == null)
@@ -109,6 +112,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeatureReferenceExpression.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IFeatureReferenceExpression featureReferenceExpressionSubject, List<IFeature> visited)
         {
             if (featureReferenceExpressionSubject == null)
@@ -200,6 +204,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
+        [Operation(name: nameof(IFeatureReferenceExpression.Evaluate))]
         internal static List<IElement> ComputeRedefinedEvaluateOperation(this IFeatureReferenceExpression featureReferenceExpressionSubject, IElement target)
         {
             if (featureReferenceExpressionSubject == null)

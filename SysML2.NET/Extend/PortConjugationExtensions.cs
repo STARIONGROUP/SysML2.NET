@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Exceptions;
 
     /// <summary>
@@ -39,6 +41,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IPortConjugation.conjugatedPortDefinition))]
         internal static IConjugatedPortDefinition ComputeConjugatedPortDefinition(this IPortConjugation portConjugationSubject)
         {
             if (portConjugationSubject == null)

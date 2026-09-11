@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -83,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ICaseUsage.actorParameter))]
         internal static List<IPartUsage> ComputeActorParameter(this ICaseUsage caseUsageSubject)
         {
             return caseUsageSubject == null
@@ -109,6 +112,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <see cref="ICaseDefinition"/> (upper-bound violation against the derived
         /// <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(ICaseUsage.caseDefinition))]
         internal static ICaseDefinition ComputeCaseDefinition(this ICaseUsage caseUsageSubject)
         {
             return caseUsageSubject == null
@@ -138,6 +142,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ICaseUsage.objectiveRequirement))]
         internal static IRequirementUsage ComputeObjectiveRequirement(this ICaseUsage caseUsageSubject)
         {
             if (caseUsageSubject == null)
@@ -171,6 +176,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ICaseUsage.subjectParameter))]
         internal static IUsage ComputeSubjectParameter(this ICaseUsage caseUsageSubject)
         {
             if (caseUsageSubject == null)

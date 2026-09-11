@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -84,6 +86,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateDefinition.doAction))]
         internal static IActionUsage ComputeDoAction(this IStateDefinition stateDefinitionSubject)
         {
             if (stateDefinitionSubject == null)
@@ -119,6 +122,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateDefinition.entryAction))]
         internal static IActionUsage ComputeEntryAction(this IStateDefinition stateDefinitionSubject)
         {
             if (stateDefinitionSubject == null)
@@ -154,6 +158,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateDefinition.exitAction))]
         internal static IActionUsage ComputeExitAction(this IStateDefinition stateDefinitionSubject)
         {
             if (stateDefinitionSubject == null)
@@ -182,6 +187,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateDefinition.state))]
         internal static List<IStateUsage> ComputeState(this IStateDefinition stateDefinitionSubject)
         {
             return stateDefinitionSubject == null

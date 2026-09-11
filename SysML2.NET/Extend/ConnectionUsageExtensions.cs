@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -74,6 +76,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConnectionUsage.connectionDefinition))]
         internal static List<IAssociationStructure> ComputeConnectionDefinition(this IConnectionUsage connectionUsageSubject)
         {
             return connectionUsageSubject == null

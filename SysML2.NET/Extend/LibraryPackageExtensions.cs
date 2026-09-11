@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
+        [Operation(name: nameof(ILibraryPackage.LibraryNamespace))]
         internal static INamespace ComputeRedefinedLibraryNamespaceOperation(this ILibraryPackage libraryPackageSubject)
         {
             if (libraryPackageSubject == null)

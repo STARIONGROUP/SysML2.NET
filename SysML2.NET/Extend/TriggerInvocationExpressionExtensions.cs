@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.Systems.Actions;
 
@@ -56,6 +58,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(ITriggerInvocationExpression.InstantiatedType))]
         internal static IType ComputeRedefinedInstantiatedTypeOperation(this ITriggerInvocationExpression triggerInvocationExpressionSubject)
         {
             if (triggerInvocationExpressionSubject == null)

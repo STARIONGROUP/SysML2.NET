@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// The <see cref="SubclassificationExtensions" /> class provides extensions methods for
     /// the <see cref="ISubclassification" /> interface
@@ -37,6 +39,7 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ISubclassification.owningClassifier))]
         internal static IClassifier ComputeOwningClassifier(this ISubclassification subclassificationSubject)
         {
             return subclassificationSubject == null

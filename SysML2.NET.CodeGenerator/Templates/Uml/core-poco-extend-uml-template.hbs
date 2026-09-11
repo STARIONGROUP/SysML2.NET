@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     {{ #Class.WriteEnumerationNameSpacesWithOperation this}}
     {{ #Class.WriteNameSpaces this POCO}}
 
@@ -47,6 +49,7 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(I{{../this.Name}}.{{property.Name}}))]
         internal static {{ Property.WriteTypeForExtendClass property }} Compute{{String.CapitalizeFirstLetter property.Name}}(this I{{../this.Name}} {{String.LowerCaseFirstLetter ../this.Name}}Subject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -64,6 +67,7 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
             /// </param>
             {{ #ParameterDocumentation operation }}
             [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [Operation(name: nameof(I{{../this.Name}}.{{String.CapitalizeFirstLetter operation.Name}}))]
             {{ #Operation.WriteForPOCOExtend operation }}
             {
                 throw new NotSupportedException("Create a GitHub issue when this method is required");

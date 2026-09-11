@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -47,6 +49,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IParameterMembership.ownedMemberParameter))]
         internal static IFeature ComputeOwnedMemberParameter(this IParameterMembership parameterMembershipSubject)
         {
             if (parameterMembershipSubject == null)
@@ -72,6 +75,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
+        [Operation(name: nameof(IParameterMembership.ParameterDirection))]
         internal static FeatureDirectionKind ComputeParameterDirectionOperation(this IParameterMembership parameterMembershipSubject)
         {
             if (parameterMembershipSubject == null)

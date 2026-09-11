@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.States;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -48,6 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITransitionFeatureMembership.transitionFeature))]
         internal static IStep ComputeTransitionFeature(this ITransitionFeatureMembership transitionFeatureMembershipSubject)
         {
             if (transitionFeatureMembershipSubject == null)
