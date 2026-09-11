@@ -44,10 +44,9 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// The purpose of the <see cref="RequirementVerificationMembershipReader" /> is to read an instance of <see cref="IRequirementVerificationMembership" />
     /// from the XMI document
     /// </summary>
     public class RequirementVerificationMembershipReader : XmiDataReader<IRequirementVerificationMembership>

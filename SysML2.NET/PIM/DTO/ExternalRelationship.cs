@@ -52,7 +52,7 @@ namespace SysML2.NET.PIM.DTO
         public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="IElement"/>
+        /// Gets or sets the <see cref="Core.DTO.Root.Elements.IElement"/>
         /// </summary>
         public Guid ElementEnd { get; set; }
 

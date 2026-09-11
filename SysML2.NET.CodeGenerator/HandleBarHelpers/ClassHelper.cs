@@ -39,6 +39,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     public static class ClassHelper
     {
         /// <summary>
+        /// The namespace that carries the root <c>Element</c> types every generated serializer refers to
+        /// </summary>
+        private const string RootElementsNameSpace = "Root.Elements";
+
+        /// <summary>
         /// Registers the <see cref="ClassHelper" />
         /// </summary>
         /// <param name="handlebars">
@@ -125,53 +130,32 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var namespacePrefix = arguments[1].ToString();
 
-                var superClasses = @class.SuperClass;
+                var uniqueNamespaces = QueryReferencedNameSpaces(@class, namespacePrefix);
 
-                var uniqueNamespaces = new HashSet<string>();
-
-                foreach (var superClass in superClasses)
-                {
-                    uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(superClass));
-                }
-
-                if (namespacePrefix == "POCO")
-                {
-                    var allProperties = @class.QueryAllProperties();
-
-                    foreach (var prop in allProperties.Where(x => x.QueryIsReferenceType()))
-                    {
-                        uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
-                    }
-
-                    var interfaceDerivedProperties =
-                        superClasses.SelectMany(x => x.QueryAllProperties()
-                            .Where(y => y.IsDerived || y.IsDerivedUnion))
-                            .ToList();
-
-                    foreach (var interfaceDerivedProperty in interfaceDerivedProperties)
-                    {
-                        if (interfaceDerivedProperty.Possessor is INamedElement owner)
-                        {
-                            var @namespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
-                            uniqueNamespaces.Add(@namespace);
-                        }
-                    }
-                    
-                    foreach (var operation in @class.QueryAllOperations())
-                    {
-                        foreach (var parameterType in operation.OwnedParameter.Where(x => x.Type is IClass).Select(x => x.Type as IClass))
-                        {
-                            uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(parameterType));
-                        }
-                    }
-                }
-                
                 uniqueNamespaces.Remove(Extensions.NamedElementExtensions.QueryNamespace(@class));
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
 
                 foreach (var orderedNamespace in orderedNamespaces)
                 {
                     writer.WriteSafeString($"using SysML2.NET.Core.{namespacePrefix}.{orderedNamespace} ;{Environment.NewLine}");
+                }
+            });
+
+            handlebars.RegisterHelper("Class.WriteAllPocoNameSpaces", (writer, context, _) =>
+            {
+                if (context.Value is not IClass @class)
+                {
+                    throw new ArgumentException("#Class.WriteAllPocoNameSpaces supposed to be IClass");
+                }
+
+                var uniqueNamespaces = QueryReferencedNameSpaces(@class, "POCO");
+
+                uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(@class));
+                uniqueNamespaces.Add(RootElementsNameSpace);
+
+                foreach (var orderedNamespace in uniqueNamespaces.Order())
+                {
+                    writer.WriteSafeString($"using SysML2.NET.Core.POCO.{orderedNamespace} ;{Environment.NewLine}");
                 }
             });
 
@@ -244,6 +228,50 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 return umlClass.QueryAllProperties().OrderBy(x => x.Name);
             });
+        }
+
+        /// <summary>
+        /// Queries the distinct namespaces that the generated code for the specified <see cref="IClass" /> refers to
+        /// </summary>
+        /// <param name="class">
+        /// The <see cref="IClass" /> for which the referenced namespaces are queried
+        /// </param>
+        /// <param name="namespacePrefix">
+        /// The generated-code flavour, either <c>DTO</c> or <c>POCO</c>
+        /// </param>
+        /// <returns>
+        /// The distinct namespaces, excluding the <c>SysML2.NET.Core.{namespacePrefix}</c> prefix
+        /// </returns>
+        private static HashSet<string> QueryReferencedNameSpaces(IClass @class, string namespacePrefix)
+        {
+            var superClasses = @class.SuperClass;
+
+            var uniqueNamespaces = superClasses
+                .Select(Extensions.NamedElementExtensions.QueryNamespace)
+                .ToHashSet();
+
+            if (namespacePrefix != "POCO")
+            {
+                return uniqueNamespaces;
+            }
+
+            uniqueNamespaces.UnionWith(@class.QueryAllProperties()
+                .Where(x => x.QueryIsReferenceType())
+                .Select(x => Extensions.NamedElementExtensions.QueryNamespace(x.Type)));
+
+            uniqueNamespaces.UnionWith(superClasses
+                .SelectMany(x => x.QueryAllProperties().Where(y => y.IsDerived || y.IsDerivedUnion))
+                .Select(x => x.Possessor)
+                .OfType<INamedElement>()
+                .Select(Extensions.NamedElementExtensions.QueryNamespace));
+
+            uniqueNamespaces.UnionWith(@class.QueryAllOperations()
+                .SelectMany(x => x.OwnedParameter)
+                .Select(x => x.Type)
+                .OfType<IClass>()
+                .Select(Extensions.NamedElementExtensions.QueryNamespace));
+
+            return uniqueNamespaces;
         }
     }
 }

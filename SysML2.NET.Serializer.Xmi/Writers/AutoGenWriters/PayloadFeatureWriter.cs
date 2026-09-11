@@ -37,11 +37,10 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Kernel.Interactions;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Serializer.Xmi.Extensions;
 
     /// <summary>

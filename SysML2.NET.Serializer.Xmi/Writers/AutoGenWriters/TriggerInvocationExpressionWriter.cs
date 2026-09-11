@@ -45,7 +45,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Serializer.Xmi.Extensions;
 
     /// <summary>

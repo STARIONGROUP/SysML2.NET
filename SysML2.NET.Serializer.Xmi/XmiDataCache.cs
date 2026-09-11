@@ -39,7 +39,7 @@ namespace SysML2.NET.Serializer.Xmi
     public class XmiDataCache : IXmiDataCache
     {
         /// <summary>
-        /// Gets the cached <see cref="Dictionary{TKey,TValue}"/> of read <see cref="IData"/>. The <see cref="IData.Id"/> is used as key,
+        /// Gets the cached <see cref="Dictionary{TKey,TValue}"/> of read <see cref="IData"/>. The <see cref="IIdentified.Id"/> is used as key,
         /// the read <see cref="IData"/> as value
         /// </summary>
         private readonly Dictionary<Guid, IData> cache = [];
@@ -81,7 +81,7 @@ namespace SysML2.NET.Serializer.Xmi
         }
 
         /// <summary>
-        /// Adds the specified <see cref="IData"/> to the cache using the <see cref="IData.Id"/> as key 
+        /// Adds the specified <see cref="IData"/> to the cache using the <see cref="IIdentified.Id"/> as key 
         /// </summary>
         /// <param name="data">The <see cref="IData"/> to be added to the cache</param>
         /// <returns>True if the provided <see cref="IData"/> was added, false if already present in the cache and could not

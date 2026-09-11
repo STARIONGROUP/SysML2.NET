@@ -58,6 +58,7 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using SysML2.NET.Core.POCO.Systems.Flows;
     using SysML2.NET.Core.POCO.Systems.Interfaces;
     using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
     using SysML2.NET.Core.POCO.Systems.Occurrences;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Ports;
@@ -66,8 +67,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Serializer.Xmi.Extensions;
 
     /// <summary>

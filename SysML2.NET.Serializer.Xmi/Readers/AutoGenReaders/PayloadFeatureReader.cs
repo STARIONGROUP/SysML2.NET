@@ -37,14 +37,13 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Interactions;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Kernel.Interactions;
-    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// The purpose of the <see cref="PayloadFeatureReader" /> is to read an instance of <see cref="IPayloadFeature" />
     /// from the XMI document
     /// </summary>
     public class PayloadFeatureReader : XmiDataReader<IPayloadFeature>

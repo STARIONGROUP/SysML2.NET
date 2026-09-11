@@ -49,6 +49,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Systems.Allocations;
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
     using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
     using SysML2.NET.Core.POCO.Systems.Cases;
     using SysML2.NET.Core.POCO.Systems.Connections;
     using SysML2.NET.Core.POCO.Systems.Constraints;
@@ -66,11 +67,9 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Core.POCO.Systems.Calculations;
-    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// The purpose of the <see cref="CalculationUsageReader" /> is to read an instance of <see cref="ICalculationUsage" />
     /// from the XMI document
     /// </summary>
     public class CalculationUsageReader : XmiDataReader<ICalculationUsage>

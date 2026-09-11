@@ -22,6 +22,7 @@ namespace SysML2.NET.ModelInterchange
 {
     using System;
     using System.Buffers;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Provides high-performance parsing and serialization helpers
@@ -68,6 +69,7 @@ namespace SysML2.NET.ModelInterchange
         /// <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </para>
         /// </remarks>
+        [SuppressMessage("Usage", "CA2265:Do not compare Span<T> to 'null' or 'default'", Justification = "Only a default span counts as a missing argument; IsEmpty would also reject a zero-length span over real storage.")]
         public static ChecksumKind Parse(ReadOnlySpan<char> value)
         {
             if (value == null)
@@ -124,6 +126,7 @@ namespace SysML2.NET.ModelInterchange
         /// Thrown when <paramref name="value"/> does not represent
         /// a valid checksum algorithm.
         /// </exception>
+        [SuppressMessage("Usage", "CA2265:Do not compare Span<T> to 'null' or 'default'", Justification = "Only a default span counts as a missing argument; IsEmpty would also reject a zero-length span over real storage.")]
         public static ChecksumKind Parse(ReadOnlySpan<byte> value)
         {
             if (value == null)

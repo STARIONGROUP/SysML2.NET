@@ -32,7 +32,7 @@ namespace SysML2.NET.Serializer.Xmi
     public interface IXmiDataCache
     {
         /// <summary>
-        /// Adds the specified <see cref="IData"/> to the cache using the <see cref="IData.Id"/> as key 
+        /// Adds the specified <see cref="IData"/> to the cache using the <see cref="IIdentified.Id"/> as key 
         /// </summary>
         /// <param name="data">The <see cref="IData"/> to be added to the cache</param>
         /// <returns>True if the provided <see cref="IData"/> was added, false if already present in the cache and could not
