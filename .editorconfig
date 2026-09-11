@@ -199,10 +199,10 @@ dotnet_naming_rule.parameters_and_locals_are_camel_case.severity = suggestion
 # Disable S3776: Cognitive Complexity Warning
 dotnet_diagnostic.S3776.severity = none
 
-[**/AutoGen*/*.cs]
-# Disable CS1570/CS1584/CS1658 for all codegen
+[**/AutoGen*/**.cs]
+# Generated code is excluded from SonarCloud analysis; keep the build log in step
+dotnet_analyzer_diagnostic.severity = none
+# Compiler diagnostics cannot be bulk-configured, so CS1570/CS1584/CS1658 stay listed
 dotnet_diagnostic.CS1570.severity = none
 dotnet_diagnostic.CS1584.severity = none
 dotnet_diagnostic.CS1658.severity = none
-# Disable CA1815: generated value types carry data only; equality semantics are not part of their contract
-dotnet_diagnostic.CA1815.severity = none
