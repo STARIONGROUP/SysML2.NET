@@ -33,7 +33,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// Provides extensions methods for the <see cref="{SysML2.NET.Core.POCO.Core.Classifiers.{this.Name}}"/> to help resolve reference for properties
+    /// Provides extensions methods for the <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Subclassification"/> to help resolve reference for properties
     /// </summary>
     public static class SubclassificationExtensions
     {

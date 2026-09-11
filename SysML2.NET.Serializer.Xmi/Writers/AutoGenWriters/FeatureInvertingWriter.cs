@@ -34,11 +34,10 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Serializer.Xmi.Extensions;
 
     /// <summary>

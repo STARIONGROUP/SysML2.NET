@@ -33,7 +33,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// Provides extensions methods for the <see cref="{SysML2.NET.Core.POCO.Systems.Requirements.{this.Name}}"/> to help resolve reference for properties
+    /// Provides extensions methods for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership"/> to help resolve reference for properties
     /// </summary>
     public static class FramedConcernMembershipExtensions
     {

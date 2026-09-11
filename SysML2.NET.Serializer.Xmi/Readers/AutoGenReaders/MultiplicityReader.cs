@@ -36,14 +36,13 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Extensions.Core;
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// The purpose of the <see cref="MultiplicityReader" /> is to read an instance of <see cref="IMultiplicity" />
     /// from the XMI document
     /// </summary>
     public class MultiplicityReader : XmiDataReader<IMultiplicity>

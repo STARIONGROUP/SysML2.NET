@@ -42,6 +42,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
     using SysML2.NET.Core.POCO.Systems.Attributes;
     using SysML2.NET.Core.POCO.Systems.Calculations;
@@ -62,11 +63,9 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Core.POCO.Systems.Allocations;
-    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// The purpose of the <see cref="AllocationDefinitionReader" /> is to read an instance of <see cref="IAllocationDefinition" />
     /// from the XMI document
     /// </summary>
     public class AllocationDefinitionReader : XmiDataReader<IAllocationDefinition>

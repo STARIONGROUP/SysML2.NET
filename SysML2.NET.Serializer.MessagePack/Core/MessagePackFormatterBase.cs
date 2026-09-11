@@ -77,7 +77,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
         /// <remarks>
         /// <para>
         /// This method encodes the <see cref="Guid"/> as a fixed-length 16-byte binary value
-        /// instead of using <see cref="Guid.ToByteArray"/>, avoiding per-call allocations.
+        /// instead of using <see cref="Guid.ToByteArray()"/>, avoiding per-call allocations.
         /// </para>
         /// <para>
         /// A thread-local reusable buffer is used to maximize throughput while remaining

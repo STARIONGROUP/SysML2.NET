@@ -42,14 +42,14 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         };
 
         /// <summary>
-        /// Provides the delegate <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/> for the
+        /// Provides the delegate <see cref="Action{Object, Utf8JsonWriter, SerializationModeKind, Boolean}"/> for the
         /// <see cref="System.Type"/> that is to be serialized
         /// </summary>
         /// <param name="type">
         /// The subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A Delegate of <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/>
+        /// A Delegate of <see cref="Action{Object, Utf8JsonWriter, SerializationModeKind, Boolean}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
@@ -67,10 +67,12 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <summary>
         /// Asserts whether the <paramref name="type"/> is supported by the provider
         /// </summary>
-        /// <param name="typeName">
-        /// The name of the subject <see cref="System.Type"/> for which support is asserted
+        /// <param name="type">
+        /// The subject <see cref="System.Type"/> for which support is asserted
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// <c>true</c> when the provider carries a serializer for <paramref name="type"/>, <c>false</c> otherwise
+        /// </returns>
         internal static bool IsTypeSupported(System.Type type)
         {
             return SerializerActionMap.ContainsKey(type);

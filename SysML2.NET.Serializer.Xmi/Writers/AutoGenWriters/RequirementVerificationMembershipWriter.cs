@@ -44,7 +44,6 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Serializer.Xmi.Extensions;
 
     /// <summary>

@@ -40,12 +40,11 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Cases;
-    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
 
     /// <summary>
-    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// The purpose of the <see cref="ObjectiveMembershipReader" /> is to read an instance of <see cref="IObjectiveMembership" />
     /// from the XMI document
     /// </summary>
     public class ObjectiveMembershipReader : XmiDataReader<IObjectiveMembership>

@@ -86,11 +86,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         }
 
         /// <summary>
-        /// Deserializes properties of a <see cref="ViewRenderingMembership" />
+        /// Deserializes properties of a <see cref="SysML2.NET.Core.DTO.Systems.Views.ViewRenderingMembership" />
         /// from a <see cref="Utf8JsonReader" />, including derived properties
         /// </summary>
         /// <param name="dtoInstance">
-        /// The <see cref="ViewRenderingMembership"/> instance holding deserialized values
+        /// The <see cref="SysML2.NET.Core.DTO.Systems.Views.ViewRenderingMembership"/> instance holding deserialized values
         /// </param>
         /// <param name="reader">
         /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
@@ -724,11 +724,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         }
 
         /// <summary>
-        /// Deserializes properties of a <see cref="ViewRenderingMembership" />
+        /// Deserializes properties of a <see cref="SysML2.NET.Core.DTO.Systems.Views.ViewRenderingMembership" />
         /// from a <see cref="Utf8JsonReader" />, excluding derived properties
         /// </summary>
         /// <param name="dtoInstance">
-        /// The <see cref="ViewRenderingMembership"/> instance holding deserialized values
+        /// The <see cref="SysML2.NET.Core.DTO.Systems.Views.ViewRenderingMembership"/> instance holding deserialized values
         /// </param>
         /// <param name="reader">
         /// The <see cref="Utf8JsonReader"/> positioned on the <see cref="JsonTokenType.StartObject"/> of the
