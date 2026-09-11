@@ -110,7 +110,10 @@ namespace SysML2.NET.Serializer.Json
             {
                 var result = this.DeSerializeUtf8Json(buffer, length, serializationModeKind, serializationTargetKind, deserializeDerivedProperties);
 
-                this.logger.LogInformation("stream deserialized in {ElapsedTime} [ms]", sw.ElapsedMilliseconds);
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("stream deserialized in {ElapsedTime} [ms]", sw.ElapsedMilliseconds);
+                }
 
                 return result;
             }
@@ -149,7 +152,10 @@ namespace SysML2.NET.Serializer.Json
             {
                 var result = this.DeSerializeUtf8Json(buffer, length, serializationModeKind, serializationTargetKind, deserializeDerivedProperties);
 
-                this.logger.LogInformation("stream deserialized asynchronously in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("stream deserialized asynchronously in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+                }
 
                 return result;
             }

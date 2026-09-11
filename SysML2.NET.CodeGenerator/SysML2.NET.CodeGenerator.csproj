@@ -278,6 +278,21 @@
     <None Update="Templates\OpenAPI\psm-json-deserialization-provider-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\OpenAPI\psm-messagepack-formatter-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-messagepack-payload-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-messagepack-payloadfactory-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-messagepack-payloadformatter-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-messagepack-formatterhelper-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />

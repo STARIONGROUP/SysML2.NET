@@ -205,6 +205,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(roundTripped.Payload, Is.TypeOf<Feature>());
                 Assert.That(((Feature)roundTripped.Payload).Id, Is.EqualTo(ElementIdentifier));
                 Assert.That(((Feature)roundTripped.Payload).DeclaredName, Is.EqualTo("the feature"));
+                Assert.That(roundTripped.Payload, Is.EqualTo(dataVersion.Payload).UsingPropertiesComparer());
             }
 
             var withApiPayload = new DataVersion
@@ -222,6 +223,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(apiRoundTripped.Payload, Is.TypeOf<ExternalData>());
                 Assert.That(((ExternalData)apiRoundTripped.Payload).ResourceIdentifier, Is.EqualTo(new Uri("http://www.stariongroup.eu/external")));
                 Assert.That(apiRoundTripped.Identity, Is.Null);
+                Assert.That(apiRoundTripped.Payload, Is.EqualTo(withApiPayload.Payload).UsingPropertiesComparer());
             }
 
             using var withoutPayload = this.SerializeResponse(new DataVersion { Id = DataVersionIdentifier });
@@ -365,11 +367,17 @@ namespace SysML2.NET.Serializer.Json.Tests
                 ]
             };
 
+            var roundTrippedDataVersion = this.RoundTripResponse(dataVersion);
+
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(this.RoundTripResponse(dataVersion), Is.EqualTo(dataVersion).UsingPropertiesComparer());
+                Assert.That(roundTrippedDataVersion, Is.EqualTo(dataVersion).UsingPropertiesComparer());
                 Assert.That(this.RoundTripResponse(project), Is.EqualTo(project).UsingPropertiesComparer());
                 Assert.That(this.RoundTripResponse(constraint), Is.EqualTo(constraint).UsingPropertiesComparer());
+
+                Assert.That(roundTrippedDataVersion.Payload, Is.TypeOf<Feature>());
+                Assert.That(roundTrippedDataVersion.Payload, Is.EqualTo(dataVersion.Payload).UsingPropertiesComparer());
+                Assert.That(roundTrippedDataVersion.Identity, Is.EqualTo(dataVersion.Identity).UsingPropertiesComparer());
             }
 
             var divergentPayload = this.RoundTripResponse(dataVersion);
@@ -410,6 +418,8 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 Assert.That(roundTrippedRequest.Payload, Is.TypeOf<Feature>());
                 Assert.That(roundTrippedRequest, Is.EqualTo(dataVersionRequest).UsingPropertiesComparer());
+                Assert.That(roundTrippedRequest.Payload, Is.EqualTo(dataVersionRequest.Payload).UsingPropertiesComparer());
+                Assert.That(roundTrippedRequest.Identity, Is.EqualTo(dataVersionRequest.Identity).UsingPropertiesComparer());
             }
         }
 

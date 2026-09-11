@@ -1,4 +1,4 @@
-﻿﻿// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="InterchangeProjectDeSerializer.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -224,7 +224,10 @@ namespace SysML2.NET.Serializer.Json.ModelInterchange
                 reader.Read();
                 Utf8JsonReaderHelper.SkipValue(ref reader);
                 
-                logger.LogDebug("The property {Property} is unknown and skipped", reader.GetString());
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("The property {Property} is unknown and skipped", reader.GetString());
+                }
             }
 
             return project;

@@ -39,6 +39,7 @@ namespace SysML2.NET.Serializer.MessagePack
         protected static MessagePackSerializerOptions CreateSerializerOptions()
         {
             var formatterResolver = CompositeResolver.Create(
+                PsmDataFormatterResolver.Instance,
                 DataFormatterResolver.Instance,
                 StandardResolver.Instance);
 
