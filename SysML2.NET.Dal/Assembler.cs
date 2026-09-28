@@ -103,7 +103,11 @@ namespace SysML2.NET.Dal
             {
                 if (!this.Cache.TryRemove(identifier, out var deletedLazyPoco))
                 {
-                    this.logger.LogWarning("The element with identifier {Identifier} was not deleted as it could not be found in the cache", identifier);
+                    if (this.logger.IsEnabled(LogLevel.Warning))
+                    {
+                        this.logger.LogWarning("The element with identifier {Identifier} was not deleted as it could not be found in the cache", identifier);
+                    }
+
                     continue;
                 }
 

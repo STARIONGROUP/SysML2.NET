@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="InterchangeProjectMetadataDeSerializer.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -156,7 +156,7 @@ namespace SysML2.NET.Serializer.Json.ModelInterchange
                 if (reader.ValueTextEquals("created"u8))
                 {
                     reader.Read();
-                    metadata.Created = Utf8JsonReaderHelper.ReadDateTimeIso8601(ref reader);
+                    metadata.Created = Utf8JsonReaderHelper.ReadDateTimeOffsetIso8601(ref reader);
                     continue;
                 }
 
@@ -248,7 +248,10 @@ namespace SysML2.NET.Serializer.Json.ModelInterchange
                 reader.Read();
                 Utf8JsonReaderHelper.SkipValue(ref reader);
 
-                logger.LogDebug("The property {Property} is unknown and skipped", propertyName);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("The property {Property} is unknown and skipped", propertyName);
+                }
             }
 
             return metadata;

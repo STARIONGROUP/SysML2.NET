@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="ExternalReferenceService.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -69,7 +69,11 @@ namespace SysML2.NET.Serializer.Xmi
             else
             {
                 var fileInfo = new FileInfo(uri.LocalPath);
-                this.logger.LogInformation("File {FileName} already processed", fileInfo.Name);
+
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("File {FileName} already processed", fileInfo.Name);
+                }
             }
         }
 

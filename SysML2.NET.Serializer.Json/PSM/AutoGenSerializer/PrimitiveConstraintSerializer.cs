@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Json.PSM
     using System;
     using System.Text.Json;
 
+    using SysML2.NET.Extensions.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.PSM.Enumerations;
     using SysML2.NET.Serializer.Json;
@@ -76,7 +77,7 @@ namespace SysML2.NET.Serializer.Json.PSM
 
             writer.WriteBoolean("inverse"u8, primitiveConstraint.Inverse);
 
-            writer.WriteString("operator"u8, primitiveConstraint.Operator.ToWireValue());
+            writer.WriteString("operator"u8, PrimitiveConstraintOperatorProvider.ToUtf8Bytes(primitiveConstraint.Operator));
 
             writer.WriteString("property"u8, primitiveConstraint.Property);
 

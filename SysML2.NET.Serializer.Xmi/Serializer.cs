@@ -146,7 +146,10 @@ namespace SysML2.NET.Serializer.Xmi
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
 
-            this.logger.LogInformation("XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
 
                 /// <summary>
@@ -186,7 +189,10 @@ namespace SysML2.NET.Serializer.Xmi
 
             var sourceFiles = elementOriginMap.GetAllSourceFiles().ToList();
 
-            this.logger.LogInformation("Starting multi-file XMI serialization for {FileCount} files", sourceFiles.Count);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("Starting multi-file XMI serialization for {FileCount} files", sourceFiles.Count);
+            }
 
             // Build a flat index of all namespaces for O(1) lookup
             var namespaceIndex = new System.Collections.Generic.Dictionary<Guid, INamespace>();
@@ -198,7 +204,11 @@ namespace SysML2.NET.Serializer.Xmi
 
                 if (rootNamespaceId == Guid.Empty)
                 {
-                    this.logger.LogWarning("No root namespace found for source file {SourceFile}", sourceFile);
+                    if (this.logger.IsEnabled(LogLevel.Warning))
+                    {
+                        this.logger.LogWarning("No root namespace found for source file {SourceFile}", sourceFile);
+                    }
+
                     continue;
                 }
 
@@ -207,12 +217,19 @@ namespace SysML2.NET.Serializer.Xmi
                 var outputPath = Path.Combine(outputDirectory.FullName, fileName);
                 var outputUri = new Uri(outputPath);
 
-                this.logger.LogInformation("Writing XMI at: {FileName}", fileName);
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("Writing XMI at: {FileName}", fileName);
+                }
 
                 // Find the namespace POCO for this file's root namespace
                 if (!namespaceIndex.TryGetValue(rootNamespaceId, out var fileRootNamespace))
                 {
-                    this.logger.LogWarning("Could not find namespace with id {NamespaceId} for file {SourceFile}", rootNamespaceId, sourceFile);
+                    if (this.logger.IsEnabled(LogLevel.Warning))
+                    {
+                        this.logger.LogWarning("Could not find namespace with id {NamespaceId} for file {SourceFile}", rootNamespaceId, sourceFile);
+                    }
+
                     continue;
                 }
 
@@ -220,7 +237,10 @@ namespace SysML2.NET.Serializer.Xmi
                 this.Serialize(fileRootNamespace, writerOptions, fileStream, elementOriginMap, outputUri);
             }
 
-            this.logger.LogInformation("Multi-file XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("Multi-file XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
 
         /// <summary>
@@ -301,7 +321,10 @@ namespace SysML2.NET.Serializer.Xmi
             await xmlWriter.WriteEndDocumentAsync();
             await xmlWriter.FlushAsync();
 
-            this.logger.LogInformation("Asynchronous XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("Asynchronous XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
 
         /// <summary>
@@ -344,7 +367,10 @@ namespace SysML2.NET.Serializer.Xmi
 
             var sourceFiles = elementOriginMap.GetAllSourceFiles().ToList();
 
-            this.logger.LogInformation("Starting asynchronous multi-file XMI serialization for {FileCount} files", sourceFiles.Count);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("Starting asynchronous multi-file XMI serialization for {FileCount} files", sourceFiles.Count);
+            }
 
             // Build a flat index of all namespaces for O(1) lookup
             var namespaceIndex = new System.Collections.Generic.Dictionary<Guid, INamespace>();
@@ -358,7 +384,11 @@ namespace SysML2.NET.Serializer.Xmi
 
                 if (rootNamespaceId == Guid.Empty)
                 {
-                    this.logger.LogWarning("No root namespace found for source file {SourceFile}", sourceFile);
+                    if (this.logger.IsEnabled(LogLevel.Warning))
+                    {
+                        this.logger.LogWarning("No root namespace found for source file {SourceFile}", sourceFile);
+                    }
+
                     continue;
                 }
 
@@ -367,12 +397,19 @@ namespace SysML2.NET.Serializer.Xmi
                 var outputPath = Path.Combine(outputDirectory.FullName, fileName);
                 var outputUri = new Uri(outputPath);
 
-                this.logger.LogInformation("Writing XMI at: {FileName}", fileName);
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("Writing XMI at: {FileName}", fileName);
+                }
 
                 // Find the namespace POCO for this file's root namespace
                 if (!namespaceIndex.TryGetValue(rootNamespaceId, out var fileRootNamespace))
                 {
-                    this.logger.LogWarning("Could not find namespace with id {NamespaceId} for file {SourceFile}", rootNamespaceId, sourceFile);
+                    if (this.logger.IsEnabled(LogLevel.Warning))
+                    {
+                        this.logger.LogWarning("Could not find namespace with id {NamespaceId} for file {SourceFile}", rootNamespaceId, sourceFile);
+                    }
+
                     continue;
                 }
                 
@@ -380,7 +417,10 @@ namespace SysML2.NET.Serializer.Xmi
                 await this.SerializeAsync(fileRootNamespace, writerOptions, fileStream, elementOriginMap, outputUri, cancellationToken);
             }
 
-            this.logger.LogInformation("Asynchronous multi-file XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("Asynchronous multi-file XMI serialization completed in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
+            }
         }
         
         /// <summary>

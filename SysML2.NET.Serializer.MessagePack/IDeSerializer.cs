@@ -26,6 +26,7 @@ namespace SysML2.NET.Serializer.MessagePack
     using System.Threading.Tasks;
 
     using SysML2.NET.Common;
+    using SysML2.NET.PSM.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="IDeSerializer"/> is to deserialize a MessagePack <see cref="Stream"/> to
@@ -33,6 +34,36 @@ namespace SysML2.NET.Serializer.MessagePack
     /// </summary>
     public interface IDeSerializer
     {
+        /// <summary>
+        /// Deserializes the MessagePack stream to an <see cref="IEnumerable{IRequest}"/>
+        /// </summary>
+        /// <param name="stream">the MessagePack input stream</param>
+        /// <returns>an <see cref="IEnumerable{IRequest}"/></returns>
+        IEnumerable<IRequest> DeSerializeRequest(Stream stream);
+
+        /// <summary>
+        /// Deserializes the MessagePack stream to an <see cref="IEnumerable{IResponse}"/>
+        /// </summary>
+        /// <param name="stream">the MessagePack input stream</param>
+        /// <returns>an <see cref="IEnumerable{IResponse}"/></returns>
+        IEnumerable<IResponse> DeSerializeResponse(Stream stream);
+
+        /// <summary>
+        /// Asynchronously deserializes the MessagePack stream to an <see cref="IEnumerable{IRequest}"/>
+        /// </summary>
+        /// <param name="stream">the MessagePack input stream</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an <see cref="IEnumerable{IRequest}"/></returns>
+        Task<IEnumerable<IRequest>> DeSerializeRequestAsync(Stream stream, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Asynchronously deserializes the MessagePack stream to an <see cref="IEnumerable{IResponse}"/>
+        /// </summary>
+        /// <param name="stream">the MessagePack input stream</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an <see cref="IEnumerable{IResponse}"/></returns>
+        Task<IEnumerable<IResponse>> DeSerializeResponseAsync(Stream stream, CancellationToken cancellationToken);
+
         /// <summary>
         /// Deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>

@@ -95,7 +95,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the alias Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the alias Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
@@ -107,12 +110,18 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 }
                 else
                 {
-                    logger.LogDebug("the created Json property was null in the Project: {Identifier}", dtoInstance.Id);
+                    if (logger.IsEnabled(LogLevel.Debug))
+                    {
+                        logger.LogDebug("the created Json property was null in the Project: {Identifier}", dtoInstance.Id);
+                    }
                 }
             }
             else
             {
-                logger.LogDebug("the created Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the created Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("defaultBranch"u8, out JsonElement defaultBranchProperty))
@@ -135,7 +144,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the defaultBranch Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the defaultBranch Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                }
             }
             
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -148,7 +160,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the name Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
@@ -161,7 +176,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the name Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
@@ -170,7 +188,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the resourceIdentifier Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the resourceIdentifier Json property was not found in the Project: {Identifier}", dtoInstance.Id);
+                }
             }
 
             logger.LogTrace("finish deserialization: Project");

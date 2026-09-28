@@ -280,12 +280,7 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         /// </returns>
         private string QueryPropertyTypeOverride(string className, string propertyName)
         {
-            if (PropertyTypeOverrides.TryGetValue((className, propertyName), out var typeName))
-            {
-                return typeName;
-            }
-
-            return this.unionPropertyTypes.TryGetValue((className, propertyName), out var unionTypeName) ? unionTypeName : null;
+            return PropertyTypeOverrides.TryGetValue((className, propertyName), out var typeName) ? typeName : this.unionPropertyTypes.GetValueOrDefault((className, propertyName));
         }
 
         /// <summary>

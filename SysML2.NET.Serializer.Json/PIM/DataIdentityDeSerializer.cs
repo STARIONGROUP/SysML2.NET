@@ -89,7 +89,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the alias Json property was not found in the DataIdentity: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the alias Json property was not found in the DataIdentity: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -102,7 +105,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the DataIdentity: {Id}", dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the name Json property was not found in the DataIdentity: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
@@ -111,7 +117,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug("the resourceIdentifier Json property was not found in the DataIdentity: {Id}",dtoInstance.Id);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the resourceIdentifier Json property was not found in the DataIdentity: {Id}",dtoInstance.Id);
+                }
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: DataIdentity");

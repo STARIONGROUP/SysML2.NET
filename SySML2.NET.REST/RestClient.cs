@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="RestClient.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
@@ -396,7 +396,10 @@ namespace SySML2.NET.REST
         /// <returns></returns>
         private async Task<IEnumerable<IIdentified>> RequestData(Uri requestUri, CancellationToken cancellationToken)
         {
-            this.logger.LogDebug("request data from: {0}", requestUri);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("request data from: {0}", requestUri);
+            }
 
             var requestMessage = new HttpRequestMessage()
             {

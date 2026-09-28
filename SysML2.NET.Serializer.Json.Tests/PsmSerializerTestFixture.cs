@@ -84,6 +84,23 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(root.GetProperty("name").GetString(), Is.EqualTo("the name"));
             }
 
+            var localProject = new Project
+            {
+                Id = ProjectIdentifier,
+                Created = new DateTime(1976, 8, 20, 0, 0, 0, DateTimeKind.Local),
+                Name = "the name"
+            };
+
+            var localJson = Serialize(stream => this.serializer.SerializeResponse(localProject, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(json, Does.Contain("\"created\":\"1976-08-20T00:00:00Z\""));
+                Assert.That(localJson, Does.Match("\"created\":\"[^\"]+[+-][0-9]{2}:[0-9]{2}\""));
+                Assert.That(JsonDocument.Parse(localJson).RootElement.GetProperty("created").GetDateTime().Kind,
+                    Is.EqualTo(DateTimeKind.Local));
+            }
+
             var collectionJson = Serialize(stream =>
                 this.serializer.SerializeResponse(new List<IResponse> { project }, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
 

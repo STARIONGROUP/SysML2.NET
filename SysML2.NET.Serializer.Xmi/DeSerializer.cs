@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
@@ -221,12 +221,19 @@ namespace SysML2.NET.Serializer.Xmi
 
             await using var fileStream = new FileStream(fileLocation.LocalPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
 
-            this.logger.LogInformation("start deserializing from {Path}", fileInfo.Name);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("start deserializing from {Path}", fileInfo.Name);
+            }
+
             var stopWatch = Stopwatch.StartNew();
 
             var result = await this.ReadAsync(fileStream, fileLocation, isRoot, elementOriginMap, cancellationToken);
 
-            this.logger.LogInformation("File {Path} deserialized in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("File {Path} deserialized in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+            }
 
             return result;
         }
@@ -264,7 +271,10 @@ namespace SysML2.NET.Serializer.Xmi
 
             using var xmlReader = XmlReader.Create(reader, settings);
 
-            this.logger.LogTrace("starting to read xml {DocumentName}", fileInfo.Name);
+            if (this.logger.IsEnabled(LogLevel.Trace))
+            {
+                this.logger.LogTrace("starting to read xml {DocumentName}", fileInfo.Name);
+            }
 
             await xmlReader.MoveToContentAsync();
 
@@ -277,7 +287,11 @@ namespace SysML2.NET.Serializer.Xmi
 
             if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
             {
-                this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
+                }
+
                 this.cache.RegisterRootNamespace(fileLocation, existingNamespace);
 
                 stopWatch.Stop();
@@ -290,7 +304,11 @@ namespace SysML2.NET.Serializer.Xmi
             this.cache.RegisterRootNamespace(fileLocation, readNamespace);
 
             stopWatch.Stop();
-            this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+
+            if (this.logger.IsEnabled(LogLevel.Trace))
+            {
+                this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+            }
 
             await this.ResolveExternalReferenceAsync(elementOriginMap, cancellationToken);
 
@@ -321,12 +339,19 @@ namespace SysML2.NET.Serializer.Xmi
 
             using var fileStream = File.OpenRead(fileLocation.LocalPath);
 
-            this.logger.LogInformation("start deserializing from {Path}", fileInfo.Name);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("start deserializing from {Path}", fileInfo.Name);
+            }
+
             var stopWatch = Stopwatch.StartNew();
 
             var result = this.Read(fileStream, fileLocation, isRoot, elementOriginMap);
 
-            this.logger.LogInformation("File {Path} deserialized in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                this.logger.LogInformation("File {Path} deserialized in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+            }
 
             return result;
         }
@@ -351,7 +376,10 @@ namespace SysML2.NET.Serializer.Xmi
 
             using var xmlReader = XmlReader.Create(reader, settings);
 
-            this.logger.LogTrace("starting to read xml {DocumentName}", fileInfo.Name);
+            if (this.logger.IsEnabled(LogLevel.Trace))
+            {
+                this.logger.LogTrace("starting to read xml {DocumentName}", fileInfo.Name);
+            }
 
             xmlReader.MoveToContent();
 
@@ -364,7 +392,11 @@ namespace SysML2.NET.Serializer.Xmi
 
             if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
             {
-                this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
+                }
+
                 this.cache.RegisterRootNamespace(fileLocation, existingNamespace);
 
                 stopWatch.Stop();
@@ -377,7 +409,11 @@ namespace SysML2.NET.Serializer.Xmi
             this.cache.RegisterRootNamespace(fileLocation, readNamespace);
 
             stopWatch.Stop();
-            this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+
+            if (this.logger.IsEnabled(LogLevel.Trace))
+            {
+                this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+            }
 
             this.ResolveExternalReference(elementOriginMap);
 

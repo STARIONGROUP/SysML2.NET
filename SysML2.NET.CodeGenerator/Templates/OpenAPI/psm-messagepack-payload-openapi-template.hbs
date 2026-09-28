@@ -1,5 +1,5 @@
-﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="CompositeConstraintOperatorExtensions.cs" company="Starion Group S.A.">
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.PayloadName}}.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2026 Starion Group S.A.
 //
@@ -22,32 +22,31 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PSM.Enumerations
+namespace SysML2.NET.Serializer.MessagePack.PSM
 {
     using System;
-    using System.CodeDom.Compiler;
+    using System.Collections.Generic;
+
+    using SysML2.NET.PSM.DTO;
 
     /// <summary>
-    /// Extension methods for the <see cref="CompositeConstraintOperator"/> enumeration
+    /// The <see cref="{{this.PayloadName}}"/> acts as envelope around the Systems Modeling API and Services
+    /// {{this.Family}} data transfer objects and is used as construct to transport them using MessagePack
     /// </summary>
-    [GeneratedCode("SysML2.NET", "latest")]
-    public static class CompositeConstraintOperatorExtensions
+    internal class {{this.PayloadName}}
     {
         /// <summary>
-        /// Queries the value that represents the literal in the Systems Modeling API and Services
+        /// Gets or sets the <see cref="DateTime"/> at which the <see cref="{{this.PayloadName}}"/> was created
         /// </summary>
-        /// <param name="value">The subject <see cref="CompositeConstraintOperator"/>.</param>
-        /// <returns>The value as it appears on the wire.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the literal is not known.</exception>
-        public static string ToWireValue(this CompositeConstraintOperator value)
-        {
-            return value switch
-            {
-                CompositeConstraintOperator.and => "and",
-                CompositeConstraintOperator.or => "or",
-                _ => throw new ArgumentOutOfRangeException(nameof(value))
-            };
-        }
+        internal DateTime Created { get; set; } = DateTime.UtcNow;
+
+        {{#each this.Entries as | entry |}}
+        /// <summary>
+        /// Gets or sets the list of <see cref="{{entry.SchemaName}}"/>.
+        /// </summary>
+        internal List<{{entry.SchemaName}}> {{entry.SchemaName}} { get; set; } = [];
+
+        {{/each}}
     }
 }
 
