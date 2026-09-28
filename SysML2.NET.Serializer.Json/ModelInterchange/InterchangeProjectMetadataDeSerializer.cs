@@ -156,7 +156,7 @@ namespace SysML2.NET.Serializer.Json.ModelInterchange
                 if (reader.ValueTextEquals("created"u8))
                 {
                     reader.Read();
-                    metadata.Created = Utf8JsonReaderHelper.ReadDateTimeIso8601(ref reader);
+                    metadata.Created = Utf8JsonReaderHelper.ReadDateTimeOffsetIso8601(ref reader);
                     continue;
                 }
 

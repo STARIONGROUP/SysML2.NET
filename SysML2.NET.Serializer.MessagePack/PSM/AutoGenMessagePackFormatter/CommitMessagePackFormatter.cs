@@ -80,7 +80,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                 }
             }
 
-            writer.Write(commit.Created);
+            WriteDateTimeIso8601(ref writer, commit.Created);
 
             writer.Write(commit.Description);
 
@@ -150,7 +150,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         break;
 
                     case 2:
-                        commit.Created = reader.ReadDateTime();
+                        commit.Created = ReadDateTimeIso8601(ref reader);
                         break;
 
                     case 3:

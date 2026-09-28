@@ -80,11 +80,11 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                 }
             }
 
-            writer.Write(tag.Created);
+            WriteDateTimeIso8601(ref writer, tag.Created);
 
             if (tag.Deleted.HasValue)
             {
-                writer.Write(tag.Deleted.Value);
+                WriteDateTimeIso8601(ref writer, tag.Deleted.Value);
             }
             else
             {
@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         break;
 
                     case 2:
-                        tag.Created = reader.ReadDateTime();
+                        tag.Created = ReadDateTimeIso8601(ref reader);
                         break;
 
                     case 3:
@@ -159,7 +159,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         }
                         else
                         {
-                            tag.Deleted = reader.ReadDateTime();
+                            tag.Deleted = ReadDateTimeIso8601(ref reader);
                         }
 
                         break;

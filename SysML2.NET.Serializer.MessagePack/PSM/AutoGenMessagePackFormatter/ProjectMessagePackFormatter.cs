@@ -80,7 +80,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                 }
             }
 
-            writer.Write(project.Created);
+            WriteDateTimeIso8601(ref writer, project.Created);
 
             WriteGuidBin16(ref writer, project.DefaultBranch);
 
@@ -136,7 +136,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         break;
 
                     case 2:
-                        project.Created = reader.ReadDateTime();
+                        project.Created = ReadDateTimeIso8601(ref reader);
                         break;
 
                     case 3:

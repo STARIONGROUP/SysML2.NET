@@ -163,14 +163,14 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
             {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
             if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
             {
-                writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
+                WriteDateTimeIso8601(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
             }
             else
             {
                 writer.WriteNil();
             }
             {{else}}
-            writer.Write({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+            WriteDateTimeIso8601(ref writer, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
             {{/if}}
             {{else if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
             if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
@@ -312,11 +312,11 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         }
                         else
                         {
-                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadDateTime();
+                            {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadDateTimeIso8601(ref reader);
                         }
 
                         {{else}}
-                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = reader.ReadDateTime();
+                        {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} = ReadDateTimeIso8601(ref reader);
                         {{/if}}
                         {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
                         {{#if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}

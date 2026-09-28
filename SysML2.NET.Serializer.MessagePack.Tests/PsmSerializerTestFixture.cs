@@ -125,6 +125,28 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
                 Assert.That(roundTrippedDataVersion.Identity, Is.EqualTo(dataVersion.Identity).UsingPropertiesComparer());
             }
 
+            var localProject = new Project
+            {
+                Id = ProjectIdentifier,
+                Created = new DateTime(1976, 8, 20, 13, 45, 56, DateTimeKind.Local),
+                Name = "the project name"
+            };
+
+            List<IResponse> localResponses = [localProject];
+
+            using var localStream = new MemoryStream();
+
+            this.serializer.SerializeResponse(localResponses, localStream);
+            localStream.Position = 0;
+
+            var roundTrippedLocal = this.deSerializer.DeSerializeResponse(localStream).OfType<Project>().Single();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(roundTrippedLocal.Created, Is.EqualTo(localProject.Created));
+                Assert.That(roundTrippedLocal.Created.Kind, Is.EqualTo(DateTimeKind.Local));
+            }
+
             var dataVersionRequest = new DataVersionRequest
             {
                 Identity = new DataIdentityRequest { Alias = ["identity alias"], Name = "the identity" },

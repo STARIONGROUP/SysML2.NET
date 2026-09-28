@@ -22,6 +22,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 {
     using System;
     using System.Buffers;
+    using System.Globalization;
 
     using global::MessagePack;
     
@@ -144,6 +145,48 @@ namespace SysML2.NET.Serializer.MessagePack.Core
             Span<byte> tmp = stackalloc byte[16];
             seq.CopyTo(tmp);
             return new Guid(tmp);
+        }
+
+        /// <summary>
+        /// Writes a <see cref="DateTime"/> as an ISO 8601 round-trip string that carries its time zone.
+        /// </summary>
+        /// <param name="writer">
+        /// The <see cref="MessagePackWriter"/> used to write the value.
+        /// </param>
+        /// <param name="value">
+        /// The <see cref="DateTime"/> to serialize.
+        /// </param>
+        /// <remarks>
+        /// The MessagePack timestamp extension normalizes to UTC and drops the <see cref="DateTimeKind"/>, so the round-trip
+        /// format is written as a string instead.
+        /// </remarks>
+        protected static void WriteDateTimeIso8601(ref MessagePackWriter writer, DateTime value)
+        {
+            writer.Write(value.ToString("O", CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Reads a <see cref="DateTime"/> written by <see cref="WriteDateTimeIso8601"/>.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="MessagePackReader"/> positioned on the value.
+        /// </param>
+        /// <returns>
+        /// The deserialized <see cref="DateTime"/>, with its <see cref="DateTimeKind"/> restored.
+        /// </returns>
+        /// <exception cref="MessagePackSerializationException">
+        /// Thrown when the value is not a valid ISO 8601 date-time string.
+        /// </exception>
+        protected static DateTime ReadDateTimeIso8601(ref MessagePackReader reader)
+        {
+            var value = reader.ReadString();
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new MessagePackSerializationException("Expected an ISO 8601 date-time string, got nil.");
+            }
+
+            return DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
         }
 
         /// <summary>

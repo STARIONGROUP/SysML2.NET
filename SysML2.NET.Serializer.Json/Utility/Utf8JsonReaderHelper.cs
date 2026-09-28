@@ -135,6 +135,31 @@ namespace SysML2.NET.Serializer.Json.Utility
         }
 
         /// <summary>
+        /// Reads the current JSON value as an ISO 8601 date-time string and parses it
+        /// into a <see cref="DateTimeOffset"/>, preserving the offset carried by the payload.
+        /// </summary>
+        /// <param name="reader">
+        /// The <see cref="Utf8JsonReader"/> positioned on the value token.
+        /// </param>
+        /// <returns>
+        /// A <see cref="DateTimeOffset"/> whose offset is the one written in the payload.
+        /// </returns>
+        /// <exception cref="JsonException">
+        /// Thrown when the value is <see langword="null"/>, empty, or not a valid ISO 8601 date-time string.
+        /// </exception>
+        public static DateTimeOffset ReadDateTimeOffsetIso8601(ref Utf8JsonReader reader)
+        {
+            var s = ReadStringOrNull(ref reader);
+
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                throw new JsonException("Expected ISO 8601 date-time string.");
+            }
+
+            return DateTimeOffset.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+        }
+
+        /// <summary>
         /// Reads the current JSON value as a <see cref="Uri"/> or <see langword="null"/>.
         /// </summary>
         /// <param name="reader">

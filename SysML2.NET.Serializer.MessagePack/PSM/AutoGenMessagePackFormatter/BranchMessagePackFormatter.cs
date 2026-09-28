@@ -80,11 +80,11 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                 }
             }
 
-            writer.Write(branch.Created);
+            WriteDateTimeIso8601(ref writer, branch.Created);
 
             if (branch.Deleted.HasValue)
             {
-                writer.Write(branch.Deleted.Value);
+                WriteDateTimeIso8601(ref writer, branch.Deleted.Value);
             }
             else
             {
@@ -156,7 +156,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         break;
 
                     case 2:
-                        branch.Created = reader.ReadDateTime();
+                        branch.Created = ReadDateTimeIso8601(ref reader);
                         break;
 
                     case 3:
@@ -166,7 +166,7 @@ namespace SysML2.NET.Serializer.MessagePack.PSM
                         }
                         else
                         {
-                            branch.Deleted = reader.ReadDateTime();
+                            branch.Deleted = ReadDateTimeIso8601(ref reader);
                         }
 
                         break;
