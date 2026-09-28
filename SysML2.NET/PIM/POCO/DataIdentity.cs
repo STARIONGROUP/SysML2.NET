@@ -23,9 +23,9 @@ namespace SysML2.NET.PIM.POCO
     using System.Collections.Generic;
 
     /// <summary>
-    /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="IData"/>
-    /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="IData"/> Version
-    /// records that represent different versions of the same <see cref="IData"/>.
+    /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="Common.IData"/>
+    /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="Common.IData"/> Version
+    /// records that represent different versions of the same <see cref="Common.IData"/>.
     /// </summary>
     public class DataIdentity : Record
     {

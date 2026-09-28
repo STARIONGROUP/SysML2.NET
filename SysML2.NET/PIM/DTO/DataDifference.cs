@@ -22,10 +22,19 @@ namespace SysML2.NET.PIM.DTO
 {
     using System;
 
+    /// <summary>
+    /// Represents a single difference between two compared versions of the same <see cref="DataIdentity"/>
+    /// </summary>
     public class DataDifference
     {
+        /// <summary>
+        /// Gets or sets the <see cref="DataVersion"/> taken as the baseline of the comparison, or <c>null</c> when the data was added
+        /// </summary>
         public Guid? BaseData { get; set; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="DataVersion"/> compared against the baseline, or <c>null</c> when the data was deleted
+        /// </summary>
         public Guid? CompareData { get; set; }
     }
 }
