@@ -112,7 +112,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             }
         }
 
-        [GeneratedRegex("^\\s*\"[^\"]*::[^\"]*\",?$", RegexOptions.Multiline)]
+        [GeneratedRegex("^[^\\S\\r\\n]*\"[^\"]*::[^\"]*\",?\\r?$", RegexOptions.Multiline)]
         private static partial Regex FunctionRegex();
     }
 }
