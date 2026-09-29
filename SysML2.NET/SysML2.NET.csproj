@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.23.0</Version>
+        <Version>0.24.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -16,9 +16,11 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] Derived-property and operation implementations across the Extend layer, covering the Expression, Classifier, Behavior, Action, Constraint, Requirement, Port and Membership families
-            [Fix] Multiplicity is now enforced on all derived-property patterns (#312)
-            [Update] Microsoft.Extensions.Logging.Abstractions and System.Collections.Immutable floored to LTS 8.0.x, lowering the minimum version imposed on consumers (#328)
+            [Add] DerivedPropertyAttribute and OperationAttribute decorate every generated Extend method, distinguishing a derived property from an operation (#211)
+            [Add] PSM DTOs, interfaces and enumerations generated from the Systems Modeling API and Services OpenAPI document (#367, #371)
+            [Add] ModelLevelEvaluableFunctions exposes the Kernel Functions Library membership set backing Function::isModelLevelEvaluable (#364)
+            [Update] IData splits into IIdentified and IDataRequest, separating what carries an identifier from what may be sent without one (#371)
+            [Fix] Build warnings reduced; generated files carry an auto-generated marker so analyzers skip them (#280)
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
