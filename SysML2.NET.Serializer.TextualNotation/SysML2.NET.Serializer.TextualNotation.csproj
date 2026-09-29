@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.23.0</Version>
+        <Version>0.24.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 Textual Notation serializer.</Description>
         <PackageId>SysML2.NET.Serializer.TextualNotation</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -17,9 +17,9 @@
         <Authors>Sam Gerené, Antoine Théate</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] Validation coverage extended to parts interconnection, function- and state-based behaviour, variant configuration, requirements, verification, and analysis and trades (#289 - #297)
-            [Update] Microsoft.Extensions.Logging.Abstractions and System.Collections.Immutable floored to LTS 8.0.x (#328)
-            [Update] Aligned with SysML2.NET 0.23.0
+            [Add] Validation coverage extended to dependency relationships, model containment, language extensions, properties-values-expressions, sequence modeling and use cases (#299 - #304)
+            [Add] A NameResolution layer emitting the shortest unambiguous name for a reference per KerML 8.2.3.5, resolving over namespace bindings, import expansion and implied Relationships
+            [Fix] Build warnings cleared across the generated builders (#280)
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>

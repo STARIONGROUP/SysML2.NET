@@ -4,7 +4,7 @@
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
         <Nullable>disable</Nullable>
-        <Version>0.23.0</Version>
+        <Version>0.24.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification semantic constraints and implied Relationships.</Description>
         <PackageId>SysML2.NET.Semantics</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -15,8 +15,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] First release - implied relationship computation per KerML 8.4.2 (#338)
-            [Update] Microsoft.Extensions.Logging.Abstractions and Microsoft.Extensions.DependencyInjection.Abstractions floored to LTS 8.0.x (#328)
+            [Fix] FeatureParameterRedefinitionRule resolves supertypes over the effective model, following implied Specializations as well as declared ones (KerML 8.4.2)
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
