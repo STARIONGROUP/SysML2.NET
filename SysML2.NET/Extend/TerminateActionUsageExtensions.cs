@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Kernel.Functions;
 
     /// <summary>
@@ -45,6 +47,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ITerminateActionUsage.terminatedOccurrenceArgument))]
         internal static IExpression ComputeTerminatedOccurrenceArgument(this ITerminateActionUsage terminateActionUsageSubject)
         {
             return terminateActionUsageSubject == null

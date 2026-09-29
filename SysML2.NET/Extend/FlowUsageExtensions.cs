@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Interactions;
 
@@ -42,6 +44,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlowUsage.flowDefinition))]
         internal static List<IInteraction> ComputeFlowDefinition(this IFlowUsage flowUsageSubject)
         {
             return flowUsageSubject == null

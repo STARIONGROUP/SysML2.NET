@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -83,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAssertConstraintUsage.assertedConstraint))]
         internal static IConstraintUsage ComputeAssertedConstraint(this IAssertConstraintUsage assertConstraintUsageSubject)
         {
             if (assertConstraintUsageSubject == null)

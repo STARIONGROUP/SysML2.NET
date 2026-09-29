@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -43,6 +45,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberElement))]
         internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
             if (owningMembershipSubject == null)
@@ -62,6 +65,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberElementId))]
         internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembershipSubject)
         {
             return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.ElementId;
@@ -82,6 +86,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberName))]
         internal static string ComputeOwnedMemberName(this IOwningMembership owningMembershipSubject)
         {
             return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.name;
@@ -102,6 +107,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberShortName))]
         internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembershipSubject)
         {
             return owningMembershipSubject == null ? throw new ArgumentNullException(nameof(owningMembershipSubject)) : owningMembershipSubject.ownedMemberElement.shortName;
@@ -118,6 +124,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IOwningMembership.Path))]
         internal static string ComputeRedefinedPathOperation(this IOwningMembership owningMembershipSubject)
         {
             if (owningMembershipSubject == null)

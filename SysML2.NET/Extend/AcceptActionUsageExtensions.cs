@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -78,6 +80,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAcceptActionUsage.payloadArgument))]
         internal static IExpression ComputePayloadArgument(this IAcceptActionUsage acceptActionUsageSubject)
         {
             return acceptActionUsageSubject == null
@@ -102,6 +105,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAcceptActionUsage.payloadParameter))]
         internal static IReferenceUsage ComputePayloadParameter(this IAcceptActionUsage acceptActionUsageSubject)
         {
             if (acceptActionUsageSubject == null)
@@ -131,6 +135,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAcceptActionUsage.receiverArgument))]
         internal static IExpression ComputeReceiverArgument(this IAcceptActionUsage acceptActionUsageSubject)
         {
             return acceptActionUsageSubject == null
@@ -155,6 +160,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IAcceptActionUsage.IsTriggerAction))]
         internal static bool ComputeIsTriggerActionOperation(this IAcceptActionUsage acceptActionUsageSubject)
         {
             return acceptActionUsageSubject == null

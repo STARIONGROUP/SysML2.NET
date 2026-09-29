@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Exceptions;
 
@@ -51,6 +53,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <exception cref="IncompleteModelException">
         /// Thrown when the <see cref="ITextualRepresentation"/> has no owner.
         /// </exception>
+        [DerivedProperty(name: nameof(ITextualRepresentation.representedElement))]
         internal static IElement ComputeRepresentedElement(this ITextualRepresentation textualRepresentationSubject)
         {
             if (textualRepresentationSubject == null)

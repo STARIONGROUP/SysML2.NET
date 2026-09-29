@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -52,6 +54,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlow.flowEnd))]
         internal static List<IFlowEnd> ComputeFlowEnd(this IFlow flowSubject)
         {
             return flowSubject == null
@@ -68,6 +71,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlow.interaction))]
         internal static List<IInteraction> ComputeInteraction(this IFlow flowSubject)
         {
             return flowSubject == null
@@ -95,6 +99,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlow.payloadFeature))]
         internal static IPayloadFeature ComputePayloadFeature(this IFlow flowSubject)
         {
             if (flowSubject == null)
@@ -125,6 +130,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlow.payloadType))]
         internal static List<IClassifier> ComputePayloadType(this IFlow flowSubject)
         {
             if (flowSubject == null)
@@ -159,6 +165,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlow.sourceOutputFeature))]
         internal static IFeature ComputeSourceOutputFeature(this IFlow flowSubject)
         {
             if (flowSubject == null)
@@ -198,6 +205,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFlow.targetInputFeature))]
         internal static IFeature ComputeTargetInputFeature(this IFlow flowSubject)
         {
             if (flowSubject == null)

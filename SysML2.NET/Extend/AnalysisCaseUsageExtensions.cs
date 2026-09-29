@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -85,6 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <see cref="IAnalysisCaseDefinition"/> (upper-bound violation against the derived
         /// <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IAnalysisCaseUsage.analysisCaseDefinition))]
         internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
             return analysisCaseUsageSubject == null
@@ -113,6 +116,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAnalysisCaseUsage.resultExpression))]
         internal static IExpression ComputeResultExpression(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
             if (analysisCaseUsageSubject == null)

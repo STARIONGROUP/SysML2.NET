@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
 
     /// <summary>
@@ -41,6 +43,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IInterfaceUsage.interfaceDefinition))]
         internal static List<IInterfaceDefinition> ComputeInterfaceDefinition(this IInterfaceUsage interfaceUsageSubject)
         {
             return interfaceUsageSubject == null

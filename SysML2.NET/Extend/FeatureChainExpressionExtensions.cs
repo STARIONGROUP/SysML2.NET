@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
@@ -55,6 +57,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeatureChainExpression.targetFeature))]
         internal static IFeature ComputeTargetFeature(this IFeatureChainExpression featureChainExpressionSubject)
         {
             if (featureChainExpressionSubject == null)
@@ -90,6 +93,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IFeatureChainExpression.SourceTargetFeature))]
         internal static IFeature ComputeSourceTargetFeatureOperation(this IFeatureChainExpression featureChainExpressionSubject)
         {
             if (featureChainExpressionSubject == null)

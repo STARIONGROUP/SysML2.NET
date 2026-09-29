@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IConjugatedPortTyping.portDefinition))]
         internal static IPortDefinition ComputePortDefinition(this IConjugatedPortTyping conjugatedPortTypingSubject)
         {
             return conjugatedPortTypingSubject == null

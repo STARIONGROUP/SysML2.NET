@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Exceptions;
 
     /// <summary>
@@ -46,6 +48,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <exception cref="IncompleteModelException">
         /// Thrown when the owning related element is null or is not an <see cref="IFeature" />.
         /// </exception>
+        [DerivedProperty(name: nameof(IReferenceSubsetting.referencingFeature))]
         internal static IFeature ComputeReferencingFeature(this IReferenceSubsetting referenceSubsettingSubject)
         {
             if (referenceSubsettingSubject == null)

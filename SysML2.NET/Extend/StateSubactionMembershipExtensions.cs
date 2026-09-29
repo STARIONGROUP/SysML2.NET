@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.States
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Extensions;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IStateSubactionMembership.action))]
         internal static IActionUsage ComputeAction(this IStateSubactionMembership stateSubactionMembershipSubject)
         {
             if (stateSubactionMembershipSubject == null)

@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -75,6 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRenderingDefinition.rendering))]
         internal static List<IRenderingUsage> ComputeRendering(this IRenderingDefinition renderingDefinitionSubject)
         {
             return renderingDefinitionSubject == null

@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Thrown when more than one <see cref="IType"/> on the subject is an
         /// <see cref="IPredicate"/> (upper-bound violation against the derived <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IBooleanExpression.predicate))]
         internal static IPredicate ComputePredicate(this IBooleanExpression booleanExpressionSubject)
         {
             return booleanExpressionSubject == null

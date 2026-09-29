@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
@@ -52,6 +54,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.chainingFeature))]
         internal static List<IFeature> ComputeChainingFeature(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -82,6 +85,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.crossFeature))]
         internal static IFeature ComputeCrossFeature(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -111,6 +115,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.endOwningType))]
         internal static IType ComputeEndOwningType(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -136,6 +141,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.featureTarget))]
         internal static IFeature ComputeFeatureTarget(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -175,6 +181,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.featuringType))]
         internal static List<IType> ComputeFeaturingType(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -223,6 +230,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedCrossSubsetting))]
         internal static ICrossSubsetting ComputeOwnedCrossSubsetting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -246,6 +254,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedFeatureChaining))]
         internal static List<IFeatureChaining> ComputeOwnedFeatureChaining(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -271,6 +280,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedFeatureInverting))]
         internal static List<IFeatureInverting> ComputeOwnedFeatureInverting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -294,6 +304,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedRedefinition))]
         internal static List<IRedefinition> ComputeOwnedRedefinition(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -322,6 +333,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedReferenceSubsetting))]
         internal static IReferenceSubsetting ComputeOwnedReferenceSubsetting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -345,6 +357,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedSubsetting))]
         internal static List<ISubsetting> ComputeOwnedSubsetting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -370,6 +383,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedTypeFeaturing))]
         internal static List<ITypeFeaturing> ComputeOwnedTypeFeaturing(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -393,6 +407,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.ownedTyping))]
         internal static List<IFeatureTyping> ComputeOwnedTyping(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -414,6 +429,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.owningFeatureMembership))]
         internal static IFeatureMembership ComputeOwningFeatureMembership(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -435,6 +451,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.owningType))]
         internal static IType ComputeOwningType(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -463,6 +480,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IFeature.type))]
         internal static List<IType> ComputeType(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -489,6 +507,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
+        [Operation(name: nameof(IFeature.DirectionFor))]
         internal static FeatureDirectionKind? ComputeDirectionForOperation(this IFeature featureSubject, IType type)
         {
             return featureSubject == null
@@ -523,6 +542,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IFeature.EffectiveShortName))]
         internal static string ComputeRedefinedEffectiveShortNameOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -568,6 +588,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IFeature.EffectiveName))]
         internal static string ComputeRedefinedEffectiveNameOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -606,6 +627,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IFeature.NamingFeature))]
         internal static IFeature ComputeNamingFeatureOperation(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -635,6 +657,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(IFeature.Supertypes))]
         internal static List<IType> ComputeRedefinedSupertypesOperation(this IFeature featureSubject, bool excludeImplied)
         {
             if (featureSubject == null)
@@ -691,6 +714,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.Redefines))]
         internal static bool ComputeRedefinesOperation(this IFeature featureSubject, IFeature redefinedFeature)
         {
             if (featureSubject == null)
@@ -726,6 +750,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.RedefinesFromLibrary))]
         internal static bool ComputeRedefinesFromLibraryOperation(this IFeature featureSubject, string libraryFeatureName)
         {
             if (featureSubject == null)
@@ -769,6 +794,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.SubsetsChain))]
         internal static bool ComputeSubsetsChainOperation(this IFeature featureSubject, IFeature first, IFeature second)
         {
             if (featureSubject == null)
@@ -862,6 +888,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.IsCompatibleWith))]
         internal static bool ComputeRedefinedIsCompatibleWithOperation(this IFeature featureSubject, IType otherType)
         {
             if (featureSubject == null)
@@ -931,6 +958,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IFeature.TypingFeatures))]
         internal static List<IFeature> ComputeTypingFeaturesOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -991,6 +1019,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
+        [Operation(name: nameof(IFeature.AsCartesianProduct))]
         internal static List<IType> ComputeAsCartesianProductOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1029,6 +1058,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.IsCartesianProduct))]
         internal static bool ComputeIsCartesianProductOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1070,6 +1100,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.IsOwnedCrossFeature))]
         internal static bool ComputeIsOwnedCrossFeatureOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1111,6 +1142,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IFeature.OwnedCrossFeature))]
         internal static IFeature ComputeOwnedCrossFeatureOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1152,6 +1184,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IFeature.AllRedefinedFeatures))]
         internal static List<IFeature> ComputeAllRedefinedFeaturesOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1219,6 +1252,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.IsFeaturedWithin))]
         internal static bool ComputeIsFeaturedWithinOperation(this IFeature featureSubject, IType type)
         {
             if (featureSubject == null)
@@ -1291,6 +1325,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.CanAccess))]
         internal static bool ComputeCanAccessOperation(this IFeature featureSubject, IFeature feature)
         {
             if (featureSubject == null)
@@ -1367,6 +1402,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IFeature.IsFeaturingType))]
         internal static bool ComputeIsFeaturingTypeOperation(this IFeature featureSubject, IType type)
         {
             if (featureSubject == null)

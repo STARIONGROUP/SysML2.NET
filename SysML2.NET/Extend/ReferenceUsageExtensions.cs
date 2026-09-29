@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.States;
 
@@ -40,6 +42,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IReferenceUsage.isReference))]
         internal static bool ComputeIsReference(this IReferenceUsage referenceUsageSubject)
         {
             if (referenceUsageSubject == null)
@@ -70,6 +73,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IReferenceUsage.NamingFeature))]
         internal static IFeature ComputeRedefinedNamingFeatureOperation(this IReferenceUsage referenceUsageSubject)
         {
             if (referenceUsageSubject == null)

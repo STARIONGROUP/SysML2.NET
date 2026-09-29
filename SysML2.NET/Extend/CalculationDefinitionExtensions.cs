@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -77,6 +79,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(ICalculationDefinition.calculation))]
         internal static List<ICalculationUsage> ComputeCalculation(this ICalculationDefinition calculationDefinitionSubject)
         {
             return calculationDefinitionSubject == null

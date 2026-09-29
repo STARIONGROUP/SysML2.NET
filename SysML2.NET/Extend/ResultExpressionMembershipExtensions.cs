@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Extensions;
 
     /// <summary>
@@ -39,6 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IResultExpressionMembership.ownedResultExpression))]
         internal static IExpression ComputeOwnedResultExpression(this IResultExpressionMembership resultExpressionMembershipSubject)
         {
             if (resultExpressionMembershipSubject == null)

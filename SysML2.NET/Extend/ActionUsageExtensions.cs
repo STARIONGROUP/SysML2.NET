@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Behaviors;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
@@ -46,6 +48,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IActionUsage.actionDefinition))]
         internal static List<IBehavior> ComputeActionDefinition(this IActionUsage actionUsageSubject)
         {
             return actionUsageSubject == null
@@ -68,6 +71,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IActionUsage.InputParameters))]
         internal static List<IFeature> ComputeInputParametersOperation(this IActionUsage actionUsageSubject)
         {
             return actionUsageSubject == null
@@ -96,6 +100,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
+        [Operation(name: nameof(IActionUsage.InputParameter))]
         internal static IFeature ComputeInputParameterOperation(this IActionUsage actionUsageSubject, int i)
         {
             if (actionUsageSubject == null)
@@ -137,6 +142,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="IExpression" />
         /// </returns>
+        [Operation(name: nameof(IActionUsage.Argument))]
         internal static IExpression ComputeArgumentOperation(this IActionUsage actionUsageSubject, int i)
         {
             return actionUsageSubject == null
@@ -166,6 +172,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IActionUsage.IsSubactionUsage))]
         internal static bool ComputeIsSubactionUsageOperation(this IActionUsage actionUsageSubject)
         {
             if (actionUsageSubject == null)

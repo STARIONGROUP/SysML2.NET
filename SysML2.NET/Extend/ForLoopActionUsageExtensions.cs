@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -85,6 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IForLoopActionUsage.loopVariable))]
         internal static IReferenceUsage ComputeLoopVariable(this IForLoopActionUsage forLoopActionUsageSubject)
         {
             if (forLoopActionUsageSubject == null)
@@ -110,6 +113,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IForLoopActionUsage.seqArgument))]
         internal static IExpression ComputeSeqArgument(this IForLoopActionUsage forLoopActionUsageSubject)
         {
             return forLoopActionUsageSubject == null

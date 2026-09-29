@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Systems.Constraints;
@@ -53,6 +55,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.actorParameter))]
         internal static List<IPartUsage> ComputeActorParameter(this IRequirementDefinition requirementDefinitionSubject)
         {
             return requirementDefinitionSubject == null
@@ -78,6 +81,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.assumedConstraint))]
         internal static List<IConstraintUsage> ComputeAssumedConstraint(this IRequirementDefinition requirementDefinitionSubject)
         {
             return requirementDefinitionSubject == null
@@ -107,6 +111,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.framedConcern))]
         internal static List<IConcernUsage> ComputeFramedConcern(this IRequirementDefinition requirementDefinitionSubject)
         {
             return requirementDefinitionSubject == null
@@ -132,6 +137,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.requiredConstraint))]
         internal static List<IConstraintUsage> ComputeRequiredConstraint(this IRequirementDefinition requirementDefinitionSubject)
         {
             return requirementDefinitionSubject == null
@@ -161,6 +167,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.stakeholderParameter))]
         internal static List<IPartUsage> ComputeStakeholderParameter(this IRequirementDefinition requirementDefinitionSubject)
         {
             // The OCL uses "StakholderMembership" which is a typo in the XMI source; the correct C# type is IStakeholderMembership.
@@ -189,6 +196,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.subjectParameter))]
         internal static IUsage ComputeSubjectParameter(this IRequirementDefinition requirementDefinitionSubject)
         {
             if (requirementDefinitionSubject == null)
@@ -218,6 +226,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IRequirementDefinition.text))]
         internal static List<string> ComputeText(this IRequirementDefinition requirementDefinitionSubject)
         {
             return requirementDefinitionSubject == null

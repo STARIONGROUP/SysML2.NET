@@ -25,6 +25,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
     using System.Globalization;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
 
@@ -53,6 +55,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMultiplicityRange.bound))]
         internal static List<IExpression> ComputeBound(this IMultiplicityRange multiplicityRangeSubject)
         {
             if (multiplicityRangeSubject is null)
@@ -92,6 +95,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMultiplicityRange.lowerBound))]
         internal static IExpression ComputeLowerBound(this IMultiplicityRange multiplicityRangeSubject)
         {
             if (multiplicityRangeSubject is null)
@@ -127,6 +131,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IMultiplicityRange.upperBound))]
         internal static IExpression ComputeUpperBound(this IMultiplicityRange multiplicityRangeSubject)
         {
             if (multiplicityRangeSubject is null)
@@ -173,6 +178,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
+        [Operation(name: nameof(IMultiplicityRange.HasBounds))]
         internal static bool ComputeHasBoundsOperation(this IMultiplicityRange multiplicityRangeSubject, int lower, string upper)
         {
             if (multiplicityRangeSubject is null)
@@ -237,6 +243,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
+        [Operation(name: nameof(IMultiplicityRange.ValueOf))]
         internal static string ComputeValueOfOperation(this IMultiplicityRange multiplicityRangeSubject, IExpression bound)
         {
             if (multiplicityRangeSubject is null)

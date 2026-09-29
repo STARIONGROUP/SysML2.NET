@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -79,6 +81,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewDefinition.satisfiedViewpoint))]
         internal static List<IViewpointUsage> ComputeSatisfiedViewpoint(this IViewDefinition viewDefinitionSubject)
         {
             return viewDefinitionSubject == null
@@ -101,6 +104,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewDefinition.view))]
         internal static List<IViewUsage> ComputeView(this IViewDefinition viewDefinitionSubject)
         {
             return viewDefinitionSubject == null
@@ -125,6 +129,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewDefinition.viewCondition))]
         internal static List<IExpression> ComputeViewCondition(this IViewDefinition viewDefinitionSubject)
         {
             return viewDefinitionSubject == null
@@ -157,6 +162,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewDefinition.viewRendering))]
         internal static IRenderingUsage ComputeViewRendering(this IViewDefinition viewDefinitionSubject)
         {
             if (viewDefinitionSubject == null)

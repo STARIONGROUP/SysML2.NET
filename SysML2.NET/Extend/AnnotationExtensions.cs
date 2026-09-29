@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using System;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -49,6 +51,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAnnotation.annotatingElement))]
         internal static IAnnotatingElement ComputeAnnotatingElement(this IAnnotation annotationSubject)
         {
             return annotationSubject == null
@@ -76,6 +79,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAnnotation.ownedAnnotatingElement))]
         internal static IAnnotatingElement ComputeOwnedAnnotatingElement(this IAnnotation annotationSubject)
         {
             return annotationSubject == null
@@ -92,6 +96,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAnnotation.owningAnnotatedElement))]
         internal static IElement ComputeOwningAnnotatedElement(this IAnnotation annotationSubject)
         {
             if (annotationSubject == null)
@@ -116,6 +121,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAnnotation.owningAnnotatingElement))]
         internal static IAnnotatingElement ComputeOwningAnnotatingElement(this IAnnotation annotationSubject)
         {
             return annotationSubject == null

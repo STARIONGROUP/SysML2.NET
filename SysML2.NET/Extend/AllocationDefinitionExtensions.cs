@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -76,6 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IAllocationDefinition.allocation))]
         internal static List<IAllocationUsage> ComputeAllocation(this IAllocationDefinition allocationDefinitionSubject)
         {
             return allocationDefinitionSubject == null

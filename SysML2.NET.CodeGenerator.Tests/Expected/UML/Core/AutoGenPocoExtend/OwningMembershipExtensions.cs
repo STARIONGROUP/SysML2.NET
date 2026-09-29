@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -43,6 +45,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberElement))]
         internal static IElement ComputeOwnedMemberElement(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -58,6 +61,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberElementId))]
         internal static string ComputeOwnedMemberElementId(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -66,6 +70,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// ownedMemberName = ownedMemberElement.name
+        /// </code>
+        /// </remarks>
         /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
@@ -73,6 +83,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberName))]
         internal static string ComputeOwnedMemberName(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -81,6 +92,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// ownedMemberShortName = ownedMemberElement.shortName
+        /// </code>
+        /// </remarks>
         /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
@@ -88,6 +105,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the computed result
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [DerivedProperty(name: nameof(IOwningMembership.ownedMemberShortName))]
         internal static string ComputeOwnedMemberShortName(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");
@@ -98,6 +116,15 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// string constructed by appending to that qualifiedName the string "/owningMembership". Otherwise,
         /// return the path of the OwningMembership as specified for a Relationship in general.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if ownedElement.qualifiedName &lt;&gt; null then
+        ///     ownedElement.qualifiedName + '/owningMembership'
+        /// else self.oclAsType(Relationship).path()
+        /// endif
+        /// </code>
+        /// </remarks>
         /// <param name="owningMembershipSubject">
         /// The subject <see cref="IOwningMembership"/>
         /// </param>
@@ -105,6 +132,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The expected <see cref="string" />
         /// </returns>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [Operation(name: nameof(IOwningMembership.Path))]
         internal static string ComputeRedefinedPathOperation(this IOwningMembership owningMembershipSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

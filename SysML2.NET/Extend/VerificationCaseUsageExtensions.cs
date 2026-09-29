@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -85,6 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <see cref="IVerificationCaseDefinition"/> (upper-bound violation against the derived
         /// <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IVerificationCaseUsage.verificationCaseDefinition))]
         internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
             return verificationCaseUsageSubject == null
@@ -113,6 +116,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IVerificationCaseUsage.verifiedRequirement))]
         internal static List<IRequirementUsage> ComputeVerifiedRequirement(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
             if (verificationCaseUsageSubject == null)

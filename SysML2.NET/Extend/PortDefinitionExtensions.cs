@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// The <see cref="PortDefinitionExtensions" /> class provides extensions methods for
     /// the <see cref="IPortDefinition" /> interface
@@ -49,6 +51,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IPortDefinition.conjugatedPortDefinition))]
         internal static IConjugatedPortDefinition ComputeConjugatedPortDefinition(this IPortDefinition portDefinitionSubject)
         {
             return portDefinitionSubject == null

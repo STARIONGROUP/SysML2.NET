@@ -22,6 +22,8 @@ namespace SysML2.NET.Core.POCO.Core.Types
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Exceptions;
 
     /// <summary>
@@ -39,6 +41,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IUnioning.typeUnioned))]
         internal static IType ComputeTypeUnioned(this IUnioning unioningSubject)
         {
             if (unioningSubject == null)

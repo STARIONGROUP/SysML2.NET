@@ -23,6 +23,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -50,6 +52,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IImport.importedElement))]
         internal static IElement ComputeImportedElement(this IImport importSubject)
         {
             if (importSubject == null)
@@ -74,6 +77,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IImport.importOwningNamespace))]
         internal static INamespace ComputeImportOwningNamespace(this IImport importSubject)
         {
             return importSubject == null ? throw new ArgumentNullException(nameof(importSubject)) : importSubject.OwningRelatedElement as INamespace;
@@ -102,6 +106,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <see cref="NotSupportedException"/> guards any future direct call.
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [Operation(name: nameof(IImport.ImportedMemberships))]
         internal static List<IMembership> ComputeImportedMembershipsOperation(this IImport importSubject, List<INamespace> excluded)
         {
             throw new NotSupportedException(

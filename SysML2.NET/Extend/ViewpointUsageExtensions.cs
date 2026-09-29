@@ -24,6 +24,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Decorators;
+
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -85,6 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <see cref="IViewpointDefinition"/> (upper-bound violation against the derived
         /// <c>[0..1]</c> property).
         /// </exception>
+        [DerivedProperty(name: nameof(IViewpointUsage.viewpointDefinition))]
         internal static IViewpointDefinition ComputeViewpointDefinition(this IViewpointUsage viewpointUsageSubject)
         {
             return viewpointUsageSubject == null
@@ -109,6 +112,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <returns>
         /// the computed result
         /// </returns>
+        [DerivedProperty(name: nameof(IViewpointUsage.viewpointStakeholder))]
         internal static List<IPartUsage> ComputeViewpointStakeholder(this IViewpointUsage viewpointUsageSubject)
         {
             // The OCL uses "featureMemberhsip" which is a typo in the XMI source; the correct C# property is featureMembership.
