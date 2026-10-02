@@ -22,6 +22,7 @@ namespace SysML2.NET.Serializer.Json.PSM
 {
     using System.Text.Json;
 
+    using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.Serializer.Json.Utility;
 

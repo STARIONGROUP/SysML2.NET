@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="RestClient.cs" company="Starion Group S.A.">
-// 
+//
 //   Copyright 2022-2026 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -30,10 +30,10 @@ namespace SySML2.NET.REST
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.PIM;
-    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.PSM;
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Root.Elements;
+    using SysML2.NET.PSM.DTO;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -113,7 +113,7 @@ namespace SySML2.NET.REST
             try
             {
                 this.baseUri = uri;
-                
+
                 var projects = await this.RequestProjects(null, null, cancellationToken);
                 return projects;
             }
@@ -157,7 +157,7 @@ namespace SySML2.NET.REST
             var requestUri = project == null ? new Uri($"{this.baseUri}/projects{queryParameters}") : new Uri($"{this.baseUri}/projects/{project}{queryParameters}");
 
             var data = await this.RequestData(requestUri, cancellationToken);
-            
+
             if (data != null && data.Any())
             {
                 return data.OfType<Project>();
@@ -336,7 +336,7 @@ namespace SySML2.NET.REST
             }
 
             return Enumerable.Empty<IElement>();
-            
+
         }
 
         /// <summary>
@@ -406,7 +406,7 @@ namespace SySML2.NET.REST
                 Method = HttpMethod.Get,
                 RequestUri = requestUri,
             };
-            
+
             using var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             response.EnsureSuccessStatusCode();

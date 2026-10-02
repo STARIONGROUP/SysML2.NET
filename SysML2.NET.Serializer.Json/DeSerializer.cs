@@ -34,6 +34,7 @@ namespace SysML2.NET.Serializer.Json
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
+    using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.Serializer.Json.Core.DTO;
     using SysML2.NET.Serializer.Json.PIM.DTO;
