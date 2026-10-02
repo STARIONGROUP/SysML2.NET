@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.24.0</Version>
+        <Version>0.24.1</Version>
         <Description>A .NET implementation of the OMG SysML v2 JSON serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Json</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -14,7 +14,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] PSM serializers and deserializers for the Systems Modeling API and Services payload types, generated from the OpenAPI document (#371, #367)
+            [Update] Serializer and DeSerializer aligned with the move of QueryParameters, Page and PagedResult to the SysML2.NET.PSM namespace
         </PackageReleaseNotes>
         <PackageIcon>cdp4-icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
