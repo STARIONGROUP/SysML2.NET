@@ -6,25 +6,29 @@ indent_size = 4
 
 [*.cs]
 
-#### 1. Layout & wrapping — Rider: WRAP_LIMIT, WRAP_LINES, LINE_FEED_AT_FILE_END, PLACE_COMMENTS_AT_FIRST_COLUMN, MAX_ENUM_MEMBERS_ON_LINE
+#### 1. Layout & wrapping — Rider: WRAP_LIMIT, WRAP_LINES, LINE_FEED_AT_FILE_END, PLACE_COMMENTS_AT_FIRST_COLUMN, MAX_ENUM_MEMBERS_ON_LINE, WRAP_OBJECT_AND_COLLECTION_INITIALIZER_STYLE, WRAP_ARRAY_INITIALIZER_STYLE
 indent_style = space
 indent_size = 4
 tab_width = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 180
-resharper_wrap_lines = false
+resharper_wrap_lines = true
 resharper_place_comments_at_first_column = true
 resharper_max_enum_members_on_line = 1
 resharper_place_accessorholder_attribute_on_same_line = never
+resharper_wrap_object_and_collection_initializer_style = wrap_if_long
+resharper_wrap_array_initializer_style = wrap_if_long
+resharper_place_simple_initializer_on_single_line = true
+resharper_max_initializer_elements_on_line = 100
 
 #### 2. Braces — Allman, and required on every control statement (Rider: BRACES_FOR_IFELSE/_FOR/_FOREACH/_WHILE = Required)
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
 csharp_new_line_before_catch = true
 csharp_new_line_before_finally = true
-csharp_new_line_before_members_in_object_initializers = true
-csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_members_in_anonymous_types = false
 csharp_new_line_between_query_expression_clauses = true
 csharp_prefer_braces = true:warning
 resharper_braces_for_ifelse = required
