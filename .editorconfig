@@ -6,7 +6,7 @@ indent_size = 4
 
 [*.cs]
 
-#### 1. Layout & wrapping — Rider: WRAP_LIMIT, WRAP_LINES, LINE_FEED_AT_FILE_END, PLACE_COMMENTS_AT_FIRST_COLUMN, MAX_ENUM_MEMBERS_ON_LINE, WRAP_OBJECT_AND_COLLECTION_INITIALIZER_STYLE, WRAP_ARRAY_INITIALIZER_STYLE
+#### 1. Layout & wrapping — Rider: WRAP_LIMIT, WRAP_LINES, LINE_FEED_AT_FILE_END, PLACE_COMMENTS_AT_FIRST_COLUMN, MAX_ENUM_MEMBERS_ON_LINE, WRAP_OBJECT_AND_COLLECTION_INITIALIZER_STYLE, WRAP_ARRAY_INITIALIZER_STYLE, WRAP_PARAMETERS_STYLE, WRAP_ARGUMENTS_STYLE, KEEP_EXISTING_DECLARATION_PARENS_ARRANGEMENT, KEEP_EXISTING_INVOCATION_PARENS_ARRANGEMENT
 indent_style = space
 indent_size = 4
 tab_width = 4
@@ -21,6 +21,13 @@ resharper_wrap_object_and_collection_initializer_style = wrap_if_long
 resharper_wrap_array_initializer_style = wrap_if_long
 resharper_place_simple_initializer_on_single_line = true
 resharper_max_initializer_elements_on_line = 100
+resharper_wrap_parameters_style = wrap_if_long
+resharper_wrap_arguments_style = wrap_if_long
+resharper_wrap_chained_method_calls = wrap_if_long
+resharper_max_formal_parameters_on_line = 100
+resharper_max_invocation_arguments_on_line = 100
+resharper_keep_existing_declaration_parens_arrangement = true
+resharper_keep_existing_invocation_parens_arrangement = true
 
 #### 2. Braces — Allman, and required on every control statement (Rider: BRACES_FOR_IFELSE/_FOR/_FOREACH/_WHILE = Required)
 csharp_new_line_before_open_brace = all
