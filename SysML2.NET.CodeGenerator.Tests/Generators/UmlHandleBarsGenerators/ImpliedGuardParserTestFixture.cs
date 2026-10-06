@@ -141,7 +141,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(guarded, Has.Count.EqualTo(63), "The number of guarded constraints in the abstract syntax changed.");
-                Assert.That(translatable, Is.EqualTo(46), "Guard-shape coverage changed; re-check the patterns against the OCL.");
+                Assert.That(translatable, Is.EqualTo(45), "Guard-shape coverage changed; re-check the patterns against the OCL.");
             }
         }
 

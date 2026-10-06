@@ -110,8 +110,6 @@ namespace SysML2.NET.Semantics.Implied
             new GeneratedRuleGuard("checkRenderingUsageSubrenderingSpecialization", element => element is SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage { owningType: SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition or SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage }),
             // owningFeatureMembership <> null and owningFeatureMembership.oclIsKindOf(RequirementVerificationMembership)
             new GeneratedRuleGuard("checkRequirementUsageRequirementVerificationSpecialization", element => element is SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage { owningFeatureMembership: SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership }),
-            // isComposite and owningType <> null and (owningType.oclIsKindOf(RequirementDefinition) or owningType.oclIsKindOf(RequirementUsage))
-            new GeneratedRuleGuard("checkRequirementUsageSubrequirementSpecialization", element => element is SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage { IsComposite: true, owningType: SysML2.NET.Core.POCO.Systems.Requirements.IRequirementDefinition or SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage }),
             // isSubactionUsage()
             new GeneratedRuleGuard("checkSendActionUsageSubactionSpecialization", element => element is SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage guardSubject && guardSubject.IsSubactionUsage()),
             // isSubstateUsage(false)

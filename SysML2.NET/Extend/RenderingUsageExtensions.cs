@@ -94,5 +94,47 @@ namespace SysML2.NET.Core.POCO.Systems.Views
                 : FeatureExtensions.ComputeType(renderingUsageSubject).SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
         }
 
+        /// <summary>
+        /// The naming Feature of a RenderingUsage that is owned via a ViewRenderingMembership and has an
+        /// ownedReferenceSubsetting is the featureTarget of the referencedFeature of that
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// if owningFeatureMembership &lt;&gt; null and
+        ///     owningFeatureMembership.oclIsKindOf(ViewRenderingMembership) and
+        ///     ownedReferenceSubsetting &lt;&gt; null then
+        ///     ownedReferenceSubsetting.referencedFeature.featureTarget
+        /// else
+        ///     self.oclAsType(OccurrenceUsage).namingFeature()
+        /// endif
+        /// </code>
+        /// </remarks>
+        /// <param name="renderingUsageSubject">
+        /// The subject <see cref="IRenderingUsage"/>
+        /// </param>
+        /// <returns>
+        /// The expected <see cref="IFeature"/>
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="renderingUsageSubject"/> is <c>null</c>.
+        /// </exception>
+        [Operation(name: nameof(IRenderingUsage.NamingFeature))]
+        internal static IFeature ComputeRedefinedNamingFeatureOperation(this IRenderingUsage renderingUsageSubject)
+        {
+            if (renderingUsageSubject == null)
+            {
+                throw new ArgumentNullException(nameof(renderingUsageSubject));
+            }
+
+            if (renderingUsageSubject.owningFeatureMembership is IViewRenderingMembership
+                && renderingUsageSubject.ownedReferenceSubsetting != null)
+            {
+                return renderingUsageSubject.ownedReferenceSubsetting.ReferencedFeature.featureTarget;
+            }
+
+            return UsageExtensions.ComputeRedefinedNamingFeatureOperation(renderingUsageSubject);
+        }
     }
 }

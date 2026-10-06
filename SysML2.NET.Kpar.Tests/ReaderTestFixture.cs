@@ -46,7 +46,7 @@ namespace SysML2.NET.Kpar.Tests
 
         private static string GetKparPath()
         {
-            return Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "Kernel_Semantic_Library-1.0.0.kpar");
+            return Directory.GetFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData"), "Kernel_Semantic_Library-*.kpar")[0];
         }
         
         [OneTimeSetUp]
@@ -157,11 +157,11 @@ namespace SysML2.NET.Kpar.Tests
             Assert.That(modelStream, Is.Not.Null);
             Assert.That(modelStream.CanRead, Is.True);
 
-            Assert.That(modelStream.Length, Is.GreaterThan(0));
-            
             using var reader = new StreamReader(modelStream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
 
             var content = reader.ReadToEnd();
+
+            Assert.That(content, Is.Not.Null.And.Not.Empty);
 
             TestContext.WriteLine("---- Base.kerml content ----");
             TestContext.WriteLine(content);
@@ -180,11 +180,12 @@ namespace SysML2.NET.Kpar.Tests
             await using var modelStream = archiveSession.OpenModel("Base");
             Assert.That(modelStream, Is.Not.Null);
             Assert.That(modelStream.CanRead, Is.True);
-            Assert.That(modelStream.Length, Is.GreaterThan(0));
-            
+
             using var reader = new StreamReader(modelStream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
 
             var content = await reader.ReadToEndAsync();
+
+            Assert.That(content, Is.Not.Null.And.Not.Empty);
 
             TestContext.WriteLine("---- Base.kerml content ----");
             TestContext.WriteLine(content);
@@ -224,7 +225,7 @@ namespace SysML2.NET.Kpar.Tests
 
                 await using var modelStream = archiveSession.OpenModel("Base");
                 Assert.That(modelStream.CanRead, Is.True);
-                Assert.That(modelStream.Length, Is.GreaterThan(0));
+                Assert.That(modelStream.ReadByte(), Is.GreaterThanOrEqualTo(0));
             }
             finally
             {
@@ -303,14 +304,14 @@ namespace SysML2.NET.Kpar.Tests
             {
                 AssertChecksum("Triggers.kerml", "124cad3625935e078d1363e6100ee12537ca9c51445a18108e056db8b4885609");
                 AssertChecksum("ControlPerformances.kerml", "31385be7dca94bd0538f011d5c8f7925626d54f96970769f0fdb28b2186a9a03");
-                AssertChecksum("Transfers.kerml", "fa40b483a7834d89f07aad0f6f57e79244adc2a58b4396c4734bddeb297d7c46");
-                AssertChecksum("Objects.kerml", "9057e2781fe8793d5108973c0647318caa26310be6231c6380152a4cbc894c25");
+                AssertChecksum("Transfers.kerml", "6697453f40187076ebda9ee475f7f974321eb8b48b93622879fe6560fa14dcf5");
+                AssertChecksum("Objects.kerml", "7e6b8a0a8f16a475e6c9290926c85defe9e3e1a1bf70df8ef137f4eec08733e6");
                 AssertChecksum("Metaobjects.kerml", "983dbd85a4b183d8859326ee512fc59d991fb98a115e009e72fad21d1f9d1685");
                 AssertChecksum("Performances.kerml", "fd965e184b300737a192530de0c800cdbee236cb6220612f370400da21dfb327");
                 AssertChecksum("StatePerformances.kerml", "f02fb7e8de58f4304c95c575ee1bcb7d271d621ce8e336ce36ea80a4e956c3da");
                 AssertChecksum("Base.kerml", "56df84cda67f62c63d4e79e2786fc26046cfa361a958c4fcf0843d32a5707e09");
                 AssertChecksum("Observation.kerml", "6bc57a73c43af6f61201b6eb659024a9f08f974643eb5a101e068e3637761ee4");
-                AssertChecksum("TransitionPerformances.kerml", "1ce78437c817c8359a2cad43e8e72b23dd32b81d2a69dc1126c803fae72aae70");
+                AssertChecksum("TransitionPerformances.kerml", "31e01baf2dadd5507a81dff436acf38cbdc66abaffc2828705fe2b67e277126a");
                 AssertChecksum("FeatureReferencingPerformances.kerml", "b6f9e5349c7c7f393591c0334c3bec86f1766b3e37209819179310c2f8fe1fb7");
                 AssertChecksum("KerML.kerml", "8fdf4b7416e981c895cd74b75dc14b18091d13cbcaff7cdded6f9c23e2483d58");
                 AssertChecksum("Occurrences.kerml", "b3a62ce0bc3a4f7e667102b4c2f68a4928ca8efeda425c6a4c8bdeadfbc9bbc1");
@@ -332,7 +333,7 @@ namespace SysML2.NET.Kpar.Tests
 
             Assert.That(archive.Project.Name, Is.EqualTo("Kernel Semantic Library"));
             Assert.That(archive.Project.Description, Is.EqualTo("Standard semantic library for the Kernel Modeling Language (KerML)"));
-            Assert.That(archive.Project.Version, Is.EqualTo("1.0.0"));
+            Assert.That(archive.Project.Version, Is.EqualTo("1.1.0-dev.20260801"));
 
             Assert.That(archive.Project.Usage, Is.Not.Null);
             Assert.That(archive.Project.Usage.Count, Is.EqualTo(2));
@@ -340,10 +341,10 @@ namespace SysML2.NET.Kpar.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(archive.Project.Usage[0].Resource, Is.EqualTo(new Uri("https://www.omg.org/spec/KerML/20250201/Data-Type-Library.kpar")));
-                Assert.That(archive.Project.Usage[0].VersionConstraint, Is.EqualTo("1.0.0"));
+                Assert.That(archive.Project.Usage[0].VersionConstraint, Is.EqualTo("1.1.0-dev.20260801"));
 
                 Assert.That(archive.Project.Usage[1].Resource, Is.EqualTo(new Uri("https://www.omg.org/spec/KerML/20250201/Function-Library.kpar")));
-                Assert.That(archive.Project.Usage[1].VersionConstraint, Is.EqualTo("1.0.0"));
+                Assert.That(archive.Project.Usage[1].VersionConstraint, Is.EqualTo("1.1.0-dev.20260801"));
             });
         }
     }

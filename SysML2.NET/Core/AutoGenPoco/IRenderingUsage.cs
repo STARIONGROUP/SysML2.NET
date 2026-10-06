@@ -78,6 +78,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591475180488_929065_121")]
         IRenderingDefinition renderingDefinition { get; }
 
+        /// <summary>
+        /// The naming Feature of a RenderingUsage that is owned via a ViewRenderingMembership and has an
+        /// ownedReferenceSubsetting is the featureTarget of the referencedFeature of that
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="IFeature" />
+        /// </returns>
+        new IFeature NamingFeature();
     }
 }
 

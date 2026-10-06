@@ -23,11 +23,13 @@ namespace SysML2.NET.Semantics.Tests.Implied
     using System;
     using System.Linq;
 
+    using Microsoft.Extensions.DependencyInjection;
+
     using NUnit.Framework;
 
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Semantics.Extensions;
     using SysML2.NET.Semantics.Implied;
-    using SysML2.NET.Semantics.Implied.Guards;
 
     [TestFixture]
     public class ImpliedRuleGuardRegistryTestFixture
@@ -82,33 +84,21 @@ namespace SysML2.NET.Semantics.Tests.Implied
         [Test]
         public void VerifyEveryConditionalConstraintHasAGuard()
         {
-            var registry = new ImpliedRuleGuardRegistry(
-            [
-                ..GeneratedImpliedRuleGuards.All,
-                new AcceptActionUsageSubactionSpecializationGuard(),
-                new AssociationBinarySpecializationGuard(),
-                new AssociationStructureBinarySpecializationGuard(),
-                new ConnectorBinaryObjectSpecializationGuard(),
-                new ConnectorBinarySpecializationGuard(),
-                new ConnectorObjectSpecializationGuard(),
-                new FeatureEndSpecializationGuard(),
-                new FeaturePortionSpecializationGuard(),
-                new FeatureSubobjectSpecializationGuard(),
-                new FeatureSuboccurrenceSpecializationGuard(),
-                new FlowDefinitionBinarySpecializationGuard(),
-                new IncludeUseCaseUsageSpecializationGuard(),
-                new OccurrenceUsageSuboccurrenceSpecializationGuard(),
-                new StepOwnedPerformanceSpecializationGuard(),
-                new StepSubperformanceSpecializationGuard(),
-                new TransitionUsageActionSpecializationGuard(),
-                new TransitionUsageStateSpecializationGuard()
-            ]);
+            using var serviceProvider = new ServiceCollection().AddSysML2Semantics().BuildServiceProvider();
+
+            // Construction throws on two guards deciding one constraint, so this also proves discovery
+            // does not re-register the generated guards.
+            var registry = new ImpliedRuleGuardRegistry(serviceProvider.GetServices<IImpliedRuleGuard>());
 
             var unguarded = ImpliedRelationshipTable.AllConditionalConstraintNames
                 .Where(constraintName => !registry.HasGuard(constraintName))
                 .ToList();
 
-            Assert.That(unguarded, Is.Empty, $"These conditional constraints have no guard: {string.Join(", ", unguarded)}");
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(unguarded, Is.Empty, $"These conditional constraints have no guard: {string.Join(", ", unguarded)}");
+                Assert.That(registry.HasGuard("checkAbsentConstraint"), Is.False);
+            }
         }
 
         private sealed class StubGuard : IImpliedRuleGuard

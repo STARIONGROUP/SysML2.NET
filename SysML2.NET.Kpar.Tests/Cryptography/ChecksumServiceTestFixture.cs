@@ -48,7 +48,7 @@ namespace SysML2.NET.Kpar.Tests.Cryptography
 
         private static string GetKparPath()
         {
-            return Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData", "Kernel_Semantic_Library-1.0.0.kpar");
+            return Directory.GetFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestData"), "Kernel_Semantic_Library-*.kpar")[0];
         }
 
         [OneTimeSetUp]

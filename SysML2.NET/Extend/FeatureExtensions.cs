@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -1114,8 +1115,9 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
         /// <summary>
         /// If this Feature is an end Feature of its owningType, then return the first ownedMember of the
-        /// Feature that is a Feature, but not a Multiplicity or a MetadataFeature, and whose owningMembership
-        /// is not a FeatureMembership. If this exists, it is the crossFeature of the end Feature.
+        /// Feature that is a Feature, but not a Multiplicity, MetadataFeature, or BindingConnector, and whose
+        /// owningMembership is not a FeatureMembership or FeatureValue. If this exists, it is the crossFeature
+        /// of the end Feature.
         /// </summary>
         /// <remarks>
         /// OCL (KerML XMI):
@@ -1124,17 +1126,16 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// else
         ///     let ownedMemberFeatures: Sequence(Feature) =
         ///         ownedMember-&gt;selectByKind(Feature)-&gt;
-        ///         reject(oclIsKindOf(Multiplicity) or
-        ///                oclIsKindOf(MetadataFeature) or
-        ///                oclIsKindOf(FeatureValue))-&gt;
-        ///         reject(owningMembership.oclIsKindOf(FeatureMembership)) in
+        ///             reject(oclIsKindOf(Multiplicity) or
+        ///                    oclIsKindOf(MetadataFeature) or
+        ///                    oclIsKindOf(BindingConnector))-&gt;
+        ///             reject(owningMembership.oclIsKindOf(FeatureMembership) or
+        ///                    owningMembership.oclIsKindOf(FeatureValue)) in
         ///     if ownedMemberFeatures.isEmpty() then null
         ///     else ownedMemberFeatures-&gt;first()
         ///     endif
+        /// endif
         /// </code>
-        /// If this Feature is an end Feature of its owningType, then return the first ownedMember of the
-        /// Feature that is a Feature, but not a Multiplicity or a MetadataFeature, and whose owningMembership
-        /// is not a FeatureMembership. If this exists, it is the crossFeature of the end Feature.
         /// </remarks>
         /// <param name="featureSubject">
         /// The subject <see cref="IFeature" />
@@ -1157,12 +1158,12 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
             return featureSubject.OwnedRelationship
                 .OfType<IOwningMembership>()
-                .Where(om => om is not IFeatureMembership)
-                .SelectMany(om => om.OwnedRelatedElement)
+                .Where(owningMembership => owningMembership is not IFeatureMembership and not IFeatureValue)
+                .SelectMany(owningMembership => owningMembership.OwnedRelatedElement)
                 .OfType<IFeature>()
-                .Where(f => f is not IMultiplicity
-                         && f is not IMetadataFeature
-                         && f is not IFeatureValue)
+                .Where(ownedMemberFeature => ownedMemberFeature is not IMultiplicity
+                                          and not IMetadataFeature
+                                          and not IBindingConnector)
                 .FirstOrDefault();
         }
 
