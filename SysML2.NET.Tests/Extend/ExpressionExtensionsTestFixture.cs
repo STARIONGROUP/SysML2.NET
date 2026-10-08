@@ -218,11 +218,8 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(expressionNestedFeature.ComputeModelLevelEvaluableOperation([]), Is.False);
 
-            // ownedFeature with a FeatureValue — NOTE: the production code's valuation check
-            // (f.valuation == null) is a known metamodel gap (IFeature has no Valuation property).
-            // FeatureValue is IOwningMembership but NOT IFeatureMembership, so the contained Expression
-            // is not visible via ownedFeature of featureWithValuation. BRANCH_A therefore succeeds
-            // (Direction = In, ownedFeature.Count == 0) and the operation returns true.
+            // ownedFeature carrying a FeatureValue → BRANCH_A fails on the KerML §8.3.4.7.3 rule that a
+            // parameter must have no FeatureValue, and BRANCH_B fails (not a ResultExpressionMembership).
             var expressionWithValuation = new Expression();
             var featureWithValuation = new Feature { Direction = FeatureDirectionKind.In };
             var featureValue = new FeatureValue();
@@ -232,7 +229,7 @@ namespace SysML2.NET.Tests.Extend
             var valuationMembership = new FeatureMembership();
             expressionWithValuation.AssignOwnership(valuationMembership, featureWithValuation);
 
-            Assert.That(expressionWithValuation.ComputeModelLevelEvaluableOperation([]), Is.True);
+            Assert.That(expressionWithValuation.ComputeModelLevelEvaluableOperation([]), Is.False);
 
             // BRANCH_B: ownedFeature owned via ResultExpressionMembership — passes branchB.
             // The inner Expression is empty (no specializations, no features), so its recursive

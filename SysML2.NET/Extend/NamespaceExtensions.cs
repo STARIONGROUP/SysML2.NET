@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="NamespaceExtensions.cs" company="Starion Group S.A.">
-//
-//    Copyright (C) 2022-2026 Starion Group S.A.
-//
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -23,19 +23,16 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
-    using SysML2.NET.Decorators;
-
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Decorators;
     using SysML2.NET.Extensions;
 
     /// <summary>
-    /// The <see cref="NamespaceExtensions"/> class provides extensions methods for
-    /// the <see cref="INamespace"/> interface
+    /// The <see cref="NamespaceExtensions" /> class provides extensions methods for
+    /// the <see cref="INamespace" /> interface
     /// </summary>
     internal static class NamespaceExtensions
     {
@@ -49,12 +46,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(INamespace.importedMembership))]
+        [DerivedProperty(nameof(INamespace.importedMembership))]
         internal static List<IMembership> ComputeImportedMembership(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : namespaceSubject.ImportedMemberships([]);
@@ -70,12 +67,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(INamespace.member))]
+        [DerivedProperty(nameof(INamespace.member))]
         internal static List<IElement> ComputeMember(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.membership.Select(x => x.MemberElement)];
@@ -85,12 +82,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// Computes the derived property.
         /// </summary>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(INamespace.membership))]
+        [DerivedProperty(nameof(INamespace.membership))]
         internal static List<IMembership> ComputeMembership(this INamespace namespaceSubject)
         {
             if (namespaceSubject == null)
@@ -119,12 +116,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(INamespace.ownedImport))]
+        [DerivedProperty(nameof(INamespace.ownedImport))]
         internal static List<IImport> ComputeOwnedImport(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.OwnedRelationship.OfType<IImport>()];
@@ -140,15 +137,17 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(INamespace.ownedMember))]
+        [DerivedProperty(nameof(INamespace.ownedMember))]
         internal static List<IElement> ComputeOwnedMember(this INamespace namespaceSubject)
         {
-            return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.ownedMembership.OfType<IOwningMembership>().Select(x => x.ownedMemberElement)];
+            return namespaceSubject == null
+                ? throw new ArgumentNullException(nameof(namespaceSubject))
+                : [..namespaceSubject.ownedMembership.OfType<IOwningMembership>().Select(x => x.ownedMemberElement)];
         }
 
         /// <summary>
@@ -161,12 +160,12 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(INamespace.ownedMembership))]
+        [DerivedProperty(nameof(INamespace.ownedMembership))]
         internal static List<IMembership> ComputeOwnedMembership(this INamespace namespaceSubject)
         {
             return namespaceSubject == null ? throw new ArgumentNullException(nameof(namespaceSubject)) : [..namespaceSubject.OwnedRelationship.OfType<IMembership>()];
@@ -183,7 +182,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="element">
         /// No documentation provided
@@ -191,7 +190,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(INamespace.NamesOf))]
+        [Operation(nameof(INamespace.NamesOf))]
         internal static List<string> ComputeNamesOfOperation(this INamespace namespaceSubject, IElement element)
         {
             if (namespaceSubject == null)
@@ -204,24 +203,16 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(element));
             }
 
-            var memberElements = namespaceSubject.membership.Where(x => x.MemberElement == element).ToList();
+            var elementMemberships = namespaceSubject.membership
+                .Where(membership => ReferenceEquals(membership.MemberElement, element))
+                .ToList();
 
-            var names = new List<string>();
-
-            foreach (var memberElement in memberElements)
-            {
-                if (!string.IsNullOrWhiteSpace(memberElement.MemberShortName))
-                {
-                    names.Add(memberElement.MemberShortName);
-                }
-
-                if (!string.IsNullOrWhiteSpace(memberElement.MemberName))
-                {
-                    names.Add(memberElement.MemberName);
-                }
-            }
-
-            return names;
+            return
+            [
+                ..elementMemberships.Select(membership => membership.MemberShortName)
+                    .Union(elementMemberships.Select(membership => membership.MemberName))
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+            ];
         }
 
         /// <summary>
@@ -240,7 +231,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="mem">
         /// No documentation provided
@@ -248,7 +239,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="VisibilityKind" />
         /// </returns>
-        [Operation(name: nameof(INamespace.VisibilityOf))]
+        [Operation(nameof(INamespace.VisibilityOf))]
         internal static VisibilityKind ComputeVisibilityOfOperation(this INamespace namespaceSubject, IMembership mem)
         {
             if (namespaceSubject == null)
@@ -261,13 +252,13 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(mem));
             }
 
-            foreach (var ownedImport in namespaceSubject.ownedImport)
+            if (namespaceSubject.importedMembership.Contains(mem))
             {
-                var membershipsFromImport = ownedImport.ImportedMemberships([]);
+                var declaringImport = namespaceSubject.ownedImport.FirstOrDefault(ownedImport => ownedImport.ImportedMemberships([]).Contains(mem));
 
-                if (membershipsFromImport.Contains(mem))
+                if (declaringImport != null)
                 {
-                    return ownedImport.Visibility;
+                    return declaringImport.Visibility;
                 }
             }
 
@@ -298,7 +289,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="excluded">
         /// No documentation provided
@@ -312,7 +303,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.VisibleMemberships))]
+        [Operation(nameof(INamespace.VisibleMemberships))]
         internal static List<IMembership> ComputeVisibleMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded, bool isRecursive, bool includeAll)
         {
             if (namespaceSubject == null)
@@ -345,12 +336,10 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 .Select(mem => mem.ownedMemberElement)
                 .OfType<INamespace>();
 
-            foreach (var nestedNamespace in nestedNamespaces)
-            {
-                result.AddRange(nestedNamespace.VisibleMemberships(excludedWithSelf, true, includeAll));
-            }
-
-            return result;
+            return
+            [
+                ..result.Union(nestedNamespaces.SelectMany(nestedNamespace => nestedNamespace.VisibleMemberships(excludedWithSelf, true, includeAll)))
+            ];
         }
 
         /// <summary>
@@ -365,7 +354,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="excluded">
         /// No documentation provided
@@ -373,7 +362,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.ImportedMemberships))]
+        [Operation(nameof(INamespace.ImportedMemberships))]
         internal static List<IMembership> ComputeImportedMembershipsOperation(this INamespace namespaceSubject, List<INamespace> excluded)
         {
             if (namespaceSubject == null)
@@ -393,8 +382,8 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
             return
             [
                 ..importedMemberships.Where(import =>
-                ownedMemberships.All(import.IsDistinguishableFrom)
-                && importedMemberships.All(other => other == import || import.IsDistinguishableFrom(other)))
+                    ownedMemberships.All(import.IsDistinguishableFrom)
+                    && importedMemberships.All(other => other == import || import.IsDistinguishableFrom(other)))
             ];
         }
 
@@ -414,7 +403,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="visibility">
         /// No documentation provided
@@ -425,7 +414,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.MembershipsOfVisibility))]
+        [Operation(nameof(INamespace.MembershipsOfVisibility))]
         internal static List<IMembership> ComputeMembershipsOfVisibilityOperation(this INamespace namespaceSubject, VisibilityKind? visibility, List<INamespace> excluded)
         {
             if (namespaceSubject == null)
@@ -486,7 +475,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="qualifiedName">
         /// No documentation provided
@@ -494,7 +483,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.Resolve))]
+        [Operation(nameof(INamespace.Resolve))]
         internal static IMembership ComputeResolveOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)
@@ -515,6 +504,11 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 return namespaceSubject.ResolveLocal(simpleName);
             }
 
+            if (qualification == "$")
+            {
+                return namespaceSubject.ResolveGlobal(simpleName);
+            }
+
             var qualificationMembership = namespaceSubject.Resolve(qualification);
 
             if (qualificationMembership?.MemberElement is INamespace qualificationNamespace)
@@ -531,7 +525,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// the KerML textual notation.
         /// </summary>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="qualifiedName">
         /// No documentation provided
@@ -539,7 +533,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.ResolveGlobal))]
+        [Operation(nameof(INamespace.ResolveGlobal))]
         internal static IMembership ComputeResolveGlobalOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)
@@ -596,7 +590,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="name">
         /// No documentation provided
@@ -604,7 +598,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.ResolveLocal))]
+        [Operation(nameof(INamespace.ResolveLocal))]
         internal static IMembership ComputeResolveLocalOperation(this INamespace namespaceSubject, string name)
         {
             if (namespaceSubject == null)
@@ -648,7 +642,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="name">
         /// No documentation provided
@@ -656,7 +650,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(INamespace.ResolveVisible))]
+        [Operation(nameof(INamespace.ResolveVisible))]
         internal static IMembership ComputeResolveVisibleOperation(this INamespace namespaceSubject, string name)
         {
             if (namespaceSubject == null)
@@ -680,7 +674,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// last. If the given qualifiedName has only one segment, then return null.
         /// </summary>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="qualifiedName">
         /// No documentation provided
@@ -688,7 +682,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(INamespace.QualificationOf))]
+        [Operation(nameof(INamespace.QualificationOf))]
         internal static string ComputeQualificationOfOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)
@@ -712,7 +706,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// single quotes and replacing all escape sequences with the specified character.
         /// </summary>
         /// <param name="namespaceSubject">
-        /// The subject <see cref="INamespace"/>
+        /// The subject <see cref="INamespace" />
         /// </param>
         /// <param name="qualifiedName">
         /// No documentation provided
@@ -720,7 +714,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(INamespace.UnqualifiedNameOf))]
+        [Operation(nameof(INamespace.UnqualifiedNameOf))]
         internal static string ComputeUnqualifiedNameOfOperation(this INamespace namespaceSubject, string qualifiedName)
         {
             if (namespaceSubject == null)

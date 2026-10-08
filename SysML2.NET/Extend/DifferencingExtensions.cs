@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DifferencingExtensions.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 //
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -21,17 +21,13 @@
 namespace SysML2.NET.Core.POCO.Core.Types
 {
     using System;
-    using System.Collections.Generic;
 
     using SysML2.NET.Decorators;
-
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
-    /// The <see cref="DifferencingExtensions"/> class provides extensions methods for
-    /// the <see cref="IDifferencing"/> interface
+    /// The <see cref="DifferencingExtensions" /> class provides extensions methods for
+    /// the <see cref="IDifferencing" /> interface
     /// </summary>
     internal static class DifferencingExtensions
     {
@@ -39,18 +35,24 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Computes the derived property.
         /// </summary>
         /// <param name="differencingSubject">
-        /// The subject <see cref="IDifferencing"/>
+        /// The subject <see cref="IDifferencing" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IDifferencing.typeDifferenced))]
+        /// <exception cref="IncompleteModelException">
+        /// Thrown when the owning related element is null or is not an <see cref="IType" />.
+        /// </exception>
+        [DerivedProperty(nameof(IDifferencing.typeDifferenced))]
         internal static IType ComputeTypeDifferenced(this IDifferencing differencingSubject)
         {
-            return differencingSubject == null
-                ? throw new ArgumentNullException(nameof(differencingSubject))
-                : differencingSubject.OwningRelatedElement as IType;
-        }
+            if (differencingSubject == null)
+            {
+                throw new ArgumentNullException(nameof(differencingSubject));
+            }
 
+            return differencingSubject.OwningRelatedElement as IType
+                   ?? throw new IncompleteModelException($"{nameof(differencingSubject)} must have an owning related element of type {nameof(IType)}");
+        }
     }
 }

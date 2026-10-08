@@ -21,12 +21,11 @@
 namespace SysML2.NET.Core.POCO.Systems.Metadata
 {
     using System;
-
-    using SysML2.NET.Decorators;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
-    using SysML2.NET.Extensions;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// The <see cref="MetadataUsageExtensions" /> class provides extensions methods for
@@ -43,12 +42,12 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IMetadataUsage.metadataDefinition))]
+        [DerivedProperty(nameof(IMetadataUsage.metadataDefinition))]
         internal static IMetaclass ComputeMetadataDefinition(this IMetadataUsage metadataUsageSubject)
         {
             return metadataUsageSubject == null
                 ? throw new ArgumentNullException(nameof(metadataUsageSubject))
-                : metadataUsageSubject.ComputeType().SingleOrDefaultStrict<IMetaclass>(nameof(metadataUsageSubject));
+                : metadataUsageSubject.ComputeType().OfType<IMetaclass>().FirstOrDefault();
         }
     }
 }

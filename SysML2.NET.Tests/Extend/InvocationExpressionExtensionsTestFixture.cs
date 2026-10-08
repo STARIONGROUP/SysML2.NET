@@ -31,6 +31,7 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Extensions;
 
@@ -82,7 +83,7 @@ namespace SysML2.NET.Tests.Extend
             nonLibrarySubject.AssignOwnership(new FeatureTyping { Type = new Function() });
 
             // The same shape, but invoking BaseFunctions::'==' — model-level evaluable per KerML Table 5.
-            var libraryPackage = new Namespace { DeclaredName = "BaseFunctions" };
+            var libraryPackage = new LibraryPackage { DeclaredName = "BaseFunctions" };
             var equalityFunction = new Function { DeclaredName = "==" };
             libraryPackage.AssignOwnership(new OwningMembership(), equalityFunction);
 
