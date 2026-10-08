@@ -487,7 +487,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// <remarks>
         /// OCL2.0:
         /// <code>
-        /// nestedMetadata = nestedUsage-&gt;selectByKind(MetadataUsage)
+        /// nestedMetadata = ownedMember-&gt;selectByKind(MetadataUsage)
         /// </code>
         /// </remarks>
         /// <param name="usageSubject">
@@ -501,7 +501,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         {
             return usageSubject == null
                 ? throw new ArgumentNullException(nameof(usageSubject))
-                : [..usageSubject.nestedUsage.OfType<IMetadataUsage>()];
+                : [..usageSubject.ownedMember.OfType<IMetadataUsage>()];
         }
 
         /// <summary>

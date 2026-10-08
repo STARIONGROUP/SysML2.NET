@@ -138,8 +138,10 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <remarks>
         /// OCL2.0:
         /// <code>
-        /// featureMembership = ownedFeatureMembership-&gt;union(
-        ///                             inheritedMembership-&gt;selectByKind(FeatureMembership))
+        /// featureMembership = ownedFeatureMembership-&gt;
+        ///     union(inheritedMembership-&gt;
+        ///         selectByKind(FeatureMembership)-&gt;
+        ///         select(mem | self.specializes(mem.owningType)))
         /// </code>
         /// </remarks>
         /// <param name="typeSubject">
@@ -153,7 +155,9 @@ namespace SysML2.NET.Core.POCO.Core.Types
         {
             return typeSubject == null
                 ? throw new ArgumentNullException(nameof(typeSubject))
-                : [..typeSubject.ownedFeatureMembership.Union(typeSubject.inheritedMembership.OfType<IFeatureMembership>())];
+                : [..typeSubject.ownedFeatureMembership.Union(typeSubject.inheritedMembership
+                    .OfType<IFeatureMembership>()
+                    .Where(featureMembership => typeSubject.Specializes(featureMembership.owningType)))];
         }
 
         /// <summary>

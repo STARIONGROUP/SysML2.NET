@@ -22,34 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\Resources\sysml.library.kpar\Kernel_Semantic_Library-1.0.0.kpar" Link="TestData\Kernel_Semantic_Library-1.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\Kernel_Data_Type_Library-1.0.0.kpar" Link="TestData\Kernel_Data_Type_Library-1.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\Kernel_Function_Library-1.0.0.kpar" Link="TestData\Kernel_Function_Library-1.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Systems_Library-2.0.0.kpar" Link="TestData\SysML_Systems_Library-2.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Analysis_Library-2.0.0.kpar" Link="TestData\SysML_Analysis_Library-2.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Cause_and_Effect_Library-2.0.0.kpar" Link="TestData\SysML_Cause_and_Effect_Library-2.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Geometry_Library-2.0.0.kpar" Link="TestData\SysML_Geometry_Library-2.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Metadata_Library-2.0.0.kpar" Link="TestData\SysML_Metadata_Library-2.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Quantities_and_Units_Library-2.0.0.kpar" Link="TestData\SysML_Quantities_and_Units_Library-2.0.0.kpar">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\Resources\sysml.library.kpar\SysML_Requirement_Derivation_Library-2.0.0.kpar" Link="TestData\SysML_Requirement_Derivation_Library-2.0.0.kpar">
+        <Content Include="..\Resources\sysml.library.kpar\*.kpar" Link="TestData\%(Filename)%(Extension)">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

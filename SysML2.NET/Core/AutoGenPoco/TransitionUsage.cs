@@ -1595,8 +1595,9 @@ namespace SysML2.NET.Core.POCO.Systems.States
 
         /// <summary>
         /// If this Feature is an end Feature of its owningType, then return the first ownedMember of the
-        /// Feature that is a Feature, but not a Multiplicity or a MetadataFeature, and whose owningMembership
-        /// is not a FeatureMembership. If this exists, it is the crossFeature of the end Feature.
+        /// Feature that is a Feature, but not a Multiplicity, MetadataFeature, or BindingConnector, and whose
+        /// owningMembership is not a FeatureMembership or FeatureValue. If this exists, it is the crossFeature
+        /// of the end Feature.
         /// </summary>
         /// <returns>
         /// The expected <see cref="IFeature" />

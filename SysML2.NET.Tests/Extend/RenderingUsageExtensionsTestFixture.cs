@@ -25,6 +25,7 @@ namespace SysML2.NET.Tests.Extend
     using NUnit.Framework;
 
     using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Exceptions;
@@ -58,6 +59,34 @@ namespace SysML2.NET.Tests.Extend
             var secondRenderingDefinition = new RenderingDefinition();
             renderingUsage.AssignOwnership(new FeatureTyping { Type = secondRenderingDefinition });
             Assert.That(() => renderingUsage.ComputeRenderingDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+        }
+
+        [Test]
+        public void VerifyComputeRedefinedNamingFeatureOperation()
+        {
+            Assert.That(() => ((IRenderingUsage)null).ComputeRedefinedNamingFeatureOperation(), Throws.TypeOf<ArgumentNullException>());
+
+            var renderingUsage = new RenderingUsage();
+
+            // Neither conjunct holds: no owningFeatureMembership and no ownedReferenceSubsetting → the
+            // OccurrenceUsage-level redefinition decides, which yields null for an unowned Usage.
+            Assert.That(renderingUsage.ComputeRedefinedNamingFeatureOperation(), Is.Null);
+
+            // Owned via a ViewRenderingMembership, but still without an ownedReferenceSubsetting.
+            var viewDefinition = new ViewDefinition();
+            viewDefinition.AssignOwnership(new ViewRenderingMembership(), renderingUsage);
+            Assert.That(renderingUsage.ComputeRedefinedNamingFeatureOperation(), Is.Null);
+
+            // Both conjuncts hold: the featureTarget of the referencedFeature is the naming Feature.
+            var referencedFeature = new Feature();
+            renderingUsage.AssignOwnership(new ReferenceSubsetting { ReferencedFeature = referencedFeature });
+            Assert.That(renderingUsage.ComputeRedefinedNamingFeatureOperation(), Is.SameAs(referencedFeature));
+
+            // A plain FeatureMembership owner falls back to the OccurrenceUsage-level redefinition.
+            var plainlyOwnedRendering = new RenderingUsage();
+            plainlyOwnedRendering.AssignOwnership(new ReferenceSubsetting { ReferencedFeature = referencedFeature });
+            new ViewDefinition().AssignOwnership(new FeatureMembership(), plainlyOwnedRendering);
+            Assert.That(plainlyOwnedRendering.ComputeRedefinedNamingFeatureOperation(), Is.Not.SameAs(referencedFeature));
         }
     }
 }

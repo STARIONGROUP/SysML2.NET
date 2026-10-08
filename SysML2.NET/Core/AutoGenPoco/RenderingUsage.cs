@@ -1448,13 +1448,23 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         public List<string> NamesOf(IElement element) => this.ComputeNamesOfOperation(element);
 
         /// <summary>
-        /// If this Usage is a variant, then its naming Feature is the referencedFeature of its
+        /// The naming Feature of a RenderingUsage that is owned via a ViewRenderingMembership and has an
+        /// ownedReferenceSubsetting is the featureTarget of the referencedFeature of that
         /// ownedReferenceSubsetting.
         /// </summary>
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
         public IFeature NamingFeature() => this.ComputeRedefinedNamingFeatureOperation();
+
+        /// <summary>
+        /// If this Usage is a variant, then its naming Feature is the referencedFeature of its
+        /// ownedReferenceSubsetting.
+        /// </summary>
+        /// <returns>
+        /// The expected <see cref="IFeature" />
+        /// </returns>
+        IFeature IUsage.NamingFeature() => this.NamingFeature();
 
         /// <summary>
         /// By default, the naming Feature of a Feature is given by its first redefinedFeature of its first
@@ -1487,8 +1497,9 @@ namespace SysML2.NET.Core.POCO.Systems.Views
 
         /// <summary>
         /// If this Feature is an end Feature of its owningType, then return the first ownedMember of the
-        /// Feature that is a Feature, but not a Multiplicity or a MetadataFeature, and whose owningMembership
-        /// is not a FeatureMembership. If this exists, it is the crossFeature of the end Feature.
+        /// Feature that is a Feature, but not a Multiplicity, MetadataFeature, or BindingConnector, and whose
+        /// owningMembership is not a FeatureMembership or FeatureValue. If this exists, it is the crossFeature
+        /// of the end Feature.
         /// </summary>
         /// <returns>
         /// The expected <see cref="IFeature" />

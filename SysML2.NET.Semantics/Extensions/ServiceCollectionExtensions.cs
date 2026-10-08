@@ -22,6 +22,7 @@ namespace SysML2.NET.Semantics.Extensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Microsoft.Extensions.DependencyInjection;
 
@@ -34,6 +35,21 @@ namespace SysML2.NET.Semantics.Extensions
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Gets the hand-written <see cref="IImpliedRuleGuard" /> implementations declared by the semantics assembly.
+        /// </summary>
+        /// <remarks>
+        /// The parameterless-constructor filter is what excludes <see cref="GeneratedRuleGuard" />, whose
+        /// instances carry a constraint name and predicate supplied by the generated table.
+        /// </remarks>
+        private static IEnumerable<Type> HandWrittenGuardTypes =>
+            typeof(IImpliedRuleGuard).Assembly
+                .GetTypes()
+                .Where(type => type.IsClass
+                               && !type.IsAbstract
+                               && typeof(IImpliedRuleGuard).IsAssignableFrom(type)
+                               && type.GetConstructor(Type.EmptyTypes) != null);
+
         /// <summary>
         /// Registers the implied-relationship services with their default configuration.
         /// </summary>
@@ -129,23 +145,10 @@ namespace SysML2.NET.Semantics.Extensions
                 services.AddSingleton(generatedGuard);
             }
 
-            services.AddImpliedRuleGuard<AcceptActionUsageSubactionSpecializationGuard>();
-            services.AddImpliedRuleGuard<AssociationBinarySpecializationGuard>();
-            services.AddImpliedRuleGuard<AssociationStructureBinarySpecializationGuard>();
-            services.AddImpliedRuleGuard<ConnectorBinaryObjectSpecializationGuard>();
-            services.AddImpliedRuleGuard<ConnectorBinarySpecializationGuard>();
-            services.AddImpliedRuleGuard<ConnectorObjectSpecializationGuard>();
-            services.AddImpliedRuleGuard<FeatureEndSpecializationGuard>();
-            services.AddImpliedRuleGuard<FeaturePortionSpecializationGuard>();
-            services.AddImpliedRuleGuard<FeatureSubobjectSpecializationGuard>();
-            services.AddImpliedRuleGuard<FeatureSuboccurrenceSpecializationGuard>();
-            services.AddImpliedRuleGuard<FlowDefinitionBinarySpecializationGuard>();
-            services.AddImpliedRuleGuard<IncludeUseCaseUsageSpecializationGuard>();
-            services.AddImpliedRuleGuard<OccurrenceUsageSuboccurrenceSpecializationGuard>();
-            services.AddImpliedRuleGuard<StepOwnedPerformanceSpecializationGuard>();
-            services.AddImpliedRuleGuard<StepSubperformanceSpecializationGuard>();
-            services.AddImpliedRuleGuard<TransitionUsageActionSpecializationGuard>();
-            services.AddImpliedRuleGuard<TransitionUsageStateSpecializationGuard>();
+            foreach (var guardType in HandWrittenGuardTypes)
+            {
+                services.AddScoped(typeof(IImpliedRuleGuard), guardType);
+            }
 
             return services;
         }
@@ -166,31 +169,17 @@ namespace SysML2.NET.Semantics.Extensions
         }
 
         /// <summary>
-        /// Registers a guard for a conditional semantic constraint.
-        /// </summary>
-        /// <typeparam name="TGuard">The guard to register.</typeparam>
-        /// <param name="services">The service collection to register with.</param>
-        /// <returns>The same service collection, to allow chaining.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="services" /> is null.</exception>
-        /// <remarks>
-        /// Guards are registered explicitly rather than discovered by assembly scanning, so the registered
-        /// set stays visible in source and the assembly stays trimmable.
-        /// </remarks>
-        public static IServiceCollection AddImpliedRuleGuard<TGuard>(this IServiceCollection services)
-            where TGuard : class, IImpliedRuleGuard
-        {
-            return services == null
-                ? throw new ArgumentNullException(nameof(services))
-                : services.AddScoped<IImpliedRuleGuard, TGuard>();
-        }
-
-        /// <summary>
         /// Registers an <see cref="ILibraryTypeIndex" /> built from the supplied library root Namespaces.
         /// </summary>
         /// <param name="services">The service collection to register with.</param>
         /// <param name="libraryNamespaces">The library root Namespaces to index.</param>
         /// <returns>The same service collection, to allow chaining.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either argument is null.</exception>
+        /// <remarks>
+        /// The semantic constraint set resolves library Types a model need not import, so the Namespaces
+        /// must come from a complete library load; an incomplete set indexes without error and surfaces as
+        /// an <see cref="UnresolvedLibraryTypeException" /> when a rule resolves its target.
+        /// </remarks>
         public static IServiceCollection AddLibraryTypeIndex(this IServiceCollection services, IEnumerable<Core.POCO.Root.Namespaces.INamespace> libraryNamespaces)
         {
             if (services == null)

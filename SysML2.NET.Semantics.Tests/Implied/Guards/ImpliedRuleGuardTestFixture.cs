@@ -37,6 +37,7 @@ namespace SysML2.NET.Semantics.Tests.Implied.Guards
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.Connections;
     using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Semantics.Implied;
     using SysML2.NET.Semantics.Implied.Guards;
 
@@ -115,6 +116,34 @@ namespace SysML2.NET.Semantics.Tests.Implied.Guards
 
                 // owningType is null when the ActionUsage is not owned by a Type at all.
                 Assert.That(guard.Applies(new ActionUsage { Id = Guid.NewGuid(), IsComposite = true }), Is.False);
+                Assert.That(guard.Applies(new Feature { Id = Guid.NewGuid() }), Is.False);
+                Assert.That(() => guard.Applies(null), Throws.TypeOf<ArgumentNullException>());
+            }
+        }
+
+        [Test]
+        public void VerifyRequirementUsageSubrequirementSpecializationGuard()
+        {
+            var guard = new RequirementUsageSubrequirementSpecializationGuard();
+
+            var ownedByDefinition = CreateSubrequirement(true, new RequirementDefinition { Id = Guid.NewGuid() }, new FeatureMembership { Id = Guid.NewGuid() });
+            var ownedByUsage = CreateSubrequirement(true, new RequirementUsage { Id = Guid.NewGuid() }, new FeatureMembership { Id = Guid.NewGuid() });
+            var notComposite = CreateSubrequirement(false, new RequirementDefinition { Id = Guid.NewGuid() }, new FeatureMembership { Id = Guid.NewGuid() });
+            var ownedByPlainType = CreateSubrequirement(true, new Class { Id = Guid.NewGuid() }, new FeatureMembership { Id = Guid.NewGuid() });
+            var constrainedRequirement = CreateSubrequirement(true, new RequirementDefinition { Id = Guid.NewGuid() }, new RequirementConstraintMembership { Id = Guid.NewGuid() });
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(guard.ConstraintName, Is.EqualTo("checkRequirementUsageSubrequirementSpecialization"));
+                Assert.That(guard.Applies(ownedByDefinition), Is.True);
+                Assert.That(guard.Applies(ownedByUsage), Is.True);
+
+                Assert.That(guard.Applies(notComposite), Is.False);
+                Assert.That(guard.Applies(ownedByPlainType), Is.False);
+
+                // Ownership via a RequirementConstraintMembership excludes the subrequirement Specialization.
+                Assert.That(guard.Applies(constrainedRequirement), Is.False);
+
                 Assert.That(guard.Applies(new Feature { Id = Guid.NewGuid() }), Is.False);
                 Assert.That(() => guard.Applies(null), Throws.TypeOf<ArgumentNullException>());
             }
@@ -270,6 +299,16 @@ namespace SysML2.NET.Semantics.Tests.Implied.Guards
             Assert.That(guard, Is.Not.Null, $"'{constraintName}' is expected to be generated from its guard OCL.");
 
             return guard;
+        }
+
+        private static RequirementUsage CreateSubrequirement(bool isComposite, IElement owner, IFeatureMembership membership)
+        {
+            var requirementUsage = new RequirementUsage { Id = Guid.NewGuid(), IsComposite = isComposite };
+
+            ((IContainedRelationship)membership).OwnedRelatedElement.Add(requirementUsage);
+            ((IContainedElement)owner).OwnedRelationship.Add(membership);
+
+            return requirementUsage;
         }
 
         private static Feature CreateEnd(bool isEnd, IElement owner)
