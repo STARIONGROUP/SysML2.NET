@@ -25,10 +25,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    using SysML2.NET.Decorators;
-
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// The <see cref="InvocationExpressionExtensions" /> class provides extensions methods for
@@ -56,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IInvocationExpression.ModelLevelEvaluable))]
+        [Operation(nameof(IInvocationExpression.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IInvocationExpression invocationExpressionSubject, List<IFeature> visited)
         {
             if (invocationExpressionSubject == null)
@@ -65,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
             }
 
             return invocationExpressionSubject.argument.All(argument => argument.ModelLevelEvaluable(visited))
-                   && invocationExpressionSubject.function.isModelLevelEvaluable;
+                   && invocationExpressionSubject.function?.isModelLevelEvaluable == true;
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The expected collection of <see cref="IElement" />
         /// </returns>
         [ExcludeFromCodeCoverage]
-        [Operation(name: nameof(IInvocationExpression.Evaluate))]
+        [Operation(nameof(IInvocationExpression.Evaluate))]
         internal static List<IElement> ComputeRedefinedEvaluateOperation(this IInvocationExpression invocationExpressionSubject, IElement target)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

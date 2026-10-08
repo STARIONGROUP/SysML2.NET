@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="CrossSubsettingExtensions.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 //
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -21,18 +21,13 @@
 namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
-    using System.Collections.Generic;
 
     using SysML2.NET.Decorators;
-
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
-    /// The <see cref="CrossSubsettingExtensions"/> class provides extensions methods for
-    /// the <see cref="ICrossSubsetting"/> interface
+    /// The <see cref="CrossSubsettingExtensions" /> class provides extensions methods for
+    /// the <see cref="ICrossSubsetting" /> interface
     /// </summary>
     internal static class CrossSubsettingExtensions
     {
@@ -40,18 +35,24 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Computes the derived property.
         /// </summary>
         /// <param name="crossSubsettingSubject">
-        /// The subject <see cref="ICrossSubsetting"/>
+        /// The subject <see cref="ICrossSubsetting" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(ICrossSubsetting.crossingFeature))]
+        /// <exception cref="IncompleteModelException">
+        /// Thrown when the owning related element is null or is not an <see cref="IFeature" />.
+        /// </exception>
+        [DerivedProperty(nameof(ICrossSubsetting.crossingFeature))]
         internal static IFeature ComputeCrossingFeature(this ICrossSubsetting crossSubsettingSubject)
         {
-            return crossSubsettingSubject == null
-                ? throw new ArgumentNullException(nameof(crossSubsettingSubject))
-                : crossSubsettingSubject.OwningRelatedElement as IFeature;
-        }
+            if (crossSubsettingSubject == null)
+            {
+                throw new ArgumentNullException(nameof(crossSubsettingSubject));
+            }
 
+            return crossSubsettingSubject.OwningRelatedElement as IFeature
+                   ?? throw new IncompleteModelException($"{nameof(crossSubsettingSubject)} must have an owning related element of type {nameof(IFeature)}");
+        }
     }
 }

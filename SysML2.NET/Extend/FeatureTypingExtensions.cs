@@ -1,38 +1,32 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureTypingExtensions.cs" company="Starion Group S.A.">
-//
-//    Copyright (C) 2022-2026 Starion Group S.A.
-//
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
 namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
-    using System.Collections.Generic;
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
-
     /// <summary>
-    /// The <see cref="FeatureTypingExtensions"/> class provides extensions methods for
-    /// the <see cref="IFeatureTyping"/> interface
+    /// The <see cref="FeatureTypingExtensions" /> class provides extensions methods for
+    /// the <see cref="IFeatureTyping" /> interface
     /// </summary>
     internal static class FeatureTypingExtensions
     {
@@ -40,18 +34,25 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Computes the derived property.
         /// </summary>
         /// <param name="featureTypingSubject">
-        /// The subject <see cref="IFeatureTyping"/>
+        /// The subject <see cref="IFeatureTyping" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeatureTyping.owningFeature))]
+        [DerivedProperty(nameof(IFeatureTyping.owningFeature))]
         internal static IFeature ComputeOwningFeature(this IFeatureTyping featureTypingSubject)
         {
-            return featureTypingSubject == null
-                ? throw new ArgumentNullException(nameof(featureTypingSubject))
-                : featureTypingSubject.OwningRelatedElement as IFeature;
-        }
+            if (featureTypingSubject == null)
+            {
+                throw new ArgumentNullException(nameof(featureTypingSubject));
+            }
 
+            var owningRelatedElement = featureTypingSubject.OwningRelatedElement;
+
+            return owningRelatedElement is IFeature owningFeature
+                   && ReferenceEquals(owningRelatedElement, featureTypingSubject.TypedFeature)
+                ? owningFeature
+                : null;
+        }
     }
 }

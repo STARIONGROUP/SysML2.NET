@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureExtensions.cs" company="Starion Group S.A.">
-// 
-//   Copyright 2022-2026 Starion Group S.A.
-// 
+//
+//   Copyright (C) 2022-2026 Starion Group S.A.
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -24,14 +24,13 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using System.Collections.Generic;
     using System.Linq;
 
-    using SysML2.NET.Decorators;
-
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// The <see cref="FeatureExtensions" /> class provides extensions methods for
@@ -55,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.chainingFeature))]
+        [DerivedProperty(nameof(IFeature.chainingFeature))]
         internal static List<IFeature> ComputeChainingFeature(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -86,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.crossFeature))]
+        [DerivedProperty(nameof(IFeature.crossFeature))]
         internal static IFeature ComputeCrossFeature(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -116,7 +115,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.endOwningType))]
+        [DerivedProperty(nameof(IFeature.endOwningType))]
         internal static IType ComputeEndOwningType(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -142,7 +141,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.featureTarget))]
+        [DerivedProperty(nameof(IFeature.featureTarget))]
         internal static IFeature ComputeFeatureTarget(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -182,7 +181,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.featuringType))]
+        [DerivedProperty(nameof(IFeature.featuringType))]
         internal static List<IType> ComputeFeaturingType(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -192,13 +191,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
             var featuringTypes = featureSubject.OwnedRelationship
                 .OfType<ITypeFeaturing>()
-                .Where(tf => tf.FeatureOfType == featureSubject)
-                .Select(tf => tf.FeaturingType)
+                .Where(typeFeaturing => ReferenceEquals(typeFeaturing.FeatureOfType, featureSubject))
+                .Select(typeFeaturing => typeFeaturing.FeaturingType)
+                .Distinct()
                 .ToList();
 
             var chainingFeatures = featureSubject.OwnedRelationship
                 .OfType<IFeatureChaining>()
-                .Select(fc => fc.ChainingFeature)
+                .Select(featureChaining => featureChaining.ChainingFeature)
                 .ToList();
 
             if (chainingFeatures.Count > 0)
@@ -231,7 +231,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedCrossSubsetting))]
+        [DerivedProperty(nameof(IFeature.ownedCrossSubsetting))]
         internal static ICrossSubsetting ComputeOwnedCrossSubsetting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -255,7 +255,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedFeatureChaining))]
+        [DerivedProperty(nameof(IFeature.ownedFeatureChaining))]
         internal static List<IFeatureChaining> ComputeOwnedFeatureChaining(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -281,7 +281,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedFeatureInverting))]
+        [DerivedProperty(nameof(IFeature.ownedFeatureInverting))]
         internal static List<IFeatureInverting> ComputeOwnedFeatureInverting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -305,7 +305,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedRedefinition))]
+        [DerivedProperty(nameof(IFeature.ownedRedefinition))]
         internal static List<IRedefinition> ComputeOwnedRedefinition(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -334,7 +334,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedReferenceSubsetting))]
+        [DerivedProperty(nameof(IFeature.ownedReferenceSubsetting))]
         internal static IReferenceSubsetting ComputeOwnedReferenceSubsetting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -358,7 +358,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedSubsetting))]
+        [DerivedProperty(nameof(IFeature.ownedSubsetting))]
         internal static List<ISubsetting> ComputeOwnedSubsetting(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -384,7 +384,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedTypeFeaturing))]
+        [DerivedProperty(nameof(IFeature.ownedTypeFeaturing))]
         internal static List<ITypeFeaturing> ComputeOwnedTypeFeaturing(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -408,7 +408,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.ownedTyping))]
+        [DerivedProperty(nameof(IFeature.ownedTyping))]
         internal static List<IFeatureTyping> ComputeOwnedTyping(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -430,7 +430,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.owningFeatureMembership))]
+        [DerivedProperty(nameof(IFeature.owningFeatureMembership))]
         internal static IFeatureMembership ComputeOwningFeatureMembership(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -452,7 +452,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.owningType))]
+        [DerivedProperty(nameof(IFeature.owningType))]
         internal static IType ComputeOwningType(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -481,12 +481,22 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeature.type))]
+        [DerivedProperty(nameof(IFeature.type))]
         internal static List<IType> ComputeType(this IFeature featureSubject)
         {
-            return featureSubject == null
-                ? throw new ArgumentNullException(nameof(featureSubject))
-                : [..featureSubject.OwnedRelationship.OfType<IFeatureTyping>().Select(ft => ft.Type).Where(t => t != null)];
+            if (featureSubject == null)
+            {
+                throw new ArgumentNullException(nameof(featureSubject));
+            }
+
+            var types = ComputeTypingFeatureClosure(featureSubject)
+                .SelectMany(typingFeature => typingFeature.OwnedRelationship.OfType<IFeatureTyping>())
+                .Select(featureTyping => featureTyping.Type)
+                .Where(type => type != null)
+                .Distinct()
+                .ToList();
+
+            return [..types.Where(candidate => !types.Any(other => other != candidate && other.Specializes(candidate)))];
         }
 
         /// <summary>
@@ -508,7 +518,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="FeatureDirectionKind" />
         /// </returns>
-        [Operation(name: nameof(IFeature.DirectionFor))]
+        [Operation(nameof(IFeature.DirectionFor))]
         internal static FeatureDirectionKind? ComputeDirectionForOperation(this IFeature featureSubject, IType type)
         {
             return featureSubject == null
@@ -543,7 +553,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(IFeature.EffectiveShortName))]
+        [Operation(nameof(IFeature.EffectiveShortName))]
         internal static string ComputeRedefinedEffectiveShortNameOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -551,7 +561,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(featureSubject));
             }
 
-            if (!string.IsNullOrWhiteSpace(featureSubject.DeclaredShortName) || !string.IsNullOrWhiteSpace(featureSubject.DeclaredName))
+            if (featureSubject.DeclaredShortName != null || featureSubject.DeclaredName != null)
             {
                 return featureSubject.DeclaredShortName;
             }
@@ -589,7 +599,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(IFeature.EffectiveName))]
+        [Operation(nameof(IFeature.EffectiveName))]
         internal static string ComputeRedefinedEffectiveNameOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -597,7 +607,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(featureSubject));
             }
 
-            if (!string.IsNullOrWhiteSpace(featureSubject.DeclaredShortName) || !string.IsNullOrWhiteSpace(featureSubject.DeclaredName))
+            if (featureSubject.DeclaredShortName != null || featureSubject.DeclaredName != null)
             {
                 return featureSubject.DeclaredName;
             }
@@ -628,7 +638,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        [Operation(name: nameof(IFeature.NamingFeature))]
+        [Operation(nameof(IFeature.NamingFeature))]
         internal static IFeature ComputeNamingFeatureOperation(this IFeature featureSubject)
         {
             return featureSubject == null
@@ -658,7 +668,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
-        [Operation(name: nameof(IFeature.Supertypes))]
+        [Operation(nameof(IFeature.Supertypes))]
         internal static List<IType> ComputeRedefinedSupertypesOperation(this IFeature featureSubject, bool excludeImplied)
         {
             if (featureSubject == null)
@@ -680,17 +690,17 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
                 if (excludeImplied)
                 {
-                    specializations = specializations.Where(s => !s.IsImplied);
+                    specializations = specializations.Where(specialization => !specialization.IsImplied);
                 }
 
-                supertypes = [..specializations.Select(s => s.General).Where(g => g != null)];
+                supertypes = [..specializations.Select(specialization => specialization.General).Where(general => general != null).Distinct()];
             }
 
-            var target = featureSubject.featureTarget;
+            var featureTarget = featureSubject.featureTarget;
 
-            if (target != featureSubject)
+            if (featureTarget != null && !ReferenceEquals(featureTarget, featureSubject) && !supertypes.Contains(featureTarget))
             {
-                supertypes.Add(target);
+                supertypes.Add(featureTarget);
             }
 
             return supertypes;
@@ -715,7 +725,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.Redefines))]
+        [Operation(nameof(IFeature.Redefines))]
         internal static bool ComputeRedefinesOperation(this IFeature featureSubject, IFeature redefinedFeature)
         {
             if (featureSubject == null)
@@ -751,7 +761,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.RedefinesFromLibrary))]
+        [Operation(nameof(IFeature.RedefinesFromLibrary))]
         internal static bool ComputeRedefinesFromLibraryOperation(this IFeature featureSubject, string libraryFeatureName)
         {
             if (featureSubject == null)
@@ -762,9 +772,9 @@ namespace SysML2.NET.Core.POCO.Core.Features
             var membership = featureSubject.ResolveGlobal(libraryFeatureName);
 
             return membership?.MemberElement is IFeature libraryFeature
-                && featureSubject.OwnedRelationship
-                    .OfType<IRedefinition>()
-                    .Any(r => r.RedefinedFeature == libraryFeature);
+                   && featureSubject.OwnedRelationship
+                       .OfType<IRedefinition>()
+                       .Any(r => r.RedefinedFeature == libraryFeature);
         }
 
         /// <summary>
@@ -795,7 +805,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.SubsetsChain))]
+        [Operation(nameof(IFeature.SubsetsChain))]
         internal static bool ComputeSubsetsChainOperation(this IFeature featureSubject, IFeature first, IFeature second)
         {
             if (featureSubject == null)
@@ -803,50 +813,16 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(featureSubject));
             }
 
-            // Inline AllSupertypes: BFS transitive closure of supertypes (bypassing the stub)
-            var visited = new HashSet<IType>();
-            var queue = new Queue<IType>();
-            visited.Add(featureSubject);
-            queue.Enqueue(featureSubject);
-
-            while (queue.Count > 0)
-            {
-                var current = queue.Dequeue();
-
-                // Inline supertypes: general Types from ownedSpecializations
-                IEnumerable<IType> supertypes;
-
-                if (current.isConjugated)
-                {
-                    var originalType = current.ownedConjugator?.OriginalType;
-                    supertypes = originalType != null ? [originalType] : [];
-                }
-                else
-                {
-                    supertypes = current.OwnedRelationship
-                        .OfType<ISpecialization>()
-                        .Select(s => s.General)
-                        .Where(g => g != null);
-                }
-
-                foreach (var supertype in supertypes)
-                {
-                    if (visited.Add(supertype))
-                    {
-                        queue.Enqueue(supertype);
-                    }
-                }
-            }
-
-            return visited
+            return featureSubject.AllSupertypes()
                 .OfType<IFeature>()
-                .Any(f =>
+                .Any(supertype =>
                 {
-                    var chain = f.chainingFeature;
-                    var chainCount = chain.Count;
-                    return chainCount >= 2
-                        && chain[chainCount - 2] == first
-                        && chain[chainCount - 1] == second;
+                    var chainingFeatures = supertype.chainingFeature;
+                    var chainingFeatureCount = chainingFeatures.Count;
+
+                    return chainingFeatureCount >= 2
+                           && ReferenceEquals(chainingFeatures[chainingFeatureCount - 2], first)
+                           && ReferenceEquals(chainingFeatures[chainingFeatureCount - 1], second);
                 });
         }
 
@@ -889,7 +865,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.IsCompatibleWith))]
+        [Operation(nameof(IFeature.IsCompatibleWith))]
         internal static bool ComputeRedefinedIsCompatibleWithOperation(this IFeature featureSubject, IType otherType)
         {
             if (featureSubject == null)
@@ -959,7 +935,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        [Operation(name: nameof(IFeature.TypingFeatures))]
+        [Operation(nameof(IFeature.TypingFeatures))]
         internal static List<IFeature> ComputeTypingFeaturesOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1020,7 +996,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IType" />
         /// </returns>
-        [Operation(name: nameof(IFeature.AsCartesianProduct))]
+        [Operation(nameof(IFeature.AsCartesianProduct))]
         internal static List<IType> ComputeAsCartesianProductOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1029,14 +1005,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
             }
 
             var notOwnedBySelf = featureSubject.featuringType
-                .Where(t => t.owner != featureSubject);
+                .Where(featuringType => !ReferenceEquals(featuringType.owner, featureSubject));
 
             var ownedBySelf = featureSubject.featuringType
-                .Where(t => t.owner == featureSubject)
+                .Where(featuringType => ReferenceEquals(featuringType.owner, featureSubject))
                 .OfType<IFeature>()
-                .SelectMany(f => f.AsCartesianProduct());
+                .SelectMany(ownedFeaturingType => ownedFeaturingType.AsCartesianProduct());
 
-            return [..notOwnedBySelf.Concat(ownedBySelf).Concat(featureSubject.type)];
+            return [..notOwnedBySelf.Union(ownedBySelf).Union(featureSubject.type)];
         }
 
         /// <summary>
@@ -1059,7 +1035,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.IsCartesianProduct))]
+        [Operation(nameof(IFeature.IsCartesianProduct))]
         internal static bool ComputeIsCartesianProductOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1080,7 +1056,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
             }
 
             return firstFeaturingType is IFeature featuringFeature
-                && featuringFeature.IsCartesianProduct();
+                   && featuringFeature.IsCartesianProduct();
         }
 
         /// <summary>
@@ -1101,7 +1077,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.IsOwnedCrossFeature))]
+        [Operation(nameof(IFeature.IsOwnedCrossFeature))]
         internal static bool ComputeIsOwnedCrossFeatureOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1110,7 +1086,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
             }
 
             return featureSubject.owningNamespace is IFeature owningFeature
-                && owningFeature.OwnedCrossFeature() == featureSubject;
+                   && owningFeature.OwnedCrossFeature() == featureSubject;
         }
 
         /// <summary>
@@ -1143,7 +1119,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="IFeature" />
         /// </returns>
-        [Operation(name: nameof(IFeature.OwnedCrossFeature))]
+        [Operation(nameof(IFeature.OwnedCrossFeature))]
         internal static IFeature ComputeOwnedCrossFeatureOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1161,10 +1137,9 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 .Where(owningMembership => owningMembership is not IFeatureMembership and not IFeatureValue)
                 .SelectMany(owningMembership => owningMembership.OwnedRelatedElement)
                 .OfType<IFeature>()
-                .Where(ownedMemberFeature => ownedMemberFeature is not IMultiplicity
-                                          and not IMetadataFeature
-                                          and not IBindingConnector)
-                .FirstOrDefault();
+                .FirstOrDefault(ownedMemberFeature => ownedMemberFeature is not IMultiplicity
+                    and not IMetadataFeature
+                    and not IBindingConnector);
         }
 
         /// <summary>
@@ -1185,7 +1160,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected collection of <see cref="IFeature" />
         /// </returns>
-        [Operation(name: nameof(IFeature.AllRedefinedFeatures))]
+        [Operation(nameof(IFeature.AllRedefinedFeatures))]
         internal static List<IFeature> ComputeAllRedefinedFeaturesOperation(this IFeature featureSubject)
         {
             if (featureSubject == null)
@@ -1253,7 +1228,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.IsFeaturedWithin))]
+        [Operation(nameof(IFeature.IsFeaturedWithin))]
         internal static bool ComputeIsFeaturedWithinOperation(this IFeature featureSubject, IType type)
         {
             if (featureSubject == null)
@@ -1265,7 +1240,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
             {
                 var anythingMembership = featureSubject.ResolveGlobal("Base::Anything");
                 var anythingElement = anythingMembership?.MemberElement;
-                
+
                 return featureSubject.featuringType.All(f => f == anythingElement);
             }
 
@@ -1326,7 +1301,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.CanAccess))]
+        [Operation(nameof(IFeature.CanAccess))]
         internal static bool ComputeCanAccessOperation(this IFeature featureSubject, IFeature feature)
         {
             if (featureSubject == null)
@@ -1403,7 +1378,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IFeature.IsFeaturingType))]
+        [Operation(nameof(IFeature.IsFeaturingType))]
         internal static bool ComputeIsFeaturingTypeOperation(this IFeature featureSubject, IType type)
         {
             if (featureSubject == null)
@@ -1430,8 +1405,45 @@ namespace SysML2.NET.Core.POCO.Core.Features
             }
 
             return type is IFeature typeFeature
-                && typeFeature.featuringType.Contains(featureSubject.owningType)
-                && typeFeature.RedefinesFromLibrary("Occurrences::Occurrence::snapshots");
+                   && typeFeature.featuringType.Contains(featureSubject.owningType)
+                   && typeFeature.RedefinesFromLibrary("Occurrences::Occurrence::snapshots");
+        }
+
+        /// <summary>
+        /// Computes the reflexive-transitive closure of <paramref name="start" /> over
+        /// <see cref="IFeature.TypingFeatures" />, using a visited set for cycle protection.
+        /// </summary>
+        /// <param name="start">
+        /// The seed <see cref="IFeature" />, which is itself included in the result.
+        /// </param>
+        /// <returns>
+        /// The seed and every transitively typing Feature, in breadth-first order.
+        /// </returns>
+        /// <remarks>
+        /// <see cref="IFeature.TypingFeatures" /> returns the typing Features "other than this Feature
+        /// itself" (KerML §8.3.3.3.4), so the seed reaches the result only through the closure's source and
+        /// must be included for the Feature's own FeatureTypings to count.
+        /// </remarks>
+        private static List<IFeature> ComputeTypingFeatureClosure(IFeature start)
+        {
+            var visited = new HashSet<IFeature> { start };
+            var result = new List<IFeature> { start };
+            var queue = new Queue<IFeature>();
+
+            queue.Enqueue(start);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                foreach (var typingFeature in current.TypingFeatures().Where(typingFeature => typingFeature != null && visited.Add(typingFeature)))
+                {
+                    queue.Enqueue(typingFeature);
+                    result.Add(typingFeature);
+                }
+            }
+
+            return result;
         }
     }
 }

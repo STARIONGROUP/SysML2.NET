@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MembershipExtensionsTestFixture.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ namespace SysML2.NET.Tests.Extend
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
 
@@ -31,15 +32,9 @@ namespace SysML2.NET.Tests.Extend
     public class MembershipExtensionsTestFixture
     {
         [Test]
-        public void VerifyComputeMemberElementId()
+        public void ComputeMembershipOwningNamespace_ThrowsNotSupportedException()
         {
-            Assert.That(() => ((IMembership)null).ComputeMemberElementId(), Throws.TypeOf<ArgumentNullException>());
-
-            var membership = new Membership();
-            var element = new Definition { ElementId = "test-element-id-42" };
-            membership.MemberElement = element;
-
-            Assert.That(membership.ComputeMemberElementId(), Is.EqualTo("test-element-id-42"));
+            Assert.That(() => ((IMembership)null).ComputeMembershipOwningNamespace(), Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -50,14 +45,24 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(() => new Membership().ComputeIsDistinguishableFromOperation(null), Throws.TypeOf<ArgumentNullException>());
 
-            // Clause C: incompatible metaclasses — types do not conform to each other → true
+            // Clause C: incompatible metaclasses — neither conforms to the other → true
             var subjectIncompat = new Membership { MemberShortName = "A", MemberName = "A" };
             subjectIncompat.MemberElement = new Definition();
 
             var otherIncompat = new Membership { MemberShortName = "A", MemberName = "A" };
-            otherIncompat.MemberElement = new Namespace();
+            otherIncompat.MemberElement = new Comment();
 
             Assert.That(subjectIncompat.ComputeIsDistinguishableFromOperation(otherIncompat), Is.True);
+
+            // Clause C, conforming metaclasses: Definition specializes Classifier, Type and Namespace, so a
+            // Definition conforms to Namespace and the colliding name is NOT distinguishable.
+            var subjectConformant = new Membership { MemberShortName = "A", MemberName = "A" };
+            subjectConformant.MemberElement = new Definition();
+
+            var otherConformant = new Membership { MemberShortName = "A", MemberName = "A" };
+            otherConformant.MemberElement = new Namespace();
+
+            Assert.That(subjectConformant.ComputeIsDistinguishableFromOperation(otherConformant), Is.False);
 
             // Clause C edge case: null MemberElement on subject — no conformance possible → true
             var subjectNullElement = new Membership { MemberShortName = "A", MemberName = "A" };
@@ -124,9 +129,15 @@ namespace SysML2.NET.Tests.Extend
         }
 
         [Test]
-        public void ComputeMembershipOwningNamespace_ThrowsNotSupportedException()
+        public void VerifyComputeMemberElementId()
         {
-            Assert.That(() => ((IMembership)null).ComputeMembershipOwningNamespace(), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((IMembership)null).ComputeMemberElementId(), Throws.TypeOf<ArgumentNullException>());
+
+            var membership = new Membership();
+            var element = new Definition { ElementId = "test-element-id-42" };
+            membership.MemberElement = element;
+
+            Assert.That(membership.ComputeMemberElementId(), Is.EqualTo("test-element-id-42"));
         }
     }
 }

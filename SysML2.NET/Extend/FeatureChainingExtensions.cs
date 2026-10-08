@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureChainingExtensions.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 //
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -21,17 +21,13 @@
 namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
-    using System.Collections.Generic;
 
     using SysML2.NET.Decorators;
-
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
-    /// The <see cref="FeatureChainingExtensions"/> class provides extensions methods for
-    /// the <see cref="IFeatureChaining"/> interface
+    /// The <see cref="FeatureChainingExtensions" /> class provides extensions methods for
+    /// the <see cref="IFeatureChaining" /> interface
     /// </summary>
     internal static class FeatureChainingExtensions
     {
@@ -39,18 +35,24 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Computes the derived property.
         /// </summary>
         /// <param name="featureChainingSubject">
-        /// The subject <see cref="IFeatureChaining"/>
+        /// The subject <see cref="IFeatureChaining" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFeatureChaining.featureChained))]
+        /// <exception cref="IncompleteModelException">
+        /// Thrown when the owning related element is null or is not an <see cref="IFeature" />.
+        /// </exception>
+        [DerivedProperty(nameof(IFeatureChaining.featureChained))]
         internal static IFeature ComputeFeatureChained(this IFeatureChaining featureChainingSubject)
         {
-            return featureChainingSubject == null
-                ? throw new ArgumentNullException(nameof(featureChainingSubject))
-                : featureChainingSubject.OwningRelatedElement as IFeature;
-        }
+            if (featureChainingSubject == null)
+            {
+                throw new ArgumentNullException(nameof(featureChainingSubject));
+            }
 
+            return featureChainingSubject.OwningRelatedElement as IFeature
+                   ?? throw new IncompleteModelException($"{nameof(featureChainingSubject)} must have an owning related element of type {nameof(IFeature)}");
+        }
     }
 }

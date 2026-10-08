@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FlowExtensions.cs" company="Starion Group S.A.">
-//
-//    Copyright (C) 2022-2026 Starion Group S.A.
-//
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -24,18 +24,13 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     using System.Collections.Generic;
     using System.Linq;
 
-    using SysML2.NET.Decorators;
-
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Associations;
-    using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Kernel.Connectors;
+    using SysML2.NET.Decorators;
 
     /// <summary>
-    /// The <see cref="FlowExtensions"/> class provides extensions methods for
-    /// the <see cref="IFlow"/> interface
+    /// The <see cref="FlowExtensions" /> class provides extensions methods for
+    /// the <see cref="IFlow" /> interface
     /// </summary>
     internal static class FlowExtensions
     {
@@ -49,12 +44,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </code>
         /// </remarks>
         /// <param name="flowSubject">
-        /// The subject <see cref="IFlow"/>
+        /// The subject <see cref="IFlow" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlow.flowEnd))]
+        [DerivedProperty(nameof(IFlow.flowEnd))]
         internal static List<IFlowEnd> ComputeFlowEnd(this IFlow flowSubject)
         {
             return flowSubject == null
@@ -66,17 +61,17 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// Computes the derived property.
         /// </summary>
         /// <param name="flowSubject">
-        /// The subject <see cref="IFlow"/>
+        /// The subject <see cref="IFlow" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlow.interaction))]
+        [DerivedProperty(nameof(IFlow.interaction))]
         internal static List<IInteraction> ComputeInteraction(this IFlow flowSubject)
         {
             return flowSubject == null
                 ? throw new ArgumentNullException(nameof(flowSubject))
-                : [.. FeatureExtensions.ComputeType(flowSubject).OfType<IInteraction>()];
+                : [.. flowSubject.ComputeType().OfType<IInteraction>()];
         }
 
         /// <summary>
@@ -94,12 +89,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </code>
         /// </remarks>
         /// <param name="flowSubject">
-        /// The subject <see cref="IFlow"/>
+        /// The subject <see cref="IFlow" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlow.payloadFeature))]
+        [DerivedProperty(nameof(IFlow.payloadFeature))]
         internal static IPayloadFeature ComputePayloadFeature(this IFlow flowSubject)
         {
             if (flowSubject == null)
@@ -125,12 +120,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </code>
         /// </remarks>
         /// <param name="flowSubject">
-        /// The subject <see cref="IFlow"/>
+        /// The subject <see cref="IFlow" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlow.payloadType))]
+        [DerivedProperty(nameof(IFlow.payloadType))]
         internal static List<IClassifier> ComputePayloadType(this IFlow flowSubject)
         {
             if (flowSubject == null)
@@ -160,12 +155,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </code>
         /// </remarks>
         /// <param name="flowSubject">
-        /// The subject <see cref="IFlow"/>
+        /// The subject <see cref="IFlow" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlow.sourceOutputFeature))]
+        [DerivedProperty(nameof(IFlow.sourceOutputFeature))]
         internal static IFeature ComputeSourceOutputFeature(this IFlow flowSubject)
         {
             if (flowSubject == null)
@@ -180,9 +175,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
                 return null;
             }
 
-            var flatOwnedFeatures = connectorEnds.SelectMany(connectorEndFeature => connectorEndFeature.ownedFeature).ToList();
+            // KerML §8.3.4.9.2 scopes this to the first connectorEnd; the OCL's implicit flattening is an erratum.
+            var firstConnectorEndOwnedFeatures = connectorEnds[0].ownedFeature;
 
-            return flatOwnedFeatures.Count == 0 ? null : flatOwnedFeatures[0];
+            return firstConnectorEndOwnedFeatures.Count == 0 ? null : firstConnectorEndOwnedFeatures[0];
         }
 
         /// <summary>
@@ -200,12 +196,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </code>
         /// </remarks>
         /// <param name="flowSubject">
-        /// The subject <see cref="IFlow"/>
+        /// The subject <see cref="IFlow" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlow.targetInputFeature))]
+        [DerivedProperty(nameof(IFlow.targetInputFeature))]
         internal static IFeature ComputeTargetInputFeature(this IFlow flowSubject)
         {
             if (flowSubject == null)

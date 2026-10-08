@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FunctionExtensionsTestFixture.cs" company="Starion Group S.A.">
-//
-//   Copyright 2022-2026 Starion Group S.A.
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -27,43 +27,13 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Extensions;
 
     [TestFixture]
     public class FunctionExtensionsTestFixture
     {
-        [Test]
-        public void VerifyComputeResult()
-        {
-            // Null subject:
-            Assert.That(() => ((IFunction)null).ComputeResult(), Throws.TypeOf<ArgumentNullException>());
-
-            // Empty: no ReturnParameterMembership → null.
-            var emptySubject = new Function();
-            Assert.That(emptySubject.ComputeResult(), Is.Null);
-
-            // Negative: a FeatureMembership that is NOT a ReturnParameterMembership → null.
-            var negativeSubject = new Function();
-            var plainMembership = new FeatureMembership();
-            var plainFeature = new Feature();
-            negativeSubject.AssignOwnership(plainMembership, plainFeature);
-            Assert.That(negativeSubject.ComputeResult(), Is.Null);
-
-            // Positive: one ReturnParameterMembership whose ownedMemberParameter is a Feature → that feature.
-            var subject = new Function();
-            var resultFeature = new Feature();
-            var returnParameterMembership = new ReturnParameterMembership();
-            subject.AssignOwnership(returnParameterMembership, resultFeature);
-            Assert.That(subject.ComputeResult(), Is.SameAs(resultFeature));
-
-            // Two ReturnParameterMemberships → the FIRST is returned (OCL ->first()).
-            var secondResultFeature = new Feature();
-            var secondReturnParameterMembership = new ReturnParameterMembership();
-            subject.AssignOwnership(secondReturnParameterMembership, secondResultFeature);
-            Assert.That(subject.ComputeResult(), Is.SameAs(resultFeature));
-        }
-
         [Test]
         public void VerifyComputeExpression()
         {
@@ -135,14 +105,52 @@ namespace SysML2.NET.Tests.Extend
                 Assert.That(LibraryFunction("DataFunctions", "===").ComputeIsModelLevelEvaluable(), Is.False);
             }
 
+            // Negative: a user-defined package sharing a library package name is not a library element.
+            var userPackage = new Namespace { DeclaredName = "BaseFunctions" };
+            var userFunction = new Function { DeclaredName = "==" };
+            userPackage.AssignOwnership(new OwningMembership(), userFunction);
+
+            Assert.That(userFunction.ComputeIsModelLevelEvaluable(), Is.False);
+
             static IFunction LibraryFunction(string packageName, string functionName)
             {
-                var libraryPackage = new Namespace { DeclaredName = packageName };
+                var libraryPackage = new LibraryPackage { DeclaredName = packageName };
                 var function = new Function { DeclaredName = functionName };
                 libraryPackage.AssignOwnership(new OwningMembership(), function);
 
                 return function;
             }
+        }
+
+        [Test]
+        public void VerifyComputeResult()
+        {
+            // Null subject:
+            Assert.That(() => ((IFunction)null).ComputeResult(), Throws.TypeOf<ArgumentNullException>());
+
+            // Empty: no ReturnParameterMembership → null.
+            var emptySubject = new Function();
+            Assert.That(emptySubject.ComputeResult(), Is.Null);
+
+            // Negative: a FeatureMembership that is NOT a ReturnParameterMembership → null.
+            var negativeSubject = new Function();
+            var plainMembership = new FeatureMembership();
+            var plainFeature = new Feature();
+            negativeSubject.AssignOwnership(plainMembership, plainFeature);
+            Assert.That(negativeSubject.ComputeResult(), Is.Null);
+
+            // Positive: one ReturnParameterMembership whose ownedMemberParameter is a Feature → that feature.
+            var subject = new Function();
+            var resultFeature = new Feature();
+            var returnParameterMembership = new ReturnParameterMembership();
+            subject.AssignOwnership(returnParameterMembership, resultFeature);
+            Assert.That(subject.ComputeResult(), Is.SameAs(resultFeature));
+
+            // Two ReturnParameterMemberships → the FIRST is returned (OCL ->first()).
+            var secondResultFeature = new Feature();
+            var secondReturnParameterMembership = new ReturnParameterMembership();
+            subject.AssignOwnership(secondReturnParameterMembership, secondResultFeature);
+            Assert.That(subject.ComputeResult(), Is.SameAs(resultFeature));
         }
     }
 }

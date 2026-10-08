@@ -24,10 +24,9 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
     using System.Collections.Generic;
     using System.Linq;
 
-    using SysML2.NET.Decorators;
-
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// The <see cref="FlowDefinitionExtensions" /> class provides extensions methods for
@@ -44,9 +43,10 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IFlowDefinition.flowEnd))]
+        [DerivedProperty(nameof(IFlowDefinition.flowEnd))]
         internal static List<IUsage> ComputeFlowEnd(this IFlowDefinition flowDefinitionSubject)
         {
+            // IType.endFeature delegates through associationEnd back to flowEnd; the static call breaks that cycle.
             return flowDefinitionSubject == null
                 ? throw new ArgumentNullException(nameof(flowDefinitionSubject))
                 : [..flowDefinitionSubject.ComputeEndFeature().OfType<IUsage>()];

@@ -23,16 +23,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-
-    using SysML2.NET.Decorators;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Decorators;
     using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="MetadataAccessExpressionExtensions" /> class provides extensions methods for
@@ -43,32 +42,33 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// Computes the derived property.
         /// </summary>
+        /// <remarks>
+        /// OCL2.0:
+        /// <code>
+        /// referencedElement =
+        ///     let elements : Sequence(Element) = ownedMembership-&gt;
+        ///         reject(oclIsKindOf(FeatureMembership)).memberElement in
+        ///     if elements-&gt;isEmpty() then null
+        ///     else elements-&gt;first()
+        ///     endif
+        /// </code>
+        /// </remarks>
         /// <param name="metadataAccessExpressionSubject">
         /// The subject <see cref="IMetadataAccessExpression" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IMetadataAccessExpression.referencedElement))]
+        [DerivedProperty(nameof(IMetadataAccessExpression.referencedElement))]
         internal static IElement ComputeReferencedElement(this IMetadataAccessExpression metadataAccessExpressionSubject)
         {
-            if (metadataAccessExpressionSubject == null)
-            {
-                throw new ArgumentNullException(nameof(metadataAccessExpressionSubject));
-            }
-
-            var ownedRelationships = metadataAccessExpressionSubject.OwnedRelationship;
-
-            foreach (var ownedRelationship in ownedRelationships)
-            {
-                if (ownedRelationship is IOwningMembership owningMembership and not IFeatureMembership)
-                {
-                    return owningMembership.OwnedRelatedElement.SingleStrict<IElement>(nameof(owningMembership));
-                }
-            }
-
-            throw new IncompleteModelException(
-                $"{nameof(IMetadataAccessExpression)}.referencedElement is [1..1] but no non-FeatureMembership OwningMembership was found on '{nameof(metadataAccessExpressionSubject)}'.");
+            return metadataAccessExpressionSubject == null
+                ? throw new ArgumentNullException(nameof(metadataAccessExpressionSubject))
+                : metadataAccessExpressionSubject.OwnedRelationship
+                    .OfType<IMembership>()
+                    .Where(membership => membership is not IFeatureMembership)
+                    .Select(membership => membership.MemberElement)
+                    .FirstOrDefault();
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected <see cref="bool" />
         /// </returns>
-        [Operation(name: nameof(IMetadataAccessExpression.ModelLevelEvaluable))]
+        [Operation(nameof(IMetadataAccessExpression.ModelLevelEvaluable))]
         internal static bool ComputeRedefinedModelLevelEvaluableOperation(this IMetadataAccessExpression metadataAccessExpressionSubject, List<IFeature> visited)
         {
             if (metadataAccessExpressionSubject == null)
@@ -125,7 +125,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <returns>
         /// The expected collection of <see cref="IElement" />
         /// </returns>
-        [Operation(name: nameof(IMetadataAccessExpression.Evaluate))]
+        [Operation(nameof(IMetadataAccessExpression.Evaluate))]
         internal static List<IElement> ComputeRedefinedEvaluateOperation(this IMetadataAccessExpression metadataAccessExpressionSubject, IElement target)
         {
             if (metadataAccessExpressionSubject == null)
@@ -133,7 +133,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
                 throw new ArgumentNullException(nameof(metadataAccessExpressionSubject));
             }
 
-            var referencedElement = metadataAccessExpressionSubject.referencedElement;
+            var referencedElement = metadataAccessExpressionSubject.referencedElement
+                                    ?? throw new IncompleteModelException(
+                                        $"{nameof(IMetadataAccessExpression)}.Evaluate requires a referencedElement, but '{nameof(metadataAccessExpressionSubject)}' owns no non-FeatureMembership Membership.");
 
             var result = new List<IElement>();
 
@@ -163,7 +165,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The expected <see cref="IMetadataFeature" />
         /// </returns>
         [ExcludeFromCodeCoverage]
-        [Operation(name: nameof(IMetadataAccessExpression.MetaclassFeature))]
+        [Operation(nameof(IMetadataAccessExpression.MetaclassFeature))]
         internal static IMetadataFeature ComputeMetaclassFeatureOperation(this IMetadataAccessExpression metadataAccessExpressionSubject)
         {
             throw new NotSupportedException("Create a GitHub issue when this method is required");

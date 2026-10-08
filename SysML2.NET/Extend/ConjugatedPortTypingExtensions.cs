@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ConjugatedPortTypingExtensions.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 //
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -21,19 +21,13 @@
 namespace SysML2.NET.Core.POCO.Systems.Ports
 {
     using System;
-    using System.Collections.Generic;
 
     using SysML2.NET.Decorators;
-
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Exceptions;
 
     /// <summary>
-    /// The <see cref="ConjugatedPortTypingExtensions"/> class provides extensions methods for
-    /// the <see cref="IConjugatedPortTyping"/> interface
+    /// The <see cref="ConjugatedPortTypingExtensions" /> class provides extensions methods for
+    /// the <see cref="IConjugatedPortTyping" /> interface
     /// </summary>
     internal static class ConjugatedPortTypingExtensions
     {
@@ -47,18 +41,24 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </code>
         /// </remarks>
         /// <param name="conjugatedPortTypingSubject">
-        /// The subject <see cref="IConjugatedPortTyping"/>
+        /// The subject <see cref="IConjugatedPortTyping" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IConjugatedPortTyping.portDefinition))]
+        /// <exception cref="IncompleteModelException">
+        /// Thrown when the conjugatedPortDefinition or its originalPortDefinition is null.
+        /// </exception>
+        [DerivedProperty(nameof(IConjugatedPortTyping.portDefinition))]
         internal static IPortDefinition ComputePortDefinition(this IConjugatedPortTyping conjugatedPortTypingSubject)
         {
-            return conjugatedPortTypingSubject == null
-                ? throw new ArgumentNullException(nameof(conjugatedPortTypingSubject))
-                : conjugatedPortTypingSubject.ConjugatedPortDefinition?.originalPortDefinition;
-        }
+            if (conjugatedPortTypingSubject == null)
+            {
+                throw new ArgumentNullException(nameof(conjugatedPortTypingSubject));
+            }
 
+            return conjugatedPortTypingSubject.ConjugatedPortDefinition?.originalPortDefinition
+                   ?? throw new IncompleteModelException($"{nameof(conjugatedPortTypingSubject)} must have a conjugatedPortDefinition with an originalPortDefinition");
+        }
     }
 }

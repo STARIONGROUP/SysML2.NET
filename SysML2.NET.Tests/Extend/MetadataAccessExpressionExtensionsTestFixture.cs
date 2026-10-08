@@ -94,7 +94,7 @@ namespace SysML2.NET.Tests.Extend
 
             var emptySubject = new MetadataAccessExpression();
 
-            Assert.That(() => emptySubject.ComputeReferencedElement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptySubject.ComputeReferencedElement(), Is.Null);
 
             var singleOwningMembershipSubject = new MetadataAccessExpression();
             var referenced = new Comment();
@@ -102,10 +102,17 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(singleOwningMembershipSubject.ComputeReferencedElement(), Is.SameAs(referenced));
 
+            // A non-owning Membership is an ownedMembership too, so the parsed MetadataReference form resolves.
+            var referenceMembershipSubject = new MetadataAccessExpression();
+            var referencedByName = new Package();
+            referenceMembershipSubject.AssignOwnership(new Membership { MemberElement = referencedByName });
+
+            Assert.That(referenceMembershipSubject.ComputeReferencedElement(), Is.SameAs(referencedByName));
+
             var featureMembershipOnlySubject = new MetadataAccessExpression();
             featureMembershipOnlySubject.AssignOwnership(new FeatureMembership(), new Feature());
 
-            Assert.That(() => featureMembershipOnlySubject.ComputeReferencedElement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(featureMembershipOnlySubject.ComputeReferencedElement(), Is.Null);
 
             var mixedSubject = new MetadataAccessExpression();
             mixedSubject.AssignOwnership(new FeatureMembership(), new Feature());

@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ElementExtensions.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2026 Starion Group S.A.
+//   Copyright (C) 2022-2026 Starion Group S.A.
 //
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -24,15 +24,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     using System.Collections.Generic;
     using System.Linq;
 
-    using SysML2.NET.Decorators;
-
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Decorators;
     using SysML2.NET.Extensions;
 
     /// <summary>
-    /// The <see cref="ElementExtensions"/> class provides extensions methods for
-    /// the <see cref="IElement"/> interface
+    /// The <see cref="ElementExtensions" /> class provides extensions methods for
+    /// the <see cref="IElement" /> interface
     /// </summary>
     internal static class ElementExtensions
     {
@@ -47,15 +46,15 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The documentation of an Element is its ownedElements that are Documentation.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.documentation))]
+        [DerivedProperty(nameof(IElement.documentation))]
         internal static List<IDocumentation> ComputeDocumentation(this IElement elementSubject)
         {
-            return elementSubject == null ?  throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<IDocumentation>()];
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<IDocumentation>()];
         }
 
         /// <summary>
@@ -69,15 +68,15 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// An Element isLibraryElement if libraryNamespace() is not null.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.isLibraryElement))]
+        [DerivedProperty(nameof(IElement.isLibraryElement))]
         internal static bool ComputeIsLibraryElement(this IElement elementSubject)
         {
-            return elementSubject == null ?  throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.LibraryNamespace() != null;
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.LibraryNamespace() != null;
         }
 
         /// <summary>
@@ -91,12 +90,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The name of an Element is given by the result of the effectiveName() operation. By default, it is the same as the declaredName, but this is overridden for certain kinds of Elements to compute a name even when the declaredName is null.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.name))]
+        [DerivedProperty(nameof(IElement.name))]
         internal static string ComputeName(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveName();
@@ -115,12 +114,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The ownedAnnotations of an Element are its ownedRelationships that are Annotations, for which the Element is the annotatedElement.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.ownedAnnotation))]
+        [DerivedProperty(nameof(IElement.ownedAnnotation))]
         internal static List<IAnnotation> ComputeOwnedAnnotation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.OwnedRelationship.OfType<IAnnotation>().Where(x => x.AnnotatedElement == elementSubject)];
@@ -137,12 +136,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The ownedElements of an Element are the ownedRelatedElements of its ownedRelationships.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.ownedElement))]
+        [DerivedProperty(nameof(IElement.ownedElement))]
         internal static List<IElement> ComputeOwnedElement(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.OwnedRelationship.SelectMany(x => x.OwnedRelatedElement)];
@@ -159,15 +158,15 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The owner of an Element is the owningRelatedElement of its owningRelationship.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.owner))]
+        [DerivedProperty(nameof(IElement.owner))]
         internal static IElement ComputeOwner(this IElement elementSubject)
         {
-            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) :elementSubject.OwningRelationship?.OwningRelatedElement;
+            return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship?.OwningRelatedElement;
         }
 
         /// <summary>
@@ -178,12 +177,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The owningRelationship of this Element, if that Relationship is a Membership. Since owningMembership subsets owningRelationship with type OwningMembership, its value is the owningRelationship when that relationship is an OwningMembership, otherwise null.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.owningMembership))]
+        [DerivedProperty(nameof(IElement.owningMembership))]
         internal static IOwningMembership ComputeOwningMembership(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship as IOwningMembership;
@@ -203,12 +202,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The owningNamespace of an Element is the membershipOwningNamespace of its owningMembership (if any).
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.owningNamespace))]
+        [DerivedProperty(nameof(IElement.owningNamespace))]
         internal static INamespace ComputeOwningNamespace(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.owningMembership?.membershipOwningNamespace;
@@ -234,12 +233,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// If this Element does not have an owningNamespace, then its qualifiedName is null. If the owningNamespace of this Element is a root Namespace, then the qualifiedName of the Element is the escaped name of the Element (if any). If the owningNamespace is non-null but not a root Namespace, then the qualifiedName of this Element is constructed from the qualifiedName of the owningNamespace and the escaped name of the Element, unless the qualifiedName of the owningNamespace is null or the escaped name is null, in which case the qualifiedName of this Element is also null. Further, if the owningNamespace has other ownedMembers with the same non-null name as this Element, and this Element is not the first, then the qualifiedName of this Element is null.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.qualifiedName))]
+        [DerivedProperty(nameof(IElement.qualifiedName))]
         internal static string ComputeQualifiedName(this IElement elementSubject)
         {
             if (elementSubject == null)
@@ -266,11 +265,11 @@ namespace SysML2.NET.Core.POCO.Root.Elements
             {
                 return elementSubject.EscapedName();
             }
-            
+
             var parentQualifiedName = elementSubject.owningNamespace.qualifiedName;
             var currentEscaped = elementSubject.EscapedName();
 
-            if (string.IsNullOrWhiteSpace(parentQualifiedName) || string.IsNullOrWhiteSpace(currentEscaped))
+            if (parentQualifiedName == null || currentEscaped == null)
             {
                 return null;
             }
@@ -289,12 +288,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The shortName of an Element is given by the result of the effectiveShortName() operation. By default, it is the same as the declaredShortName, but this is overridden for certain kinds of Elements to compute a shortName even when the declaredName is null.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.shortName))]
+        [DerivedProperty(nameof(IElement.shortName))]
         internal static string ComputeShortName(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.EffectiveShortName();
@@ -311,12 +310,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// The textualRepresentations of an Element are its ownedElements that are TextualRepresentations.
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// the computed result
         /// </returns>
-        [DerivedProperty(name: nameof(IElement.textualRepresentation))]
+        [DerivedProperty(nameof(IElement.textualRepresentation))]
         internal static List<ITextualRepresentation> ComputeTextualRepresentation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : [..elementSubject.ownedElement.OfType<ITextualRepresentation>()];
@@ -334,7 +333,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// If an Element has any ownedRelationships for which isImplied = true, then the Element must also have isImpliedIncluded = true. (Note that an Element can have isImplied = true even if no ownedRelationships have isImplied = true, indicating the Element simply has no implied Relationships.)
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// true if the constraint is satisfied; false otherwise
@@ -347,8 +346,8 @@ namespace SysML2.NET.Core.POCO.Root.Elements
             }
 
             return elementSubject.OwnedRelationship.Count == 0
-                || !elementSubject.OwnedRelationship.Any(r => r.IsImplied)
-                || elementSubject.IsImpliedIncluded;
+                   || !elementSubject.OwnedRelationship.Any(r => r.IsImplied)
+                   || elementSubject.IsImpliedIncluded;
         }
 
         /// <summary>
@@ -358,12 +357,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// notation (i.e., surrounded by single quote characters and with special characters escaped).
         /// </summary>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(IElement.EscapedName))]
+        [Operation(nameof(IElement.EscapedName))]
         internal static string ComputeEscapedNameOperation(this IElement elementSubject)
         {
             if (elementSubject == null)
@@ -371,14 +370,9 @@ namespace SysML2.NET.Core.POCO.Root.Elements
                 throw new ArgumentNullException(nameof(elementSubject));
             }
 
-            var targetName = elementSubject.name;
+            var targetName = elementSubject.name ?? elementSubject.shortName;
 
-            if (string.IsNullOrWhiteSpace(targetName))
-            {
-                targetName = elementSubject.shortName;
-            }
-
-            if (string.IsNullOrWhiteSpace(targetName))
+            if (targetName == null)
             {
                 return null;
             }
@@ -398,12 +392,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// Return an effective shortName for this Element. By default this is the same as its declaredShortName. (Note: this operation is redefined on Feature to also consider the naming feature when declaredShortName and declaredName are both null.)
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(IElement.EffectiveShortName))]
+        [Operation(nameof(IElement.EffectiveShortName))]
         internal static string ComputeEffectiveShortNameOperation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.DeclaredShortName;
@@ -420,12 +414,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// Return an effective name for this Element. By default this is the same as its declaredName. (Note: this operation is redefined on Feature to also consider the naming feature when declaredShortName and declaredName are both null.)
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(IElement.EffectiveName))]
+        [Operation(nameof(IElement.EffectiveName))]
         internal static string ComputeEffectiveNameOperation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.DeclaredName;
@@ -443,12 +437,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// By default, return the library Namespace of the owningRelationship of this Element, if it has one. (Note: this operation is redefined on Relationship to also check owningRelatedElement, and on LibraryPackage to return itself.)
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// The expected <see cref="INamespace" />
         /// </returns>
-        [Operation(name: nameof(IElement.LibraryNamespace))]
+        [Operation(nameof(IElement.LibraryNamespace))]
         internal static INamespace ComputeLibraryNamespaceOperation(this IElement elementSubject)
         {
             return elementSubject == null ? throw new ArgumentNullException(nameof(elementSubject)) : elementSubject.OwningRelationship?.LibraryNamespace();
@@ -476,12 +470,12 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// Return a unique description of the location of this Element in the containment structure rooted in a root Namespace. If the Element has a non-null qualifiedName, then return that. Otherwise, if it has an owningRelationship, then return the string constructed by appending to the path of its owningRelationship the character / followed by the string representation of its position in the list of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the empty string. (Note that this operation is overridden for Relationships to use owningRelatedElement when appropriate.)
         /// </remarks>
         /// <param name="elementSubject">
-        /// The subject <see cref="IElement"/>
+        /// The subject <see cref="IElement" />
         /// </param>
         /// <returns>
         /// The expected <see cref="string" />
         /// </returns>
-        [Operation(name: nameof(IElement.Path))]
+        [Operation(nameof(IElement.Path))]
         internal static string ComputePathOperation(this IElement elementSubject)
         {
             if (elementSubject == null)
@@ -491,7 +485,7 @@ namespace SysML2.NET.Core.POCO.Root.Elements
 
             var qualifiedName = elementSubject.qualifiedName;
 
-            if (!string.IsNullOrWhiteSpace(qualifiedName))
+            if (qualifiedName != null)
             {
                 return qualifiedName;
             }
@@ -500,10 +494,10 @@ namespace SysML2.NET.Core.POCO.Root.Elements
             {
                 return string.Empty;
             }
-            
-            var ownedRelatedElementsIndex =  elementSubject.OwningRelationship.OwnedRelatedElement.ToList().IndexOf(elementSubject) +1;
+
+            var ownedRelatedElementsIndex = elementSubject.OwningRelationship.OwnedRelatedElement.ToList().IndexOf(elementSubject) + 1;
             var parentPath = elementSubject.OwningRelationship.Path();
-            
+
             return $"{parentPath}/{ownedRelatedElementsIndex}";
         }
     }

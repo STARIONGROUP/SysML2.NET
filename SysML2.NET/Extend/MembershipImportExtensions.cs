@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MembershipImportExtensions.cs" company="Starion Group S.A.">
-//
-//    Copyright (C) 2022-2026 Starion Group S.A.
-//
-//    Licensed under the Apache License, Version 2.0 (the "License");
-//    you may not use this file except in compliance with the License.
-//    You may obtain a copy of the License at
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -25,13 +25,9 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-
     /// <summary>
-    /// The <see cref="MembershipImportExtensions"/> class provides extensions methods for
-    /// the <see cref="IMembershipImport"/> interface
+    /// The <see cref="MembershipImportExtensions" /> class provides extensions methods for
+    /// the <see cref="IMembershipImport" /> interface
     /// </summary>
     internal static class MembershipImportExtensions
     {
@@ -54,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </code>
         /// </remarks>
         /// <param name="membershipImportSubject">
-        /// The subject <see cref="IMembershipImport"/>
+        /// The subject <see cref="IMembershipImport" />
         /// </param>
         /// <param name="excluded">
         /// No documentation provided
@@ -62,7 +58,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// The expected collection of <see cref="IMembership" />
         /// </returns>
-        [Operation(name: nameof(IMembershipImport.ImportedMemberships))]
+        [Operation(nameof(IMembershipImport.ImportedMemberships))]
         internal static List<IMembership> ComputeRedefinedImportedMembershipsOperation(this IMembershipImport membershipImportSubject, List<INamespace> excluded)
         {
             if (membershipImportSubject == null)
@@ -72,7 +68,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 
             if (!membershipImportSubject.IsRecursive
                 || membershipImportSubject.importedElement is not INamespace importedNamespace
-                || excluded.Contains(importedNamespace))
+                || (excluded != null && excluded.Contains(importedNamespace)))
             {
                 return [membershipImportSubject.ImportedMembership];
             }

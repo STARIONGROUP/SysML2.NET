@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="NamespaceExtensionsTestFixture.cs" company="Starion Group S.A.">
-//
-//   Copyright 2022-2026 Starion Group S.A.
-//
+// 
+//   Copyright (C) 2022-2026 Starion Group S.A.
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //        http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//
+// 
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -24,12 +24,12 @@ namespace SysML2.NET.Tests.Extend
 
     using NUnit.Framework;
 
-    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -55,6 +55,52 @@ namespace SysML2.NET.Tests.Extend
             namespaceElement.AssignOwnership(namespaceImport);
 
             Assert.That(namespaceElement.ComputeImportedMembership(), Is.EquivalentTo([importedMembership]));
+        }
+
+        [Test]
+        public void VerifyComputeImportedMembershipsOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeImportedMembershipsOperation([]), Throws.TypeOf<ArgumentNullException>());
+
+            var namespaceElement = new Namespace();
+
+            Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Has.Count.EqualTo(0));
+
+            var importedNamespace = new Namespace();
+            var importedElement = new Definition { DeclaredName = "imported" };
+            var importedMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            importedNamespace.AssignOwnership(importedMembership, importedElement);
+
+            var namespaceImport = new NamespaceImport { ImportedNamespace = importedNamespace };
+            namespaceElement.AssignOwnership(namespaceImport);
+
+            Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Is.EquivalentTo([importedMembership]));
+
+            var collidingElement = new Definition { DeclaredName = "imported" };
+            var ownedMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            namespaceElement.AssignOwnership(ownedMembership, collidingElement);
+
+            // Clause B (cross-comparisons): import and owned share both metaclass (Definition)
+            // and MemberName ("imported"), so they are NOT distinguishable -> import excluded.
+            Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Has.Count.EqualTo(0));
+
+            // Clause C (metaclass non-conformance): wire a second importedNamespace whose owned member is a
+            // Comment named "imported". It collides on MemberName with the owned Definition above, but
+            // Comment specializes AnnotatingElement while Definition specializes Classifier, so neither
+            // metaclass conforms to the other and per Membership::isDistinguishableFrom Clause C the pair IS
+            // distinguishable — the import must surface. A Namespace would NOT serve here: Definition
+            // specializes Type and so conforms to Namespace.
+            var crossMetaclassNamespace = new Namespace();
+            var crossMetaclassElement = new Comment { DeclaredName = "imported" };
+            var crossMetaclassMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            crossMetaclassNamespace.AssignOwnership(crossMetaclassMembership, crossMetaclassElement);
+
+            var crossMetaclassImport = new NamespaceImport { ImportedNamespace = crossMetaclassNamespace };
+            namespaceElement.AssignOwnership(crossMetaclassImport);
+
+            Assert.That(
+                namespaceElement.ComputeImportedMembershipsOperation([]),
+                Is.EquivalentTo([crossMetaclassMembership]));
         }
 
         [Test]
@@ -108,6 +154,52 @@ namespace SysML2.NET.Tests.Extend
         }
 
         [Test]
+        public void VerifyComputeMembershipsOfVisibilityOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeMembershipsOfVisibilityOperation(null, []), Throws.TypeOf<ArgumentNullException>());
+
+            var namespaceElement = new Namespace();
+            var publicElement = new Definition();
+            var privateElement = new Definition();
+            var publicMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            var privateMembership = new OwningMembership { Visibility = VisibilityKind.Private };
+
+            namespaceElement.AssignOwnership(publicMembership, publicElement);
+            namespaceElement.AssignOwnership(privateMembership, privateElement);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(null, []), Has.Count.EqualTo(2));
+                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(VisibilityKind.Public, []), Is.EquivalentTo([publicMembership]));
+                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(VisibilityKind.Private, []), Is.EquivalentTo([privateMembership]));
+                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(VisibilityKind.Protected, []), Has.Count.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void VerifyComputeNamesOfOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeNamesOfOperation(new Definition()), Throws.TypeOf<ArgumentNullException>());
+
+            var namespaceElement = new Namespace();
+
+            Assert.That(() => namespaceElement.ComputeNamesOfOperation(null), Throws.TypeOf<ArgumentNullException>());
+
+            var element = new Definition();
+
+            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Has.Count.EqualTo(0));
+
+            var membership = new Membership { MemberName = "elementName", MemberShortName = "en", MemberElement = element };
+            namespaceElement.AssignOwnership(membership);
+
+            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["en", "elementName"]));
+
+            membership.MemberShortName = null;
+
+            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["elementName"]));
+        }
+
+        [Test]
         public void VerifyComputeOwnedImport()
         {
             Assert.That(() => ((INamespace)null).ComputeOwnedImport(), Throws.TypeOf<ArgumentNullException>());
@@ -155,26 +247,172 @@ namespace SysML2.NET.Tests.Extend
         }
 
         [Test]
-        public void VerifyComputeNamesOfOperation()
+        public void VerifyComputeQualificationOfOperation()
         {
-            Assert.That(() => ((INamespace)null).ComputeNamesOfOperation(new Definition()), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((INamespace)null).ComputeQualificationOfOperation("name"), Throws.TypeOf<ArgumentNullException>());
 
             var namespaceElement = new Namespace();
 
-            Assert.That(() => namespaceElement.ComputeNamesOfOperation(null), Throws.TypeOf<ArgumentNullException>());
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(namespaceElement.ComputeQualificationOfOperation(null), Is.Null);
+                Assert.That(namespaceElement.ComputeQualificationOfOperation("  "), Is.Null);
+                Assert.That(namespaceElement.ComputeQualificationOfOperation("simpleName"), Is.Null);
+                Assert.That(namespaceElement.ComputeQualificationOfOperation("a::b"), Is.EqualTo("a"));
+                Assert.That(namespaceElement.ComputeQualificationOfOperation("a::b::c"), Is.EqualTo("a::b"));
+                Assert.That(namespaceElement.ComputeQualificationOfOperation("'a::b'::c"), Is.EqualTo("'a::b'"));
+                Assert.That(namespaceElement.ComputeQualificationOfOperation("a::'b::c'"), Is.EqualTo("a"));
+            }
+        }
 
-            var element = new Definition();
+        [Test]
+        public void VerifyComputeResolveGlobalOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeResolveGlobalOperation("name"), Throws.TypeOf<ArgumentNullException>());
 
-            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Has.Count.EqualTo(0));
+            var rootNamespace = new Namespace();
 
-            var membership = new Membership { MemberName = "elementName", MemberShortName = "en", MemberElement = element };
-            namespaceElement.AssignOwnership(membership);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(rootNamespace.ComputeResolveGlobalOperation(null), Is.Null);
+                Assert.That(rootNamespace.ComputeResolveGlobalOperation("  "), Is.Null);
+            }
 
-            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["en", "elementName"]));
+            var childNamespace = new Namespace { DeclaredName = "child" };
+            var childMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            rootNamespace.AssignOwnership(childMembership, childNamespace);
 
-            membership.MemberShortName = null;
+            var element = new Definition { DeclaredName = "leaf" };
+            var elementMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            childNamespace.AssignOwnership(elementMembership, element);
 
-            Assert.That(namespaceElement.ComputeNamesOfOperation(element), Is.EquivalentTo(["elementName"]));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(childNamespace.ComputeResolveGlobalOperation("child"), Is.EqualTo(childMembership));
+                Assert.That(childNamespace.ComputeResolveGlobalOperation("child::leaf"), Is.EqualTo(elementMembership));
+                Assert.That(childNamespace.ComputeResolveGlobalOperation("nonExistent"), Is.Null);
+            }
+        }
+
+        [Test]
+        public void VerifyComputeResolveLocalOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeResolveLocalOperation("name"), Throws.TypeOf<ArgumentNullException>());
+
+            var rootNamespace = new Namespace();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(rootNamespace.ComputeResolveLocalOperation(null), Is.Null);
+                Assert.That(rootNamespace.ComputeResolveLocalOperation("  "), Is.Null);
+            }
+
+            var element = new Definition { DeclaredName = "myElement" };
+            var membership = new OwningMembership { Visibility = VisibilityKind.Public };
+            rootNamespace.AssignOwnership(membership, element);
+
+            Assert.That(rootNamespace.ComputeResolveLocalOperation("myElement"), Is.EqualTo(membership));
+
+            var childNamespace = new Namespace();
+            var childOwning = new OwningMembership { Visibility = VisibilityKind.Public };
+            rootNamespace.AssignOwnership(childOwning, childNamespace);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(childNamespace.ComputeResolveLocalOperation("myElement"), Is.EqualTo(membership));
+                Assert.That(childNamespace.ComputeResolveLocalOperation("nonExistent"), Is.Null);
+            }
+
+            // Local resolution is visibility-BLIND (KerML §8.2.3.5.3) — it searches every membership of
+            // the Namespace, so a private owned member resolves in its own Namespace. That is what
+            // distinguishes it from visible resolution, which admits public memberships only.
+            var privateElement = new Definition { DeclaredName = "hidden", DeclaredShortName = "h" };
+            var privateMembership = new OwningMembership { Visibility = VisibilityKind.Private };
+            childNamespace.AssignOwnership(privateMembership, privateElement);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(childNamespace.ComputeResolveLocalOperation("hidden"), Is.EqualTo(privateMembership));
+                Assert.That(childNamespace.ComputeResolveLocalOperation("h"), Is.EqualTo(privateMembership));
+            }
+        }
+
+        [Test]
+        public void VerifyComputeResolveOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeResolveOperation("name"), Throws.TypeOf<ArgumentNullException>());
+
+            var rootNamespace = new Namespace();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(rootNamespace.ComputeResolveOperation(null), Is.Null);
+                Assert.That(rootNamespace.ComputeResolveOperation("  "), Is.Null);
+            }
+
+            var childNamespace = new Namespace { DeclaredName = "child" };
+            var childMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            rootNamespace.AssignOwnership(childMembership, childNamespace);
+
+            var element = new Definition { DeclaredName = "leaf" };
+            var elementMembership = new OwningMembership { Visibility = VisibilityKind.Public };
+            childNamespace.AssignOwnership(elementMembership, element);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(rootNamespace.ComputeResolveOperation("child"), Is.EqualTo(childMembership));
+                Assert.That(rootNamespace.ComputeResolveOperation("child::leaf"), Is.EqualTo(elementMembership));
+                Assert.That(rootNamespace.ComputeResolveOperation("child::nonExistent"), Is.Null);
+                Assert.That(rootNamespace.ComputeResolveOperation("nonExistent::leaf"), Is.Null);
+            }
+        }
+
+        [Test]
+        public void VerifyComputeResolveVisibleOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeResolveVisibleOperation("name"), Throws.TypeOf<ArgumentNullException>());
+
+            var namespaceElement = new Namespace();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(namespaceElement.ComputeResolveVisibleOperation(null), Is.Null);
+                Assert.That(namespaceElement.ComputeResolveVisibleOperation("  "), Is.Null);
+            }
+
+            var element = new Definition { DeclaredName = "myElement" };
+            var membership = new OwningMembership { Visibility = VisibilityKind.Public };
+            namespaceElement.AssignOwnership(membership, element);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(namespaceElement.ComputeResolveVisibleOperation("myElement"), Is.EqualTo(membership));
+                Assert.That(namespaceElement.ComputeResolveVisibleOperation("nonExistent"), Is.Null);
+            }
+
+            membership.Visibility = VisibilityKind.Private;
+
+            Assert.That(namespaceElement.ComputeResolveVisibleOperation("myElement"), Is.Null);
+        }
+
+        [Test]
+        public void VerifyComputeUnqualifiedNameOfOperation()
+        {
+            Assert.That(() => ((INamespace)null).ComputeUnqualifiedNameOfOperation("name"), Throws.TypeOf<ArgumentNullException>());
+
+            var namespaceElement = new Namespace();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation(null), Is.Null);
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("  "), Is.Null);
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("simpleName"), Is.EqualTo("simpleName"));
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::b"), Is.EqualTo("b"));
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::b::c"), Is.EqualTo("c"));
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::'non basic'"), Is.EqualTo("non basic"));
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::'it\\'s'"), Is.EqualTo("it's"));
+                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("'a::b'::c"), Is.EqualTo("c"));
+            }
         }
 
         [Test]
@@ -285,245 +523,6 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(
                 outerNamespace.ComputeVisibleMembershipsOperation([], true, false),
                 Is.EquivalentTo([innerOwning, innerMemberMembership]));
-        }
-
-        [Test]
-        public void VerifyComputeImportedMembershipsOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeImportedMembershipsOperation([]), Throws.TypeOf<ArgumentNullException>());
-
-            var namespaceElement = new Namespace();
-
-            Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Has.Count.EqualTo(0));
-
-            var importedNamespace = new Namespace();
-            var importedElement = new Definition { DeclaredName = "imported" };
-            var importedMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            importedNamespace.AssignOwnership(importedMembership, importedElement);
-
-            var namespaceImport = new NamespaceImport { ImportedNamespace = importedNamespace };
-            namespaceElement.AssignOwnership(namespaceImport);
-
-            Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Is.EquivalentTo([importedMembership]));
-
-            var collidingElement = new Definition { DeclaredName = "imported" };
-            var ownedMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            namespaceElement.AssignOwnership(ownedMembership, collidingElement);
-
-            // Clause B (cross-comparisons): import and owned share both metaclass (Definition)
-            // and MemberName ("imported"), so they are NOT distinguishable -> import excluded.
-            Assert.That(namespaceElement.ComputeImportedMembershipsOperation([]), Has.Count.EqualTo(0));
-
-            // Clause C (metaclass non-conformance): wire a second importedNamespace whose
-            // owned member is a Namespace (NOT a Definition) named "imported". It collides on
-            // MemberName with the owned Definition above, but the metaclasses are unrelated
-            // (Namespace vs Definition — neither IsAssignableFrom the other), so per
-            // Membership::isDistinguishableFrom Clause C the pair IS distinguishable, and the
-            // import must surface. The previous partial helper omitted Clause C and would have
-            // wrongly excluded this import; this assertion locks in the spec-correct behavior.
-            var crossMetaclassNamespace = new Namespace();
-            var crossMetaclassElement = new Namespace { DeclaredName = "imported" };
-            var crossMetaclassMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            crossMetaclassNamespace.AssignOwnership(crossMetaclassMembership, crossMetaclassElement);
-
-            var crossMetaclassImport = new NamespaceImport { ImportedNamespace = crossMetaclassNamespace };
-            namespaceElement.AssignOwnership(crossMetaclassImport);
-
-            Assert.That(
-                namespaceElement.ComputeImportedMembershipsOperation([]),
-                Is.EquivalentTo([crossMetaclassMembership]));
-        }
-
-        [Test]
-        public void VerifyComputeMembershipsOfVisibilityOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeMembershipsOfVisibilityOperation(null, []), Throws.TypeOf<ArgumentNullException>());
-
-            var namespaceElement = new Namespace();
-            var publicElement = new Definition();
-            var privateElement = new Definition();
-            var publicMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            var privateMembership = new OwningMembership { Visibility = VisibilityKind.Private };
-
-            namespaceElement.AssignOwnership(publicMembership, publicElement);
-            namespaceElement.AssignOwnership(privateMembership, privateElement);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(null, []), Has.Count.EqualTo(2));
-                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(VisibilityKind.Public, []), Is.EquivalentTo([publicMembership]));
-                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(VisibilityKind.Private, []), Is.EquivalentTo([privateMembership]));
-                Assert.That(namespaceElement.ComputeMembershipsOfVisibilityOperation(VisibilityKind.Protected, []), Has.Count.EqualTo(0));
-            }
-        }
-
-        [Test]
-        public void VerifyComputeResolveVisibleOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeResolveVisibleOperation("name"), Throws.TypeOf<ArgumentNullException>());
-
-            var namespaceElement = new Namespace();
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(namespaceElement.ComputeResolveVisibleOperation(null), Is.Null);
-                Assert.That(namespaceElement.ComputeResolveVisibleOperation("  "), Is.Null);
-            }
-
-            var element = new Definition { DeclaredName = "myElement" };
-            var membership = new OwningMembership { Visibility = VisibilityKind.Public };
-            namespaceElement.AssignOwnership(membership, element);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(namespaceElement.ComputeResolveVisibleOperation("myElement"), Is.EqualTo(membership));
-                Assert.That(namespaceElement.ComputeResolveVisibleOperation("nonExistent"), Is.Null);
-            }
-
-            membership.Visibility = VisibilityKind.Private;
-
-            Assert.That(namespaceElement.ComputeResolveVisibleOperation("myElement"), Is.Null);
-        }
-
-        [Test]
-        public void VerifyComputeResolveLocalOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeResolveLocalOperation("name"), Throws.TypeOf<ArgumentNullException>());
-
-            var rootNamespace = new Namespace();
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(rootNamespace.ComputeResolveLocalOperation(null), Is.Null);
-                Assert.That(rootNamespace.ComputeResolveLocalOperation("  "), Is.Null);
-            }
-
-            var element = new Definition { DeclaredName = "myElement" };
-            var membership = new OwningMembership { Visibility = VisibilityKind.Public };
-            rootNamespace.AssignOwnership(membership, element);
-
-            Assert.That(rootNamespace.ComputeResolveLocalOperation("myElement"), Is.EqualTo(membership));
-
-            var childNamespace = new Namespace();
-            var childOwning = new OwningMembership { Visibility = VisibilityKind.Public };
-            rootNamespace.AssignOwnership(childOwning, childNamespace);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(childNamespace.ComputeResolveLocalOperation("myElement"), Is.EqualTo(membership));
-                Assert.That(childNamespace.ComputeResolveLocalOperation("nonExistent"), Is.Null);
-            }
-
-            // Local resolution is visibility-BLIND (KerML §8.2.3.5.3) — it searches every membership of
-            // the Namespace, so a private owned member resolves in its own Namespace. That is what
-            // distinguishes it from visible resolution, which admits public memberships only.
-            var privateElement = new Definition { DeclaredName = "hidden", DeclaredShortName = "h" };
-            var privateMembership = new OwningMembership { Visibility = VisibilityKind.Private };
-            childNamespace.AssignOwnership(privateMembership, privateElement);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(childNamespace.ComputeResolveLocalOperation("hidden"), Is.EqualTo(privateMembership));
-                Assert.That(childNamespace.ComputeResolveLocalOperation("h"), Is.EqualTo(privateMembership));
-            }
-        }
-
-        [Test]
-        public void VerifyComputeResolveOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeResolveOperation("name"), Throws.TypeOf<ArgumentNullException>());
-
-            var rootNamespace = new Namespace();
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(rootNamespace.ComputeResolveOperation(null), Is.Null);
-                Assert.That(rootNamespace.ComputeResolveOperation("  "), Is.Null);
-            }
-
-            var childNamespace = new Namespace { DeclaredName = "child" };
-            var childMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            rootNamespace.AssignOwnership(childMembership, childNamespace);
-
-            var element = new Definition { DeclaredName = "leaf" };
-            var elementMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            childNamespace.AssignOwnership(elementMembership, element);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(rootNamespace.ComputeResolveOperation("child"), Is.EqualTo(childMembership));
-                Assert.That(rootNamespace.ComputeResolveOperation("child::leaf"), Is.EqualTo(elementMembership));
-                Assert.That(rootNamespace.ComputeResolveOperation("child::nonExistent"), Is.Null);
-                Assert.That(rootNamespace.ComputeResolveOperation("nonExistent::leaf"), Is.Null);
-            }
-        }
-
-        [Test]
-        public void VerifyComputeResolveGlobalOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeResolveGlobalOperation("name"), Throws.TypeOf<ArgumentNullException>());
-
-            var rootNamespace = new Namespace();
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(rootNamespace.ComputeResolveGlobalOperation(null), Is.Null);
-                Assert.That(rootNamespace.ComputeResolveGlobalOperation("  "), Is.Null);
-            }
-
-            var childNamespace = new Namespace { DeclaredName = "child" };
-            var childMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            rootNamespace.AssignOwnership(childMembership, childNamespace);
-
-            var element = new Definition { DeclaredName = "leaf" };
-            var elementMembership = new OwningMembership { Visibility = VisibilityKind.Public };
-            childNamespace.AssignOwnership(elementMembership, element);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(childNamespace.ComputeResolveGlobalOperation("child"), Is.EqualTo(childMembership));
-                Assert.That(childNamespace.ComputeResolveGlobalOperation("child::leaf"), Is.EqualTo(elementMembership));
-                Assert.That(childNamespace.ComputeResolveGlobalOperation("nonExistent"), Is.Null);
-            }
-        }
-
-        [Test]
-        public void VerifyComputeQualificationOfOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeQualificationOfOperation("name"), Throws.TypeOf<ArgumentNullException>());
-
-            var namespaceElement = new Namespace();
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(namespaceElement.ComputeQualificationOfOperation(null), Is.Null);
-                Assert.That(namespaceElement.ComputeQualificationOfOperation("  "), Is.Null);
-                Assert.That(namespaceElement.ComputeQualificationOfOperation("simpleName"), Is.Null);
-                Assert.That(namespaceElement.ComputeQualificationOfOperation("a::b"), Is.EqualTo("a"));
-                Assert.That(namespaceElement.ComputeQualificationOfOperation("a::b::c"), Is.EqualTo("a::b"));
-                Assert.That(namespaceElement.ComputeQualificationOfOperation("'a::b'::c"), Is.EqualTo("'a::b'"));
-                Assert.That(namespaceElement.ComputeQualificationOfOperation("a::'b::c'"), Is.EqualTo("a"));
-            }
-        }
-
-        [Test]
-        public void VerifyComputeUnqualifiedNameOfOperation()
-        {
-            Assert.That(() => ((INamespace)null).ComputeUnqualifiedNameOfOperation("name"), Throws.TypeOf<ArgumentNullException>());
-
-            var namespaceElement = new Namespace();
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation(null), Is.Null);
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("  "), Is.Null);
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("simpleName"), Is.EqualTo("simpleName"));
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::b"), Is.EqualTo("b"));
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::b::c"), Is.EqualTo("c"));
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::'non basic'"), Is.EqualTo("non basic"));
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("a::'it\\'s'"), Is.EqualTo("it's"));
-                Assert.That(namespaceElement.ComputeUnqualifiedNameOfOperation("'a::b'::c"), Is.EqualTo("c"));
-            }
         }
     }
 }

@@ -27,7 +27,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Metadata;
     using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -53,12 +52,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subjectOneTyping.ComputeMetadataDefinition(), Is.SameAs(metaclass));
 
-            // [0..1] upper-bound violation (STRICT contract): two Metaclass typings → MultiplicityViolationException.
+            // The redefined metaclass OCL elects metaClassTypes->first(), so two Metaclass typings are legal.
             var subjectTwoTypings = new MetadataUsage();
-            subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = new Metaclass() });
+            var firstMetaclass = new Metaclass();
+            subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = firstMetaclass });
             subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = new Metaclass() });
 
-            Assert.That(subjectTwoTypings.ComputeMetadataDefinition, Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(subjectTwoTypings.ComputeMetadataDefinition(), Is.SameAs(firstMetaclass));
         }
     }
 }
