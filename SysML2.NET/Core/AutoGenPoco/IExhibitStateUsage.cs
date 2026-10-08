@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// The StateUsage to be exhibited by the ExhibitStateUsage. It is the performedAction of the
         /// ExhibitStateUsage considered as a PerformActionUsage, which must be a StateUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1577070999039_688794_260", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577070999039_688794_260", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
         IStateUsage exhibitedState { get; }
 

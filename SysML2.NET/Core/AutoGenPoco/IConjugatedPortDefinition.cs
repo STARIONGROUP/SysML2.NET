@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// The original PortDefinition for this ConjugatedPortDefinition, which is the owningNamespace of the
         /// ConjugatedPortDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575484364017_387810_990", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484364017_387810_990", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         IPortDefinition originalPortDefinition { get; }
 
@@ -85,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// The PortConjugation that is the ownedConjugator of this ConjugatedPortDefinition, linking it to its
         /// originalPortDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575484344901_850046_947", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484344901_850046_947", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_280165_440")]
         IPortConjugation ownedPortConjugator { get; }
 

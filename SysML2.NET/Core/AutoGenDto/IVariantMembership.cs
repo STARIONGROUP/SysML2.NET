@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// The Usage that represents a variant in the context of the owningVariationDefinition or
         /// owningVariationUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1590978683452_645414_775", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1590978683452_645414_775", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         Guid ownedVariantUsage { get; }
 

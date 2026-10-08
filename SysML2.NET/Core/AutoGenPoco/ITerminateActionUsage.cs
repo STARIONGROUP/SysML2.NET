@@ -79,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The Expression that is the featureValue of the terminateOccurrence parameter of this
         /// TerminateActionUsage.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1724451750939_948290_107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_2022x_2_12e503d9_1724451750939_948290_107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         IExpression terminatedOccurrenceArgument { get; }
 
     }

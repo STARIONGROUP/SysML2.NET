@@ -56,14 +56,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <summary>
         /// The Feature that is redefined by the redefiningFeature of this Redefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674973_199798_43245", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674973_199798_43245", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_393191_43181")]
         IFeature RedefinedFeature { get; set; }
 
         /// <summary>
         /// The Feature that is redefining the redefinedFeature of this Redefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674958_414216_43160", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674958_414216_43160", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
         IFeature RedefiningFeature { get; set; }
 

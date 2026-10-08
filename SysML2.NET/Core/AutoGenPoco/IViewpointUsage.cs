@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// The ViewpointDefinition that is the definition of this ViewpointUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596649684798_569222_3524", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596649684798_569222_3524", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1583000408905_769743_1223")]
         IViewpointDefinition viewpointDefinition { get; }
 
@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The PartUsages that identify the stakeholders with concerns framed by this ViewpointUsage, which are
         /// the owned and inherited stakeholderParameters of the framedConcerns of this ViewpointUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617117200628_940407_3323", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617117200628_940407_3323", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         List<IPartUsage> viewpointStakeholder { get; }
 
     }

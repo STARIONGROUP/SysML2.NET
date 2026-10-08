@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// An operator symbol that names a corresponding Function from one of the standard packages from the
         /// Kernel Function Library .
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1557528808100_646606_111674", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1557528808100_646606_111674", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         string Operator { get; set; }
 
     }

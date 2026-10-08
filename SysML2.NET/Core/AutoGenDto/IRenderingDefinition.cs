@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
         /// <summary>
         /// The usages of a RenderingDefinition that are RenderingUsages.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596741367270_249607_6373", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596741367270_249607_6373", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<Guid> rendering { get; }
 

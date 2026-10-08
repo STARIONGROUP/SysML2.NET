@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// The model-level evaluable Boolean-valued Expression used to filter the members of this Package,
         /// which are owned by the Package are via ElementFilterMemberships.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1607033896050_867332_6206", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1607033896050_867332_6206", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         List<IExpression> filterCondition { get; }
 

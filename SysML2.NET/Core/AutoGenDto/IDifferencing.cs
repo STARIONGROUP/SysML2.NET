@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// Type that partly determines interpretations of typeDifferenced, as described in
         /// Type::differencingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661871173117_978241_809", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661871173117_978241_809", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         Guid DifferencingType { get; set; }
 
@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// Type with interpretations partly determined by differencingType, as described in
         /// Type::differencingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661871168453_175911_796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661871168453_175911_796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         Guid typeDifferenced { get; }

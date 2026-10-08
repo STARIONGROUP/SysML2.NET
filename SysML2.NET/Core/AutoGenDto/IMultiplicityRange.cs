@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Multiplicities
         /// The owned Expressions of the MultiplicityRange whose results provide its bounds. These must be the
         /// first ownedMembers of the MultiplicityRange.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1573095221994_519580_5095", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 2, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1573095221994_519580_5095", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 2, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         List<Guid> bound { get; }
 
@@ -59,14 +59,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Multiplicities
         /// Expression is given, then the lower bound shall have the same value as the upper bound, unless the
         /// upper bound is unbounded (*), in which case the lower bound shall be 0.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1573094905677_801324_4744", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1573094905677_801324_4744", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
         Guid? lowerBound { get; }
 
         /// <summary>
         /// The Expression whose result is the upper bound of the MultiplicityRange.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1573094947427_797440_4796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1573094947427_797440_4796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
         Guid upperBound { get; }
 

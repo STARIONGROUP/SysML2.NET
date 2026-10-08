@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
         /// <summary>
         /// The Namespace whose visible Memberships are imported by this NamespaceImport.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674966_977620_43202", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674966_977620_43202", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         Guid ImportedNamespace { get; set; }
 

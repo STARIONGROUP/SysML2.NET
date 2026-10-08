@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     /// AttributeDefinition, an AttributeUsage is a usage of a AttributeDefinition to represent the value of
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
     /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
-    /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
+    /// nested features must be referential (non-composite). An AttributeUsage must specialize, directly or
     /// indirectly, the base Feature Base::dataValues from the Kernel Semantic Library.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565471291545_950196_20762", isAbstract: false, isFinalSpecialization: false, isActive: false)]
@@ -78,14 +78,14 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// but other kinds of kernel DataTypes are also allowed, to permit use of DataTypes from the Kernel
         /// Model Libraries.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565471811429_523492_20975", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1565471811429_523492_20975", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         List<IDataType> attributeDefinition { get; }
 
         /// <summary>
         /// Always true for an AttributeUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624050661138_649455_27", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624050661138_649455_27", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         new bool isReference { get; }
 

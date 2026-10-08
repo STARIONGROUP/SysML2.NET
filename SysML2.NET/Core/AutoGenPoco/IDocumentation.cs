@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <summary>
         /// The Element that is documented by this Documentation.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_948466_1622", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_948466_1622", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_744477_17277")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594145755058_99428_86")]
         IElement documentedElement { get; }

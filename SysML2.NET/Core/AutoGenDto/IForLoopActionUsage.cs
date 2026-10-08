@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// the successive values of the input sequence on each iteration. It is the ownedFeature that redefines
         /// ForLoopAction::var.</co>
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1640325378400_227367_3662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1640325378400_227367_3662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         Guid loopVariable { get; }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// each iterative performance of the bodyAction. It is the Expression whose result is bound to the seq
         /// input parameter of this ForLoopActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624306920911_355291_5769", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624306920911_355291_5769", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         Guid seqArgument { get; }
 
     }

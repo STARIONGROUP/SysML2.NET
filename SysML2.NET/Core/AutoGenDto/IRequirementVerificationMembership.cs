@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// <summary>
         /// The kind of a RequirementVerificationMembership must be requirement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603921465292_637146_187", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
+        [Property(xmiId: "_19_0_4_12e503d9_1603921465292_637146_187", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
         new RequirementConstraintKind Kind { get; set; }
 
@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// RequirementVerificationMembership. This will either be the verifiedRequirement, or it will subset
         /// the verifiedRequirement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603921329650_612380_147", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603921329650_612380_147", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
         Guid ownedRequirement { get; }
 
@@ -63,7 +63,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// RequirementVerificationMembership considered as a RequirementConstraintMembership, which must be a
         /// RequirementUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603921870169_98378_309", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603921870169_98378_309", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
         Guid verifiedRequirement { get; }
 

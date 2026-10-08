@@ -45,14 +45,14 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// <summary>
         /// The ActionUsage that is the ownedMemberFeature of this StateSubactionMembership.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1582974847979_606181_96", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582974847979_606181_96", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         Guid action { get; }
 
         /// <summary>
         /// Whether this StateSubactionMembership is for an entry, do or exit ActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575671861308_70894_325", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575671861308_70894_325", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         StateSubactionKind Kind { get; set; }
 
     }

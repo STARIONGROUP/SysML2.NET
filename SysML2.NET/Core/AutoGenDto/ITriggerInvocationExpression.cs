@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// Indicates which of the Functions from the Triggers model in the Kernel Semantic Library is to be
         /// invoked by this TriggerInvocationExpression.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1643588513495_774789_300", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1643588513495_774789_300", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         TriggerKind Kind { get; set; }
 
     }

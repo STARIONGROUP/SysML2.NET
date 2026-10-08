@@ -50,8 +50,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     {
         /// <summary>
         /// The Integer value that is the result of evaluating this LiteralInteger.
+        /// The Integer value that is the result of evaluating this Expression.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_358889_43199", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_358889_43199", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         int Value { get; set; }
 
     }

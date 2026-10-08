@@ -43,25 +43,29 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
     {
         /// <summary>
         /// The Expressions that are steps in the calculation of the result of this Function.
+        /// The set of expressions that represent computational steps or parts of a system of equations within
+        /// the Function.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543948400639_301251_20841", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543948400639_301251_20841", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_b9102da_1536346067212_587255_17343")]
         List<Guid> expression { get; }
 
         /// <summary>
         /// Whether this Function can be used as the function of a model-level evaluable InvocationExpression.
         /// Certain Functions from the Kernel Functions Library are considered to have isModelLevelEvaluable =
-        /// true. For all other Functions it is false.<strong>Note:</strong> See the specification of the KerML
+        /// true. For all other Functions it is false. <strong>Note:</strong> See the specification of the KerML
         /// concrete syntax notation for Expressions for an identification of which library Functions are
         /// model-level evaluable.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617395221463_139517_26381", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617395221463_139517_26381", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         bool isModelLevelEvaluable { get; }
 
         /// <summary>
         /// The object or value that is the result of evaluating the Function.
+        /// The result parameter of the Function, which is owned by the Function via a
+        /// ReturnParameterMembership.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543948912268_88159_21323", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543948912268_88159_21323", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674960_365618_43170")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         Guid result { get; }

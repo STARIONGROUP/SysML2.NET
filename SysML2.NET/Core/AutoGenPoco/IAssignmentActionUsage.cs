@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// <summary>
         /// The Feature whose value is to be set.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624202269076_561550_3109", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624202269076_561550_3109", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         IFeature referent { get; }
 
@@ -86,13 +86,13 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// value of the referent will be set to the result of the valueExpression by this
         /// AssignmentActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624201786354_844501_2835", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624201786354_844501_2835", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         IExpression targetArgument { get; }
 
         /// <summary>
         /// The Expression whose result is to be assigned to the referent Feature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624201792996_104394_2856", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624201792996_104394_2856", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         IExpression valueExpression { get; }
 
     }

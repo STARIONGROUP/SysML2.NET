@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO.Systems.Cases
         /// <summary>
         /// The parameters of this CaseDefinition that represent actors involved in the case.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621464609772_382176_1612", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621464609772_382176_1612", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<Guid> actorParameter { get; }
@@ -52,14 +52,14 @@ namespace SysML2.NET.Core.DTO.Systems.Cases
         /// <summary>
         /// The RequirementUsage representing the objective of this CaseDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_59601fc_1590259317710_27529_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_59601fc_1590259317710_27529_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         Guid? objectiveRequirement { get; }
 
         /// <summary>
         /// The parameter of this CaseDefinition that represents its subject.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1595189932946_106647_973", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1595189932946_106647_973", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         Guid subjectParameter { get; }
