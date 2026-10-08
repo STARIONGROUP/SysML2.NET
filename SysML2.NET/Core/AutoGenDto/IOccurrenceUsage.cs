@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
         /// <summary>
         /// The at most one occurrenceDefinition that has isIndividual = true.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1618958878775_52798_7090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1618958878775_52798_7090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         Guid? individualDefinition { get; }
 
@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
         /// Whether this OccurrenceUsage represents the usage of the specific individual represented by its
         /// individualDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1618959865886_548379_7149", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618959865886_548379_7149", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         bool IsIndividual { get; set; }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
         /// but other kinds of kernel Classes are also allowed, to permit use of Classes from the Kernel Model
         /// Libraries.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         List<Guid> occurrenceDefinition { get; }
 
@@ -72,7 +72,7 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
         /// portionKind is not null, then the owningType of the OccurrenceUsage must be non-null, and the
         /// OccurrenceUsage represents portions of the featuring instance of the owningType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1618959362712_182798_7138", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1618959362712_182798_7138", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         PortionKind? PortionKind { get; set; }
 
     }

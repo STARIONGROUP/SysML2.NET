@@ -52,8 +52,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     {
         /// <summary>
         /// The Function that types this Expression.
+        /// This is the Function that types the Expression.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         IFunction function { get; }
 
@@ -61,7 +62,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Whether this Expression meets the constraints necessary to be evaluated at model level, that is,
         /// using metadata within the model.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1609957047704_424471_48", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1609957047704_424471_48", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         bool isModelLevelEvaluable { get; }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Expression is either inherited from its function or it is related to the Expression via a
         /// ReturnParameterMembership, in which case it redefines the result parameter of its function.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1595188071574_902060_363", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1595188071574_902060_363", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674960_365618_43170")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         IFeature result { get; }
@@ -78,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// Return whether this Expression is model-level evaluable. The visited parameter is used to track
         /// possible circular Feature references made from FeatureReferenceExpressions (see the redefinition of
         /// this operation for FeatureReferenceExpression). Such circular references are not allowed in
-        /// model-level evaluable expressions.An Expression that is not otherwise specialized is model-level
+        /// model-level evaluable expressions. An Expression that is not otherwise specialized is model-level
         /// evaluable if it has no (non-implied) ownedSpecializations and all its ownedFeatures are either in
         /// parameters, the result parameter or a result Expression owned via a ResultExpressionMembership. The
         /// parameters  must not have any ownedFeatures or a FeatureValue, and the result Expression must be

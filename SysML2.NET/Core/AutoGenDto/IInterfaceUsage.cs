@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// <summary>
         /// The InterfaceDefinitions that type this InterfaceUsage.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565499418349_431355_28798", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1565499418349_431355_28798", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594853499656_139435_802")]
         List<Guid> interfaceDefinition { get; }
 

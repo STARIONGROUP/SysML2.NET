@@ -49,14 +49,14 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// The type of this ConjugatedPortTyping considered as a FeatureTyping, which must be a
         /// ConjugatedPortDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1577915017970_186033_146", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577915017970_186033_146", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543180520185_480887_21131")]
         IConjugatedPortDefinition ConjugatedPortDefinition { get; set; }
 
         /// <summary>
         /// The originalPortDefinition of the conjugatedPortDefinition of this ConjugatedPortTyping.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1577915013583_787601_133", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577915013583_787601_133", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         IPortDefinition portDefinition { get; }
 
     }

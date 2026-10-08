@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The ActionUsage to be performed by this PerformedActionUsage. It is the eventOccurrence of the
         /// PerformActionUsage considered as an EventOccurrenceUsage, which must be an ActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1567740791820_867719_18017", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1567740791820_867719_18017", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
         IActionUsage performedAction { get; }
 

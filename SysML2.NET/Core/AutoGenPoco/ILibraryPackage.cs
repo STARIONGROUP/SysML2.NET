@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// LibraryPackages in the standard Kernel Model Libraries or in normative model libraries for a
         /// language built on KerML.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1665459011301_65344_899", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1665459011301_65344_899", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         bool IsStandard { get; set; }
 
         /// <summary>

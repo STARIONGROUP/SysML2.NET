@@ -46,21 +46,21 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         /// <summary>
         /// The Classifier that owns this Subclassification relationship, which must also be its subclassifier.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543189170642_857401_25506", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543189170642_857401_25506", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         IClassifier owningClassifier { get; }
 
         /// <summary>
         /// The more specific Classifier in this Subclassification.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543189084042_772698_25407", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543189084042_772698_25407", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         IClassifier Subclassifier { get; set; }
 
         /// <summary>
         /// The more general Classifier in this Subclassification.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543188934635_627507_25283", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543188934635_627507_25283", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
         IClassifier Superclassifier { get; set; }
 

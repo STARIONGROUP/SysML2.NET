@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// The RequirementUsages verified by this VerificationCaseDefinition, which are the
         /// verifiedRequirements of all RequirementVerificationMemberships of the objectiveRequirement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603922371399_701592_338", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603922371399_701592_338", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         List<IRequirementUsage> verifiedRequirement { get; }
 
     }

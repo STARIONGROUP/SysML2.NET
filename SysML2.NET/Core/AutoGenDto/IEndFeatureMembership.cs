@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1625459277304_568293_5526", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1625459277304_568293_5526", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         new Guid ownedMemberFeature { get; }
 

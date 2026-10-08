@@ -48,14 +48,14 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// The Feature that this FeatureMembership relates to its owningType, making it an ownedFeature of the
         /// owningType.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_898044_43344", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_898044_43344", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         Guid ownedMemberFeature { get; }
 
         /// <summary>
         /// The Type that owns this FeatureMembership.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_418504_43339", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_418504_43339", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866524_738482_486")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
         Guid owningType { get; }

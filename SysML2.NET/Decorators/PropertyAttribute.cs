@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="PropertyAttribute.cs" company="Starion Group S.A.">
-// 
-//   Copyright 2022-2025 Starion Group S.A.
-// 
+//
+//   Copyright (C) 2022-2026 Starion Group S.A.
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -41,26 +41,22 @@ namespace SysML2.NET.Decorators
         /// Indicates that the Property is aggregated compositely, i.e., the composite object has responsibility
         /// for the existence and storage of the composed objects (parts).
         /// </summary>
-        Composite,
-
+        Composite
     }
+
     /// <summary>
     /// Attribute used to decorate properties with using the properties sourced from
     /// the UML metamodel.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
     public sealed class PropertyAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="PropertyAttribute" /> class.
         /// </summary>
         public PropertyAttribute(string xmiId = "", AggregationKind aggregation = AggregationKind.None, int lowerValue = 1, int upperValue = 1,
-            bool isOrdered = false,
-            bool isReadOnly = false,
-            bool isDerived = false,
-            bool isDerivedUnion = false,
-            bool isUnique = true,
-            string defaultValue = null)
+            bool isOrdered = false, bool isReadOnly = false, bool isDerived = false, bool isDerivedUnion = false, bool isUnique = true, string defaultValue = null,
+            bool isOwnerEnd = false)
         {
             this.XmiId = xmiId;
             this.Aggregation = aggregation;
@@ -72,6 +68,7 @@ namespace SysML2.NET.Decorators
             this.IsDerivedUnion = isDerivedUnion;
             this.IsUnique = isUnique;
             this.DefaultValue = defaultValue;
+            this.IsOwnerEnd = isOwnerEnd;
         }
 
         /// <summary>
@@ -80,7 +77,7 @@ namespace SysML2.NET.Decorators
         public string XmiId { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="AggregationKind"/>.
+        /// Gets or sets the <see cref="AggregationKind" />.
         /// </summary>
         public AggregationKind Aggregation { get; set; }
 
@@ -123,5 +120,10 @@ namespace SysML2.NET.Decorators
         /// Gets or sets the default value if any.
         /// </summary>
         public string DefaultValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value specifying whether this property is the owner end of a composite association, whose value is implied by the containment and therefore not serialized.
+        /// </summary>
+        public bool IsOwnerEnd { get; set; }
     }
 }

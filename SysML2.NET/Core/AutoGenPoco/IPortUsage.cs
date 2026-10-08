@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// <summary>
         /// The occurrenceDefinitions of this PortUsage, which must all be PortDefinitions.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565492740124_880100_25026", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1565492740124_880100_25026", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         List<IPortDefinition> portDefinition { get; }
 
