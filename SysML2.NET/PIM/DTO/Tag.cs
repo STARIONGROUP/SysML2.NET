@@ -22,6 +22,8 @@ namespace SysML2.NET.PIM.DTO
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// a <see cref="Tag"/> is used for annotating specific commits-of-interest during <see cref="Project"/> development,
     /// such as for representing <see cref="Project"/> milestones, releases, baselines, or snapshots. A <see cref="Project"/>
@@ -32,6 +34,7 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets a reference to the tagged <see cref="Commit"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid TaggedCommit { get; set; }
     }
 }

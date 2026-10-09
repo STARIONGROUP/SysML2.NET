@@ -25,6 +25,7 @@ namespace SysML2.NET.PIM.POCO
     using System.Linq;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
     using SysML2.NET.PIM;
 
     /// <summary>
@@ -36,11 +37,14 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets a human-friendly identifier for a Project
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
+        [RedefinedProperty(propertyName: "Record.Name")]
         public new string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Project"/> was created
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public DateTime Created { get; set; }
 
         /// <summary>
@@ -50,37 +54,47 @@ namespace SysML2.NET.PIM.POCO
         /// <remarks>
         /// this is a derived attribute
         /// </remarks>
+        [Property(lowerValue: 0, upperValue: int.MaxValue, isDerived: true)]
         public IEnumerable<DataIdentity> IdentifiedData => throw new NotImplementedException();
 
         /// <summary>
         /// Gets all the <see cref="Commit"/>s in the <see cref="Project"/>
         /// </summary>
-        public List<Commit> Commits { get; set; } = new List<Commit>();
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        public List<Commit> Commits { get; set; } = [];
 
         /// <summary>
         /// Gets or sets all <see cref="CommitReference"/>s in the <see cref="Project"/>
         /// </summary>
-        public List<CommitReference> CommitReference { get; set; } = new List<CommitReference>();
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        public List<CommitReference> CommitReferences { get; set; } = [];
 
         /// <summary>
-        /// Gets or sets all the branches in the Project which is a subset of <see cref="CommitReference"/>
+        /// Gets all the branches in the <see cref="Project"/> which is a subset of <see cref="CommitReferences"/>
         /// </summary>
-        public IEnumerable<Branch> Branches => this.CommitReference.OfType<Branch>();
+        [Property(lowerValue: 1, upperValue: int.MaxValue, isDerived: true)]
+        [SubsettedProperty(propertyName: "Project.CommitReferences")]
+        public IEnumerable<Branch> Branches => this.CommitReferences.OfType<Branch>();
 
         /// <summary>
         /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
+        [SubsettedProperty(propertyName: "Project.Branches")]
         public Branch DefaultBranch { get; set; }
 
         /// <summary>
-        /// Gets all the <see cref="Tag"/>s in the <see cref="Project"/> which is a subset of <see cref="CommitReference"/>
+        /// Gets all the <see cref="Tag"/>s in the <see cref="Project"/> which is a subset of <see cref="CommitReferences"/>
         /// </summary>
-        public IEnumerable<Tag> Tags => this.CommitReference.OfType<Tag>();
+        [Property(lowerValue: 0, upperValue: int.MaxValue, isDerived: true)]
+        [SubsettedProperty(propertyName: "Project.CommitReferences")]
+        public IEnumerable<Tag> Tags => this.CommitReferences.OfType<Tag>();
 
         /// <summary>
         /// Gets or sets the <see cref="Query"/> records owned by the <see cref="Project"/>. Each <see cref="Query"/> record represents a
         /// saved <see cref="Query"/> for the given <see cref="Project"/>.
         /// </summary>
-        public List<Query> Queries { get; set; } = new List<Query>();
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        public List<Query> Queries { get; set; } = [];
     }
 }

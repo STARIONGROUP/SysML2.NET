@@ -22,30 +22,36 @@ namespace SysML2.NET.PIM.DTO
 {
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
-    /// a subtype of Constraint that represents simple conditions that be modeled using the
+    /// a concrete subtype of <see cref="Constraint"/> that represents simple conditions that be modeled using the
     /// property-operator -value tuple. e.g. mass &lt;= 4 kg, or type instanceOf Generalization
     /// </summary>
-    public class PrimitiveConstraint
+    public class PrimitiveConstraint : Constraint
     {
         /// <summary>
         /// Gets or sets the name of a property of Element or its subtypes that is being constrained
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public string Property { get; set; }
 
         /// <summary>
         /// Gets or sets the mathematical operators
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Operator Operator { get; set; }
 
         /// <summary>
         /// Gets or sets list of primitive objects, such as String, Boolean, Integer, Double, and UUID
         /// </summary>
+        [Property(lowerValue: 1, upperValue: int.MaxValue)]
         public List<string> Value { get; set;} = [];
 
         /// <summary>
         /// Gets or sets a value indicating a logical NOT operator is applied to the <see cref="PrimitiveConstraint"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public bool Inverse { get; set; }
     }
 }
