@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.DTO
     using System;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// ExternalRelationship is a realization of Data, and represents the relationship between a
@@ -35,6 +36,7 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid Id { get; set; }
 
         /// <summary>
@@ -44,21 +46,25 @@ namespace SysML2.NET.PIM.DTO
         /// would contain mathematical expressions, such as equations, representing the mapping.This is an optional
         /// attribute.
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public string Specification { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the expression language used for the specification. This is an optional attribute.
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Core.DTO.Root.Elements.IElement"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid ElementEnd { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ExternalData"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid ExternalDataEnd { get; set; }
     }
 }

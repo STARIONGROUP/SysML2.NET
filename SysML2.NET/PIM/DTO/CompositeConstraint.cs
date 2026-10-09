@@ -22,8 +22,10 @@ namespace SysML2.NET.PIM.DTO
 {
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
-    /// a subtype of <see cref="Constraint"/> that represents complex conditions composed of two or more
+    /// a concrete subtype of <see cref="Constraint"/> that represents complex conditions composed of two or more
     /// <see cref="CompositeConstraint"/>s or <see cref="PrimitiveConstraint"/>s using logical AND or OR operators
     /// </summary>
     public class CompositeConstraint : Constraint
@@ -34,11 +36,13 @@ namespace SysML2.NET.PIM.DTO
         /// <remarks>
         /// There must be at least 2
         /// </remarks>
+        [Property(lowerValue: 2, upperValue: int.MaxValue)]
         public List<Constraint> Constraint { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the logical operator for composing the <see cref="Constraint"/>s
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public JoinOperator Operator { get; set; }
     }
 }

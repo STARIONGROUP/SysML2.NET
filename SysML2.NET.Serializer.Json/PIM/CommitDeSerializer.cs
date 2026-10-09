@@ -145,18 +145,17 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             if (jsonElement.TryGetProperty("previousCommit"u8, out JsonElement previousCommitProperty))
             {
-                if (previousCommitProperty.ValueKind == JsonValueKind.Null)
+                if (previousCommitProperty.ValueKind == JsonValueKind.Array)
                 {
-                    dtoInstance.PreviousCommit = Guid.Empty;
-                }
-                else
-                {
-                    if (previousCommitProperty.TryGetProperty("@id"u8, out JsonElement previousCommitPropertyIdProperty))
+                    foreach (var previousCommitItem in previousCommitProperty.EnumerateArray())
                     {
-                        var propertyValue = previousCommitPropertyIdProperty.GetString();
-                        if (propertyValue != null)
+                        if (previousCommitItem.TryGetProperty("@id"u8, out JsonElement previousCommitItemIdProperty))
                         {
-                            dtoInstance.PreviousCommit = Guid.Parse(propertyValue);
+                            var propertyValue = previousCommitItemIdProperty.GetString();
+                            if (propertyValue != null)
+                            {
+                                dtoInstance.PreviousCommits.Add(Guid.Parse(propertyValue));
+                            }
                         }
                     }
                 }
@@ -165,7 +164,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.LogDebug("the owningProject Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                    logger.LogDebug("the previousCommit Json property was not found in the Commit: {Id}", dtoInstance.Id);
                 }
             }
 

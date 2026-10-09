@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.POCO
     using System;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// ExternalData is a realization of Data, and represents a resource external to a given tool or
@@ -33,11 +34,13 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1, isReadOnly: true)]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the string representation of the IRI of the resource represented by the ExternalData
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public string ResourceIdentifier { get; set; }
     }
 }

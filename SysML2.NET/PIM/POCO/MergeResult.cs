@@ -22,6 +22,8 @@ namespace SysML2.NET.PIM.POCO
 {
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// Represents the outcome of merging one <see cref="Commit"/> into another
     /// </summary>
@@ -30,11 +32,13 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the <see cref="DataIdentity"/> records that could not be merged automatically
         /// </summary>
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
         public List<DataIdentity> Conflict { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the <see cref="Commit"/> that records the merge
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public Commit MergeCommit { get; set; }
     }
 }
