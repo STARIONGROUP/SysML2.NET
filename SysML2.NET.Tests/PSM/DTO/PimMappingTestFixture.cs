@@ -21,7 +21,6 @@
 namespace SysML2.NET.Tests.PSM.DTO
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
 
@@ -290,7 +289,7 @@ namespace SysML2.NET.Tests.PSM.DTO
         {
             Assert.That(() => new PrimitiveConstraint().FromPim(null), Throws.TypeOf<ArgumentNullException>());
 
-            foreach (var comparisonOperator in Enum.GetValues(typeof(Operator)).Cast<Operator>())
+            foreach (var comparisonOperator in Enum.GetValues<Operator>())
             {
                 var record = new PIM.DTO.PrimitiveConstraint
                 {
