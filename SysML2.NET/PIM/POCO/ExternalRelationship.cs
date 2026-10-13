@@ -25,6 +25,7 @@ namespace SysML2.NET.PIM.POCO
     using SysML2.NET.Common;
     using SysML2.NET.Core.POCO;
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// ExternalRelationship is a realization of Data, and represents the relationship between a
@@ -37,6 +38,7 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid Id { get; set; }
 
         /// <summary>
@@ -46,21 +48,25 @@ namespace SysML2.NET.PIM.POCO
         /// would contain mathematical expressions, such as equations, representing the mapping.This is an optional
         /// attribute.
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public string Specification { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the expression language used for the specification. This is an optional attribute.
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IElement"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public IElement ElementEnd { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ExternalData"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public ExternalData ExternalDataEnd { get; set; }
     }
 }

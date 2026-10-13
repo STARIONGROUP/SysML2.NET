@@ -23,6 +23,8 @@ namespace SysML2.NET.PIM.DTO
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// <see cref="Query"/> is a subclass of <see cref="Record"/> that represents a precise and language-independent
     /// request for information  retrieval using the Systems Modeling API and Services.
@@ -33,24 +35,44 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the name of the Query
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
+        [RedefinedProperty(propertyName: "Record.Name")]
         public new string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="DTO.Project"/> that owns the <see cref="Query"/>
+        /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
+        public Guid Project { get; set; }
 
         /// <summary>
         /// list of properties of Element or its subtypes that will be included for each Element object in the
         /// query response. Element is the root-metaclass in KerML. If no properties are specified, then all the
         /// properties will be included for each Element in the query response
         /// </summary>
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
         public List<string> Select { get; set; } = [];
 
         /// <summary>
         /// represents the conditions that Elements in the query response must satisfy
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Constraint Where { get; set; }
 
         /// <summary>
         /// list of Data objects that define the scope context for query execution. The default scope of a
         /// Query is the owning Project
         /// </summary>
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
         public List<Guid> Scope { get; set; } = [];
+
+        /// <summary>
+        /// Gets or sets the list of properties used for sorting the data objects in the query response
+        /// </summary>
+        /// <remarks>
+        /// The order of the properties in the list governs the sorting order.
+        /// </remarks>
+        [Property(lowerValue: 0, upperValue: int.MaxValue, isOrdered: true)]
+        public List<string> OrderBy { get; set; } = [];
     }
 }

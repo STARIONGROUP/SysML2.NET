@@ -22,6 +22,8 @@ namespace SysML2.NET.PIM.POCO
 {
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="Common.IData"/>
     /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="Common.IData"/> Version
@@ -32,6 +34,7 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing all versions of the given <see cref="DataIdentity"/>
         /// </summary>
-        public List<DataVersion> Version = new List<DataVersion>();
+        [Property(lowerValue: 1, upperValue: int.MaxValue)]
+        public List<DataVersion> Version { get; set; } = [];
     }
 }

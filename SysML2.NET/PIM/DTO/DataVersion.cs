@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.DTO
     using System;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents <see cref="IData"/> at a specific version in its lifecycle.
@@ -32,18 +33,33 @@ namespace SysML2.NET.PIM.DTO
     public class DataVersion : Record
     {
         /// <summary>
-        /// Gets or sets the <see cref="Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
+        /// Gets or sets the <see cref="DTO.Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid Commit { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="DTO.Project"/> that owns the <see cref="DataVersion"/>
+        /// </summary>
+        /// <remarks>
+        /// Derived by Systems Modeling API and Services, Clause 7.1.2 from the owning project of <see cref="Commit"/>.
+        /// </remarks>
+        [Property(lowerValue: 1, upperValue: 1, isDerived: true)]
+        public Guid Project { get; set; }
 
         /// <summary>
         /// Gets or sets the contained <see cref="DataIdentity"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public DataIdentity Identity { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IData"/> that is the payload
         /// </summary>
+        /// <remarks>
+        /// <c>null</c> when no data with the given identity is present at the <see cref="Commit"/>.
+        /// </remarks>
+        [Property(lowerValue: 0, upperValue: 1)]
         public IData Payload { get; set; }
     }
 }

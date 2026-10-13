@@ -20,10 +20,12 @@
 
 namespace SysML2.NET.PIM.POCO
 {
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// A <see cref="Branch"/> is a type of <see cref="CommitReference"/>. A <see cref="Branch"/> is a pointer to a <see cref="Commit"/> (Branch.head).
     /// The <see cref="Commit"/> history of a <see cref="Project"/> on a given <see cref="Branch"/> can be computed by recursively navigating
-    /// <see cref="Commit.PreviousCommit"/>, starting from the head <see cref="Commit"/> of the <see cref="Branch"/> (Branch.head)
+    /// <see cref="Commit.PreviousCommits"/>, starting from the head <see cref="Commit"/> of the <see cref="Branch"/> (Branch.head)
     /// </summary>
     public class Branch : CommitReference
     {
@@ -31,6 +33,7 @@ namespace SysML2.NET.PIM.POCO
         /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
         /// <see cref="Project"/> on the given branch
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Commit Head { get; set; }
     }
 }

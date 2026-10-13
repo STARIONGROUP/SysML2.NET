@@ -22,6 +22,8 @@ namespace SysML2.NET.PIM.DTO
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// Represents a single difference between two compared versions of the same <see cref="DataIdentity"/>
     /// </summary>
@@ -30,11 +32,13 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the <see cref="DataVersion"/> taken as the baseline of the comparison, or <c>null</c> when the data was added
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public Guid? BaseData { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="DataVersion"/> compared against the baseline, or <c>null</c> when the data was deleted
         /// </summary>
+        [Property(lowerValue: 0, upperValue: 1)]
         public Guid? CompareData { get; set; }
     }
 }

@@ -22,6 +22,8 @@ namespace SysML2.NET.PIM.POCO
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// a <see cref="Tag"/> is used for annotating specific commits-of-interest during <see cref="Project"/> development,
     /// such as for representing <see cref="Project"/> milestones, releases, baselines, or snapshots. A <see cref="Project"/>
@@ -33,6 +35,7 @@ namespace SysML2.NET.PIM.POCO
         /// Gets or sets a reference to the <see cref="Commit"/> which the Tag is pointing. It represents a 
         /// <see cref="Commit"/>-of-interest in the owning <see cref="Project"/>.
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Commit TaggedCommit { get; set; }
     }
 }

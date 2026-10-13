@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.DTO
     using System;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
@@ -33,16 +34,19 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1, isReadOnly: true)]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid UsedCommit { get; set; }
 
         /// <summary>
         /// Gets or sets the reference to the <see cref="Project"/> of the <see cref="Project"/> being used.
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Guid UsedProject { get; set; }
     }
 }

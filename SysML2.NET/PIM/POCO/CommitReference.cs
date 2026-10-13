@@ -22,9 +22,11 @@ namespace SysML2.NET.PIM.POCO
 {
     using System;
 
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// An abstract subclass of <see cref="Record"/> that references a specific <see cref="Commit"/> (Commit Reference.referencedCommit). Project.commit is the set of all the Commit records for a given Project.
-    /// <see cref="Project.CommitReference"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the
+    /// <see cref="Project.CommitReferences"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the
     /// <see cref="Common.IData"/> in a Project. Two special types of <see cref="CommitReference"/> are <see cref="Branch"/> and <see cref="Tag"/>
     /// </summary>
     public abstract class CommitReference : Record
@@ -32,21 +34,26 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was created.
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was deleted
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public DateTime Deleted { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the <see cref="CommitReference"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
+        [RedefinedProperty(propertyName: "Record.Name")]
         public new string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Project that owns the given <see cref="CommitReference"/>
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Project OwningProject { get; set; }
     }
 }

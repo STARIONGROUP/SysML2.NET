@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.POCO
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
     using SysML2.NET.PIM;
 
     /// <summary>
@@ -44,27 +45,35 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Commit"/> was created
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Project"/> that owns the <see cref="Commit"/>.
         /// </summary>
+        [Property(lowerValue: 1, upperValue: 1)]
         public Project OwningProject { get; set; }
 
         /// <summary>
         /// Gets or sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public List<Commit> PreviousCommit { get; set; } = new List<Commit>();
+        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        public List<Commit> PreviousCommits { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="Common.IData"/> that is
         /// created, updated, or deleted in the <see cref="Commit"/>
         /// </summary>
-        public List<DataVersion> Change { get; set; } = new List<DataVersion>();
+        [Property(lowerValue: 1, upperValue: int.MaxValue)]
+        public List<DataVersion> Change { get; set; } = [];
 
         /// <summary>
         /// Queries the derived property VersionedData
         /// </summary>
+        /// <returns>The set of cumulative <see cref="DataVersion"/> records at the <see cref="Commit"/>.</returns>
+        /// <exception cref="NotImplementedException">Thrown until the derivation is supported.</exception>
+        [Property(lowerValue: 0, upperValue: int.MaxValue, isDerived: true)]
+        [DerivedProperty(name: "VersionedData")]
         public List<DataVersion> QueryVersionedData()
         {
             throw new NotImplementedException("Derived property VersionedData not yet supported");
