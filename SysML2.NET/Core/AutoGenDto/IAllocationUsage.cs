@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.Allocations
         /// <summary>
         /// The AllocationDefinitions that are the types of this AllocationUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1611430742949_241425_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1611430742949_241425_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594853499656_139435_802")]
         List<Guid> allocationDefinition { get; }
 

@@ -22,8 +22,8 @@
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
       <PackageReference Include="Microsoft.CodeAnalysis" Version="5.9.0" />
       <PackageReference Include="Microsoft.OpenApi" Version="3.10.2" />
-      <PackageReference Include="uml4net.HandleBars" Version="8.4.0" />
-    <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="8.6.0" />
+      <PackageReference Include="uml4net.HandleBars" Version="9.1.0" />
+    <PackageReference Include="uml4net.xmi.Extensions.EnterpriseArchitect" Version="9.1.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">

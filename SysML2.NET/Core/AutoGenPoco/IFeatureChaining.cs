@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The Feature whose values partly determine values of featureChained, as described in
         /// Feature::chainingFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1622125799011_772669_117", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1622125799011_772669_117", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IFeature ChainingFeature { get; set; }
 
@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// The Feature whose values are partly determined by values of the chainingFeature, as described in
         /// Feature::chainingFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1622125589880_897608_73", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1622125589880_897608_73", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         IFeature featureChained { get; }

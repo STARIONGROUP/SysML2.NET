@@ -46,14 +46,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <summary>
         /// An Expose always imports all Elements, regardless of visibility (isImportAll = true).
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1622578615027_762161_80", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Property(xmiId: "_19_0_4_12e503d9_1622578615027_762161_80", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622577942205_869984_64")]
         new bool IsImportAll { get; set; }
 
         /// <summary>
         /// An Expose always has protected visibility.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1720469034555_222060_1140", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "protected")]
+        [Property(xmiId: "_2022x_2_12e503d9_1720469034555_222060_1140", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "protected", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674976_798509_43257")]
         new VisibilityKind Visibility { get; set; }
 

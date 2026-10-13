@@ -46,21 +46,21 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <summary>
         /// The Feature that is featured by the featuringType. It is the source of the TypeFeaturing.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603904928950_912234_579", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603904928950_912234_579", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         IFeature FeatureOfType { get; set; }
 
         /// <summary>
         /// The Type that features the featureOfType. It is the target of the TypeFeaturing.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603904945024_8186_598", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603904945024_8186_598", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IType FeaturingType { get; set; }
 
         /// <summary>
         /// A featureOfType that is also the owningRelatedElement of this TypeFeaturing.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603905673976_689994_763", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603905673976_689994_763", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_912234_579")]
         IFeature owningFeatureOfType { get; }

@@ -50,14 +50,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// The kind of an FramedConcernMembership must be requirement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617120451812_644221_3690", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120451812_644221_3690", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
         new RequirementConstraintKind Kind { get; set; }
 
         /// <summary>
         /// The ConcernUsage that is the ownedConstraint of this FramedConcernMembership.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617120590170_490370_3748", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120590170_490370_3748", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
         IConcernUsage ownedConcern { get; }
 
@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// referencedConstraint of the FramedConcernMembership considered as a RequirementConstraintMembership,
         /// which must be a ConcernUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617120658044_92083_3773", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120658044_92083_3773", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
         IConcernUsage referencedConcern { get; }
 

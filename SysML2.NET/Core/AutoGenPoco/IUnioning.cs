@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Type with interpretations partly determined by unioningType, as described in Type::unioningType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661869978504_423347_459", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661869978504_423347_459", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         IType typeUnioned { get; }
@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <summary>
         /// Type that partly determines interpretations of typeUnioned, as described in Type::unioningType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661869982082_280210_472", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661869982082_280210_472", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IType UnioningType { get; set; }
 

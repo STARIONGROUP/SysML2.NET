@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The Elements that are exposed by this ViewUsage, which are those memberElements of the imported
         /// Memberships from all the Expose Relationships that meet all the owned and inherited viewConditions.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596648681658_691767_2705", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596648681658_691767_2705", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         List<IElement> exposedElement { get; }
 
@@ -85,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The nestedRequirements of this ViewUsage that are ViewpointUsages for (additional) viewpoints
         /// satisfied by the ViewUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596645688987_502277_1282", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596645688987_502277_1282", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         List<IViewpointUsage> satisfiedViewpoint { get; }
 
@@ -93,14 +93,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The Expressions related to this ViewUsage by ElementFilterMemberships, which specify conditions on
         /// Elements to be rendered in a view.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1606938933668_437943_4809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1606938933668_437943_4809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         List<IExpression> viewCondition { get; }
 
         /// <summary>
         /// The ViewDefinition that is the definition of this ViewUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596644438889_580287_734", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596644438889_580287_734", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591475180488_929065_121")]
         IViewDefinition viewDefinition { get; }
 
@@ -108,7 +108,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The RenderingUsage to be used to render views defined by this ViewUsage, which is the
         /// referencedRendering of the ViewRenderingMembership of the ViewUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596657318021_274182_5067", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596657318021_274182_5067", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         IRenderingUsage viewRendering { get; }
 
         /// <summary>

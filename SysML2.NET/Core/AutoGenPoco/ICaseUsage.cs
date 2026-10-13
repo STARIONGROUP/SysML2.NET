@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// The parameters of this CaseUsage that represent actors involved in the case.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621464633171_380461_1655", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621464633171_380461_1655", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         List<IPartUsage> actorParameter { get; }
@@ -82,21 +82,21 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <summary>
         /// The CaseDefinition that is the type of this CaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_59601fc_1590257465225_855208_512", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_59601fc_1590257465225_855208_512", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1588213526305_899324_302")]
         ICaseDefinition caseDefinition { get; }
 
         /// <summary>
         /// The RequirementUsage representing the objective of this CaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591138794257_404044_2145", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591138794257_404044_2145", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         IRequirementUsage objectiveRequirement { get; }
 
         /// <summary>
         /// The parameter of this CaseUsage that represents its subject.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1595190279083_51021_1128", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1595190279083_51021_1128", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         IUsage subjectParameter { get; }

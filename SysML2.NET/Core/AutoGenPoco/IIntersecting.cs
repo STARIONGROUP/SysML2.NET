@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Type that partly determines interpretations of typeIntersected, as described in
         /// Type::intersectingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623242559520_591868_537", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1623242559520_591868_537", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IType IntersectingType { get; set; }
 
@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Type with interpretations partly determined by intersectingType, as described in
         /// Type::intersectingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623242552145_149730_525", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1623242552145_149730_525", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         IType typeIntersected { get; }

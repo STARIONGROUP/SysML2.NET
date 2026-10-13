@@ -75,7 +75,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// The UseCaseUsages that are included by this UseCaseDefinition, which are the useCaseIncludeds of the
         /// IncludeUseCaseUsages owned by this UseCaseDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621461043764_27_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621461043764_27_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         List<IUseCaseUsage> includedUseCase { get; }
 
     }

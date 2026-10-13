@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         /// <summary>
         /// The annotation text for the Comment.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674981_840045_43277", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674981_840045_43277", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         string Body { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
         /// [language[_territory][.codeset][@modifier]].
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1647722682836_708148_649", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1647722682836_708148_649", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         string Locale { get; set; }
 
     }

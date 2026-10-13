@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// The parameters of this RequirementDefinition that represent actors involved in the requirement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621564041941_652319_2722", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621564041941_652319_2722", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<IPartUsage> actorParameter { get; }
@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// ownedConstraints of the RequirementConstraintMemberships of the RequirementDefinition with kind =
         /// assumption.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1583376806647_629021_133", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1583376806647_629021_133", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         List<IConstraintUsage> assumedConstraint { get; }
 
@@ -92,7 +92,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// The ConcernUsages framed by this RequirementDefinition, which are the ownedConcerns of all
         /// FramedConcernMemberships of the RequirementDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617116733499_587735_3242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617116733499_587735_3242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583376932997_792124_158")]
         List<IConcernUsage> framedConcern { get; }
 
@@ -101,7 +101,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// an original requirement text in some source document), which is the declaredShortName for the
         /// RequirementDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1583376411386_270321_92", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1583376411386_270321_92", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594160442439_915308_4153")]
         string ReqId { get; set; }
 
@@ -110,14 +110,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// ownedConstraints of the RequirementConstraintMemberships of the RequirementDefinition with kind =
         /// requirement.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1583376932997_792124_158", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1583376932997_792124_158", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         List<IConstraintUsage> requiredConstraint { get; }
 
         /// <summary>
         /// The parameters of this RequirementDefinition that represent stakeholders for the requirement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624033010374_29375_40166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624033010374_29375_40166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<IPartUsage> stakeholderParameter { get; }
@@ -125,7 +125,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <summary>
         /// The parameter of this RequirementDefinition that represents its subject.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1595189007408_784255_586", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1595189007408_784255_586", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         IUsage subjectParameter { get; }
@@ -134,7 +134,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// An optional textual statement of the requirement represented by this RequirementDefinition, derived
         /// from the bodies of the documentation of the RequirementDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1583376433122_189839_94", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1583376433122_189839_94", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         List<string> text { get; }
 
     }

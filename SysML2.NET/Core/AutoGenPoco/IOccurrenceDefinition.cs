@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent at most one thing.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1618955405499_394357_6740", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618955405499_394357_6740", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         bool IsIndividual { get; set; }
 
     }

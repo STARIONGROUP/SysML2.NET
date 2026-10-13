@@ -72,14 +72,14 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// <summary>
         /// The Usages that define the things related by the ConnectionDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591476421094_685440_682", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591476421094_685440_682", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
         List<IUsage> connectionEnd { get; }
 
         /// <summary>
         /// A ConnectionDefinition always has isSufficient = true.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1734734871008_462076_156", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Property(xmiId: "_2022x_2_12e503d9_1734734871008_462076_156", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1564072709069_937523_30797")]
         new bool IsSufficient { get; set; }
 

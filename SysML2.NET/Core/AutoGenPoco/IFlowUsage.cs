@@ -79,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// other kinds of Kernel Interactions are also allowed, to permit use of Interactions from the Kernel
         /// Model Libraries.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1661892878973_977062_185", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1661892878973_977062_185", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1661900477937_518125_727")]
         List<IInteraction> flowDefinition { get; }

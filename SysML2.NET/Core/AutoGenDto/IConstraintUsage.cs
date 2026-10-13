@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// ConstraintDefinition, but other kinds of Predicates are also allowed, to permit use of Predicates
         /// from the Kernel Model Libraries.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
         Guid? constraintDefinition { get; }
 

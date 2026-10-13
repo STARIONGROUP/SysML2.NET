@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// <summary>
         /// A subsettingFeature that is also the owningRelatedElement of this Subsetting.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_236250_43311", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_236250_43311", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         Guid? owningFeature { get; }
@@ -55,14 +55,14 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// <summary>
         /// The Feature that is subsetted by the subsettingFeature of this Subsetting.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_393191_43181", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_393191_43181", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
         Guid SubsettedFeature { get; set; }
 
         /// <summary>
         /// The Feature that is a subset of the subsettedFeature of this Subsetting.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674967_140305_43206", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674967_140305_43206", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         Guid SubsettingFeature { get; set; }
 

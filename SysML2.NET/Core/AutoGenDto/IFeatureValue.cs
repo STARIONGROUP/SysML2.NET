@@ -37,10 +37,10 @@ namespace SysML2.NET.Core.DTO.Kernel.FeatureValues
     /// A FeatureValue is a Membership that identifies a particular member Expression that provides the
     /// value of the Feature that owns the FeatureValue. The value is specified as either a bound value or
     /// an initial value, and as either a concrete or default value. A Feature can have at most one
-    /// FeatureValue.The result of the value Expression is bound to the featureWithValue using a
+    /// FeatureValue. The result of the value Expression is bound to the featureWithValue using a
     /// BindingConnector. If isInitial = false, then the featuringType of the BindingConnector is the same
     /// as the featuringType of the featureWithValue. If isInitial = true, then the featuringType of the
-    /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
+    /// BindingConnector is restricted to its startShot. If isDefault = false, then the above semantics of
     /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
     /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
     /// given for the featureWithValue for that individual.
@@ -51,8 +51,9 @@ namespace SysML2.NET.Core.DTO.Kernel.FeatureValues
     {
         /// <summary>
         /// The Feature to be provided a value.
+        /// The Feature to be provided a value.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1573079011690_119762_1724", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1573079011690_119762_1724", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
         Guid featureWithValue { get; }
 
@@ -60,19 +61,20 @@ namespace SysML2.NET.Core.DTO.Kernel.FeatureValues
         /// Whether this FeatureValue is a concrete specification of the bound or initial value of the
         /// featureWithValue, or just a default value that may be overridden.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1623940132054_842266_36467", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1623940132054_842266_36467", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         bool IsDefault { get; set; }
 
         /// <summary>
         /// Whether this FeatureValue specifies a bound value or an initial value for the featureWithValue.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1623940148216_422105_36473", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1623940148216_422105_36473", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         bool IsInitial { get; set; }
 
         /// <summary>
         /// The Expression that provides the value as a result.
+        /// The Expression that provides the value of the featureWithValue as its result.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1573081851611_231043_3236", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1573081851611_231043_3236", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         Guid value { get; }
 

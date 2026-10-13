@@ -45,13 +45,13 @@ namespace SysML2.NET.Core.DTO.Systems.UseCases
         /// The UseCaseUsages that are included by this UseCaseUse, which are the useCaseIncludeds of the
         /// IncludeUseCaseUsages owned by this UseCaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621545989647_997634_1855", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621545989647_997634_1855", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         List<Guid> includedUseCase { get; }
 
         /// <summary>
         /// The UseCaseDefinition that is the definition of this UseCaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621460964889_804779_881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621460964889_804779_881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
         Guid? useCaseDefinition { get; }
 

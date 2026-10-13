@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Whether this Invariant is asserted to be false rather than true.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1623945815201_648891_36531", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1623945815201_648891_36531", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         bool IsNegated { get; set; }
 
     }

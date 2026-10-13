@@ -42,8 +42,9 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     {
         /// <summary>
         /// The String value that is the result of evaluating this Expression.
+        /// The String value that is the result of evaluating this LiteralString.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674985_368212_43297", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674985_368212_43297", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         string Value { get; set; }
 
     }

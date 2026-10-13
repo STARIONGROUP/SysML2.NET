@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The ActionUsage to be performed repeatedly by the LoopActionUsage. It is the second parameter of the
         /// LoopActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624203902575_509097_3869", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624203902575_509097_3869", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         IActionUsage bodyAction { get; }
 
     }

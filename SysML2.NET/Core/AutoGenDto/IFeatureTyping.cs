@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// <summary>
         /// A typedFeature that is also the owningRelatedElement of this FeatureTyping.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596597427753_801746_43", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596597427753_801746_43", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_13273_21101")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         Guid? owningFeature { get; }
@@ -53,14 +53,14 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// <summary>
         /// The Type that is being applied by this FeatureTyping.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543180520185_480887_21131", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543180520185_480887_21131", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
         Guid Type { get; set; }
 
         /// <summary>
         /// The Feature that has a type determined by this FeatureTyping.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543180501615_13273_21101", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543180501615_13273_21101", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         Guid TypedFeature { get; set; }
 

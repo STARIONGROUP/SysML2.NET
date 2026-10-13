@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         /// EnumerationUsages of this EnumerationDefinitionthat have distinct, fixed values. Each
         /// enumeratedValue specifies one of the allowed instances of the EnumerationDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1606946634788_959145_265", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1606946634788_959145_265", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1590979457191_746167_951")]
         List<Guid> enumeratedValue { get; }
 
@@ -53,7 +53,7 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         /// An EnumerationDefinition is considered semantically to be a variation whose allowed variants are its
         /// enumerationValues.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1606946783667_895456_287", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Property(xmiId: "_19_0_4_12e503d9_1606946783667_895456_287", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1590978283180_265362_419")]
         new bool IsVariation { get; set; }
 

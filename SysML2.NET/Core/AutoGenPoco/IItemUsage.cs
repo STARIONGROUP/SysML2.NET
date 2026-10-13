@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Items
         /// other kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel
         /// Library.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         List<IStructure> itemDefinition { get; }
 

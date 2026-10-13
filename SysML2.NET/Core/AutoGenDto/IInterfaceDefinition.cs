@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// <summary>
         /// The PortUsages that are the connectionEnds of this InterfaceDefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565496234915_779221_26664", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1565496234915_779221_26664", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591476421094_685440_682")]
         List<Guid> interfaceEnd { get; }
 

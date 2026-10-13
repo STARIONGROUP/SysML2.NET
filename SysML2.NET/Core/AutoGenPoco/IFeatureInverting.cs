@@ -48,21 +48,21 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <summary>
         /// The Feature that is an inverse of the invertingFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623178838862_842173_146", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1623178838862_842173_146", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         IFeature FeatureInverted { get; set; }
 
         /// <summary>
         /// The Feature that is an inverse of the invertedFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623178854941_627588_162", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1623178854941_627588_162", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IFeature InvertingFeature { get; set; }
 
         /// <summary>
         /// A featureInverted that is also the owningRelatedElement of this FeatureInverting.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1653567738671_122613_44", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1653567738671_122613_44", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838862_842173_146")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         IFeature owningFeature { get; }

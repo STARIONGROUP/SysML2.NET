@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1645049784007_509459_41", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: ".")]
+        [Property(xmiId: "_19_0_4_12e503d9_1645049784007_509459_41", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: ".", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
         new string Operator { get; set; }
 
@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// The Feature that is accessed by this FeatureChainExpression, which is its first non-parameter
         /// member.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1645049897369_762611_49", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1645049897369_762611_49", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         Guid targetFeature { get; }
 

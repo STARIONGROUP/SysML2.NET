@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1559596670531_992404_29068", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "collect")]
+        [Property(xmiId: "_18_5_3_12e503d9_1559596670531_992404_29068", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "collect", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
         new string Operator { get; set; }
 

@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
     /// An EventOccurrenceUsage is an OccurrenceUsage that represents another OccurrenceUsage occurring as a
     /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. Unless it is the
     /// EventOccurrenceUsage itself, the referenced OccurrenceUsage is related to the EventOccurrenceUsage
-    /// by a ReferenceSubsetting Relationship.If the EventOccurrenceUsage is owned by an
+    /// by a ReferenceSubsetting Relationship. If the EventOccurrenceUsage is owned by an
     /// OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences property
     /// of the Class Occurrence from the Kernel Semantic Library model Occurrences.
     /// </summary>
@@ -50,13 +50,13 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
         /// of the ownedReferenceSubsetting for the EventOccurrenceUsage, if there is one, and, otherwise, the
         /// EventOccurrenceUsage itself.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         Guid eventOccurrence { get; }
 
         /// <summary>
         /// Always true for an EventOccurrenceUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1672526906017_786343_306", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Property(xmiId: "_19_0_4_12e503d9_1672526906017_786343_306", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true", isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         new bool isReference { get; }
 

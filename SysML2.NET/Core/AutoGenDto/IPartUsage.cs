@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Parts
 
     /// <summary>
     /// A PartUsage is a usage of a PartDefinition to represent a system or a part of a system. At least one
-    /// of the itemDefinitions of the PartUsage must be a PartDefinition.A PartUsage must subset, directly
+    /// of the itemDefinitions of the PartUsage must be a PartDefinition. A PartUsage must subset, directly
     /// or indirectly, the base PartUsage parts from the Systems Model Library.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565471239590_312157_20701", isAbstract: false, isFinalSpecialization: false, isActive: false)]
@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.Parts
         /// <summary>
         /// The itemDefinitions of this PartUsage that are PartDefinitions.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591475180488_929065_121", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591475180488_929065_121", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
         List<Guid> partDefinition { get; }
 

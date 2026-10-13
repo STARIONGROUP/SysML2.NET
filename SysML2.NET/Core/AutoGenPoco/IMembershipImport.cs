@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <summary>
         /// The Membership to be imported.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1668466089734_604404_605", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1668466089734_604404_605", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IMembership ImportedMembership { get; set; }
 

@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
         /// <summary>
         /// The Usages that define the things related by the FlowDefinition.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1733008492358_136366_19515", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_2022x_2_12e503d9_1733008492358_136366_19515", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
         List<IUsage> flowEnd { get; }
 

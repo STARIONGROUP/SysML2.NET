@@ -71,14 +71,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.AliasIds")]
         public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
         /// The Behaviors that type this Step.
         /// </summary>
-        [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [Implements(implementation: "IStep.Behavior")]
         public List<IBehavior> behavior => this.ComputeBehavior();
@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// original Feature), then using each of those as domain instances to find the values of the second
         /// Feature in chainingFeatures, and so on, to values of the last Feature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IFeature.ChainingFeature")]
         public List<IFeature> chainingFeature => this.ComputeChainingFeature();
 
@@ -101,14 +101,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// the end Feature obtained when navigating from values of the other end Features of the same
         /// owningType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IFeature.CrossFeature")]
         public IFeature crossFeature => this.ComputeCrossFeature();
 
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.DeclaredName")]
         public string DeclaredName { get; set; }
 
@@ -118,7 +118,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
         /// model or relative to some other context.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.DeclaredShortName")]
         public string DeclaredShortName { get; set; }
 
@@ -131,14 +131,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// their children not of that sex (because the interpretations of the children Feature that identify
         /// those of that sex are also interpretations of the Classifier for that sex).
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IType.DifferencingType")]
         public List<IType> differencingType => this.ComputeDifferencingType();
 
         /// <summary>
         /// The features of this Type that have a non-null direction.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
@@ -148,14 +148,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Indicates how values of this Feature are determined or used (as specified for the
         /// FeatureDirectionKind).
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IFeature.Direction")]
         public FeatureDirectionKind? Direction { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
@@ -165,14 +165,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.ElementId")]
         public string ElementId { get; set; }
 
         /// <summary>
         /// All features of this Type with isEnd = true.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.EndFeature")]
         public List<IFeature> endFeature => this.ComputeEndFeature();
@@ -181,7 +181,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
         /// ownedMemberFeature.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1563834516279_920295_20653", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1563834516279_920295_20653", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [Implements(implementation: "IFeature.EndOwningType")]
@@ -190,7 +190,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "IType.Feature")]
         public List<IFeature> feature => this.ComputeFeature();
@@ -200,14 +200,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// those inheritedMemberships that are FeatureMemberships (but does not include any
         /// importedMemberships).
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IType.FeatureMembership")]
         public List<IFeatureMembership> featureMembership => this.ComputeFeatureMembership();
 
         /// <summary>
         /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IFeature.FeatureTarget")]
         public IFeature featureTarget => this.ComputeFeatureTarget();
 
@@ -217,14 +217,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// If the Feature is chained, then the featuringTypes of the first Feature in the chain are also
         /// featuringTypes of the chained Feature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IFeature.FeaturingType")]
         public List<IType> featuringType => this.ComputeFeaturingType();
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "INamespace.ImportedMembership")]
         public List<IMembership> importedMembership => this.ComputeImportedMembership();
@@ -232,7 +232,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// All the memberFeatures of the inheritedMemberships of this Type that are FeatureMemberships.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.InheritedFeature")]
         public List<IFeature> inheritedFeature => this.ComputeInheritedFeature();
@@ -241,7 +241,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// All Memberships inherited by this Type via Specialization or Conjugation. These are included in the
         /// derived union for the memberships of the Type.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "IType.InheritedMembership")]
         public List<IMembership> inheritedMembership => this.ComputeInheritedMembership();
@@ -249,7 +249,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction in or inout.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Input")]
         public List<IFeature> input => this.ComputeInput();
@@ -263,7 +263,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// of that sex (because the interpretations of the children Feature that identify those of that sex are
         /// also interpretations of the Classifier for that sex).
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IType.IntersectingType")]
         public List<IType> intersectingType => this.ComputeIntersectingType();
 
@@ -271,7 +271,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
         /// Types.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_741353_43165", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_741353_43165", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IType.IsAbstract")]
         public bool IsAbstract { get; set; }
 
@@ -280,14 +280,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// cannot exist after its featuring instance no longer does and cannot be values of another composite
         /// feature that is not on the same featuring instance.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_331870_43224", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_331870_43224", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsComposite")]
         public bool IsComposite { get; set; }
 
         /// <summary>
         /// Indicates whether this Type has an ownedConjugator.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IType.IsConjugated")]
         public bool isConjugated => this.ComputeIsConjugated();
 
@@ -295,14 +295,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
         /// snapshots of its owningType.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_300560_43342", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_300560_43342", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsConstant")]
         public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_500504_43341", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_500504_43341", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsDerived")]
         public bool IsDerived { get; set; }
 
@@ -316,7 +316,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
         /// fixed.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1562475749426_705395_21984", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_12e503d9_1562475749426_705395_21984", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsEnd")]
         public bool IsEnd { get; set; }
 
@@ -327,21 +327,21 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IElement.IsImpliedIncluded")]
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.IsLibraryElement")]
         public bool isLibraryElement => this.ComputeIsLibraryElement();
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674969_728225_43215", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674969_728225_43215", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsOrdered")]
         public bool IsOrdered { get; set; }
 
@@ -349,26 +349,26 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Whether the values of this Feature are contained in the space and time of instances of the domain of
         /// the Feature and represent the same thing as those instances.
         /// </summary>
-        [Property(xmiId: "_18_5_3_b9102da_1559231981638_234817_22063", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_b9102da_1559231981638_234817_22063", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsPortion")]
         public bool IsPortion { get; set; }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// Type. (A Type gives conditions that must be met by whatever it classifies, but when
+        /// isSufficient is false, things may meet those conditions but still not be classified by the Type. For
+        /// example, a Type Car that is not sufficient could require everything it classifies to have four
+        /// wheels, but not all four wheeled things would classify as cars. However, if the Type Car were
+        /// sufficient, it would classify all four-wheeled things.)
         /// </summary>
-        [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IType.IsSufficient")]
         public bool IsSufficient { get; set; }
 
         /// <summary>
         /// Whether or not values for this Feature must have no duplicates or not.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674968_321342_43214", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674968_321342_43214", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsUnique")]
         public bool IsUnique { get; set; } = true;
 
@@ -376,7 +376,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
         [Implements(implementation: "IFeature.IsVariable")]
         public bool IsVariable { get; set; }
 
@@ -384,7 +384,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
         /// the Namespace.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "INamespace.Member")]
         public List<IElement> member => this.ComputeMember();
 
@@ -392,7 +392,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
         /// importedMemberships.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "INamespace.Membership")]
         public List<IMembership> membership => this.ComputeMembership();
 
@@ -401,7 +401,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// If there is no such ownedMember, then the cardinality of this Type is constrained by all the
         /// Multiplicity constraints applicable to any direct supertypes.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.Multiplicity")]
         public IMultiplicity multiplicity => this.ComputeMultiplicity();
@@ -412,14 +412,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// this is overridden for certain kinds of Elements to compute a name even when the declaredName is
         /// null.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.Name")]
         public string name => this.ComputeName();
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Output")]
         public List<IFeature> output => this.ComputeOutput();
@@ -428,7 +428,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
         /// annotatedElement.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
@@ -437,7 +437,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// A Conjugation owned by this Type for which the Type is the originalType.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575482646809_280165_440", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575482646809_280165_440", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedConjugator")]
@@ -447,7 +447,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The one ownedSubsetting of this Feature, if any, that is a CrossSubsetting}, for which the Feature
         /// is the crossingFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedCrossSubsetting")]
         public ICrossSubsetting ownedCrossSubsetting => this.ComputeOwnedCrossSubsetting();
@@ -456,7 +456,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Type that are Differencings, having this Type as their
         /// typeDifferenced.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661871168454_98082_797", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661871168454_98082_797", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedDifferencing")]
@@ -466,7 +466,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Type that are Disjoinings, for which the Type is the typeDisjoined
         /// Type.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1627447519613_145554_370", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1627447519613_145554_370", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
         [Implements(implementation: "IType.OwnedDisjoining")]
@@ -476,14 +476,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
         /// this Element.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.OwnedElement")]
         public List<IElement> ownedElement => this.ComputeOwnedElement();
 
         /// <summary>
         /// All endFeatures of this Type that are ownedFeatures.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1563834516278_687758_20652", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1563834516278_687758_20652", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [Implements(implementation: "IType.OwnedEndFeature")]
@@ -492,7 +492,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The ownedMemberFeatures of the ownedFeatureMemberships of this Type.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.OwnedFeature")]
         public List<IFeature> ownedFeature => this.ComputeOwnedFeature();
@@ -501,7 +501,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Feature that are FeatureChainings, for which the Feature will be the
         /// featureChained.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1622125589880_791465_72", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1622125589880_791465_72", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IFeature.OwnedFeatureChaining")]
@@ -511,7 +511,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Feature that are FeatureInvertings and for which the Feature is the
         /// featureInverted.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1653567738671_359235_43", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1653567738671_359235_43", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedFeatureInverting")]
@@ -521,7 +521,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedMemberships of this Type that are FeatureMemberships, for which the Type is the owningType.
         /// Each such FeatureMembership identifies an ownedFeature of the Type.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_868417_43171", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_868417_43171", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
         [Implements(implementation: "IType.OwnedFeatureMembership")]
@@ -531,7 +531,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
         /// importOwningNamespace.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674974_746786_43247", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674974_746786_43247", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "INamespace.OwnedImport")]
@@ -540,7 +540,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The ownedRelationships of this Type that are Intersectings, have the Type as their typeIntersected.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623242552144_910757_524", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1623242552144_910757_524", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedIntersecting")]
@@ -550,7 +550,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
         /// of the Namespace.</cpde>
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "INamespace.OwnedMember")]
         public List<IElement> ownedMember => this.ComputeOwnedMember();
@@ -559,7 +559,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
         /// membershipOwningNamespace.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_190614_43269", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_190614_43269", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
@@ -570,7 +570,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedSubsettings of this Feature that are Redefinitions, for which the Feature is the
         /// redefiningFeature.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedRedefinition")]
         public List<IRedefinition> ownedRedefinition => this.ComputeOwnedRedefinition();
@@ -579,7 +579,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The one ownedSubsetting of this Feature, if any, that is a ReferenceSubsetting, for which the
         /// Feature is the referencingFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedReferenceSubsetting")]
         public IReferenceSubsetting ownedReferenceSubsetting => this.ComputeOwnedReferenceSubsetting();
@@ -587,7 +587,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
         public IReadOnlyList<IRelationship> OwnedRelationship => ((IContainedElement)this).OwnedRelationship;
@@ -599,7 +599,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Type that are Specializations, for which the Type is the specific
         /// Type.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_579676_43168", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_579676_43168", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
         [Implements(implementation: "IType.OwnedSpecialization")]
@@ -609,7 +609,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedSpecializations of this Feature that are Subsettings, for which the Feature is the
         /// subsettingFeature.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_472382_43221", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_472382_43221", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
         [Implements(implementation: "IFeature.OwnedSubsetting")]
@@ -619,7 +619,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedRelationships of this Feature that are TypeFeaturings and for which the Feature is the
         /// featureOfType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1603905673975_310948_762", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1603905673975_310948_762", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedTypeFeaturing")]
@@ -629,7 +629,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The ownedSpecializations of this Feature that are FeatureTypings, for which the Feature is the
         /// typedFeature.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596597427751_965862_42", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1596597427751_965862_42", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
         [Implements(implementation: "IFeature.OwnedTyping")]
@@ -638,7 +638,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The ownedRelationships of this Type that are Unionings, having the Type as their typeUnioned.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661869978505_968809_460", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661869978505_968809_460", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IType.OwnedUnioning")]
@@ -648,14 +648,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
         /// Element, if any.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.Owner")]
         public IElement owner => this.ComputeOwner();
 
         /// <summary>
         /// The FeatureMembership that owns this Feature as an ownedMemberFeature, determining its owningType.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
         [Implements(implementation: "IFeature.OwningFeatureMembership")]
         public IFeatureMembership owningFeatureMembership => this.ComputeOwningFeatureMembership();
@@ -663,7 +663,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
@@ -673,7 +673,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
         /// of this Element, if any.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
         public INamespace owningNamespace => this.ComputeOwningNamespace();
@@ -681,7 +681,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwningRelationship")]
         public IRelationship OwningRelationship => ((IContainedElement)this).OwningRelationship;
@@ -692,7 +692,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// <summary>
         /// The Type that is the owningType of the owningFeatureMembership of this Feature.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_592215_43200", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_592215_43200", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674987_297074_43308")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
@@ -703,7 +703,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The parameters of this Step, which are defined as its directedFeatures, whose values are passed into
         /// and/or out of a performance of the Step.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
         public List<IFeature> parameter => this.ComputeParameter();
@@ -716,7 +716,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Namespace to this Element. If the owningNamespace has other Elements with the same name as this one,
         /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.QualifiedName")]
         public string qualifiedName => this.ComputeQualifiedName();
 
@@ -726,14 +726,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// declaredShortName, but this is overridden for certain kinds of Elements to compute a shortName even
         /// when the declaredName is null.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IElement.ShortName")]
         public string shortName => this.ComputeShortName();
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
@@ -745,7 +745,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Feature is chained, then the types of the last Feature in the chain are also types of the chained
         /// Feature.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IFeature.Type")]
         public List<IType> type => this.ComputeType();
 
@@ -756,7 +756,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Similarly, a feature for people&#39;s children might be the union of features dividing them in the
         /// same ways as people in general.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [Implements(implementation: "IType.UnioningType")]
         public List<IType> unioningType => this.ComputeUnioningType();
 
@@ -851,7 +851,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         public FeatureDirectionKind? DirectionOfExcluding(IFeature feature, List<IType> excluded) => this.ComputeDirectionOfExcludingOperation(feature, excluded);
 
         /// <summary>
-        /// If a Feature has no declaredName or declaredShortName, then its effective name is given by the
+        /// If a Feature has no declaredName or declaredShortName , then its effective name is given by the
         /// effective name of the Feature returned by the namingFeature() operation, if any.
         /// </summary>
         /// <returns>
@@ -957,10 +957,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 
         /// <summary>
         /// A Feature is compatible with an otherType if it either directly or indirectly specializes the
-        /// otherType or if the otherType is also a Feature and all of the following are true.<ol>	<li>Neither
-        /// this Feature or the otherType have any ownedFeatures.</li>	<li>This Feature directly or indirectly
-        /// redefines a Feature that is also directly or indirectly redefined by the otherType.</li>	<li>This
-        /// Feature can access the otherType.</li></ol>
+        /// otherType or if the otherType is also a Feature and all of the following are true. <ol> <li>Neither
+        /// this Feature or the otherType have any ownedFeatures.</li> <li>This Feature directly or indirectly
+        /// redefines a Feature that is also directly or indirectly redefined by the otherType.</li> <li>This
+        /// Feature can access the otherType. </li></ol>
         /// </summary>
         /// <param name="otherType">
         /// No documentation provided
@@ -1110,7 +1110,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// an owningRelationship, then return the string constructed by appending to the path of it's
         /// owningRelationship the character / followed by the string representation of its position in the list
         /// of ownedRelatedElements of the owningRelationship (indexed starting at 1). Otherwise, return the
-        /// empty string.(Note that this operation is overridden for Relationships to use owningRelatedElement
+        /// empty string. (Note that this operation is overridden for Relationships to use owningRelatedElement
         /// when appropriate.)
         /// </summary>
         /// <returns>
@@ -1156,12 +1156,11 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 
         /// <summary>
         /// Return a subset of memberships, removing those Memberships whose memberElements are Features and for
-        /// which either of the following two conditions holds:<ol>	<li>The memberElement of the Membership is
-        /// included in redefined Features of another Membership in memberships.</li>	<li>One of the redefined
-        /// Features of the Membership is a directly redefinedFeature of an ownedFeature of this
-        /// Type.</li></ol>For this purpose, the redefined Features of a Membership whose memberElement is a
-        /// Feature includes the memberElement and all Features directly or indirectly redefined by the
-        /// memberElement.
+        /// which either of the following two conditions holds: <ol> <li>The memberElement of the Membership is
+        /// included in redefined Features of another Membership in memberships.</li> <li>One of the redefined
+        /// Features of the Membership is a directly redefinedFeature of an ownedFeature of this Type.</li>
+        /// </ol> For this purpose, the redefined Features of a Membership whose memberElement is a Feature
+        /// includes the memberElement and all Features directly or indirectly redefined by the memberElement.
         /// </summary>
         /// <param name="memberships">
         /// No documentation provided
@@ -1288,7 +1287,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// Return the Features used to determine the types of this Feature (other than this Feature itself). If
         /// this Feature is not conjugated, then the typingFeatures consist of all subsetted Features, except
         /// from CrossSubsetting, and the last chainingFeature (if any). If this Feature is conjugated, then the
-        /// typingFeatures are only its originalType (if the originalType is a Feature).<strong>Note.</strong>
+        /// typingFeatures are only its originalType (if the originalType is a Feature). <strong>Note.</strong>
         /// CrossSubsetting is excluded from the determination of the type of a Feature in order to avoid
         /// circularity in the construction of implied CrossSubsetting relationships. The
         /// validateFeatureCrossFeatureType requires that the crossFeature of a Feature have the same type as

@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
         /// <summary>
         /// The AnalysisCaseDefinition that is the definition of this AnalysisCaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591152217935_225164_2921", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591152217935_225164_2921", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
         Guid? analysisCaseDefinition { get; }
 
@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
         /// An Expression used to compute the result of the AnalysisCaseUsage, owned via a
         /// ResultExpressionMembership.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591151453868_910052_2600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591151453868_910052_2600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         Guid? resultExpression { get; }
 

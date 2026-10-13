@@ -42,8 +42,9 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     {
         /// <summary>
         /// The Boolean value that is the result of evaluating this LiteralBoolean.
+        /// The Boolean value that is the result of evaluating this Expression.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674984_421338_43289", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674984_421338_43289", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         bool Value { get; set; }
 
     }

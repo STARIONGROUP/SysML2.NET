@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Packages
         /// The model-level evaluable Boolean-valued Expression used to filter the imported members of the
         /// membershipOwningNamespace of this ElementFilterMembership.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1605762464250_876969_157", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1605762464250_876969_157", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         Guid condition { get; }
 
