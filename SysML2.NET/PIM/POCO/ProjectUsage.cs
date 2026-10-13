@@ -34,19 +34,19 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1, isReadOnly: true)]
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1628380685338_895164_312", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Commit UsedCommit { get; set; }
 
         /// <summary>
         /// Gets or sets the reference to the <see cref="Project"/> being used.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Project UsedProject { get; set; }
     }
 }

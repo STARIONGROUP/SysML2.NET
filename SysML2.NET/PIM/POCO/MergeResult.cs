@@ -32,13 +32,13 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the <see cref="DataIdentity"/> records that could not be merged automatically
         /// </summary>
-        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_4_58901f1_1667600196883_169912_162", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<DataIdentity> Conflict { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the <see cref="Commit"/> that records the merge
         /// </summary>
-        [Property(lowerValue: 0, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1667600196883_581172_161", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Commit MergeCommit { get; set; }
     }
 }

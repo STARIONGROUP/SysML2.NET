@@ -30,13 +30,13 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the <see cref="DataVersion"/> taken as the baseline of the comparison, or <c>null</c> when the data was added
         /// </summary>
-        [Property(lowerValue: 0, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1667597388218_19169_136", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DataVersion BaseData { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="DataVersion"/> compared against the baseline, or <c>null</c> when the data was deleted
         /// </summary>
-        [Property(lowerValue: 0, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1667597418425_384059_139", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DataVersion CompareData { get; set; }
     }
 }

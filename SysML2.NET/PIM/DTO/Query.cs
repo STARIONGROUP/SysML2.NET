@@ -35,14 +35,14 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the name of the Query
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1671293480578_778123_7740", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "Record.Name")]
         public new string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="DTO.Project"/> that owns the <see cref="Query"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1597396233221_999408_902", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Project { get; set; }
 
         /// <summary>
@@ -50,20 +50,20 @@ namespace SysML2.NET.PIM.DTO
         /// query response. Element is the root-metaclass in KerML. If no properties are specified, then all the
         /// properties will be included for each Element in the query response
         /// </summary>
-        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_4_58901f1_1597377655027_119603_507", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<string> Select { get; set; } = [];
 
         /// <summary>
         /// represents the conditions that Elements in the query response must satisfy
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1597377630809_759194_505", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Constraint Where { get; set; }
 
         /// <summary>
         /// list of Data objects that define the scope context for query execution. The default scope of a
         /// Query is the owning Project
         /// </summary>
-        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_4_58901f1_1597377703876_758020_511", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<Guid> Scope { get; set; } = [];
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace SysML2.NET.PIM.DTO
         /// <remarks>
         /// The order of the properties in the list governs the sorting order.
         /// </remarks>
-        [Property(lowerValue: 0, upperValue: int.MaxValue, isOrdered: true)]
+        [Property(xmiId: "_19_0_4_58901f1_1597387733264_611302_866", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<string> OrderBy { get; set; } = [];
     }
 }

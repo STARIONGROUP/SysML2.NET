@@ -34,13 +34,13 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1, isReadOnly: true)]
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the string representation of the IRI of the resource represented by the ExternalData
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_8bf0285_1596606723805_618012_132", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public string ResourceIdentifier { get; set; }
     }
 }

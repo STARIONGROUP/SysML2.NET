@@ -36,13 +36,13 @@ namespace SysML2.NET.PIM.POCO
         /// <remarks>
         /// There must be at least 2
         /// </remarks>
-        [Property(lowerValue: 2, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_4_58901f1_1597377207847_92212_477", aggregation: AggregationKind.None, lowerValue: 2, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<Constraint> Constraint { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the logical operator for composing the <see cref="Constraint"/>s
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1597377244778_333596_491", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public JoinOperator Operator { get; set; }
     }
 }

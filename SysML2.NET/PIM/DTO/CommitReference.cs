@@ -35,25 +35,25 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was created.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1628778313797_665973_538", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was deleted
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_2022x_2_f940371_1740179401841_624617_283", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DateTime Deleted { get; set; }
 
         /// <summary>
         /// Gets or sets the Project that owns the given <see cref="CommitReference"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1628779129336_65342_713", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid OwningProject { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the <see cref="CommitReference"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1671293488580_668503_7742", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "Record.Name")]
         public new string Name { get; set; }
     }

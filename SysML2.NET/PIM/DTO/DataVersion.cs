@@ -35,22 +35,22 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the <see cref="DTO.Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469725_462619_66059", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Commit { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="DTO.Project"/> that owns the <see cref="DataVersion"/>
+        /// Gets the <see cref="DTO.Project"/> that owns the <see cref="DataVersion"/>
         /// </summary>
         /// <remarks>
         /// Derived by Systems Modeling API and Services, Clause 7.1.2 from the owning project of <see cref="Commit"/>.
         /// </remarks>
-        [Property(lowerValue: 1, upperValue: 1, isDerived: true)]
-        public Guid Project { get; set; }
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469730_358203_66069", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public Guid project { get; internal set; }
 
         /// <summary>
         /// Gets or sets the contained <see cref="DataIdentity"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469729_652900_66067", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DataIdentity Identity { get; set; }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace SysML2.NET.PIM.DTO
         /// <remarks>
         /// <c>null</c> when no data with the given identity is present at the <see cref="Commit"/>.
         /// </remarks>
-        [Property(lowerValue: 0, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469731_381637_66070", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public IData Payload { get; set; }
     }
 }

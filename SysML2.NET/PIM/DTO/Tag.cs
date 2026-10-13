@@ -34,7 +34,7 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets a reference to the tagged <see cref="Commit"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1628778728157_220677_662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid TaggedCommit { get; set; }
     }
 }

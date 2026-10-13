@@ -35,7 +35,7 @@ namespace SysML2.NET.PIM.POCO
         /// Gets or sets a reference to the <see cref="Commit"/> which the Tag is pointing. It represents a 
         /// <see cref="Commit"/>-of-interest in the owning <see cref="Project"/>.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1628778728157_220677_662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Commit TaggedCommit { get; set; }
     }
 }

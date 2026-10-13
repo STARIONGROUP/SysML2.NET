@@ -45,19 +45,19 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Commit"/> was created
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469727_54677_66063", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Project"/> that owns the <see cref="Commit"/>.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469728_610810_66065", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid OwningProject { get; set; }
 
         /// <summary>
         /// Gets or sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469727_74119_66064", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<Guid> PreviousCommits { get; set; } = [];
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace SysML2.NET.PIM.DTO
         /// <remarks>
         /// A deletion is recorded by a <see cref="DataVersion"/> whose payload is <c>null</c>.
         /// </remarks>
-        [Property(lowerValue: 1, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469724_226337_66058", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<Guid> Change { get; set; } = [];
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SysML2.NET.PIM.DTO
         /// Derived by Systems Modeling API and Services, Clause 7.1.2 from <see cref="Change"/> and the
         /// versioned data of <see cref="PreviousCommits"/>.
         /// </remarks>
-        [Property(lowerValue: 0, upperValue: int.MaxValue, isDerived: true)]
-        public List<Guid> VersionedData { get; set; } = [];
+        [Property(xmiId: "_19_0_4_58901f1_1629496059367_814933_41", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public List<Guid> versionedData { get; internal set; } = [];
     }
 }

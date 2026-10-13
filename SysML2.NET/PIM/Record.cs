@@ -43,33 +43,33 @@ namespace SysML2.NET.PIM
         /// <summary>
         /// Gets or sets the unique identifier of the <see cref="Record"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469739_885136_66087", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: true, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets string representation of the IRI for the <see cref="Record"/>
         /// </summary>
-        [Property(lowerValue: 0, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469740_90190_66088", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public string ResourceIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of other identifiers for this record, especially if the record was created or represented
         /// in other software applications and systems
         /// </summary>
-        [Property(lowerValue: 0, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469740_197983_66089", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<string> Alias { get; set; }
 
         /// <summary>
         /// Gets or sets a statement that provides details about the <see cref="Record"/>.
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1629741832147_14565_28133", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets an optional human-friendly identifier for a record. The value assigned to the name for a given
         /// record must be in the set of values assigned to alias for that record
         /// </summary>
-        [Property(lowerValue: 0, upperValue: 1)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469741_716007_66090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "Record.Alias")]
         public string Name { get; set; }
     }

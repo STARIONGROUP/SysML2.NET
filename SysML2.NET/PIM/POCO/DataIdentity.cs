@@ -34,7 +34,7 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing all versions of the given <see cref="DataIdentity"/>
         /// </summary>
-        [Property(lowerValue: 1, upperValue: int.MaxValue)]
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469729_822777_66066", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<DataVersion> Version { get; set; } = [];
     }
 }

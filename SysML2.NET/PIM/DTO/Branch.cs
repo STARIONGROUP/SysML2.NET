@@ -35,7 +35,7 @@ namespace SysML2.NET.PIM.DTO
         /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
         /// <see cref="Project"/> on the given branch
         /// </summary>
-        [Property(lowerValue: 1, upperValue: 1)]
+        [Property(xmiId: "_19_0_4_58901f1_1614695877725_676676_515", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Head { get; set; }
     }
 }
