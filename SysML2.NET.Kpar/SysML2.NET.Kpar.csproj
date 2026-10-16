@@ -18,15 +18,13 @@
         <PackageReleaseNotes>
             [Update] Aligned with SysML2.NET 0.24.1
         </PackageReleaseNotes>
-        <PackageIcon>cdp4-icon.png</PackageIcon>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
-        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.5" PrivateAssets="all" />
+        <PackageReference Include="BouncyCastle.Cryptography" />
+        <PackageReference Include="Microsoft.Sbom.Targets" />
         <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
         <ProjectReference Include="..\SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj" />
     </ItemGroup>
@@ -35,10 +33,5 @@
         <InternalsVisibleTo Include="SysML2.NET.Kpar.Tests" />
     </ItemGroup>
 
-
-    <ItemGroup>
-        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
-        <None Include="..\README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
 
 </Project>
