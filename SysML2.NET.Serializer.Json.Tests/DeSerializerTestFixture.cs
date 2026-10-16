@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializerTestFixture.cs" company="Starion Group S.A.">
-// 
+//
 //   Copyright 2022-2025 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -64,6 +64,20 @@ namespace SysML2.NET.Serializer.Json.Tests
         /// </remarks>
         private const int LargePayloadElementCount = 4000;
 
+        /// <summary>
+        /// A merge commit json object that names two immediately preceding commits
+        /// </summary>
+        private const string MergeCommit = """[{"@id":"6d7ad9fd-6520-4ff2-885b-8c5c129e6c27","@type":"Commit","created":"2023-03-13T17:53:59.111354-04:00","description":null,"owningProject":{"@id":"000e9890-6935-43e6-a5d7-5d7cac601f4c"},"previousCommit":[{"@id":"1e4c2a06-0f2f-4a3c-9d64-0f4b2f6d9a11"},{"@id":"2b7d5e18-6a4f-4d1e-8c32-7d5a1c8e4b22"}]}]""";
+
+        /// <summary>
+        /// The identifiers that the <see cref="MergeCommit"/> payload names as preceding commits
+        /// </summary>
+        private static readonly Guid[] MergeCommitPredecessors =
+        [
+            Guid.Parse("1e4c2a06-0f2f-4a3c-9d64-0f4b2f6d9a11"),
+            Guid.Parse("2b7d5e18-6a4f-4d1e-8c32-7d5a1c8e4b22")
+        ];
+
         private DeSerializer deSerializer;
 
         [SetUp]
@@ -71,7 +85,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         {
             this.deSerializer = new DeSerializer();
         }
-        
+
         [Test]
         [TestCase(false)]
         [TestCase(true)]
@@ -144,7 +158,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(feature.DeclaredShortName, Is.Null);
                 Assert.That(feature.Direction, Is.EqualTo(FeatureDirectionKind.Out));
             }
-            
+
             cts.Dispose();
         }
 
@@ -209,7 +223,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
-                Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
+                Assert.That(firstCommit.PreviousCommits, Has.Count.EqualTo(0));
                 Assert.That(firstCommit.Description, Is.Null);
                 Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00", CultureInfo.InvariantCulture)));
             }
@@ -232,9 +246,27 @@ namespace SysML2.NET.Serializer.Json.Tests
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
-                Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
+                Assert.That(firstCommit.PreviousCommits, Has.Count.EqualTo(0));
                 Assert.That(firstCommit.Description, Is.Null);
                 Assert.That(firstCommit.Created, Is.EqualTo(DateTime.Parse("2023-03-13T17:53:59.111354-04:00", CultureInfo.InvariantCulture)));
+            }
+        }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_a_merge_commit_from_restapi_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
+        {
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(MergeCommit));
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, shouldDeserializeDerivedProperties);
+
+            var mergeCommit = data.OfType<Commit>().Single();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(mergeCommit.PreviousCommits, Is.EquivalentTo(MergeCommitPredecessors));
+                Assert.That(mergeCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
             }
         }
 

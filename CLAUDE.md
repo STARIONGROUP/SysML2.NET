@@ -14,7 +14,7 @@ SysML2.NET is a .NET C# SDK implementing the OMG SysML v2 specification. It prov
 |---|---|
 | **KerML 1.0** | abstract syntax (metaclasses, properties, multiplicities, ordering, redefinitions), derived properties/operations (OCL), invariants, implied relationships (§8.4.2) |
 | **SysML v2.0** | the systems layer on top of KerML — plus the textual concrete syntax |
-| **Systems Modeling API & Services 1.0** | PIM types and services, REST/HTTP binding (`SysML2.NET.REST`, `PIM/`, `SysML2.NET.Serializer.Dictionary`) |
+| **Systems Modeling API & Services 1.0** | the PIM types and services (`PIM/`, hand-written from `ptc/25-02-29`) and the REST/HTTP PSM that binds them (`PSM/`, generated from `ptc/25-02-30`), plus `SysML2.NET.REST` and `SysML2.NET.Serializer.Dictionary` — see "PIM vs PSM" |
 | **Model interchange** | the project/archive interchange format (`SysML2.NET.Kpar`) |
 
 Rules that hold at every layer:
@@ -107,7 +107,8 @@ SysML2.NET (core: netstandard2.1)
   ├── Core/POCO/           - Hand-coded: IContainedElement, IContainedRelationship
   ├── Extend/              - Auto-generated extension methods per metaclass
   ├── Decorators/          - [Class], [Property], [Implements] attributes
-  ├── PIM/                 - Platform-Independent Model DTOs (REST API types)
+  ├── PIM/                 - Platform-Independent API model, hand-written (DTO/ + POCO/)
+  ├── PSM/                 - REST/HTTP Platform-Specific model, generated from the OpenAPI
   ├── ModelInterchange/    - Archive/project interchange types (kpar)
   └── Common/IData.cs      - Base interface with Id property
 
@@ -128,6 +129,25 @@ Target frameworks: core `netstandard2.1`; tests and CodeGenerator `net10.0`; Vie
 Each metaclass exists twice: **DTO** (lightweight, relationships by `Guid`, for serialization/transport) and **POCO** (resolved object references, `ContainerList<T>` for containment, for in-memory manipulation). Both share the `I{MetaclassName}` interface from `AutoGenDto/`; hand-coded `Core/DTO/IElement.cs` adds `IData` (`Guid Id`).
 
 Generated namespaces mirror the KerML/SysML package hierarchy: `SysML2.NET.Core.DTO.Root.Elements`, `…Core.Types`, `…Systems.Actions`.
+
+### PIM vs PSM — two models, not two copies
+
+The Systems Modeling API & Services specification defines a Platform Independent Model (Clause 7) and, on top of it, a REST/HTTP Platform Specific Model (Clause 8). **The solution ships both because they are different models, related by Clause 8.1.2 Table 9 — neither is a redundant copy of the other.** Mixing them produces wrong conclusions; keep the two columns below straight.
+
+| | **PIM** — `SysML2.NET/PIM/` | **PSM** — `SysML2.NET/PSM/` |
+|---|---|---|
+| What it is | the platform-independent API model | the HTTP-specific binding of that model |
+| Source of truth | the normative PIM UML model (OMG `ptc/25-02-29`, `Systems-Modeling-API.xmi`) plus the Clause 7 prose | `Resources/ptc-25-02-30.json`, the normative OpenAPI document |
+| How it is written | **hand-written** | **code-generated** into `PSM/AutoGenDto/` — never hand-edit |
+| Shape | domain shape: `Guid` / resolved references, `DTO` + `POCO` split, `[Property]` decorators | wire shape: `@id` / `@type`, nullable members, request/response families, `IRequest` / `IResponse` markers, no decorators |
+
+Consequences that matter in practice:
+
+- **Check a PIM fact against the PIM model, never against the OpenAPI, and vice versa.** They genuinely disagree: `Branch.head`, `Query.where`, `Record.description` and `CommitReference.deleted` are all `[1..1]` in `ptc/25-02-29` while the OpenAPI declares them nullable, and the PIM's `Query::project` is `owningProject` on the wire. A PSM divergence from the PIM is a question for the specification, not a defect in our PIM types.
+- **`ptc/25-02-29` is not in the repository** — only the OpenAPI is. Fetch it from `https://www.omg.org/spec/SystemsModelingAPI/20250201/Systems-Modeling-API.xmi` when a PIM structural claim has to be verified; do not substitute the OpenAPI or the specification PDF's diagrams for it.
+- **Clause 2 ranks the sources:** where the document and the machine-readable files conflict, the machine-readable files win. That is why `Query::orderBy` carries `isOrdered: false` even though the Clause 7.1.4 prose says the order is significant.
+- **`[Property(xmiId: …)]` on a PIM type carries the real `xmi:id` from `ptc/25-02-29`**, so the decorator is traceable to the model. `xmiId: "sysml2.net"` means "no element in `ptc/25-02-29`" — the repo-wide placeholder for a member the source model does not define.
+- Hypha does **not** cover this specification. It fetches `3-Systems_Modeling_API_and_Services.pdf` but generates no queryable spec knowledge for it, so API/Services questions are answered from the PDF and the two `ptc` artifacts, not from `hypha:spec-citation`.
 
 ## Key conventions
 
