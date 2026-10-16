@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializerTestFixture.cs" company="Starion Group S.A.">
-// 
+//
 //   Copyright 2022-2025 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         {
             this.deSerializer = new DeSerializer();
         }
-        
+
         [Test]
         [TestCase(false)]
         [TestCase(true)]
@@ -158,7 +158,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(feature.DeclaredShortName, Is.Null);
                 Assert.That(feature.Direction, Is.EqualTo(FeatureDirectionKind.Out));
             }
-            
+
             cts.Dispose();
         }
 
@@ -265,7 +265,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(mergeCommit.PreviousCommits, Is.EqualTo(MergeCommitPredecessors));
+                Assert.That(mergeCommit.PreviousCommits, Is.EquivalentTo(MergeCommitPredecessors));
                 Assert.That(mergeCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
             }
         }
