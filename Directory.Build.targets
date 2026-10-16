@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+
+    <!-- NuGet ignores asset metadata on <PackageVersion>, so it is centralized here rather than in Directory.Packages.props. -->
+    <ItemGroup>
+        <PackageReference Update="Microsoft.Sbom.Targets" PrivateAssets="all" />
+        <PackageReference Update="coverlet.collector" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+        <PackageReference Update="coverlet.msbuild" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(IsPackable)' != 'false'">
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(IsPackable)' != 'false'">
+        <None Include="$(MSBuildThisFileDirectory)cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>
