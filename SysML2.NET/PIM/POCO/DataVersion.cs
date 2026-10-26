@@ -23,7 +23,8 @@ namespace SysML2.NET.PIM.POCO
     using System;
 
     using SysML2.NET.Common;
-    
+    using SysML2.NET.Decorators;
+
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents <see cref="IData"/> at a specific version in its lifecycle.
     /// A <see cref="DataVersion"/> record is associated with only one (1) <see cref="DataIdentity"/> record. <see cref="DataVersion"/>
@@ -34,26 +35,39 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the <see cref="Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
         /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469725_462619_66059", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Commit Commit { get; set; }
 
         /// <summary>
         /// Gets or sets a reference to corresponding the <see cref="DataIdentity"/>
         /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469729_652900_66067", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DataIdentity Identity { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IData"/> payload
         /// </summary>
+        /// <remarks>
+        /// <c>null</c> when no data with the given identity is present at the <see cref="Commit"/>.
+        /// </remarks>
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469731_381637_66070", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public IData Payload { get; set; }
 
         /// <summary>
-        /// Queries the derived property <see cref="Project"/>
+        /// Gets the <see cref="POCO.Project"/> that owns the <see cref="DataVersion"/>
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Project QueryProject()
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469730_358203_66069", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public Project project => this.ComputeProject();
+
+        /// <summary>
+        /// Computes the owning <see cref="POCO.Project"/> from the owning project of <see cref="Commit"/>
+        /// </summary>
+        /// <returns>The <see cref="POCO.Project"/> that owns the <see cref="DataVersion"/>.</returns>
+        /// <exception cref="NotSupportedException">Thrown until the derivation is supported.</exception>
+        [DerivedProperty(nameof(project))]
+        private Project ComputeProject()
         {
-            throw new NotImplementedException("Derived property Project not yet supported");
+            throw new NotSupportedException("Derived property project not yet supported");
         }
     }
 }

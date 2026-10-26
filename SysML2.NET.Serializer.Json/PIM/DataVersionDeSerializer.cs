@@ -143,7 +143,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the payload Json property was not found in the DataVersion: {dtoInstance.Id}");
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the payload Json property was not found in the DataVersion: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))

@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.POCO
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Decorators;
     using SysML2.NET.PIM;
 
     /// <summary>
@@ -44,30 +45,46 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Commit"/> was created
         /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469727_54677_66063", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Project"/> that owns the <see cref="Commit"/>.
         /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469728_610810_66065", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Project OwningProject { get; set; }
 
         /// <summary>
         /// Gets or sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public List<Commit> PreviousCommit { get; set; } = new List<Commit>();
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469727_74119_66064", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public List<Commit> PreviousCommits { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="Common.IData"/> that is
         /// created, updated, or deleted in the <see cref="Commit"/>
         /// </summary>
-        public List<DataVersion> Change { get; set; } = new List<DataVersion>();
+        [Property(xmiId: "_19_0_2_12e503d9_1577820469724_226337_66058", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public List<DataVersion> Change { get; set; } = [];
 
         /// <summary>
-        /// Queries the derived property VersionedData
+        /// Gets the set of cumulative <see cref="DataVersion"/> records in a <see cref="Project"/> at the <see cref="Commit"/>
         /// </summary>
-        public List<DataVersion> QueryVersionedData()
+        [Property(xmiId: "_19_0_4_58901f1_1629496059367_814933_41", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public List<DataVersion> versionedData => this.ComputeVersionedData();
+
+        /// <summary>
+        /// Computes the cumulative <see cref="DataVersion"/> records from <see cref="Change"/> and the versioned data of <see cref="PreviousCommits"/>
+        /// </summary>
+        /// <returns>The set of cumulative <see cref="DataVersion"/> records at the <see cref="Commit"/>.</returns>
+        /// <exception cref="NotSupportedException">Thrown until the derivation is supported.</exception>
+        /// <remarks>
+        /// Systems Modeling API and Services, Clause 7.1.2 formalizes the derivation in OCL.
+        /// </remarks>
+        [DerivedProperty(nameof(versionedData))]
+        private List<DataVersion> ComputeVersionedData()
         {
-            throw new NotImplementedException("Derived property VersionedData not yet supported");
+            throw new NotSupportedException("Derived property versionedData not yet supported");
         }
     }
 }

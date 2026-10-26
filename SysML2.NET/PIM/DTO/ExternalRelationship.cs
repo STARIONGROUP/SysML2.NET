@@ -23,6 +23,7 @@ namespace SysML2.NET.PIM.DTO
     using System;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// ExternalRelationship is a realization of Data, and represents the relationship between a
@@ -35,6 +36,7 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid Id { get; set; }
 
         /// <summary>
@@ -44,21 +46,25 @@ namespace SysML2.NET.PIM.DTO
         /// would contain mathematical expressions, such as equations, representing the mapping.This is an optional
         /// attribute.
         /// </summary>
+        [Property(xmiId: "_19_0_2_58901f1_1596708855858_697400_1579", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public string Specification { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the expression language used for the specification. This is an optional attribute.
         /// </summary>
+        [Property(xmiId: "_19_0_4_58901f1_1629815682552_46136_30600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Core.DTO.Root.Elements.IElement"/>
         /// </summary>
+        [Property(xmiId: "_19_0_4_58901f1_1629755852196_23786_29899", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid ElementEnd { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ExternalData"/>
         /// </summary>
+        [Property(xmiId: "_19_0_4_58901f1_1629755861218_259967_29912", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public Guid ExternalDataEnd { get; set; }
     }
 }
