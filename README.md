@@ -45,6 +45,20 @@ Branch | Build Status
 Master | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
 Development | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
+## Dependency management
+
+Every NuGet version is declared once, in [Directory.Packages.props](Directory.Packages.props), using [Central Package Management](https://learn.microsoft.com/nuget/consume-packages/central-package-management). A `<PackageReference>` in a project carries `Include` only — never `Version`.
+
+[Directory.Build.targets](Directory.Build.targets) holds what `Directory.Packages.props` cannot: NuGet ignores asset metadata on `<PackageVersion>`, so the `PrivateAssets` / `IncludeAssets` of `Microsoft.Sbom.Targets`, `coverlet.collector` and `coverlet.msbuild` are centralized there through `<PackageReference Update="…" />`. The same file gives every packable project its `PackageIcon` and `PackageReadmeFile`, and packs `cdp4-icon.png` and `README.md` into the `.nupkg`; a project opts out by setting `IsPackable` to `false`.
+
+The redistributable libraries multi-target `netstandard2.1;net10.0`, so a referenced version is a **minimum floor** for every downstream consumer. The version policy follows from that:
+
+- **Libraries** (`SysML2.NET`, `SysML2.NET.Serializer.*`, `SysML2.NET.Dal`, `SysML2.NET.REST`, `SysML2.NET.Kpar`, `SysML2.NET.Extensions`, `SysML2.NET.Semantics`) reference the lowest version that provides the APIs used. Stable framework abstractions stay at an LTS floor; serialization and cryptography packages track current.
+- **Applications and test projects** track current versions.
+- A library dependency is raised only when a required new API needs it, or when a CVE affects that package.
+
+The floored packages — `Microsoft.Extensions.DependencyInjection.Abstractions`, `Microsoft.Extensions.Logging.Abstractions`, `System.Collections.Immutable`, `System.IO.Pipelines`, plus the transitive `Microsoft.NETCore.Platforms` and `Microsoft.NETCore.Targets` — are by design permanently "outdated". They are listed in `Directory.Packages.props` and mirrored in `IGNORE_PACKAGES` in [.github/workflows/nuget-reference-check.yml](.github/workflows/nuget-reference-check.yml), which suppresses the *outdated* signal only: the deprecated and vulnerable checks still cover them.
+
 ## API conventions
 
 ### 1-based positional operations

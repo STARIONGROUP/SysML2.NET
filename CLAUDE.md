@@ -36,6 +36,20 @@ dotnet-coverage collect "dotnet test SysML2.NET.sln --no-build" -f xml -o covera
 
 Test framework: **NUnit** (`[TestFixture]`, `[Test]`).
 
+## Dependency management (Central Package Management)
+
+`Directory.Packages.props` at the repo root owns **every** NuGet version. A `<PackageReference>` carries `Include` only — **never `Version`**. Adding a package means adding a `<PackageVersion>` there as well.
+
+`Directory.Build.targets` at the repo root owns the rest: NuGet ignores asset metadata on `<PackageVersion>`, so `PrivateAssets` / `IncludeAssets` are centralized there via `<PackageReference Update="…" />`. It also sets `PackageIcon` / `PackageReadmeFile` and packs `cdp4-icon.png` and `README.md` for every project that does not set `IsPackable` to `false`. Neither belongs in a `.csproj`.
+
+Version policy, driven by the `netstandard2.1` target making any referenced version a floor for downstream consumers:
+
+- **Redistributable libraries** reference the lowest version providing the APIs used; stable framework abstractions stay at an **LTS floor**; serialization/crypto packages track current.
+- **Applications and `*.Tests`** track current.
+- Raise a library dependency only for (a) a required new API or (b) a CVE on that package.
+
+The floored packages are listed once in the comment block in `Directory.Packages.props` and mirrored in `IGNORE_PACKAGES` in `.github/workflows/nuget-reference-check.yml`. Change one, change the other. That filter suppresses the *outdated* signal only — `--deprecated` and `--vulnerable` stay strict on every package.
+
 ## Mandatory reading
 
 **`DEVELOPMENT_STANDARDS.md`** (repo root) governs how code is written across the whole solution — production, tests, generator, scripts. Read it before authoring code in a session where you have not already done so; do not code from memory of "typical C#" or by copying a neighbouring file, since parts of this repo predate it.
