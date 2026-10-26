@@ -117,7 +117,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the description Json property was not found in the Commit: {dtoInstance.Id}");
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the description Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("owningProject"u8, out JsonElement owningProjectProperty))
@@ -140,7 +143,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the owningProject Json property was not found in the Commit: {dtoInstance.Id}");
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the owningProject Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
             }
 
             if (jsonElement.TryGetProperty("previousCommit"u8, out JsonElement previousCommitProperty))
@@ -174,7 +180,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the resourceIdentifier Json property was not found in the Commit: {dtoInstance.Id}");
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the resourceIdentifier Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: Commit");
