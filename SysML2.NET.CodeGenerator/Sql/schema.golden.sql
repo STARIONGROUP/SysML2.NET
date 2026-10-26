@@ -2,7 +2,7 @@
 -- SysML2.NET — PostgreSQL persistence schema (golden reference)
 --
 -- This file is the HAND-WRITTEN GOLDEN for the schema that
--- SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema-2.hbs must emit.
+-- SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema.hbs must emit.
 -- The generator's output is diffed against this file. Where a section is marked
 -- [GENERATED], the template emits it from Resources/KerML_only_xmi.uml +
 -- Resources/SysML_only_xmi.uml; a representative excerpt is shown here.
@@ -491,7 +491,7 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 -- target_identity FKs to data_identity, NOT to element_version — a reference names an element,
 -- not a version of it.
 --
--- GENERATOR NOTE: core-sql-schema-2.hbs derives these mechanically. Every reference-valued link
+-- GENERATOR NOTE: core-sql-schema.hbs derives these mechanically. Every reference-valued link
 -- table gets an ix_{table}_target reverse-lookup index (this file shows the same rule).
 ------------------------------------------------------------------------------------------------
 
@@ -605,7 +605,7 @@ CREATE INDEX ix_dependency_supplier_target
 -- Dependency introduces no scalar properties (client/supplier are link tables), so it has no
 -- subtype table.
 --
--- GENERATOR NOTE: core-sql-schema-2.hbs derives these tables mechanically and emits two things
+-- GENERATOR NOTE: core-sql-schema.hbs derives these tables mechanically and emits two things
 -- this hand-curated file only shows selectively:
 --   * a DEFAULT clause for every column whose UML property declares a default value in the XMI
 --     (e.g. the Feature booleans DEFAULT false, Membership::visibility DEFAULT 'public',

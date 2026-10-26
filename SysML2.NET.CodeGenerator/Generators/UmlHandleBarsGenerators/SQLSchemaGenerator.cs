@@ -95,7 +95,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("core-sql-schema-2");
+            this.RegisterTemplate("core-sql-schema");
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// </returns>
         private async Task<string> GenerateSqlSchemaInternalAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["core-sql-schema-2"];
+            var template = this.Templates["core-sql-schema"];
 
             var payload = CreateHandlebarsPayload(xmiReaderResult);
 

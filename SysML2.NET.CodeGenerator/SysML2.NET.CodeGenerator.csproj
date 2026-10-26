@@ -257,7 +257,7 @@
     <None Update="Templates\Uml\core-model-level-evaluable-functions-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\Uml\core-sql-schema-2.hbs">
+    <None Update="Templates\Uml\core-sql-schema.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\OpenAPI\psm-dto-class-openapi-template.hbs">
