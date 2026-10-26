@@ -96,7 +96,7 @@ namespace SysML2.NET.Tests.PSM.DTO
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(conflicted.MergeCommit, Is.EqualTo(Guid.Empty));
+                Assert.That(conflicted.MergeCommit, Is.Null);
                 Assert.That(conflicted.Conflict, Is.EqualTo([identity]));
             }
         }
@@ -112,7 +112,7 @@ namespace SysML2.NET.Tests.PSM.DTO
                 Assert.That(MergeResultMapper.ToPim(MergeResultMapper.ToPsm(merged)).MergeCommit, Is.EqualTo(merged.MergeCommit));
                 Assert.That(MergeResultMapper.ToPim(MergeResultMapper.ToPsm(merged)).Conflict, Has.Count.EqualTo(0));
                 Assert.That(MergeResultMapper.ToPim(MergeResultMapper.ToPsm(conflicted)).Conflict, Is.EqualTo(conflicted.Conflict));
-                Assert.That(MergeResultMapper.ToPim(MergeResultMapper.ToPsm(conflicted)).MergeCommit, Is.EqualTo(Guid.Empty));
+                Assert.That(MergeResultMapper.ToPim(MergeResultMapper.ToPsm(conflicted)).MergeCommit, Is.Null);
             }
         }
     }

@@ -57,9 +57,9 @@ namespace SysML2.NET.PSM.DTO
                 return MergeOutcome.Conflicted(record.Conflict.Select(identity => new DataIdentity { Id = identity }));
             }
 
-            return record.MergeCommit == Guid.Empty
+            return record.MergeCommit == null
                 ? throw new IncompleteModelException("A MergeResult holds either the merge commit or the conflicting data identities.")
-                : MergeOutcome.Merged(new Commit { Id = record.MergeCommit });
+                : MergeOutcome.Merged(new Commit { Id = record.MergeCommit.Value });
         }
 
         /// <summary>
