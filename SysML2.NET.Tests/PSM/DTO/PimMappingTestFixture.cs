@@ -108,7 +108,7 @@ namespace SysML2.NET.Tests.PSM.DTO
                 Description = "the description",
                 Name = "the commit",
                 OwningProject = Guid.NewGuid(),
-                Change = [Guid.NewGuid()]
+                Change = []
             };
 
             Assert.That(RoundTrip<Commit, PIM.DTO.Commit>(record).PreviousCommits, Has.Count.EqualTo(0));
@@ -416,7 +416,7 @@ namespace SysML2.NET.Tests.PSM.DTO
             var record = new PIM.DTO.ProjectUsage
             {
                 Id = Guid.NewGuid(),
-                UsedCommit = Guid.NewGuid(),
+                UsedProjectCommit = Guid.NewGuid(),
                 UsedProject = Guid.NewGuid()
             };
 
@@ -425,7 +425,7 @@ namespace SysML2.NET.Tests.PSM.DTO
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(result.Id, Is.EqualTo(record.Id));
-                Assert.That(result.UsedCommit, Is.EqualTo(record.UsedCommit));
+                Assert.That(result.UsedProjectCommit, Is.EqualTo(record.UsedProjectCommit));
                 Assert.That(result.UsedProject, Is.EqualTo(record.UsedProject));
                 Assert.That(RoundTrip<ProjectUsageRequest, PIM.DTO.ProjectUsage>(record).UsedProject, Is.EqualTo(record.UsedProject));
             }

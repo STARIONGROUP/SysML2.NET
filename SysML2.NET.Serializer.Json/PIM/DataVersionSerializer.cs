@@ -70,14 +70,36 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                         }
                     }
                     writer.WriteEndArray();
+                    writer.WriteStartObject("commit"u8);
+                    writer.WriteString("@id"u8, dataVersion.Commit);
+                    writer.WriteEndObject();
                     writer.WriteString("description"u8, dataVersion.Description);
-                    writer.WriteStartObject("identity"u8);
-                    DataIdentitySerializer.Serialize(dataVersion.Identity, writer, serializationModeKind, includeDerivedProperties);
-                    writer.WriteEndObject();
-                    writer.WriteStartObject("payload"u8);
-                    var func = SerializationProvider.Provide(dataVersion.Payload.GetType());
-                    func(dataVersion.Payload, writer, serializationModeKind, includeDerivedProperties);
-                    writer.WriteEndObject();
+
+                    // the delegated serializers write their own enclosing object, so only the property
+                    // name may be written here — an extra WriteStartObject would produce invalid JSON
+                    if (dataVersion.Identity == null)
+                    {
+                        writer.WriteNull("identity"u8);
+                    }
+                    else
+                    {
+                        writer.WritePropertyName("identity"u8);
+                        DataIdentitySerializer.Serialize(dataVersion.Identity, writer, serializationModeKind, includeDerivedProperties);
+                    }
+
+                    // a null payload is meaningful: it represents a deletion (OMG Systems Modeling API
+                    // and Services v1.0, Clause 7.1.2)
+                    if (dataVersion.Payload == null)
+                    {
+                        writer.WriteNull("payload"u8);
+                    }
+                    else
+                    {
+                        writer.WritePropertyName("payload"u8);
+                        var func = SerializationProvider.Provide(dataVersion.Payload.GetType());
+                        func(dataVersion.Payload, writer, serializationModeKind, includeDerivedProperties);
+                    }
+
                     writer.WriteString("resourceIdentifier"u8, dataVersion.ResourceIdentifier);
                     writer.WriteEndObject();
 

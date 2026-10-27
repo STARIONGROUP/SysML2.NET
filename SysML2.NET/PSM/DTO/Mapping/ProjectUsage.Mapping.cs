@@ -36,7 +36,7 @@ namespace SysML2.NET.PSM.DTO
             return new PIM.DTO.ProjectUsage
             {
                 Id = this.Id,
-                UsedCommit = this.UsedCommit,
+                UsedProjectCommit = this.UsedCommit,
                 UsedProject = this.UsedProject
             };
         }
@@ -54,7 +54,7 @@ namespace SysML2.NET.PSM.DTO
             }
 
             this.Id = record.Id;
-            this.UsedCommit = record.UsedCommit;
+            this.UsedCommit = record.UsedProjectCommit;
             this.UsedProject = record.UsedProject;
         }
     }

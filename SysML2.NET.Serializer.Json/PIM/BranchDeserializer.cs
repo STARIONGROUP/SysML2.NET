@@ -123,7 +123,14 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 }
             }
 
-            if (jsonElement.TryGetProperty("head"u8, out JsonElement headProperty))
+            if (jsonElement.TryGetProperty("deleted"u8, out JsonElement deletedProperty) && deletedProperty.ValueKind != JsonValueKind.Null)
+            {
+                dtoInstance.Deleted = deletedProperty.GetDateTime();
+            }
+
+            // head redefines referencedCommit; accept either wire name, head taking precedence
+            if (jsonElement.TryGetProperty("head"u8, out JsonElement headProperty)
+                || jsonElement.TryGetProperty("referencedCommit"u8, out headProperty))
             {
                 if (headProperty.ValueKind == JsonValueKind.Null)
                 {
