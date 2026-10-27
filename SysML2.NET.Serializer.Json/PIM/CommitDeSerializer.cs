@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="CommitDeSerializer.cs" company="Starion Group S.A.">
-// 
+//
 //   Copyright 2022-2026 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 {
                     throw new JsonException("The @id property is not present, the Commit cannot be deserialized");
                 }
-                
+
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
 
@@ -151,16 +151,64 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             if (jsonElement.TryGetProperty("previousCommit"u8, out JsonElement previousCommitProperty))
             {
-                if (previousCommitProperty.ValueKind == JsonValueKind.Array)
+                switch (previousCommitProperty.ValueKind)
                 {
-                    foreach (var previousCommitItem in previousCommitProperty.EnumerateArray())
-                    {
-                        if (previousCommitItem.TryGetProperty("@id"u8, out JsonElement previousCommitItemIdProperty))
+                    case JsonValueKind.Null:
+                        break;
+                    case JsonValueKind.Array:
+
+                        foreach (var previousCommitItem in previousCommitProperty.EnumerateArray())
                         {
-                            var propertyValue = previousCommitItemIdProperty.GetString();
+                            if (previousCommitItem.TryGetProperty("@id"u8, out JsonElement previousCommitItemIdProperty))
+                            {
+                                var propertyValue = previousCommitItemIdProperty.GetString();
+
+                                if (propertyValue != null)
+                                {
+                                    dtoInstance.PreviousCommits.Add(Guid.Parse(propertyValue));
+                                }
+                            }
+                        }
+
+                        break;
+                    default:
+
+                        // the reference implementation emits a single { "@id": ... } object rather than an array
+                        if (previousCommitProperty.TryGetProperty("@id"u8, out JsonElement previousCommitPropertyIdProperty))
+                        {
+                            var propertyValue = previousCommitPropertyIdProperty.GetString();
+
                             if (propertyValue != null)
                             {
                                 dtoInstance.PreviousCommits.Add(Guid.Parse(propertyValue));
+                            }
+                        }
+
+                        break;
+                }
+            }
+            else
+            {
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("the previousCommit Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                }
+            }
+
+            if (jsonElement.TryGetProperty("change"u8, out JsonElement changeProperty))
+            {
+                if (changeProperty.ValueKind == JsonValueKind.Array)
+                {
+                    // each item is a reference to a DataVersion; an embedded DataVersion object is reduced to its identifier
+                    foreach (var changeItem in changeProperty.EnumerateArray())
+                    {
+                        if (changeItem.TryGetProperty("@id"u8, out JsonElement changeItemIdProperty))
+                        {
+                            var propertyValue = changeItemIdProperty.GetString();
+
+                            if (propertyValue != null)
+                            {
+                                dtoInstance.Change.Add(Guid.Parse(propertyValue));
                             }
                         }
                     }
@@ -170,7 +218,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.LogDebug("the previousCommit Json property was not found in the Commit: {Id}", dtoInstance.Id);
+                    logger.LogDebug("the change Json property was not found in the Commit: {Id}", dtoInstance.Id);
                 }
             }
 

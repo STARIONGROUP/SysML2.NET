@@ -45,6 +45,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     { "Branch", BranchDeserializer.DeSerialize },
                     { "Commit", CommitDeSerializer.DeSerialize },
                     { "DataIdentity", DataIdentityDeSerializer.DeSerialize },
+                    { "DataVersion", DataVersionDeSerializer.DeSerialize },
                     { "Project", ProjectDeSerializer.DeSerialize },
                     { "Tag", TagDeserializer.DeSerialize}
                 };

@@ -1,20 +1,20 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="Query.cs" company="Starion Group S.A.">
-// 
+//
 //   Copyright 2022-2025 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -67,11 +67,9 @@ namespace SysML2.NET.PIM.DTO
         public List<Guid> Scope { get; set; } = [];
 
         /// <summary>
-        /// Gets or sets the list of properties used for sorting the data objects in the query response
+        /// Gets or sets the list of properties of Data (or its realizations) used for sorting the query
+        /// response. The order of the properties in the list governs the sorting order.
         /// </summary>
-        /// <remarks>
-        /// The order of the properties in the list governs the sorting order.
-        /// </remarks>
         [Property(xmiId: "_19_0_4_58901f1_1597387733264_611302_866", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         public List<string> OrderBy { get; set; } = [];
     }
