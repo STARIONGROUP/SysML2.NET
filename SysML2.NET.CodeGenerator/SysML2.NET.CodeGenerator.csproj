@@ -293,15 +293,9 @@
     <None Update="Templates\OpenAPI\psm-messagepack-formatterhelper-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Remove="Sql\schema.concurrency.hot.sql" />
-    <None Remove="Sql\schema.concurrency.setup.sql" />
-    <None Remove="Sql\schema.concurrency.verify.sql" />
-    <None Remove="Templates\Uml\core-classkind-enum-template.hbs" />
-    <None Remove="Templates\Uml\core-sql-schema.hbs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />
-    <Folder Include="Sql\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\PrimitiveTypes.xmi" Link="datamodel\PrimitiveTypes.xmi">
@@ -336,12 +330,5 @@
     <Content Include="..\SysML2.NET.Serializer.Xmi.Tests\Resources\Kernel Libraries\Kernel Function Library\*.kermlx" Link="datamodel\Kernel Function Library\%(Filename)%(Extension)">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Extensions\SqlSchemaExtensions.cs" />
-    <Compile Remove="Generators\UmlHandleBarsGenerators\ClassKindEnumGenerator.cs" />
-    <Compile Remove="Generators\UmlHandleBarsGenerators\ClassKindEnumMember.cs" />
-    <Compile Remove="Generators\UmlHandleBarsGenerators\ClassKindRegistration.cs" />
-    <Compile Remove="Generators\UmlHandleBarsGenerators\ClassKindRegistry.cs" />
   </ItemGroup>
 </Project>
