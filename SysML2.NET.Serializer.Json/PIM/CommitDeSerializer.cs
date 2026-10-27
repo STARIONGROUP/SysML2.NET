@@ -199,9 +199,18 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             {
                 if (changeProperty.ValueKind == JsonValueKind.Array)
                 {
+                    // each item is a reference to a DataVersion; an embedded DataVersion object is reduced to its identifier
                     foreach (var changeItem in changeProperty.EnumerateArray())
                     {
-                        dtoInstance.Change.Add(DataVersionDeSerializer.DeSerialize(changeItem, serializationModeKind, deserializeDerivedProperties, loggerFactory));
+                        if (changeItem.TryGetProperty("@id"u8, out JsonElement changeItemIdProperty))
+                        {
+                            var propertyValue = changeItemIdProperty.GetString();
+
+                            if (propertyValue != null)
+                            {
+                                dtoInstance.Change.Add(Guid.Parse(propertyValue));
+                            }
+                        }
                     }
                 }
             }

@@ -61,23 +61,23 @@ namespace SysML2.NET.PIM.DTO
         public List<Guid> PreviousCommits { get; set; } = [];
 
         /// <summary>
-        /// Gets or sets the set of <see cref="DataVersion"/> records representing data that is created, updated,
+        /// Gets or sets the Guids of a set of <see cref="DataVersion"/> records representing data that is created, updated,
         /// or deleted in the <see cref="Commit"/>
         /// </summary>
         /// <remarks>
         /// A deletion is recorded by a <see cref="DataVersion"/> whose payload is <c>null</c>.
         /// </remarks>
         [Property(xmiId: "_19_0_2_12e503d9_1577820469724_226337_66058", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public List<DataVersion> Change { get; set; } = [];
+        public List<Guid> Change { get; set; } = [];
 
         /// <summary>
-        /// Gets or sets the set of cumulative <see cref="DataVersion"/> records in a <see cref="Project"/> at the <see cref="Commit"/>
+        /// Gets or sets the Guid's of a set of cumulative <see cref="DataVersion"/> records in a <see cref="Project"/> at the <see cref="Commit"/>
         /// </summary>
         /// <remarks>
         /// Derived by Systems Modeling API and Services, Clause 7.1.2 from <see cref="Change"/> and the
         /// versioned data of <see cref="PreviousCommits"/>.
         /// </remarks>
         [Property(xmiId: "_19_0_4_58901f1_1629496059367_814933_41", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public List<DataVersion> VersionedData { get; internal set; } = [];
+        public List<Guid> VersionedData { get; internal set; } = [];
     }
 }

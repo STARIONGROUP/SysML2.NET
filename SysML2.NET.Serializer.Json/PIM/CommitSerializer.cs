@@ -92,9 +92,14 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
                     writer.WriteStartArray("change"u8);
 
-                    foreach (var dataVersion in commit.Change)
+                    if (commit.Change != null)
                     {
-                        DataVersionSerializer.Serialize(dataVersion, writer, serializationModeKind, includeDerivedProperties);
+                        foreach (var change in commit.Change)
+                        {
+                            writer.WriteStartObject();
+                            writer.WriteString("@id"u8, change);
+                            writer.WriteEndObject();
+                        }
                     }
 
                     writer.WriteEndArray();
