@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.24.1</Version>
+        <Version>0.25.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -16,8 +16,11 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] PagedResult&lt;T&gt; and Page carry one page of records together with the cursors that address the pages either side of it
-            [Update] QueryParameters, ConstraintValue, ConstraintValueKind, IRequest and IResponse moved from the PIM namespace to PSM and PSM.DTO
+            [Add] PSM DTOs declare their PIM counterpart through IPimMappable&lt;TRecord&gt;, IRequest&lt;TRecord&gt; and IResponse&lt;TRecord&gt;; PimMapper, ConstraintMapper and MergeResultMapper translate between the two models (#389)
+            [Update] Metamodel, textual grammar and generated code aligned with the SysML v2 2026-08 release (#383)
+            [Update] PIM members carry a Property attribute holding the xmi:id and multiplicity from the normative API PIM model (ptc/25-02-29)
+            [Fix] PIM types aligned with the normative API PIM model: PrimitiveConstraint specializes Constraint, Commit.PreviousCommits replaces Commit.PreviousCommit, and Commit.Change, Commit.VersionedData, Project.Branches, Project.Tags, Project.CommitReferences, Query.Project, Query.OrderBy and DataVersion.project are added (#388)
+            [Fix] Derived-property and operation implementations corrected after a verification round against the specification (#385)
         </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
