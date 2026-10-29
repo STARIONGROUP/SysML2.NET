@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.25.1</Version>
+        <Version>0.25.2</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -16,8 +16,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Add] DataMapper translates data-version payloads between the PIM IData and the PSM IDataRequest alternatives
-            [Fix] CommitRequest and DataVersionRequest implement IRequest&lt;TRecord&gt;, so commits and their change map to and from the PIM Commit and DataVersion
+            [Update] Version aligned with the SysML2.NET 0.25.2 release; no functional changes
         </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
