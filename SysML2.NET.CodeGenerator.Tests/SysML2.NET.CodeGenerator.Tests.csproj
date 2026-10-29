@@ -28,6 +28,12 @@
     <None Include="Expected\UML\**\*.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Expected\UML\**\*.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sql\*.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
@@ -37,12 +43,16 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="coverlet.msbuild" />
+    <PackageReference Include="Npgsql" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="Serilog.Extensions.Logging" />
     <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Testcontainers.PostgreSql" />
     <PackageReference Include="uml4net.Reporting" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj" />
+    <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+    <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
   </ItemGroup>
 </Project>

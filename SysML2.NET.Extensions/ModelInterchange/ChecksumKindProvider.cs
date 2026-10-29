@@ -122,7 +122,7 @@ namespace SysML2.NET.ModelInterchange
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            
+
             switch (value.Length)
             {
                 case 3:

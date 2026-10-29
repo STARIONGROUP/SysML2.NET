@@ -221,7 +221,40 @@ This is the testing-side companion to the broader scope-discipline feedback: a t
 
 ---
 
-## 10. Anti-pattern checklist (what NOT to do)
+## 10. Integration fixtures (Docker-backed)
+
+Fixtures that need external infrastructure — currently the SQL-schema fixtures in
+`SysML2.NET.CodeGenerator.Tests/Generators/UmlHandleBarsGenerators/` (`SqlSchemaSmokeTestFixture`,
+`SqlSchemaConcurrencyTestFixture`), which run PostgreSQL 18 via `Testcontainers.PostgreSql` —
+follow these rules:
+
+- **Mark the fixture `[Category("Integration")]`.** CI's test invocation filters
+  `TestCategory!=Integration`, so these run locally only; run them explicitly with
+  `dotnet test … --filter TestCategory=Integration` or from the IDE.
+- **Docker unavailable must SKIP, not fail**: start the container in `[OneTimeSetUp]` and
+  translate a start failure into `Assert.Ignore(...)` (see `PostgreSqlSchemaTestHost`, which
+  also resolves Docker Desktop's modern `dockerDesktopLinuxEngine` named pipe on Windows).
+- **Test the live artifact, not a checked-in copy**: the SQL fixtures generate the schema
+  in-process (`SQLSchemaGenerator.GenerateSqlSchemaAsync` returns the DDL) so they also catch
+  generator/registry drift.
+- **Self-calibrating assertions over hardcoded counts**: the smoke fixture asserts the number
+  of `PASS` notices equals the number of `RAISE NOTICE 'PASS` occurrences in the script
+  itself — extending a SQL test never requires touching the fixture.
+- **No latency assertions** in concurrency tests — report timings via `TestContext.Out`,
+  assert only deterministic invariants (counts, win/loss tallies, verifier PASSes).
+- Expect the **first run to be slow** (docker image pull).
+
+The **benchmark harness** (`SqlSchemaBenchmarkTestFixture`) follows the same rules but is
+marked `[Category("Benchmark")]` — a separate opt-in from `Integration`, because a run loads
+hundreds of thousands of rows and takes minutes-to-hours depending on scale. Run it with
+`dotnet test … --filter TestCategory=Benchmark --logger "console;verbosity=detailed"`; scale
+is controlled by the `SYSML2_BENCH_ELEMENTS` / `SYSML2_BENCH_COMMITS` /
+`SYSML2_BENCH_BRANCHES` environment variables (defaults: 100000 / 2000 / 500; the full
+production gate is 1000000 / 20000 / 500). All throughput and latency numbers
+are reported, never asserted; its deterministic assertions are row counts, non-null reads,
+page sizes, and the plan-shape guard on SQL-function inlining.
+
+## 11. Anti-pattern checklist (what NOT to do)
 
 - ❌ Splitting one method-under-test into many `…_WhenX_DoesY` tests **when the scenarios share setup and could trivially combine** (combined-form is the default — see §2). Splitting is acceptable when each scenario has a genuinely distinct, complex setup.
 - ❌ `Assert.Throws<T>` / `Assert.IsTrue` / `Assert.AreEqual` / `Assert.IsNull` (any legacy NUnit API).
@@ -234,7 +267,7 @@ This is the testing-side companion to the broader scope-discipline feedback: a t
 
 ---
 
-## 11. Reference fixtures
+## 12. Reference fixtures
 
 When in doubt, model new fixtures on these (they reflect the current canonical styles):
 
