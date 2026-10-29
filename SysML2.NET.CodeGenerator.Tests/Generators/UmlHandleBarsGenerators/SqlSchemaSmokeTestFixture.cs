@@ -31,7 +31,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
 
     /// <summary>
-    /// Runs SysML2.NET.CodeGenerator/Sql/schema.smoke.sql against the LIVE generator output — the
+    /// Runs SysML2.NET.CodeGenerator.Tests/Sql/schema.smoke.sql against the LIVE generator output — the
     /// schema is generated from the UML model in-process and installed on a PostgreSQL 18
     /// Testcontainer, so this fixture also catches registry/template drift the string assertions
     /// of <see cref="SQLSchemaGeneratorTestFixture" /> cannot.

@@ -33,14 +33,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     /// A Handlebars based generator that produces the PostgreSQL persistence schema for SysML v2
     /// models from the UML metamodel. Only non-derived, non-redefining properties are stored;
     /// derived state is materialized separately at commit time. The reference design is
-    /// SysML2.NET.CodeGenerator/Sql/schema.golden.sql.
+    /// SysML2.NET.CodeGenerator.Tests/Sql/schema.golden.sql.
     /// </summary>
     public class SQLSchemaGenerator : UmlHandleBarsGenerator
     {
         /// <summary>
         /// The name of the generated schema file
         /// </summary>
-        public const string SchemaFileName = "schema2.sql";
+        public const string SchemaFileName = "schema.sql";
 
         /// <summary>
         /// Generates the PostgreSQL schema

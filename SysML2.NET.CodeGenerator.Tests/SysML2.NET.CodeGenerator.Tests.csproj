@@ -28,6 +28,12 @@
     <None Include="Expected\UML\**\*.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Expected\UML\**\*.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sql\*.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs">
@@ -70,16 +76,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Expected\UML\Core\AutoGenWriters\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\SysML2.NET.CodeGenerator\Sql\schema.smoke.sql" Link="Sql\schema.smoke.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\SysML2.NET.CodeGenerator\Sql\schema.concurrency.setup.sql" Link="Sql\schema.concurrency.setup.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\SysML2.NET.CodeGenerator\Sql\schema.concurrency.verify.sql" Link="Sql\schema.concurrency.verify.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

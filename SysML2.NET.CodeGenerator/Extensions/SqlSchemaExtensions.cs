@@ -33,7 +33,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
     /// Extension methods used by the SQL schema generator (SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema.hbs)
     /// to derive the PostgreSQL persistence schema from the UML metamodel. The schema stores only
     /// non-derived, non-redefining properties; everything derived is materialized separately at
-    /// commit time (see SysML2.NET.CodeGenerator/Sql/schema.golden.sql for the reference design).
+    /// commit time (see SysML2.NET.CodeGenerator.Tests/Sql/schema.golden.sql for the reference design).
     /// </summary>
     public static class SqlSchemaExtensions
     {

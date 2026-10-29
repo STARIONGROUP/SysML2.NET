@@ -34,7 +34,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
 
     /// <summary>
-    /// The .NET form of the multi-user suite (SysML2.NET.CodeGenerator/Sql/schema.concurrency.*):
+    /// The .NET form of the multi-user suite (SysML2.NET.CodeGenerator.Tests/Sql/schema.concurrency.*):
     /// parallel writers race the normative §18.2 compare-and-swap commit protocol through
     /// sysml2.bench_try_commit against the LIVE generated schema on a PostgreSQL 18 Testcontainer,
     /// and every scenario ends by running the C1–C5 invariant verifier. The pgbench scripts'

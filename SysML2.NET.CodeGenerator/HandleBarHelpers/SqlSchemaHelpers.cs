@@ -40,7 +40,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     /// [GENERATED] section of SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema.hbs;
     /// the hand-written sections (PIM, element_version, derived_version, snapshot resolution)
     /// live verbatim in the template. The reference design is
-    /// SysML2.NET.CodeGenerator/Sql/schema.golden.sql.
+    /// SysML2.NET.CodeGenerator.Tests/Sql/schema.golden.sql.
     /// </summary>
     public static class SqlSchemaHelpers
     {

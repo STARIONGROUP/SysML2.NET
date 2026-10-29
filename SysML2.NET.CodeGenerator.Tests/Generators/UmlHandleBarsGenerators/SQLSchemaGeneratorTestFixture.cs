@@ -76,5 +76,17 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(generatedSchema, Does.Not.Contain("CREATE TABLE sysml2.class_kind_table"), "subtype-table participation lives in generated C#, not in the database");
             Assert.That(generatedSchema, Does.Not.Contain("{{"), "no unresolved handlebars expressions may survive generation");
         }
+
+        [Test]
+        [Category("Expected")]
+        public async Task Verify_that_expected_sql_schema_is_generated()
+        {
+            var generatedSchema = await this.sqlSchemaGenerator.GenerateSqlSchemaAsync(GeneratorSetupFixture.XmiReaderResult, this.sqlSchemaDirectoryInfo);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
+                "Expected/UML/AutoGenSql/schema.generated.sql"));
+
+            Assert.That(generatedSchema, Is.EqualTo(expected));
+        }
     }
 }

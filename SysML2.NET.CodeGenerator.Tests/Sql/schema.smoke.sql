@@ -1,4 +1,4 @@
--- Smoke test for SysML2.NET.CodeGenerator/Sql/schema.golden.sql
+-- Smoke test for SysML2.NET.CodeGenerator.Tests/Sql/schema.golden.sql
 --
 -- Scenario, exercising the load-bearing claim of the design:
 --

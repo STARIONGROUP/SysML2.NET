@@ -1,5 +1,5 @@
 -- Concurrency-suite SETUP for the SysML2 PostgreSQL schema — run AFTER installing the
--- generated schema (SysML2.NET.CodeGenerator/Sql/schema2.generated.sql) on a scratch database.
+-- generated schema (SysML2.NET.CodeGenerator.Tests/Expected/UML/AutoGenSql/schema.generated.sql) on a scratch database.
 --
 -- Seeds one project with 1,000 elements, a checkpointed base commit and 16 branches, and
 -- installs two TEST-ONLY helper functions the pgbench scripts drive:
