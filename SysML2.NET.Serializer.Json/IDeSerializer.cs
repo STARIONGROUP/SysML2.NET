@@ -9,8 +9,11 @@
 
 namespace SysML2.NET.Serializer.Json
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Runtime.Serialization;
+    using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -71,6 +74,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         T DeSerializeRequest<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IRequest;
 
         /// <summary>
@@ -81,6 +88,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         IEnumerable<T> DeSerializeRequests<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IRequest;
 
         /// <summary>
@@ -91,6 +102,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         T DeSerializeResponse<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IResponse;
 
         /// <summary>
@@ -101,6 +116,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         IEnumerable<T> DeSerializeResponses<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IResponse;
 
         /// <summary>
@@ -112,6 +131,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         Task<T> DeSerializeRequestAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest;
 
         /// <summary>
@@ -123,6 +146,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         Task<IEnumerable<T>> DeSerializeRequestsAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest;
 
         /// <summary>
@@ -134,6 +161,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         Task<T> DeSerializeResponseAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse;
 
         /// <summary>
@@ -145,6 +176,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         Task<IEnumerable<T>> DeSerializeResponsesAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse;
     }
 }

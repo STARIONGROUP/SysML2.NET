@@ -163,6 +163,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public T DeSerializeRequest<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IRequest
         {
             return ReadPooled(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
@@ -176,6 +180,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public IEnumerable<T> DeSerializeRequests<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IRequest
         {
             return ReadPooled(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true));
@@ -189,6 +197,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public T DeSerializeResponse<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IResponse
         {
             return ReadPooled(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
@@ -202,6 +214,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public IEnumerable<T> DeSerializeResponses<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties) where T : IResponse
         {
             return ReadPooled(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false));
@@ -216,6 +232,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public Task<T> DeSerializeRequestAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest
         {
             return ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true), cancellationToken);
@@ -230,6 +250,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public async Task<IEnumerable<T>> DeSerializeRequestsAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IRequest
         {
             return await ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, true), cancellationToken);
@@ -244,6 +268,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an instance of <typeparamref name="T"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public Task<T> DeSerializeResponseAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse
         {
             return ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadSingle<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false), cancellationToken);
@@ -258,6 +286,10 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
         /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or is not a <typeparamref name="T"/></exception>
+        /// <exception cref="SerializationException">Thrown when an object carries no <c>@type</c> discriminator or the payload exceeds the maximum length</exception>
+        /// <exception cref="InvalidOperationException">Thrown when a property value has a JSON token type that the property does not accept</exception>
+        /// <exception cref="NotSupportedException">Thrown when the <paramref name="serializationModeKind"/> is not supported</exception>
         public async Task<IEnumerable<T>> DeSerializeResponsesAsync<T>(Stream stream, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IResponse
         {
             return await ReadPooledAsync(stream, (byte[] buffer, int length) => this.ReadMany<T>(buffer, length, serializationModeKind, deserializeDerivedProperties, false), cancellationToken);

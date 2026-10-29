@@ -122,9 +122,17 @@ namespace SysML2.NET.Serializer.Json.PSM
         /// <exception cref="SerializationException">
         /// Thrown when the object carries no <c>@type</c> discriminator
         /// </exception>
+        /// <exception cref="JsonException">
+        /// Thrown when the <c>@type</c> discriminator is not defined by the response family
+        /// </exception>
         internal static IResponse ReadResponse(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory)
         {
             var typeName = ReadTypeName(reader);
+
+            if (!ResponseDeSerializationProvider.IsTypeSupported(typeName))
+            {
+                throw new JsonException($"The @type {typeName} is not a known response type.");
+            }
 
             return ResponseDeSerializationProvider.Provide(typeName)(ref reader, serializationModeKind, deserializeDerivedProperties, loggerFactory);
         }
@@ -150,9 +158,17 @@ namespace SysML2.NET.Serializer.Json.PSM
         /// <exception cref="SerializationException">
         /// Thrown when the object carries no <c>@type</c> discriminator
         /// </exception>
+        /// <exception cref="JsonException">
+        /// Thrown when the <c>@type</c> discriminator is not defined by the request family
+        /// </exception>
         internal static IRequest ReadRequest(ref Utf8JsonReader reader, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory)
         {
             var typeName = ReadTypeName(reader);
+
+            if (!RequestDeSerializationProvider.IsTypeSupported(typeName))
+            {
+                throw new JsonException($"The @type {typeName} is not a known request type.");
+            }
 
             return RequestDeSerializationProvider.Provide(typeName)(ref reader, serializationModeKind, deserializeDerivedProperties, loggerFactory);
         }

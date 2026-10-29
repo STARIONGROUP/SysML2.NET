@@ -86,6 +86,11 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             Assert.That(() => this.deSerializer.DeSerializeResponse<Project>(notAnObject, SerializationModeKind.JSON, false),
                 Throws.TypeOf<JsonException>());
+
+            using var unknownType = ToStream("""{ "@type": "ProjectResponse", "name": "the name" }""");
+
+            Assert.That(() => this.deSerializer.DeSerializeResponse<Project>(unknownType, SerializationModeKind.JSON, false),
+                Throws.TypeOf<JsonException>().With.Message.Contains("ProjectResponse"));
         }
 
         [Test]
@@ -121,6 +126,11 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             Assert.That(() => this.deSerializer.DeSerializeRequest<BranchRequest>(mismatched, SerializationModeKind.JSON, false),
                 Throws.TypeOf<JsonException>());
+
+            using var unknownType = ToStream("""{ "@type": "BranchRequest", "name": "feature" }""");
+
+            Assert.That(() => this.deSerializer.DeSerializeRequest<BranchRequest>(unknownType, SerializationModeKind.JSON, false),
+                Throws.TypeOf<JsonException>().With.Message.Contains("BranchRequest"));
         }
 
         [Test]
