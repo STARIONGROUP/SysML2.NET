@@ -11,7 +11,6 @@ namespace SysML2.NET.ModelInterchange
 {
     using System;
     using System.Buffers;
-    using NET.ModelInterchange;
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>

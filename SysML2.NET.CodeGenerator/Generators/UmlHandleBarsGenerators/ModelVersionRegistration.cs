@@ -30,7 +30,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     /// The frozen ordinal of the release (sysml2.model_version.id)
     /// </param>
     /// <param name="Name">
-    /// The human-readable release label, e.g. "sysml-2.0-beta-4"
+    /// The human-readable release label, e.g. "sysml-2.0-2026-08"
     /// </param>
     /// <param name="SourceFingerprint">
     /// The root-package fingerprint ("Name:XmiId") of the UML model the release was generated

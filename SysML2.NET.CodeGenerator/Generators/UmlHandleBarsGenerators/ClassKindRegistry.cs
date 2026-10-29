@@ -47,8 +47,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// </summary>
         public static IReadOnlyList<ModelVersionRegistration> ModelVersions { get; } =
         [
-            new(1, "sysml-2.0-beta-4", "SysML:_mczcUFn3EfG_XZTXp4TXuA"),
-            new(2, "SysML", "SysML:_1BF3sI9WEfGTIPR1UWDcqw"),
+            new(1, "sysml-2.0-2026-08", "SysML:_1BF3sI9WEfGTIPR1UWDcqw"),
         ];
 
         /// <summary>

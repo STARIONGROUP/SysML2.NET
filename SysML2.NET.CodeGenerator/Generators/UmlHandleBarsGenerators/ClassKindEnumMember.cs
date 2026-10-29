@@ -35,7 +35,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     /// Whether the metaclass is abstract in the metamodel
     /// </param>
     /// <param name="IntroducedIn">
-    /// The name of the release that introduced the metaclass, e.g. "sysml-2.0-beta-4"
+    /// The name of the release that introduced the metaclass, e.g. "sysml-2.0-2026-08"
     /// </param>
     /// <param name="RemovedIn">
     /// The name of the first release WITHOUT the metaclass, or null while it is still part of the

@@ -84,8 +84,7 @@ CREATE TABLE sysml2.class_kind (
 -- the model only validates against the registry). Idempotent by construction.
 
 INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
-    (1, 'sysml-2.0-beta-4', 'SysML:_mczcUFn3EfG_XZTXp4TXuA'),
-    (2, 'SysML', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw')
+    (1, 'sysml-2.0-2026-08', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES
@@ -551,7 +550,7 @@ CREATE TABLE sysml2.data_identity (
     -- and therefore FK-able, unlike everything else about an element. Two consumers:
     --   * element_version's composite FK (identity_id, class_kind) makes a version that
     --     claims a different metaclass than its identity IMPOSSIBLE;
-    --   * validate_references_at_commit (§14) type-checks every stored reference against
+    --   * validate_references_at_commit (§13) type-checks every stored reference against
     --     this column — including cross-project targets, because identities are typed
     --     regardless of which project they live in.
     -- A release conversion that retypes an element (e.g. its metaclass was dropped) must
@@ -3892,19 +3891,7 @@ END;
 $$;
 
 ------------------------------------------------------------------------------------------------
--- 13. MODEL VERSION                                                                [GENERATED]
-------------------------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sysml2.query_model_version()
-RETURNS text
-LANGUAGE sql
-IMMUTABLE
-AS $$
-    SELECT 'SysML:_1BF3sI9WEfGTIPR1UWDcqw'::text;
-$$;
-
-------------------------------------------------------------------------------------------------
--- 14. REFERENCE VALIDATION — two tiers                                              [GENERATED]
+-- 13. REFERENCE VALIDATION — two tiers                                              [GENERATED]
 --
 -- The ON-DEMAND half of referential integrity (guide §7): the FKs prove that every stored
 -- reference targets an EXISTING identity; these functions check what FKs cannot —

@@ -36,20 +36,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Expected\UML\Core\AutoGenEnum\ClassKind.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
@@ -68,13 +54,5 @@
     <ProjectReference Include="..\SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj" />
     <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
     <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Expected\UML\Core\AutoGenWriters\" />
   </ItemGroup>
 </Project>

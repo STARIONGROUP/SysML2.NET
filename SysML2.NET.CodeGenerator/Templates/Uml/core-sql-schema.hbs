@@ -25,7 +25,7 @@ SET search_path = sysml2, public;
 -- `Direction.Value.ToString().ToLower()`. Deserialization is case-insensitive.
 ------------------------------------------------------------------------------------------------
 
-{{ #uml_template.SQL2.WriteEnumTypes this }}
+{{ #uml_template.SQL.WriteEnumTypes this }}
 ------------------------------------------------------------------------------------------------
 -- 2. METAMODEL CATALOGS                                                            [GENERATED]
 --
@@ -77,7 +77,7 @@ CREATE TABLE sysml2.class_kind (
 -- The append-only registry seeds, emitted from ClassKindRegistry (NOT from the UML model —
 -- the model only validates against the registry). Idempotent by construction.
 
-{{ #uml_template.SQL2.WriteMetamodelCatalogRows this }}
+{{ #uml_template.SQL.WriteMetamodelCatalogRows this }}
 ------------------------------------------------------------------------------------------------
 -- 3. PIM — PROJECTS, COMMITS, BRANCHES, TAGS                                      [HAND-WRITTEN]
 --
@@ -364,7 +364,7 @@ CREATE TABLE sysml2.data_identity (
     -- and therefore FK-able, unlike everything else about an element. Two consumers:
     --   * element_version's composite FK (identity_id, class_kind) makes a version that
     --     claims a different metaclass than its identity IMPOSSIBLE;
-    --   * validate_references_at_commit (§14) type-checks every stored reference against
+    --   * validate_references_at_commit (§13) type-checks every stored reference against
     --     this column — including cross-project targets, because identities are typed
     --     regardless of which project they live in.
     -- A release conversion that retypes an element (e.g. its metaclass was dropped) must
@@ -461,7 +461,7 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 -- table gets an ix_{table}_target reverse-lookup index (this file shows the same rule).
 ------------------------------------------------------------------------------------------------
 
-{{ #uml_template.SQL2.WriteLinkTables this }}
+{{ #uml_template.SQL.WriteLinkTables this }}
 ------------------------------------------------------------------------------------------------
 -- 7. SUBTYPE TABLES — one per storage-introducing metaclass                        [GENERATED]
 --
@@ -494,7 +494,7 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 --     load-bearing ones for derived-property impact analysis.
 ------------------------------------------------------------------------------------------------
 
-{{ #uml_template.SQL2.WriteSubtypeTables this }}
+{{ #uml_template.SQL.WriteSubtypeTables this }}
 ------------------------------------------------------------------------------------------------
 -- 8. DERIVED ELEMENT STATE — the second append-only stream                       [HAND-WRITTEN]
 --
@@ -932,7 +932,7 @@ $$;
 --                                          -- and a Relationship, so relationship_version joins too.
 
 
-{{ #uml_template.SQL2.WriteFlatteningViews this }}
+{{ #uml_template.SQL.WriteFlatteningViews this }}
 ------------------------------------------------------------------------------------------------
 -- 12. PARTITIONS
 --
@@ -972,7 +972,7 @@ DECLARE
     partition_count   constant int := 16;
 BEGIN
     FOREACH partitioned_table IN ARRAY ARRAY[
-        'element_version', 'derived_version', 'branch_head', 'commit_checkpoint'{{ #uml_template.SQL2.WritePartitionedTableArray this }}
+        'element_version', 'derived_version', 'branch_head', 'commit_checkpoint'{{ #uml_template.SQL.WritePartitionedTableArray this }}
     ]
     LOOP
         FOR partition_index IN 0 .. partition_count - 1 LOOP
@@ -1048,19 +1048,7 @@ END;
 $$;
 
 ------------------------------------------------------------------------------------------------
--- 13. MODEL VERSION                                                                [GENERATED]
-------------------------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sysml2.query_model_version()
-RETURNS text
-LANGUAGE sql
-IMMUTABLE
-AS $$
-    SELECT '{{ #uml_template.SQL2.WriteModelVersion this }}'::text;
-$$;
-
-------------------------------------------------------------------------------------------------
--- 14. REFERENCE VALIDATION — two tiers                                              [GENERATED]
+-- 13. REFERENCE VALIDATION — two tiers                                              [GENERATED]
 --
 -- The ON-DEMAND half of referential integrity (guide §7): the FKs prove that every stored
 -- reference targets an EXISTING identity; these functions check what FKs cannot —
@@ -1090,7 +1078,7 @@ $$;
 -- metaclasses resolved through ClassKindRegistry.
 ------------------------------------------------------------------------------------------------
 
-{{ #uml_template.SQL2.WriteReferenceValidation this }}
+{{ #uml_template.SQL.WriteReferenceValidation this }}
 ------------------------------------------------------------------------------------------------
 --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 ------------------------------------------------------------------------------------------------

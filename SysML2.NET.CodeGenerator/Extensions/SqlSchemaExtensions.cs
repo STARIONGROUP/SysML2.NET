@@ -38,21 +38,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
     public static class SqlSchemaExtensions
     {
         /// <summary>
-        /// The derived properties that are promoted to real columns on the derived_version table
-        /// (key: UML property name, value: SQL column name). All other derived properties live in
-        /// the derived_json document.
-        /// </summary>
-        private static readonly Dictionary<string, string> PromotedDerivedColumns = new()
-        {
-            ["owner"] = "owner",
-            ["owningNamespace"] = "owning_namespace",
-            ["qualifiedName"] = "qualified_name",
-            ["name"] = "name",
-            ["shortName"] = "short_name",
-            ["isLibraryElement"] = "is_library_element"
-        };
-
-        /// <summary>
         /// Converts a camelCase or PascalCase UML name to the snake_case form used for SQL identifiers
         /// </summary>
         /// <param name="name">
@@ -297,52 +282,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 "String" => "text",
                 _ => throw new NotSupportedException($"No SQL type mapping for UML type {property.QueryTypeName()} of property {property.Name}")
             };
-        }
-
-        /// <summary>
-        /// Resolves a property to the property whose storage it occupies: a same-name redefinition (e.g.
-        /// CollectExpression::operator) resolves transitively to the root property it redefines
-        /// (OperatorExpression::operator); any other property — including redefinitions under a new name —
-        /// resolves to itself.
-        /// </summary>
-        /// <param name="property">
-        /// The subject <see cref="IProperty" />
-        /// </param>
-        /// <returns>
-        /// The property that owns the storage
-        /// </returns>
-        public static IProperty QueryStorageRootProperty(this IProperty property)
-        {
-            ArgumentNullException.ThrowIfNull(property);
-
-            var current = property;
-
-            while (current.QueryIsSameNameRedefinition())
-            {
-                current = current.RedefinedProperty.First(redefined => redefined.Name == current.Name);
-            }
-
-            return current;
-        }
-
-        /// <summary>
-        /// Tries to query the derived_version column that a derived property is promoted to. Only the
-        /// six hot Element-level derived properties are promoted; the rest live in derived_json.
-        /// </summary>
-        /// <param name="property">
-        /// The subject derived <see cref="IProperty" />
-        /// </param>
-        /// <param name="columnName">
-        /// The derived_version column name when promoted
-        /// </param>
-        /// <returns>
-        /// True when the property is promoted to a real column
-        /// </returns>
-        public static bool TryQueryPromotedDerivedColumn(this IProperty property, out string columnName)
-        {
-            ArgumentNullException.ThrowIfNull(property);
-
-            return PromotedDerivedColumns.TryGetValue(property.Name, out columnName);
         }
     }
 }

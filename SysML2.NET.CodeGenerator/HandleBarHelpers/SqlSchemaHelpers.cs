@@ -52,7 +52,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </param>
         public static void RegisterUmlTemplateSqlSchemaHelpers(this IHandlebars handlebars)
         {
-            handlebars.RegisterHelper("uml_template.SQL2.WriteEnumTypes", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WriteEnumTypes", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
 
@@ -68,7 +68,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteMetamodelCatalogRows", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WriteMetamodelCatalogRows", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
 
@@ -95,7 +95,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteLinkTables", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WriteLinkTables", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
 
@@ -138,7 +138,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteSubtypeTables", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WriteSubtypeTables", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
 
@@ -174,7 +174,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteFlatteningViews", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WriteFlatteningViews", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
                 var classKinds = QueryClassKinds(payload);
@@ -213,7 +213,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WriteReferenceValidation", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WriteReferenceValidation", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
                 var registrationsByName = ClassKindRegistry.ClassKinds.ToDictionary(registration => registration.Name);
@@ -323,7 +323,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(stringBuilder.ToString());
             });
 
-            handlebars.RegisterHelper("uml_template.SQL2.WritePartitionedTableArray", (writer, _, parameters) =>
+            handlebars.RegisterHelper("uml_template.SQL.WritePartitionedTableArray", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
 
@@ -338,13 +338,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     .Select(tableName => $"        '{tableName}'");
 
                 writer.WriteSafeString(",\n" + string.Join(",\n", tableNames));
-            });
-
-            handlebars.RegisterHelper("uml_template.SQL2.WriteModelVersion", (writer, _, parameters) =>
-            {
-                var payload = ResolvePayload(parameters[0]);
-
-                writer.WriteSafeString($"{payload.RootPackage.Name}:{payload.RootPackage.XmiId}");
             });
         }
 
