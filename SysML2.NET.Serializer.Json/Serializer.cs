@@ -48,7 +48,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IEnumerable<IIdentified> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IEnumerable<IIdentified> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions)
         {
             using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -132,7 +133,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IEnumerable<IIdentified> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IEnumerable<IIdentified> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -180,7 +182,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IIdentified dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IIdentified dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -206,11 +209,14 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="includeDerivedProperties">Asserts that derived properties should also be part of the serialization.</param>
         /// <param name="stream">The target <see cref="Stream"/>.</param>
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
-        public void SerializeRequest(IRequest dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void SerializeRequest(IRequest dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions)
         {
             using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
             WriteSingle(dataItem, writer, serializationModeKind, includeDerivedProperties);
+
+            writer.Flush();
         }
 
         /// <summary>
@@ -221,11 +227,14 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="includeDerivedProperties">Asserts that derived properties should also be part of the serialization.</param>
         /// <param name="stream">The target <see cref="Stream"/>.</param>
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
-        public void SerializeRequest(IEnumerable<IRequest> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void SerializeRequest(IEnumerable<IRequest> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions)
         {
             using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
             WriteMany(dataItems, writer, serializationModeKind, includeDerivedProperties);
+
+            writer.Flush();
         }
 
         /// <summary>
@@ -236,11 +245,14 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="includeDerivedProperties">Asserts that derived properties should also be part of the serialization.</param>
         /// <param name="stream">The target <see cref="Stream"/>.</param>
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
-        public void SerializeResponse(IResponse dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void SerializeResponse(IResponse dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions)
         {
             using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
             WriteSingle(dataItem, writer, serializationModeKind, includeDerivedProperties);
+
+            writer.Flush();
         }
 
         /// <summary>
@@ -251,11 +263,14 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="includeDerivedProperties">Asserts that derived properties should also be part of the serialization.</param>
         /// <param name="stream">The target <see cref="Stream"/>.</param>
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
-        public void SerializeResponse(IEnumerable<IResponse> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void SerializeResponse(IEnumerable<IResponse> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions)
         {
             using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
             WriteMany(dataItems, writer, serializationModeKind, includeDerivedProperties);
+
+            writer.Flush();
         }
 
         /// <summary>
@@ -268,7 +283,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation.</param>
         /// <returns>an awaitable <see cref="Task"/>.</returns>
-        public async Task SerializeRequestAsync(IRequest dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeRequestAsync(IRequest dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -287,7 +303,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation.</param>
         /// <returns>an awaitable <see cref="Task"/>.</returns>
-        public async Task SerializeRequestAsync(IEnumerable<IRequest> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeRequestAsync(IEnumerable<IRequest> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -306,7 +323,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation.</param>
         /// <returns>an awaitable <see cref="Task"/>.</returns>
-        public async Task SerializeResponseAsync(IResponse dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeResponseAsync(IResponse dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -325,7 +343,8 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">The <see cref="JsonWriterOptions"/> to use.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation.</param>
         /// <returns>an awaitable <see cref="Task"/>.</returns>
-        public async Task SerializeResponseAsync(IEnumerable<IResponse> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeResponseAsync(IEnumerable<IResponse> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream,
+            JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
 
@@ -346,8 +365,6 @@ namespace SysML2.NET.Serializer.Json
             var serializationAction = PsmSerializationProvider.Provide(dataItem.GetType());
 
             serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
-
-            writer.Flush();
         }
 
         /// <summary>
@@ -369,8 +386,6 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WriteEndArray();
-
-            writer.Flush();
         }
     }
 }
