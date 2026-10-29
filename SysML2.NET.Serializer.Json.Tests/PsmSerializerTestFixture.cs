@@ -12,8 +12,17 @@ namespace SysML2.NET.Serializer.Json.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Text.Json;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.Hosting;
 
     using NUnit.Framework;
 
@@ -86,6 +95,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 Assert.That(json, Does.Contain("\"created\":\"1976-08-20T00:00:00Z\""));
                 Assert.That(localJson, Does.Match("\"created\":\"[^\"]+[+-][0-9]{2}:[0-9]{2}\""));
+
                 Assert.That(JsonDocument.Parse(localJson).RootElement.GetProperty("created").GetDateTime().Kind,
                     Is.EqualTo(DateTimeKind.Local));
             }
@@ -288,6 +298,73 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Throws.TypeOf<NotSupportedException>());
         }
 
+        [Test]
+        public async Task VerifySerializeResponseAsync()
+        {
+            var project = new Project { Id = ProjectIdentifier, Name = "the name" };
+
+            await using var stream = new AsyncOnlyStream();
+
+            Assert.That(() => this.serializer.SerializeResponse(project, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions),
+                Throws.TypeOf<InvalidOperationException>());
+
+            await this.serializer.SerializeResponseAsync(project, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions, CancellationToken.None);
+            await this.serializer.SerializeResponseAsync([project], SerializationModeKind.JSON, false, stream, this.jsonWriterOptions, CancellationToken.None);
+
+            Assert.That(stream.Length, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public async Task SerializeResponseAsync_ToTestServerResponseBody_RoundTripsWithoutDataLoss()
+        {
+            IResponse[] responses =
+            [
+                new Project
+                {
+                    Id = ProjectIdentifier,
+                    Alias = ["first", "second"],
+                    Created = new DateTime(1976, 8, 20, 0, 0, 0, DateTimeKind.Utc),
+                    DefaultBranch = BranchIdentifier,
+                    Description = "the description",
+                    Name = "the name"
+                },
+                new Branch
+                {
+                    Id = BranchIdentifier,
+                    Created = new DateTime(1976, 8, 21, 0, 0, 0, DateTimeKind.Utc),
+                    Head = DataVersionIdentifier,
+                    Name = "the branch",
+                    OwningProject = ProjectIdentifier,
+                    ReferencedCommit = DataVersionIdentifier
+                }
+            ];
+
+            using var host = await new HostBuilder()
+                .ConfigureWebHost(webHost => webHost.UseTestServer().Configure(app => app.Run(context => context.Request.Path == "/sync"
+                    ? Task.Run(() => this.serializer.SerializeResponse(responses, SerializationModeKind.JSON, false, context.Response.Body, this.jsonWriterOptions))
+                    : this.serializer.SerializeResponseAsync(responses, SerializationModeKind.JSON, false, context.Response.Body, this.jsonWriterOptions, context.RequestAborted))))
+                .StartAsync();
+
+            using var client = host.GetTestClient();
+
+            await Assert.ThatAsync(() => client.GetAsync("/sync"), Throws.TypeOf<InvalidOperationException>());
+
+            using var response = await client.GetAsync("/");
+            await using var body = await response.Content.ReadAsStreamAsync();
+
+            var roundTripped = (await new DeSerializer().DeSerializeResponsesAsync<IResponse>(body, SerializationModeKind.JSON, false, CancellationToken.None)).ToList();
+
+            var expected = Serialize(stream => this.serializer.SerializeResponse(responses, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
+            var actual = Serialize(stream => this.serializer.SerializeResponse(roundTripped, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(response.IsSuccessStatusCode, Is.True);
+                Assert.That(roundTripped, Has.Count.EqualTo(2));
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+        }
+
         private static string Serialize(Action<Stream> serialize)
         {
             using var stream = new MemoryStream();
@@ -295,6 +372,22 @@ namespace SysML2.NET.Serializer.Json.Tests
             serialize(stream);
 
             return Encoding.UTF8.GetString(stream.ToArray());
+        }
+
+        /// <summary>
+        /// A <see cref="MemoryStream"/> that rejects synchronous writes, as an ASP.NET Core response body does.
+        /// </summary>
+        private sealed class AsyncOnlyStream : MemoryStream
+        {
+            public override void Write(byte[] buffer, int offset, int count) => throw new InvalidOperationException();
+
+            public override void Write(ReadOnlySpan<byte> buffer) => throw new InvalidOperationException();
+
+            public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+            {
+                base.Write(buffer.ToArray(), 0, buffer.Length);
+                return ValueTask.CompletedTask;
+            }
         }
     }
 }
