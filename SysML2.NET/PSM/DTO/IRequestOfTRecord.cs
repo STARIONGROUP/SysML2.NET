@@ -15,9 +15,6 @@ namespace SysML2.NET.PSM.DTO
     /// <typeparam name="TRecord">
     /// The Platform Independent Model type that this request model corresponds to.
     /// </typeparam>
-    /// <remarks>
-    /// Requests whose payload the Platform Independent Model cannot carry implement the non generic <see cref="IRequest"/> only.
-    /// </remarks>
     public interface IRequest<TRecord> : IRequest, IPimMappable<TRecord>
     {
     }

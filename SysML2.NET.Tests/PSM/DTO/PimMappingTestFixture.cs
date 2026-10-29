@@ -446,6 +446,130 @@ namespace SysML2.NET.Tests.PSM.DTO
         }
 
         [Test]
+        public void VerifyDataVersionRequestRoundTrip()
+        {
+            Assert.That(() => new DataVersionRequest().FromPim(null), Throws.TypeOf<ArgumentNullException>());
+
+            var record = new PIM.DTO.DataVersion
+            {
+                Id = Guid.NewGuid(),
+                Alias = [.. TwoAliases],
+                Description = "the description",
+                Name = "the version",
+                Commit = Guid.NewGuid()
+            };
+
+            var empty = RoundTrip<DataVersionRequest, PIM.DTO.DataVersion>(record);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(empty.Identity, Is.Null);
+                Assert.That(empty.Payload, Is.Null);
+                Assert.That(empty.Id, Is.EqualTo(Guid.Empty));
+                Assert.That(empty.Commit, Is.EqualTo(Guid.Empty));
+            }
+
+            var identity = new PIM.DTO.DataIdentity { Id = Guid.NewGuid(), Name = "the identity" };
+            var payload = new PIM.DTO.ExternalData { Id = Guid.NewGuid(), ResourceIdentifier = "https://example.org/the-resource" };
+            record.Identity = identity;
+            record.Payload = payload;
+
+            var result = RoundTrip<DataVersionRequest, PIM.DTO.DataVersion>(record);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(result.Alias, Is.EqualTo(TwoAliases));
+                Assert.That(result.Description, Is.EqualTo(record.Description));
+                Assert.That(result.Name, Is.EqualTo(record.Name));
+                Assert.That(result.Identity.Id, Is.EqualTo(identity.Id));
+                Assert.That(result.Payload, Is.TypeOf<PIM.DTO.ExternalData>());
+                Assert.That(result.Payload.Id, Is.EqualTo(payload.Id));
+                Assert.That(((PIM.DTO.ExternalData)result.Payload).ResourceIdentifier, Is.EqualTo(payload.ResourceIdentifier));
+            }
+        }
+
+        [Test]
+        public void VerifyCommitRequestRoundTrip()
+        {
+            var commitRequest = new CommitRequest();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(() => commitRequest.FromPim(null), Throws.TypeOf<ArgumentNullException>());
+                Assert.That(() => commitRequest.FromPim(new PIM.DTO.Commit(), null), Throws.TypeOf<ArgumentNullException>());
+                Assert.That(() => commitRequest.FromPim(null, []), Throws.TypeOf<ArgumentNullException>());
+            }
+
+            var record = new PIM.DTO.Commit
+            {
+                Id = Guid.NewGuid(),
+                Alias = [.. TwoAliases],
+                Description = "the description",
+                Name = "the commit",
+                Change = [Guid.NewGuid()]
+            };
+
+            commitRequest.FromPim(record);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(commitRequest.Name, Is.EqualTo(record.Name));
+                Assert.That(commitRequest.Change, Has.Count.EqualTo(0));
+                Assert.That(() => commitRequest.FromPim(record, []), Throws.TypeOf<ArgumentException>());
+            }
+
+            var (emptyCommit, emptyChange) = new CommitRequest().ToPimWithChange();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(emptyCommit.Change, Has.Count.EqualTo(0));
+                Assert.That(emptyChange, Has.Count.EqualTo(0));
+            }
+
+            var request = new CommitRequest
+            {
+                Alias = [.. TwoAliases],
+                Description = "the description",
+                Name = "the commit",
+                Change =
+                [
+                    new DataVersionRequest { Name = "the first version", Identity = new DataIdentityRequest { Id = Guid.NewGuid() } },
+                    new DataVersionRequest { Name = "the second version", Payload = new ExternalDataRequest { Id = Guid.NewGuid() } }
+                ]
+            };
+
+            var (commit, change) = request.ToPimWithChange();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(commit.Id, Is.Not.EqualTo(Guid.Empty));
+                Assert.That(commit.Alias, Is.EqualTo(TwoAliases));
+                Assert.That(commit.Name, Is.EqualTo(request.Name));
+                Assert.That(change, Has.Count.EqualTo(2));
+                Assert.That(commit.Change, Is.EqualTo(change.Select(version => version.Id)));
+                Assert.That(change.Select(version => version.Commit), Is.All.EqualTo(commit.Id));
+                Assert.That(change[0].Name, Is.EqualTo("the first version"));
+                Assert.That(change[0].Identity.Id, Is.EqualTo(request.Change[0].Identity.Id));
+                Assert.That(change[1].Payload, Is.TypeOf<PIM.DTO.ExternalData>());
+                Assert.That(request.ToPim().Change, Has.Count.EqualTo(2));
+            }
+
+            var restored = new CommitRequest();
+            restored.FromPim(commit, [.. change.Reverse()]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(restored.Alias, Is.EqualTo(TwoAliases));
+                Assert.That(restored.Description, Is.EqualTo(request.Description));
+                Assert.That(restored.Name, Is.EqualTo(request.Name));
+                Assert.That(restored.Change, Has.Count.EqualTo(2));
+                Assert.That(restored.Change[0].Name, Is.EqualTo("the first version"));
+                Assert.That(restored.Change[0].Identity.Id, Is.EqualTo(request.Change[0].Identity.Id));
+                Assert.That(restored.Change[1].Payload, Is.TypeOf<ExternalDataRequest>());
+            }
+        }
+
+        [Test]
         public void VerifyContractCoverage()
         {
             var models = typeof(IResponse).Assembly.GetTypes()
@@ -463,8 +587,8 @@ namespace SysML2.NET.Tests.PSM.DTO
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(mappable, Has.Count.EqualTo(23));
-                Assert.That(unmapped, Is.EquivalentTo(["Error", "CommitRequest", "DataVersionRequest", "MergeOutcome"]));
+                Assert.That(mappable, Has.Count.EqualTo(25));
+                Assert.That(unmapped, Is.EquivalentTo(["Error", "MergeOutcome"]));
                 Assert.That(mappable, Does.Contain("PrimitiveConstraint"));
             }
         }
