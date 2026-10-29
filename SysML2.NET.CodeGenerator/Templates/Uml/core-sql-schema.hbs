@@ -58,7 +58,7 @@ SET search_path = sysml2, public;
 
 CREATE TABLE sysml2.model_version (
     id                  smallint  NOT NULL,   -- ordinal: higher id == later release
-    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.0-beta-4'
+    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.0-2026-08'
     source_fingerprint  text      NOT NULL,   -- root-package fingerprint of the generator input
     PRIMARY KEY (id),
     UNIQUE (name)
