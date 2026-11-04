@@ -41,6 +41,33 @@ namespace SySML2.NET.REST.Tests
                 Assert.That(exception.Conflicts[0], Is.SameAs(conflict));
                 Assert.That(exception, Is.InstanceOf<PsmApiException>());
             }
+
+            exception = new MergeConflictException();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exception.Conflicts, Has.Count.EqualTo(0));
+                Assert.That(exception.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
+            }
+
+            exception = new MergeConflictException("the message");
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exception.Message, Is.EqualTo("the message"));
+                Assert.That(exception.Conflicts, Has.Count.EqualTo(0));
+            }
+
+            var innerException = new InvalidOperationException();
+
+            exception = new MergeConflictException("the message", innerException);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exception.InnerException, Is.SameAs(innerException));
+                Assert.That(exception.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
+                Assert.That(exception.Error, Is.Null);
+            }
         }
     }
 }

@@ -15,7 +15,6 @@
 namespace SySML2.NET.REST
 {
     using System;
-    using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Text.Json;
@@ -56,13 +55,12 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<PagedResult<IElement>> GetElementsByProjectCommitAsync(Guid projectId, Guid commitId, bool? excludeUsed = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder(queryParameters);
             query.Add("excludeUsed", excludeUsed);
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -93,13 +91,12 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<IElement> GetElementByProjectCommitIdAsync(Guid projectId, Guid commitId, Guid elementId, bool? excludeUsed = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder();
             query.Add("excludeUsed", excludeUsed);
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements/{Escape(elementId)}{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements/{Escape(elementId)}{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -127,12 +124,11 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<ProjectUsage> GetProjectUsageByProjectCommitElementAsync(Guid projectId, Guid commitId, Guid elementId, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder();
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements/{Escape(elementId)}/projectUsage{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements/{Escape(elementId)}/projectUsage{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -163,13 +159,12 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<PagedResult<IElement>> GetRootsByProjectCommitAsync(Guid projectId, Guid commitId, bool? excludeUsed = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder(queryParameters);
             query.Add("excludeUsed", excludeUsed);
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/roots{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/roots{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 

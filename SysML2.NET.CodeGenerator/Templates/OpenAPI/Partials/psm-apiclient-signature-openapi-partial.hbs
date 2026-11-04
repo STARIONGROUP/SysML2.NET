@@ -5,30 +5,30 @@
 {{~#if (String.Equal Format 'uuid')}}?{{else if (String.Equal (OpenApi.Text Type) 'Integer')}}?{{else if (String.Equal (OpenApi.Text Type) 'Boolean')}}?{{/if~}}
 {{~/inline~}}
 {{~#*inline "parametertype"~}}
-{{~#if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}IEnumerable<{{> scalar Schema.Items}}>{{else}}{{> scalar Schema}}{{#unless Required}}{{> nullable Schema}}{{/unless}}{{/if~}}
+{{~#if Schema.Enum}}{{String.Pascalcase Name}}{{#unless Required}}?{{/unless}}{{else if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}IEnumerable<{{> scalar Schema.Items}}>{{else}}{{> scalar Schema}}{{#unless Required}}{{> nullable Schema}}{{/unless}}{{/if~}}
 {{~/inline~}}
 Task<
 {{~#each Operation.Responses~}}
 {{~#if (String.StartsWith @key '2')~}}
 {{~#each Content~}}
 {{~#if (String.Equal @key 'application/json')~}}
-{{~#if Schema.Items}}PagedResult<{{> psm-apiclient-typename-openapi-partial Schema.Items}}>{{else if Schema.Reference}}{{> psm-apiclient-typename-openapi-partial Schema}}{{else}}JsonDocument{{/if~}}
+{{~#if Schema.Items}}PagedResult<{{> psm-apiclient-typename-openapi-partial Schema.Items}}>{{else if Schema.Reference}}{{> psm-apiclient-typename-openapi-partial Schema}}{{else if ../../IsPaged}}PagedResult<JsonDocument>{{else}}JsonDocument{{/if~}}
 {{~/if~}}
 {{~/each~}}
 {{~/if~}}
 {{~/each~}}
 > {{String.Pascalcase Operation.OperationId}}Async(
-{{~#each Operation.Parameters~}}
+{{~#each Parameters~}}
 {{~#if Required}}{{> parametertype}} {{Name}}, {{/if~}}
 {{~/each~}}
-{{~#each Operation.RequestBody.Content~}}
-{{~#if Schema.Reference}}{{Schema.Reference.Id}} requestBody, {{/if~}}
-{{~#each Schema.OneOf~}}{{~#if Items}}IEnumerable<{{> psm-apiclient-typename-openapi-partial Items}}> requestBody, {{/if~}}{{~/each~}}
+{{~#with Operation.RequestBody~}}
+{{~#each Content~}}
+{{~#if Schema.Reference}}{{Schema.Reference.Id}} requestBody{{#unless ../Required}} = null{{/unless}}, {{/if~}}
+{{~#each Schema.OneOf~}}{{~#if Items}}IEnumerable<{{> psm-apiclient-typename-openapi-partial Items}}> requestBody{{#unless ../../Required}} = null{{/unless}}, {{/if~}}{{~/each~}}
 {{~/each~}}
-{{~#each Operation.Parameters~}}
-{{~#unless Required}}{{#unless (String.StartsWith Name 'page')}}{{> parametertype}} {{Name}} = null, {{/unless}}{{/unless~}}
+{{~/with~}}
+{{~#each Parameters~}}
+{{~#unless Required}}{{> parametertype}} {{Name}} = null, {{/unless~}}
 {{~/each~}}
-{{~#each Operation.Parameters~}}
-{{~#if (String.Equal Name 'page[size]')}}QueryParameters queryParameters = null, {{/if~}}
-{{~/each~}}
+{{~#if IsPaged}}QueryParameters queryParameters = null, {{/if~}}
 CancellationToken cancellationToken = default)

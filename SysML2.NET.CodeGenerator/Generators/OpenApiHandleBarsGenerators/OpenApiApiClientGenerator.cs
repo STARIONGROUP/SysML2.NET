@@ -122,6 +122,9 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         /// <returns>
         /// One <see cref="ApiClientTagModel"/> per tag that has at least one operation
         /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when an operation declares a shape that the generated client cannot express
+        /// </exception>
         public static IReadOnlyList<ApiClientTagModel> QueryTagModels(OpenApiDocument openApiDocument)
         {
             ArgumentNullException.ThrowIfNull(openApiDocument);
@@ -131,19 +134,55 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
                 {
                     Path = path.Key,
                     HttpMethod = operation.Key.Method,
-                    Operation = operation.Value
+                    Operation = ValidateOperation(operation.Value)
                 })))
                 .ToLookup(entry => entry.Tag, entry => entry.Model, StringComparer.Ordinal);
 
             return openApiDocument.Tags
                 .Where(tag => operationsByTag.Contains(tag.Name))
-                .Select(tag => new ApiClientTagModel
+                .Select((tag, tagIndex) => new ApiClientTagModel
                 {
                     Tag = tag.Name,
                     Name = QueryTagName(tag.Name),
+                    IsPrimary = tagIndex == 0,
                     Operations = operationsByTag[tag.Name].ToList()
                 })
                 .ToList();
+        }
+
+        /// <summary>
+        /// Verifies that the generated client can express the operation
+        /// </summary>
+        /// <param name="operation">
+        /// The <see cref="OpenApiOperation"/> to verify
+        /// </param>
+        /// <returns>
+        /// The verified <paramref name="operation"/>
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the operation has more than one successful JSON response, or an array query parameter not written as a comma separated list
+        /// </exception>
+        private static OpenApiOperation ValidateOperation(OpenApiOperation operation)
+        {
+            var successfulJsonResponseCount = operation.Responses?
+                .Count(response => response.Key.StartsWith('2') && response.Value.Content?.ContainsKey("application/json") == true) ?? 0;
+
+            if (successfulJsonResponseCount > 1)
+            {
+                throw new InvalidOperationException($"The operation {operation.OperationId} declares {successfulJsonResponseCount} successful JSON responses; the generated client returns one");
+            }
+
+            var unsupportedArrayParameter = operation.Parameters?
+                .FirstOrDefault(parameter => parameter.In == ParameterLocation.Query
+                                             && parameter.Schema?.Type == JsonSchemaType.Array
+                                             && (parameter.Style is not (null or ParameterStyle.Form) || parameter.Explode));
+
+            if (unsupportedArrayParameter is not null)
+            {
+                throw new InvalidOperationException($"The array query parameter {unsupportedArrayParameter.Name} of the operation {operation.OperationId} is not declared with style form and explode false");
+            }
+
+            return operation;
         }
 
         /// <summary>
@@ -152,6 +191,7 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         protected override void RegisterHelpers()
         {
             this.Handlebars.RegisterTextHelper();
+            this.Handlebars.RegisterHttpMethodHelper();
         }
 
         /// <summary>

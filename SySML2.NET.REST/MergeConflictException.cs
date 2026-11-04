@@ -9,6 +9,7 @@
 
 namespace SySML2.NET.REST
 {
+    using System;
     using System.Collections.Generic;
     using System.Net;
 
@@ -19,6 +20,37 @@ namespace SySML2.NET.REST
     /// </summary>
     public class MergeConflictException : PsmApiException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergeConflictException"/> class
+        /// </summary>
+        public MergeConflictException() : this(null, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergeConflictException"/> class with a specified error message
+        /// </summary>
+        /// <param name="message">
+        /// The message that describes the error
+        /// </param>
+        public MergeConflictException(string message) : this(message, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergeConflictException"/> class with a specified error message and the exception that caused it
+        /// </summary>
+        /// <param name="message">
+        /// The message that describes the error
+        /// </param>
+        /// <param name="innerException">
+        /// The exception that is the cause of this exception, or <c>null</c> when none is specified
+        /// </param>
+        public MergeConflictException(string message, Exception innerException) : base(HttpStatusCode.Conflict, message, innerException)
+        {
+            this.Conflicts = [];
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeConflictException"/> class
         /// </summary>

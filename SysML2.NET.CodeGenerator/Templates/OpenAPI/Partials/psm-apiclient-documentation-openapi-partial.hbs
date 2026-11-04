@@ -1,7 +1,7 @@
 /// <summary>
 /// {{Operation.Summary}}
 /// </summary>
-{{#each Operation.Parameters}}
+{{#each Parameters}}
 {{#if Required}}
 /// <param name="{{Name}}">
 /// {{Description}}
@@ -13,35 +13,41 @@
 /// The payload sent as the body of the request
 /// </param>
 {{/if}}
-{{#each Operation.Parameters}}
+{{#each Parameters}}
 {{#unless Required}}
-{{#unless (String.StartsWith Name 'page')}}
 /// <param name="{{Name}}">
 /// {{Description}}
 /// </param>
 {{/unless}}
-{{/unless}}
 {{/each}}
-{{#each Operation.Parameters}}
-{{#if (String.Equal Name 'page[size]')}}
+{{#if IsPaged}}
 /// <param name="queryParameters">
 /// The page of the result to request, or <c>null</c> to let the server choose
 /// </param>
 {{/if}}
-{{/each}}
 /// <param name="cancellationToken">
 /// The <see cref="CancellationToken"/> that cancels the request
 /// </param>
 /// <returns>
 /// The deserialized response of the {{Operation.OperationId}} operation
 /// </returns>
+{{#each Parameters}}
+{{#if Required}}
+{{#if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}
+/// <exception cref="ArgumentNullException">
+/// Thrown when <paramref name="{{Name}}"/> is <c>null</c>
+/// </exception>
+/// <exception cref="ArgumentException">
+/// Thrown when <paramref name="{{Name}}"/> is empty
+/// </exception>
+{{/if}}
+{{/if}}
+{{/each}}
 /// <exception cref="PsmApiException">
 /// Thrown when the server responds with an error status code
 /// </exception>
-{{#each Operation.Responses}}
-{{#if (String.Equal @key '409')}}
+{{#if ThrowsMergeConflict}}
 /// <exception cref="MergeConflictException">
 /// Thrown when the server reports conflicting data
 /// </exception>
 {{/if}}
-{{/each}}

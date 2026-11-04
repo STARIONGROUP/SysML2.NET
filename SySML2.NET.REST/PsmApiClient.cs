@@ -18,6 +18,7 @@ namespace SySML2.NET.REST
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Runtime.Serialization;
+    using System.Text;
     using System.Text.Json;
     using System.Text.RegularExpressions;
     using System.Threading;
@@ -74,6 +75,11 @@ namespace SySML2.NET.REST
         /// </returns>
         private static Regex LinkValuePattern() => LinkValueRegex;
 #endif
+
+        /// <summary>
+        /// The <see cref="JsonWriterOptions"/> used to write every request payload
+        /// </summary>
+        private static readonly JsonWriterOptions WriterOptions = new();
 
         /// <summary>
         /// The <see cref="HttpClient"/> whose <see cref="HttpClient.BaseAddress"/> addresses the server
@@ -136,6 +142,51 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
+        /// Converts the UTF-8 representation of an enumeration literal into the value of a query parameter
+        /// </summary>
+        /// <param name="utf8Value">
+        /// The UTF-8 encoded representation of the literal in the Systems Modeling API and Services
+        /// </param>
+        /// <returns>
+        /// The value of the query parameter
+        /// </returns>
+        private static string ToQueryValue(ReadOnlySpan<byte> utf8Value)
+        {
+            return Encoding.UTF8.GetString(utf8Value);
+        }
+
+        /// <summary>
+        /// Throws when a required sequence parameter is <c>null</c> or empty
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the items of the sequence
+        /// </typeparam>
+        /// <param name="value">
+        /// The value of the parameter
+        /// </param>
+        /// <param name="parameterName">
+        /// The name of the parameter
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="value"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="value"/> is empty
+        /// </exception>
+        private static void ThrowIfNullOrEmpty<T>(IEnumerable<T> value, string parameterName)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+
+            if (!value.Any())
+            {
+                throw new ArgumentException("At least one value is required", parameterName);
+            }
+        }
+
+        /// <summary>
         /// Queries the page that the link with the specified relation type of the <c>Link</c> header points to
         /// </summary>
         /// <param name="response">
@@ -145,12 +196,9 @@ namespace SySML2.NET.REST
         /// The relation types, any of which selects the link
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>, or <c>null</c> when the header has no such link or the link carries no page token
+        /// The <see cref="Page"/>, or <c>null</c> when the header has no such link or the link carries no page token that <see cref="Page.TryParse"/> accepts
         /// </returns>
-        /// <exception cref="FormatException">
-        /// Thrown when the page token of the link is not an epoch and an identifier separated by a vertical bar
-        /// </exception>
-        private static Page? QueryLinkedPage(HttpResponseMessage response, params string[] relationTypes)
+        private Page? QueryLinkedPage(HttpResponseMessage response, params string[] relationTypes)
         {
             if (!response.Headers.TryGetValues("Link", out var headerValues))
             {
@@ -180,34 +228,19 @@ namespace SySML2.NET.REST
                     .Select(pair => Uri.UnescapeDataString(pair[1]))
                     .FirstOrDefault();
 
-            return token is null ? null : ParsePage(token);
-        }
-
-        /// <summary>
-        /// Parses a page token formatted as <see cref="Page.ToString"/> writes it
-        /// </summary>
-        /// <param name="token">
-        /// The page token
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page"/>
-        /// </returns>
-        /// <exception cref="FormatException">
-        /// Thrown when the token is not an epoch and an identifier separated by a vertical bar
-        /// </exception>
-        private static Page ParsePage(string token)
-        {
-            var parts = token.Split('|');
-
-            if (parts.Length != 2 || !int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var epoch) || !Guid.TryParse(parts[1], out var identifier))
+            if (token is null)
             {
-                throw new FormatException($"The page token '{token}' is not an epoch and an identifier separated by a vertical bar");
+                return null;
             }
 
-            return new Page
+            if (Page.TryParse(token, out var page))
             {
-                Epoch = epoch, Identifier = identifier
-            };
+                return page;
+            }
+
+            this.logger.LogWarning("The page token {Token} of the {Relation} link is not a valid page token", token, relationTypes[0]);
+
+            return null;
         }
 
         /// <summary>
@@ -231,7 +264,7 @@ namespace SySML2.NET.REST
 
             var stream = new MemoryStream();
 
-            await this.serializer.SerializeRequestAsync(requestBody, SerializationModeKind.JSON, false, stream, new JsonWriterOptions(), cancellationToken);
+            await this.serializer.SerializeRequestAsync(requestBody, SerializationModeKind.JSON, false, stream, WriterOptions, cancellationToken);
 
             return CreateContent(stream);
         }
@@ -257,7 +290,7 @@ namespace SySML2.NET.REST
 
             var stream = new MemoryStream();
 
-            await this.serializer.SerializeAsync(requestBody, SerializationModeKind.JSON, false, stream, new JsonWriterOptions(), cancellationToken);
+            await this.serializer.SerializeAsync(requestBody, SerializationModeKind.JSON, false, stream, WriterOptions, cancellationToken);
 
             return CreateContent(stream);
         }
@@ -330,19 +363,40 @@ namespace SySML2.NET.REST
 
             if (response.Content?.Headers.ContentType?.MediaType == JsonMediaType)
             {
-                using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
+                await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
-                try
-                {
-                    error = await this.deSerializer.DeSerializeResponseAsync<Error>(stream, SerializationModeKind.JSON, false, cancellationToken);
-                }
-                catch (Exception exception) when (exception is JsonException or SerializationException or InvalidOperationException)
-                {
-                    this.logger.LogWarning(exception, "The {StatusCode} response does not carry a readable Error", response.StatusCode);
-                }
+                error = await this.ReadErrorAsync(stream, response.StatusCode, cancellationToken);
             }
 
             throw new PsmApiException(response.StatusCode, error);
+        }
+
+        /// <summary>
+        /// Reads the <see cref="Error"/> carried by the body of an error response
+        /// </summary>
+        /// <param name="stream">
+        /// The <see cref="Stream"/> that holds the body of the response
+        /// </param>
+        /// <param name="statusCode">
+        /// The <see cref="HttpStatusCode"/> of the response, used to log an unreadable body
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that cancels the deserialization
+        /// </param>
+        /// <returns>
+        /// The <see cref="Error"/>, or <c>null</c> when the body is not a readable <see cref="Error"/>
+        /// </returns>
+        private async Task<Error> ReadErrorAsync(Stream stream, HttpStatusCode statusCode, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await this.deSerializer.DeSerializeResponseAsync<Error>(stream, SerializationModeKind.JSON, false, cancellationToken);
+            }
+            catch (Exception exception) when (exception is JsonException or SerializationException or InvalidOperationException)
+            {
+                this.logger.LogWarning(exception, "The {StatusCode} response does not carry a readable Error", statusCode);
+                return null;
+            }
         }
 
         /// <summary>
@@ -358,7 +412,10 @@ namespace SySML2.NET.REST
         /// An awaitable <see cref="Task"/>
         /// </returns>
         /// <exception cref="MergeConflictException">
-        /// Thrown when the response has the <see cref="HttpStatusCode.Conflict"/> status code and a JSON body
+        /// Thrown when the response has the <see cref="HttpStatusCode.Conflict"/> status code and a JSON body listing the conflicting data
+        /// </exception>
+        /// <exception cref="PsmApiException">
+        /// Thrown when the response has the <see cref="HttpStatusCode.Conflict"/> status code and a JSON body that does not list the conflicting data
         /// </exception>
         private async Task ThrowOnConflictAsync(HttpResponseMessage response, CancellationToken cancellationToken)
         {
@@ -367,9 +424,29 @@ namespace SySML2.NET.REST
                 return;
             }
 
-            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
+            await using var buffer = new MemoryStream();
 
-            var conflicts = await this.deSerializer.DeSerializeResponsesAsync<DataIdentity>(stream, SerializationModeKind.JSON, false, cancellationToken);
+            await using (var stream = await ReadContentStreamAsync(response.Content, cancellationToken))
+            {
+                await stream.CopyToAsync(buffer, cancellationToken);
+            }
+
+            buffer.Position = 0;
+
+            IEnumerable<DataIdentity> conflicts;
+
+            try
+            {
+                conflicts = await this.deSerializer.DeSerializeResponsesAsync<DataIdentity>(buffer, SerializationModeKind.JSON, false, cancellationToken);
+            }
+            catch (Exception exception) when (exception is JsonException or SerializationException or InvalidOperationException)
+            {
+                this.logger.LogWarning(exception, "The {StatusCode} response does not carry readable conflicting data", response.StatusCode);
+
+                buffer.Position = 0;
+
+                throw new PsmApiException(response.StatusCode, await this.ReadErrorAsync(buffer, response.StatusCode, cancellationToken));
+            }
 
             throw new MergeConflictException(conflicts.ToList());
         }
@@ -396,7 +473,7 @@ namespace SySML2.NET.REST
                 return default;
             }
 
-            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
+            await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             return await this.deSerializer.DeSerializeResponseAsync<T>(stream, SerializationModeKind.JSON, false, cancellationToken);
         }
@@ -418,11 +495,11 @@ namespace SySML2.NET.REST
         /// </returns>
         private async Task<PagedResult<T>> ReadPagedResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken) where T : IResponse
         {
-            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
+            await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             var records = await this.deSerializer.DeSerializeResponsesAsync<T>(stream, SerializationModeKind.JSON, false, cancellationToken);
 
-            return CreatePagedResult(response, records.ToList());
+            return this.CreatePagedResult(response, records.ToList());
         }
 
         /// <summary>
@@ -445,11 +522,11 @@ namespace SySML2.NET.REST
         /// </exception>
         private async Task<T> ReadDataAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken) where T : IData
         {
-            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
+            await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
-            var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
+            var data = await this.deSerializer.DeSerializeAsync<T>(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
 
-            return data.Cast<T>().Single();
+            return data.Single();
         }
 
         /// <summary>
@@ -471,9 +548,9 @@ namespace SySML2.NET.REST
         {
             await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
-            var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
+            var data = await this.deSerializer.DeSerializeAsync<T>(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
 
-            return CreatePagedResult(response, data.Cast<T>().ToList());
+            return this.CreatePagedResult(response, data.ToList());
         }
 
         /// <summary>
@@ -496,6 +573,25 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
+        /// Reads a payload that has no data transfer object, such as a JSON schema, together with the pages that the <c>Link</c> header points to
+        /// </summary>
+        /// <param name="response">
+        /// The successful <see cref="HttpResponseMessage"/>
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that cancels the parsing
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedResult{T}"/> whose single record is the parsed <see cref="JsonDocument"/>, which the caller disposes
+        /// </returns>
+        private async Task<PagedResult<JsonDocument>> ReadPagedJsonAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            var document = await ReadJsonAsync(response, cancellationToken);
+
+            return this.CreatePagedResult(response, [document]);
+        }
+
+        /// <summary>
         /// Creates a <see cref="PagedResult{T}"/> from the records of a response and the pages that its <c>Link</c> header points to
         /// </summary>
         /// <typeparam name="T">
@@ -510,13 +606,13 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The <see cref="PagedResult{T}"/>
         /// </returns>
-        private static PagedResult<T> CreatePagedResult<T>(HttpResponseMessage response, IReadOnlyList<T> records)
+        private PagedResult<T> CreatePagedResult<T>(HttpResponseMessage response, IReadOnlyList<T> records)
         {
             return new PagedResult<T>
             {
                 Records = records,
-                Next = QueryLinkedPage(response, "next"),
-                Previous = QueryLinkedPage(response, "prev", "previous")
+                Next = this.QueryLinkedPage(response, "next"),
+                Previous = this.QueryLinkedPage(response, "prev", "previous")
             };
         }
 

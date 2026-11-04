@@ -25,6 +25,7 @@ namespace SysML2.NET.Serializer.Json.Tests
     using SysML2.NET.Common;
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.DTO.Core.Features;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.PIM.DTO;
     using SysML2.NET.Serializer.Json;
 
@@ -350,6 +351,23 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(((IFeature)arrayRoot[0]).Id, Is.EqualTo(ElementIdentifier));
                 Assert.That(grown, Has.Count.EqualTo(LargePayloadElementCount), "payload larger than the initial buffer");
                 Assert.That(grown[^1].Id, Is.EqualTo(LargePayloadIdentifier(LargePayloadElementCount - 1)), "the last element survives the buffer growth");
+            }
+
+            await using (var stream = CreateStream($"[{Element}]", false, 1))
+            {
+                await Assert.ThatAsync(() => this.deSerializer.DeSerializeAsync<IRelationship>(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, false, CancellationToken.None),
+                    Throws.TypeOf<JsonException>());
+            }
+
+            await using (var stream = CreateStream($"[{Element}]", false, 1))
+            {
+                var features = (await this.deSerializer.DeSerializeAsync<IFeature>(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, false, CancellationToken.None)).ToList();
+
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(features, Has.Count.EqualTo(1));
+                    Assert.That(features[0].Id, Is.EqualTo(ElementIdentifier));
+                }
             }
         }
 

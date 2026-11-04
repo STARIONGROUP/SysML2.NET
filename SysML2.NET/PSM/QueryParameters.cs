@@ -27,7 +27,7 @@ namespace SysML2.NET.PSM
         /// specifies the URL of the page succeeding the page being requested
         /// </summary>
         /// <remarks>
-        /// format: epoch|GUID, where epoch is Unix epoch: DateTime(1970, 1, 1, 0, 0, 0, 0)
+        /// the token written by <see cref="Page.ToString"/>: the unpadded Base64 encoding of epoch|GUID, the epoch in milliseconds since the Unix epoch
         /// </remarks>
         public Page? PageAfter { get; set; } = null;
 
@@ -35,7 +35,7 @@ namespace SysML2.NET.PSM
         /// specifies the URL of a page preceding the page being requested
         /// </summary>
         /// <remarks>
-        /// format: epoch|GUID, where epoch is Unix epoch: DateTime(1970, 1, 1, 0, 0, 0, 0)
+        /// the token written by <see cref="Page.ToString"/>: the unpadded Base64 encoding of epoch|GUID, the epoch in milliseconds since the Unix epoch
         /// </remarks>
         public Page? PageBefore { get; set; } = null;
 

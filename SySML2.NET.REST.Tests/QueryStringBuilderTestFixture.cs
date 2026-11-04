@@ -33,7 +33,7 @@ namespace SySML2.NET.REST.Tests
 
             Assert.That(new QueryStringBuilder(new QueryParameters()).ToString(), Is.Empty);
 
-            var page = new Page { Epoch = 1700000000, Identifier = FirstCommitId };
+            var page = new Page { Epoch = 1618861496632, Identifier = FirstCommitId };
 
             var builder = new QueryStringBuilder(new QueryParameters { PageSize = 2, PageAfter = page, PageBefore = page });
 

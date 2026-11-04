@@ -9,6 +9,7 @@
 
 namespace SySML2.NET.REST.Tests
 {
+    using System;
     using System.Net;
 
     using NUnit.Framework;
@@ -42,6 +43,29 @@ namespace SySML2.NET.REST.Tests
             {
                 Assert.That(exception.Error, Is.Null);
                 Assert.That(exception.Message, Is.EqualTo("The server responded with status code 500 (InternalServerError)"));
+            }
+
+            exception = new PsmApiException();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exception.StatusCode, Is.EqualTo((HttpStatusCode)0));
+                Assert.That(exception.Error, Is.Null);
+            }
+
+            exception = new PsmApiException("the message");
+
+            Assert.That(exception.Message, Is.EqualTo("the message"));
+
+            var innerException = new InvalidOperationException();
+
+            exception = new PsmApiException("the message", innerException);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exception.Message, Is.EqualTo("the message"));
+                Assert.That(exception.InnerException, Is.SameAs(innerException));
+                Assert.That(exception.Error, Is.Null);
             }
         }
     }

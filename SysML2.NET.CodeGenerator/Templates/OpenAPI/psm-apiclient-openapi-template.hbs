@@ -18,7 +18,9 @@
 namespace SySML2.NET.REST
 {
     using System;
+    {{#if IsPrimary}}
     using System.CodeDom.Compiler;
+    {{/if}}
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Text.Json;
@@ -27,40 +29,56 @@ namespace SySML2.NET.REST
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Root.Elements;
+    {{#if UsesEnumerations}}
+    using SysML2.NET.Extensions.PSM;
+    {{/if}}
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    {{#if UsesEnumerations}}
+    using SysML2.NET.PSM.Enumerations;
+    {{/if}}
 
     /// <summary>
     /// Provides the {{Tag}} operations of the Systems Modeling API and Services
     /// </summary>
+    {{#if IsPrimary}}
+    [GeneratedCode("SysML2.NET", "latest")]
+    {{/if}}
     public partial class PsmApiClient
     {
         {{#each Operations}}
         {{> psm-apiclient-documentation-openapi-partial}}
-        [GeneratedCode("SysML2.NET", "latest")]
         public async {{> psm-apiclient-signature-openapi-partial}}
         {
-            var query = new QueryStringBuilder({{#each Operation.Parameters}}{{#if (String.Equal Name 'page[size]')}}queryParameters{{/if}}{{/each}});
-            {{#each Operation.Parameters}}
+            {{#each Parameters}}
+            {{#if Required}}
+            {{#if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}
+            ThrowIfNullOrEmpty({{Name}}, nameof({{Name}}));
+
+            {{/if}}
+            {{/if}}
+            {{/each}}
+            var query = new QueryStringBuilder({{#if IsPaged}}queryParameters{{/if}});
+            {{#each Parameters}}
             {{#if (String.Equal (OpenApi.Text In) 'Query')}}
-            {{#unless (String.StartsWith Name 'page')}}
+            {{#if Schema.Enum}}
+            query.Add("{{Name}}", {{Name}} is { } {{Name}}Value ? ToQueryValue({{String.Pascalcase Name}}Provider.ToUtf8Bytes({{Name}}Value)) : null);
+            {{else}}
             query.Add("{{Name}}", {{Name}});
-            {{/unless}}
+            {{/if}}
             {{/if}}
             {{/each}}
 
             {{#if Operation.RequestBody}}
             using var content = await this.CreateContentAsync(requestBody, cancellationToken);
-            using var response = await this.SendAsync(new HttpMethod("{{HttpMethod}}"), $"{{{String.Replace (String.Replace (String.Substring Path 1) '{' '{Escape(') '}' ')}'}}}{query}", content, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.{{OpenApi.HttpMethod HttpMethod}}, $"{{{String.Replace (String.Replace (String.Substring Path 1) '{' '{Escape(') '}' ')}'}}}{query}", content, cancellationToken);
             {{else}}
-            using var response = await this.SendAsync(new HttpMethod("{{HttpMethod}}"), $"{{{String.Replace (String.Replace (String.Substring Path 1) '{' '{Escape(') '}' ')}'}}}{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.{{OpenApi.HttpMethod HttpMethod}}, $"{{{String.Replace (String.Replace (String.Substring Path 1) '{' '{Escape(') '}' ')}'}}}{query}", null, cancellationToken);
             {{/if}}
-            {{#each Operation.Responses}}
-            {{#if (String.Equal @key '409')}}
+            {{#if ThrowsMergeConflict}}
 
             await this.ThrowOnConflictAsync(response, cancellationToken);
             {{/if}}
-            {{/each}}
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -72,6 +90,8 @@ namespace SySML2.NET.REST
             return await this.ReadPaged{{> family Schema.Items}}Async<{{> psm-apiclient-typename-openapi-partial Schema.Items}}>(response, cancellationToken);
             {{else if Schema.Reference}}
             return await this.Read{{> family Schema}}Async<{{> psm-apiclient-typename-openapi-partial Schema}}>(response, cancellationToken);
+            {{else if ../../IsPaged}}
+            return await this.ReadPagedJsonAsync(response, cancellationToken);
             {{else}}
             return await ReadJsonAsync(response, cancellationToken);
             {{/if}}

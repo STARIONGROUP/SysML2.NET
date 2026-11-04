@@ -47,26 +47,6 @@ namespace SysML2.NET.Extensions.PSM
         }
 
         /// <summary>
-        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="{{this.Key}}"/>
-        /// </summary>
-        /// <param name="value">The <see cref="ReadOnlySpan{Char}"/> that is to be parsed.</param>
-        /// <param name="result">The parsed literal, or <c>default</c> when the value denotes none.</param>
-        /// <returns>True when the value was parsed.</returns>
-        public static bool TryParse(ReadOnlySpan<char> value, out {{this.Key}} result)
-        {
-            {{#each (Enumeration.QueryValues this.Value) as | enumerationValue |}}
-            if (value.Length == {{#Enumeration.WriteValueLength enumerationValue}} && value.Equals("{{{enumerationValue}}}".AsSpan(), StringComparison.OrdinalIgnoreCase))
-            {
-                result = {{../this.Key}}.{{#Enumeration.WriteLiteralName enumerationValue}};
-                return true;
-            }
-
-            {{/each}}
-            result = default;
-            return false;
-        }
-
-        /// <summary>
         /// Parses the UTF-8 encoded <see cref="ReadOnlySpan{Byte}"/> to a <see cref="{{this.Key}}"/>
         /// </summary>
         /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> that is to be parsed.</param>
@@ -111,6 +91,26 @@ namespace SysML2.NET.Extensions.PSM
             value.CopyTo(buffer);
 
             return Parse(buffer[..(int)value.Length]);
+        }
+
+        /// <summary>
+        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="{{this.Key}}"/>
+        /// </summary>
+        /// <param name="value">The <see cref="ReadOnlySpan{Char}"/> that is to be parsed.</param>
+        /// <param name="result">The parsed literal, or <c>default</c> when the value denotes none.</param>
+        /// <returns>True when the value was parsed.</returns>
+        public static bool TryParse(ReadOnlySpan<char> value, out {{this.Key}} result)
+        {
+            {{#each (Enumeration.QueryValues this.Value) as | enumerationValue |}}
+            if (value.Length == {{#Enumeration.WriteValueLength enumerationValue}} && value.Equals("{{{enumerationValue}}}".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = {{../this.Key}}.{{#Enumeration.WriteLiteralName enumerationValue}};
+                return true;
+            }
+
+            {{/each}}
+            result = default;
+            return false;
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.OpenApiHandleBarsGenerators
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
 
     using Microsoft.OpenApi;
@@ -64,16 +65,71 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.OpenApiHandleBarsGenerators
         {
             Assert.That(() => OpenApiApiClientGenerator.QueryTagModels(null), Throws.TypeOf<ArgumentNullException>());
 
-            var tagModels = OpenApiApiClientGenerator.QueryTagModels(this.openApiDocument);
-
-            using (Assert.EnterMultipleScope())
+            var validOperation = new OpenApiOperation
             {
-                Assert.That(tagModels, Has.Count.EqualTo(9));
-                Assert.That(tagModels.Select(tagModel => tagModel.Name), Is.EqualTo(["Project", "Branch", "Tag", "Commit", "Element", "Relationship", "DiffMerge", "Query", "Meta"]));
-                Assert.That(tagModels.SelectMany(tagModel => tagModel.Operations).ToList(), Has.Count.EqualTo(35));
-                Assert.That(tagModels[6].Tag, Is.EqualTo("Diff & Merge"));
-                Assert.That(tagModels[6].Operations.Select(operation => operation.HttpMethod), Is.EqualTo(["GET", "POST"]));
-            }
+                OperationId = "getThings",
+                Parameters = [CreateArrayParameter(ParameterStyle.Form, false)],
+                Responses = new OpenApiResponses { ["200"] = CreateJsonResponse() }
+            };
+
+            Assert.That(OpenApiApiClientGenerator.QueryTagModels(CreateDocument(validOperation)), Has.Count.EqualTo(1));
+
+            var twoSuccessResponses = new OpenApiOperation
+            {
+                OperationId = "getThings",
+                Responses = new OpenApiResponses { ["200"] = CreateJsonResponse(), ["201"] = CreateJsonResponse() }
+            };
+
+            Assert.That(() => OpenApiApiClientGenerator.QueryTagModels(CreateDocument(twoSuccessResponses)), Throws.TypeOf<InvalidOperationException>());
+
+            var explodedArray = new OpenApiOperation
+            {
+                OperationId = "getThings",
+                Parameters = [CreateArrayParameter(ParameterStyle.Form, true)],
+                Responses = new OpenApiResponses { ["200"] = CreateJsonResponse() }
+            };
+
+            Assert.That(() => OpenApiApiClientGenerator.QueryTagModels(CreateDocument(explodedArray)), Throws.TypeOf<InvalidOperationException>());
+
+            var pipeDelimitedArray = new OpenApiOperation
+            {
+                OperationId = "getThings",
+                Parameters = [CreateArrayParameter(ParameterStyle.PipeDelimited, false)],
+                Responses = new OpenApiResponses { ["200"] = CreateJsonResponse() }
+            };
+
+            Assert.That(() => OpenApiApiClientGenerator.QueryTagModels(CreateDocument(pipeDelimitedArray)), Throws.TypeOf<InvalidOperationException>());
+        }
+
+        private static OpenApiDocument CreateDocument(OpenApiOperation operation)
+        {
+            var document = new OpenApiDocument
+            {
+                Tags = new HashSet<OpenApiTag> { new() { Name = "Things" } },
+                Paths = []
+            };
+
+            operation.Tags = new HashSet<OpenApiTagReference> { new("Things", document) };
+            document.Paths["/things"] = new OpenApiPathItem { Operations = new Dictionary<HttpMethod, OpenApiOperation> { [HttpMethod.Get] = operation } };
+
+            return document;
+        }
+
+        private static OpenApiParameter CreateArrayParameter(ParameterStyle style, bool explode)
+        {
+            return new OpenApiParameter
+            {
+                Name = "thingId",
+                In = ParameterLocation.Query,
+                Style = style,
+                Explode = explode,
+                Schema = new OpenApiSchema { Type = JsonSchemaType.Array, Items = new OpenApiSchema { Type = JsonSchemaType.String } }
+            };
+        }
+
+        private static OpenApiResponse CreateJsonResponse()
+        {
+            return new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { ["application/json"] = new OpenApiMediaType() } };
         }
 
         [Test]

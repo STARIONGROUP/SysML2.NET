@@ -24,6 +24,7 @@ namespace SySML2.NET.REST.Tests
     using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.PSM.Enumerations;
     using SysML2.NET.Serializer.Json;
 
     [TestFixture]
@@ -94,14 +95,13 @@ namespace SySML2.NET.REST.Tests
         public async Task VerifyGetBranchesByProjectAsync()
         {
             var branchesUri = $"{BaseAddress}projects/{ProjectId}/branches";
-            var previousPage = new Page { Epoch = 1700000000, Identifier = OtherCommitId };
-            var nextPage = new Page { Epoch = 1700000600, Identifier = CommitId };
+            var previousPage = new Page { Epoch = 1618861496632, Identifier = OtherCommitId };
+            var nextPage = new Page { Epoch = 1618861496632, Identifier = Guid.Parse("20109f40-4825-416a-86f6-7508ac42a021") };
 
             this.mockHttp.Expect(HttpMethod.Get, branchesUri)
-                .WithQueryString("page[size]", "2")
-                .WithQueryString("page[after]", previousPage.ToString())
+                .WithExactQueryString($"page[size]=2&page[after]={Uri.EscapeDataString(previousPage.ToString())}")
                 .Respond(HttpStatusCode.OK,
-                    CreateLinkHeader($"<{branchesUri}?page[after]={Uri.EscapeDataString(nextPage.ToString())}>; rel=\"next\", <{branchesUri}?page[before]={Uri.EscapeDataString(previousPage.ToString())}>; rel=\"prev\""),
+                    CreateLinkHeader($"<{branchesUri}?page[after]=MTYxODg2MTQ5NjYzMnwyMDEwOWY0MC00ODI1LTQxNmEtODZmNi03NTA4YWM0MmEwMjE&page[size]=2>; rel=\"next\", <{branchesUri}?page[before]={Uri.EscapeDataString(previousPage.ToString())}>; rel=\"prev\""),
                     JsonMediaType, ReadPayload("branches.json"));
 
             var branches = await this.client.GetBranchesByProjectAsync(ProjectId, new QueryParameters { PageSize = 2, PageAfter = previousPage });
@@ -115,7 +115,7 @@ namespace SySML2.NET.REST.Tests
                 Assert.That(branches.Previous, Is.EqualTo(previousPage));
             }
 
-            this.mockHttp.Expect(HttpMethod.Get, branchesUri).Respond(JsonMediaType, "[]");
+            this.mockHttp.Expect(HttpMethod.Get, branchesUri).WithExactQueryString(string.Empty).Respond(JsonMediaType, "[]");
 
             branches = await this.client.GetBranchesByProjectAsync(ProjectId);
 
@@ -129,7 +129,9 @@ namespace SySML2.NET.REST.Tests
             this.mockHttp.Expect(HttpMethod.Get, branchesUri)
                 .Respond(HttpStatusCode.OK, CreateLinkHeader($"<{branchesUri}?page[after]=not-a-page>; rel=\"next\""), JsonMediaType, "[]");
 
-            await Assert.ThatAsync(() => this.client.GetBranchesByProjectAsync(ProjectId), Throws.TypeOf<FormatException>());
+            branches = await this.client.GetBranchesByProjectAsync(ProjectId);
+
+            Assert.That(branches.Next, Is.Null);
 
             this.mockHttp.Expect(HttpMethod.Get, branchesUri).Respond(HttpStatusCode.NotFound, JsonMediaType, ErrorPayload);
 
@@ -188,7 +190,7 @@ namespace SySML2.NET.REST.Tests
             var commitRequest = new CommitRequest { Description = "the commit description" };
 
             this.mockHttp.Expect(HttpMethod.Post, commitsUri)
-                .WithQueryString("branchId", BranchId.ToString())
+                .WithExactQueryString($"branchId={BranchId}")
                 .With(request => request.Content.Headers.ContentType.MediaType == JsonMediaType
                                  && request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the commit description"))
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
@@ -213,7 +215,7 @@ namespace SySML2.NET.REST.Tests
             var rootsUri = $"{BaseAddress}projects/{ProjectId}/commits/{CommitId}/roots";
 
             this.mockHttp.Expect(HttpMethod.Get, rootsUri)
-                .WithQueryString("excludeUsed", "true")
+                .WithExactQueryString("excludeUsed=true")
                 .Respond(JsonMediaType, ReadPayload("roots.json"));
 
             var roots = await this.client.GetRootsByProjectCommitAsync(ProjectId, CommitId, true);
@@ -233,6 +235,32 @@ namespace SySML2.NET.REST.Tests
         }
 
         [Test]
+        public async Task VerifyGetRelationshipsByProjectCommitRelatedElementAsync()
+        {
+            var relationshipsUri = $"{BaseAddress}projects/{ProjectId}/commits/{CommitId}/elements/{RootNamespaceId}/relationships";
+
+            this.mockHttp.Expect(HttpMethod.Get, relationshipsUri).WithExactQueryString("direction=in").Respond(JsonMediaType, "[]");
+
+            var relationships = await this.client.GetRelationshipsByProjectCommitRelatedElementAsync(ProjectId, CommitId, RootNamespaceId, Direction.@in);
+
+            Assert.That(relationships.Records, Has.Count.EqualTo(0));
+
+            this.mockHttp.Expect(HttpMethod.Get, relationshipsUri).WithExactQueryString("direction=both&excludeUsed=true").Respond(JsonMediaType, "[]");
+
+            relationships = await this.client.GetRelationshipsByProjectCommitRelatedElementAsync(ProjectId, CommitId, RootNamespaceId, Direction.both, true);
+
+            Assert.That(relationships.Records, Has.Count.EqualTo(0));
+
+            this.mockHttp.Expect(HttpMethod.Get, relationshipsUri).WithExactQueryString(string.Empty).Respond(JsonMediaType, "[]");
+
+            relationships = await this.client.GetRelationshipsByProjectCommitRelatedElementAsync(ProjectId, CommitId, RootNamespaceId);
+
+            Assert.That(relationships.Next, Is.Null);
+
+            this.mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Test]
         public async Task VerifyGetElementByProjectCommitIdAsync()
         {
             var elementUri = $"{BaseAddress}projects/{ProjectId}/commits/{CommitId}/elements/{RootNamespaceId}";
@@ -241,7 +269,7 @@ namespace SySML2.NET.REST.Tests
             using (var rootsDocument = JsonDocument.Parse(roots))
             {
                 this.mockHttp.Expect(HttpMethod.Get, elementUri)
-                    .WithQueryString("excludeUsed", "false")
+                    .WithExactQueryString("excludeUsed=false")
                     .Respond(JsonMediaType, rootsDocument.RootElement[0].GetRawText());
             }
 
@@ -272,8 +300,7 @@ namespace SySML2.NET.REST.Tests
             var queryRequest = new QueryRequest { Name = "the query name" };
 
             this.mockHttp.Expect(HttpMethod.Post, queryResultsUri)
-                .WithQueryString("commitId", CommitId.ToString())
-                .WithQueryString("page[size]", "2")
+                .WithExactQueryString($"page[size]=2&commitId={CommitId}")
                 .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the query name"))
                 .Respond(JsonMediaType, ReadPayload("roots.json"));
 
@@ -314,6 +341,14 @@ namespace SySML2.NET.REST.Tests
                 Assert.That(project.DefaultBranch, Is.EqualTo(BranchId));
             }
 
+            this.mockHttp.Expect(HttpMethod.Put, projectUri)
+                .With(request => request.Content is null)
+                .Respond(JsonMediaType, ReadPayload("project.json"));
+
+            project = await this.client.PutProjectByIdAsync(ProjectId);
+
+            Assert.That(project.Id, Is.EqualTo(ProjectId));
+
             this.mockHttp.Expect(HttpMethod.Put, projectUri).Respond(HttpStatusCode.BadRequest, JsonMediaType, ErrorPayload);
 
             await Assert.ThatAsync(() => this.client.PutProjectByIdAsync(ProjectId, projectRequest),
@@ -330,8 +365,7 @@ namespace SySML2.NET.REST.Tests
             var mergeUri = $"{BaseAddress}projects/{ProjectId}/branches/{BranchId}/merge";
 
             this.mockHttp.Expect(HttpMethod.Post, mergeUri)
-                .WithQueryString("sourceCommitId", $"{CommitId},{OtherCommitId}")
-                .WithQueryString("description", "the merge description")
+                .WithExactQueryString($"sourceCommitId={CommitId}%2C{OtherCommitId}&description=the%20merge%20description")
                 .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains(RootNamespaceId.ToString()))
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
 
@@ -339,11 +373,16 @@ namespace SySML2.NET.REST.Tests
 
             Assert.That(mergeCommit.Id, Is.EqualTo(CommitId));
 
+            await Assert.ThatAsync(() => this.client.MergeAsync(ProjectId, null, BranchId), Throws.TypeOf<ArgumentNullException>());
+
+            await Assert.ThatAsync(() => this.client.MergeAsync(ProjectId, [], BranchId), Throws.TypeOf<ArgumentException>());
+
             this.mockHttp.Expect(HttpMethod.Post, mergeUri)
-                .With(request => request.Content is null && string.IsNullOrWhiteSpace(request.RequestUri.Query))
+                .WithExactQueryString($"sourceCommitId={CommitId}")
+                .With(request => request.Content is null)
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
 
-            mergeCommit = await this.client.MergeAsync(ProjectId, [], BranchId, null);
+            mergeCommit = await this.client.MergeAsync(ProjectId, [CommitId], BranchId);
 
             Assert.That(mergeCommit.Id, Is.EqualTo(CommitId));
 
@@ -360,9 +399,62 @@ namespace SySML2.NET.REST.Tests
                     .With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.Conflict)
                     .And.Property(nameof(MergeConflictException.Conflicts)).With.Count.EqualTo(1));
 
+            this.mockHttp.Expect(HttpMethod.Post, mergeUri).Respond(HttpStatusCode.Conflict, JsonMediaType, ErrorPayload);
+
+            await Assert.ThatAsync(() => this.client.MergeAsync(ProjectId, [CommitId], BranchId, null),
+                Throws.TypeOf<PsmApiException>()
+                    .With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.Conflict)
+                    .And.Property(nameof(PsmApiException.Error)).Property(nameof(Error.Description)).EqualTo("the error description"));
+
+            this.mockHttp.Expect(HttpMethod.Post, mergeUri).Respond(HttpStatusCode.Conflict, JsonMediaType, "{ not json");
+
+            await Assert.ThatAsync(() => this.client.MergeAsync(ProjectId, [CommitId], BranchId, null),
+                Throws.TypeOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.Conflict));
+
             this.mockHttp.Expect(HttpMethod.Post, mergeUri).Respond(HttpStatusCode.NotFound, JsonMediaType, ErrorPayload);
 
             await Assert.ThatAsync(() => this.client.MergeAsync(ProjectId, [CommitId], BranchId, null),
+                Throws.TypeOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.NotFound));
+
+            this.mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Test]
+        public async Task VerifyGetDatatypesAsync()
+        {
+            var datatypesUri = $"{BaseAddress}meta/datatypes";
+            const string datatypesPayload = "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"$defs\":{\"Boolean\":{\"type\":\"boolean\"}}}";
+            var nextPage = new Page { Epoch = 1618861496632, Identifier = CommitId };
+
+            this.mockHttp.Expect(HttpMethod.Get, datatypesUri)
+                .WithExactQueryString("page[size]=1")
+                .Respond(HttpStatusCode.OK, CreateLinkHeader($"<{datatypesUri}?page[after]={nextPage}&page[size]=1>; rel=\"next\""), JsonMediaType, datatypesPayload);
+
+            var datatypes = await this.client.GetDatatypesAsync(new QueryParameters { PageSize = 1 });
+
+            using (datatypes.Records[0])
+            {
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(datatypes.Records, Has.Count.EqualTo(1));
+                    Assert.That(datatypes.Records[0].RootElement.GetProperty("$defs").GetProperty("Boolean").GetProperty("type").GetString(), Is.EqualTo("boolean"));
+                    Assert.That(datatypes.Next, Is.EqualTo(nextPage));
+                    Assert.That(datatypes.Previous, Is.Null);
+                }
+            }
+
+            this.mockHttp.Expect(HttpMethod.Get, datatypesUri).WithExactQueryString(string.Empty).Respond(JsonMediaType, datatypesPayload);
+
+            datatypes = await this.client.GetDatatypesAsync();
+
+            using (datatypes.Records[0])
+            {
+                Assert.That(datatypes.Next, Is.Null);
+            }
+
+            this.mockHttp.Expect(HttpMethod.Get, datatypesUri).Respond(HttpStatusCode.NotFound, JsonMediaType, ErrorPayload);
+
+            await Assert.ThatAsync(() => this.client.GetDatatypesAsync(),
                 Throws.TypeOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.NotFound));
 
             this.mockHttp.VerifyNoOutstandingExpectation();

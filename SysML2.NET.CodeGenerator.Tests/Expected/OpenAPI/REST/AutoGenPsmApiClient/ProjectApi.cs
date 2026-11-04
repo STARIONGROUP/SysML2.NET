@@ -30,6 +30,7 @@ namespace SySML2.NET.REST
     /// <summary>
     /// Provides the Project operations of the Systems Modeling API and Services
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial class PsmApiClient
     {
         /// <summary>
@@ -47,12 +48,11 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<PagedResult<Project>> GetProjectsAsync(QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder(queryParameters);
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -74,13 +74,12 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
-        public async Task<Project> PostProjectAsync(ProjectRequest requestBody, CancellationToken cancellationToken = default)
+        public async Task<Project> PostProjectAsync(ProjectRequest requestBody = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder();
 
             using var content = await this.CreateContentAsync(requestBody, cancellationToken);
-            using var response = await this.SendAsync(new HttpMethod("POST"), $"projects{query}", content, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Post, $"projects{query}", content, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -102,12 +101,11 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<Project> GetProjectByIdAsync(Guid projectId, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder();
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects/{Escape(projectId)}{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects/{Escape(projectId)}{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -132,13 +130,12 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
-        public async Task<Project> PutProjectByIdAsync(Guid projectId, ProjectRequest requestBody, CancellationToken cancellationToken = default)
+        public async Task<Project> PutProjectByIdAsync(Guid projectId, ProjectRequest requestBody = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder();
 
             using var content = await this.CreateContentAsync(requestBody, cancellationToken);
-            using var response = await this.SendAsync(new HttpMethod("PUT"), $"projects/{Escape(projectId)}{query}", content, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Put, $"projects/{Escape(projectId)}{query}", content, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
@@ -160,12 +157,11 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
         public async Task<Project> DeleteProjectByIdAsync(Guid projectId, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder();
 
-            using var response = await this.SendAsync(new HttpMethod("DELETE"), $"projects/{Escape(projectId)}{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Delete, $"projects/{Escape(projectId)}{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 

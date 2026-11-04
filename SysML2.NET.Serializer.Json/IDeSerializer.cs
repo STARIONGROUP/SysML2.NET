@@ -67,6 +67,19 @@ namespace SysML2.NET.Serializer.Json
         Task<IEnumerable<IIdentified>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{T}"/>
+        /// </summary>
+        /// <typeparam name="T">The expected <see cref="IIdentified"/> type of every deserialized item.</typeparam>
+        /// <param name="stream">the JSON input stream</param>
+        /// <param name="serializationModeKind">The <see cref="SerializationModeKind"/> to use</param>
+        /// <param name="serializationTargetKind">The <see cref="SerializationTargetKind"/> to use</param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to cancel the operation</param>
+        /// <returns>an <see cref="IEnumerable{T}"/></returns>
+        /// <exception cref="JsonException">Thrown when the payload is not valid JSON, declares an unknown <c>@type</c>, or holds an item that is not a <typeparamref name="T"/></exception>
+        Task<IEnumerable<T>> DeSerializeAsync<T>(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken) where T : IIdentified;
+
+        /// <summary>
         /// Deserializes the JSON stream to a single <typeparamref name="T"/> request
         /// </summary>
         /// <typeparam name="T">The expected <see cref="IRequest"/> type.</typeparam>

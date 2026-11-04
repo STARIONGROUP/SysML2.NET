@@ -22,6 +22,53 @@ namespace SySML2.NET.REST
         /// <summary>
         /// Initializes a new instance of the <see cref="PsmApiException"/> class
         /// </summary>
+        public PsmApiException()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PsmApiException"/> class with a specified error message
+        /// </summary>
+        /// <param name="message">
+        /// The message that describes the error
+        /// </param>
+        public PsmApiException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PsmApiException"/> class with a specified error message and the exception that caused it
+        /// </summary>
+        /// <param name="message">
+        /// The message that describes the error
+        /// </param>
+        /// <param name="innerException">
+        /// The exception that is the cause of this exception, or <c>null</c> when none is specified
+        /// </param>
+        public PsmApiException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PsmApiException"/> class for a response with a specified status code
+        /// </summary>
+        /// <param name="statusCode">
+        /// The <see cref="HttpStatusCode"/> of the response
+        /// </param>
+        /// <param name="message">
+        /// The message that describes the error
+        /// </param>
+        /// <param name="innerException">
+        /// The exception that is the cause of this exception, or <c>null</c> when none is specified
+        /// </param>
+        protected PsmApiException(HttpStatusCode statusCode, string message, Exception innerException) : base(message, innerException)
+        {
+            this.StatusCode = statusCode;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PsmApiException"/> class
+        /// </summary>
         /// <param name="statusCode">
         /// The <see cref="HttpStatusCode"/> of the response
         /// </param>

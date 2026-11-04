@@ -25,6 +25,7 @@ namespace SySML2.NET.REST
     using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.PSM.Enumerations;
 
     /// <summary>
     /// The client of the REST/HTTP platform specific model of the Systems Modeling API and Services
@@ -64,7 +65,7 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        Task<Project> PostProjectAsync(ProjectRequest requestBody, CancellationToken cancellationToken = default);
+        Task<Project> PostProjectAsync(ProjectRequest requestBody = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get project by ID
@@ -101,7 +102,7 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        Task<Project> PutProjectByIdAsync(Guid projectId, ProjectRequest requestBody, CancellationToken cancellationToken = default);
+        Task<Project> PutProjectByIdAsync(Guid projectId, ProjectRequest requestBody = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete project by ID
@@ -520,7 +521,7 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        Task<PagedResult<IRelationship>> GetRelationshipsByProjectCommitRelatedElementAsync(Guid projectId, Guid commitId, Guid relatedElementId, string direction = null, bool? excludeUsed = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default);
+        Task<PagedResult<IRelationship>> GetRelationshipsByProjectCommitRelatedElementAsync(Guid projectId, Guid commitId, Guid relatedElementId, Direction? direction = null, bool? excludeUsed = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Diff a base commit and compare commit
@@ -575,13 +576,19 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the merge operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="sourceCommitId"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="sourceCommitId"/> is empty
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         /// <exception cref="MergeConflictException">
         /// Thrown when the server reports conflicting data
         /// </exception>
-        Task<Commit> MergeAsync(Guid projectId, IEnumerable<Guid> sourceCommitId, Guid targetBranchId, IEnumerable<IData> requestBody, string description = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default);
+        Task<Commit> MergeAsync(Guid projectId, IEnumerable<Guid> sourceCommitId, Guid targetBranchId, IEnumerable<IData> requestBody = null, string description = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get queries by project
@@ -779,7 +786,7 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        Task<JsonDocument> GetDatatypesAsync(QueryParameters queryParameters = null, CancellationToken cancellationToken = default);
+        Task<PagedResult<JsonDocument>> GetDatatypesAsync(QueryParameters queryParameters = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get datatype by ID

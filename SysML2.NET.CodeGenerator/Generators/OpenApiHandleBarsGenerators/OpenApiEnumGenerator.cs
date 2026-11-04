@@ -75,13 +75,13 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         }
 
         /// <summary>
-        /// Queries the enumerations declared inline by the schemas of the OpenAPI document
+        /// Queries the enumerations declared inline by the schemas and by the query parameters of the OpenAPI document
         /// </summary>
         /// <param name="openApiDocument">
         /// the <see cref="OpenApiDocument"/> that contains the OpenAPI model to generate from
         /// </param>
         /// <returns>
-        /// The generated enumeration name paired with the property schema that declares it, ordered by name
+        /// The generated enumeration name paired with the schema that declares it, ordered by name
         /// </returns>
         public static IReadOnlyList<KeyValuePair<string, IOpenApiSchema>> QueryEnumerations(OpenApiDocument openApiDocument)
         {
@@ -89,7 +89,37 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
 
             return QuerySchemas(openApiDocument)
                 .SelectMany(schema => schema.Value.QueryEnumerations(schema.Key))
+                .Concat(QueryParameterEnumerations(openApiDocument))
                 .OrderBy(enumeration => enumeration.Key, StringComparer.Ordinal)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Queries the enumerations declared inline by the query parameters of the operations of the OpenAPI document
+        /// </summary>
+        /// <param name="openApiDocument">
+        /// the <see cref="OpenApiDocument"/> that contains the OpenAPI model to generate from
+        /// </param>
+        /// <returns>
+        /// The enumeration name, derived from the parameter name, paired with the parameter schema that declares it
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when parameters with the same name declare different sets of allowed values
+        /// </exception>
+        public static IReadOnlyList<KeyValuePair<string, IOpenApiSchema>> QueryParameterEnumerations(OpenApiDocument openApiDocument)
+        {
+            ArgumentNullException.ThrowIfNull(openApiDocument);
+
+            return openApiDocument.Paths
+                .SelectMany(path => path.Value.Operations.Values)
+                .SelectMany(operation => operation.Parameters ?? [])
+                .Where(parameter => parameter.In == ParameterLocation.Query && parameter.Schema?.Enum?.Count > 0)
+                .GroupBy(parameter => OpenApiSchemaExtensions.QueryPropertyName(parameter.Name), StringComparer.Ordinal)
+                .Select(group => group.Select(parameter => parameter.Schema).DistinctBy(schema => string.Join("|", schema.QueryEnumerationValues())).ToList() switch
+                {
+                    [var schema] => new KeyValuePair<string, IOpenApiSchema>(group.Key, schema),
+                    _ => throw new InvalidOperationException($"The query parameters named {group.Key} declare different sets of allowed values")
+                })
                 .ToList();
         }
 

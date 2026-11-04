@@ -15,7 +15,6 @@
 namespace SySML2.NET.REST
 {
     using System;
-    using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Text.Json;
@@ -24,8 +23,10 @@ namespace SySML2.NET.REST
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Root.Elements;
+    using SysML2.NET.Extensions.PSM;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.PSM.Enumerations;
 
     /// <summary>
     /// Provides the Relationship operations of the Systems Modeling API and Services
@@ -62,14 +63,13 @@ namespace SySML2.NET.REST
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
-        [GeneratedCode("SysML2.NET", "latest")]
-        public async Task<PagedResult<IRelationship>> GetRelationshipsByProjectCommitRelatedElementAsync(Guid projectId, Guid commitId, Guid relatedElementId, string direction = null, bool? excludeUsed = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
+        public async Task<PagedResult<IRelationship>> GetRelationshipsByProjectCommitRelatedElementAsync(Guid projectId, Guid commitId, Guid relatedElementId, Direction? direction = null, bool? excludeUsed = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
         {
             var query = new QueryStringBuilder(queryParameters);
-            query.Add("direction", direction);
+            query.Add("direction", direction is { } directionValue ? ToQueryValue(DirectionProvider.ToUtf8Bytes(directionValue)) : null);
             query.Add("excludeUsed", excludeUsed);
 
-            using var response = await this.SendAsync(new HttpMethod("GET"), $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements/{Escape(relatedElementId)}/relationships{query}", null, cancellationToken);
+            using var response = await this.SendAsync(HttpMethod.Get, $"projects/{Escape(projectId)}/commits/{Escape(commitId)}/elements/{Escape(relatedElementId)}/relationships{query}", null, cancellationToken);
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
