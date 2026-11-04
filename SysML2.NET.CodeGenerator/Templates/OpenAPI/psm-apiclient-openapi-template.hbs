@@ -73,7 +73,7 @@ namespace SySML2.NET.REST
             {{else if Schema.Reference}}
             return await this.Read{{> family Schema}}Async<{{> psm-apiclient-typename-openapi-partial Schema}}>(response, cancellationToken);
             {{else}}
-            return await this.ReadJsonAsync(response, cancellationToken);
+            return await ReadJsonAsync(response, cancellationToken);
             {{/if}}
             {{/if}}
             {{/each}}

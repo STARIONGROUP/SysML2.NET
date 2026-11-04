@@ -96,10 +96,14 @@ namespace SySML2.NET.REST
         /// </exception>
         public async Task<PagedResult<Project>> Open(Uri baseAddress, CancellationToken cancellationToken)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(baseAddress);
+#else
             if (baseAddress is null)
             {
                 throw new ArgumentNullException(nameof(baseAddress));
             }
+#endif
 
             if (!baseAddress.IsAbsoluteUri)
             {
@@ -111,7 +115,7 @@ namespace SySML2.NET.REST
             var httpClient = this.httpClientFactory.CreateClient(nameof(Session));
 
             // a relative request URI drops the last path segment of a base address that does not end with a slash
-            httpClient.BaseAddress = baseAddress.AbsoluteUri.EndsWith("/", StringComparison.Ordinal) ? baseAddress : new Uri($"{baseAddress.AbsoluteUri}/");
+            httpClient.BaseAddress = baseAddress.AbsoluteUri.EndsWith('/') ? baseAddress : new Uri($"{baseAddress.AbsoluteUri}/");
 
             var client = new PsmApiClient(httpClient, this.deSerializer, this.serializer, this.loggerFactory);
 

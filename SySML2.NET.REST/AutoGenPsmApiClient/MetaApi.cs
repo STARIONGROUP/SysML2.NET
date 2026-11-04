@@ -56,7 +56,7 @@ namespace SySML2.NET.REST
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
-            return await this.ReadJsonAsync(response, cancellationToken);
+            return await ReadJsonAsync(response, cancellationToken);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace SySML2.NET.REST
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
-            return await this.ReadJsonAsync(response, cancellationToken);
+            return await ReadJsonAsync(response, cancellationToken);
         }
     }
 }

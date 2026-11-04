@@ -42,9 +42,38 @@ namespace SySML2.NET.REST
         private const string JsonMediaType = "application/json";
 
         /// <summary>
-        /// Matches one link-value of an RFC 8288 <c>Link</c> header, capturing its target and its relation type
+        /// The pattern of one link-value of an RFC 8288 <c>Link</c> header, capturing its target and its relation type
         /// </summary>
-        private static readonly Regex LinkValuePattern = new("<(?<target>[^>]*)>[^,]*?;\\s*rel=\"?(?<relation>[^\";,]+)\"?", RegexOptions.Compiled);
+        private const string LinkValueExpression = "<(?<target>[^>]*)>[^,]*?;\\s*rel=\"?(?<relation>[^\";,]+)\"?";
+
+        /// <summary>
+        /// The time, in milliseconds, after which matching a <c>Link</c> header value times out
+        /// </summary>
+        private const int LinkValueMatchTimeoutMilliseconds = 1000;
+
+#if NET7_0_OR_GREATER
+        /// <summary>
+        /// Gets the <see cref="Regex"/> that matches one link-value of an RFC 8288 <c>Link</c> header
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Regex"/>
+        /// </returns>
+        [GeneratedRegex(LinkValueExpression, RegexOptions.None, LinkValueMatchTimeoutMilliseconds)]
+        private static partial Regex LinkValuePattern();
+#else
+        /// <summary>
+        /// The <see cref="Regex"/> that matches one link-value of an RFC 8288 <c>Link</c> header
+        /// </summary>
+        private static readonly Regex LinkValueRegex = new(LinkValueExpression, RegexOptions.Compiled, TimeSpan.FromMilliseconds(LinkValueMatchTimeoutMilliseconds));
+
+        /// <summary>
+        /// Gets the <see cref="Regex"/> that matches one link-value of an RFC 8288 <c>Link</c> header
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Regex"/>
+        /// </returns>
+        private static Regex LinkValuePattern() => LinkValueRegex;
+#endif
 
         /// <summary>
         /// The <see cref="HttpClient"/> whose <see cref="HttpClient.BaseAddress"/> addresses the server
@@ -129,7 +158,7 @@ namespace SySML2.NET.REST
             }
 
             var target = headerValues
-                .SelectMany(headerValue => LinkValuePattern.Matches(headerValue).Cast<Match>())
+                .SelectMany(headerValue => LinkValuePattern().Matches(headerValue).Cast<Match>())
                 .Where(match => relationTypes.Contains(match.Groups["relation"].Value, StringComparer.OrdinalIgnoreCase))
                 .Select(match => match.Groups["target"].Value)
                 .FirstOrDefault();
@@ -240,9 +269,9 @@ namespace SySML2.NET.REST
         /// The <see cref="MemoryStream"/> that holds the serialized payload
         /// </param>
         /// <returns>
-        /// The <see cref="HttpContent"/>
+        /// The <see cref="StreamContent"/>
         /// </returns>
-        private static HttpContent CreateContent(MemoryStream stream)
+        private static StreamContent CreateContent(MemoryStream stream)
         {
             stream.Position = 0;
 
@@ -250,6 +279,29 @@ namespace SySML2.NET.REST
             content.Headers.ContentType = new MediaTypeHeaderValue(JsonMediaType);
 
             return content;
+        }
+
+        /// <summary>
+        /// Reads the body of a response as a <see cref="Stream"/>
+        /// </summary>
+        /// <param name="content">
+        /// The <see cref="HttpContent"/> to read
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that cancels the read
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>, which the caller disposes
+        /// </returns>
+        private static Task<Stream> ReadContentStreamAsync(HttpContent content, CancellationToken cancellationToken)
+        {
+#if NET5_0_OR_GREATER
+            return content.ReadAsStreamAsync(cancellationToken);
+#else
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return content.ReadAsStreamAsync();
+#endif
         }
 
         /// <summary>
@@ -278,7 +330,7 @@ namespace SySML2.NET.REST
 
             if (response.Content?.Headers.ContentType?.MediaType == JsonMediaType)
             {
-                using var stream = await response.Content.ReadAsStreamAsync();
+                using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
                 try
                 {
@@ -315,7 +367,7 @@ namespace SySML2.NET.REST
                 return;
             }
 
-            using var stream = await response.Content.ReadAsStreamAsync();
+            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             var conflicts = await this.deSerializer.DeSerializeResponsesAsync<DataIdentity>(stream, SerializationModeKind.JSON, false, cancellationToken);
 
@@ -344,7 +396,7 @@ namespace SySML2.NET.REST
                 return default;
             }
 
-            using var stream = await response.Content.ReadAsStreamAsync();
+            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             return await this.deSerializer.DeSerializeResponseAsync<T>(stream, SerializationModeKind.JSON, false, cancellationToken);
         }
@@ -366,7 +418,7 @@ namespace SySML2.NET.REST
         /// </returns>
         private async Task<PagedResult<T>> ReadPagedResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken) where T : IResponse
         {
-            using var stream = await response.Content.ReadAsStreamAsync();
+            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             var records = await this.deSerializer.DeSerializeResponsesAsync<T>(stream, SerializationModeKind.JSON, false, cancellationToken);
 
@@ -393,7 +445,7 @@ namespace SySML2.NET.REST
         /// </exception>
         private async Task<T> ReadDataAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken) where T : IData
         {
-            using var stream = await response.Content.ReadAsStreamAsync();
+            using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
 
@@ -417,7 +469,7 @@ namespace SySML2.NET.REST
         /// </returns>
         private async Task<PagedResult<T>> ReadPagedDataAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken) where T : IData
         {
-            await using var stream = await response.Content.ReadAsStreamAsync();
+            await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
 
@@ -436,9 +488,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The parsed <see cref="JsonDocument"/>, which the caller disposes
         /// </returns>
-        private async Task<JsonDocument> ReadJsonAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        private static async Task<JsonDocument> ReadJsonAsync(HttpResponseMessage response, CancellationToken cancellationToken)
         {
-            await using var stream = await response.Content.ReadAsStreamAsync();
+            await using var stream = await ReadContentStreamAsync(response.Content, cancellationToken);
 
             return await JsonDocument.ParseAsync(stream, default, cancellationToken);
         }
@@ -494,7 +546,10 @@ namespace SySML2.NET.REST
 
             var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-            this.logger.LogDebug("{Method} {RequestUri} responded {StatusCode}", method, requestUri, response.StatusCode);
+            if (this.logger.IsEnabled(LogLevel.Debug))
+            {
+                this.logger.LogDebug("{Method} {RequestUri} responded {StatusCode}", method, requestUri, response.StatusCode);
+            }
 
             return response;
         }
