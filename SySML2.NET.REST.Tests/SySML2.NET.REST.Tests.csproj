@@ -20,12 +20,22 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging.Console" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Moq" />
         <PackageReference Include="NUnit" />
         <PackageReference Include="NUnit.Console" />
         <PackageReference Include="NUnit3TestAdapter" />
+        <PackageReference Include="RichardSzalay.MockHttp" />
 
         <PackageReference Include="coverlet.collector" />
         <PackageReference Include="coverlet.msbuild" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\SysML2.NET.Serializer.Json.Tests\Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.json" Link="Data\project.json" CopyToOutputDirectory="PreserveNewest" />
+      <None Include="..\SysML2.NET.Serializer.Json.Tests\Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.branches.json" Link="Data\branches.json" CopyToOutputDirectory="PreserveNewest" />
+      <None Include="..\SysML2.NET.Serializer.Json.Tests\Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.branches.c294a463-6c9c-47a8-b592-01252c5ab2a7.json" Link="Data\branch.json" CopyToOutputDirectory="PreserveNewest" />
+      <None Include="..\SysML2.NET.Serializer.Json.Tests\Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.json" Link="Data\commit.json" CopyToOutputDirectory="PreserveNewest" />
+      <None Include="..\SysML2.NET.Serializer.Json.Tests\Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.roots.json" Link="Data\roots.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
     <ItemGroup>

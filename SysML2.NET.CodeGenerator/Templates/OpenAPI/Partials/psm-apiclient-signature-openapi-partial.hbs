@@ -1,0 +1,34 @@
+{{~#*inline "scalar"~}}
+{{~#if (String.Equal Format 'uuid')}}Guid{{else if (String.Equal (OpenApi.Text Type) 'Integer')}}int{{else if (String.Equal (OpenApi.Text Type) 'Boolean')}}bool{{else}}string{{/if~}}
+{{~/inline~}}
+{{~#*inline "nullable"~}}
+{{~#if (String.Equal Format 'uuid')}}?{{else if (String.Equal (OpenApi.Text Type) 'Integer')}}?{{else if (String.Equal (OpenApi.Text Type) 'Boolean')}}?{{/if~}}
+{{~/inline~}}
+{{~#*inline "parametertype"~}}
+{{~#if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}IEnumerable<{{> scalar Schema.Items}}>{{else}}{{> scalar Schema}}{{#unless Required}}{{> nullable Schema}}{{/unless}}{{/if~}}
+{{~/inline~}}
+Task<
+{{~#each Operation.Responses~}}
+{{~#if (String.StartsWith @key '2')~}}
+{{~#each Content~}}
+{{~#if (String.Equal @key 'application/json')~}}
+{{~#if Schema.Items}}PagedResult<{{> psm-apiclient-typename-openapi-partial Schema.Items}}>{{else if Schema.Reference}}{{> psm-apiclient-typename-openapi-partial Schema}}{{else}}JsonDocument{{/if~}}
+{{~/if~}}
+{{~/each~}}
+{{~/if~}}
+{{~/each~}}
+> {{String.Pascalcase Operation.OperationId}}Async(
+{{~#each Operation.Parameters~}}
+{{~#if Required}}{{> parametertype}} {{Name}}, {{/if~}}
+{{~/each~}}
+{{~#each Operation.RequestBody.Content~}}
+{{~#if Schema.Reference}}{{Schema.Reference.Id}} requestBody, {{/if~}}
+{{~#each Schema.OneOf~}}{{~#if Items}}IEnumerable<{{> psm-apiclient-typename-openapi-partial Items}}> requestBody, {{/if~}}{{~/each~}}
+{{~/each~}}
+{{~#each Operation.Parameters~}}
+{{~#unless Required}}{{#unless (String.StartsWith Name 'page')}}{{> parametertype}} {{Name}} = null, {{/unless}}{{/unless~}}
+{{~/each~}}
+{{~#each Operation.Parameters~}}
+{{~#if (String.Equal Name 'page[size]')}}QueryParameters queryParameters = null, {{/if~}}
+{{~/each~}}
+CancellationToken cancellationToken = default)

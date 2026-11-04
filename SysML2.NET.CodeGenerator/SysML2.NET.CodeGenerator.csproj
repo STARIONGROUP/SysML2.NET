@@ -293,6 +293,21 @@
     <None Update="Templates\OpenAPI\psm-messagepack-formatterhelper-openapi-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\OpenAPI\psm-apiclient-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\psm-apiclient-interface-openapi-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\Partials\psm-apiclient-typename-openapi-partial.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\Partials\psm-apiclient-documentation-openapi-partial.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\OpenAPI\Partials\psm-apiclient-signature-openapi-partial.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />

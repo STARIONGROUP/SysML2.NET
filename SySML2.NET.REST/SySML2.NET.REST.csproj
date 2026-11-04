@@ -15,6 +15,7 @@
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
           [Update] Aligned with SysML2.NET 0.25.2
+          [Update] Code-generated PsmApiClient covering every operation of the Systems Modeling API and Services (breaking: replaces IRestClient/RestClient; Session no longer takes credentials)
       </PackageReleaseNotes>
       <GenerateDocumentationFile>true</GenerateDocumentationFile>
       <GenerateSBOM>true</GenerateSBOM>
@@ -22,7 +23,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Sbom.Targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="SySML2.NET.REST.Tests" />
   </ItemGroup>
 
 </Project>
