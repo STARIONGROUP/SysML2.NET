@@ -26,6 +26,7 @@ namespace SySML2.NET.REST
     using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.REST.Exceptions;
 
     /// <summary>
     /// Provides the Project operations of the Systems Modeling API and Services

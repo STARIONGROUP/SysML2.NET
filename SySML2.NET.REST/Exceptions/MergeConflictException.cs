@@ -7,7 +7,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SySML2.NET.REST
+namespace SysML2.NET.REST.Exceptions
 {
     using System;
     using System.Collections.Generic;

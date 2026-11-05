@@ -7,7 +7,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SySML2.NET.REST.Tests
+namespace SySML2.NET.REST.Tests.Exceptions
 {
     using System;
     using System.Net;
@@ -15,6 +15,7 @@ namespace SySML2.NET.REST.Tests
     using NUnit.Framework;
 
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.REST.Exceptions;
 
     [TestFixture]
     public class MergeConflictExceptionTestFixture

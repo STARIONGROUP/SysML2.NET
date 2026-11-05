@@ -25,6 +25,7 @@ namespace SySML2.NET.REST.Tests
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.PSM.Enumerations;
+    using SysML2.NET.REST.Exceptions;
     using SysML2.NET.Serializer.Json;
 
     [TestFixture]

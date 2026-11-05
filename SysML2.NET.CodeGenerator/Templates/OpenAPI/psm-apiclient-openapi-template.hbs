@@ -37,6 +37,7 @@ namespace SySML2.NET.REST
     {{#if UsesEnumerations}}
     using SysML2.NET.PSM.Enumerations;
     {{/if}}
+    using SysML2.NET.REST.Exceptions;
 
     /// <summary>
     /// Provides the {{Tag}} operations of the Systems Modeling API and Services
@@ -91,7 +92,7 @@ namespace SySML2.NET.REST
             {{else if Schema.Reference}}
             return await this.Read{{> family Schema}}Async<{{> psm-apiclient-typename-openapi-partial Schema}}>(response, cancellationToken);
             {{else if ../../IsPaged}}
-            return await this.ReadPagedJsonAsync(response, cancellationToken);
+            return await ReadPagedJsonAsync(response, cancellationToken);
             {{else}}
             return await ReadJsonAsync(response, cancellationToken);
             {{/if}}

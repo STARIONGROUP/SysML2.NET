@@ -21,6 +21,7 @@ namespace SySML2.NET.REST.Tests
 
     using RichardSzalay.MockHttp;
 
+    using SysML2.NET.REST.Exceptions;
     using SysML2.NET.Serializer.Json;
 
     [TestFixture]

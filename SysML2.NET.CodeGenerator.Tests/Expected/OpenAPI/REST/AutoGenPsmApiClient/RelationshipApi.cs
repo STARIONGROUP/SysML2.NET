@@ -27,6 +27,7 @@ namespace SySML2.NET.REST
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.PSM.Enumerations;
+    using SysML2.NET.REST.Exceptions;
 
     /// <summary>
     /// Provides the Relationship operations of the Systems Modeling API and Services

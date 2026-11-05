@@ -25,6 +25,7 @@ namespace SySML2.NET.REST
     using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.REST.Exceptions;
 
     /// <summary>
     /// Provides the Meta operations of the Systems Modeling API and Services
@@ -54,7 +55,7 @@ namespace SySML2.NET.REST
 
             await this.EnsureSuccessAsync(response, cancellationToken);
 
-            return await this.ReadPagedJsonAsync(response, cancellationToken);
+            return await ReadPagedJsonAsync(response, cancellationToken);
         }
 
         /// <summary>

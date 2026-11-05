@@ -30,6 +30,7 @@ namespace SySML2.NET.REST
     using SysML2.NET.Common;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.REST.Exceptions;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -487,7 +488,7 @@ namespace SySML2.NET.REST
 
             var records = await this.deSerializer.DeSerializeResponsesAsync<T>(stream, SerializationModeKind.JSON, false, cancellationToken);
 
-            return this.CreatePagedResult(response, records.ToList());
+            return CreatePagedResult(response, records.ToList());
         }
 
         /// <summary>
@@ -538,7 +539,7 @@ namespace SySML2.NET.REST
 
             var data = await this.deSerializer.DeSerializeAsync<T>(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
 
-            return this.CreatePagedResult(response, data.ToList());
+            return CreatePagedResult(response, data.ToList());
         }
 
         /// <summary>
@@ -572,11 +573,11 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The <see cref="PagedResult{T}"/> whose single record is the parsed <see cref="JsonDocument"/>, which the caller disposes
         /// </returns>
-        private async Task<PagedResult<JsonDocument>> ReadPagedJsonAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        private static async Task<PagedResult<JsonDocument>> ReadPagedJsonAsync(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             var document = await ReadJsonAsync(response, cancellationToken);
 
-            return this.CreatePagedResult(response, [document]);
+            return CreatePagedResult(response, [document]);
         }
 
         /// <summary>
@@ -594,7 +595,7 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The <see cref="PagedResult{T}"/>
         /// </returns>
-        private PagedResult<T> CreatePagedResult<T>(HttpResponseMessage response, IReadOnlyList<T> records)
+        private static PagedResult<T> CreatePagedResult<T>(HttpResponseMessage response, IReadOnlyList<T> records)
         {
             return new PagedResult<T>
             {
