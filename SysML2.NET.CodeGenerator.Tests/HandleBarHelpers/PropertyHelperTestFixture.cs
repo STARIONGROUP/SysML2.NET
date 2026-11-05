@@ -148,7 +148,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             foreach (var @class in this.allClasses.Where(c => !c.IsAbstract).Take(5))
             {
-                var properties = @class.QueryAllNonDerivedNonRedefinedProperties();
+                var properties = CodeGenerator.Extensions.ClassExtensions.QueryAllNonDerivedNonRedefinedProperties(@class);
 
                 foreach (var property in properties.Take(3))
                 {

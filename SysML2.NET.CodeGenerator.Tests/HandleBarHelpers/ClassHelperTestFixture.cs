@@ -138,7 +138,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public void Verify_that_QueryAllNonDerivedNonRedefinedProperties_does_not_throw()
         {
-            var testClass = this.allClasses.First(c => !c.IsAbstract && c.QueryAllNonDerivedNonRedefinedProperties().Count > 0);
+            var testClass = this.allClasses.First(c => !c.IsAbstract && CodeGenerator.Extensions.ClassExtensions.QueryAllNonDerivedNonRedefinedProperties(c).Count > 0);
 
             Assert.That(() => this.RenderWithClassContext(
                 "{{#Class.QueryAllNonDerivedNonRedefinedProperties}}item{{/Class.QueryAllNonDerivedNonRedefinedProperties}}",
@@ -150,7 +150,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             var testClass = this.allClasses.First(c => !c.IsAbstract);
 
-            var expectedCount = testClass.QueryAllNonDerivedNonRedefinedProperties().Count;
+            var expectedCount = CodeGenerator.Extensions.ClassExtensions.QueryAllNonDerivedNonRedefinedProperties(testClass).Count;
             var countResult = this.RenderWithClassContext("{{Class.WriteCountAllNonDerivedNonRedefinedProperties}}", testClass);
             var actualCount = int.Parse(countResult.Trim());
 

@@ -168,7 +168,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("#Class.QueryAllNonDerivedNonRedefinedProperties: supposed to be IClass");
                 }
 
-                return @class.QueryAllNonDerivedNonRedefinedProperties();
+                return Extensions.ClassExtensions.QueryAllNonDerivedNonRedefinedProperties(@class);
             });
 
             // writes the count of non-derived and non Redefined properties of the IClass

@@ -38,10 +38,8 @@ namespace SysML2.NET.Tests.Extensions.Utilities
         {
             Stream stream = null;
 
-            var ex = Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await stream.ReadAllBytesAsync(CancellationToken.None));
-
-            Assert.That(ex!.ParamName, Is.EqualTo("stream"));
+            await Assert.ThatAsync(async () => await stream.ReadAllBytesAsync(CancellationToken.None),
+                Throws.ArgumentNullException.With.Property(nameof(ArgumentNullException.ParamName)).EqualTo("stream"));
         }
 
         [Test]
