@@ -18,6 +18,7 @@
       </PackageReleaseNotes>
        <GenerateDocumentationFile>true</GenerateDocumentationFile>
        <GenerateSBOM>true</GenerateSBOM>
+       <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,7 +26,10 @@
       <PackageReference Include="Microsoft.Sbom.Targets" />
     </ItemGroup>
 
-    
+    <ItemGroup>
+      <EmbeddedResource Include="AutoGenSql\*.sql" LogicalName="SysML2.NET.Dal.AutoGenSql.%(Filename)%(Extension)" />
+    </ItemGroup>
+
   <ItemGroup>
     <Folder Include="PIM\" />
   </ItemGroup>
