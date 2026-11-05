@@ -95,8 +95,8 @@ namespace SySML2.NET.REST.Tests
         public async Task VerifyGetBranchesByProjectAsync()
         {
             var branchesUri = $"{BaseAddress}projects/{ProjectId}/branches";
-            var previousPage = new Page { Epoch = 1618861496632, Identifier = OtherCommitId };
-            var nextPage = new Page { Epoch = 1618861496632, Identifier = Guid.Parse("20109f40-4825-416a-86f6-7508ac42a021") };
+            var previousPage = Page.FromCursor(1618861496632, OtherCommitId);
+            var nextPage = Page.FromCursor(1618861496632, Guid.Parse("20109f40-4825-416a-86f6-7508ac42a021"));
 
             this.mockHttp.Expect(HttpMethod.Get, branchesUri)
                 .WithExactQueryString($"page[size]=2&page[after]={Uri.EscapeDataString(previousPage.ToString())}")
@@ -130,6 +130,14 @@ namespace SySML2.NET.REST.Tests
                 .Respond(HttpStatusCode.OK, CreateLinkHeader($"<{branchesUri}?page[after]=not-a-page>; rel=\"next\""), JsonMediaType, "[]");
 
             branches = await this.client.GetBranchesByProjectAsync(ProjectId);
+
+            Assert.That(branches.Next, Is.EqualTo(new Page("not-a-page")));
+
+            this.mockHttp.Expect(HttpMethod.Get, branchesUri)
+                .WithExactQueryString("page[after]=not-a-page")
+                .Respond(HttpStatusCode.OK, CreateLinkHeader($"<{branchesUri}?page[after]=>; rel=\"next\""), JsonMediaType, "[]");
+
+            branches = await this.client.GetBranchesByProjectAsync(ProjectId, new QueryParameters { PageAfter = branches.Next });
 
             Assert.That(branches.Next, Is.Null);
 
@@ -365,7 +373,7 @@ namespace SySML2.NET.REST.Tests
             var mergeUri = $"{BaseAddress}projects/{ProjectId}/branches/{BranchId}/merge";
 
             this.mockHttp.Expect(HttpMethod.Post, mergeUri)
-                .WithExactQueryString($"sourceCommitId={CommitId}%2C{OtherCommitId}&description=the%20merge%20description")
+                .WithExactQueryString($"sourceCommitId={CommitId},{OtherCommitId}&description=the%20merge%20description")
                 .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains(RootNamespaceId.ToString()))
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
 
@@ -424,7 +432,7 @@ namespace SySML2.NET.REST.Tests
         {
             var datatypesUri = $"{BaseAddress}meta/datatypes";
             const string datatypesPayload = "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"$defs\":{\"Boolean\":{\"type\":\"boolean\"}}}";
-            var nextPage = new Page { Epoch = 1618861496632, Identifier = CommitId };
+            var nextPage = Page.FromCursor(1618861496632, CommitId);
 
             this.mockHttp.Expect(HttpMethod.Get, datatypesUri)
                 .WithExactQueryString("page[size]=1")

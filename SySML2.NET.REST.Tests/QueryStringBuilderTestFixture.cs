@@ -26,6 +26,8 @@ namespace SySML2.NET.REST.Tests
 
         private static readonly Guid[] TwoCommitIds = [FirstCommitId, SecondCommitId];
 
+        private static readonly string[] ValuesContainingTheDelimiter = ["first, value", "second&value"];
+
         [Test]
         public void VerifyConstructor()
         {
@@ -33,7 +35,7 @@ namespace SySML2.NET.REST.Tests
 
             Assert.That(new QueryStringBuilder(new QueryParameters()).ToString(), Is.Empty);
 
-            var page = new Page { Epoch = 1618861496632, Identifier = FirstCommitId };
+            var page = Page.FromCursor(1618861496632, FirstCommitId);
 
             var builder = new QueryStringBuilder(new QueryParameters { PageSize = 2, PageAfter = page, PageBefore = page });
 
@@ -47,6 +49,7 @@ namespace SySML2.NET.REST.Tests
 
             builder.Add("commitId", null);
             builder.Add("sourceCommitId", NoCommitIds);
+            builder.Add("page[after]", default(Page));
 
             Assert.That(builder.ToString(), Is.Empty);
 
@@ -54,8 +57,9 @@ namespace SySML2.NET.REST.Tests
             builder.Add("sourceCommitId", TwoCommitIds);
             builder.Add("description", "the merge, & its description");
             builder.Add("pageSize", 1.5);
+            builder.Add("name", ValuesContainingTheDelimiter);
 
-            Assert.That(builder.ToString(), Is.EqualTo($"?excludeUsed=false&sourceCommitId={FirstCommitId}%2C{SecondCommitId}&description=the%20merge%2C%20%26%20its%20description&pageSize=1.5"));
+            Assert.That(builder.ToString(), Is.EqualTo($"?excludeUsed=false&sourceCommitId={FirstCommitId},{SecondCommitId}&description=the%20merge%2C%20%26%20its%20description&pageSize=1.5&name=first%2C%20value,second%26value"));
         }
 
         [Test]

@@ -50,7 +50,7 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
-        /// Adds a query parameter, writing a sequence as a comma separated list
+        /// Adds a query parameter, writing a sequence as a comma separated list in the OpenAPI <c>form</c> style without explode
         /// </summary>
         /// <param name="name">
         /// The name of the query parameter as declared in the OpenAPI document
@@ -63,7 +63,7 @@ namespace SySML2.NET.REST
             var text = value switch
             {
                 null => null,
-                string stringValue => stringValue,
+                string stringValue => Uri.EscapeDataString(stringValue),
                 bool booleanValue => booleanValue ? "true" : "false",
                 IEnumerable sequence => FormatSequence(sequence),
                 _ => FormatValue(value)
@@ -71,7 +71,7 @@ namespace SySML2.NET.REST
 
             if (text is not null)
             {
-                this.parameters.Add($"{name}={Uri.EscapeDataString(text)}");
+                this.parameters.Add($"{name}={text}");
             }
         }
 
@@ -87,7 +87,7 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
-        /// Formats a sequence as a comma separated list of values formatted using the invariant culture
+        /// Formats a sequence as its escaped values joined by a literal comma
         /// </summary>
         /// <param name="sequence">
         /// The sequence to format
@@ -99,21 +99,23 @@ namespace SySML2.NET.REST
         {
             var values = sequence.Cast<object>().Select(FormatValue).ToList();
 
-            return values.Count == 0 ? null : string.Join(",", values);
+            return values.Count == 0 ? null : string.Join(',', values);
         }
 
         /// <summary>
-        /// Formats a scalar value using the invariant culture
+        /// Formats a scalar value using the invariant culture and escapes it
         /// </summary>
         /// <param name="value">
         /// The value to format
         /// </param>
         /// <returns>
-        /// The formatted value
+        /// The escaped value, or <c>null</c> when the value formats as <c>null</c>
         /// </returns>
         private static string FormatValue(object value)
         {
-            return Convert.ToString(value, CultureInfo.InvariantCulture);
+            var text = Convert.ToString(value, CultureInfo.InvariantCulture);
+
+            return text is null ? null : Uri.EscapeDataString(text);
         }
     }
 }

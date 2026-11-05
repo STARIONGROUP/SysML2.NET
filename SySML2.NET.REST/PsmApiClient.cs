@@ -196,9 +196,9 @@ namespace SySML2.NET.REST
         /// The relation types, any of which selects the link
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>, or <c>null</c> when the header has no such link or the link carries no page token that <see cref="Page.TryParse"/> accepts
+        /// The <see cref="Page"/> carrying the token exactly as the service returned it, or <c>null</c> when the header has no such link or the link carries no page token
         /// </returns>
-        private Page? QueryLinkedPage(HttpResponseMessage response, params string[] relationTypes)
+        private static Page? QueryLinkedPage(HttpResponseMessage response, params string[] relationTypes)
         {
             if (!response.Headers.TryGetValues("Link", out var headerValues))
             {
@@ -228,19 +228,7 @@ namespace SySML2.NET.REST
                     .Select(pair => Uri.UnescapeDataString(pair[1]))
                     .FirstOrDefault();
 
-            if (token is null)
-            {
-                return null;
-            }
-
-            if (Page.TryParse(token, out var page))
-            {
-                return page;
-            }
-
-            this.logger.LogWarning("The page token {Token} of the {Relation} link is not a valid page token", token, relationTypes[0]);
-
-            return null;
+            return string.IsNullOrWhiteSpace(token) ? null : new Page(token);
         }
 
         /// <summary>
@@ -611,8 +599,8 @@ namespace SySML2.NET.REST
             return new PagedResult<T>
             {
                 Records = records,
-                Next = this.QueryLinkedPage(response, "next"),
-                Previous = this.QueryLinkedPage(response, "prev", "previous")
+                Next = QueryLinkedPage(response, "next"),
+                Previous = QueryLinkedPage(response, "prev", "previous")
             };
         }
 

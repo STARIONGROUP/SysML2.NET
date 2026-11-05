@@ -14,42 +14,87 @@ namespace SysML2.NET.PSM
     using System.Text;
 
     /// <summary>
-    /// Defines the structure of the page for the pagination process
+    /// Defines the opaque page token of the cursor-based pagination (Systems Modeling API and Services, Clause 8.1.3)
     /// </summary>
-    public struct Page
+    public readonly struct Page
     {
         /// <summary>
-        /// The time, in milliseconds since the Unix epoch, that positions the page
-        /// </summary>
-        public long Epoch { get; set; }
-
-        /// <summary>
-        /// The page identifier
-        /// </summary>
-        public Guid Identifier { get; set; }
-
-        /// <summary>
-        /// Converts a page token into a <see cref="Page"/>
+        /// Initializes a new instance of the <see cref="Page"/> struct
         /// </summary>
         /// <param name="token">
-        /// The page token: the unpadded Base64 encoding of an epoch and an identifier separated by a vertical bar (Systems Modeling API and Services, Clause 8.1.3)
+        /// The page token, kept exactly as the service returned it
         /// </param>
-        /// <param name="page">
-        /// The <see cref="Page"/> when the conversion succeeds, or the default <see cref="Page"/> otherwise
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="token"/> is <c>null</c>, empty or white space
+        /// </exception>
+        public Page(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentException("The page token is required", nameof(token));
+            }
+
+            this.Token = token;
+        }
+
+        /// <summary>
+        /// The page token, sent back to the service unchanged
+        /// </summary>
+        public string Token { get; }
+
+        /// <summary>
+        /// Creates a <see cref="Page"/> whose token is the unpadded Base64 encoding of an epoch and an identifier separated by a vertical bar
+        /// </summary>
+        /// <param name="epoch">
+        /// The time, in milliseconds since the Unix epoch, that positions the page
+        /// </param>
+        /// <param name="identifier">
+        /// The identifier that positions the page
         /// </param>
         /// <returns>
-        /// <c>true</c> when <paramref name="token"/> was converted, <c>false</c> otherwise
+        /// The <see cref="Page"/> in the token format shown by the examples of Clause 8.1.3
         /// </returns>
-        public static bool TryParse(string token, out Page page)
+        public static Page FromCursor(long epoch, Guid identifier)
         {
-            page = default;
+            var text = $"{epoch.ToString(CultureInfo.InvariantCulture)}|{identifier}";
 
-            if (string.IsNullOrWhiteSpace(token))
+            return new Page(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)).TrimEnd('='));
+        }
+
+        /// <summary>
+        /// Returns the page token
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Token"/>
+        /// </returns>
+        public override string ToString()
+        {
+            return this.Token;
+        }
+
+        /// <summary>
+        /// Decodes the token as the unpadded Base64 encoding of an epoch and an identifier separated by a vertical bar
+        /// </summary>
+        /// <param name="epoch">
+        /// The epoch, in milliseconds since the Unix epoch, when the decoding succeeds, or 0 otherwise
+        /// </param>
+        /// <param name="identifier">
+        /// The identifier when the decoding succeeds, or <see cref="Guid.Empty"/> otherwise
+        /// </param>
+        /// <returns>
+        /// <c>true</c> when the token has the format shown by the examples of Clause 8.1.3, <c>false</c> otherwise
+        /// </returns>
+        public bool TryDecode(out long epoch, out Guid identifier)
+        {
+            epoch = 0;
+            identifier = Guid.Empty;
+
+            if (string.IsNullOrWhiteSpace(this.Token))
             {
                 return false;
             }
 
-            var base64 = token.Replace('-', '+').Replace('_', '/');
+            var base64 = this.Token.Replace('-', '+').Replace('_', '/');
             base64 = base64.PadRight(base64.Length + (4 - base64.Length % 4) % 4, '=');
 
             var bytes = new byte[base64.Length * 3 / 4];
@@ -61,31 +106,15 @@ namespace SysML2.NET.PSM
 
             var parts = Encoding.UTF8.GetString(bytes, 0, byteCount).Split('|');
 
-            if (parts.Length != 2 || !long.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out var epoch) || !Guid.TryParse(parts[1], out var identifier))
+            if (parts.Length != 2 || !long.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out var decodedEpoch) || !Guid.TryParse(parts[1], out var decodedIdentifier))
             {
                 return false;
             }
 
-            page = new Page
-            {
-                Epoch = epoch,
-                Identifier = identifier
-            };
+            epoch = decodedEpoch;
+            identifier = decodedIdentifier;
 
             return true;
-        }
-
-        /// <summary>
-        /// Returns the page token that represents the <see cref="Page"/>
-        /// </summary>
-        /// <returns>
-        /// The unpadded Base64 encoding of the epoch and the identifier separated by a vertical bar
-        /// </returns>
-        public override string ToString()
-        {
-            var text = $"{this.Epoch.ToString(CultureInfo.InvariantCulture)}|{this.Identifier}";
-
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(text)).TrimEnd('=');
         }
     }
 }
