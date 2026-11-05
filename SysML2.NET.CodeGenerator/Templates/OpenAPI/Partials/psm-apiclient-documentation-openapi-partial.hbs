@@ -1,0 +1,69 @@
+/// <summary>
+/// {{Operation.Summary}}
+/// </summary>
+{{#each Parameters}}
+{{#if Required}}
+/// <param name="{{Name}}">
+/// {{Description}}
+/// </param>
+{{/if}}
+{{/each}}
+{{#if Operation.RequestBody}}
+/// <param name="requestBody">
+/// The payload sent as the body of the request
+/// </param>
+{{/if}}
+{{#each Parameters}}
+{{#unless Required}}
+/// <param name="{{Name}}">
+/// {{Description}}
+/// </param>
+{{/unless}}
+{{/each}}
+{{#if IsPaged}}
+/// <param name="queryParameters">
+/// The page of the result to request, or <c>null</c> to let the server choose
+/// </param>
+{{/if}}
+/// <param name="cancellationToken">
+/// The <see cref="CancellationToken"/> that cancels the request
+/// </param>
+/// <returns>
+/// The deserialized response of the {{Operation.OperationId}} operation
+/// </returns>
+{{#each Parameters}}
+{{#if Required}}
+{{#if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}
+/// <exception cref="ArgumentNullException">
+/// Thrown when <paramref name="{{Name}}"/> is <c>null</c>
+/// </exception>
+/// <exception cref="ArgumentException">
+/// Thrown when <paramref name="{{Name}}"/> is empty
+/// </exception>
+{{else if (String.Equal (OpenApi.Text Schema.Type) 'String')}}
+{{#unless Schema.Enum}}
+{{#unless (String.Equal Schema.Format 'uuid')}}
+/// <exception cref="ArgumentNullException">
+/// Thrown when <paramref name="{{Name}}"/> is <c>null</c>
+/// </exception>
+/// <exception cref="ArgumentException">
+/// Thrown when <paramref name="{{Name}}"/> is empty or whitespace
+/// </exception>
+{{/unless}}
+{{/unless}}
+{{/if}}
+{{/if}}
+{{/each}}
+{{#if Operation.RequestBody.Required}}
+/// <exception cref="ArgumentNullException">
+/// Thrown when <paramref name="requestBody"/> is <c>null</c>
+/// </exception>
+{{/if}}
+/// <exception cref="PsmApiException">
+/// Thrown when the server responds with an error status code
+/// </exception>
+{{#if ThrowsMergeConflict}}
+/// <exception cref="MergeConflictException">
+/// Thrown when the server reports conflicting data
+/// </exception>
+{{/if}}

@@ -22,7 +22,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Sbom.Targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="SySML2.NET.REST.Tests" />
   </ItemGroup>
 
 </Project>

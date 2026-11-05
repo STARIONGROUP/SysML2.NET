@@ -40,25 +40,25 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.OpenApiHandleBarsGenerators
         [Test]
         public async Task VerifyGenerateAsync()
         {
-            Assert.That(() => this.openApiEnumProviderGenerator.GenerateAsync(null, this.outputDirectory), Throws.TypeOf<ArgumentNullException>());
-            Assert.That(() => this.openApiEnumProviderGenerator.GenerateAsync(this.openApiDocument, null), Throws.TypeOf<ArgumentNullException>());
+            await Assert.ThatAsync(() => this.openApiEnumProviderGenerator.GenerateAsync(null, this.outputDirectory), Throws.TypeOf<ArgumentNullException>());
+            await Assert.ThatAsync(() => this.openApiEnumProviderGenerator.GenerateAsync(this.openApiDocument, null), Throws.TypeOf<ArgumentNullException>());
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(null, this.outputDirectory, "CompositeConstraintOperator"), Throws.TypeOf<ArgumentNullException>());
-                Assert.That(() => this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(this.openApiDocument, null, "CompositeConstraintOperator"), Throws.TypeOf<ArgumentNullException>());
-                Assert.That(() => this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(this.openApiDocument, this.outputDirectory, " "), Throws.TypeOf<ArgumentException>());
+                await Assert.ThatAsync(() => this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(null, this.outputDirectory, "CompositeConstraintOperator"), Throws.TypeOf<ArgumentNullException>());
+                await Assert.ThatAsync(() => this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(this.openApiDocument, null, "CompositeConstraintOperator"), Throws.TypeOf<ArgumentNullException>());
+                await Assert.ThatAsync(() => this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(this.openApiDocument, this.outputDirectory, " "), Throws.TypeOf<ArgumentException>());
             }
 
             await Assert.ThatAsync(() => this.openApiEnumProviderGenerator.GenerateAsync(this.openApiDocument, this.outputDirectory), Throws.Nothing);
 
-            Assert.That(this.outputDirectory.GetFiles("*Provider.cs"), Has.Length.EqualTo(4));
+            Assert.That(this.outputDirectory.GetFiles("*Provider.cs"), Has.Length.EqualTo(5));
         }
 
         [Test]
         [Category("Expected")]
         public async Task VerifyGenerateEnumerationProviderAsync([Values("CompositeConstraintOperator", "CompositeConstraintRequestOperator",
-            "PrimitiveConstraintOperator", "PrimitiveConstraintRequestOperator")] string enumerationName)
+            "Direction", "PrimitiveConstraintOperator", "PrimitiveConstraintRequestOperator")] string enumerationName)
         {
             var generatedCode = await this.openApiEnumProviderGenerator.GenerateEnumerationProviderAsync(this.openApiDocument, this.outputDirectory, enumerationName);
 

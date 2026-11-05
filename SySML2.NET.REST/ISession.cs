@@ -9,29 +9,39 @@
 
 namespace SySML2.NET.REST
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
-    
+
+    using SysML2.NET.PSM;
+    using SysML2.NET.PSM.DTO;
+
     /// <summary>
-    /// Definition of the <see cref="ISession"/> used to provide an abstraction over the SysML2 model server REST API
+    /// Definition of the <see cref="ISession"/> that holds the connection to a server of the Systems Modeling API and Services
     /// </summary>
     public interface ISession
     {
         /// <summary>
-        /// Opens a connection to the SysML2 model server REST API
+        /// Gets the <see cref="IPsmApiClient"/> of the open connection, or <c>null</c> when the session is closed
         /// </summary>
-        /// <param name="username">The username used to login a SysML2 model server</param>
-        /// <param name="password">The password (secret) used to login a SysML2 model server</param>
-        /// <param name="uri">
-        /// The uri of the model-server
-        /// </param>
-        /// <param name="cancellationToken">
-        /// The <see cref="CancellationToken"/> used to cancel the operation
-        /// </param>
-        Task Open(string username, string password, string uri, CancellationToken cancellationToken);
+        IPsmApiClient Client { get; }
 
         /// <summary>
-        /// Closes a connection to the SysML2 model server REST API
+        /// Opens a connection to the server, replacing any open connection, and reads the first page of its projects
+        /// </summary>
+        /// <param name="baseAddress">
+        /// The absolute base address of the server
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that cancels the operation
+        /// </param>
+        /// <returns>
+        /// The first page of the projects of the server
+        /// </returns>
+        Task<PagedResult<Project>> Open(Uri baseAddress, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Closes the connection to the server
         /// </summary>
         void Close();
     }

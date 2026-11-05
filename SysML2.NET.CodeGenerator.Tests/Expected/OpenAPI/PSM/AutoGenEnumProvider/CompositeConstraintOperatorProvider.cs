@@ -47,30 +47,6 @@ namespace SysML2.NET.Extensions.PSM
         }
 
         /// <summary>
-        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="CompositeConstraintOperator"/>
-        /// </summary>
-        /// <param name="value">The <see cref="ReadOnlySpan{Char}"/> that is to be parsed.</param>
-        /// <param name="result">The parsed literal, or <c>default</c> when the value denotes none.</param>
-        /// <returns>True when the value was parsed.</returns>
-        public static bool TryParse(ReadOnlySpan<char> value, out CompositeConstraintOperator result)
-        {
-            if (value.Length == 3 && value.Equals("and".AsSpan(), StringComparison.OrdinalIgnoreCase))
-            {
-                result = CompositeConstraintOperator.and;
-                return true;
-            }
-
-            if (value.Length == 2 && value.Equals("or".AsSpan(), StringComparison.OrdinalIgnoreCase))
-            {
-                result = CompositeConstraintOperator.or;
-                return true;
-            }
-
-            result = default;
-            return false;
-        }
-
-        /// <summary>
         /// Parses the UTF-8 encoded <see cref="ReadOnlySpan{Byte}"/> to a <see cref="CompositeConstraintOperator"/>
         /// </summary>
         /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> that is to be parsed.</param>
@@ -115,6 +91,30 @@ namespace SysML2.NET.Extensions.PSM
             value.CopyTo(buffer);
 
             return Parse(buffer[..(int)value.Length]);
+        }
+
+        /// <summary>
+        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="CompositeConstraintOperator"/>
+        /// </summary>
+        /// <param name="value">The <see cref="ReadOnlySpan{Char}"/> that is to be parsed.</param>
+        /// <param name="result">The parsed literal, or <c>default</c> when the value denotes none.</param>
+        /// <returns>True when the value was parsed.</returns>
+        public static bool TryParse(ReadOnlySpan<char> value, out CompositeConstraintOperator result)
+        {
+            if (value.Length == 3 && value.Equals("and".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = CompositeConstraintOperator.and;
+                return true;
+            }
+
+            if (value.Length == 2 && value.Equals("or".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = CompositeConstraintOperator.or;
+                return true;
+            }
+
+            result = default;
+            return false;
         }
 
         /// <summary>

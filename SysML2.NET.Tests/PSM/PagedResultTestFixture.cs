@@ -43,13 +43,14 @@ namespace SysML2.NET.Tests.PSM
                 Assert.That(pagedResult.Records[^1], Is.EqualTo("the last record"));
             }
 
-            pagedResult.Previous = new Page { Epoch = 1700000000, Identifier = FirstIdentifier };
-            pagedResult.Next = new Page { Epoch = 1700000600, Identifier = LastIdentifier };
+            pagedResult.Previous = Page.FromCursor(1618861496632, FirstIdentifier);
+            pagedResult.Next = new Page("the next page token");
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(pagedResult.Previous.Value.ToString(), Is.EqualTo($"1700000000|{FirstIdentifier}"));
-                Assert.That(pagedResult.Next.Value.ToString(), Is.EqualTo($"1700000600|{LastIdentifier}"));
+                Assert.That(pagedResult.Previous, Is.EqualTo(Page.FromCursor(1618861496632, FirstIdentifier)));
+                Assert.That(pagedResult.Previous, Is.Not.EqualTo(Page.FromCursor(1618861496632, LastIdentifier)));
+                Assert.That(pagedResult.Next.Value.Token, Is.EqualTo("the next page token"));
             }
         }
     }
