@@ -43,5 +43,10 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     /// The <see cref="ModelVersionRegistration.Id" /> of the first release WITHOUT the metaclass,
     /// or null while it is still part of the newest registered release
     /// </param>
-    public sealed record ClassKindRegistration(int Id, string Name, bool IsAbstract, int IntroducedIn, int? RemovedIn = null);
+    /// <param name="IsApiRecord">
+    /// Whether the kind is a Systems Modeling API Clause 7 data record (ProjectUsage, ExternalRelationship,
+    /// ExternalData) versioned through the commit stream like an element but absent from the UML model;
+    /// such kinds live at or above <see cref="ClassKindRegistry.ApiRecordIdFloor" />
+    /// </param>
+    public sealed record ClassKindRegistration(int Id, string Name, bool IsAbstract, int IntroducedIn, int? RemovedIn = null, bool IsApiRecord = false);
 }

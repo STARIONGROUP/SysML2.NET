@@ -38,9 +38,17 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     ///   * The generator fails fast on any drift between the newest registered release and the UML
     ///     model on disk (unregistered class, stale registration, fingerprint mismatch), printing
     ///     the exact entries to append.
+    ///   * Ids at or above <see cref="ApiRecordIdFloor" /> are reserved for the Systems Modeling API
+    ///     Clause 7 data records (not metaclasses, exempt from the UML drift check); metaclass ids
+    ///     stay below it.
     /// </summary>
     public static class ClassKindRegistry
     {
+        /// <summary>
+        /// The first class-kind id reserved for API data records; every id below it is a metaclass.
+        /// </summary>
+        public const int ApiRecordIdFloor = 1000;
+
         /// <summary>
         /// Gets the registered metamodel releases, ordered by ordinal. The last entry is the release
         /// the UML model on disk must match.
@@ -230,6 +238,9 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             new(173, "ViewpointDefinition", false, 1),
             new(174, "ViewpointUsage", false, 1),
             new(175, "WhileLoopActionUsage", false, 1),
+            new(1001, "ExternalData", false, 1, null, true),
+            new(1002, "ExternalRelationship", false, 1, null, true),
+            new(1003, "ProjectUsage", false, 1, null, true),
         ];
     }
 }

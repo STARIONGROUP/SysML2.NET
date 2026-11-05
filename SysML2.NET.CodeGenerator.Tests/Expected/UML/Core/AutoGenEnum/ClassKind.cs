@@ -32,6 +32,8 @@ namespace SysML2.NET.Core
     /// (SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs) and are
     /// frozen forever: never renumbered, never deleted. The canonical identity of a metaclass
     /// remains its name (the API @type value); this enum is the registry interning of it.
+    /// Values from 1000 upward are the Systems Modeling API Clause 7 data records, versioned
+    /// through the commit stream like elements.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public enum ClassKind : short
@@ -910,6 +912,21 @@ namespace SysML2.NET.Core
         /// The WhileLoopActionUsage metaclass — frozen class_kind id 175, introduced in sysml-2.0-2026-08.
         /// </summary>
         WhileLoopActionUsage = 175,
+
+        /// <summary>
+        /// The ExternalData API data record — frozen class_kind id 1001, introduced in sysml-2.0-2026-08.
+        /// </summary>
+        ExternalData = 1001,
+
+        /// <summary>
+        /// The ExternalRelationship API data record — frozen class_kind id 1002, introduced in sysml-2.0-2026-08.
+        /// </summary>
+        ExternalRelationship = 1002,
+
+        /// <summary>
+        /// The ProjectUsage API data record — frozen class_kind id 1003, introduced in sysml-2.0-2026-08.
+        /// </summary>
+        ProjectUsage = 1003,
 
     }
 }

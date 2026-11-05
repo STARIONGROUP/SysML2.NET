@@ -32,13 +32,15 @@ namespace SysML2.NET.Core
     /// (SysML2.NET.CodeGenerator/Generators/UmlHandleBarsGenerators/ClassKindRegistry.cs) and are
     /// frozen forever: never renumbered, never deleted. The canonical identity of a metaclass
     /// remains its name (the API @type value); this enum is the registry interning of it.
+    /// Values from 1000 upward are the Systems Modeling API Clause 7 data records, versioned
+    /// through the commit stream like elements.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public enum ClassKind : short
     {
         {{ #each this.Members as | member | }}
         /// <summary>
-        /// The {{ member.Name }} metaclass{{#if member.IsAbstract}} (abstract){{/if}} — frozen class_kind id {{ member.Id }}, introduced in {{ member.IntroducedIn }}.{{#if member.RemovedIn}} Removed in {{ member.RemovedIn }}.{{/if}}
+        /// The {{ member.Name }} {{#if member.IsApiRecord}}API data record{{else}}metaclass{{/if}}{{#if member.IsAbstract}} (abstract){{/if}} — frozen class_kind id {{ member.Id }}, introduced in {{ member.IntroducedIn }}.{{#if member.RemovedIn}} Removed in {{ member.RemovedIn }}.{{/if}}
         /// </summary>
         {{ member.Name }} = {{ member.Id }},
 

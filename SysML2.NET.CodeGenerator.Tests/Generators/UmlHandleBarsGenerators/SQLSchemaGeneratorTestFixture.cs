@@ -72,6 +72,18 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.validate_references_in_commit("));
             Assert.That(generatedSchema, Does.Contain("ANALYZE validation_snapshot;"), "the full pass must feed the planner true snapshot cardinality");
             Assert.That(generatedSchema, Does.Contain("'wrong-type'"), "the reference validation must type-check via the typed identity");
+            Assert.That(generatedSchema, Does.Contain("(1003, 'ProjectUsage', false, 1, NULL)"), "the API data records are seeded from the registry's reserved band");
+            Assert.That(generatedSchema, Does.Contain("UNIQUE (id, project_id)"), "commit must expose the FK target for the usedProject = usedProjectCommit.owningProject check");
+            Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.external_data_version"));
+            Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.external_relationship_version"));
+            Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.project_usage_version"));
+            Assert.That(generatedSchema, Does.Contain("FOREIGN KEY (used_project_commit, used_project) REFERENCES sysml2.commit (id, project_id)"));
+            Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.resolve_kind_at_commit("));
+            Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.get_project_usages_at_commit("));
+            Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.get_external_relationships_by_element_at_commit("));
+            Assert.That(generatedSchema, Does.Contain("SELECT 'external_relationship_version'::text, 'external_data_end'::text,"), "the hand-written record reference columns must get validation arms");
+            Assert.That(generatedSchema, Does.Contain("CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END"), "an Element-typed reference naming an API data record must be reported as wrong-type");
+            Assert.That(generatedSchema, Does.Not.Contain("CREATE TABLE sysml2.project_usage ("), "project usages are versioned through the commit stream, not stored as a flat PIM row");
             Assert.That(generatedSchema, Does.Not.Contain("CREATE TABLE sysml2.property_catalog"), "the property->storage routing lives in generated C#, not in the database");
             Assert.That(generatedSchema, Does.Not.Contain("CREATE TABLE sysml2.class_kind_table"), "subtype-table participation lives in generated C#, not in the database");
             Assert.That(generatedSchema, Does.Not.Contain("{{"), "no unresolved handlebars expressions may survive generation");

@@ -119,7 +119,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                     registration.Id,
                     registration.IsAbstract,
                     versionNamesById[registration.IntroducedIn],
-                    registration.RemovedIn.HasValue ? versionNamesById[registration.RemovedIn.Value] : null))
+                    registration.RemovedIn.HasValue ? versionNamesById[registration.RemovedIn.Value] : null,
+                    registration.IsApiRecord))
                 .ToList();
 
             var template = this.Templates["core-classkind-enum-template"];

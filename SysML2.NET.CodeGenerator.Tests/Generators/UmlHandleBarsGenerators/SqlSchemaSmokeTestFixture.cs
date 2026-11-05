@@ -86,6 +86,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 Assert.That(passNotices, Has.Some.StartWith("PASS 2a"), "the derived-state axiom assertion must be present");
                 Assert.That(passNotices, Has.Some.StartWith("PASS 11a"), "the multi-version registry assertion must be present");
                 Assert.That(passNotices, Has.Some.StartWith("PASS 13c"), "the incremental reference-validation assertion must be present");
+                Assert.That(passNotices, Has.Some.StartWith("PASS 16e"), "the ProjectUsageService commit-stream assertions must be present");
+                Assert.That(passNotices, Has.Some.StartWith("PASS 28e"), "the ExternalRelationshipService commit-stream assertions must be present");
             }
         }
     }

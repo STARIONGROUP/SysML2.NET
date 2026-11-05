@@ -49,6 +49,12 @@ SET search_path = sysml2, public;
 -- stale registration, fingerprint mismatch) instead of silently renumbering, and the seed
 -- INSERTs are idempotent (ON CONFLICT DO NOTHING) — safe to re-apply to a populated database.
 --
+-- Ids at or above 1000 are RESERVED for the Systems Modeling API Clause 7 data records
+-- (ExternalData, ExternalRelationship, ProjectUsage). DataVersion.payload is typed Data, which
+-- those records realize alongside Element, so they flow through the same identity/version
+-- stream (§4, §5, §7b) — the band is how DDL tells a record row from an element row. They are
+-- not metaclasses: the UML drift check skips them, and metaclass ids stay below the band.
+--
 -- The property->storage routing that earlier designs kept in a property_catalog table is
 -- deliberately NOT in the database: the generated service layer carries it as static
 -- per-release C# (model-version descriptors). Nothing in this schema reads such a catalog —
@@ -120,7 +126,8 @@ CREATE TABLE sysml2.commit (
     -- stamp, never from the branch or the project.
     model_version_id smallint   NOT NULL REFERENCES sysml2.model_version (id),
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (id, project_id)   -- FK target for project_usage_version's usedProject consistency check (§7b)
 );
 
 CREATE INDEX ix_commit_project_created ON sysml2.commit (project_id, created DESC);
@@ -297,14 +304,6 @@ CREATE TABLE sysml2.tag (
 CREATE UNIQUE INDEX ux_tag_project_name_live
     ON sysml2.tag (project_id, name) WHERE deleted IS NULL;
 
-CREATE TABLE sysml2.project_usage (
-    id                     uuid NOT NULL,
-    project_id             uuid NOT NULL REFERENCES sysml2.project (id) ON DELETE CASCADE,
-    used_project_id        uuid NOT NULL REFERENCES sysml2.project (id),
-    used_project_commit_id uuid NOT NULL REFERENCES sysml2.commit (id),
-    PRIMARY KEY (id)
-);
-
 -- Query is the spec's stored-query record (Clause 7): a saved select/where/orderBy definition,
 -- executed on demand against a commit or branch head. Mutable + destructible — the API exposes
 -- PUT and DELETE for it. The definition is stored as the spec's own JSON shape; the service's
@@ -334,7 +333,7 @@ CREATE UNIQUE INDEX ux_query_project_name_live
 -- This table is deliberately NOT partitioned and its PK is the bare uuid: ProjectUsage lets an
 -- element in project A reference an element in project B, so a (project_id, id) composite key
 -- would make every cross-project reference un-FK-able. Project scoping is enforced by the
--- service layer via project_usage, not by the FK.
+-- service layer via the usage resolved at the commit (project_usage_version, §7b), not by the FK.
 ------------------------------------------------------------------------------------------------
 
 -- DELETION IS EXPLICIT, NOT CASCADED. At scale (~1M identities per project), FK cascades are a
@@ -343,7 +342,14 @@ CREATE UNIQUE INDEX ux_query_project_name_live
 -- Project deletion is therefore an ordered, batched, per-table procedure (each statement prunes
 -- to one partition and uses a PK prefix):
 --
---     DELETE FROM sysml2.<link/subtype tables>  WHERE project_id = $1;
+--     -- 0. While any commit of ANOTHER project pins this project through project_usage_version
+--     --    (§7b), its NO ACTION FK onto commit blocks the procedure: the API answers 409. This
+--     --    is the deleteProject behaviour chosen from the PIM's ProjectService note ("only if
+--     --    none of their commits are referenced by project usages in any commit of any other
+--     --    project"). Removing that usage history to proceed is an ADMINISTRATIVE PURGE — an
+--     --    explicit exception to the append-only rule of §5 that also drops DataVersions from
+--     --    the using project's commit change sets.
+--     DELETE FROM sysml2.<link/subtype tables>  WHERE project_id = $1;   -- §6, §7 and §7b
 --     DELETE FROM sysml2.derived_version        WHERE project_id = $1;
 --     DELETE FROM sysml2.element_version        WHERE project_id = $1;
 --     DELETE FROM sysml2.branch_head            WHERE project_id = $1;
@@ -375,7 +381,7 @@ CREATE TABLE sysml2.data_identity (
     UNIQUE (id, class_kind)   -- FK target for element_version's type-consistency check
 );
 
-CREATE INDEX ix_data_identity_project ON sysml2.data_identity (project_id);
+CREATE INDEX ix_data_identity_project_kind ON sysml2.data_identity (project_id, class_kind);
 
 ------------------------------------------------------------------------------------------------
 -- 5. STORED ELEMENT STATE — append-only                                          [HAND-WRITTEN]
@@ -422,8 +428,13 @@ CREATE TABLE sysml2.element_version (
 
     CONSTRAINT element_version_tombstone_empty
         CHECK (NOT tombstone OR (stored_json IS NULL AND element_id IS NULL)),
+    -- API data records (class_kind >= 1000, §2 / §7b) carry stored_json only — never Element columns
     CONSTRAINT element_version_payload_present
-        CHECK (tombstone OR (stored_json IS NOT NULL AND element_id IS NOT NULL AND is_implied_included IS NOT NULL))
+        CHECK (tombstone OR (stored_json IS NOT NULL
+               AND (class_kind >= 1000 OR (element_id IS NOT NULL AND is_implied_included IS NOT NULL)))),
+    CONSTRAINT element_version_api_record_shape
+        CHECK (class_kind < 1000 OR (element_id IS NULL AND declared_name IS NULL AND declared_short_name IS NULL
+               AND is_implied_included IS NULL AND owning_relationship IS NULL))
 ) PARTITION BY HASH (project_id);
 
 -- Clause 7.1.2: "DataVersion.identity is unique among records listed in Commit.change."
@@ -495,6 +506,70 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 ------------------------------------------------------------------------------------------------
 
 {{ #uml_template.SQL.WriteSubtypeTables this }}
+------------------------------------------------------------------------------------------------
+-- 7b. API DATA RECORDS — ExternalData, ExternalRelationship, ProjectUsage          [HAND-WRITTEN]
+--
+-- Systems Modeling API Clause 7: DataVersion.payload is typed Data, realized by Element AND by
+-- these three records. The REST binding posts them inside Commit.change like any element, and
+-- ProjectUsageService / ExternalRelationshipService read at a commit and write through a branch
+-- (a new commit; the branch head moves). So a record is an identity (§4, class_kind in the
+-- >= 1000 band of §2) plus element_version rows (§5: tombstone = deletion, stored_json = the
+-- wire payload, no Element columns), and these subtype tables hold its typed columns exactly as
+-- the generated §7 tables do for metaclasses. Everything downstream — CAS commit protocol,
+-- branch_head overlay, checkpoints, resolvers, diff, merge, GET .../changes — applies unchanged.
+--
+-- Deliberately NOT partitioned: a project holds a handful of usages and at most thousands of
+-- external relationships; the (project_id, version_id) PK keeps every probe project-local.
+--
+-- Read functions live in §10 (resolve_kind_at_commit and the get_*_at_commit family).
+------------------------------------------------------------------------------------------------
+
+CREATE TABLE sysml2.external_data_version (
+    project_id          uuid NOT NULL,
+    version_id          uuid NOT NULL,
+    resource_identifier text NOT NULL,   -- ExternalData::resourceIdentifier : IRI [1..1]
+    PRIMARY KEY (project_id, version_id),
+    FOREIGN KEY (project_id, version_id)
+        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+);
+
+-- elementEnd names ANY Element identity — cross-project targets included, as for every reference
+-- (§4); externalDataEnd names an ExternalData identity. Both are type-checked by §13 through the
+-- typed identity, and reverse-indexed for getExternalRelationshipsByElement and §13's incoming arm.
+CREATE TABLE sysml2.external_relationship_version (
+    project_id        uuid NOT NULL,
+    version_id        uuid NOT NULL,
+    element_end       uuid NOT NULL REFERENCES sysml2.data_identity (id),
+    external_data_end uuid NOT NULL REFERENCES sysml2.data_identity (id),
+    language          text NULL,
+    specification     text NULL,
+    PRIMARY KEY (project_id, version_id),
+    FOREIGN KEY (project_id, version_id)
+        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+);
+
+CREATE INDEX ix_external_relationship_version_element_end
+    ON sysml2.external_relationship_version (project_id, element_end);
+CREATE INDEX ix_external_relationship_version_external_data_end
+    ON sysml2.external_relationship_version (project_id, external_data_end);
+
+-- The PIM constraint usedProject = usedProjectCommit.owningProject is the composite FK onto
+-- commit (id, project_id): a usage can never pin a commit of a different project. Both FKs are
+-- NO ACTION, so a used project stays undeletable while any commit anywhere pins it (§4, step 0).
+CREATE TABLE sysml2.project_usage_version (
+    project_id          uuid NOT NULL,
+    version_id          uuid NOT NULL,
+    used_project        uuid NOT NULL REFERENCES sysml2.project (id),
+    used_project_commit uuid NOT NULL REFERENCES sysml2.commit (id),
+    PRIMARY KEY (project_id, version_id),
+    FOREIGN KEY (project_id, version_id)
+        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE,
+    FOREIGN KEY (used_project_commit, used_project) REFERENCES sysml2.commit (id, project_id)
+);
+
+CREATE INDEX ix_project_usage_version_used_project
+    ON sysml2.project_usage_version (used_project);
+
 ------------------------------------------------------------------------------------------------
 -- 8. DERIVED ELEMENT STATE — the second append-only stream                       [HAND-WRITTEN]
 --
@@ -814,6 +889,12 @@ $$;
 --
 -- The normalized columns of §5-§7 are the system of record and carry the referential integrity;
 -- stored_json / derived_json are the read model built from them at commit time.
+--
+-- API data records (§7b) are read by KIND: resolve_kind_at_commit folds one class_kind over the
+-- checkpoint-bounded ancestry, driven from the few identities of that kind — O(records x log),
+-- never O(model). Reads at a branch head go through branch.head_commit_id and that fold (no
+-- overlay fast path; records are few). A record by id is get_element_at_commit — its payload is
+-- the record's wire JSON. The element SET reads below return Elements only (class_kind < 1000).
 ------------------------------------------------------------------------------------------------
 
 -- Branch-head single-element read over the OVERLAY: the overlay row wins (a tombstoned overlay
@@ -873,7 +954,8 @@ AS $$
       ON ev.project_id = h.project_id AND ev.version_id = h.version_id
     LEFT JOIN sysml2.derived_version dv
       ON dv.project_id = h.project_id AND dv.derived_id = h.derived_id
-    WHERE NOT ev.tombstone;
+    WHERE NOT ev.tombstone
+      AND ev.class_kind < 1000;
 $$;
 
 CREATE OR REPLACE FUNCTION sysml2.get_elements_at_commit(p_project_id uuid, p_commit_id uuid)
@@ -887,7 +969,8 @@ AS $$
     JOIN sysml2.element_version ev
       ON ev.project_id = p_project_id AND ev.version_id = r.version_id
     LEFT JOIN sysml2.derived_version dv
-      ON dv.project_id = p_project_id AND dv.derived_id = r.derived_id;
+      ON dv.project_id = p_project_id AND dv.derived_id = r.derived_id
+    WHERE ev.class_kind < 1000;
 $$;
 
 CREATE OR REPLACE FUNCTION sysml2.get_element_at_commit(p_project_id uuid, p_commit_id uuid, p_identity_id uuid)
@@ -901,6 +984,131 @@ AS $$
       ON ev.project_id = p_project_id AND ev.version_id = r.version_id
     LEFT JOIN sysml2.derived_version dv
       ON dv.project_id = p_project_id AND dv.derived_id = r.derived_id;
+$$;
+
+-- Kind-filtered resolver for the API data records (§7b): the same checkpoint-bounded walk as
+-- resolve_element_at_commit, folded over ONE class_kind. The checkpoint arm is driven from the
+-- identities of that kind (ix_data_identity_project_kind) probing the commit_checkpoint PK, so
+-- the cost is O(records x walked ancestry) — never a scan of the checkpoint.
+CREATE OR REPLACE FUNCTION sysml2.resolve_kind_at_commit(p_project_id uuid, p_commit_id uuid, p_class_kind smallint)
+RETURNS TABLE (identity_id uuid, version_id uuid)
+LANGUAGE sql
+STABLE
+AS $$
+    WITH RECURSIVE
+    checkpoint AS (
+        SELECT ccr.commit_id
+        FROM sysml2.commit_checkpoint_registry ccr
+        WHERE ccr.project_id = p_project_id AND ccr.commit_id = p_commit_id
+    ),
+    ancestry AS (
+        SELECT c.id, c.created, (SELECT count(*) > 0 FROM checkpoint) AS at_checkpoint
+        FROM sysml2.commit c
+        WHERE c.id = p_commit_id
+
+        UNION
+
+        SELECT parent.id, parent.created,
+               EXISTS (SELECT 1 FROM sysml2.commit_checkpoint_registry ccr
+                       WHERE ccr.project_id = p_project_id AND ccr.commit_id = parent.id)
+        FROM ancestry a
+        JOIN sysml2.commit_parent cp ON cp.commit_id = a.id
+        JOIN sysml2.commit parent    ON parent.id = cp.parent_commit_id
+        WHERE NOT a.at_checkpoint
+    ),
+    folded AS (
+        SELECT DISTINCT ON (ev.identity_id)
+               ev.identity_id,
+               ev.version_id,
+               ev.tombstone
+        FROM ancestry a
+        JOIN sysml2.element_version ev
+          ON ev.project_id = p_project_id AND ev.commit_id = a.id AND ev.class_kind = p_class_kind
+        ORDER BY ev.identity_id, a.created DESC, a.id DESC
+    ),
+    checkpointed AS (
+        SELECT cc.identity_id, cc.version_id
+        FROM sysml2.data_identity di
+        JOIN ancestry a ON a.at_checkpoint
+        JOIN sysml2.commit_checkpoint cc
+          ON cc.project_id = p_project_id AND cc.commit_id = a.id AND cc.identity_id = di.id
+        WHERE di.project_id = p_project_id
+          AND di.class_kind = p_class_kind
+          AND NOT EXISTS (SELECT 1 FROM folded f WHERE f.identity_id = di.id)
+    )
+    SELECT f.identity_id, f.version_id FROM folded f WHERE NOT f.tombstone
+    UNION ALL
+    SELECT c.identity_id, c.version_id FROM checkpointed c;
+$$;
+
+-- ProjectUsageService::getProjectUsages(project, commit).
+CREATE OR REPLACE FUNCTION sysml2.get_project_usages_at_commit(p_project_id uuid, p_commit_id uuid)
+RETURNS TABLE (identity_id uuid, used_project uuid, used_project_commit uuid, payload jsonb)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT r.identity_id, pu.used_project, pu.used_project_commit, ev.stored_json
+    FROM sysml2.resolve_kind_at_commit(p_project_id, p_commit_id,
+             (SELECT ck.id FROM sysml2.class_kind ck WHERE ck.name = 'ProjectUsage')) r
+    JOIN sysml2.project_usage_version pu
+      ON pu.project_id = p_project_id AND pu.version_id = r.version_id
+    JOIN sysml2.element_version ev
+      ON ev.project_id = p_project_id AND ev.version_id = r.version_id;
+$$;
+
+-- GET /projects/{p}/commits/{c}/elements/{e}/projectUsage: the usage, at the commit, whose used
+-- project owns the element's identity.
+CREATE OR REPLACE FUNCTION sysml2.get_project_usage_for_element_at_commit(p_project_id uuid, p_commit_id uuid, p_identity_id uuid)
+RETURNS TABLE (identity_id uuid, used_project uuid, used_project_commit uuid, payload jsonb)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT pu.identity_id, pu.used_project, pu.used_project_commit, pu.payload
+    FROM sysml2.data_identity di
+    JOIN sysml2.get_project_usages_at_commit(p_project_id, p_commit_id) pu
+      ON pu.used_project = di.project_id
+    WHERE di.id = p_identity_id;
+$$;
+
+-- ExternalRelationshipService::getExternalRelationships(project, commit).
+CREATE OR REPLACE FUNCTION sysml2.get_external_relationships_at_commit(p_project_id uuid, p_commit_id uuid)
+RETURNS TABLE (identity_id uuid, element_end uuid, external_data_end uuid, payload jsonb)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT r.identity_id, er.element_end, er.external_data_end, ev.stored_json
+    FROM sysml2.resolve_kind_at_commit(p_project_id, p_commit_id,
+             (SELECT ck.id FROM sysml2.class_kind ck WHERE ck.name = 'ExternalRelationship')) r
+    JOIN sysml2.external_relationship_version er
+      ON er.project_id = p_project_id AND er.version_id = r.version_id
+    JOIN sysml2.element_version ev
+      ON ev.project_id = p_project_id AND ev.version_id = r.version_id;
+$$;
+
+-- ExternalRelationshipService::getExternalRelationshipsByElement(project, commit, elementId):
+-- candidates through the reverse index, each resolved at the commit; a candidate counts only
+-- when its RESOLVED version still names the element.
+CREATE OR REPLACE FUNCTION sysml2.get_external_relationships_by_element_at_commit(p_project_id uuid, p_commit_id uuid, p_element_id uuid)
+RETURNS TABLE (identity_id uuid, element_end uuid, external_data_end uuid, payload jsonb)
+LANGUAGE sql
+STABLE
+AS $$
+    WITH candidates AS (
+        SELECT DISTINCT ev.identity_id
+        FROM sysml2.external_relationship_version er
+        JOIN sysml2.element_version ev
+          ON ev.project_id = er.project_id AND ev.version_id = er.version_id
+        WHERE er.project_id = p_project_id
+          AND er.element_end = p_element_id
+    )
+    SELECT r.identity_id, er.element_end, er.external_data_end, ev.stored_json
+    FROM candidates c
+    CROSS JOIN LATERAL sysml2.resolve_element_at_commit(p_project_id, p_commit_id, c.identity_id) r
+    JOIN sysml2.external_relationship_version er
+      ON er.project_id = p_project_id AND er.version_id = r.version_id
+    JOIN sysml2.element_version ev
+      ON ev.project_id = p_project_id AND ev.version_id = r.version_id
+    WHERE er.element_end = p_element_id;
 $$;
 
 ------------------------------------------------------------------------------------------------
@@ -1058,7 +1266,7 @@ $$;
 --                     checked via the TYPED IDENTITY (data_identity.class_kind, §4) — this
 --                     check applies to cross-project targets too.
 -- Liveness of cross-project targets is deliberately NOT checked here: it depends on the
--- used-project commit (project_usage), which is service-layer resolution.
+-- used-project commit (project_usage_version, §7b), which is service-layer resolution.
 --
 -- TIER 1 — validate_references_at_commit: the FULL periodic audit over one commit's whole
 -- snapshot. It materializes and ANALYZEs the snapshot in a temp table first, so the planner
