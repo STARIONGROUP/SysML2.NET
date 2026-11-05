@@ -70,11 +70,19 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the getDatatypeById operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="datatypeId"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="datatypeId"/> is empty or whitespace
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         public async Task<JsonDocument> GetDatatypeByIdAsync(string datatypeId, CancellationToken cancellationToken = default)
         {
+            ThrowIfNullOrWhiteSpace(datatypeId, nameof(datatypeId));
+
             var query = new QueryStringBuilder();
 
             using var response = await this.SendAsync(HttpMethod.Get, $"meta/datatypes/{Escape(datatypeId)}{query}", null, cancellationToken);

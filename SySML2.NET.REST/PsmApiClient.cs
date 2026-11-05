@@ -188,6 +188,54 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
+        /// Throws when a required text parameter is <c>null</c>, empty or whitespace
+        /// </summary>
+        /// <param name="value">
+        /// The value of the parameter
+        /// </param>
+        /// <param name="parameterName">
+        /// The name of the parameter
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="value"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="value"/> is empty or whitespace
+        /// </exception>
+        private static void ThrowIfNullOrWhiteSpace(string value, string parameterName)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException("A non-whitespace value is required", parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws when a required request body is <c>null</c>
+        /// </summary>
+        /// <param name="value">
+        /// The request body
+        /// </param>
+        /// <param name="parameterName">
+        /// The name of the parameter
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="value"/> is <c>null</c>
+        /// </exception>
+        private static void ThrowIfNull(object value, string parameterName)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+        }
+
+        /// <summary>
         /// Queries the page that the link with the specified relation type of the <c>Link</c> header points to
         /// </summary>
         /// <param name="response">

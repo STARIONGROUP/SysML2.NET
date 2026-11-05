@@ -76,11 +76,16 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the postBranchByProject operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         public async Task<Branch> PostBranchByProjectAsync(Guid projectId, BranchRequest requestBody, CancellationToken cancellationToken = default)
         {
+            ThrowIfNull(requestBody, nameof(requestBody));
+
             var query = new QueryStringBuilder();
 
             using var content = await this.CreateContentAsync(requestBody, cancellationToken);

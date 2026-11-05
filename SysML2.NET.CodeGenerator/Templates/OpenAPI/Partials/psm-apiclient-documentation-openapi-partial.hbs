@@ -40,9 +40,25 @@
 /// <exception cref="ArgumentException">
 /// Thrown when <paramref name="{{Name}}"/> is empty
 /// </exception>
+{{else if (String.Equal (OpenApi.Text Schema.Type) 'String')}}
+{{#unless Schema.Enum}}
+{{#unless (String.Equal Schema.Format 'uuid')}}
+/// <exception cref="ArgumentNullException">
+/// Thrown when <paramref name="{{Name}}"/> is <c>null</c>
+/// </exception>
+/// <exception cref="ArgumentException">
+/// Thrown when <paramref name="{{Name}}"/> is empty or whitespace
+/// </exception>
+{{/unless}}
+{{/unless}}
 {{/if}}
 {{/if}}
 {{/each}}
+{{#if Operation.RequestBody.Required}}
+/// <exception cref="ArgumentNullException">
+/// Thrown when <paramref name="requestBody"/> is <c>null</c>
+/// </exception>
+{{/if}}
 /// <exception cref="PsmApiException">
 /// Thrown when the server responds with an error status code
 /// </exception>

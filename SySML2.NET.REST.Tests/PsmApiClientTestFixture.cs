@@ -209,11 +209,13 @@ namespace SySML2.NET.REST.Tests
             Assert.That(commit.Id, Is.EqualTo(CommitId));
 
             this.mockHttp.Expect(HttpMethod.Post, commitsUri)
-                .With(request => request.Content is null && string.IsNullOrWhiteSpace(request.RequestUri.Query))
+                .With(request => string.IsNullOrWhiteSpace(request.RequestUri.Query))
                 .Respond(HttpStatusCode.BadRequest, JsonMediaType, ErrorPayload);
 
-            await Assert.ThatAsync(() => this.client.PostCommitByProjectAsync(ProjectId, null),
+            await Assert.ThatAsync(() => this.client.PostCommitByProjectAsync(ProjectId, commitRequest),
                 Throws.TypeOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.BadRequest));
+
+            await Assert.ThatAsync(() => this.client.PostCommitByProjectAsync(ProjectId, null), Throws.ArgumentNullException);
 
             this.mockHttp.VerifyNoOutstandingExpectation();
         }
@@ -491,6 +493,12 @@ namespace SySML2.NET.REST.Tests
             this.mockHttp.Expect(HttpMethod.Get, datatypeUri).Respond(JsonMediaType, "not json");
 
             await Assert.ThatAsync(() => this.client.GetDatatypeByIdAsync(datatypeId), Throws.InstanceOf<JsonException>());
+
+            using (Assert.EnterMultipleScope())
+            {
+                await Assert.ThatAsync(() => this.client.GetDatatypeByIdAsync(null), Throws.ArgumentNullException);
+                await Assert.ThatAsync(() => this.client.GetDatatypeByIdAsync(" "), Throws.ArgumentException);
+            }
 
             this.mockHttp.VerifyNoOutstandingExpectation();
         }

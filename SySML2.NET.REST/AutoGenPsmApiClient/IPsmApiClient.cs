@@ -157,6 +157,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the postBranchByProject operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -237,6 +240,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the postTagByProject operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -320,6 +326,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the postCommitByProject operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -626,6 +635,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the postQueryByProject operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -669,6 +681,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the putQueryByProjectAndId operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -741,6 +756,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the getQueryResultsByProjectIdQuery operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -767,6 +785,9 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the getQueryResultsByProjectIdQueryPost operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
@@ -801,6 +822,12 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the getDatatypeById operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="datatypeId"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="datatypeId"/> is empty or whitespace
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>

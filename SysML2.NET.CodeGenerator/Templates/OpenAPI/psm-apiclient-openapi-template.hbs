@@ -56,9 +56,20 @@ namespace SySML2.NET.REST
             {{#if (String.Equal (OpenApi.Text Schema.Type) 'Array')}}
             ThrowIfNullOrEmpty({{Name}}, nameof({{Name}}));
 
+            {{else if (String.Equal (OpenApi.Text Schema.Type) 'String')}}
+            {{#unless Schema.Enum}}
+            {{#unless (String.Equal Schema.Format 'uuid')}}
+            ThrowIfNullOrWhiteSpace({{Name}}, nameof({{Name}}));
+
+            {{/unless}}
+            {{/unless}}
             {{/if}}
             {{/if}}
             {{/each}}
+            {{#if Operation.RequestBody.Required}}
+            ThrowIfNull(requestBody, nameof(requestBody));
+
+            {{/if}}
             var query = new QueryStringBuilder({{#if IsPaged}}queryParameters{{/if}});
             {{#each Parameters}}
             {{#if (String.Equal (OpenApi.Text In) 'Query')}}

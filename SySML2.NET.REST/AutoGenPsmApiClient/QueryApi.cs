@@ -76,11 +76,16 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the postQueryByProject operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         public async Task<Query> PostQueryByProjectAsync(Guid projectId, QueryRequest requestBody, CancellationToken cancellationToken = default)
         {
+            ThrowIfNull(requestBody, nameof(requestBody));
+
             var query = new QueryStringBuilder();
 
             using var content = await this.CreateContentAsync(requestBody, cancellationToken);
@@ -138,11 +143,16 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the putQueryByProjectAndId operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         public async Task<Query> PutQueryByProjectAndIdAsync(Guid projectId, Guid queryId, QueryRequest requestBody, CancellationToken cancellationToken = default)
         {
+            ThrowIfNull(requestBody, nameof(requestBody));
+
             var query = new QueryStringBuilder();
 
             using var content = await this.CreateContentAsync(requestBody, cancellationToken);
@@ -239,11 +249,16 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the getQueryResultsByProjectIdQuery operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         public async Task<PagedResult<IData>> GetQueryResultsByProjectIdQueryAsync(Guid projectId, QueryRequest requestBody, Guid? commitId = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
         {
+            ThrowIfNull(requestBody, nameof(requestBody));
+
             var query = new QueryStringBuilder(queryParameters);
             query.Add("commitId", commitId);
 
@@ -276,11 +291,16 @@ namespace SySML2.NET.REST
         /// <returns>
         /// The deserialized response of the getQueryResultsByProjectIdQueryPost operation
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="requestBody"/> is <c>null</c>
+        /// </exception>
         /// <exception cref="PsmApiException">
         /// Thrown when the server responds with an error status code
         /// </exception>
         public async Task<PagedResult<IData>> GetQueryResultsByProjectIdQueryPostAsync(Guid projectId, QueryRequest requestBody, Guid? commitId = null, QueryParameters queryParameters = null, CancellationToken cancellationToken = default)
         {
+            ThrowIfNull(requestBody, nameof(requestBody));
+
             var query = new QueryStringBuilder(queryParameters);
             query.Add("commitId", commitId);
 
