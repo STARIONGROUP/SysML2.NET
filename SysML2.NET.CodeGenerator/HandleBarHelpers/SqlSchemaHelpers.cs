@@ -45,6 +45,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     public static class SqlSchemaHelpers
     {
         /// <summary>
+        /// The reference columns of the hand-written API data record tables, absent from the UML model:
+        /// table, column, and the single legal target kind (null when any Element is legal).
+        /// </summary>
+        private static readonly IReadOnlyList<(string TableName, string ColumnName, string TargetKindName)> ApiRecordReferenceColumns =
+        [
+            ("external_relationship_version", "element_end", null),
+            ("external_relationship_version", "external_data_end", "ExternalData"),
+        ];
+
+        /// <summary>
         /// Registers the SQL schema helpers
         /// </summary>
         /// <param name="handlebars">
@@ -244,6 +254,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     })
                     .ToList();
 
+                boundedSources.AddRange(ApiRecordReferenceColumns
+                    .Select(source => (source.TableName, source.ColumnName,
+                        AllowedTargetKinds: source.TargetKindName == null ? null : (IReadOnlyList<int>)[registrationsByName[source.TargetKindName].Id])));
+
                 var fullPassBlocks = boundedSources
                     .Select(source => FormatReferenceValidationBlock(source.TableName, source.ColumnName, source.AllowedTargetKinds));
 
@@ -407,9 +421,44 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="payload">
         /// The subject <see cref="HandlebarsPayload" />
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="payload" /> is null
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown on any drift between the UML model and the registry
+        /// </exception>
         public static void AssertRegistryInSyncWithModel(HandlebarsPayload payload)
         {
-            var newestVersion = ClassKindRegistry.ModelVersions[^1];
+            AssertRegistryInSyncWithModel(payload, ClassKindRegistry.ModelVersions, ClassKindRegistry.ClassKinds);
+        }
+
+        /// <summary>
+        /// Asserts that the UML model matches the newest release of the given registrations: the
+        /// fingerprint, the API-record id band, every model class registered, no stale metaclass
+        /// registration, no API record named like a model class, and matching abstractness
+        /// </summary>
+        /// <param name="payload">
+        /// The subject <see cref="HandlebarsPayload" />
+        /// </param>
+        /// <param name="modelVersions">
+        /// The registered metamodel releases, ordered by ordinal; the last one must match the model
+        /// </param>
+        /// <param name="classKinds">
+        /// The class-kind registrations to validate the model against
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when any argument is null
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown on any drift between the UML model and the registrations
+        /// </exception>
+        public static void AssertRegistryInSyncWithModel(HandlebarsPayload payload, IReadOnlyList<ModelVersionRegistration> modelVersions, IReadOnlyList<ClassKindRegistration> classKinds)
+        {
+            ArgumentNullException.ThrowIfNull(payload);
+            ArgumentNullException.ThrowIfNull(modelVersions);
+            ArgumentNullException.ThrowIfNull(classKinds);
+
+            var newestVersion = modelVersions[^1];
             var fingerprint = $"{payload.RootPackage.Name}:{payload.RootPackage.XmiId}";
 
             if (fingerprint != newestVersion.SourceFingerprint)
@@ -420,7 +469,24 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     "release, or update the fingerprint in place for an editorial change that adds or removes no metaclasses.");
             }
 
-            var registrationsByName = ClassKindRegistry.ClassKinds.ToDictionary(registration => registration.Name);
+            var misplacedRegistrations = classKinds
+                .Where(registration => registration.IsApiRecord != registration.Id >= ClassKindRegistry.ApiRecordIdFloor)
+                .ToList();
+
+            if (misplacedRegistrations.Count != 0)
+            {
+                var misplacedNames = string.Join(", ", misplacedRegistrations.Select(registration => registration.Name));
+
+                throw new InvalidOperationException(
+                    $"ClassKindRegistry ids at or above {ClassKindRegistry.ApiRecordIdFloor} are reserved for API data records and metaclass ids " +
+                    $"must stay below it: {misplacedNames}.");
+            }
+
+            var metaclassRegistrations = classKinds
+                .Where(registration => !registration.IsApiRecord)
+                .ToList();
+
+            var registrationsByName = metaclassRegistrations.ToDictionary(registration => registration.Name);
             var orderedClasses = QueryOrderedClasses(payload);
 
             var unregisteredClasses = orderedClasses
@@ -429,7 +495,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (unregisteredClasses.Count != 0)
             {
-                var maxId = ClassKindRegistry.ClassKinds.Max(registration => registration.Id);
+                var maxId = metaclassRegistrations.Max(registration => registration.Id);
 
                 var suggestedRegistrations = string.Join("\n", unregisteredClasses
                     .Select((@class, classIndex) => $"    new({maxId + classIndex + 1}, \"{@class.Name}\", {(@class.IsAbstract ? "true" : "false")}, {newestVersion.Id}),"));
@@ -443,7 +509,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 .Select(@class => @class.Name)
                 .ToHashSet();
 
-            var staleRegistrations = ClassKindRegistry.ClassKinds
+            var staleRegistrations = metaclassRegistrations
                 .Where(registration => registration.RemovedIn == null && !modelClassNames.Contains(registration.Name))
                 .ToList();
 
@@ -454,6 +520,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 throw new InvalidOperationException(
                     $"ClassKindRegistry registers metaclasses the UML model no longer contains: {staleNames}. Keep their entries and " +
                     "close them with RemovedIn = the id of the release that dropped them — never delete a registration.");
+            }
+
+            var collidingRecords = classKinds
+                .Where(registration => registration.IsApiRecord && modelClassNames.Contains(registration.Name))
+                .ToList();
+
+            if (collidingRecords.Count != 0)
+            {
+                var collidingNames = string.Join(", ", collidingRecords.Select(registration => registration.Name));
+
+                throw new InvalidOperationException(
+                    $"ClassKindRegistry registers API data records whose names the UML model also declares as metaclasses: {collidingNames}.");
             }
 
             var driftedRegistrations = orderedClasses
@@ -598,46 +676,46 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </param>
         /// <param name="allowedTargetKinds">
         /// The legal target class_kind ids, or null when every concrete metaclass is legal (an
-        /// Element-typed reference) and the type check is omitted
+        /// Element-typed reference) and only an API data record target is the wrong type
         /// </param>
         /// <returns>
         /// The formatted SELECT arm, without a trailing separator
         /// </returns>
         private static string FormatReferenceValidationBlock(string tableName, string columnName, IReadOnlyList<int> allowedTargetKinds)
         {
+            var wrongTypePredicate = FormatWrongTypePredicate(allowedTargetKinds);
             var stringBuilder = new StringBuilder();
-
-            if (allowedTargetKinds == null)
-            {
-                stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
-                stringBuilder.AppendLine($"           snap.identity_id, src.{columnName}, 'dangling'::text");
-                stringBuilder.AppendLine($"    FROM sysml2.{tableName} src");
-                stringBuilder.AppendLine("    JOIN validation_snapshot snap ON snap.version_id = src.version_id");
-                stringBuilder.AppendLine($"    JOIN sysml2.data_identity ti ON ti.id = src.{columnName}");
-                stringBuilder.AppendLine($"    LEFT JOIN validation_snapshot live ON live.identity_id = src.{columnName}");
-                stringBuilder.AppendLine("    WHERE src.project_id = p_project_id");
-                stringBuilder.AppendLine($"      AND src.{columnName} IS NOT NULL");
-                stringBuilder.AppendLine("      AND ti.project_id = p_project_id");
-                stringBuilder.Append("      AND live.identity_id IS NULL");
-
-                return stringBuilder.ToString();
-            }
-
-            var allowedIds = string.Join(", ", allowedTargetKinds);
 
             stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
             stringBuilder.AppendLine($"           snap.identity_id, src.{columnName},");
-            stringBuilder.AppendLine($"           CASE WHEN ti.class_kind NOT IN ({allowedIds}) THEN 'wrong-type' ELSE 'dangling' END");
+            stringBuilder.AppendLine($"           CASE WHEN {wrongTypePredicate} THEN 'wrong-type' ELSE 'dangling' END");
             stringBuilder.AppendLine($"    FROM sysml2.{tableName} src");
             stringBuilder.AppendLine("    JOIN validation_snapshot snap ON snap.version_id = src.version_id");
             stringBuilder.AppendLine($"    JOIN sysml2.data_identity ti ON ti.id = src.{columnName}");
             stringBuilder.AppendLine($"    LEFT JOIN validation_snapshot live ON live.identity_id = src.{columnName}");
             stringBuilder.AppendLine("    WHERE src.project_id = p_project_id");
             stringBuilder.AppendLine($"      AND src.{columnName} IS NOT NULL");
-            stringBuilder.AppendLine($"      AND (ti.class_kind NOT IN ({allowedIds})");
+            stringBuilder.AppendLine($"      AND ({wrongTypePredicate}");
             stringBuilder.Append("           OR (ti.project_id = p_project_id AND live.identity_id IS NULL))");
 
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Formats the predicate on the typed identity alias ti that classifies a reference target as
+        /// 'wrong-type': outside the allowed kinds, or any API data record when every metaclass is legal
+        /// </summary>
+        /// <param name="allowedTargetKinds">
+        /// The legal target class_kind ids, or null when every concrete metaclass is legal
+        /// </param>
+        /// <returns>
+        /// The SQL boolean expression
+        /// </returns>
+        private static string FormatWrongTypePredicate(IReadOnlyList<int> allowedTargetKinds)
+        {
+            return allowedTargetKinds == null
+                ? $"ti.class_kind >= {ClassKindRegistry.ApiRecordIdFloor}"
+                : $"ti.class_kind NOT IN ({string.Join(", ", allowedTargetKinds)})";
         }
 
         /// <summary>
@@ -653,30 +731,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// The reference column
         /// </param>
         /// <param name="allowedTargetKinds">
-        /// The legal target class_kind ids, or null when every concrete metaclass is legal and the
-        /// type check is omitted
+        /// The legal target class_kind ids, or null when every concrete metaclass is legal and only
+        /// an API data record target is the wrong type
         /// </param>
         /// <returns>
         /// The formatted SELECT arm, without a trailing separator
         /// </returns>
         private static string FormatOutgoingValidationBlock(string tableName, string columnName, IReadOnlyList<int> allowedTargetKinds)
         {
+            var wrongTypePredicate = FormatWrongTypePredicate(allowedTargetKinds);
             var stringBuilder = new StringBuilder();
             var isCoreTable = tableName == "element_version";
             var sourceAlias = isCoreTable ? "changed" : "src";
 
             stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
             stringBuilder.AppendLine($"           changed.identity_id, {sourceAlias}.{columnName},");
-
-            if (allowedTargetKinds == null)
-            {
-                stringBuilder.AppendLine("           'dangling'::text");
-            }
-            else
-            {
-                stringBuilder.AppendLine($"           CASE WHEN ti.class_kind NOT IN ({string.Join(", ", allowedTargetKinds)}) THEN 'wrong-type' ELSE 'dangling' END");
-            }
-
+            stringBuilder.AppendLine($"           CASE WHEN {wrongTypePredicate} THEN 'wrong-type' ELSE 'dangling' END");
             stringBuilder.AppendLine("    FROM sysml2.element_version changed");
 
             if (!isCoreTable)
@@ -695,15 +765,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 $"(ti.project_id = p_project_id\n" +
                 $"           AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, {sourceAlias}.{columnName})))";
 
-            if (allowedTargetKinds == null)
-            {
-                stringBuilder.Append($"      AND {livenessCheck}");
-            }
-            else
-            {
-                stringBuilder.AppendLine($"      AND (ti.class_kind NOT IN ({string.Join(", ", allowedTargetKinds)})");
-                stringBuilder.Append($"           OR {livenessCheck})");
-            }
+            stringBuilder.AppendLine($"      AND ({wrongTypePredicate}");
+            stringBuilder.Append($"           OR {livenessCheck})");
 
             return stringBuilder.ToString();
         }

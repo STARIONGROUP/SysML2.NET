@@ -17,13 +17,17 @@ INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
     (2, 'smoke-release-2', 'smoke:v2')
 ON CONFLICT (id) DO NOTHING;
 
--- The FROZEN registry ids of the three metaclasses this test uses (see ClassKindRegistry) —
--- identical to the generated schema's seeds, so this INSERT is a no-op there and every
--- hard-coded id in validate_references_at_commit() means the same thing in both contexts.
+-- The FROZEN registry ids of the three metaclasses and three API data records this test uses
+-- (see ClassKindRegistry) — identical to the generated schema's seeds, so this INSERT is a no-op
+-- there and every hard-coded id in validate_references_at_commit() means the same thing in both
+-- contexts.
 INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in) VALUES
     (116, 'OwningMembership', false, 1),
     (117, 'Package',          false, 1),
-    (120, 'PartUsage',        false, 1)
+    (120, 'PartUsage',        false, 1),
+    (1001, 'ExternalData',         false, 1),
+    (1002, 'ExternalRelationship', false, 1),
+    (1003, 'ProjectUsage',         false, 1)
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO sysml2.project (id, name, created) VALUES
@@ -840,10 +844,13 @@ END;
 $$;
 
 ----------------------------------------------------------------------------------------------
--- PROJECT-USAGE SCENARIO — cross-project references (GET .../projectUsage).
+-- PROJECT-USAGE SCENARIO — ProjectUsageService (getProjectUsages / createProjectUsage /
+-- deleteProjectUsage) and GET .../elements/{e}/projectUsage.
 --
--- A ProjectUsage pins a used project AT a commit. Storage-level contract: the row reads back,
--- and it can dangle neither on the used project nor on the used commit.
+-- A ProjectUsage is an API data record (§7b): an identity in the >= 1000 class_kind band, one
+-- element_version row per commit that changes it, and a project_usage_version row with the typed
+-- columns. createProjectUsage is a commit on the branch (c16), deleteProjectUsage a tombstone in
+-- a later commit (c17). Reads are AT a commit: c14 sees nothing, c16 the usage, c17 its absence.
 ----------------------------------------------------------------------------------------------
 
 DO $$
@@ -851,38 +858,160 @@ DECLARE
     proj      constant uuid := '11111111-0000-0000-0000-000000000000';
     proj2     constant uuid := '22222222-0000-0000-0000-000000000000';
     cu1       constant uuid := 'cf111111-0000-0000-0000-000000000000';
-    u1        constant uuid := 'de111111-0000-0000-0000-000000000000';
-    used_at   uuid;
+    c14       constant uuid := 'cd111111-0000-0000-0000-000000000000';
+    c16       constant uuid := 'cb222222-0000-0000-0000-000000000000';
+    c17       constant uuid := 'cc222222-0000-0000-0000-000000000000';
+    e9        constant uuid := 'e9999999-0000-0000-0000-000000000000';
+    u1        constant uuid := 'eb111111-0000-0000-0000-000000000000';
+    u2        constant uuid := 'eb222222-0000-0000-0000-000000000000';
+    e10       constant uuid := 'eb333333-0000-0000-0000-000000000000';
+    vu1       constant uuid := 'af111111-0000-0000-0000-000000000000';
+    vu2       constant uuid := 'af222222-0000-0000-0000-000000000000';
+    vneg      constant uuid := 'af333333-0000-0000-0000-000000000000';
+    usage_kind smallint;
+    row_count int;
 BEGIN
+    SELECT id INTO usage_kind FROM sysml2.class_kind WHERE name = 'ProjectUsage';
+
     INSERT INTO sysml2.project (id, name, created)
     VALUES (proj2, 'UsedLibraryProject', '2026-01-02T00:00:00Z');
 
     INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
     VALUES (cu1, proj2, '2026-01-02T01:00:00Z', 'library release', 1);
 
-    -- 16a. Create + read back: the usage pins proj -> proj2 AT cu1.
-    INSERT INTO sysml2.project_usage (id, project_id, used_project_id, used_project_commit_id)
-    VALUES (u1, proj, proj2, cu1);
+    -- The library root's identity; its version row arrives with the deletion scenario.
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind)
+    VALUES (e9, proj2, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'));
 
-    SELECT pu.used_project_commit_id INTO used_at
-    FROM sysml2.project_usage pu
-    WHERE pu.project_id = proj AND pu.used_project_id = proj2;
+    -- 16a. createProjectUsage(proj, main, usage): one commit whose change set is the usage.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c16, proj, '2026-01-01T21:00:00Z', 'use the library at its release', 1);
 
-    IF used_at IS DISTINCT FROM cu1 THEN
-        RAISE EXCEPTION 'FAIL 16a: project_usage does not pin the used commit (got %)', used_at;
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c16, c14, 0);
+
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES (u1, proj, usage_kind);
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone, stored_json)
+    VALUES
+        (proj, vu1, u1, c16, usage_kind, false,
+         '{"@id":"eb111111-0000-0000-0000-000000000000","@type":"ProjectUsage","usedCommit":{"@id":"cf111111-0000-0000-0000-000000000000"},"usedProject":{"@id":"22222222-0000-0000-0000-000000000000"}}');
+
+    INSERT INTO sysml2.project_usage_version (project_id, version_id, used_project, used_project_commit)
+    VALUES (proj, vu1, proj2, cu1);
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.get_project_usages_at_commit(proj, c16) pu
+    WHERE pu.identity_id = u1 AND pu.used_project = proj2 AND pu.used_project_commit = cu1
+      AND pu.payload ->> '@type' = 'ProjectUsage';
+
+    IF row_count <> 1 OR (SELECT count(*) FROM sysml2.get_project_usages_at_commit(proj, c16)) <> 1 THEN
+        RAISE EXCEPTION 'FAIL 16a: getProjectUsages at c16 does not return exactly the usage pinning % (matching rows: %)', cu1, row_count;
     END IF;
-    RAISE NOTICE 'PASS 16a: project_usage pins the used project at a commit and reads back';
 
-    -- 16b. The pinned commit must exist.
+    SELECT count(*) INTO row_count FROM sysml2.get_project_usages_at_commit(proj, c14);
+
+    IF row_count <> 0 THEN
+        RAISE EXCEPTION 'FAIL 16a: getProjectUsages at the PARENT commit c14 returned % usages', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 16a: createProjectUsage is a commit; getProjectUsages sees the usage at c16 and not at c14';
+
+    -- 16b. The pinned commit must exist. The scaffolding rolls back with the failing INSERT.
     BEGIN
-        INSERT INTO sysml2.project_usage (id, project_id, used_project_id, used_project_commit_id)
-        VALUES ('de222222-0000-0000-0000-000000000000', proj, proj2,
-                'cdeadbee-0000-0000-0000-000000000000');
+        INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES (u2, proj, usage_kind);
 
-        RAISE EXCEPTION 'FAIL 16b: project_usage pinning a non-existent commit was ACCEPTED';
+        INSERT INTO sysml2.element_version
+            (project_id, version_id, identity_id, commit_id, class_kind, tombstone, stored_json)
+        VALUES (proj, vneg, u2, c16, usage_kind, false, '{}');
+
+        INSERT INTO sysml2.project_usage_version (project_id, version_id, used_project, used_project_commit)
+        VALUES (proj, vneg, proj2, 'cdeadbee-0000-0000-0000-000000000000');
+
+        RAISE EXCEPTION 'FAIL 16b: a usage pinning a non-existent commit was ACCEPTED';
     EXCEPTION WHEN foreign_key_violation THEN
-        RAISE NOTICE 'PASS 16b: project_usage with a dangling used commit rejected by FK';
+        RAISE NOTICE 'PASS 16b: a usage with a dangling used commit is rejected by FK';
     END;
+
+    -- 16c. The PIM constraint usedProject = usedProjectCommit.owningProject: cu1 belongs to proj2.
+    BEGIN
+        INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES (u2, proj, usage_kind);
+
+        INSERT INTO sysml2.element_version
+            (project_id, version_id, identity_id, commit_id, class_kind, tombstone, stored_json)
+        VALUES (proj, vneg, u2, c16, usage_kind, false, '{}');
+
+        INSERT INTO sysml2.project_usage_version (project_id, version_id, used_project, used_project_commit)
+        VALUES (proj, vneg, proj, cu1);
+
+        RAISE EXCEPTION 'FAIL 16c: a usage whose usedProject does not own usedProjectCommit was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 16c: usedProject = usedProjectCommit.owningProject is enforced by the composite FK';
+    END;
+
+    -- 16d. Shape guards: a record version carries no Element columns; an Element version must.
+    BEGIN
+        INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES (u2, proj, usage_kind);
+
+        INSERT INTO sysml2.element_version
+            (project_id, version_id, identity_id, commit_id, class_kind, tombstone, element_id, stored_json)
+        VALUES (proj, vneg, u2, c16, usage_kind, false, 'eb222222-0000-0000-0000-000000000000', '{}');
+
+        RAISE EXCEPTION 'FAIL 16d: a ProjectUsage version carrying element_id was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        NULL;
+    END;
+
+    BEGIN
+        INSERT INTO sysml2.data_identity (id, project_id, class_kind)
+        VALUES (e10, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'));
+
+        INSERT INTO sysml2.element_version
+            (project_id, version_id, identity_id, commit_id, class_kind, tombstone, is_implied_included, stored_json)
+        VALUES (proj, vneg, e10, c16, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'), false, false, '{}');
+
+        RAISE EXCEPTION 'FAIL 16d: a Package version without element_id was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        NULL;
+    END;
+    RAISE NOTICE 'PASS 16d: element_version keeps Element columns off record rows and on element rows';
+
+    -- 16e. deleteProjectUsage(proj, main, u1): a tombstone version in a new commit.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c17, proj, '2026-01-01T22:00:00Z', 'drop the library usage', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c17, c16, 0);
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone)
+    VALUES (proj, vu2, u1, c17, usage_kind, true);
+
+    IF (SELECT count(*) FROM sysml2.get_project_usages_at_commit(proj, c17)) <> 0
+       OR (SELECT count(*) FROM sysml2.get_project_usages_at_commit(proj, c16)) <> 1 THEN
+        RAISE EXCEPTION 'FAIL 16e: deleteProjectUsage did not hide the usage at c17 while keeping it at c16';
+    END IF;
+    RAISE NOTICE 'PASS 16e: deleteProjectUsage is a tombstone commit; the usage is gone at c17 and kept at c16';
+
+    -- 16f. GET .../commits/{c}/elements/{e}/projectUsage: the usage that brings in the library root.
+    SELECT count(*) INTO row_count
+    FROM sysml2.get_project_usage_for_element_at_commit(proj, c16, e9) pu
+    WHERE pu.identity_id = u1;
+
+    IF row_count <> 1
+       OR (SELECT count(*) FROM sysml2.get_project_usage_for_element_at_commit(proj, c17, e9)) <> 0 THEN
+        RAISE EXCEPTION 'FAIL 16f: the usage originating the library element resolves wrongly (% at c16)', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 16f: the usage originating a used-project element resolves at c16 and not at c17';
+
+    -- 16g. The element SET read returns Elements only; the record itself reads by id.
+    SELECT count(*) INTO row_count
+    FROM sysml2.get_elements_at_commit(proj, c16) r
+    WHERE r.identity_id = u1;
+
+    IF row_count <> 0
+       OR sysml2.get_element_at_commit(proj, c16, u1) ->> '@type' IS DISTINCT FROM 'ProjectUsage' THEN
+        RAISE EXCEPTION 'FAIL 16g: set read listed the usage % times, or the by-id read lost it', row_count;
+    END IF;
+    RAISE NOTICE 'PASS 16g: GET /elements excludes API data records; GET /elements/{id} returns the record';
 END;
 $$;
 
@@ -1200,11 +1329,11 @@ $$;
 -- PROJECT-DELETION SCENARIO — DELETE /projects/{p}, the documented ordered procedure.
 --
 -- The library project (proj2) gets a small model, a branch, a tag, and a CHECKPOINT. Then:
--- inbound project_usage blocks deletion (26a); with the usage gone, a direct DELETE is STILL
--- blocked — commit_checkpoint_registry's NO ACTION FK to commit is exactly the out-of-order
--- guard the procedure comment promises (26b; this FK is why the registry line is part of the
--- documented order); the full ordered procedure then completes, and the neighbor project is
--- untouched (26c).
+-- the inbound usage HISTORY of proj (PASS 16, pinned at cu1) blocks deletion through the commit
+-- FK (26a); after the administrative purge of that history, a direct DELETE is STILL blocked —
+-- commit_checkpoint_registry's NO ACTION FK to commit is exactly the out-of-order guard the
+-- procedure comment promises (26b; this FK is why the registry line is part of the documented
+-- order); the full ordered procedure then completes, and the neighbor project is untouched (26c).
 ----------------------------------------------------------------------------------------------
 
 DO $$
@@ -1221,11 +1350,8 @@ DECLARE
     neighbor_versions_after  int;
     n         int;
 BEGIN
-    -- Give the library project a small but complete footprint: identity + stored + derived
-    -- state, a link row, a branch with overlay, a tag, and a materialized checkpoint.
-    INSERT INTO sysml2.data_identity (id, project_id, class_kind)
-    VALUES (e9, proj2, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'));
-
+    -- Give the library project a small but complete footprint: stored + derived state for the
+    -- identity PASS 16 created, a link row, a branch with overlay, a tag, and a checkpoint.
     INSERT INTO sysml2.element_version
         (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
          element_id, declared_name, is_implied_included, stored_json)
@@ -1254,19 +1380,24 @@ BEGIN
 
     PERFORM sysml2.build_commit_checkpoint(proj2, cu1);
 
-    SELECT count(*) INTO neighbor_versions_before
-    FROM sysml2.element_version WHERE project_id = proj;
-
-    -- 26a. An inbound project_usage (from PASS 16) blocks deletion of the used project.
+    -- 26a. The inbound usage history of proj (PASS 16) blocks deletion of the used project, even
+    --      though the usage is tombstoned at proj's head: history pins cu1 forever.
     BEGIN
         DELETE FROM sysml2.project WHERE id = proj2;
 
         RAISE EXCEPTION 'FAIL 26a: deleting a USED project was ACCEPTED';
     EXCEPTION WHEN foreign_key_violation THEN
-        RAISE NOTICE 'PASS 26a: inbound project_usage blocks deletion of the used project';
+        RAISE NOTICE 'PASS 26a: inbound project_usage_version history blocks deletion of the used project';
     END;
 
-    DELETE FROM sysml2.project_usage WHERE used_project_id = proj2;
+    -- The administrative purge (data_identity DDL comment, step 0): drop the using project's
+    -- usage history; the subtype rows cascade from element_version.
+    DELETE FROM sysml2.element_version
+    WHERE project_id = proj
+      AND class_kind = (SELECT id FROM sysml2.class_kind WHERE name = 'ProjectUsage');
+
+    SELECT count(*) INTO neighbor_versions_before
+    FROM sysml2.element_version WHERE project_id = proj;
 
     -- 26b. Out-of-order deletion is still blocked, loudly: the checkpoint registry's
     --      NO ACTION FK to commit refuses the cascade — the guard that makes the ordered
@@ -1281,6 +1412,9 @@ BEGIN
 
     -- 26c. The documented ordered procedure (data_identity DDL comment), verbatim order.
     DELETE FROM sysml2.element_owned_relationship       WHERE project_id = proj2;
+    DELETE FROM sysml2.external_relationship_version    WHERE project_id = proj2;
+    DELETE FROM sysml2.external_data_version            WHERE project_id = proj2;
+    DELETE FROM sysml2.project_usage_version            WHERE project_id = proj2;
     DELETE FROM sysml2.derived_version                  WHERE project_id = proj2;
     DELETE FROM sysml2.element_version                  WHERE project_id = proj2;
     DELETE FROM sysml2.branch_head                      WHERE project_id = proj2;
@@ -1392,5 +1526,187 @@ BEGIN
         RAISE EXCEPTION 'FAIL 27c: expected retired + live tag under the same name, got %', n;
     END IF;
     RAISE NOTICE 'PASS 27c: soft-deleted tag keeps its record; the name is reusable';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- EXTERNAL-RELATIONSHIP SCENARIO — ExternalRelationshipService (getExternalRelationships,
+-- getExternalRelationshipsByElement, getExternalRelationshipById, createExternalRelationship,
+-- deleteExternalRelationship).
+--
+-- c18 creates an ExternalData x1 and an ExternalRelationship r1 (elementEnd = the Package e1,
+-- externalDataEnd = x1), plus two deliberately broken relationships for the validators: r2 whose
+-- externalDataEnd names a PartUsage, r3 whose elementEnd names an identity without any version.
+-- c19 tombstones x1 (r1 and r3 left dangling — the incoming validation arm); c20 tombstones r1.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj      constant uuid := '11111111-0000-0000-0000-000000000000';
+    c17       constant uuid := 'cc222222-0000-0000-0000-000000000000';
+    c18       constant uuid := 'cd222222-0000-0000-0000-000000000000';
+    c19       constant uuid := 'ce222222-0000-0000-0000-000000000000';
+    c20       constant uuid := 'cf222222-0000-0000-0000-000000000000';
+    e1        constant uuid := 'e1111111-0000-0000-0000-000000000000';
+    e2        constant uuid := 'e2222222-0000-0000-0000-000000000000';
+    e11       constant uuid := 'ec222222-0000-0000-0000-000000000000';   -- identity without a version
+    x1        constant uuid := 'ec111111-0000-0000-0000-000000000000';
+    r1        constant uuid := 'ed111111-0000-0000-0000-000000000000';
+    r2        constant uuid := 'ed222222-0000-0000-0000-000000000000';
+    r3        constant uuid := 'ed333333-0000-0000-0000-000000000000';
+    vx1       constant uuid := 'b0111111-0000-0000-0000-000000000000';
+    vr1       constant uuid := 'b0222222-0000-0000-0000-000000000000';
+    vr2       constant uuid := 'b0333333-0000-0000-0000-000000000000';
+    vr3       constant uuid := 'b0444444-0000-0000-0000-000000000000';
+    vx2       constant uuid := 'b0555555-0000-0000-0000-000000000000';
+    vr4       constant uuid := 'b0666666-0000-0000-0000-000000000000';
+    data_kind smallint;
+    rel_kind  smallint;
+    row_count int;
+    other_count int;
+BEGIN
+    SELECT id INTO data_kind FROM sysml2.class_kind WHERE name = 'ExternalData';
+    SELECT id INTO rel_kind  FROM sysml2.class_kind WHERE name = 'ExternalRelationship';
+
+    -- 28a. createExternalRelationship(proj, main, r1) with its ExternalData, in one commit.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c18, proj, '2026-01-01T23:00:00Z', 'trace the package to an external requirement', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c18, c17, 0);
+
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES
+        (x1, proj, data_kind),
+        (r1, proj, rel_kind),
+        (r2, proj, rel_kind),
+        (r3, proj, rel_kind),
+        (e11, proj, (SELECT id FROM sysml2.class_kind WHERE name = 'Package'));
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone, stored_json)
+    VALUES
+        (proj, vx1, x1, c18, data_kind, false,
+         '{"@id":"ec111111-0000-0000-0000-000000000000","@type":"ExternalData","resourceIdentifier":"https://example.org/requirements/42"}'),
+        (proj, vr1, r1, c18, rel_kind, false,
+         '{"@id":"ed111111-0000-0000-0000-000000000000","@type":"ExternalRelationship","elementEnd":{"@id":"e1111111-0000-0000-0000-000000000000"},"externalDataEnd":{"@id":"ec111111-0000-0000-0000-000000000000"},"language":"sysml","specification":"satisfies"}'),
+        (proj, vr2, r2, c18, rel_kind, false,
+         '{"@id":"ed222222-0000-0000-0000-000000000000","@type":"ExternalRelationship","elementEnd":{"@id":"e1111111-0000-0000-0000-000000000000"},"externalDataEnd":{"@id":"e2222222-0000-0000-0000-000000000000"},"language":null,"specification":null}'),
+        (proj, vr3, r3, c18, rel_kind, false,
+         '{"@id":"ed333333-0000-0000-0000-000000000000","@type":"ExternalRelationship","elementEnd":{"@id":"ec222222-0000-0000-0000-000000000000"},"externalDataEnd":{"@id":"ec111111-0000-0000-0000-000000000000"},"language":null,"specification":null}');
+
+    INSERT INTO sysml2.external_data_version (project_id, version_id, resource_identifier)
+    VALUES (proj, vx1, 'https://example.org/requirements/42');
+
+    INSERT INTO sysml2.external_relationship_version
+        (project_id, version_id, element_end, external_data_end, language, specification)
+    VALUES
+        (proj, vr1, e1, x1, 'sysml', 'satisfies'),
+        (proj, vr2, e1, e2, NULL, NULL),
+        (proj, vr3, e11, x1, NULL, NULL);
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.get_external_relationships_at_commit(proj, c18) er
+    WHERE er.identity_id = r1 AND er.element_end = e1 AND er.external_data_end = x1
+      AND er.payload ->> '@type' = 'ExternalRelationship' AND er.payload ->> 'specification' = 'satisfies';
+
+    SELECT count(*) INTO other_count FROM sysml2.get_external_relationships_at_commit(proj, c18);
+
+    IF row_count <> 1 OR other_count <> 3
+       OR (SELECT count(*) FROM sysml2.get_external_relationships_at_commit(proj, c17)) <> 0 THEN
+        RAISE EXCEPTION 'FAIL 28a: getExternalRelationships at c18 returned % rows (% matching r1); expected 3 and 1, none at c17', other_count, row_count;
+    END IF;
+    RAISE NOTICE 'PASS 28a: createExternalRelationship is a commit; getExternalRelationships reads the relationships at c18 and not at c17';
+
+    -- 28b. getExternalRelationshipsByElement: the Package has r1 and r2, the PartUsage none.
+    SELECT count(*) INTO row_count
+    FROM sysml2.get_external_relationships_by_element_at_commit(proj, c18, e1);
+
+    SELECT count(*) INTO other_count
+    FROM sysml2.get_external_relationships_by_element_at_commit(proj, c18, e2);
+
+    IF row_count <> 2 OR other_count <> 0 THEN
+        RAISE EXCEPTION 'FAIL 28b: by-element lookup returned % for the Package and % for the PartUsage', row_count, other_count;
+    END IF;
+    RAISE NOTICE 'PASS 28b: getExternalRelationshipsByElement finds the relationships through the reverse index and the snapshot';
+
+    -- 28c. getExternalRelationshipById and the ExternalData by id are the element by-id read.
+    IF sysml2.get_element_at_commit(proj, c18, r1) -> 'externalDataEnd' ->> '@id' IS DISTINCT FROM x1::text
+       OR sysml2.get_element_at_commit(proj, c18, x1) ->> 'resourceIdentifier' IS DISTINCT FROM 'https://example.org/requirements/42' THEN
+        RAISE EXCEPTION 'FAIL 28c: by-id reads of the relationship or its external data lost their payload';
+    END IF;
+    RAISE NOTICE 'PASS 28c: getExternalRelationshipById and the ExternalData read by id return the record payloads';
+
+    -- 28d. Validation: r2 names a PartUsage as externalDataEnd (wrong-type), r3 an identity with
+    --      no live version as elementEnd (dangling); both tiers agree.
+    SELECT count(*) INTO row_count
+    FROM sysml2.validate_references_in_commit(proj, c18) v
+    WHERE (v.source_table, v.source_column, v.source_identity, v.target_identity, v.problem)
+          IN (('external_relationship_version', 'external_data_end', r2, e2, 'wrong-type'),
+              ('external_relationship_version', 'element_end', r3, e11, 'dangling'));
+
+    SELECT count(*) INTO other_count FROM sysml2.validate_references_in_commit(proj, c18);
+
+    IF row_count <> 2 OR other_count <> 2 THEN
+        RAISE EXCEPTION 'FAIL 28d: incremental validation at c18 reported % findings, % of them expected', other_count, row_count;
+    END IF;
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.validate_references_at_commit(proj, c18) v
+    WHERE v.source_table = 'external_relationship_version'
+      AND (v.source_column, v.source_identity, v.target_identity, v.problem)
+          IN (('external_data_end', r2, e2, 'wrong-type'), ('element_end', r3, e11, 'dangling'));
+
+    SELECT count(*) INTO other_count
+    FROM sysml2.validate_references_at_commit(proj, c18) v
+    WHERE v.source_table = 'external_relationship_version';
+
+    IF row_count <> 2 OR other_count <> 2 THEN
+        RAISE EXCEPTION 'FAIL 28d: full validation at c18 reported % relationship findings, % of them expected', other_count, row_count;
+    END IF;
+
+    -- Tombstoning the ExternalData leaves r1 and r3 dangling: the incoming arm catches both.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c19, proj, '2026-01-01T23:30:00Z', 'retire the external requirement', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c19, c18, 0);
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone)
+    VALUES (proj, vx2, x1, c19, data_kind, true);
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.validate_references_in_commit(proj, c19) v
+    WHERE v.source_table = 'external_relationship_version' AND v.source_column = 'external_data_end'
+      AND v.source_identity IN (r1, r3) AND v.target_identity = x1 AND v.problem = 'dangling';
+
+    SELECT count(*) INTO other_count FROM sysml2.validate_references_in_commit(proj, c19);
+
+    IF row_count <> 2 OR other_count <> 2 THEN
+        RAISE EXCEPTION 'FAIL 28d: tombstoning the ExternalData reported % findings, % of them the dangling holders', other_count, row_count;
+    END IF;
+    RAISE NOTICE 'PASS 28d: both validation tiers type-check externalDataEnd, flag a dangling elementEnd, and catch holders a tombstone leaves dangling';
+
+    -- 28e. deleteExternalRelationship(proj, main, r1): a tombstone version in a new commit.
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c20, proj, '2026-01-01T23:45:00Z', 'drop the trace', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c20, c19, 0);
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone)
+    VALUES (proj, vr4, r1, c20, rel_kind, true);
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.get_external_relationships_at_commit(proj, c20) er
+    WHERE er.identity_id = r1;
+
+    SELECT count(*) INTO other_count
+    FROM sysml2.get_external_relationships_by_element_at_commit(proj, c20, e1);
+
+    IF row_count <> 0 OR other_count <> 1
+       OR (SELECT count(*) FROM sysml2.get_external_relationships_at_commit(proj, c18) er WHERE er.identity_id = r1) <> 1
+       OR sysml2.get_element_at_commit(proj, c19, x1) IS NOT NULL THEN
+        RAISE EXCEPTION 'FAIL 28e: deleteExternalRelationship left r1 visible at c20 (% rows, % by element) or kept it off c18', row_count, other_count;
+    END IF;
+    RAISE NOTICE 'PASS 28e: deleteExternalRelationship is a tombstone commit; r1 is gone at c20 and kept at c18';
 END;
 $$;

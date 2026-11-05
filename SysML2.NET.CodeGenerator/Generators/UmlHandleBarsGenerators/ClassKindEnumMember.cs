@@ -41,5 +41,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     /// The name of the first release WITHOUT the metaclass, or null while it is still part of the
     /// newest registered release
     /// </param>
-    public sealed record ClassKindEnumMember(string Name, int Id, bool IsAbstract, string IntroducedIn, string RemovedIn);
+    /// <param name="IsApiRecord">
+    /// Whether the member is a Systems Modeling API Clause 7 data record and not a metaclass
+    /// </param>
+    public sealed record ClassKindEnumMember(string Name, int Id, bool IsAbstract, string IntroducedIn, string RemovedIn, bool IsApiRecord);
 }
