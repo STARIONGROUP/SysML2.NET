@@ -421,9 +421,44 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="payload">
         /// The subject <see cref="HandlebarsPayload" />
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="payload" /> is null
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown on any drift between the UML model and the registry
+        /// </exception>
         public static void AssertRegistryInSyncWithModel(HandlebarsPayload payload)
         {
-            var newestVersion = ClassKindRegistry.ModelVersions[^1];
+            AssertRegistryInSyncWithModel(payload, ClassKindRegistry.ModelVersions, ClassKindRegistry.ClassKinds);
+        }
+
+        /// <summary>
+        /// Asserts that the UML model matches the newest release of the given registrations: the
+        /// fingerprint, the API-record id band, every model class registered, no stale metaclass
+        /// registration, no API record named like a model class, and matching abstractness
+        /// </summary>
+        /// <param name="payload">
+        /// The subject <see cref="HandlebarsPayload" />
+        /// </param>
+        /// <param name="modelVersions">
+        /// The registered metamodel releases, ordered by ordinal; the last one must match the model
+        /// </param>
+        /// <param name="classKinds">
+        /// The class-kind registrations to validate the model against
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when any argument is null
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown on any drift between the UML model and the registrations
+        /// </exception>
+        public static void AssertRegistryInSyncWithModel(HandlebarsPayload payload, IReadOnlyList<ModelVersionRegistration> modelVersions, IReadOnlyList<ClassKindRegistration> classKinds)
+        {
+            ArgumentNullException.ThrowIfNull(payload);
+            ArgumentNullException.ThrowIfNull(modelVersions);
+            ArgumentNullException.ThrowIfNull(classKinds);
+
+            var newestVersion = modelVersions[^1];
             var fingerprint = $"{payload.RootPackage.Name}:{payload.RootPackage.XmiId}";
 
             if (fingerprint != newestVersion.SourceFingerprint)
@@ -434,7 +469,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     "release, or update the fingerprint in place for an editorial change that adds or removes no metaclasses.");
             }
 
-            var misplacedRegistrations = ClassKindRegistry.ClassKinds
+            var misplacedRegistrations = classKinds
                 .Where(registration => registration.IsApiRecord != registration.Id >= ClassKindRegistry.ApiRecordIdFloor)
                 .ToList();
 
@@ -447,7 +482,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     $"must stay below it: {misplacedNames}.");
             }
 
-            var metaclassRegistrations = ClassKindRegistry.ClassKinds
+            var metaclassRegistrations = classKinds
                 .Where(registration => !registration.IsApiRecord)
                 .ToList();
 
@@ -487,7 +522,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     "close them with RemovedIn = the id of the release that dropped them — never delete a registration.");
             }
 
-            var collidingRecords = ClassKindRegistry.ClassKinds
+            var collidingRecords = classKinds
                 .Where(registration => registration.IsApiRecord && modelClassNames.Contains(registration.Name))
                 .ToList();
 
