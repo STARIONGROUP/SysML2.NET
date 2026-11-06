@@ -100,7 +100,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
                 "Expected/UML/AutoGenSql/schema.generated.sql"));
 
-            Assert.That(generatedSchema, Is.EqualTo(expected));
+            Assert.That(generatedSchema, Is.EqualTo(expected.ReplaceLineEndings("\n")));
         }
     }
 }

@@ -116,7 +116,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             var payload = CreateHandlebarsPayload(xmiReaderResult);
 
-            var generatedSchema = template(payload);
+            var generatedSchema = template(payload).ReplaceLineEndings("\n");
 
             await WriteAsync(generatedSchema, outputDirectory, SchemaFileName);
 

@@ -45,13 +45,13 @@ namespace SysML2.NET.Dal
         /// </summary>
         /// <param name="assembly">The assembly that embeds the resource.</param>
         /// <param name="resourceName">The manifest resource name.</param>
-        /// <returns>The resource text, without any byte-order mark.</returns>
+        /// <returns>The resource text with LF line endings and without any byte-order mark.</returns>
         private static string ReadResource(Assembly assembly, string resourceName)
         {
             using var stream = assembly.GetManifestResourceStream(resourceName);
             using var reader = new StreamReader(stream);
 
-            return reader.ReadToEnd();
+            return reader.ReadToEnd().Replace("\r\n", "\n");
         }
     }
 }
