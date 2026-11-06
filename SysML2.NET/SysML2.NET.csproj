@@ -5,7 +5,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.25.2</Version>
+        <Version>0.26.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -16,7 +16,9 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] Version aligned with the SysML2.NET 0.25.2 release; no functional changes
+            [Add] ClassKind enumeration interning every SysML v2 metaclass name as the frozen identifier used by the class_kind table of the SQL schema
+            [Add] Direction enumeration of the PSM, with the in, out and both literals (#404)
+            [Update] PSM Page is an immutable, opaque page token as defined in Clause 8.1.3, created with FromCursor and decoded with TryDecode; the Epoch and Identifier properties are removed (#404)
         </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
