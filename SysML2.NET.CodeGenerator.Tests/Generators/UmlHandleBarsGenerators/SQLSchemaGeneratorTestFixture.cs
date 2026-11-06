@@ -59,7 +59,9 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.element_owned_relationship"));
             Assert.That(generatedSchema, Does.Contain("CREATE VIEW sysml2.vw_part_usage"));
             Assert.That(generatedSchema, Does.Contain("CREATE TABLE sysml2.model_version"));
-            Assert.That(generatedSchema, Does.Contain("INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES"));
+            Assert.That(generatedSchema, Does.Contain("INSERT INTO sysml2.model_version (id, name, source_fingerprint, kerml_version, sysml_version, release_tag) VALUES"));
+            Assert.That(generatedSchema, Does.Contain("(1, 'sysml-2.1-2026-08', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw', '1.1', '2.1', '2026-08')"));
+            Assert.That(generatedSchema, Does.Contain("CREATE OR REPLACE FUNCTION sysml2.get_schema_version()"));
             Assert.That(generatedSchema, Does.Contain("INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES"));
             Assert.That(generatedSchema, Does.Contain("ON CONFLICT (id) DO NOTHING;"), "the registry seeds must be idempotent");
             Assert.That(generatedSchema, Does.Contain("(120, 'PartUsage', false, 1, NULL)"), "class_kind ids must come from the frozen registry");
@@ -98,7 +100,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
                 "Expected/UML/AutoGenSql/schema.generated.sql"));
 
-            Assert.That(generatedSchema, Is.EqualTo(expected));
+            Assert.That(generatedSchema, Is.EqualTo(expected.ReplaceLineEndings("\n")));
         }
     }
 }

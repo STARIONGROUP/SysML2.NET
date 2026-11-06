@@ -12,9 +12,9 @@
 
 SET search_path = sysml2, public;
 
-INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
-    (1, 'smoke-release-1', 'smoke:v1'),
-    (2, 'smoke-release-2', 'smoke:v2')
+INSERT INTO sysml2.model_version (id, name, source_fingerprint, kerml_version, sysml_version, release_tag) VALUES
+    (1, 'smoke-release-1', 'smoke:v1', '1.0', '2.0', 'smoke-1'),
+    (2, 'smoke-release-2', 'smoke:v2', '1.0', '2.0', 'smoke-2')
 ON CONFLICT (id) DO NOTHING;
 
 -- The FROZEN registry ids of the three metaclasses and three API data records this test uses

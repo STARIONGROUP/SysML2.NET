@@ -46,7 +46,7 @@ namespace SysML2.NET.CodeGenerator.Tests.HandleBarHelpers
 
             Assert.That(() => SqlSchemaHelpers.AssertRegistryInSyncWithModel(this.payload), Throws.Nothing);
 
-            IReadOnlyList<ModelVersionRegistration> unreleasedVersions = [.. modelVersions, new(2, "next-release", "SysML:_unreleased")];
+            IReadOnlyList<ModelVersionRegistration> unreleasedVersions = [.. modelVersions, new(2, "next-release", "SysML:_unreleased", "1.0", "2.0", "next")];
 
             Assert.That(() => SqlSchemaHelpers.AssertRegistryInSyncWithModel(this.payload, unreleasedVersions, classKinds),
                 Throws.TypeOf<InvalidOperationException>().With.Message.Contains("fingerprint"));

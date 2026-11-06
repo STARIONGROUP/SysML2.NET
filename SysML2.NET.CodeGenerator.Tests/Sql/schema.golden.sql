@@ -91,7 +91,7 @@ CREATE TYPE sysml2.visibility_kind               AS ENUM ('private', 'protected'
 
 CREATE TABLE sysml2.model_version (
     id                  smallint  NOT NULL,   -- ordinal: higher id == later release
-    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.0-2026-08'
+    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.1-2026-08'
     source_fingerprint  text      NOT NULL,   -- root-package fingerprint of the generator input
     PRIMARY KEY (id),
     UNIQUE (name)
@@ -111,7 +111,7 @@ CREATE TABLE sysml2.class_kind (
 -- registered metaclasses from ClassKindRegistry, idempotently:
 --
 -- INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
---     (1, 'sysml-2.0-2026-08', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw')
+--     (1, 'sysml-2.1-2026-08', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw')
 -- ON CONFLICT (id) DO NOTHING;
 --
 -- INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES
