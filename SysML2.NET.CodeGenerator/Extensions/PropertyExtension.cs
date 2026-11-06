@@ -25,37 +25,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
     public static class PropertyExtension
     {
         /// <summary>
-        /// Asserts that the <see cref="IProperty"/> is an enum type with a default value provided
-        /// </summary>
-        /// <param name="property">The <see cref="IProperty"/> to assert</param>
-        /// <returns>True if the <see cref="IProperty"/> have a default value for an enum</returns>
-        public static bool QueryIsEnumPropertyWithDefaultValue(this IProperty property)
-        {
-            ArgumentNullException.ThrowIfNull(property);
-
-            if (!property.QueryIsEnum())
-            {
-                return false;
-            }
-            
-            var defaultValue = property.QueryDefaultValueAsString();
-
-            if (defaultValue == "null")
-            {
-                return false;
-            }
-            
-            var valueSpecification = property.DefaultValue.FirstOrDefault();
-
-            if (valueSpecification is IInstanceValue instanceValue)
-            {
-                return instanceValue.Instance is IEnumerationLiteral;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Gets the name of the property.
         /// </summary>
         /// <param name="property">The <see cref="IProperty"/></param>

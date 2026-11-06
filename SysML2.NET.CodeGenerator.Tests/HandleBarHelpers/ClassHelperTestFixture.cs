@@ -136,16 +136,6 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         }
 
         [Test]
-        public void Verify_that_QueryAllNonDerivedNonRedefinedProperties_does_not_throw()
-        {
-            var testClass = this.allClasses.First(c => !c.IsAbstract && c.QueryAllNonDerivedNonRedefinedProperties().Count > 0);
-
-            Assert.That(() => this.RenderWithClassContext(
-                "{{#Class.QueryAllNonDerivedNonRedefinedProperties}}item{{/Class.QueryAllNonDerivedNonRedefinedProperties}}",
-                testClass), Throws.Nothing);
-        }
-
-        [Test]
         public void Verify_that_QueryAllNonDerivedNonRedefinedProperties_returns_expected_count()
         {
             var testClass = this.allClasses.First(c => !c.IsAbstract);
