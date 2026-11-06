@@ -86,10 +86,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine("INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES");
+                stringBuilder.AppendLine("INSERT INTO sysml2.model_version (id, name, source_fingerprint, kerml_version, sysml_version, release_tag) VALUES");
 
                 var modelVersionRows = ClassKindRegistry.ModelVersions
-                    .Select(modelVersion => $"    ({modelVersion.Id}, '{modelVersion.Name}', '{modelVersion.SourceFingerprint}')");
+                    .Select(modelVersion => $"    ({modelVersion.Id}, '{modelVersion.Name}', '{modelVersion.SourceFingerprint}', '{modelVersion.KermlVersion}', '{modelVersion.SysmlVersion}', '{modelVersion.ReleaseTag}')");
 
                 stringBuilder.AppendLine(string.Join(",\n", modelVersionRows));
                 stringBuilder.AppendLine("ON CONFLICT (id) DO NOTHING;");

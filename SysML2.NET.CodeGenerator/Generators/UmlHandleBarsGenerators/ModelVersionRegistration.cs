@@ -30,12 +30,21 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     /// The frozen ordinal of the release (sysml2.model_version.id)
     /// </param>
     /// <param name="Name">
-    /// The human-readable release label, e.g. "sysml-2.0-2026-08"
+    /// The human-readable release label, e.g. "sysml-2.1-2026-08"
     /// </param>
     /// <param name="SourceFingerprint">
     /// The root-package fingerprint ("Name:XmiId") of the UML model the release was generated
     /// from — the generator refuses to run when the model on disk no longer matches the newest
     /// registered fingerprint, so a metamodel change forces a conscious registry update
     /// </param>
-    public sealed record ModelVersionRegistration(int Id, string Name, string SourceFingerprint);
+    /// <param name="KermlVersion">
+    /// The version of the KerML specification the release implements, e.g. "1.1"
+    /// </param>
+    /// <param name="SysmlVersion">
+    /// The version of the SysML specification the release implements, e.g. "2.1"
+    /// </param>
+    /// <param name="ReleaseTag">
+    /// The tag of the SysML v2 release the UML model was taken from, e.g. "2026-08"
+    /// </param>
+    public sealed record ModelVersionRegistration(int Id, string Name, string SourceFingerprint, string KermlVersion, string SysmlVersion, string ReleaseTag);
 }

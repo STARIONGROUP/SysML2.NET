@@ -70,8 +70,11 @@ CREATE TYPE sysml2.visibility_kind AS ENUM ('private', 'protected', 'public');
 
 CREATE TABLE sysml2.model_version (
     id                  smallint  NOT NULL,   -- ordinal: higher id == later release
-    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.0-2026-08'
+    name                text      NOT NULL,   -- human-readable release label, e.g. 'sysml-2.1-2026-08'
     source_fingerprint  text      NOT NULL,   -- root-package fingerprint of the generator input
+    kerml_version       text      NOT NULL,   -- KerML specification version, e.g. '1.1'
+    sysml_version       text      NOT NULL,   -- SysML specification version, e.g. '2.1'
+    release_tag         text      NOT NULL,   -- SysML v2 release tag of the UML model, e.g. '2026-08'
     PRIMARY KEY (id),
     UNIQUE (name)
 );
@@ -89,8 +92,8 @@ CREATE TABLE sysml2.class_kind (
 -- The append-only registry seeds, emitted from ClassKindRegistry (NOT from the UML model —
 -- the model only validates against the registry). Idempotent by construction.
 
-INSERT INTO sysml2.model_version (id, name, source_fingerprint) VALUES
-    (1, 'sysml-2.0-2026-08', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw')
+INSERT INTO sysml2.model_version (id, name, source_fingerprint, kerml_version, sysml_version, release_tag) VALUES
+    (1, 'sysml-2.1-2026-08', 'SysML:_1BF3sI9WEfGTIPR1UWDcqw', '1.1', '2.1', '2026-08')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in) VALUES
@@ -273,6 +276,19 @@ INSERT INTO sysml2.class_kind (id, name, is_abstract, introduced_in, removed_in)
     (1002, 'ExternalRelationship', false, 1, NULL),
     (1003, 'ProjectUsage', false, 1, NULL)
 ON CONFLICT (id) DO NOTHING;
+
+-- The specification versions this schema targets: the newest metamodel release (older
+-- model_version rows stay readable) and the Systems Modeling API and Services version of §3.
+CREATE OR REPLACE FUNCTION sysml2.get_schema_version()
+RETURNS TABLE (model_version_id smallint, release_tag text, kerml_version text, sysml_version text, api_version text)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT mv.id, mv.release_tag, mv.kerml_version, mv.sysml_version, '1.0'::text
+    FROM sysml2.model_version mv
+    ORDER BY mv.id DESC
+    LIMIT 1;
+$$;
 ------------------------------------------------------------------------------------------------
 -- 3. PIM — PROJECTS, COMMITS, BRANCHES, TAGS                                      [HAND-WRITTEN]
 --
