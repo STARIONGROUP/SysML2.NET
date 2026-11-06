@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.25.2</Version>
+        <Version>0.26.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 JSON serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Json</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -14,8 +14,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Fix] SerializeResponseAsync performs no synchronous write on the target stream, so it works on streams that disallow synchronous I/O such as an ASP.NET Core response body (#399)
-            [Fix] DeSerializeRequest and DeSerializeResponse throw a JsonException for an unrecognised @type discriminator, and IDeSerializer documents the exceptions it raises (#400)
+            [Add] IDeSerializer.DeSerializeAsync&lt;T&gt; deserializes a stream to a typed collection and throws a JsonException for any item that is not a T (#404)
         </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
