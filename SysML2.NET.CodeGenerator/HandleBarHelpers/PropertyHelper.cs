@@ -247,7 +247,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (!isRedefinedPropertyInContext)
                 {
-                    if (PropertyExtension.QueryIsEnumPropertyWithDefaultValue(property))
+                    if (property.QueryIsEnumPropertyWithDefaultValue())
                     {
                         sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
                     }
@@ -475,7 +475,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if ((!property.IsDerived || property.IsDerivedUnion) && !isRedefinedPropertyInContext)
                 {
-                    if (PropertyExtension.QueryIsEnumPropertyWithDefaultValue(property))
+                    if (property.QueryIsEnumPropertyWithDefaultValue())
                     {
                         sb.Append($" = {property.Type.Name.CapitalizeFirstLetter()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()};");
                     }
@@ -1052,7 +1052,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 return property.QueryIsEnum() 
-                    ? PropertyExtension.QueryIsEnumPropertyWithDefaultValue(property) 
+                    ? property.QueryIsEnumPropertyWithDefaultValue() 
                     : (property.QueryHasDefaultValue() && property.QueryIsDefaultValueDifferentThanDefault());
             });
 

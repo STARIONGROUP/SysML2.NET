@@ -159,18 +159,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(@class.CountAllNonDerivedProperties());
             });
 
-            // Queries all the properties that are non derived and not redefined in the
-            // context of the current class
-            handlebars.RegisterHelper("Class.QueryAllNonDerivedNonRedefinedProperties", (context, _) =>
-            {
-                if (!(context.Value is IClass @class))
-                {
-                    throw new ArgumentException("#Class.QueryAllNonDerivedNonRedefinedProperties: supposed to be IClass");
-                }
-
-                return Extensions.ClassExtensions.QueryAllNonDerivedNonRedefinedProperties(@class);
-            });
-
             // writes the count of non-derived and non Redefined properties of the IClass
             handlebars.RegisterHelper("Class.WriteCountAllNonDerivedNonRedefinedProperties", (writer, context, _) => 
             {
