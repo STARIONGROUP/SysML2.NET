@@ -182,8 +182,15 @@ Every concrete metaclass gets U1 and at least one of U2–U4, in step 5 (KerML) 
 - D1 (step 12): a subject deleted together with its owning membership, the owner updated in the
   same commit — keeps the model well-formed.
 - D2 (step 12): a whole nested package's content deleted in one commit.
-- D3 (open question, §9): an owner deleted alone. The API specification does not visibly define a
-  cascade; read the PIM clause before writing an expectation.
+- D3 (step 12): **delete cascade**. One commit deletes only an owner with nested content (and its
+  own owning membership, so its parent stays well-formed); none of its owned elements is listed. At
+  the new commit, everything in the owner's composition tree is gone: its `ownedRelationship`s,
+  their `ownedRelatedElement`s, and so on down. Basis: both properties are composite in KerML
+  (`Element::ownedRelationship`, `Relationship::ownedRelatedElement`; Hypha 2026-07). Asserted on:
+  - `GetElementByProjectCommitIdAsync` → 404 for every element of the tree;
+  - `GetElementsByProjectCommitAsync` → the tree's ids are absent, everything else is unchanged;
+  - `DiffAsync` previous → new commit → `DELETED` for every element of the tree, not only the owner;
+  - the previous commit still returns the whole tree.
 
 ### 6.3 Negative cases (spread over the steps, every operation has at least one)
 
@@ -220,13 +227,11 @@ Known before starting: Flexo's `/meta/datatypes` serves a pre-final schema (`Ite
 
 ## 9. Open questions
 
-1. **Delete cascade (D3)** — what the PIM says about deleting an owner without its owned elements.
-2. **Query by `@type` and subtypes** — Flexo matches subtypes; check whether the spec requires it.
-3. **ProjectUsage / ExternalData / ExternalRelationship on Flexo** — stored generically, untested.
-4. **Flexo image** — `v0.2.1` (recommended) or `develop-SNAPSHOT`.
-5. **CI** — local only (recommended for now), or a separate opt-in workflow.
-6. **One `[Test]` per step vs `TESTING.md` §2** — the scenario's unit is the step, not a client
-   method; confirm this exception for the integration fixture.
+1. **Query by `@type` and subtypes** — Flexo matches subtypes; check whether the spec requires it.
+2. **ProjectUsage / ExternalData / ExternalRelationship on Flexo** — stored generically, untested.
+3. **Flexo image** — `v0.2.1` (recommended) or `develop-SNAPSHOT`.
+4. **CI** — local only (recommended for now), or a separate opt-in workflow.
+5. **One `[Test]` per step vs `TESTING.md` §2** — In the scope of this integration test, going again rules defined in the TESTING.md file is accepted. One scenario can be split into multiple [Test] method. A TestOrder need to be correctly settle
 
 ## 10. Work breakdown
 
