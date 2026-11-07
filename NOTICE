@@ -1,2 +1,6 @@
 SysML2.NET
 Copyright 2022-2025 Starion Group S.A.
+
+This product includes the file SySML2.NET.REST.Tests/Resources/Flexo/cluster.trig, taken from
+Flexo MMS SysML v2 Microservice (https://github.com/Open-MBEE/flexo-mms-sysmlv2), commit 836d904d,
+licensed under the Apache License, Version 2.0.

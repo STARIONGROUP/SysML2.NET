@@ -24,9 +24,13 @@ merge-conflict handling.
 **Flexo is the counterpart, not the subject.** It is there because the client can only be
 checked against a real server; it stands in for any compliant implementation. So:
 
-- Expectations come from the specifications, never from what Flexo happens to do.
+- Expectations come from the specifications, the OpenAPI document `Resources/ptc-25-02-30.json`
+  first, never from what Flexo happens to do.
 - A difference is triaged (§8) and never absorbed by weakening an assertion: either our client is
-  wrong (we fix it), or Flexo is (we record it, report it upstream, and keep the scenario running).
+  wrong (we file an issue and the check stays red), or Flexo is (we record it, report it upstream,
+  and keep the scenario running).
+- The client is not changed while the scenario is built. The scenario is the complete fixture the
+  client is fixed against later, so its checks must tell a client defect from a server divergence.
 
 ### Non-goals
 
@@ -55,36 +59,70 @@ The appendices are the progress checklist; the final step (§5, step 14) enforce
 
 ## 3. Test environment
 
-### 3.1 Flexo host — `Integration/FlexoTestHost.cs`
+### 3.1 Flexo host — `Helpers/FlexoTestHost.cs`
 
 Testcontainers, three containers on one network, following `TESTING.md` §10 and
 `PostgreSqlSchemaTestHost`:
 
 | Container | Image (pinned) | Role |
 |---|---|---|
-| quad store | `atomgraph/fuseki:4.6` | triplestore, loaded from `cluster.trig` |
-| layer1 | `openmbee/flexo-mms-layer1-service:v0.3.0` | Flexo MMS core |
-| SysML v2 | `openmbee/flexo-sysmlv2:v0.2.1` | the API under test |
+| quad store | `atomgraph/fuseki:4.6`, pinned by digest | triplestore, loaded from `cluster.trig` |
+| layer1 | `openmbee/flexo-mms-layer1-service:v0.3.0`, pinned by digest | Flexo MMS core |
+| SysML v2 | `openmbee/flexo-sysmlv2@sha256:007bd800…` (the `develop` build of commit `836d904d`, pinned by digest) | the API under test |
 
-- `cluster.trig` and the env values are copied from the Flexo `v0.2.1` tag into
+`v0.2.1` is not used: it has no paging, no commit changes and no 404 for a missing element. The
+pinned `develop` build has all three and stays reproducible; its error answers still carry no
+`Error` JSON (§8).
+
+- `cluster.trig` is copied verbatim from Flexo commit `836d904d` into
   `SySML2.NET.REST.Tests/Resources/Flexo/` (Apache-2.0; attribution in `NOTICE`). The file holds
   only users, access control and the metaclass vocabulary — no model data.
-- Readiness: poll `GET /projects` until 200. Bootstrap: `PUT {layer1}/orgs/sysmlv2` through a plain
-  `HttpClient` — layer1 is not the SysML v2 API and stays outside the client under test.
-- Docker unavailable → `Assert.Ignore`. `[Category("Integration")]`, which CI already excludes.
+- Network aliases `quad-server` and `layer1-service`, which `cluster.trig` and the layer1
+  configuration name. Containers start in order: Fuseki (ready on its `Start Fuseki` log line) →
+  layer1 (ready on any HTTP answer) → `PUT {layer1}/orgs/sysmlv2` through a plain `HttpClient` →
+  SysML v2 service (ready on `GET /meta/datatypes`). layer1 is not the SysML v2 API and stays
+  outside the client under test.
+- Docker unreachable → `Assert.Ignore`; any later start failure → `Assert.Fail` with the container
+  logs. `[Category("Integration")]`, which CI already excludes.
 - Fresh containers per run: every run starts from an empty server.
 
 ### 3.2 Client wiring
 
 A test `IHttpClientFactory` returns an `HttpClient` whose handler chain is:
 
-1. **`BearerTokenHandler`** — adds `Authorization: Bearer <JWT>`, the token generated in the test
-   from the shared HMAC secret (Flexo requires it; `Session` has no auth option — separate issue).
+1. **`BearerTokenHandler`** — adds `Authorization: Bearer <JWT>` (Flexo requires it; `Session` has
+   no auth option — separate issue). `FlexoJwt` generates a random secret per run, configures layer1
+   with it and signs an HS256 token, so no secret is stored in source. The SysML v2 service gets no
+   `FLEXO_AUTH` fallback token, so only the client's own token reaches layer1.
 2. **`EndpointRecorder`** — records `(method, path template, status)` of every request by matching
-   the URL against the path templates of `Resources/ptc-25-02-30.json`. Step 14 uses it.
+   the URL against the path templates of `Resources/ptc-25-02-30.json`, and every request body that
+   references the empty GUID. Step 14 uses it. It also checks every request and every response
+   against the OpenAPI document (§3.3).
 
 The scenario then uses the production entry point unchanged:
 `new Session(factory, deSerializer, serializer).Open(flexoUri, …)`.
+
+### 3.3 OpenAPI conformance of every call
+
+The measure of the client is the OpenAPI document. `OpenApiDocument` reads it as JSON Schema 2020-12
+(OpenAPI 3.1) with JsonSchema.Net, and the recorder checks the raw HTTP traffic of every call:
+
+- **request** (the client's side): query parameters declared, required ones present, values of the
+  declared type (`page[size]` an integer, `direction` one of its literals, ids in `uuid` format);
+  the body of a declared media type and valid against the request schema;
+- **response** (the server's side): the status declared, explicitly or by `default`; the body of a
+  declared media type and valid against the response schema.
+
+After each step, `OpenApiConformance` fails on any request violation: it is a client defect. A
+response violation is reported as the known divergence that explains it (§8), or fails. So a
+client defect and a server divergence never pass for each other: a 404 whose body conforms but
+reaches the caller without a parsed `Error` fails as a client defect.
+
+The document is read as published, with two adjustments the validator needs, neither of which
+changes what it allows: the component schemas carry `$id`s, some relative, and are referenced both as
+`#/components/schemas/…` and by those `$id`s, so the `$id`s are removed and every reference is made
+absolute. `PrimitiveConstraintRequest` carries the `$id` of `PrimitiveConstraint`; nothing
+references it by that `$id`.
 
 ## 4. How the model is built
 
@@ -92,13 +130,18 @@ The scenario then uses the production entry point unchanged:
 
 - **`ScenarioState`** (one per fixture) — server-assigned ids (projects, branches, tags, commits,
   queries), plus a local **expected model**: the DTOs as they should exist at each commit.
-- **`ModelBuilder`** — creates DTOs with readable deterministic ids (UUID v5 of
-  `"<step>/<name>"`), and wires ownership consistently: owner `ownedRelationship` (ordered) ⇄
-  membership `ownedRelatedElement` ⇄ member `owningRelationship`. A step only describes *what* it
-  adds; the builder produces the `DataVersionRequest`s for the commit.
+- **`ModelBuilder`** — creates **POCOs** with deterministic ids (UUID v5 of `"<step>/<name>"`); the
+  step wires ownership with `AssignOwnership` (`SysML2.NET/Extensions/ElementExtensions.cs`). Once
+  the step is wired, the builder converts every POCO with its generated Dal
+  `ToDto(includeDerivedProperties: true)`, naming the element when a conversion fails, and produces
+  the `DataVersionRequest`s for the commit.
+- Why POCOs: a DTO cannot hold the value of a non-derived member that a derived property redefines
+  (`OwningMembership.memberElement`, `Import.source`, … — 173 no-op setters in 90 DTO classes), so a
+  hand-built DTO would send the empty GUID for it. Only the POCO conversion fills those values.
 - Payloads are `Core.DTO` elements (`Core.DTO.IElement` implements `IDataRequest`). `PsmApiClient`
   serializes them without derived properties, and `ComparerProvider` (`SysML2.NET.Extensions`)
-  compares non-derived content — the two agree.
+  compares non-derived content — the two agree, except for the redefined members above, which the
+  comparers skip; §4.3 checks those separately.
 
 ### 4.2 Modelling rules
 
@@ -124,30 +167,48 @@ After each commit:
 - `PostCommitByProjectAsync` returned a commit on the expected branch whose `previousCommits` is
   the previous head; the branch `head` moved (`GetBranchesByProjectAndIdAsync`).
 - `GetChangesByProjectCommitAsync` / `GetChangeByProjectCommitIdAsync` → exactly the sent
-  `DataVersion`s.
+  `DataVersion`s: one per element, its payload equal to the element sent.
 - `GetElementByProjectCommitIdAsync` for each element of the step → equal to the expected DTO under
   `ComparerProvider`.
-- `GetElementsByProjectCommitAsync`, paged (`page[size]=25`, following `Link` to the end) → exactly
-  the expected id set at that commit, no duplicates.
-- `GetRootsByProjectCommitAsync` → only the root package.
+- `GetElementsByProjectCommitAsync`, paged (`page[size]=10`, following `Link` to the end, so that
+  every step's model spans several pages) → exactly the expected id set at that commit, no
+  duplicates.
+- `GetRootsByProjectCommitAsync` → exactly the elements without an `owner`. Systems Modeling API and
+  Services, Clause 7.2.2, Table 2: "A root element is an element that does not have any other element
+  as an owner. Hence, Element.owner is not specified for a root element." KerML derives `owner` as
+  `owningRelationship.owningRelatedElement`, so a relationship owned through its
+  `owningRelatedElement` has no `owner` and is a root. The clause admits a second reading ("owned by
+  no other element"); this one follows its `Element.owner` sentence. Flexo answers exactly the
+  elements without an `owningRelatedElement`, so an element owned through its `owningRelationship`
+  is a root too; that fits neither reading: the known divergence `RootsIgnoreOwningRelationship`
+  (§8) accepts that exact set, and anything else fails.
 - `GetRelationshipsByProjectCommitRelatedElementAsync`, `Direction` `in` / `out` / `both`, for the
   step's relationship ends.
 - History is immutable: one element of an earlier commit is re-read at that commit and is unchanged.
+- Every `Membership` read back has the `memberElement` and `memberName` that were sent, and no
+  non-derived reference read back is the empty GUID. The comparers do not cover these members, and
+  the JSON round trip loses them today (#424), so these checks stay red until #424 is fixed.
+- No request body references the empty GUID.
+- A negative case expects 404 for an unknown resource where the OpenAPI document declares 404, and
+  any 4xx where it does not; a 404 whose body conforms must reach the caller with its `Error`. A
+  call may tolerate one named known divergence (§8); any other answer fails.
+- Every request and response of the step conforms to the OpenAPI document (§3.3).
+- An element that differs from what was sent names the properties that differ.
 
 Comparisons over a list of elements run inside `Assert.EnterMultipleScope`, so one run reports
 every failing metaclass, not just the first.
 
 ## 5. The scenario
 
-`FlexoModelScenarioTestFixture` — `[Category("Integration")]`, one `[Test]` per step ordered with
-`[Order(n)]` (precedent: `SqlSchemaBenchmarkTestFixture`). `[SetUp]` ignores a step when an
-earlier step failed (`Assert.Ignore("step N failed")`), so a failure is reported once, at its
-origin.
+`FlexoModelScenarioTestFixture` — `[Category("Integration")]`, one `[Test]` per step. Each step
+declares `[DependsOnTest(previous step, AllowFailure = true)]` (NUnit 5 deprecates `[Order]`), so
+the steps run in order and an assertion failure in one step does not hide the outcome of the next;
+a step ignores itself only when the state it builds on is missing. The verdict always runs.
 
 | # | Step | Model content | Operations exercised (Appendix C #) |
 |---:|---|---|---|
 | 1 | **Empty server** | — | `GET /meta/datatypes` (34), by id (35); `GET /projects` is empty (1); unknown project → 404 `Error` (3) |
-| 2 | **Project and root model** | `POST`/`GET`/`PUT` project (2, 3, 4, 1); commit on the default branch: root `Package`, nested `Package`s, `Namespace`, `LibraryPackage`, `AnnotatingElement`, `Comment`, `Documentation`, `TextualRepresentation`, `Annotation`, `OwningMembership`, `Membership`, `NamespaceImport`, `MembershipImport`, `Dependency`, `ElementFilterMembership` (Root, Packages — 14) | 15, 14, 16, 17, 18, 19, 20, 22, 23 |
+| 2 | **Project and root model** | `POST`/`GET`/`PUT` project (2, 3, 4, 1); commit on the default branch: root `Package`, nested `Package`s, `Namespace`, `LibraryPackage`, `AnnotatingElement`, `Comment`, `Documentation`, `TextualRepresentation`, `Annotation`, `OwningMembership`, `Membership`, `NamespaceImport`, `MembershipImport`, `Dependency`, `ElementFilterMembership` (Root, Packages — 14); the filter condition is a `LiteralBoolean` with its `result` parameter (a `Feature` through a `ReturnParameterMembership`), which KerML requires of every `Expression` | 15, 14, 16, 17, 18, 19, 20, 22, 23 |
 | 3 | **KerML Core** | `Type`, `Classifier`, `Feature`, `Specialization`, `Subclassification`, `FeatureTyping`, `Subsetting`, `Redefinition`, `ReferenceSubsetting`, `CrossSubsetting`, `Conjugation`, `Disjoining`, `Differencing`, `Intersecting`, `Unioning`, `FeatureChaining`, `FeatureInverting`, `TypeFeaturing`, `FeatureMembership`, `EndFeatureMembership`, `Multiplicity` (21) — typing and specializing step-2 content | as step 2 |
 | 4 | **KerML Kernel** | data types, classes, structures, associations, connectors, behaviors, steps, functions, all expression and literal kinds, feature values, multiplicity ranges, interactions, flows, metaclasses and metadata (43); then **tag** `kernel` on this commit | as step 2; `POST`/`GET` tags (11, 10, 12) |
 | 5 | **Update the KerML model** | U1–U4 (§6.1) on step 2–4 content | 15, 17, 20; `DiffAsync` `kernel` → head shows `UPDATED` (24) |
@@ -209,7 +270,9 @@ Computed from what the **server returned**, not from what was sent:
   DTO interfaces), some element read back carried a non-default value, and some update changed it.
 - **Literals**: every enumeration literal was read back at least once.
 - **Endpoints**: `EndpointRecorder` saw every `(method, path template)` of
-  `Resources/ptc-25-02-30.json` (35), each with at least one success and one failure status.
+  `Resources/ptc-25-02-30.json` (35) with a success status, and with a client error status where
+  the document declares a 4xx response for it. A 5xx counts as a divergence, not as coverage. Every
+  request must address an operation of the document.
 
 All four lists are self-calibrating: extending the metamodel or the OpenAPI document never needs a
 change to the verdict, only to the steps.
@@ -218,20 +281,47 @@ change to the verdict, only to the steps.
 
 | Finding | Action |
 |---|---|
-| Our client or serializer is wrong per the spec | fix here, with a unit test |
-| Flexo diverges from the spec | not a failure of the client, so not a failure of this suite: upstream issue on `Open-MBEE/flexo-mms-sysmlv2`; the case goes in one `KnownServerDivergences` table and is reported through `Assert.Warn` quoting the issue, so later steps still run — the expectation stays spec-based |
+| Our client or serializer is wrong per the spec | not fixed while the scenario is built: a GitHub issue is filed and the check stays red, so the scenario is the fixture the client is fixed against later |
+| Flexo diverges from the spec | not a failure of the client, so not a failure of this suite: the case goes in one `KnownServerDivergences` table and is reported through `Assert.Warn` quoting its reference, so later steps still run — the expectation stays spec-based. The reference is the Flexo source location, or the route it was observed on, at the pinned commit until an upstream issue on `Open-MBEE/flexo-mms-sysmlv2` exists, which then replaces it. A divergence that a response violation shows (§3.3) carries a matcher as narrow as the violation, so it cannot hide another one. An entry is added with the step that first observes it |
 | The spec is ambiguous | pick a reading, cite the clause, note in one line that it admits more than one (CLAUDE.md) |
 
-Known before starting: Flexo's `/meta/datatypes` serves a pre-final schema (`ItemFlow`,
-`LifeClass`, …) — step 1 asserts shape only.
+Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergences.cs`:
+
+- `RootsIgnoreOwningRelationship`: the roots are every element without an `owningRelatedElement`,
+  including the elements owned through their `owningRelationship` (step 2);
+- `UnknownResourceNotFound`, `UnknownResourceAccepted`: an unknown project answers 403 instead of
+  404, and the relationships of an unknown element answer 200 (step 2);
+- `ErrorWithoutErrorBody`: an error answer carries an empty or `text/plain` body, never an
+  `application/json` `Error` (steps 1, 2);
+- `CreatedAnsweredOk`: `POST /projects` and `POST …/commits` answer 200 instead of 201 (step 2);
+- `RecordsWithoutRequiredProperties`: projects, branches, commits and data versions leave out the
+  required `alias`, `name`, `description` and `deleted`, and send `null` for an empty
+  `previousCommit` (step 2);
+- `ElementsWithoutDerivedProperties`: elements come back without their derived properties
+  (`owner`, `qualifiedName`, …), which the response schemas require; it matches only when every
+  missing property is derived, so a missing non-derived property still fails (step 2);
+- `DatatypeIdNotUri`: a datatype comes back with an `$id` that is not a URI (step 1).
+
+Expected from the Flexo source, added with the step that observes them:
+
+- diff and merge answer 501 Not Implemented (steps 5, 8);
+- real values come back as single-precision floats (step 4);
+- deleting an element leaves the elements it owns in place (no cascade, §6.2 D3, step 12).
+
+Client defects found so far, each red until fixed:
+
+- #424 — the JSON round trip loses non-derived members that a derived property redefines
+  (`memberElement`, `memberName`, `source`, `target`);
+- #425 — the PSM JSON serializers write `null` for optional references that the OpenAPI document
+  does not make nullable (`ProjectRequest.defaultBranch`, …).
 
 ## 9. Open questions
 
 1. **Query by `@type` and subtypes** — Flexo matches subtypes; check whether the spec requires it.
 2. **ProjectUsage / ExternalData / ExternalRelationship on Flexo** — stored generically, untested.
-3. **Flexo image** — `v0.2.1` (recommended) or `develop-SNAPSHOT`.
+3. **Flexo image** — decided: the `develop` build pinned by digest (§3.1).
 4. **CI** — local only (recommended for now), or a separate opt-in workflow.
-5. **One `[Test]` per step vs `TESTING.md` §2** — In the scope of this integration test, going again rules defined in the TESTING.md file is accepted. One scenario can be split into multiple [Test] method. A TestOrder need to be correctly settle
+5. **One `[Test]` per step vs `TESTING.md` §2** — decided: in the scope of this integration test, going against the rules of `TESTING.md` is accepted. One scenario is split into one `[Test]` per step, and the order is set with `[DependsOnTest(…, AllowFailure = true)]` (§5).
 
 ## 10. Work breakdown
 
