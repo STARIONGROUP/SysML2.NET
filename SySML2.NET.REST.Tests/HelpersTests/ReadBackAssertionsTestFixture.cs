@@ -12,6 +12,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
     using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.REST.Exceptions;
 
     using Direction = SysML2.NET.PSM.Enumerations.Direction;
 
@@ -107,11 +109,25 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             List<Commit> commits = [commit];
             DataVersion changeById = null;
             Guid? head = this.commitId;
+            var changesUnreadable = false;
 
-            this.client.Setup(api => api.GetCommitByProjectAndIdAsync(this.projectId, this.commitId, It.IsAny<CancellationToken>())).ReturnsAsync(() => commit);
+            var commitUnreadable = false;
+
+            var recorded = new List<EndpointCall>();
+            EndpointCall commitResponse = null;
+
+            this.client.Setup(api => api.GetCommitByProjectAndIdAsync(this.projectId, this.commitId, It.IsAny<CancellationToken>())).ReturnsAsync(() =>
+            {
+                if (commitResponse != null)
+                {
+                    recorded.Add(commitResponse);
+                }
+
+                return commitUnreadable ? throw new InvalidOperationException("previousCommit is an object") : commit;
+            });
             this.client.Setup(api => api.GetCommitsByProjectAsync(this.projectId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, QueryParameters parameters, CancellationToken _) => Paged(commits, parameters));
             this.client.Setup(api => api.GetBranchesByProjectAndIdAsync(this.projectId, branchId, It.IsAny<CancellationToken>())).ReturnsAsync(() => new Branch { Id = branchId, Head = head });
-            this.client.Setup(api => api.GetChangesByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, Guid _, QueryParameters parameters, CancellationToken _) => Paged(changes, parameters));
+            this.client.Setup(api => api.GetChangesByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, Guid _, QueryParameters parameters, CancellationToken _) => changesUnreadable ? throw new InvalidOperationException("no changes") : Paged(changes, parameters));
             this.client.Setup(api => api.GetChangeByProjectCommitIdAsync(this.projectId, this.commitId, It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync((Guid _, Guid _, Guid changeId, CancellationToken _) => changeById ?? changes.Single(change => change.Id == changeId));
 
             var firstCommit = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, null, changed));
@@ -162,6 +178,36 @@ namespace SySML2.NET.REST.Tests.HelpersTests
 
             var noChanges = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, []));
 
+            changesUnreadable = true;
+
+            var unreadableChanges = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, []));
+
+            changesUnreadable = false;
+
+            commitUnreadable = true;
+
+            var unreadableCommit = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, []));
+
+            var recording = new ReadBackAssertions(this.client.Object, this.state, () => recorded);
+            var commitCall = new EndpointCall(null, "GET /projects/p/commits/c", HttpStatusCode.OK);
+
+            commitResponse = commitCall with { ResponseViolations = [new ContractViolation(ContractViolationKind.SchemaMismatch, "/previousCommit type: Value is \"object\" but should be \"array\"")] };
+
+            var unreadableOnBreakingResponse = await IsolatedAssertions.RunAsync(() => recording.VerifyCommitAsync(commit, branchId, previousId, []));
+
+            commitResponse = commitCall with { ResponseViolations = [new ContractViolation(ContractViolationKind.SchemaMismatch, "/ required: Required properties [\"alias\"] are not present")] };
+
+            var unreadableOnToleratedResponse = await IsolatedAssertions.RunAsync(() => recording.VerifyCommitAsync(commit, branchId, previousId, []));
+
+            commitResponse = commitCall;
+
+            var unreadableOnConformingResponse = await IsolatedAssertions.RunAsync(() => recording.VerifyCommitAsync(commit, branchId, previousId, []));
+
+            commitResponse = null;
+            recorded.Add(commitCall with { ResponseViolations = [new ContractViolation(ContractViolationKind.SchemaMismatch, "/previousCommit type: Value is \"object\" but should be \"array\"")] });
+
+            var unreadableAfterEarlierBreakingResponse = await IsolatedAssertions.RunAsync(() => recording.VerifyCommitAsync(commit, branchId, previousId, []));
+
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(firstCommit, Is.Empty);
@@ -177,9 +223,102 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(onePage[0].Message, Does.Contain("paging is untested"));
                 Assert.That(missingChanges, Has.Count.EqualTo(2));
                 Assert.That(noChanges, Has.Count.EqualTo(1));
+                Assert.That(unreadableChanges.Select(result => result.Message), Is.EqualTo((string[])["GetChangesByProjectCommitAsync threw InvalidOperationException: no changes"]), "the commit, the list and the branch head still pass");
+                Assert.That(unreadableCommit.Select(result => result.Message), Has.Some.Contains("GetCommitByProjectAndIdAsync threw InvalidOperationException: previousCommit is an object"));
+                Assert.That(unreadableCommit, Has.Count.EqualTo(2), "the commit read fails, and the other commit checks still run");
+                Assert.That(unreadableOnBreakingResponse.Select(result => result.Status), Is.EquivalentTo((AssertionStatus[])[AssertionStatus.Warning, AssertionStatus.Failed]));
+                Assert.That(unreadableOnBreakingResponse.Single(result => result.Status == AssertionStatus.Warning).Message, Does.Contain(KnownServerDivergences.PreviousCommitAsObject.Summary).And.Contain("(GET /projects/p/commits/c)"));
+                Assert.That(unreadableOnToleratedResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed, AssertionStatus.Failed]), "a tolerated divergence that does not break deserialization excuses nothing");
+                Assert.That(unreadableOnConformingResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed, AssertionStatus.Failed]));
+                Assert.That(unreadableAfterEarlierBreakingResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed, AssertionStatus.Failed]), "a breaking response of an earlier call excuses nothing");
             }
 
             this.client.Verify(api => api.GetChangeByProjectCommitIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Test]
+        public async Task VerifyVerifyDiffAsync()
+        {
+            var baseCommitId = Guid.NewGuid();
+            var compareCommitId = Guid.NewGuid();
+            var updated = new Package { Id = Guid.NewGuid() };
+            var created = new Package { Id = Guid.NewGuid() };
+            this.state.ExpectedModels[baseCommitId] = [updated];
+
+            static DataVersion Version(IElement element) => new() { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = element.Id }, Payload = element };
+
+            List<DataDifference> differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { CompareData = Version(created) }];
+            Exception failure = null;
+
+            this.client.Setup(api => api.DiffAsync(this.projectId, baseCommitId, compareCommitId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>()))
+                .Returns((Guid _, Guid _, Guid _, QueryParameters parameters, CancellationToken _) => failure != null ? throw failure : Paged(differences, parameters));
+
+            var expected = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
+
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }];
+
+            var missing = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
+
+            differences = [new DataDifference { CompareData = Version(updated) }, new DataDifference { BaseData = Version(created), CompareData = Version(created) }];
+
+            var misclassified = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
+
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { BaseData = Version(created) }, new DataDifference()];
+
+            var deletedAndUnnamed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
+
+            failure = new PsmApiException(HttpStatusCode.NotImplemented, null);
+
+            var notImplemented = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
+
+            failure = new PsmApiException(HttpStatusCode.BadRequest, null);
+
+            var rejected = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(expected, Is.Empty);
+                Assert.That(missing, Has.Count.EqualTo(1));
+                Assert.That(misclassified.Select(result => result.Message), Has.Some.Contains("UPDATED"));
+                Assert.That(misclassified.Select(result => result.Message), Has.Some.Contains("CREATED"));
+                Assert.That(deletedAndUnnamed.Select(result => result.Message), Has.Some.Contains("a difference names the data it is about"));
+                Assert.That(notImplemented.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
+                Assert.That(notImplemented[0].Message, Does.Contain(KnownServerDivergences.DiffNotImplemented.Summary));
+                Assert.That(rejected.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
+                Assert.That(rejected[0].Message, Does.Contain("DiffAsync threw PsmApiException"));
+            }
+        }
+
+        [Test]
+        public async Task VerifyVerifyHistoryAsync()
+        {
+            var earlierCommitId = Guid.NewGuid();
+            var element = new Package { Id = Guid.NewGuid(), DeclaredName = "Before" };
+            IElement atEarlierCommit = Clone(element);
+            var unreadable = false;
+
+            this.client.Setup(api => api.GetElementByProjectCommitIdAsync(this.projectId, earlierCommitId, element.Id, It.IsAny<bool?>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => unreadable ? throw new InvalidOperationException("gone") : atEarlierCommit);
+
+            var unchanged = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyHistoryAsync(earlierCommitId, element));
+
+            var rewritten = (Package)Clone(element);
+            rewritten.DeclaredName = "After";
+            atEarlierCommit = rewritten;
+
+            var changed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyHistoryAsync(earlierCommitId, element));
+
+            unreadable = true;
+
+            var failed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyHistoryAsync(earlierCommitId, element));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(unchanged, Is.Empty);
+                Assert.That(changed.Select(result => result.Message), Is.EqualTo((string[])[$"Package {element.Id} at the earlier commit {earlierCommitId} differs from what was sent: Element.DeclaredName"]));
+                Assert.That(failed, Has.Count.EqualTo(1));
+                Assert.That(failed[0].Message, Does.Contain("threw InvalidOperationException: gone"));
+            }
         }
 
         [Test]
@@ -189,23 +328,26 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             var elements = model.Builder.ToDtos();
             var relationships = elements.OfType<IRelationship>().ToList();
             var readBack = elements.ToDictionary(element => element.Id, Clone);
-            var unowned = elements.Where(element => element.owner == null).ToList();
+            var unowned = elements.Where(element => element.OwningRelationship == null).ToList();
             IReadOnlyList<IElement> roots = unowned;
             IReadOnlyList<IElement> listed = elements;
             var onePage = false;
+            var unreadable = new HashSet<Guid>();
             var dropIncoming = false;
+            var listUnreadable = false;
+            Direction? unreadableDirection = null;
 
             this.client.Setup(api => api.GetElementByProjectCommitIdAsync(this.projectId, this.commitId, It.IsAny<Guid>(), It.IsAny<bool?>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Guid _, Guid _, Guid elementId, bool? _, CancellationToken _) => readBack[elementId]);
+                .ReturnsAsync((Guid _, Guid _, Guid elementId, bool? _, CancellationToken _) => unreadable.Contains(elementId) ? throw new InvalidOperationException("not deserializable") : readBack[elementId]);
 
             this.client.Setup(api => api.GetElementsByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<bool?>(), It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>()))
-                .Returns((Guid _, Guid _, bool? _, QueryParameters parameters, CancellationToken _) => Paged(listed, onePage ? null : parameters));
+                .Returns((Guid _, Guid _, bool? _, QueryParameters parameters, CancellationToken _) => listUnreadable ? throw new InvalidOperationException("no list") : Paged(listed, onePage ? null : parameters));
 
             this.client.Setup(api => api.GetRootsByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<bool?>(), It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>()))
                 .Returns((Guid _, Guid _, bool? _, QueryParameters parameters, CancellationToken _) => Paged(roots, parameters));
 
             this.client.Setup(api => api.GetRelationshipsByProjectCommitRelatedElementAsync(this.projectId, this.commitId, It.IsAny<Guid>(), It.IsAny<Direction?>(), It.IsAny<bool?>(), It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>()))
-                .Returns((Guid _, Guid _, Guid subjectId, Direction? direction, bool? _, QueryParameters parameters, CancellationToken _) =>
+                .Returns((Guid _, Guid _, Guid subjectId, Direction? direction, bool? _, QueryParameters parameters, CancellationToken _) => direction == unreadableDirection ? throw new InvalidOperationException("no relationships") :
                     Paged(relationships.Where(relationship => direction switch
                     {
                         Direction.@out => relationship.Source.Contains(subjectId),
@@ -213,7 +355,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                         _ => relationship.Source.Contains(subjectId) || relationship.Target.Contains(subjectId)
                     }).ToList(), parameters));
 
-            var firstRead = elements.Select(element => readBack[element.Id]).ToList();
+            var firstRead = elements.ToList();
             var identical = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
             var recorded = this.state.ReadBack.ToList();
 
@@ -296,6 +438,34 @@ namespace SySML2.NET.REST.Tests.HelpersTests
 
             var emptyReference = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
 
+            readBack[dependency.Id] = Clone(dependency);
+            unreadable.Add(model.Nested.Id);
+
+            var elementUnreadable = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+
+            unreadable.Clear();
+            listUnreadable = true;
+            var readBackBefore = this.state.ReadBack.Count;
+
+            var listUnreadableResults = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var recordedWithoutList = this.state.ReadBack.Skip(readBackBefore).Select(entry => entry.Data).ToList();
+
+            listUnreadable = false;
+            unreadableDirection = Direction.@in;
+
+            var incomingUnreadable = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+
+            unreadableDirection = null;
+
+            var listedRenamed = (Package)Clone(elements.Single(element => element.Id == model.Nested.Id));
+            listedRenamed.DeclaredName = "Listed";
+            listed = [.. elements.Select(element => element.Id == model.Nested.Id ? listedRenamed : element)];
+            this.client.Invocations.Clear();
+
+            var unchangedListedDifferently = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyModelAsync(this.commitId, elements, [], model.Nested.Id));
+
+            this.client.Verify(api => api.GetElementByProjectCommitIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<bool?>(), It.IsAny<CancellationToken>()), Times.Never, "an element that the commit did not change is not read by id");
+
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(identical, Is.Empty);
@@ -324,6 +494,11 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(memberNameLost.Select(result => result.Message), Has.Some.Contains("lost its memberName (#424)"));
                 Assert.That(memberNameLost.Select(result => result.Message), Has.None.Contains("holds empty references"));
                 Assert.That(emptyReference.Select(result => result.Message), Has.Some.Contains($"Dependency {dependency.Id} holds empty references (#424)"));
+                Assert.That(unchangedListedDifferently.Select(result => result.Message), Is.EqualTo((string[])[$"Package {model.Nested.Id} as listed differs from what was sent: Element.DeclaredName"]));
+                Assert.That(listUnreadableResults.Select(result => result.Message), Is.EqualTo((string[])["GetElementsByProjectCommitAsync threw InvalidOperationException: no list"]));
+                Assert.That(recordedWithoutList, Is.EquivalentTo(elements.Select(element => (IData)readBack[element.Id])).Using<IData>((actual, expected) => ReferenceEquals(actual, expected)), "without the list, the elements read by id are recorded");
+                Assert.That(incomingUnreadable.Select(result => result.Message), Is.EqualTo((string[])["GetRelationshipsByProjectCommitRelatedElementAsync in threw InvalidOperationException: no relationships"]), "the out and both directions still pass");
+                Assert.That(elementUnreadable.Select(result => result.Message), Is.EqualTo((string[])[$"GetElementByProjectCommitIdAsync of Package {model.Nested.Id} threw InvalidOperationException: not deserializable"]));
             }
         }
 
@@ -342,6 +517,6 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             });
         }
 
-        private Func<Task> VerifyModel(IReadOnlyList<IElement> elements, Guid relationshipSubjectId) => () => this.assertions.VerifyModelAsync(this.commitId, elements, relationshipSubjectId);
+        private Func<Task> VerifyModel(IReadOnlyList<IElement> elements, Guid relationshipSubjectId) => () => this.assertions.VerifyModelAsync(this.commitId, elements, elements, relationshipSubjectId);
     }
 }

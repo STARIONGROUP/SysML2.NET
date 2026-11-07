@@ -36,7 +36,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         {
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(KnownServerDivergences.All, Is.EquivalentTo((ServerDivergence[])[KnownServerDivergences.RootsIgnoreOwningRelationship, KnownServerDivergences.UnknownResourceNotFound, KnownServerDivergences.UnknownResourceAccepted, KnownServerDivergences.ErrorWithoutErrorBody, KnownServerDivergences.CreatedAnsweredOk, KnownServerDivergences.RecordsWithoutRequiredProperties, KnownServerDivergences.ElementsWithoutDerivedProperties, KnownServerDivergences.DatatypeIdNotUri]));
+                Assert.That(KnownServerDivergences.All, Is.EquivalentTo((ServerDivergence[])[KnownServerDivergences.RootsIgnoreOwningRelationship, KnownServerDivergences.DiffNotImplemented, KnownServerDivergences.UnknownResourceNotFound, KnownServerDivergences.UnknownResourceAccepted, KnownServerDivergences.ErrorWithoutErrorBody, KnownServerDivergences.CreatedAnsweredOk, KnownServerDivergences.RecordsWithoutRequiredProperties, KnownServerDivergences.PreviousCommitAsObject, KnownServerDivergences.ElementsWithoutDerivedProperties, KnownServerDivergences.DatatypeIdNotUri]));
                 Assert.That(KnownServerDivergences.All.Select(divergence => divergence.Reference), Has.All.Contains("Open-MBEE/flexo-mms-sysmlv2@836d904d"));
             }
         }
@@ -147,6 +147,22 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             }
 
             await Assert.ThatAsync(() => KnownServerDivergences.ExpectNotFoundAsync(() => throw new InvalidOperationException("a client defect"), () => Conforming, notFound), Throws.InvalidOperationException);
+        }
+
+        [Test]
+        public void VerifyPreviousCommitAsObject()
+        {
+            var explains = KnownServerDivergences.PreviousCommitAsObject.Explains;
+            var call = Conforming with { StatusCode = HttpStatusCode.OK };
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(explains(call, new ContractViolation(ContractViolationKind.SchemaMismatch, "/previousCommit type: Value is \"object\" but should be \"array\"")), Is.True);
+                Assert.That(explains(call, new ContractViolation(ContractViolationKind.SchemaMismatch, "/0/previousCommit type: Value is \"object\" but should be \"array\"")), Is.True);
+                Assert.That(explains(call, new ContractViolation(ContractViolationKind.SchemaMismatch, "/change type: Value is \"object\" but should be \"array\"")), Is.False);
+                Assert.That(explains(call, new ContractViolation(ContractViolationKind.InvalidJson, "/previousCommit type: Value is \"object\" but should be \"array\"")), Is.False);
+                Assert.That(KnownServerDivergences.All.Where(divergence => divergence.BreaksDeserialization), Is.EqualTo((ServerDivergence[])[KnownServerDivergences.PreviousCommitAsObject]));
+            }
         }
 
         [Test]

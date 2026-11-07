@@ -10,43 +10,90 @@
 namespace SySML2.NET.REST.Tests.Helpers
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
 
+    using SysML2.NET.Extensions.Core.DTO.Comparers;
     using SysML2.NET.PSM.DTO;
 
     using DtoElement = SysML2.NET.Core.DTO.Root.Elements.IElement;
     using PocoElement = SysML2.NET.Core.POCO.Root.Elements.IElement;
 
     /// <summary>
-    /// Builds the part of the model that one scenario step commits: POCOs with deterministic ids, wired by the
-    /// caller with <c>AssignOwnership</c>, then converted to DTOs, including derived values, once the step is complete
+    /// Builds the model of the scenario step by step: POCOs with deterministic ids, wired by the caller with
+    /// <c>AssignOwnership</c>, then converted to DTOs, including derived values, once a step is complete
     /// </summary>
     /// <remarks>
     /// The DTOs are produced from POCOs because a DTO cannot hold the values of members that a derived property
-    /// redefines, such as <c>OwningMembership.memberElement</c>, which the payload must still carry.
+    /// redefines, such as <c>OwningMembership.memberElement</c>, which the payload must still carry. One builder holds
+    /// the whole model, so a later step can wire into the elements of an earlier one.
     /// </remarks>
     public sealed class ModelBuilder
     {
         /// <summary>
-        /// The prefix of the names that the ids are derived from
+        /// The settable string list properties per DTO class, which the Dal conversion shares with the POCO (#428)
         /// </summary>
-        private readonly string scope;
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> StringListsByClass = new();
+
+        /// <summary>
+        /// The prefix of the names that the ids of the current step are derived from
+        /// </summary>
+        private string scope;
 
         /// <summary>
         /// The created elements with their conversion, in creation order
         /// </summary>
-        private readonly List<(string Name, PocoElement Poco, Func<DtoElement> Convert)> entries = [];
+        private readonly List<(string Name, PocoElement Poco, Func<bool, DtoElement> Convert)> entries = [];
+
+        /// <summary>
+        /// The names of the elements that the last <see cref="ToDtos"/> converted without their derived values
+        /// </summary>
+        private List<string> withoutDerivedValues = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBuilder"/> class
         /// </summary>
         /// <param name="scope">
-        /// The prefix of the names that the ids are derived from, e.g. the step name
+        /// The prefix of the names that the ids of the first step are derived from, e.g. the step name
         /// </param>
         public ModelBuilder(string scope)
         {
             this.scope = scope;
+        }
+
+        /// <summary>
+        /// Gets the names of the elements that the last <see cref="ToDtos"/> converted without their derived values,
+        /// because computing them failed; derived values are not sent, so the payload is unaffected
+        /// </summary>
+        public IReadOnlyList<string> WithoutDerivedValues => this.withoutDerivedValues;
+
+        /// <summary>
+        /// Gets every created element, in creation order, with the scoped name its id is derived from
+        /// </summary>
+        public IReadOnlyList<(string Name, PocoElement Element)> Elements => [.. this.entries.Select(entry => (entry.Name, entry.Poco))];
+
+        /// <summary>
+        /// Selects the elements that a commit must send: those that are new, or whose DTO differs from the one of the
+        /// previous commit under <c>ComparerProvider</c>
+        /// </summary>
+        /// <param name="previous">
+        /// The model at the previous commit
+        /// </param>
+        /// <param name="current">
+        /// The model as it must be after the commit
+        /// </param>
+        /// <returns>
+        /// The new and changed elements of <paramref name="current"/>, in its order
+        /// </returns>
+        public static IReadOnlyList<DtoElement> Changed(IReadOnlyList<DtoElement> previous, IReadOnlyList<DtoElement> current)
+        {
+            var previousById = previous.ToDictionary(element => element.Id);
+
+            return current
+                .Where(element => !previousById.TryGetValue(element.Id, out var before) || before.GetType() != element.GetType() || !ComparerProvider.Resolve(element).Equals(before, element))
+                .ToList();
         }
 
         /// <summary>
@@ -75,6 +122,18 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
+        /// Starts the next step: the ids of the elements created from now on are derived from names in
+        /// <paramref name="stepScope"/>
+        /// </summary>
+        /// <param name="stepScope">
+        /// The prefix of the names of the step, e.g. <c>core</c>
+        /// </param>
+        public void BeginStep(string stepScope)
+        {
+            this.scope = stepScope;
+        }
+
+        /// <summary>
         /// Creates a POCO with a deterministic <c>Id</c> and <c>ElementId</c>, and records its conversion to a DTO
         /// </summary>
         /// <typeparam name="TPoco">
@@ -94,26 +153,56 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// </exception>
         public TPoco Create<TPoco>(string name, Func<TPoco, bool, DtoElement> toDto) where TPoco : PocoElement, new()
         {
-            if (this.entries.Exists(entry => entry.Name == name))
+            var scopedName = $"{this.scope}/{name}";
+
+            if (this.entries.Exists(entry => entry.Name == scopedName))
             {
                 throw new ArgumentException($"The name {name} is already used in scope {this.scope}", nameof(name));
             }
 
             var poco = new TPoco
             {
-                Id = DeterministicGuid.Create($"{this.scope}/{name}")
+                Id = DeterministicGuid.Create(scopedName)
             };
 
             poco.ElementId = poco.Id.ToString();
 
-            this.entries.Add((name, poco, () => toDto(poco, true)));
+            this.entries.Add((scopedName, poco, includeDerivedProperties => toDto(poco, includeDerivedProperties)));
 
             return poco;
         }
 
         /// <summary>
-        /// Converts every created POCO to its DTO, including derived values
+        /// Finds a created element by the scoped name its id is derived from, e.g. <c>core/f</c>
         /// </summary>
+        /// <typeparam name="TPoco">
+        /// The POCO type of the element
+        /// </typeparam>
+        /// <param name="scopedName">
+        /// The scope and name of the element
+        /// </param>
+        /// <returns>
+        /// The element
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown when no element of <typeparamref name="TPoco"/> was created under <paramref name="scopedName"/>
+        /// </exception>
+        public TPoco Find<TPoco>(string scopedName) where TPoco : PocoElement
+        {
+            return this.entries.Find(entry => entry.Name == scopedName).Poco is TPoco element
+                ? element
+                : throw new ArgumentException($"No {typeof(TPoco).Name} was created as {scopedName}", nameof(scopedName));
+        }
+
+        /// <summary>
+        /// Converts every created POCO to its DTO, including derived values; an element whose derived values cannot be
+        /// computed, such as an operator expression without the model library, is converted without them and listed
+        /// in <see cref="WithoutDerivedValues"/>
+        /// </summary>
+        /// <remarks>
+        /// Every DTO gets its own copy of the string lists that the Dal conversion shares with the POCO (#428), so that
+        /// a DTO stays the snapshot of the model at its commit when a later step changes the POCO.
+        /// </remarks>
         /// <returns>
         /// The DTOs, in creation order
         /// </returns>
@@ -122,17 +211,59 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// </exception>
         public IReadOnlyList<DtoElement> ToDtos()
         {
-            return this.entries.Select(entry =>
+            var withoutDerived = new List<string>();
+
+            var dtos = this.entries.Select(entry =>
             {
                 try
                 {
-                    return entry.Convert();
+                    return Detach(entry.Convert(true));
+                }
+                catch (Exception)
+                {
+                    withoutDerived.Add(entry.Name);
+                }
+
+                try
+                {
+                    return Detach(entry.Convert(false));
                 }
                 catch (Exception exception)
                 {
-                    throw new InvalidOperationException($"{this.scope}/{entry.Name} ({entry.Poco.GetType().Name}) cannot be converted to a DTO: {exception.Message}", exception);
+                    throw new InvalidOperationException($"{entry.Name} ({entry.Poco.GetType().Name}) cannot be converted to a DTO: {exception.Message}", exception);
                 }
             }).ToList();
+
+            this.withoutDerivedValues = withoutDerived;
+
+            return dtos;
+        }
+
+        /// <summary>
+        /// Gives a DTO its own copy of every string list it holds
+        /// </summary>
+        /// <param name="dto">
+        /// The DTO
+        /// </param>
+        /// <returns>
+        /// The same DTO
+        /// </returns>
+        private static DtoElement Detach(DtoElement dto)
+        {
+            var stringLists = StringListsByClass.GetOrAdd(dto.GetType(), type => type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(property => property.PropertyType == typeof(List<string>) && property.CanWrite && property.SetMethod is { IsPublic: true } or { IsAssembly: true })
+                .ToArray());
+
+            foreach (var property in stringLists)
+            {
+                if (property.GetValue(dto) is List<string> list)
+                {
+                    property.SetValue(dto, new List<string>(list));
+                }
+            }
+
+            return dto;
         }
     }
 }

@@ -52,6 +52,11 @@ namespace SySML2.NET.REST.Tests.Helpers
         private static readonly Regex NullList = new(@"^\S* type: Value is ""null"" but should be ""array""$", RegexOptions.Compiled);
 
         /// <summary>
+        /// Matches a schema error on a <c>previousCommit</c> sent as one object
+        /// </summary>
+        private static readonly Regex PreviousCommitObject = new(@"^\S*/previousCommit type: Value is ""object"" but should be ""array""$", RegexOptions.Compiled);
+
+        /// <summary>
         /// Gets the divergence that the roots are the elements without an <c>owningRelatedElement</c>, owned through
         /// an <c>owningRelationship</c> or not, where Clause 7.2.2 makes them the elements without an <c>owner</c>
         /// </summary>
@@ -79,6 +84,11 @@ namespace SySML2.NET.REST.Tests.Helpers
             (call, violation) => (int)call.StatusCode >= 400 && violation.Kind is ContractViolationKind.UnexpectedBody or ContractViolationKind.UndeclaredMediaType);
 
         /// <summary>
+        /// Gets the divergence that the diff of two commits is not implemented
+        /// </summary>
+        public static ServerDivergence DiffNotImplemented { get; } = new("GET /projects/{projectId}/commits/{compareCommitId}/diff answers 501 Not Implemented", $"{FlexoRevision}, observed on GET /projects/{{projectId}}/commits/{{compareCommitId}}/diff");
+
+        /// <summary>
         /// Gets the divergence that a create answers 200 OK, where the OpenAPI document declares 201 Created and no 200
         /// </summary>
         public static ServerDivergence CreatedAnsweredOk { get; } = new(
@@ -94,6 +104,16 @@ namespace SySML2.NET.REST.Tests.Helpers
             "projects, branches, commits and data versions leave out the required alias, name, description and deleted, and send null for an empty previousCommit",
             $"{FlexoRevision}, observed on every project, branch, commit and change read",
             (_, violation) => violation.Kind == ContractViolationKind.SchemaMismatch && (NullList.IsMatch(violation.Message) || MissingNames(violation) is { Count: > 0 } names && names.All(OmittedRecordProperties.Contains)));
+
+        /// <summary>
+        /// Gets the divergence that a commit with one previous commit sends <c>previousCommit</c> as that one object,
+        /// where the OpenAPI document declares an array
+        /// </summary>
+        public static ServerDivergence PreviousCommitAsObject { get; } = new(
+            "a commit with one previous commit sends previousCommit as an object instead of an array",
+            $"{FlexoRevision}, observed on GET /projects/{{projectId}}/commits/{{commitId}} and GET /projects/{{projectId}}/commits",
+            (_, violation) => violation.Kind == ContractViolationKind.SchemaMismatch && PreviousCommitObject.IsMatch(violation.Message),
+            BreaksDeserialization: true);
 
         /// <summary>
         /// Gets the divergence that elements are returned without their derived properties, which the response schemas
@@ -115,7 +135,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <summary>
         /// Gets every known divergence
         /// </summary>
-        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, ElementsWithoutDerivedProperties, DatatypeIdNotUri];
+        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri];
 
         /// <summary>
         /// Asserts that a call for an unknown resource fails with 404 Not Found, or reports the one tolerated divergence

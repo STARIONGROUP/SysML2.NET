@@ -85,7 +85,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             RemoveIds(schemas);
             RewriteSchemaReferences(root, keysById);
 
-            var reader = new SchemaReader();
+            var reader = new SchemaReader(schemas);
 
             reader.Build(new JsonObject
             {
@@ -141,11 +141,13 @@ namespace SySML2.NET.REST.Tests.Helpers
         private static OpenApiContent ReadContent(JsonObject declaration, SchemaReader reader)
         {
             var content = declaration?["content"]?.AsObject() ?? [];
+            var schema = content.Select(mediaType => mediaType.Value?["schema"]).FirstOrDefault(node => node != null);
+            var isArray = schema?["type"]?.GetValueKind() == JsonValueKind.String && (string)schema["type"] == "array";
 
-            return new OpenApiContent(content.ToDictionary(
-                mediaType => mediaType.Key,
-                mediaType => reader.Build(mediaType.Value?["schema"] ?? new JsonObject()),
-                StringComparer.OrdinalIgnoreCase));
+            return new OpenApiContent(
+                content.ToDictionary(mediaType => mediaType.Key, mediaType => reader.Build(mediaType.Value?["schema"] ?? new JsonObject()), StringComparer.OrdinalIgnoreCase),
+                reader.UnionMembers(isArray ? schema["items"] : schema),
+                isArray);
         }
 
         /// <summary>
@@ -303,6 +305,26 @@ namespace SySML2.NET.REST.Tests.Helpers
         private sealed class SchemaReader
         {
             /// <summary>
+            /// The prefix of an absolute reference to a component schema
+            /// </summary>
+            private const string DefinitionReferencePrefix = $"{DefinitionsUri}#/$defs/";
+
+            /// <summary>
+            /// The keywords that a node of a union may carry besides its alternatives, none of which validates
+            /// </summary>
+            private static readonly HashSet<string> AnnotationKeywords = ["$ref", "anyOf", "oneOf", "title", "description", "$comment", "examples", "$schema"];
+
+            /// <summary>
+            /// The component schemas, by name, with their references made absolute
+            /// </summary>
+            private readonly JsonObject definitions;
+
+            /// <summary>
+            /// The built members of unions, by the schema object they were built from
+            /// </summary>
+            private readonly Dictionary<JsonObject, JsonSchema> members = new(ReferenceEqualityComparer.Instance);
+
+            /// <summary>
             /// The options that every schema of the document is built with
             /// </summary>
             private readonly BuildOptions options = new() { SchemaRegistry = new SchemaRegistry() };
@@ -311,6 +333,17 @@ namespace SySML2.NET.REST.Tests.Helpers
             /// The number of schemas built so far, which names the base URI of the next one
             /// </summary>
             private int count;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SchemaReader"/> class
+            /// </summary>
+            /// <param name="definitions">
+            /// The component schemas, by name, with their references made absolute
+            /// </param>
+            public SchemaReader(JsonObject definitions)
+            {
+                this.definitions = definitions;
+            }
 
             /// <summary>
             /// Builds a schema
@@ -327,6 +360,91 @@ namespace SySML2.NET.REST.Tests.Helpers
             public JsonSchema Build(JsonNode schema, Uri baseUri = null)
             {
                 return JsonSchema.Build(JsonSerializer.SerializeToElement(schema), this.options, baseUri ?? new Uri($"{DefinitionsUri}:{++this.count}"));
+            }
+
+            /// <summary>
+            /// Finds the members of the union that a schema is, through its <c>$ref</c>s, <c>anyOf</c>s and <c>oneOf</c>s:
+            /// the object schemas that fix their <c>@type</c> with a <c>const</c>; a <c>@type</c> fixed by two different
+            /// objects is left out, so that the member of a <c>@type</c> is always the only one that admits it
+            /// </summary>
+            /// <param name="schema">
+            /// The schema, or <c>null</c>
+            /// </param>
+            /// <returns>
+            /// The built member for each <c>@type</c>
+            /// </returns>
+            public IReadOnlyDictionary<string, JsonSchema> UnionMembers(JsonNode schema)
+            {
+                var byType = new Dictionary<string, JsonObject>(StringComparer.Ordinal);
+                var ambiguous = new HashSet<string>(StringComparer.Ordinal);
+                var visited = new HashSet<string>(StringComparer.Ordinal);
+                var pending = new Stack<JsonNode>();
+
+                if (schema != null)
+                {
+                    pending.Push(schema);
+                }
+
+                while (pending.Count > 0)
+                {
+                    if (pending.Pop() is not JsonObject node)
+                    {
+                        continue;
+                    }
+
+                    if (node["properties"]?["@type"]?["const"] is JsonValue constant && constant.GetValueKind() == JsonValueKind.String)
+                    {
+                        var type = constant.GetValue<string>();
+
+                        if (byType.TryGetValue(type, out var known) && !ReferenceEquals(known, node))
+                        {
+                            ambiguous.Add(type);
+                        }
+
+                        byType.TryAdd(type, node);
+                        continue;
+                    }
+
+                    if (node.Any(keyword => !AnnotationKeywords.Contains(keyword.Key)))
+                    {
+                        return new Dictionary<string, JsonSchema>();
+                    }
+
+                    if (node["$ref"] is JsonValue reference && reference.GetValue<string>() is { } target && target.StartsWith(DefinitionReferencePrefix, StringComparison.Ordinal)
+                        && visited.Add(target) && this.definitions[target[DefinitionReferencePrefix.Length..]] is { } definition)
+                    {
+                        pending.Push(definition);
+                    }
+
+                    foreach (var alternative in new[] { node["anyOf"], node["oneOf"] }.OfType<JsonArray>().SelectMany(alternatives => alternatives))
+                    {
+                        pending.Push(alternative);
+                    }
+                }
+
+                return byType
+                    .Where(member => !ambiguous.Contains(member.Key))
+                    .ToDictionary(member => member.Key, member => this.BuildMember(member.Value), StringComparer.Ordinal);
+            }
+
+            /// <summary>
+            /// Builds the member of a union once, however many unions it belongs to
+            /// </summary>
+            /// <param name="member">
+            /// The schema object of the member
+            /// </param>
+            /// <returns>
+            /// The built <see cref="JsonSchema"/>
+            /// </returns>
+            private JsonSchema BuildMember(JsonObject member)
+            {
+                if (!this.members.TryGetValue(member, out var built))
+                {
+                    built = this.Build(member);
+                    this.members[member] = built;
+                }
+
+                return built;
             }
         }
     }

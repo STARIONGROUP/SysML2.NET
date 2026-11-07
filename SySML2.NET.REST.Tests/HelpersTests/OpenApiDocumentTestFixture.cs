@@ -54,6 +54,33 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             }
             """;
 
+        private const string UnionDocument = """
+            {
+              "openapi": "3.1.0",
+              "paths": {
+                "/u": {
+                  "get": {
+                    "responses": {
+                      "200": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Union" } } } }
+                    }
+                  }
+                }
+              },
+              "components": {
+                "schemas": {
+                  "Union": {
+                    "anyOf": [
+                      { "type": "object", "properties": { "@type": { "const": "T1" }, "a": { "type": "string" } } },
+                      { "type": "object", "properties": { "@type": { "const": "T1" }, "b": { "type": "string" } } },
+                      { "type": "object", "properties": { "@type": { "const": "T2" } } },
+                      { "$ref": "#/components/schemas/Union" }
+                    ]
+                  }
+                }
+              }
+            }
+            """;
+
         private OpenApiDocument openApi;
 
         private string smallDocumentPath;
@@ -107,6 +134,44 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             File.WriteAllText(this.smallDocumentPath, SmallDocument.Replace("#/components/responses/404", "#/components/responses/410"));
 
             Assert.That(() => OpenApiDocument.Load(this.smallDocumentPath), Throws.InvalidOperationException.With.Message.Contains("#/components/responses/410"));
+        }
+
+        [Test]
+        public void VerifyUnionMembers()
+        {
+            var getElement = this.openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}/commits/{commitId}/elements/{elementId}");
+            var getElements = this.openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}/commits/{commitId}/elements");
+            var getProject = this.openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}");
+            var element = getElement.Responses["200"];
+            var flexoPackage = "{\"@id\":\"5d2c1a3e-0000-4000-8000-000000000001\",\"@type\":\"Package\",\"declaredName\":\"P\"}";
+            var wrongName = "{\"@id\":\"5d2c1a3e-0000-4000-8000-000000000001\",\"@type\":\"Package\",\"declaredName\":5}";
+            var byFullSchema = new OpenApiContent(element.SchemasByMediaType);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(element.SchemasByType.Keys, Does.Contain("Package").And.Contain("Feature").And.Contain("PartUsage"));
+                Assert.That(element.IsArrayOfTypes, Is.False);
+                Assert.That(getElements.Responses["200"].IsArrayOfTypes, Is.True);
+                Assert.That(getElements.Responses["200"].SchemasByType.Keys, Does.Contain("Package"));
+                Assert.That(getProject.Responses["200"].SchemasByType.Keys, Is.EqualTo((string[])["Project"]));
+                Assert.That(byFullSchema.Check("application/json", flexoPackage), Is.Not.Empty, "the full schema also rejects an element without its derived properties");
+                Assert.That(element.Check("application/json", wrongName), Is.Not.Empty);
+                Assert.That(byFullSchema.Check("application/json", wrongName), Is.Not.Empty);
+                Assert.That(element.Check("application/json", flexoPackage)[0].Message, Does.Contain("required").And.Contain("owner"));
+            }
+
+            File.WriteAllText(this.smallDocumentPath, SmallDocument.Replace("\"required\": [\"name\"],", "\"required\": [\"name\"], \"anyOf\": [{ \"properties\": { \"@type\": { \"const\": \"T1\" } } }],"));
+
+            var small = OpenApiDocument.Load(this.smallDocumentPath);
+            var thing = small.Operations.Single(operation => operation.PathTemplate == "/a/{x}").Responses["200"];
+
+            Assert.That(thing.SchemasByType, Is.Empty, "a union whose node has constraints of its own is not checked by type");
+
+            File.WriteAllText(this.smallDocumentPath, UnionDocument);
+
+            var union = OpenApiDocument.Load(this.smallDocumentPath).Operations.Single().Responses["200"];
+
+            Assert.That(union.SchemasByType.Keys, Is.EqualTo((string[])["T2"]), "a @type fixed by two members is left to the declared schema, and the self reference ends");
         }
 
         [Test]

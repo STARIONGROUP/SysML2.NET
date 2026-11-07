@@ -46,5 +46,10 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// Gets every data item the server returned, with the commit it was read at
         /// </summary>
         public List<(Guid CommitId, IData Data)> ReadBack { get; } = [];
+
+        /// <summary>
+        /// Gets the ids of the tags the scenario created, by name
+        /// </summary>
+        public Dictionary<string, Guid> TagIds { get; } = [];
     }
 }

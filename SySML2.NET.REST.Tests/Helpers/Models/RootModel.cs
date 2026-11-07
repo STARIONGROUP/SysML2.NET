@@ -9,8 +9,6 @@
 
 namespace SySML2.NET.REST.Tests.Helpers.Models
 {
-    using System;
-
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
@@ -22,9 +20,6 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Dal;
     using SysML2.NET.Extensions;
-
-    using DtoElement = SysML2.NET.Core.DTO.Root.Elements.IElement;
-    using PocoElement = SysML2.NET.Core.POCO.Root.Elements.IElement;
 
     /// <summary>
     /// The model of scenario step 2: the root package and the KerML Root and Packages metaclasses
@@ -51,15 +46,13 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
     /// plus an <see cref="AnnotatingElement"/> about <c>Library</c>, which has no textual notation of its own, and the
     /// result parameter of the filter condition, which KerML requires of every <c>Expression</c> (<c>result [1..1]</c>).
     /// </remarks>
-    public sealed class RootModel
+    public sealed class RootModel : StepModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RootModel"/> class and builds the model
         /// </summary>
-        public RootModel()
+        public RootModel() : base(new ModelBuilder("root"), "root")
         {
-            this.Builder = new ModelBuilder("root");
-
             this.Root = this.CreateNamed<Package>("CoverageModel", "cvm", PackageExtensions.ToDto);
 
             this.Nested = this.CreateNamed<Package>("Nested", "nst", PackageExtensions.ToDto);
@@ -134,11 +127,6 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         }
 
         /// <summary>
-        /// Gets the <see cref="ModelBuilder"/> holding every element of the model
-        /// </summary>
-        public ModelBuilder Builder { get; }
-
-        /// <summary>
         /// Gets the root package
         /// </summary>
         public Package Root { get; }
@@ -147,48 +135,5 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// Gets the nested package, which owns the imports and is annotated by the comment
         /// </summary>
         public Package Nested { get; }
-
-        /// <summary>
-        /// Creates an element with a declared name, short name and alias id
-        /// </summary>
-        /// <typeparam name="TPoco">
-        /// The POCO type
-        /// </typeparam>
-        /// <param name="name">
-        /// The declared name, also the name its id is derived from
-        /// </param>
-        /// <param name="shortName">
-        /// The declared short name
-        /// </param>
-        /// <param name="toDto">
-        /// The generated <c>ToDto</c> extension of <typeparamref name="TPoco"/>
-        /// </param>
-        /// <returns>
-        /// The created POCO
-        /// </returns>
-        private TPoco CreateNamed<TPoco>(string name, string shortName, Func<TPoco, bool, DtoElement> toDto) where TPoco : PocoElement, new()
-        {
-            var element = this.Builder.Create(name, toDto);
-            element.DeclaredName = name;
-            element.DeclaredShortName = shortName;
-            element.AliasIds = [$"urn:coverage-model:{name}"];
-
-            return element;
-        }
-
-        /// <summary>
-        /// Makes an element an owned member of a namespace through a new <see cref="OwningMembership"/>
-        /// </summary>
-        /// <param name="owner">
-        /// The owning namespace
-        /// </param>
-        /// <param name="member">
-        /// The owned member
-        /// </param>
-        private void OwnMember(PocoElement owner, PocoElement member)
-        {
-            var membership = this.Builder.Create<OwningMembership>($"{member.ElementId}/membership", OwningMembershipExtensions.ToDto);
-            owner.AssignOwnership(membership, member);
-        }
     }
 }

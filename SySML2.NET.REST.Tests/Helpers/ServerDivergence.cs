@@ -23,5 +23,9 @@ namespace SySML2.NET.REST.Tests.Helpers
     /// <param name="Explains">
     /// Whether the divergence explains a contract violation of a response, or <c>null</c> when it explains none
     /// </param>
-    public sealed record ServerDivergence(string Summary, string Reference, Func<EndpointCall, ContractViolation, bool> Explains = null);
+    /// <param name="BreaksDeserialization">
+    /// Whether a response showing the divergence cannot be read by a client that follows the OpenAPI document, so that
+    /// a read failing on it is no client defect
+    /// </param>
+    public sealed record ServerDivergence(string Summary, string Reference, Func<EndpointCall, ContractViolation, bool> Explains = null, bool BreaksDeserialization = false);
 }

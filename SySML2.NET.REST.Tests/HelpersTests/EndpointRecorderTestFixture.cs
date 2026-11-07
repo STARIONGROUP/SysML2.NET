@@ -61,6 +61,8 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(this.recorder.Calls, Is.Empty);
                 Assert.That(this.recorder.EmptyGuidRequests, Is.Empty);
                 Assert.That(this.recorder.LastCall, Is.Null);
+                Assert.That(this.recorder.ServerTime, Is.EqualTo(TimeSpan.Zero));
+                Assert.That(this.recorder.CheckTime, Is.EqualTo(TimeSpan.Zero));
             }
         }
 
@@ -100,6 +102,8 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(calls[4].Operation, Is.Null);
                 Assert.That(calls[4].ResponseViolations, Is.Empty);
                 Assert.That(this.recorder.EmptyGuidRequests, Is.EqualTo((string[])["POST /projects"]));
+                Assert.That(this.recorder.ServerTime, Is.GreaterThan(TimeSpan.Zero));
+                Assert.That(this.recorder.CheckTime, Is.GreaterThan(TimeSpan.Zero));
             }
         }
     }

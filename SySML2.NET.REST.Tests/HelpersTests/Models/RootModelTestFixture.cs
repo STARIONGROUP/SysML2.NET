@@ -48,6 +48,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(owningMemberships.Select(membership => ((IMembership)membership).MemberElement), Is.EquivalentTo(owningMemberships.Select(membership => membership.OwnedRelatedElement[0])));
                 Assert.That(commitRequest.Change, Has.Count.EqualTo(dtos.Count));
                 Assert.That(json, Does.Not.Contain("00000000-0000-0000-0000-000000000000"));
+                Assert.That(model.Builder.WithoutDerivedValues, Is.Empty);
             }
 
             Assert.That(new RootModel().Builder.ToDtos().Select(dto => dto.Id), Is.EqualTo(dtos.Select(dto => dto.Id)));

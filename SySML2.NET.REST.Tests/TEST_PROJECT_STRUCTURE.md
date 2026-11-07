@@ -22,10 +22,14 @@ SySML2.NET.REST.Tests/
 ├── Helpers/                          the scenario's infrastructure (no tests)
 │   ├── FlexoTestHost.cs, FlexoJwt.cs, ModelBuilder.cs, …   see below
 │   └── Models/                       the model each step commits
-│       └── RootModel.cs              step 2
+│       ├── StepModel.cs              the base: naming and ownership conventions
+│       ├── RootModel.cs              step 2: KerML Root and Packages
+│       ├── CoreModel.cs              step 3: KerML Core
+│       ├── KernelModel.cs            step 4: KerML Kernel
+│       └── KerMLUpdateModel.cs       step 5: updates U1–U4 of steps 2–4
 ├── HelpersTests/                     offline: one fixture per helper, mirroring Helpers/
 │   ├── FlexoJwtTestFixture.cs, ModelBuilderTestFixture.cs, …
-│   └── Models/RootModelTestFixture.cs
+│   └── Models/                       one fixture per model class
 ├── IntegrationTests/                 needs Docker
 │   └── FlexoModelScenarioTestFixture.cs   the scenario: one [Test] per step
 ├── Resources/Flexo/cluster.trig      Flexo's initial quad-store content (Apache-2.0, see NOTICE)
@@ -76,7 +80,7 @@ Session → PsmApiClient → HttpClient
 |---|---|
 | `IntegrationHttpClientFactory` | `IHttpClientFactory` that hands out clients over the shared chain. The chain is disposed once, at the end of the fixture. |
 | `BearerTokenHandler` | Adds the bearer token, because `Session` has no authentication option of its own. |
-| `EndpointRecorder` | Records every request as an `EndpointCall`: the OpenAPI operation it matched, the request line, the status, and how the request and the response break the document. It buffers the response body, so the client still reads it. It also collects request bodies that reference `00000000-0000-0000-0000-000000000000`. |
+| `EndpointRecorder` | Records every request as an `EndpointCall`: the OpenAPI operation it matched, the request line, the status, and how the request and the response break the document. It buffers the response body, so the client still reads it. It also collects request bodies that reference `00000000-0000-0000-0000-000000000000`, and totals the time spent waiting for the server and checking the contract; the coverage step prints both. |
 | `EndpointCall` | One recorded request, with its `RequestViolations` (client defects) and `ResponseViolations` (server divergences). |
 
 ### 3. The OpenAPI contract
@@ -85,7 +89,7 @@ Session → PsmApiClient → HttpClient
 |---|---|
 | `OpenApiDocument` | Reads the OpenAPI 3.1 document as JSON Schema 2020-12, with JsonSchema.Net, and matches a request path to its operation. When templates overlap, the one with the most literal segments wins. It removes the `$id`s of the component schemas and makes every reference absolute, because the document references its schemas both by JSON pointer and by those `$id`s. |
 | `OpenApiOperation` | One operation: its parameters, request body and responses. `CheckRequest` checks the query and the body a client sends; `CheckResponse` checks the status and the body a server answers. |
-| `OpenApiParameter`, `OpenApiContent` | A declared parameter, and a declared body (a schema per media type). They check one value or one body; schema errors are summarized to the branch whose `@type` matched. |
+| `OpenApiParameter`, `OpenApiContent` | A declared parameter, and a declared body (a schema per media type). They check one value or one body; schema errors are summarized to the branch whose `@type` matched. Where the declared schema is a union of object schemas that each fix their `@type`, as the element schemas are, an object is validated against the member of its `@type` alone: the verdict is the same and the evaluation is far cheaper. |
 | `ContractViolation`, `ContractViolationKind` | One way a request or a response breaks the document, by kind, so a known divergence can match it. |
 | `OpenApiConformance` | After each step: fails on any request violation; reports a response violation as the known divergence that explains it, or fails. |
 
@@ -93,16 +97,16 @@ Session → PsmApiClient → HttpClient
 
 | Type | Responsibility |
 |---|---|
-| `ModelBuilder` | Creates POCOs with deterministic ids; the step wires them with `AssignOwnership`. Once the step is complete, they are converted with the Dal's `ToDto(includeDerivedProperties: true)` and turned into a `CommitRequest`. POCOs are used because a hand-built DTO cannot set members that a derived property redefines. |
+| `ModelBuilder` | Holds the whole model across the steps: each step starts its own scope (`BeginStep`) and creates POCOs with deterministic ids, wired with `AssignOwnership`. It converts them with the Dal's `ToDto(includeDerivedProperties: true)`, `Changed` selects the delta a commit sends, and `Find` looks an element up by its scoped name. An element whose derived values cannot be computed without the model library is converted without them and listed in `WithoutDerivedValues`. POCOs are used because a hand-built DTO cannot set members that a derived property redefines. |
 | `DeterministicGuid` | Name-based UUID v5 of `"<step>/<name>"`, so the elements have the same ids in every run. |
-| `Models/*` | One class per step, describing the model that step commits (for example `RootModel` for step 2). |
+| `Models/*` | One class per step, deriving from `StepModel`, describing what that step adds to or changes in the model: `RootModel` (step 2), `CoreModel` (step 3), `KernelModel` (step 4), `KerMLUpdateModel` (step 5). |
 
 ### 5. Checking what came back
 
 | Type | Responsibility |
 |---|---|
 | `ScenarioState` | What the steps hand on to each other: the ids the server assigned (project, branch, commits), the expected model at each commit, and everything the server returned. |
-| `ReadBackAssertions` | The checks each model step runs after a commit: the commit and its predecessor, the branch head, the changes and their payloads, every element by id, paged element reads, roots (the elements without an `owner`), relationships, the member element and name of every membership, and that no returned DTO holds an empty GUID. Element equality uses `ComparerProvider` from `SysML2.NET.Extensions`; a difference names the properties that differ. |
+| `ReadBackAssertions` | The checks each model step runs after a commit: the commit and its predecessor, the branch head, the changes and their payloads, the changed elements by id, every element as listed, roots (the elements without an `owner`), relationships, the member element and name of every membership, that no returned DTO holds an empty GUID, and that an earlier commit still reads as it was. Element equality uses `ComparerProvider` from `SysML2.NET.Extensions`; a difference names the properties that differ. Every read is guarded: a read that throws fails, or warns when the response it failed on breaks the OpenAPI document. |
 | `KnownServerDivergences`, `ServerDivergence` | The named ways Flexo diverges from the specification, each with a reference: an upstream issue, or a Flexo source location at the pinned commit. A divergence can explain response violations. `Report` raises an `Assert.Warn`. `ExpectNotFoundAsync` expects a 404, tolerates one named divergence, and fails when a conforming 404 reaches the caller without its `Error`. |
 | `IsolatedAssertions` | Runs a check in an isolated NUnit context and returns its failures and warnings, without failing the calling test. The offline fixtures use it to prove that a check fails when it should. |
 
@@ -130,7 +134,10 @@ Having one `[Test]` per step goes against the one-test-per-method rule in `TESTI
 |---|---|---|
 | 1 | `VerifyEmptyServer` | implemented |
 | 2 | `VerifyProjectAndRootModel` | implemented |
-| 3–13 | see plan §5 | planned |
+| 3 | `VerifyKerMLCore` | implemented |
+| 4 | `VerifyKerMLKernel` | implemented, with the tag `kernel` |
+| 5 | `VerifyKerMLUpdate` | implemented, with the diff from the tag `kernel` |
+| 6–13 | see plan §5 | planned |
 | 14 | `VerifyCoverage` | implemented, red by design |
 
 ### Reading the outcome
@@ -158,10 +165,11 @@ The Docker endpoint is taken from `DOCKER_HOST`, and otherwise, on Windows, from
 
 To add a step:
 
-1. Add a model class under `Helpers/Models/` that builds the step's elements with `ModelBuilder`, and its offline fixture under `HelpersTests/Models/`.
+1. Add a model class under `Helpers/Models/`, deriving from `StepModel`, that adds the step's elements to the shared `ModelBuilder`, and its offline fixture under `HelpersTests/Models/`.
 2. Add a `[Test]` to `IntegrationTests/FlexoModelScenarioTestFixture.cs` that depends on the previous step with `AllowFailure = true`, commits the model, and calls `ReadBackAssertions`.
-3. Make `VerifyCoverage` depend on the new last step.
-4. When Flexo diverges, add an entry to `KnownServerDivergences` with its reference, and list it under "Observed" in plan §8.
-5. Check the coverage verdict output: the step should remove items from it.
+3. Commit with `CommitModelAsync` and verify with `VerifyCommittedModelAsync`, which send the delta and check the whole model.
+4. Make `VerifyCoverage` depend on the new last step.
+5. When Flexo diverges, add an entry to `KnownServerDivergences` with its reference, and list it under "Observed" in plan §8.
+6. Check the coverage verdict output: the step should remove items from it.
 
 Fixture rules (`TESTING.md`, `DEVELOPMENT_STANDARDS.md`) apply to every file here, with the one exception noted above.

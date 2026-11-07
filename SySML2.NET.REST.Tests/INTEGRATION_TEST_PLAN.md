@@ -135,6 +135,15 @@ references it by that `$id`.
   the step is wired, the builder converts every POCO with its generated Dal
   `ToDto(includeDerivedProperties: true)`, naming the element when a conversion fails, and produces
   the `DataVersionRequest`s for the commit.
+- **One builder holds the whole model.** Each step starts its own scope (`BeginStep`) and wires into
+  the elements of earlier steps, through the `StepModel` base class (`Helpers/Models/`). A commit
+  sends only the delta: the elements that are new, or whose DTO differs from the previous commit
+  under `ComparerProvider` (`ModelBuilder.Changed`); every check runs against the whole model.
+- **Derived values that cannot be computed.** Without the model library, an operator expression has
+  no instantiated type, and the generated `ToDto(true)` dereferences it. Such an element is
+  converted without derived values and listed in `ModelBuilder.WithoutDerivedValues`; derived values
+  are never sent, so the payload is unaffected. The Kernel fixture pins that list to the five
+  operator expressions.
 - Why POCOs: a DTO cannot hold the value of a non-derived member that a derived property redefines
   (`OwningMembership.memberElement`, `Import.source`, … — 173 no-op setters in 90 DTO classes), so a
   hand-built DTO would send the empty GUID for it. Only the POCO conversion fills those values.
@@ -168,11 +177,13 @@ After each commit:
   the previous head; the branch `head` moved (`GetBranchesByProjectAndIdAsync`).
 - `GetChangesByProjectCommitAsync` / `GetChangeByProjectCommitIdAsync` → exactly the sent
   `DataVersion`s: one per element, its payload equal to the element sent.
-- `GetElementByProjectCommitIdAsync` for each element of the step → equal to the expected DTO under
-  `ComparerProvider`.
+- `GetElementByProjectCommitIdAsync` for each element the commit created or changed → equal to the
+  expected DTO under `ComparerProvider`. An unchanged element was read by id at the commit that
+  last changed it; its content is compared as listed instead, which keeps a step on a large model
+  fast.
 - `GetElementsByProjectCommitAsync`, paged (`page[size]=10`, following `Link` to the end, so that
   every step's model spans several pages) → exactly the expected id set at that commit, no
-  duplicates.
+  duplicates, and every element equal to the expected DTO.
 - `GetRootsByProjectCommitAsync` → exactly the elements without an `owner`. Systems Modeling API and
   Services, Clause 7.2.2, Table 2: "A root element is an element that does not have any other element
   as an owner. Hence, Element.owner is not specified for a root element." KerML derives `owner` as
@@ -194,6 +205,12 @@ After each commit:
   call may tolerate one named known divergence (§8); any other answer fails.
 - Every request and response of the step conforms to the OpenAPI document (§3.3).
 - An element that differs from what was sent names the properties that differ.
+- Every read is guarded: a read that throws is a failure naming the call, and the step's other checks
+  still run. It is a warning instead only when a response of that very read shows a known divergence
+  that breaks deserialization (today only `PreviousCommitAsObject`), because a client cannot be
+  faulted for an answer the document does not allow; the conformance check reports that answer.
+  Every Flexo response breaks the document in some tolerated way, so any other violation excuses
+  nothing.
 
 Comparisons over a list of elements run inside `Assert.EnterMultipleScope`, so one run reports
 every failing metaclass, not just the first.
@@ -230,13 +247,17 @@ creates it.
 ### 6.1 Update scenarios
 
 Every concrete metaclass gets U1 and at least one of U2–U4, in step 5 (KerML) or step 8 (SysML).
+Exceptions, asserted by `KerMLUpdateModelTestFixture`: an owning membership is not retargeted,
+because that moves its member, which the public SDK cannot do (#427), so it gets U2 (its
+visibility); a `TypeFeaturing` keeps its ends, because its featuring type is the type that owns its
+feature. A connector, flow or association is retargeted through the reference or typing of an end.
 
 | Id | Change | Applies to |
 |---|---|---|
 | U1 | `declaredName` / `declaredShortName` changed | all 167 |
 | U2 | the carried non-derived attribute changed (flip a boolean, another literal value, another enum literal) | every row of A.3 / A.4 |
 | U3 | a relationship end retargeted (`FeatureTyping.type`, `Redefinition.redefinedFeature`, …) | the 62 concrete `Relationship` subclasses |
-| U4 | an ordered collection reordered, extended and shrunk (`ownedRelationship` of a `Namespace`) | one per metamodel package — ordering survives the round trip |
+| U4 | an ordered collection reordered, extended and shrunk (`ownedRelationship` of a `Namespace`) | one per metamodel package — ordering survives the round trip; only *extended* for now: the public SDK cannot reorder or shrink an ownership list (#427) |
 
 ### 6.2 Delete scenarios
 
@@ -297,6 +318,10 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `RecordsWithoutRequiredProperties`: projects, branches, commits and data versions leave out the
   required `alias`, `name`, `description` and `deleted`, and send `null` for an empty
   `previousCommit` (step 2);
+- `PreviousCommitAsObject`: a commit with one previous commit sends `previousCommit` as that one
+  object instead of an array (step 3); the client's deserializer then throws on a response it cannot
+  be expected to read, so that read is reported as a warning (§4.3) and the step's other checks
+  still run;
 - `ElementsWithoutDerivedProperties`: elements come back without their derived properties
   (`owner`, `qualifiedName`, …), which the response schemas require; it matches only when every
   missing property is derived, so a missing non-derived property still fails (step 2);
@@ -304,8 +329,9 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 
 Expected from the Flexo source, added with the step that observes them:
 
-- diff and merge answer 501 Not Implemented (steps 5, 8);
-- real values come back as single-precision floats (step 4);
+- merge answers 501 Not Implemented (step 8);
+- real values come back as single-precision floats (step 4); 2.5 and 3.5 are exact in single
+  precision, so this is not observed yet;
 - deleting an element leaves the elements it owns in place (no cascade, §6.2 D3, step 12).
 
 Client defects found so far, each red until fixed:
@@ -314,6 +340,18 @@ Client defects found so far, each red until fixed:
   (`memberElement`, `memberName`, `source`, `target`);
 - #425 — the PSM JSON serializers write `null` for optional references that the OpenAPI document
   does not make nullable (`ProjectRequest.defaultBranch`, …).
+
+SDK defects found while building the fixture, outside the client:
+
+- #426 — the generated comparers treat equal floating-point values as different, so a
+  `LiteralRational` read back equal is reported as differing (step 4);
+- #427 — `AssignOwnership` duplicates the member when an owning membership is re-assigned, and the
+  public API cannot reorder or shrink an ownership list or let any relationship other than an
+  owning membership or an annotation own a related element. Step 3 therefore makes the feature
+  chain of its `CrossSubsetting` a member of the package, and step 5 only extends (U4).
+- #428 — the Dal conversions share value lists (`aliasIds`, `text`) between a POCO and its DTO, so a
+  later change to the POCO rewrites the expected model of an earlier commit; `ModelBuilder` gives
+  every DTO its own copy.
 
 ## 9. Open questions
 

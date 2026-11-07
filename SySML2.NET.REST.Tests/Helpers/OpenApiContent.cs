@@ -19,6 +19,12 @@ namespace SySML2.NET.REST.Tests.Helpers
     /// <summary>
     /// The body that an OpenAPI request body or response declares: a schema per media type, or no body at all
     /// </summary>
+    /// <remarks>
+    /// Where the declared schema is a union of object schemas that each fix their <c>@type</c> with a <c>const</c>, as
+    /// the element schemas are, an object is validated against the member of its <c>@type</c> alone: every other
+    /// member rejects that <c>@type</c>, so the verdict is the same, its errors are those of that member, and the
+    /// evaluation skips the other members.
+    /// </remarks>
     public sealed class OpenApiContent
     {
         /// <summary>
@@ -37,15 +43,43 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <param name="schemasByMediaType">
         /// The schema of the body per declared media type; empty when no body is declared
         /// </param>
-        public OpenApiContent(IReadOnlyDictionary<string, JsonSchema> schemasByMediaType)
+        public OpenApiContent(IReadOnlyDictionary<string, JsonSchema> schemasByMediaType) : this(schemasByMediaType, new Dictionary<string, JsonSchema>(), false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenApiContent"/> class, with the member schemas of a union
+        /// </summary>
+        /// <param name="schemasByMediaType">
+        /// The schema of the body per declared media type; empty when no body is declared
+        /// </param>
+        /// <param name="schemasByType">
+        /// The member of the declared union for each <c>@type</c> it admits; empty when the schema is no such union
+        /// </param>
+        /// <param name="isArrayOfTypes">
+        /// Whether the body is an array whose items are of the union, rather than an object of it
+        /// </param>
+        public OpenApiContent(IReadOnlyDictionary<string, JsonSchema> schemasByMediaType, IReadOnlyDictionary<string, JsonSchema> schemasByType, bool isArrayOfTypes)
         {
             this.SchemasByMediaType = schemasByMediaType ?? throw new ArgumentNullException(nameof(schemasByMediaType));
+            this.SchemasByType = schemasByType ?? throw new ArgumentNullException(nameof(schemasByType));
+            this.IsArrayOfTypes = isArrayOfTypes;
         }
 
         /// <summary>
         /// Gets the schema of the body per declared media type; empty when no body is declared
         /// </summary>
         public IReadOnlyDictionary<string, JsonSchema> SchemasByMediaType { get; }
+
+        /// <summary>
+        /// Gets the member of the declared union for each <c>@type</c> it admits; empty when the schema is no such union
+        /// </summary>
+        public IReadOnlyDictionary<string, JsonSchema> SchemasByType { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the body is an array whose items are of the union
+        /// </summary>
+        public bool IsArrayOfTypes { get; }
 
         /// <summary>
         /// Checks a body against the declared media types and their schemas
@@ -96,9 +130,14 @@ namespace SySML2.NET.REST.Tests.Helpers
 
             using (instance)
             {
+                if (this.CheckByType(instance.RootElement) is { } byType)
+                {
+                    return byType;
+                }
+
                 var results = this.SchemasByMediaType[declared].Evaluate(instance.RootElement, Evaluation);
 
-                return results.IsValid ? [] : [.. Summarize(results).Select(error => new ContractViolation(ContractViolationKind.SchemaMismatch, error))];
+                return results.IsValid ? [] : [.. Summarize(results, string.Empty).Select(error => new ContractViolation(ContractViolationKind.SchemaMismatch, error))];
             }
         }
 
@@ -224,10 +263,13 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <param name="results">
         /// The results, in the hierarchical output format
         /// </param>
+        /// <param name="location">
+        /// The location of the evaluated instance in the body, empty for the body itself
+        /// </param>
         /// <returns>
         /// At most <see cref="ReportedErrors"/> lines of the form <c>location keyword: message</c>
         /// </returns>
-        private static IReadOnlyList<string> Summarize(EvaluationResults results)
+        private static IReadOnlyList<string> Summarize(EvaluationResults results, string location)
         {
             var errors = ErrorsOf(results)
                 .Where(error => error.Keyword is not ("anyOf" or "oneOf" or "allOf" or "properties" or "items" or "$ref" or ""))
@@ -252,7 +294,51 @@ namespace SySML2.NET.REST.Tests.Helpers
 
             return errors.Count == 0
                 ? ["the body does not validate"]
-                : [.. reported.Take(ReportedErrors).Select(error => $"{(error.Location.Length == 0 ? "/" : error.Location)} {error.Keyword}: {error.Message}")];
+                : [.. reported.Take(ReportedErrors).Select(error => $"{(location.Length + error.Location.Length == 0 ? "/" : location + error.Location)} {error.Keyword}: {error.Message}")];
+        }
+
+        /// <summary>
+        /// Checks the body against the member of the union for its <c>@type</c>, or for the <c>@type</c> of each of its
+        /// items
+        /// </summary>
+        /// <param name="body">
+        /// The body
+        /// </param>
+        /// <returns>
+        /// The violations found, or <c>null</c> when the body cannot be checked by type and the declared schema decides
+        /// </returns>
+        private IReadOnlyList<ContractViolation> CheckByType(JsonElement body)
+        {
+            if (this.SchemasByType.Count == 0 || (this.IsArrayOfTypes && body.ValueKind != JsonValueKind.Array))
+            {
+                return null;
+            }
+
+            var instances = this.IsArrayOfTypes
+                ? body.EnumerateArray().Select((item, index) => (Location: $"/{index}", Instance: item)).ToList()
+                : [(Location: string.Empty, Instance: body)];
+
+            var members = new List<(string Location, JsonElement Instance, JsonSchema Schema)>();
+
+            foreach (var (location, instance) in instances)
+            {
+                if (instance.ValueKind != JsonValueKind.Object
+                    || !instance.TryGetProperty("@type", out var type)
+                    || type.ValueKind != JsonValueKind.String
+                    || !this.SchemasByType.TryGetValue(type.GetString()!, out var member))
+                {
+                    return null;
+                }
+
+                members.Add((location, instance, member));
+            }
+
+            return [.. members
+                .Select(entry => (entry.Location, Results: entry.Schema.Evaluate(entry.Instance, Evaluation)))
+                .Where(entry => !entry.Results.IsValid)
+                .SelectMany(entry => Summarize(entry.Results, entry.Location))
+                .Take(ReportedErrors)
+                .Select(error => new ContractViolation(ContractViolationKind.SchemaMismatch, error))];
         }
     }
 }

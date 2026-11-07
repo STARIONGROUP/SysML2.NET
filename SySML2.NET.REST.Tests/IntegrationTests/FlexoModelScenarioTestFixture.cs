@@ -10,6 +10,7 @@
 namespace SySML2.NET.REST.Tests.IntegrationTests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -23,6 +24,8 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
     using SySML2.NET.REST.Tests.Helpers;
     using SySML2.NET.REST.Tests.Helpers.Models;
 
+    using SysML2.NET.Core.DTO.Root.Elements;
+    using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.REST.Exceptions;
     using SysML2.NET.Serializer.Json;
@@ -56,6 +59,14 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
 
         private int verifiedCalls;
 
+        private RootModel rootModel;
+
+        private CoreModel coreModel;
+
+        private KernelModel kernelModel;
+
+        private KerMLUpdateModel kermlUpdateModel;
+
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
         {
@@ -71,7 +82,7 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             await this.session.Open(this.host.BaseAddress, CancellationToken.None);
 
             this.client = this.session.Client;
-            this.readBack = new ReadBackAssertions(this.client, this.state);
+            this.readBack = new ReadBackAssertions(this.client, this.state, () => this.httpClientFactory.Recorder.Calls);
         }
 
         [OneTimeTearDown]
@@ -95,9 +106,10 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             }
 
             var calls = this.httpClientFactory.Recorder.Calls.ToList();
-
-            OpenApiConformance.Verify(calls[this.verifiedCalls..], KnownServerDivergences.All);
+            var unverified = calls[this.verifiedCalls..];
             this.verifiedCalls = calls.Count;
+
+            OpenApiConformance.Verify(unverified, KnownServerDivergences.All);
         }
 
         [Test]
@@ -143,20 +155,15 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
                 Assert.That(projects.Select(project => project.Id), Is.EqualTo([created.Id]));
             }
 
-            var model = new RootModel();
-            var elements = model.Builder.ToDtos();
+            this.rootModel = new RootModel();
 
-            var commit = await this.client.PostCommitByProjectAsync(created.Id, ModelBuilder.ToCommitRequest(elements, "Root model"), created.DefaultBranch);
-
-            this.state.HeadCommitId = commit.Id;
-            this.state.ExpectedModels[commit.Id] = elements;
-
+            var committed = await this.CommitModelAsync(this.rootModel.Builder, "Root model");
+            var commit = committed.Commit;
+            var elements = committed.Model;
             var unknown = Guid.NewGuid();
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(this.httpClientFactory.Recorder.EmptyGuidRequests, Is.Empty, "a request referenced the empty GUID");
-
                 await this.ExpectNotFoundAsync(() => this.client.PutProjectByIdAsync(unknown, new ProjectRequest { Name = "Unknown" }));
                 await ExpectClientErrorAsync(() => this.client.PostCommitByProjectAsync(unknown, ModelBuilder.ToCommitRequest(elements, "Unknown project")));
                 await this.ExpectNotFoundAsync(() => this.client.GetCommitsByProjectAsync(unknown), KnownServerDivergences.UnknownResourceNotFound);
@@ -168,14 +175,84 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
                 await this.ExpectNotFoundAsync(() => this.client.GetRootsByProjectCommitAsync(created.Id, unknown));
                 await this.ExpectNotFoundAsync(() => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(created.Id, commit.Id, unknown), KnownServerDivergences.UnknownResourceAccepted);
                 await this.ExpectNotFoundAsync(() => this.client.GetBranchesByProjectAndIdAsync(created.Id, unknown));
-
-                await this.readBack.VerifyCommitAsync(commit, created.DefaultBranch, null, elements);
-                await this.readBack.VerifyModelAsync(commit.Id, elements, model.Nested.Id);
             }
+
+            await this.VerifyCommittedModelAsync(committed, this.rootModel.Nested.Id);
         }
 
         [Test]
         [DependsOnTest(nameof(VerifyProjectAndRootModel), AllowFailure = true)]
+        public async Task VerifyKerMLCore()
+        {
+            if (this.rootModel == null || this.state.HeadCommitId == null)
+            {
+                Assert.Ignore("step 2 committed no model to build on");
+            }
+
+            this.coreModel = new CoreModel(this.rootModel);
+
+            var committed = await this.CommitModelAsync(this.coreModel.Builder, "KerML Core");
+
+            await this.VerifyCommittedModelAsync(committed, this.coreModel.A.Id);
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyKerMLCore), AllowFailure = true)]
+        public async Task VerifyKerMLKernel()
+        {
+            if (this.coreModel == null)
+            {
+                Assert.Ignore("step 3 built no model to build on");
+            }
+
+            this.kernelModel = new KernelModel(this.rootModel, this.coreModel);
+
+            var committed = await this.CommitModelAsync(this.kernelModel.Builder, "KerML Kernel");
+            var projectId = this.state.ProjectId!.Value;
+
+            var tag = await this.client.PostTagByProjectAsync(projectId, new TagRequest { Name = "kernel", Description = "The KerML model of step 4", TaggedCommit = committed.Commit.Id });
+            this.state.TagIds["kernel"] = tag.Id;
+
+            var tagById = await this.client.GetTagByProjectAndIdAsync(projectId, tag.Id);
+            var (tags, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetTagsByProjectAsync(projectId, parameters));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(tag.Name, Is.EqualTo("kernel"));
+                Assert.That(tag.TaggedCommit, Is.EqualTo(committed.Commit.Id));
+                Assert.That(tag.OwningProject, Is.EqualTo(projectId));
+                Assert.That(tagById.Id, Is.EqualTo(tag.Id));
+                Assert.That(tagById.TaggedCommit, Is.EqualTo(committed.Commit.Id));
+                Assert.That(tags.Select(record => record.Id), Is.EqualTo((Guid[])[tag.Id]));
+
+                await this.ExpectNotFoundAsync(() => this.client.GetTagByProjectAndIdAsync(projectId, Guid.NewGuid()));
+            }
+
+            await this.VerifyCommittedModelAsync(committed, this.kernelModel.Class.Id);
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyKerMLKernel), AllowFailure = true)]
+        public async Task VerifyKerMLUpdate()
+        {
+            if (this.kernelModel == null || !this.state.TagIds.ContainsKey("kernel"))
+            {
+                Assert.Ignore("step 4 built no tagged model to update");
+            }
+
+            var projectId = this.state.ProjectId!.Value;
+            var kernelTag = await this.client.GetTagByProjectAndIdAsync(projectId, this.state.TagIds["kernel"]);
+
+            this.kermlUpdateModel = new KerMLUpdateModel(this.rootModel, this.coreModel, this.kernelModel);
+
+            var committed = await this.CommitModelAsync(this.kermlUpdateModel.Builder, "KerML update");
+
+            await this.readBack.VerifyDiffAsync(kernelTag.TaggedCommit, committed.Commit.Id, committed.Changed);
+            await this.VerifyCommittedModelAsync(committed, this.coreModel.A.Id);
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyKerMLUpdate), AllowFailure = true)]
         public async Task VerifyCoverage()
         {
             var verdict = new CoverageVerdict(this.state.ReadBack, this.httpClientFactory.Recorder.Calls, this.openApi);
@@ -186,6 +263,7 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             await TestContext.Out.WriteLineAsync($"Missing literals ({verdict.MissingLiterals.Count}): {string.Join(", ", verdict.MissingLiterals)}");
             await TestContext.Out.WriteLineAsync($"Uncovered operations ({verdict.UncoveredOperations.Count}): {string.Join(", ", verdict.UncoveredOperations)}");
             await TestContext.Out.WriteLineAsync($"Unmatched requests ({verdict.UnmatchedRequests.Count}): {string.Join(", ", verdict.UnmatchedRequests)}");
+            await TestContext.Out.WriteLineAsync($"{this.httpClientFactory.Recorder.Calls.Count} calls: {this.httpClientFactory.Recorder.ServerTime} waiting for the server, {this.httpClientFactory.Recorder.CheckTime} checking against the OpenAPI document");
 
             using (Assert.EnterMultipleScope())
             {
@@ -204,9 +282,43 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             await Assert.ThatAsync(() => call(), Throws.InstanceOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).Matches<HttpStatusCode>(status => (int)status is >= 400 and < 500), description);
         }
 
+        private async Task<(Commit Commit, IReadOnlyList<IElement> Model, IReadOnlyList<IElement> Changed, Guid? PreviousHead)> CommitModelAsync(ModelBuilder builder, string description)
+        {
+            var previousHead = this.state.HeadCommitId;
+            IReadOnlyList<IElement> previous = previousHead is { } head ? this.state.ExpectedModels[head] : [];
+            var model = builder.ToDtos();
+            var changed = ModelBuilder.Changed(previous, model);
+
+            var commit = await this.client.PostCommitByProjectAsync(this.state.ProjectId!.Value, ModelBuilder.ToCommitRequest(changed, description), this.state.DefaultBranchId);
+
+            this.state.HeadCommitId = commit.Id;
+            this.state.ExpectedModels[commit.Id] = model;
+
+            return (commit, model, changed, previousHead);
+        }
+
         private Task ExpectNotFoundAsync(Func<Task> call, ServerDivergence tolerated = null, [CallerArgumentExpression(nameof(call))] string description = null)
         {
             return KnownServerDivergences.ExpectNotFoundAsync(call, () => this.httpClientFactory.Recorder.LastCall, tolerated, description);
+        }
+
+        private async Task VerifyCommittedModelAsync((Commit Commit, IReadOnlyList<IElement> Model, IReadOnlyList<IElement> Changed, Guid? PreviousHead) committed, Guid relationshipSubjectId)
+        {
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.httpClientFactory.Recorder.EmptyGuidRequests, Is.Empty, "a request referenced the empty GUID");
+
+                await this.readBack.VerifyCommitAsync(committed.Commit, this.state.DefaultBranchId!.Value, committed.PreviousHead, committed.Changed);
+                await this.readBack.VerifyModelAsync(committed.Commit.Id, committed.Model, committed.Changed, relationshipSubjectId);
+
+                if (committed.PreviousHead is { } previousHead)
+                {
+                    var previous = this.state.ExpectedModels[previousHead];
+                    var changedIds = committed.Changed.Select(element => element.Id).ToHashSet();
+
+                    await this.readBack.VerifyHistoryAsync(previousHead, previous.FirstOrDefault(element => changedIds.Contains(element.Id)) ?? previous[0]);
+                }
+            }
         }
     }
 }

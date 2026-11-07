@@ -12,6 +12,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
 
     using NUnit.Framework;
@@ -24,6 +25,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     using SysML2.NET.Extensions.Core.DTO.Comparers;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.REST.Exceptions;
 
     using Direction = SysML2.NET.PSM.Enumerations.Direction;
 
@@ -54,6 +56,16 @@ namespace SySML2.NET.REST.Tests.Helpers
         private readonly ScenarioState state;
 
         /// <summary>
+        /// Gets the calls that the <see cref="EndpointRecorder"/> recorded so far, in order, or <c>null</c>
+        /// </summary>
+        private readonly Func<IReadOnlyCollection<EndpointCall>> recordedCalls;
+
+        /// <summary>
+        /// The known divergences, of which those that break deserialization excuse a failed read
+        /// </summary>
+        private readonly IReadOnlyList<ServerDivergence> divergences;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ReadBackAssertions"/> class
         /// </summary>
         /// <param name="client">
@@ -62,10 +74,19 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <param name="state">
         /// The scenario state that read-back data is recorded in
         /// </param>
-        public ReadBackAssertions(IPsmApiClient client, ScenarioState state)
+        /// <param name="recordedCalls">
+        /// Gets the calls that the <see cref="EndpointRecorder"/> recorded so far, so that a read failing on a response
+        /// the client cannot be expected to read is told apart from a client defect; <c>null</c> when nothing is recorded
+        /// </param>
+        /// <param name="divergences">
+        /// The known divergences, <see cref="KnownServerDivergences.All"/> when <c>null</c>
+        /// </param>
+        public ReadBackAssertions(IPsmApiClient client, ScenarioState state, Func<IReadOnlyCollection<EndpointCall>> recordedCalls = null, IReadOnlyList<ServerDivergence> divergences = null)
         {
             this.client = client;
             this.state = state;
+            this.recordedCalls = recordedCalls;
+            this.divergences = divergences ?? KnownServerDivergences.All;
         }
 
         /// <summary>
@@ -134,18 +155,38 @@ namespace SySML2.NET.REST.Tests.Helpers
 
             Guid[] expectedPrevious = previousCommitId.HasValue ? [previousCommitId.Value] : [];
 
-            var commitById = await this.client.GetCommitByProjectAndIdAsync(projectId, commit.Id);
-            var (commits, _) = await ReadAllPagesAsync(parameters => this.client.GetCommitsByProjectAsync(projectId, parameters));
-            var branch = await this.client.GetBranchesByProjectAndIdAsync(projectId, branchId);
-            var (changes, changePages) = await ReadAllPagesAsync(parameters => this.client.GetChangesByProjectCommitAsync(projectId, commit.Id, parameters));
-
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(commitById.Id, Is.EqualTo(commit.Id));
-                Assert.That(commitById.OwningProject, Is.EqualTo(projectId));
-                Assert.That(commitById.PreviousCommit, Is.EqualTo(expectedPrevious));
-                Assert.That(commits.Select(record => record.Id), Does.Contain(commit.Id));
-                Assert.That(branch.Head, Is.EqualTo(commit.Id));
+                var commitById = await this.ReadAsync(() => this.client.GetCommitByProjectAndIdAsync(projectId, commit.Id), "GetCommitByProjectAndIdAsync");
+
+                if (commitById != null)
+                {
+                    Assert.That(commitById.Id, Is.EqualTo(commit.Id));
+                    Assert.That(commitById.OwningProject, Is.EqualTo(projectId));
+                    Assert.That(commitById.PreviousCommit, Is.EqualTo(expectedPrevious));
+                }
+
+                var (commits, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetCommitsByProjectAsync(projectId, parameters)), "GetCommitsByProjectAsync");
+
+                if (commits != null)
+                {
+                    Assert.That(commits.Select(record => record.Id), Does.Contain(commit.Id));
+                }
+
+                var branch = await this.ReadAsync(() => this.client.GetBranchesByProjectAndIdAsync(projectId, branchId), "GetBranchesByProjectAndIdAsync");
+
+                if (branch != null)
+                {
+                    Assert.That(branch.Head, Is.EqualTo(commit.Id));
+                }
+
+                var (changes, changePages) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetChangesByProjectCommitAsync(projectId, commit.Id, parameters)), "GetChangesByProjectCommitAsync");
+
+                if (changes == null)
+                {
+                    return;
+                }
+
                 Assert.That(changes.Select(change => change.Identity.Id), Is.EquivalentTo(changed.Select(element => element.Id)));
                 Assert.That(changePages, Is.GreaterThan(1), "the changes did not span several pages, so paging is untested");
 
@@ -155,18 +196,20 @@ namespace SySML2.NET.REST.Tests.Helpers
                 {
                     VerifySame(sentById[change.Identity.Id], change.Payload as IElement, $"the payload of change {change.Id}");
                 }
-            }
 
-            if (changes.Count == 0)
-            {
-                return;
-            }
+                if (changes.Count == 0)
+                {
+                    return;
+                }
 
-            var firstChange = changes[0];
-            var changeById = await this.client.GetChangeByProjectCommitIdAsync(projectId, commit.Id, firstChange.Id);
+                var firstChange = changes[0];
+                var changeById = await this.ReadAsync(() => this.client.GetChangeByProjectCommitIdAsync(projectId, commit.Id, firstChange.Id), "GetChangeByProjectCommitIdAsync");
 
-            using (Assert.EnterMultipleScope())
-            {
+                if (changeById == null)
+                {
+                    return;
+                }
+
                 Assert.That(changeById.Id, Is.EqualTo(firstChange.Id));
                 Assert.That(changeById.Identity.Id, Is.EqualTo(firstChange.Identity.Id));
 
@@ -178,13 +221,102 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
-        /// Verifies the model at a commit through every element read operation, recording what the server returned
+        /// Verifies the diff of two commits: one difference per element created, changed or deleted between them, an
+        /// element of the base commit as updated, and an element added since as created
         /// </summary>
+        /// <param name="baseCommitId">
+        /// The base commit, whose expected model is known
+        /// </param>
+        /// <param name="compareCommitId">
+        /// The compare commit
+        /// </param>
+        /// <param name="changed">
+        /// The elements created or changed between the two commits
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyDiffAsync(Guid baseCommitId, Guid compareCommitId, IReadOnlyList<IElement> changed)
+        {
+            var projectId = this.state.ProjectId!.Value;
+            var notImplemented = false;
+
+            using (Assert.EnterMultipleScope())
+            {
+                var (differences, _) = await this.ReadAsync(async () =>
+                {
+                    try
+                    {
+                        return await ReadAllPagesAsync(parameters => this.client.DiffAsync(projectId, baseCommitId, compareCommitId, parameters));
+                    }
+                    catch (PsmApiException exception) when (exception.StatusCode == HttpStatusCode.NotImplemented)
+                    {
+                        notImplemented = true;
+                        return (null, 0);
+                    }
+                }, "DiffAsync");
+
+                if (notImplemented)
+                {
+                    KnownServerDivergences.Report(KnownServerDivergences.DiffNotImplemented, $"DiffAsync from {baseCommitId} to {compareCommitId} answered 501");
+                    return;
+                }
+
+                if (differences == null)
+                {
+                    return;
+                }
+
+                var atBase = this.state.ExpectedModels[baseCommitId].Select(element => element.Id).ToHashSet();
+                var compared = differences.Where(difference => difference.CompareData?.Identity != null).ToList();
+
+                Assert.That(differences, Has.None.Matches<DataDifference>(difference => (difference.CompareData ?? difference.BaseData)?.Identity == null), "a difference names the data it is about");
+                Assert.That(differences.Select(difference => (difference.CompareData ?? difference.BaseData)?.Identity?.Id), Is.EquivalentTo(changed.Select(element => (Guid?)element.Id)));
+                Assert.That(compared.Where(difference => atBase.Contains(difference.CompareData.Identity.Id)), Has.All.Matches<DataDifference>(difference => difference.BaseData != null), "an element of the base commit is UPDATED");
+                Assert.That(compared.Where(difference => !atBase.Contains(difference.CompareData.Identity.Id)), Has.All.Matches<DataDifference>(difference => difference.BaseData == null), "an element added since is CREATED");
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the history is immutable: an element read at an earlier commit is still the version of that
+        /// commit
+        /// </summary>
+        /// <param name="earlierCommitId">
+        /// The earlier commit
+        /// </param>
+        /// <param name="expected">
+        /// The element as it was at <paramref name="earlierCommitId"/>
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyHistoryAsync(Guid earlierCommitId, IElement expected)
+        {
+            var description = $"{expected.GetType().Name} {expected.Id} at the earlier commit {earlierCommitId}";
+            var (succeeded, actual) = await this.TryReadAsync(() => this.client.GetElementByProjectCommitIdAsync(this.state.ProjectId!.Value, earlierCommitId, expected.Id), $"GetElementByProjectCommitIdAsync of {description}");
+
+            if (succeeded)
+            {
+                VerifySame(expected, actual, description);
+            }
+        }
+
+        /// <summary>
+        /// Verifies the model at a commit through every element read operation, recording what the server returned:
+        /// the elements the commit changed are read by id, and every element is compared as listed
+        /// </summary>
+        /// <remarks>
+        /// An element that the commit did not change was read by id at the commit that last changed it; reading it
+        /// by id again would repeat that check against a growing model, so its content is compared in the list.
+        /// </remarks>
         /// <param name="commitId">
         /// The commit to read the model at
         /// </param>
         /// <param name="expected">
         /// The complete model expected at <paramref name="commitId"/>
+        /// </param>
+        /// <param name="changed">
+        /// The elements that the commit created or changed
         /// </param>
         /// <param name="relationshipSubjectId">
         /// The element whose relationships are read in each direction
@@ -192,37 +324,59 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <returns>
         /// An awaitable <see cref="Task"/>
         /// </returns>
-        public async Task VerifyModelAsync(Guid commitId, IReadOnlyList<IElement> expected, Guid relationshipSubjectId)
+        public async Task VerifyModelAsync(Guid commitId, IReadOnlyList<IElement> expected, IReadOnlyList<IElement> changed, Guid relationshipSubjectId)
         {
             var projectId = this.state.ProjectId!.Value;
             var readById = new Dictionary<Guid, IElement>();
 
-            foreach (var element in expected)
-            {
-                readById[element.Id] = await this.client.GetElementByProjectCommitIdAsync(projectId, commitId, element.Id);
-            }
-
-            this.state.ReadBack.AddRange(readById.Values.Select(element => (commitId, (IData)element)));
-
-            var (listed, listPages) = await ReadAllPagesAsync(parameters => this.client.GetElementsByProjectCommitAsync(projectId, commitId, queryParameters: parameters));
-            var (roots, _) = await ReadAllPagesAsync(parameters => this.client.GetRootsByProjectCommitAsync(projectId, commitId, queryParameters: parameters));
-
             using (Assert.EnterMultipleScope())
             {
-                foreach (var element in expected)
+                foreach (var element in changed)
+                {
+                    var (succeeded, actual) = await this.TryReadAsync(() => this.client.GetElementByProjectCommitIdAsync(projectId, commitId, element.Id), $"GetElementByProjectCommitIdAsync of {element.GetType().Name} {element.Id}");
+
+                    if (succeeded)
+                    {
+                        readById[element.Id] = actual;
+                    }
+                }
+
+                var read = changed.Where(element => readById.ContainsKey(element.Id)).ToList();
+
+                foreach (var element in read)
                 {
                     VerifySame(element, readById[element.Id], $"{element.GetType().Name} {element.Id}");
                 }
 
-                Assert.That(listed.Select(element => element.Id), Is.EquivalentTo(expected.Select(element => element.Id)));
-                Assert.That(listPages, Is.GreaterThan(1), "the elements did not span several pages, so paging is untested");
-                VerifyRoots(roots, expected);
+                var (listed, listPages) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetElementsByProjectCommitAsync(projectId, commitId, queryParameters: parameters)), "GetElementsByProjectCommitAsync");
 
-                VerifyMemberships(expected, readById);
+                this.state.ReadBack.AddRange((listed ?? [.. readById.Values]).Select(element => (commitId, (IData)element)));
+
+                if (listed != null)
+                {
+                    Assert.That(listed.Select(element => element.Id), Is.EquivalentTo(expected.Select(element => element.Id)));
+                    Assert.That(listPages, Is.GreaterThan(1), "the elements did not span several pages, so paging is untested");
+
+                    var listedById = listed.GroupBy(element => element.Id).ToDictionary(group => group.Key, group => group.First());
+
+                    foreach (var element in expected.Where(element => !readById.ContainsKey(element.Id) && listedById.ContainsKey(element.Id)))
+                    {
+                        VerifySame(element, listedById[element.Id], $"{element.GetType().Name} {element.Id} as listed");
+                    }
+                }
+
+                var (roots, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetRootsByProjectCommitAsync(projectId, commitId, queryParameters: parameters)), "GetRootsByProjectCommitAsync");
+
+                if (roots != null)
+                {
+                    VerifyRoots(roots, expected);
+                }
+
+                VerifyMemberships(read, readById);
                 VerifyNoEmptyReferences(readById.Values);
-            }
 
-            await this.VerifyRelationshipsAsync(commitId, expected, relationshipSubjectId);
+                await this.VerifyRelationshipsAsync(commitId, expected, relationshipSubjectId);
+            }
         }
 
         /// <summary>
@@ -275,6 +429,10 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <see cref="KnownServerDivergences.RootsIgnoreOwningRelationship"/>, exactly the elements without an
         /// <c>owningRelatedElement</c>
         /// </summary>
+        /// <remarks>
+        /// KerML derives <c>owner</c> as <c>owningRelationship.owningRelatedElement</c>, so an element has no owner exactly
+        /// when it has no <c>owningRelationship</c>, which is not derived and is known for every element sent.
+        /// </remarks>
         /// <param name="roots">
         /// The roots read back
         /// </param>
@@ -284,7 +442,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         private static void VerifyRoots(IReadOnlyList<IElement> roots, IReadOnlyList<IElement> model)
         {
             var rootIds = roots.Select(element => element.Id).ToHashSet();
-            var unowned = model.Where(element => element.owner == null).Select(element => element.Id).ToList();
+            var unowned = model.Where(element => element.OwningRelationship == null).Select(element => element.Id).ToList();
             var notOwnedRelated = model.Where(element => element is not IRelationship { OwningRelatedElement: not null }).Select(element => element.Id).ToList();
 
             if (!rootIds.SetEquals(unowned) && roots.Count == notOwnedRelated.Count && rootIds.SetEquals(notOwnedRelated))
@@ -327,6 +485,78 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
+        /// Reads from the server, reporting a read that throws as a failure, so that the checks that do not depend on
+        /// it still run
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of what is read
+        /// </typeparam>
+        /// <param name="read">
+        /// The read
+        /// </param>
+        /// <param name="description">
+        /// The description of the read in the failure message
+        /// </param>
+        /// <returns>
+        /// What was read, or the default of <typeparamref name="T"/> when the read threw
+        /// </returns>
+        private async Task<T> ReadAsync<T>(Func<Task<T>> read, string description)
+        {
+            var (_, value) = await this.TryReadAsync(read, description);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Reads from the server, reporting a read that throws as a failure, or as a warning when a response of that
+        /// read shows a known divergence that breaks deserialization, which <see cref="OpenApiConformance"/> reports
+        /// </summary>
+        /// <remarks>
+        /// Only the calls recorded while the read ran count, and only divergences that break deserialization: every
+        /// Flexo response breaks the document in some tolerated way, and a client defect must still fail.
+        /// </remarks>
+        /// <typeparam name="T">
+        /// The type of what is read
+        /// </typeparam>
+        /// <param name="read">
+        /// The read
+        /// </param>
+        /// <param name="description">
+        /// The description of the read in the failure message
+        /// </param>
+        /// <returns>
+        /// Whether the read succeeded, and what was read
+        /// </returns>
+        private async Task<(bool Succeeded, T Value)> TryReadAsync<T>(Func<Task<T>> read, string description)
+        {
+            var callsBefore = this.recordedCalls?.Invoke().Count ?? 0;
+
+            try
+            {
+                return (true, await read());
+            }
+            catch (Exception exception) when (exception is not ResultStateException)
+            {
+                var failure = $"{description} threw {exception.GetType().Name}: {exception.Message}";
+
+                var excused = (this.recordedCalls?.Invoke() ?? []).Skip(callsBefore)
+                    .SelectMany(call => call.ResponseViolations.Select(violation => (Call: call, Divergence: this.divergences.FirstOrDefault(divergence => divergence.BreaksDeserialization && divergence.Explains?.Invoke(call, violation) == true))))
+                    .FirstOrDefault(entry => entry.Divergence != null);
+
+                if (excused.Divergence != null)
+                {
+                    Assert.Warn($"{failure}, on a response that shows the known divergence that {excused.Divergence.Summary} ({excused.Call.RequestLine}); the OpenAPI conformance check reports the response");
+                }
+                else
+                {
+                    Assert.Fail(failure);
+                }
+
+                return (false, default);
+            }
+        }
+
+        /// <summary>
         /// Verifies the relationships of an element in each direction against the sources and targets that were sent
         /// </summary>
         /// <param name="commitId">
@@ -349,17 +579,22 @@ namespace SySML2.NET.REST.Tests.Helpers
             var outgoing = relationships.Where(relationship => relationship.Source.Contains(subjectId)).Select(relationship => relationship.Id).ToList();
             var incoming = relationships.Where(relationship => relationship.Target.Contains(subjectId)).Select(relationship => relationship.Id).ToList();
 
-            var (readOut, _) = await ReadAllPagesAsync(parameters => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(projectId, commitId, subjectId, Direction.@out, queryParameters: parameters));
-            var (readIn, _) = await ReadAllPagesAsync(parameters => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(projectId, commitId, subjectId, Direction.@in, queryParameters: parameters));
-            var (readBoth, _) = await ReadAllPagesAsync(parameters => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(projectId, commitId, subjectId, Direction.both, queryParameters: parameters));
+            (Direction Direction, List<Guid> Expected)[] directions = [(Direction.@out, outgoing), (Direction.@in, incoming), (Direction.both, [.. outgoing.Union(incoming)])];
 
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(outgoing, Is.Not.Empty, "the subject is the source of no relationship, so the out direction is untested");
                 Assert.That(incoming, Is.Not.Empty, "the subject is the target of no relationship, so the in direction is untested");
-                Assert.That(readOut.Select(relationship => relationship.Id), Is.EquivalentTo(outgoing));
-                Assert.That(readIn.Select(relationship => relationship.Id), Is.EquivalentTo(incoming));
-                Assert.That(readBoth.Select(relationship => relationship.Id), Is.EquivalentTo(outgoing.Union(incoming)));
+
+                foreach (var (direction, expectedIds) in directions)
+                {
+                    var (read, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(projectId, commitId, subjectId, direction, queryParameters: parameters)), $"GetRelationshipsByProjectCommitRelatedElementAsync {direction}");
+
+                    if (read != null)
+                    {
+                        Assert.That(read.Select(relationship => relationship.Id), Is.EquivalentTo(expectedIds), $"the {direction} relationships");
+                    }
+                }
             }
         }
     }

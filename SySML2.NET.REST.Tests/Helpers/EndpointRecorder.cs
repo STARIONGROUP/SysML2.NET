@@ -12,6 +12,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -44,6 +45,16 @@ namespace SySML2.NET.REST.Tests.Helpers
         private readonly ConcurrentQueue<string> emptyGuidRequests = new();
 
         /// <summary>
+        /// The time spent waiting for the server, in ticks
+        /// </summary>
+        private long serverTicks;
+
+        /// <summary>
+        /// The time spent checking requests and responses against the OpenAPI document, in ticks
+        /// </summary>
+        private long checkTicks;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EndpointRecorder"/> class
         /// </summary>
         /// <param name="openApi">
@@ -71,6 +82,16 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// Gets the call recorded last, or <c>null</c> before the first
         /// </summary>
         public EndpointCall LastCall { get; private set; }
+
+        /// <summary>
+        /// Gets the time spent waiting for the server
+        /// </summary>
+        public TimeSpan ServerTime => TimeSpan.FromTicks(Interlocked.Read(ref this.serverTicks));
+
+        /// <summary>
+        /// Gets the time spent checking requests and responses against the OpenAPI document
+        /// </summary>
+        public TimeSpan CheckTime => TimeSpan.FromTicks(Interlocked.Read(ref this.checkTicks));
 
         /// <summary>
         /// Sends the request on, and records the operation it addressed, the status it was answered with, and how the
@@ -101,11 +122,14 @@ namespace SySML2.NET.REST.Tests.Helpers
                 }
             }
 
+            var server = Stopwatch.StartNew();
             var response = await base.SendAsync(request, cancellationToken);
 
             await response.Content.LoadIntoBufferAsync(cancellationToken);
             var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            Interlocked.Add(ref this.serverTicks, server.Elapsed.Ticks);
 
+            var check = Stopwatch.StartNew();
             var operation = this.openApi.Match(request.Method, request.RequestUri?.AbsolutePath ?? string.Empty);
 
             var call = new EndpointCall(operation, requestLine, response.StatusCode)
@@ -114,6 +138,7 @@ namespace SySML2.NET.REST.Tests.Helpers
                 ResponseViolations = operation?.CheckResponse(response.StatusCode, response.Content.Headers.ContentType?.MediaType, responseBody) ?? []
             };
 
+            Interlocked.Add(ref this.checkTicks, check.Elapsed.Ticks);
             this.calls.Enqueue(call);
             this.LastCall = call;
 
