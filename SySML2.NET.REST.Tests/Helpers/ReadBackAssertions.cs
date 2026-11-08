@@ -37,9 +37,19 @@ namespace SySML2.NET.REST.Tests.Helpers
     public sealed class ReadBackAssertions
     {
         /// <summary>
-        /// The page size used to read lists, small enough that a step's model spans several pages
+        /// The page size used to read a whole list
         /// </summary>
-        private const int PageSize = 10;
+        private const int ListPageSize = 100;
+
+        /// <summary>
+        /// The page size of the paging walk, small enough that a step's model spans several pages
+        /// </summary>
+        private const int PagingPageSize = 10;
+
+        /// <summary>
+        /// The number of pages the paging walk reads
+        /// </summary>
+        private const int PagingWalkPages = 3;
 
         /// <summary>
         /// The maximum number of pages read from one list, guarding against a server that never ends a list
@@ -112,29 +122,9 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// </exception>
         public static async Task<(IReadOnlyList<T> Records, int Pages)> ReadAllPagesAsync<T>(Func<QueryParameters, Task<PagedResult<T>>> readPage)
         {
-            var records = new List<T>();
-            var cursors = new HashSet<string>();
-            var parameters = new QueryParameters { PageSize = PageSize };
+            var (records, pages, ended) = await ReadPagesAsync(readPage, ListPageSize, MaximumPages);
 
-            for (var pages = 1; pages <= MaximumPages; pages++)
-            {
-                var page = await readPage(parameters);
-                records.AddRange(page.Records);
-
-                if (page.Next == null)
-                {
-                    return (records, pages);
-                }
-
-                if (!cursors.Add(page.Next.Value.Token))
-                {
-                    throw new InvalidOperationException($"The server repeated the page cursor {page.Next.Value.Token} after {pages} pages");
-                }
-
-                parameters = new QueryParameters { PageSize = PageSize, PageAfter = page.Next };
-            }
-
-            throw new InvalidOperationException($"The list did not end within {MaximumPages} pages");
+            return ended ? (records, pages) : throw new InvalidOperationException($"The list did not end within {MaximumPages} pages");
         }
 
         /// <summary>
@@ -194,7 +184,7 @@ namespace SySML2.NET.REST.Tests.Helpers
                 }
 
                 Assert.That(changes.Select(change => change.Identity.Id), Is.EquivalentTo(changed.Select(element => element.Id)));
-                if (changed.Count > PageSize)
+                if (changed.Count > ListPageSize)
                 {
                     Assert.That(changePages, Is.GreaterThan(1), "the changes did not span several pages, so paging is untested");
                 }
@@ -312,11 +302,12 @@ namespace SySML2.NET.REST.Tests.Helpers
 
         /// <summary>
         /// Verifies the model at a commit through every element read operation, recording what the server returned:
-        /// the elements the commit changed are read by id, and every element is compared as listed
+        /// one changed element of each metaclass is read by id, every element is compared as listed, and the first
+        /// pages of the list are read in small pages
         /// </summary>
         /// <remarks>
-        /// An element that the commit did not change was read by id at the commit that last changed it; reading it
-        /// by id again would repeat that check against a growing model, so its content is compared in the list.
+        /// The list already compares every element, so one read by id per metaclass covers that operation for every
+        /// metaclass the commit changed; the membership checks still cover every changed element.
         /// </remarks>
         /// <param name="commitId">
         /// The commit to read the model at
@@ -337,11 +328,12 @@ namespace SySML2.NET.REST.Tests.Helpers
         {
             var projectId = this.state.ProjectId!.Value;
             var readById = new Dictionary<Guid, IElement>();
+            var sample = changed.GroupBy(element => element.GetType()).Select(metaclass => metaclass.First()).ToList();
 
             using (Assert.EnterMultipleScope())
             {
                 var byId = await this.ReadManyAsync(
-                    changed,
+                    sample,
                     element => this.client.GetElementByProjectCommitIdAsync(projectId, commitId, element.Id),
                     element => $"GetElementByProjectCommitIdAsync of {element.GetType().Name} {element.Id}",
                     (element, call) => call.RequestLine.Contains(element.Id.ToString(), StringComparison.OrdinalIgnoreCase));
@@ -351,29 +343,28 @@ namespace SySML2.NET.REST.Tests.Helpers
                     readById[element.Id] = actual;
                 }
 
-                var read = changed.Where(element => readById.ContainsKey(element.Id)).ToList();
-
-                foreach (var element in read)
+                foreach (var element in sample.Where(element => readById.ContainsKey(element.Id)))
                 {
                     VerifySame(element, readById[element.Id], $"{element.GetType().Name} {element.Id}");
                 }
 
-                var (listed, listPages) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetElementsByProjectCommitAsync(projectId, commitId, queryParameters: parameters)), "GetElementsByProjectCommitAsync");
+                var (listed, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetElementsByProjectCommitAsync(projectId, commitId, queryParameters: parameters)), "GetElementsByProjectCommitAsync");
 
                 this.state.ReadBack.AddRange((listed ?? [.. readById.Values]).Select(element => (commitId, (IData)element)));
+
+                var listedById = (listed ?? []).GroupBy(element => element.Id).ToDictionary(group => group.Key, group => group.First());
 
                 if (listed != null)
                 {
                     Assert.That(listed.Select(element => element.Id), Is.EquivalentTo(expected.Select(element => element.Id)));
-                    Assert.That(listPages, Is.GreaterThan(1), "the elements did not span several pages, so paging is untested");
-
-                    var listedById = listed.GroupBy(element => element.Id).ToDictionary(group => group.Key, group => group.First());
 
                     foreach (var element in expected.Where(element => !readById.ContainsKey(element.Id) && listedById.ContainsKey(element.Id)))
                     {
                         VerifySame(element, listedById[element.Id], $"{element.GetType().Name} {element.Id} as listed");
                     }
                 }
+
+                await this.VerifyPagingAsync(commitId, expected);
 
                 var (roots, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetRootsByProjectCommitAsync(projectId, commitId, queryParameters: parameters)), "GetRootsByProjectCommitAsync");
 
@@ -382,11 +373,64 @@ namespace SySML2.NET.REST.Tests.Helpers
                     VerifyRoots(roots, expected);
                 }
 
-                VerifyMemberships(read, readById);
-                VerifyNoEmptyReferences(readById.Values);
+                var readBack = changed
+                    .Select(element => readById.GetValueOrDefault(element.Id) ?? listedById.GetValueOrDefault(element.Id))
+                    .Where(element => element != null)
+                    .ToDictionary(element => element.Id);
+
+                VerifyMemberships([.. changed.Where(element => readBack.ContainsKey(element.Id))], readBack);
+                VerifyNoEmptyReferences(readBack.Values);
 
                 await this.VerifyRelationshipsAsync(commitId, expected, relationshipSubjectId);
             }
+        }
+
+        /// <summary>
+        /// Reads pages of a list operation, following <see cref="PagedResult{T}.Next"/>, up to a number of pages
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the records
+        /// </typeparam>
+        /// <param name="readPage">
+        /// Reads one page for the given <see cref="QueryParameters"/>
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size to request
+        /// </param>
+        /// <param name="pageLimit">
+        /// The number of pages after which reading stops
+        /// </param>
+        /// <returns>
+        /// The records of the pages read, in order, the number of pages read, and whether the list ended
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the server repeats a page cursor
+        /// </exception>
+        private static async Task<(IReadOnlyList<T> Records, int Pages, bool Ended)> ReadPagesAsync<T>(Func<QueryParameters, Task<PagedResult<T>>> readPage, int pageSize, int pageLimit)
+        {
+            var records = new List<T>();
+            var cursors = new HashSet<string>();
+            var parameters = new QueryParameters { PageSize = pageSize };
+
+            for (var pages = 1; pages <= pageLimit; pages++)
+            {
+                var page = await readPage(parameters);
+                records.AddRange(page.Records);
+
+                if (page.Next == null)
+                {
+                    return (records, pages, true);
+                }
+
+                if (!cursors.Add(page.Next.Value.Token))
+                {
+                    throw new InvalidOperationException($"The server repeated the page cursor {page.Next.Value.Token} after {pages} pages");
+                }
+
+                parameters = new QueryParameters { PageSize = pageSize, PageAfter = page.Next };
+            }
+
+            return (records, pageLimit, false);
         }
 
         /// <summary>
@@ -643,6 +687,39 @@ namespace SySML2.NET.REST.Tests.Helpers
                 this.ReportFailedRead(description, exception, (this.recordedCalls?.Invoke() ?? []).Skip(callsBefore));
                 return (false, default);
             }
+        }
+
+        /// <summary>
+        /// Verifies paging on the first <see cref="PagingWalkPages"/> small pages of the element list: the model spans
+        /// several pages, and the pages read hold distinct elements of the model
+        /// </summary>
+        /// <param name="commitId">
+        /// The commit to read at
+        /// </param>
+        /// <param name="expected">
+        /// The complete model expected at <paramref name="commitId"/>
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        private async Task VerifyPagingAsync(Guid commitId, IReadOnlyList<IElement> expected)
+        {
+            var projectId = this.state.ProjectId!.Value;
+            var (walked, pages, _) = await this.ReadAsync(() => ReadPagesAsync(parameters => this.client.GetElementsByProjectCommitAsync(projectId, commitId, queryParameters: parameters), PagingPageSize, PagingWalkPages), "GetElementsByProjectCommitAsync in small pages");
+
+            if (walked == null)
+            {
+                return;
+            }
+
+            var expectedIds = expected.Select(element => element.Id).ToHashSet();
+
+            if (expected.Count > PagingPageSize)
+            {
+                Assert.That(pages, Is.GreaterThan(1), "the elements did not span several pages, so paging is untested");
+            }
+
+            Assert.That(walked.Select(element => element.Id), Is.Unique.And.All.Matches<Guid>(expectedIds.Contains), "the pages hold distinct elements of the model");
         }
 
         /// <summary>

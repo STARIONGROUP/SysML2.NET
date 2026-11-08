@@ -177,14 +177,16 @@ After each commit:
   the previous head; the branch `head` moved (`GetBranchesByProjectAndIdAsync`).
 - `GetChangesByProjectCommitAsync` / `GetChangeByProjectCommitIdAsync` → exactly the sent
   `DataVersion`s: one per element, its payload equal to the element sent; a commit that changes
-  more than a page of elements must be read over several pages.
-- `GetElementByProjectCommitIdAsync` for each element the commit created or changed → equal to the
-  expected DTO under `ComparerProvider`. An unchanged element was read by id at the commit that
-  last changed it; its content is compared as listed instead, which keeps a step on a large model
-  fast. Reads by id run four at a time; a read that fails is excused only by its own response.
-- `GetElementsByProjectCommitAsync`, paged (`page[size]=10`, following `Link` to the end, so that
-  every step's model spans several pages) → exactly the expected id set at that commit, no
-  duplicates, and every element equal to the expected DTO.
+  more than a page of 100 elements must be read over several pages.
+- `GetElementByProjectCommitIdAsync` for one element of each metaclass the commit created or
+  changed → equal to the expected DTO under `ComparerProvider`. Every other element is compared as
+  listed; the list already compares every element, so one read by id per metaclass covers the
+  operation for each. Reads by id run four at a time; a read that fails is excused only by its own
+  response.
+- `GetElementsByProjectCommitAsync`, in pages of 100 following `Link` to the end → exactly the
+  expected id set at that commit, no duplicates, and every element equal to the expected DTO.
+  Paging itself is checked on the first three pages of 10 (`page[size]=10`, `page[after]` from
+  `Link`): the model spans several pages, and the pages hold distinct elements of the model.
 - `GetRootsByProjectCommitAsync` → exactly the elements without an `owner`. Systems Modeling API and
   Services, Clause 7.2.2, Table 2: "A root element is an element that does not have any other element
   as an owner. Hence, Element.owner is not specified for a root element." KerML derives `owner` as
@@ -197,8 +199,9 @@ After each commit:
 - `GetRelationshipsByProjectCommitRelatedElementAsync`, `Direction` `in` / `out` / `both`, for the
   step's relationship ends.
 - History is immutable: one element of an earlier commit is re-read at that commit and is unchanged.
-- Every `Membership` read back has the `memberElement` and `memberName` that were sent, and no
-  non-derived reference read back is the empty GUID. The comparers do not cover these members, and
+- Every changed `Membership` read back, by id or as listed, has the `memberElement` and
+  `memberName` that were sent, and no non-derived reference of a changed element read back is the
+  empty GUID. The comparers do not cover these members, and
   the JSON round trip loses them today (#424), so these checks stay red until #424 is fixed.
 - No request body references the empty GUID.
 - A negative case expects 404 for an unknown resource where the OpenAPI document declares 404, and
@@ -341,6 +344,10 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `MergeRequiresArrayBody`: merge reads its optional body as a required array, so a merge without
   a body answers 500 and one with a `null` body 400, before the 501 (step 8). Step 8 then sends
   the resolution merge, whose body is an array, and stops at its 501.
+
+Not a divergence from the specification, but it sets the run time: layer1's requests to the quad
+store slow down during a run, from a few milliseconds to hundreds, while the quad store stays fast
+(Open-MBEE/flexo-mms-layer1-service#293). The scenario therefore keeps its call count low (§4.3).
 
 Expected from the Flexo source, added with the step that observes them:
 

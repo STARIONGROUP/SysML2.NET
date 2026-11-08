@@ -108,7 +108,7 @@ Session → PsmApiClient → HttpClient
 | Type | Responsibility |
 |---|---|
 | `ScenarioState` | What the steps hand on to each other: the ids the server assigned (project, branches, commits), the head of every branch the scenario committed on, the expected model at each commit, and everything the server returned. |
-| `ReadBackAssertions` | The checks each model step runs after a commit: the commit and its predecessor, the branch head, the changes and their payloads, the changed elements by id, every element as listed, roots (the elements without an `owner`), relationships, the member element and name of every membership, that no returned DTO holds an empty GUID, and that an earlier commit still reads as it was. Element equality uses `ComparerProvider` from `SysML2.NET.Extensions`; a difference names the properties that differ. Reads by id run four at a time. Every read is guarded: a read that throws fails, or warns when its own response shows a known divergence that breaks deserialization. |
+| `ReadBackAssertions` | The checks each model step runs after a commit: the commit and its predecessor, the branch head, the changes and their payloads, the changed elements by id, every element as listed, roots (the elements without an `owner`), relationships, the member element and name of every membership, that no returned DTO holds an empty GUID, and that an earlier commit still reads as it was. Element equality uses `ComparerProvider` from `SysML2.NET.Extensions`; a difference names the properties that differ. Lists are read in pages of 100, and paging is checked on the first three pages of 10. One changed element of each metaclass is read by id, four reads at a time. Every read is guarded: a read that throws fails, or warns when its own response shows a known divergence that breaks deserialization. |
 | `KnownServerDivergences`, `ServerDivergence` | The named ways Flexo diverges from the specification, each with a reference: an upstream issue, or a Flexo source location at the pinned commit. A divergence can explain response violations. `Report` raises an `Assert.Warn`. `ExpectNotFoundAsync` expects a 404, tolerates one named divergence, and fails when a conforming 404 reaches the caller without its `Error`. |
 | `IsolatedAssertions` | Runs a check in an isolated NUnit context and returns its failures and warnings, without failing the calling test. The offline fixtures use it to prove that a check fails when it should. |
 
@@ -129,7 +129,7 @@ Session → PsmApiClient → HttpClient
 - The last test, `VerifyCoverage`, always runs and prints the coverage verdict. It stays red until the scenario covers everything.
 - `[OneTimeTearDown]` closes the session and disposes the handler chain and the containers.
 - Starting the host has a 15-minute timeout.
-- Steps 1–8 take about 75 minutes, most of it waiting for Flexo, whose answers slow down as the model grows; steps 6 and 7 take about an hour together.
+- Steps 1–8 take about 7 minutes and about 500 calls. Flexo slows down after several hundred requests (Open-MBEE/flexo-mms-layer1-service#293), so a check that adds many calls can lengthen the run far more than its own share.
 
 Having one `[Test]` per step goes against the one-test-per-method rule in `TESTING.md`. This is accepted for this scenario only (see plan §9).
 

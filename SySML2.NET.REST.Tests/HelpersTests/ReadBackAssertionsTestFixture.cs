@@ -87,7 +87,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(requests[0].PageAfter, Is.Null);
                 Assert.That(requests[1].PageAfter?.Token, Is.EqualTo("cursor-1"));
                 Assert.That(requests[2].PageAfter?.Token, Is.EqualTo("cursor-2"));
-                Assert.That(requests.TrueForAll(parameters => parameters.PageSize == 10), Is.True);
+                Assert.That(requests.TrueForAll(parameters => parameters.PageSize == 100), Is.True);
                 Assert.That(single, Is.EqualTo((int[])[7]));
                 Assert.That(singlePages, Is.EqualTo(1));
             }
@@ -104,7 +104,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             var branchId = Guid.NewGuid();
             var previousId = Guid.NewGuid();
 
-            List<IElement> changed = [.. Enumerable.Range(0, 25).Select(index => new Package { Id = Guid.NewGuid(), DeclaredName = $"P{index}" })];
+            List<IElement> changed = [.. Enumerable.Range(0, 150).Select(index => new Package { Id = Guid.NewGuid(), DeclaredName = $"P{index}" })];
             var changes = changed.Select(element => new DataVersion { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = element.Id }, Payload = Clone(element) }).ToList();
             var commit = new Commit { Id = this.commitId, OwningProject = this.projectId };
             List<Commit> commits = [commit];
@@ -334,6 +334,8 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         {
             var model = new RootModel();
             var elements = model.Builder.ToDtos();
+            List<IElement> changed = [.. elements.OrderBy(element => element.Id != model.Nested.Id)];
+            var space = elements.Single(element => element.GetType() == typeof(Namespace));
             var relationships = elements.OfType<IRelationship>().ToList();
             var readBack = elements.ToDictionary(element => element.Id, Clone);
             var unowned = elements.Where(element => element.OwningRelationship == null).ToList();
@@ -378,79 +380,99 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                     }).ToList(), parameters));
 
             var firstRead = elements.ToList();
-            var identical = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var identical = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
             var recorded = this.state.ReadBack.ToList();
+            var readsById = this.client.Invocations.Count(invocation => invocation.Method.Name == nameof(IPsmApiClient.GetElementByProjectCommitIdAsync));
+            var listPageSizes = this.client.Invocations.Where(invocation => invocation.Method.Name == nameof(IPsmApiClient.GetElementsByProjectCommitAsync)).Select(invocation => ((QueryParameters)invocation.Arguments[3]).PageSize).ToList();
+
+            var larger = new RootModel();
+            _ = new CoreModel(larger);
+            var largerElements = larger.Builder.ToDtos();
+
+            foreach (var element in largerElements.Where(element => !readBack.ContainsKey(element.Id)))
+            {
+                readBack[element.Id] = Clone(element);
+            }
+
+            listed = largerElements;
+            roots = [.. largerElements.Where(element => element.OwningRelationship == null)];
+            this.client.Invocations.Clear();
+
+            var largerModel = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyModelAsync(this.commitId, largerElements, [], larger.Nested.Id));
+            var walkPages = this.client.Invocations.Count(invocation => invocation.Method.Name == nameof(IPsmApiClient.GetElementsByProjectCommitAsync) && ((QueryParameters)invocation.Arguments[3]).PageSize == 10);
+
+            listed = elements;
 
             roots = elements;
 
-            var everyElementRoot = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var everyElementRoot = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             roots = [.. elements.Where(element => element is not IRelationship { OwningRelatedElement: not null })];
 
-            var notOwnedRelatedRoots = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var notOwnedRelatedRoots = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             roots = [.. elements.Where(element => element is not IRelationship)];
 
-            var nonRelationshipRoots = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var nonRelationshipRoots = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             roots = [.. unowned.Where(element => element.Id != model.Root.Id)];
 
-            var rootMissing = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var rootMissing = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             roots = [.. unowned, new Package { Id = Guid.NewGuid() }];
 
-            var foreignRoot = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var foreignRoot = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             roots = unowned;
             var renamed = (Package)Clone(readBack[model.Nested.Id]);
             renamed.DeclaredName = "Changed";
             readBack[model.Nested.Id] = renamed;
 
-            var elementChanged = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var elementChanged = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             readBack[model.Nested.Id] = new Namespace { Id = model.Nested.Id };
 
-            var otherMetaclass = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var otherMetaclass = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             readBack[model.Nested.Id] = null;
 
-            var nothingRead = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var nothingRead = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             readBack[model.Nested.Id] = Clone(elements.Single(element => element.Id == model.Nested.Id));
             listed = elements.Skip(1).ToList();
 
-            var elementNotListed = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var elementNotListed = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             listed = [.. elements, elements[0]];
 
-            var elementListedTwice = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var elementListedTwice = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             listed = elements;
             onePage = true;
 
-            var listOnOnePage = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var listOnOnePage = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             onePage = false;
             dropIncoming = true;
 
-            var incomingLost = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var incomingLost = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             dropIncoming = false;
 
-            var unrelatedSubject = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, Guid.NewGuid()));
+            var unrelatedSubject = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, Guid.NewGuid()));
 
             var alias = elements.Single(element => element.GetType() == typeof(Membership));
             var lostMember = (Membership)Clone(alias);
             lostMember.MemberElement = Guid.Empty;
             readBack[alias.Id] = lostMember;
 
-            var memberElementLost = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var memberElementLost = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             var lostName = (Membership)Clone(alias);
             lostName.MemberName = null;
             readBack[alias.Id] = lostName;
 
-            var memberNameLost = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var memberNameLost = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             readBack[alias.Id] = Clone(alias);
             var dependency = elements.OfType<Dependency>().Single();
@@ -458,24 +480,24 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             emptyClient.Client = [Guid.Empty];
             readBack[dependency.Id] = emptyClient;
 
-            var emptyReference = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var emptyReference = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             readBack[dependency.Id] = Clone(dependency);
             unreadable.Add(model.Nested.Id);
 
-            var elementUnreadable = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var elementUnreadable = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             unreadable.Clear();
             listUnreadable = true;
             var readBackBefore = this.state.ReadBack.Count;
 
-            var listUnreadableResults = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var listUnreadableResults = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
             var recordedWithoutList = this.state.ReadBack.Skip(readBackBefore).Select(entry => entry.Data).ToList();
 
             listUnreadable = false;
             unreadableDirection = Direction.@in;
 
-            var incomingUnreadable = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, model.Nested.Id));
+            var incomingUnreadable = await IsolatedAssertions.RunAsync(this.VerifyModel(elements, changed, model.Nested.Id));
 
             unreadableDirection = null;
 
@@ -489,18 +511,23 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             this.client.Verify(api => api.GetElementByProjectCommitIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<bool?>(), It.IsAny<CancellationToken>()), Times.Never, "an element that the commit did not change is not read by id");
 
             listed = elements;
-            unreadable.UnionWith([model.Nested.Id, model.Root.Id]);
-            breakingFor.Add(model.Root.Id);
+            unreadable.UnionWith([model.Nested.Id, space.Id]);
+            breakingFor.Add(space.Id);
             var recording = new ReadBackAssertions(this.client.Object, this.state, () => [.. recordedReads], [KnownServerDivergences.PreviousCommitAsObject with { Explains = (_, violation) => violation == breaking }]);
             Interlocked.Exchange(ref maximumInFlight, 0);
 
-            var concurrentFailures = await IsolatedAssertions.RunAsync(() => recording.VerifyModelAsync(this.commitId, elements, elements, model.Nested.Id));
+            var concurrentFailures = await IsolatedAssertions.RunAsync(() => recording.VerifyModelAsync(this.commitId, elements, changed, model.Nested.Id));
 
             unreadable.Clear();
 
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(identical, Is.Empty);
+                Assert.That(readsById, Is.EqualTo(elements.Select(element => element.GetType()).Distinct().Count()), "one changed element of each metaclass is read by id");
+                Assert.That(listPageSizes, Is.EqualTo((int?[])[100, 10, 10, 10]), "the whole list in large pages, then the paging walk over the three small pages the model fills");
+                Assert.That(largerElements, Has.Count.GreaterThan(30));
+                Assert.That(largerModel, Is.Empty);
+                Assert.That(walkPages, Is.EqualTo(3), "the paging walk stops after three small pages");
                 Assert.That(recorded.TrueForAll(entry => entry.CommitId == this.commitId), Is.True);
                 Assert.That(recorded.Select(entry => entry.Data), Is.EqualTo(firstRead.Cast<IData>()).Using<IData>((actual, expected) => ReferenceEquals(actual, expected)));
                 Assert.That(unowned, Has.Count.GreaterThan(1), "owned relationships have no owner, so they are roots");
@@ -514,7 +541,8 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(otherMetaclass.Select(result => result.Message), Has.Some.Contains($"Package {model.Nested.Id} was read back as another metaclass"));
                 Assert.That(nothingRead.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
                 Assert.That(elementNotListed, Has.Count.EqualTo(1));
-                Assert.That(elementListedTwice, Has.Count.EqualTo(1));
+                Assert.That(elementListedTwice, Has.Count.EqualTo(2), "the list and the paging walk, which reads all of this small model, both report the duplicate");
+                Assert.That(elementListedTwice.Select(result => result.Message), Has.Some.Contains("the pages hold distinct elements of the model"));
                 Assert.That(listOnOnePage, Has.Count.EqualTo(1));
                 Assert.That(listOnOnePage[0].Message, Does.Contain("the elements did not span several pages, so paging is untested"));
                 Assert.That(incomingLost, Has.Count.EqualTo(1));
@@ -527,11 +555,11 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(memberNameLost.Select(result => result.Message), Has.None.Contains("holds empty references"));
                 Assert.That(emptyReference.Select(result => result.Message), Has.Some.Contains($"Dependency {dependency.Id} holds empty references (#424)"));
                 Assert.That(concurrentFailures.Single(result => result.Message.Contains(model.Nested.Id.ToString()) && result.Message.Contains("threw")).Status, Is.EqualTo(AssertionStatus.Failed), "a breaking response of a concurrent read excuses nothing");
-                Assert.That(concurrentFailures.Single(result => result.Message.Contains(model.Root.Id.ToString()) && result.Message.Contains("threw")).Status, Is.EqualTo(AssertionStatus.Warning), "its own breaking response excuses a read");
+                Assert.That(concurrentFailures.Single(result => result.Message.Contains(space.Id.ToString()) && result.Message.Contains("threw")).Status, Is.EqualTo(AssertionStatus.Warning), "its own breaking response excuses a read");
                 Assert.That(maximumInFlight, Is.InRange(2, 4), "the reads run concurrently, at most four at a time");
                 Assert.That(unchangedListedDifferently.Select(result => result.Message), Is.EqualTo((string[])[$"Package {model.Nested.Id} as listed differs from what was sent: Element.DeclaredName"]));
-                Assert.That(listUnreadableResults.Select(result => result.Message), Is.EqualTo((string[])["GetElementsByProjectCommitAsync threw InvalidOperationException: no list"]));
-                Assert.That(recordedWithoutList, Is.EquivalentTo(elements.Select(element => (IData)readBack[element.Id])).Using<IData>((actual, expected) => ReferenceEquals(actual, expected)), "without the list, the elements read by id are recorded");
+                Assert.That(listUnreadableResults.Select(result => result.Message), Is.EqualTo((string[])["GetElementsByProjectCommitAsync threw InvalidOperationException: no list", "GetElementsByProjectCommitAsync in small pages threw InvalidOperationException: no list"]));
+                Assert.That(recordedWithoutList, Is.EquivalentTo(changed.GroupBy(element => element.GetType()).Select(metaclass => (IData)readBack[metaclass.First().Id])).Using<IData>((actual, expected) => ReferenceEquals(actual, expected)), "without the list, the elements read by id are recorded");
                 Assert.That(incomingUnreadable.Select(result => result.Message), Is.EqualTo((string[])["GetRelationshipsByProjectCommitRelatedElementAsync in threw InvalidOperationException: no relationships"]), "the out and both directions still pass");
                 Assert.That(elementUnreadable.Select(result => result.Message), Is.EqualTo((string[])[$"GetElementByProjectCommitIdAsync of Package {model.Nested.Id} threw InvalidOperationException: not deserializable"]));
             }
@@ -552,6 +580,6 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             });
         }
 
-        private Func<Task> VerifyModel(IReadOnlyList<IElement> elements, Guid relationshipSubjectId) => () => this.assertions.VerifyModelAsync(this.commitId, elements, elements, relationshipSubjectId);
+        private Func<Task> VerifyModel(IReadOnlyList<IElement> elements, IReadOnlyList<IElement> changed, Guid relationshipSubjectId) => () => this.assertions.VerifyModelAsync(this.commitId, elements, changed, relationshipSubjectId);
     }
 }
