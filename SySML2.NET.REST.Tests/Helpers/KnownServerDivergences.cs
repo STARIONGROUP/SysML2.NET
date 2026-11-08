@@ -57,6 +57,21 @@ namespace SySML2.NET.REST.Tests.Helpers
         private static readonly Regex PreviousCommitObject = new(@"^\S*/previousCommit type: Value is ""object"" but should be ""array""$", RegexOptions.Compiled);
 
         /// <summary>
+        /// Matches the schema error on an item of an element list whose <c>@type</c> is a kind of data that is no element
+        /// </summary>
+        private static readonly Regex DataItemInElementList = new(@"^/\d+/@type const: ""(ExternalData|ExternalRelationship|ProjectUsage)"" is none of the types the schema admits$", RegexOptions.Compiled);
+
+        /// <summary>
+        /// The path templates of the operations that list elements
+        /// </summary>
+        private static readonly HashSet<string> ElementListTemplates = ["/projects/{projectId}/commits/{commitId}/elements", "/projects/{projectId}/commits/{commitId}/roots"];
+
+        /// <summary>
+        /// The path templates of the operations that answer query results
+        /// </summary>
+        private static readonly HashSet<string> QueryResultTemplates = ["/projects/{projectId}/queries/{queryId}/results", "/projects/{projectId}/query-results"];
+
+        /// <summary>
         /// Gets the divergence that the roots are the elements without an <c>owningRelatedElement</c>, owned through
         /// an <c>owningRelationship</c> or not, where Clause 7.2.2 makes them the elements without an <c>owner</c>
         /// </summary>
@@ -72,7 +87,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// Gets the divergence that a request naming an unknown resource succeeds, where the OpenAPI document declares
         /// 404 Not Found for it
         /// </summary>
-        public static ServerDivergence UnknownResourceAccepted { get; } = new("a request naming an unknown resource succeeds instead of answering 404 Not Found", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/RelationshipApi.kt");
+        public static ServerDivergence UnknownResourceAccepted { get; } = new("a request naming an unknown resource succeeds instead of answering 404 Not Found", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/RelationshipApi.kt, and QueryApi.kt, whose PUT creates a missing query");
 
         /// <summary>
         /// Gets the divergence that an error answer carries an empty or plain-text body, where the OpenAPI document
@@ -143,9 +158,54 @@ namespace SySML2.NET.REST.Tests.Helpers
             (call, violation) => call.Operation?.PathTemplate == "/meta/datatypes/{datatypeId}" && violation.Message.StartsWith("/$id format:", StringComparison.Ordinal));
 
         /// <summary>
+        /// Gets the divergence that the element lists include project usages and external data, which are data but no
+        /// elements, where the OpenAPI document declares a list of elements
+        /// </summary>
+        public static ServerDivergence DataListedAsElements { get; } = new(
+            "the elements and roots of a commit include its project usages, external data and external relationships, which are no elements",
+            $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/ElementApi.kt, every stored subject is listed",
+            (call, violation) => call.Operation is { } operation && ElementListTemplates.Contains(operation.PathTemplate) && violation.Kind == ContractViolationKind.SchemaMismatch && DataItemInElementList.IsMatch(violation.Message),
+            BreaksDeserialization: true);
+
+        /// <summary>
+        /// Gets the divergence that the project usage of an element is answered as an array of every project usage of
+        /// the commit, where the OpenAPI document declares the one project usage that brings the element in
+        /// </summary>
+        public static ServerDivergence ProjectUsageAsArray { get; } = new(
+            "GET /projects/{projectId}/commits/{commitId}/elements/{elementId}/projectUsage answers an array of every project usage of the commit, whatever the element, instead of one project usage",
+            $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/ElementApi.kt",
+            (call, violation) => call.Operation?.PathTemplate == "/projects/{projectId}/commits/{commitId}/elements/{elementId}/projectUsage" && violation.Message == "/ type: Value is \"array\" but should be \"object\"",
+            BreaksDeserialization: true);
+
+        /// <summary>
+        /// Gets the divergence that query results keep only the properties the query selects, as Clause 7.1.4 says, where
+        /// the OpenAPI document declares complete data
+        /// </summary>
+        public static ServerDivergence QueryResultsProjected { get; } = new(
+            "query results keep only the properties in the select of the query, as Clause 7.1.4 says, leaving out @type and the other properties that the Data schema of the OpenAPI document requires",
+            $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/QueryApi.kt, which follows Clause 7.1.4 where the OpenAPI document, ranked first by Clause 2, declares complete Data",
+            (call, violation) => call.Operation is { } operation && QueryResultTemplates.Contains(operation.PathTemplate) && violation.Kind == ContractViolationKind.SchemaMismatch && MissingNames(violation) is { } names && names.Contains("@type"),
+            BreaksDeserialization: true);
+
+        /// <summary>
+        /// Gets the divergence that a query is stored without its name, alias and description
+        /// </summary>
+        public static ServerDivergence QueryLosesNameAndDescription { get; } = new("a query is stored without its name, alias and description, which are lost on every later read", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/QueryApi.kt, createOrUpdateQuery");
+
+        /// <summary>
+        /// Gets the divergence that a primitive constraint with the <c>instanceOf</c> operator is rejected
+        /// </summary>
+        public static ServerDivergence InstanceOfRejected { get; } = new("a primitive constraint with the instanceOf operator is answered 400 Bad Request", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/QueryApi.kt, the operator is not read");
+
+        /// <summary>
+        /// Gets the divergence that the results of a query definition sent with GET are not implemented
+        /// </summary>
+        public static ServerDivergence QueryResultsGetNotImplemented { get; } = new("GET /projects/{projectId}/query-results answers 501 Not Implemented", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/QueryApi.kt");
+
+        /// <summary>
         /// Gets every known divergence
         /// </summary>
-        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, MergeNotImplemented, MergeRequiresArrayBody, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri];
+        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, MergeNotImplemented, MergeRequiresArrayBody, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri, DataListedAsElements, ProjectUsageAsArray, QueryResultsProjected, QueryLosesNameAndDescription, InstanceOfRejected, QueryResultsGetNotImplemented];
 
         /// <summary>
         /// Asserts that a call for an unknown resource fails with 404 Not Found, or reports the one tolerated divergence

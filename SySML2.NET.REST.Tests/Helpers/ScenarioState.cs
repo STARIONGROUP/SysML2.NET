@@ -28,6 +28,11 @@ namespace SySML2.NET.REST.Tests.Helpers
         public Guid? ProjectId { get; set; }
 
         /// <summary>
+        /// Gets or sets the id of the project that the main project uses, created in step 10
+        /// </summary>
+        public Guid? LibraryProjectId { get; set; }
+
+        /// <summary>
         /// Gets or sets the id of the default branch of the project
         /// </summary>
         public Guid? DefaultBranchId { get; set; }

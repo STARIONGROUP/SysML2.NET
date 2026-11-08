@@ -9,6 +9,7 @@
 
 namespace SySML2.NET.REST.Tests.HelpersTests.Models
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -16,6 +17,11 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.DTO.Core.Features;
+    using SysML2.NET.Core.DTO.Kernel.Expressions;
+    using SysML2.NET.Core.DTO.Kernel.FeatureValues;
+    using SysML2.NET.Core.DTO.Root.Elements;
+    using SysML2.NET.Core.DTO.Systems.States;
     using SysML2.NET.Serializer.Json;
 
     using SySML2.NET.REST.Tests.Helpers;
@@ -70,6 +76,30 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(changed.Select(dto => dto.Id), Does.Contain(root.Root.Id).And.Contain(structure.OccurrenceDefinition.Id), "the root package and the occurrence definition of step 6 change");
                 Assert.That(json, Does.Not.Contain("00000000-0000-0000-0000-000000000000"));
                 Assert.That(model.Builder.WithoutDerivedValues, Is.EquivalentTo((string[])["systems behaviour/accept when/trigger", "systems behaviour/accept at/trigger", "systems behaviour/accept after/trigger"]), "only the trigger invocations, whose instantiated type needs the model library");
+            }
+
+            var level = dtos.OfType<Feature>().Single(feature => feature.GetType() == typeof(Feature) && feature.DeclaredName == "level");
+            var limit = dtos.OfType<Feature>().Single(feature => feature.GetType() == typeof(Feature) && feature.DeclaredName == "limit");
+            var initialValue = dtos.OfType<FeatureValue>().Single(value => value.OwningRelatedElement == limit.Id);
+            var parallel = dtos.OfType<StateDefinition>().Single(state => state.DeclaredName == "Par");
+            var parallelUsage = dtos.OfType<StateUsage>().Single(state => state.DeclaredName == "pu");
+            var ownedByParallel = dtos.OfType<IRelationship>().Where(relationship => relationship.OwningRelatedElement == parallel.Id).SelectMany(relationship => relationship.OwnedRelatedElement).Select(id => dtos.Single(dto => dto.Id == id)).ToList();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(level.IsVariable, Is.True);
+                Assert.That(level.IsConstant, Is.False, "the referent of an assignment changes over time");
+                Assert.That(dtos.OfType<FeatureValue>().Where(value => value.OwningRelatedElement == level.Id), Is.Empty, "the referent of an assignment has no initial value");
+                Assert.That(limit.IsVariable, Is.True);
+                Assert.That(limit.IsConstant, Is.True, "a constant feature must be variable");
+                Assert.That(initialValue.IsInitial, Is.True);
+                Assert.That(dtos.Single(dto => dto.Id == initialValue.OwnedRelatedElement[0]), Is.TypeOf<LiteralInteger>().With.Property(nameof(LiteralInteger.Value)).EqualTo(0));
+                Assert.That(parallel.IsParallel, Is.True);
+                Assert.That(ownedByParallel.Select(element => element.DeclaredName), Is.EquivalentTo((string[])["pa1", "pa2"]));
+                Assert.That(ownedByParallel, Has.All.TypeOf<StateUsage>(), "the substates of a parallel state have no transitions");
+                Assert.That(parallelUsage.IsParallel, Is.True);
+                Assert.That(dtos.OfType<FeatureTyping>().Where(typing => typing.OwningRelatedElement == parallelUsage.Id).Select(typing => typing.Type), Is.EqualTo((Guid[])[parallel.Id]));
+                Assert.That(dtos.OfType<StateDefinition>().Single(state => state.DeclaredName == "St").IsParallel, Is.False, "the state definition with a transition is not parallel");
             }
         }
     }

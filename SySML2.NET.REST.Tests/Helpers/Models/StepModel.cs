@@ -237,6 +237,23 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         }
 
         /// <summary>
+        /// Makes a feature specialize another through a <see cref="Subsetting"/>
+        /// </summary>
+        /// <param name="feature">
+        /// The subsetting feature
+        /// </param>
+        /// <param name="subsetted">
+        /// The subsetted feature
+        /// </param>
+        protected void Subsets(IFeature feature, IFeature subsetted)
+        {
+            var subsetting = this.Builder.Create<Subsetting>($"{feature.ElementId}/subsetting", SubsettingExtensions.ToDto);
+            subsetting.SubsettingFeature = feature;
+            subsetting.SubsettedFeature = subsetted;
+            feature.AssignOwnership(subsetting);
+        }
+
+        /// <summary>
         /// Types a feature with a <see cref="FeatureTyping"/>
         /// </summary>
         /// <param name="feature">

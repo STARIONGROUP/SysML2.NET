@@ -185,6 +185,13 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             var level = this.Owned<Feature>(structure.OccurrenceDefinition, "level", FeatureExtensions.ToDto);
             level.IsVariable = true;
 
+            var limit = this.Owned<Feature>(structure.OccurrenceDefinition, "limit", FeatureExtensions.ToDto);
+            limit.IsVariable = true;
+            limit.IsConstant = true;
+            var initialValue = this.Builder.Create<FeatureValue>($"{limit.ElementId}/value", FeatureValueExtensions.ToDto);
+            initialValue.IsInitial = true;
+            limit.AssignOwnership(initialValue, this.Literal<LiteralInteger>("limit/initial/0", LiteralIntegerExtensions.ToDto, literal => literal.Value = 0));
+
             var assign = this.Owned<AssignmentActionUsage>(this.ActionDefinition, "assign", AssignmentActionUsageExtensions.ToDto);
             this.Refer(assign, level);
             this.Value(this.Param<ReferenceUsage, ParameterMembership>(assign, "assign/target", ReferenceUsageExtensions.ToDto, ParameterMembershipExtensions.ToDto), this.Literal<LiteralInteger>("assign/target/0", LiteralIntegerExtensions.ToDto, literal => literal.Value = 0));
@@ -536,7 +543,8 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
 
         /// <summary>
         /// Adds the state definition <c>St</c> with entry, do and exit subactions, two states and a transition between
-        /// them with a trigger, a guard and an effect, and a state usage that a part definition exhibits
+        /// them with a trigger, a guard and an effect, a state usage that a part definition exhibits, and a parallel state
+        /// definition and usage, whose substates have no transitions
         /// </summary>
         private void States()
         {
@@ -599,6 +607,15 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
 
             var exhibit = this.Owned<ExhibitStateUsage>(this.Member<PartDefinition>("Exhibitor", PartDefinitionExtensions.ToDto), "exhibit", ExhibitStateUsageExtensions.ToDto);
             this.Subset(exhibit, exhibited);
+
+            var parallel = this.Member<StateDefinition>("Par", StateDefinitionExtensions.ToDto);
+            parallel.IsParallel = true;
+            this.Owned<StateUsage>(parallel, "pa1", StateUsageExtensions.ToDto);
+            this.Owned<StateUsage>(parallel, "pa2", StateUsageExtensions.ToDto);
+
+            var parallelUsage = this.Member<StateUsage>("pu", StateUsageExtensions.ToDto);
+            parallelUsage.IsParallel = true;
+            this.Typed(parallelUsage, parallel);
         }
 
         /// <summary>

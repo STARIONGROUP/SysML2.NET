@@ -13,6 +13,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -128,6 +129,39 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
+        /// Verifies a query read back against the request it was created or updated with: its project, select and
+        /// constraint, and its name, description and aliases, or the known divergence that the server lost all three
+        /// </summary>
+        /// <param name="query">
+        /// The query read back
+        /// </param>
+        /// <param name="sent">
+        /// The request the query was created or updated with
+        /// </param>
+        /// <param name="projectId">
+        /// The project the query belongs to
+        /// </param>
+        /// <param name="description">
+        /// The description of the query in assertion messages
+        /// </param>
+        public static void VerifyQueryRecord(Query query, QueryRequest sent, Guid projectId, string description)
+        {
+            Assert.That(query.OwningProject, Is.EqualTo(projectId), $"{description} belongs to the project");
+            Assert.That(query.Select, Is.EqualTo(sent.Select), $"{description} selects what was sent");
+            Assert.That(ScenarioQueries.ConstraintText(query.Where), Is.EqualTo(ScenarioQueries.ConstraintText(sent.Where)), $"{description} has the constraint that was sent");
+
+            if (string.IsNullOrWhiteSpace(query.Name) && query.Description == null && query.Alias.Count == 0)
+            {
+                KnownServerDivergences.Report(KnownServerDivergences.QueryLosesNameAndDescription, $"{description} came back without the name \"{sent.Name}\"");
+                return;
+            }
+
+            Assert.That(query.Name, Is.EqualTo(sent.Name), $"{description} has the name that was sent");
+            Assert.That(query.Description, Is.EqualTo(sent.Description), $"{description} has the description that was sent");
+            Assert.That(query.Alias, Is.EqualTo(sent.Alias), $"{description} has the aliases that were sent");
+        }
+
+        /// <summary>
         /// Verifies a commit on a branch: the commit itself, its place in the history, the branch head and its changes
         /// </summary>
         /// <param name="commit">
@@ -149,32 +183,9 @@ namespace SySML2.NET.REST.Tests.Helpers
         {
             var projectId = this.state.ProjectId!.Value;
 
-            Guid[] expectedPrevious = previousCommitId.HasValue ? [previousCommitId.Value] : [];
-
             using (Assert.EnterMultipleScope())
             {
-                var commitById = await this.ReadAsync(() => this.client.GetCommitByProjectAndIdAsync(projectId, commit.Id), "GetCommitByProjectAndIdAsync");
-
-                if (commitById != null)
-                {
-                    Assert.That(commitById.Id, Is.EqualTo(commit.Id));
-                    Assert.That(commitById.OwningProject, Is.EqualTo(projectId));
-                    Assert.That(commitById.PreviousCommit, Is.EqualTo(expectedPrevious));
-                }
-
-                var (commits, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetCommitsByProjectAsync(projectId, parameters)), "GetCommitsByProjectAsync");
-
-                if (commits != null)
-                {
-                    Assert.That(commits.Select(record => record.Id), Does.Contain(commit.Id));
-                }
-
-                var branch = await this.ReadAsync(() => this.client.GetBranchesByProjectAndIdAsync(projectId, branchId), "GetBranchesByProjectAndIdAsync");
-
-                if (branch != null)
-                {
-                    Assert.That(branch.Head, Is.EqualTo(commit.Id));
-                }
+                await this.VerifyCommitRecordAsync(commit, branchId, previousCommitId);
 
                 var (changes, changePages) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetChangesByProjectCommitAsync(projectId, commit.Id, parameters)), "GetChangesByProjectCommitAsync");
 
@@ -215,6 +226,59 @@ namespace SySML2.NET.REST.Tests.Helpers
                 if (firstChange.Payload is IElement firstPayload)
                 {
                     VerifySame(firstPayload, changeById.Payload as IElement, $"the payload of change {changeById.Id} read by id");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Verifies a commit of data that is no element, such as project usages and external data, which a client reads
+        /// back through the changes of the commit: the commit itself, its place in the history, the branch head, and one
+        /// change per data item, with the payload that was sent or none for a deletion
+        /// </summary>
+        /// <param name="commit">
+        /// The commit that <c>PostCommitByProjectAsync</c> returned
+        /// </param>
+        /// <param name="branchId">
+        /// The branch the commit was made on
+        /// </param>
+        /// <param name="previousCommitId">
+        /// The head of the branch before the commit
+        /// </param>
+        /// <param name="expected">
+        /// Per data item, its id and the payload the commit sent, or <c>null</c> when the commit deletes it
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyDataCommitAsync(Commit commit, Guid branchId, Guid? previousCommitId, IReadOnlyList<(Guid Id, IData Payload)> expected)
+        {
+            var projectId = this.state.ProjectId!.Value;
+
+            using (Assert.EnterMultipleScope())
+            {
+                await this.VerifyCommitRecordAsync(commit, branchId, previousCommitId);
+
+                var (changes, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetChangesByProjectCommitAsync(projectId, commit.Id, parameters)), "GetChangesByProjectCommitAsync");
+
+                if (changes == null)
+                {
+                    return;
+                }
+
+                Assert.That(changes.Select(change => change.Identity?.Id), Is.EquivalentTo(expected.Select(entry => (Guid?)entry.Id)), "one change per data item");
+
+                var changesById = changes.Where(change => change.Identity != null).GroupBy(change => change.Identity.Id).ToDictionary(group => group.Key, group => group.First());
+
+                foreach (var (id, payload) in expected.Where(entry => changesById.ContainsKey(entry.Id)))
+                {
+                    if (payload == null)
+                    {
+                        Assert.That(changesById[id].Payload, Is.Null, $"the change of {id} deletes it");
+                    }
+                    else
+                    {
+                        VerifySameData(payload, changesById[id].Payload, $"the payload of the change of {payload.GetType().Name} {id}");
+                    }
                 }
             }
         }
@@ -273,6 +337,31 @@ namespace SySML2.NET.REST.Tests.Helpers
                 Assert.That(differences.Select(difference => (difference.CompareData ?? difference.BaseData)?.Identity?.Id), Is.EquivalentTo(changed.Select(element => (Guid?)element.Id)));
                 Assert.That(compared.Where(difference => atBase.Contains(difference.CompareData.Identity.Id)), Has.All.Matches<DataDifference>(difference => difference.BaseData != null), "an element of the base commit is UPDATED");
                 Assert.That(compared.Where(difference => !atBase.Contains(difference.CompareData.Identity.Id)), Has.All.Matches<DataDifference>(difference => difference.BaseData == null), "an element added since is CREATED");
+            }
+        }
+
+        /// <summary>
+        /// Verifies that a list of elements holds exactly the expected elements
+        /// </summary>
+        /// <param name="description">
+        /// The description of the read in assertion messages
+        /// </param>
+        /// <param name="readPage">
+        /// Reads one page of the list for the given <see cref="QueryParameters"/>
+        /// </param>
+        /// <param name="expectedIds">
+        /// The ids of the elements the list must hold
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyElementIdsAsync(string description, Func<QueryParameters, Task<PagedResult<IElement>>> readPage, IReadOnlyCollection<Guid> expectedIds)
+        {
+            var (listed, _) = await this.ReadAsync(() => ReadAllPagesAsync(readPage), description);
+
+            if (listed != null)
+            {
+                Assert.That(listed.Select(element => element.Id), Is.EquivalentTo(expectedIds), description);
             }
         }
 
@@ -382,6 +471,94 @@ namespace SySML2.NET.REST.Tests.Helpers
                 VerifyNoEmptyReferences(readBack.Values);
 
                 await this.VerifyRelationshipsAsync(commitId, expected, relationshipSubjectId);
+            }
+        }
+
+        /// <summary>
+        /// Verifies the project usage that brings an element of a used project into a commit
+        /// </summary>
+        /// <param name="commitId">
+        /// The commit
+        /// </param>
+        /// <param name="elementId">
+        /// The element of the used project
+        /// </param>
+        /// <param name="expected">
+        /// The project usage that was committed
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyProjectUsageAsync(Guid commitId, Guid elementId, ProjectUsage expected)
+        {
+            var (succeeded, actual) = await this.TryReadAsync(() => this.client.GetProjectUsageByProjectCommitElementAsync(this.state.ProjectId!.Value, commitId, elementId), $"GetProjectUsageByProjectCommitElementAsync of {elementId}");
+
+            if (succeeded)
+            {
+                VerifySameData(expected, actual, $"the project usage of {elementId}");
+            }
+        }
+
+        /// <summary>
+        /// Verifies the results of a query: exactly the expected elements, each equal to the element that was sent
+        /// </summary>
+        /// <param name="description">
+        /// The description of the read in assertion messages
+        /// </param>
+        /// <param name="readPage">
+        /// Reads one page of the results for the given <see cref="QueryParameters"/>
+        /// </param>
+        /// <param name="expected">
+        /// The elements the results must hold
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyResultsAsync(string description, Func<QueryParameters, Task<PagedResult<IData>>> readPage, IReadOnlyList<IElement> expected)
+        {
+            var (results, _) = await this.ReadAsync(() => ReadAllPagesAsync(readPage), description);
+
+            if (results == null)
+            {
+                return;
+            }
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(results.Select(result => result.Id), Is.EquivalentTo(expected.Select(element => element.Id)), description);
+
+                var resultsById = results.GroupBy(result => result.Id).ToDictionary(group => group.Key, group => group.First());
+
+                foreach (var element in expected.Where(element => resultsById.ContainsKey(element.Id)))
+                {
+                    VerifySame(element, resultsById[element.Id] as IElement, $"{element.GetType().Name} {element.Id} in {description}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Verifies a list of roots against a model: the elements without an <c>owner</c>, or the known divergence
+        /// <see cref="KnownServerDivergences.RootsIgnoreOwningRelationship"/>
+        /// </summary>
+        /// <param name="description">
+        /// The description of the read in assertion messages
+        /// </param>
+        /// <param name="readPage">
+        /// Reads one page of the roots for the given <see cref="QueryParameters"/>
+        /// </param>
+        /// <param name="model">
+        /// The model whose roots the list must hold
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyRootsAsync(string description, Func<QueryParameters, Task<PagedResult<IElement>>> readPage, IReadOnlyList<IElement> model)
+        {
+            var (roots, _) = await this.ReadAsync(() => ReadAllPagesAsync(readPage), description);
+
+            if (roots != null)
+            {
+                VerifyRoots(roots, model);
             }
         }
 
@@ -539,6 +716,42 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
+        /// Verifies that data read back is of the kind that was sent and equal to it, naming the properties that differ;
+        /// an element is compared as in <see cref="VerifySame"/>
+        /// </summary>
+        /// <param name="sent">
+        /// The data that was sent
+        /// </param>
+        /// <param name="actual">
+        /// The data read back, or <c>null</c>
+        /// </param>
+        /// <param name="description">
+        /// The description of the data in assertion messages
+        /// </param>
+        private static void VerifySameData(IData sent, IData actual, string description)
+        {
+            if (sent is IElement element)
+            {
+                VerifySame(element, actual as IElement, description);
+                return;
+            }
+
+            Assert.That(actual, Is.TypeOf(sent.GetType()), $"{description} was read back as another kind of data");
+
+            if (actual?.GetType() != sent.GetType())
+            {
+                return;
+            }
+
+            var differing = sent.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(property => !Equals(property.GetValue(sent), property.GetValue(actual)))
+                .Select(property => property.Name)
+                .ToList();
+
+            Assert.That(differing, Is.Empty, $"{description} differs from what was sent");
+        }
+
+        /// <summary>
         /// Reads from the server, reporting a read that throws as a failure, so that the checks that do not depend on
         /// it still run
         /// </summary>
@@ -686,6 +899,52 @@ namespace SySML2.NET.REST.Tests.Helpers
             {
                 this.ReportFailedRead(description, exception, (this.recordedCalls?.Invoke() ?? []).Skip(callsBefore));
                 return (false, default);
+            }
+        }
+
+        /// <summary>
+        /// Verifies the record of a commit: read by id it is the commit, in the project, after the previous head; it is
+        /// listed; and it is the head of its branch
+        /// </summary>
+        /// <param name="commit">
+        /// The commit that <c>PostCommitByProjectAsync</c> returned
+        /// </param>
+        /// <param name="branchId">
+        /// The branch the commit was made on
+        /// </param>
+        /// <param name="previousCommitId">
+        /// The head of the branch before the commit, or <c>null</c> for the first commit
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        private async Task VerifyCommitRecordAsync(Commit commit, Guid branchId, Guid? previousCommitId)
+        {
+            var projectId = this.state.ProjectId!.Value;
+
+            Guid[] expectedPrevious = previousCommitId.HasValue ? [previousCommitId.Value] : [];
+
+            var commitById = await this.ReadAsync(() => this.client.GetCommitByProjectAndIdAsync(projectId, commit.Id), "GetCommitByProjectAndIdAsync");
+
+            if (commitById != null)
+            {
+                Assert.That(commitById.Id, Is.EqualTo(commit.Id));
+                Assert.That(commitById.OwningProject, Is.EqualTo(projectId));
+                Assert.That(commitById.PreviousCommit, Is.EqualTo(expectedPrevious));
+            }
+
+            var (commits, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetCommitsByProjectAsync(projectId, parameters)), "GetCommitsByProjectAsync");
+
+            if (commits != null)
+            {
+                Assert.That(commits.Select(record => record.Id), Does.Contain(commit.Id));
+            }
+
+            var branch = await this.ReadAsync(() => this.client.GetBranchesByProjectAndIdAsync(projectId, branchId), "GetBranchesByProjectAndIdAsync");
+
+            if (branch != null)
+            {
+                Assert.That(branch.Head, Is.EqualTo(commit.Id));
             }
         }
 

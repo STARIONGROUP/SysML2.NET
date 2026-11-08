@@ -17,6 +17,10 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.DTO.Core.Features;
+    using SysML2.NET.Core.DTO.Root.Elements;
+    using SysML2.NET.Core.DTO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.DTO.Systems.Parts;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Serializer.Json;
 
@@ -64,6 +68,20 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(changed.Where(dto => atStep5.Any(before => before.Id == dto.Id)).Select(dto => dto.Id), Is.EquivalentTo((Guid[])[root.Root.Id, root.Builder.Find<LiteralRational>("kernel/rational").Id]), "the root package, and the rational literal that its comparer reports as changed (#426)");
                 Assert.That(json, Does.Not.Contain("00000000-0000-0000-0000-000000000000"));
                 Assert.That(model.Builder.WithoutDerivedValues, Is.EquivalentTo((string[])["kernel/sum", "kernel/index", "kernel/select", "kernel/collect", "kernel/chain"]), "no structure element loses its derived values");
+            }
+
+            var variation = dtos.OfType<PartUsage>().Single(part => part.DeclaredName == "vu");
+            var variant = dtos.OfType<PartUsage>().Single(part => part.DeclaredName == "vu1");
+            var ownedByVariation = dtos.OfType<IRelationship>().Where(relationship => relationship.OwningRelatedElement == variation.Id).ToList();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(variation.IsVariation, Is.True);
+                Assert.That(variation.IsAbstract, Is.True, "a variation usage must be abstract");
+                Assert.That(ownedByVariation, Has.Count.EqualTo(1).And.All.TypeOf<VariantMembership>(), "a variation usage owns only variant memberships");
+                Assert.That(ownedByVariation[0].OwnedRelatedElement, Is.EqualTo((Guid[])[variant.Id]));
+                Assert.That(variant.IsVariation, Is.False);
+                Assert.That(dtos.OfType<Subsetting>().Where(subsetting => subsetting.OwningRelatedElement == variant.Id).Select(subsetting => subsetting.SubsettedFeature), Is.EqualTo((Guid[])[variation.Id]), "a variant specializes its variation usage");
             }
         }
     }

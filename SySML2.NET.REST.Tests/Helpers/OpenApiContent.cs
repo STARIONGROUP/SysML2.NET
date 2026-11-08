@@ -299,7 +299,8 @@ namespace SySML2.NET.REST.Tests.Helpers
 
         /// <summary>
         /// Checks the body against the member of the union for its <c>@type</c>, or for the <c>@type</c> of each of its
-        /// items
+        /// items, where an item of a <c>@type</c> that no member admits is a violation of its own, reported ahead of
+        /// the errors of the other items so that the limit on reported errors cannot hide it
         /// </summary>
         /// <param name="body">
         /// The body
@@ -318,25 +319,38 @@ namespace SySML2.NET.REST.Tests.Helpers
                 ? body.EnumerateArray().Select((item, index) => (Location: $"/{index}", Instance: item)).ToList()
                 : [(Location: string.Empty, Instance: body)];
 
-            var members = new List<(string Location, JsonElement Instance, JsonSchema Schema)>();
+            var members = new List<(string Location, string UnknownType, JsonElement Instance, JsonSchema Schema)>();
 
             foreach (var (location, instance) in instances)
             {
                 if (instance.ValueKind != JsonValueKind.Object
                     || !instance.TryGetProperty("@type", out var type)
-                    || type.ValueKind != JsonValueKind.String
-                    || !this.SchemasByType.TryGetValue(type.GetString()!, out var member))
+                    || type.ValueKind != JsonValueKind.String)
                 {
                     return null;
                 }
 
-                members.Add((location, instance, member));
+                var typeName = type.GetString()!;
+
+                if (this.SchemasByType.TryGetValue(typeName, out var member))
+                {
+                    members.Add((location, null, instance, member));
+                }
+                else if (this.IsArrayOfTypes)
+                {
+                    members.Add((location, typeName, instance, null));
+                }
+                else
+                {
+                    return null;
+                }
             }
 
             return [.. members
-                .Select(entry => (entry.Location, Results: entry.Schema.Evaluate(entry.Instance, Evaluation)))
-                .Where(entry => !entry.Results.IsValid)
-                .SelectMany(entry => Summarize(entry.Results, entry.Location))
+                .OrderBy(entry => entry.UnknownType == null)
+                .SelectMany(entry => entry.UnknownType != null
+                    ? [$"{entry.Location}/@type const: \"{entry.UnknownType}\" is none of the types the schema admits"]
+                    : entry.Schema.Evaluate(entry.Instance, Evaluation) is { IsValid: false } results ? Summarize(results, entry.Location) : [])
                 .Take(ReportedErrors)
                 .Select(error => new ContractViolation(ContractViolationKind.SchemaMismatch, error))];
         }

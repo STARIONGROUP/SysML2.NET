@@ -236,12 +236,27 @@ a step ignores itself only when the state it builds on is missing. The verdict a
 | 6 | **Branch, SysML structure** | **branch** `systems` from head (7, 6, 8); commits with `branchId`: definitions and usages, attributes, enumerations, occurrences, items, parts, ports (incl. conjugated), connections, interfaces, allocations, flows (31) | 15 with `branchId`; as step 2 on the branch |
 | 7 | **SysML behaviour and requirements** | actions (all node and loop kinds), states and transitions, calculations, constraints, requirements, concerns, cases, analysis / verification / use cases, views, viewpoints, renderings, metadata (58) | as step 6 |
 | 8 | **Merge** | update the same element on default and on `systems` → merge reports the conflict (`MergeConflictException`, `MergeResult.conflict`); merge again with a resolution body; then a clean merge of the remaining `systems` work; U1–U2 on SysML content after merge | 25, 24, 8 |
-| 9 | **Queries** | `POST` a query with nested `CompositeConstraint` (`AND`, `OR`) and `PrimitiveConstraint`s using all 7 `Operator` literals and `inverse`; `select`, `scope`, `orderBy`; list, get, `PUT`, results three ways, at head and at the `kernel` commit; `DELETE` | 27, 26, 28, 29, 31, 32, 33, 30 |
-| 10 | **Project usage** | second project `Library` with a small model; the main model commits a `ProjectUsage` of its head; `excludeUsed` on elements and roots | 2, 15, 21, 19, 22 |
-| 11 | **External data** | commit `ExternalData` and `ExternalRelationship`, update both, delete both | 15, 17, 18 |
+| 9 | **Queries** | `POST` a query with an `or` `CompositeConstraint` holding a nested `and` and `PrimitiveConstraint`s; across the step's queries all 7 `Operator` literals and `inverse`; `select`; list, get, `PUT`, results three ways, at the default head and at the `kernel` commit; negative cases; `DELETE` | 27, 26, 28, 29, 31, 32, 33, 30 |
+| 10 | **Project usage** | second project `UsedLibrary` with a small model; **branch** `data` from the default head; a commit of a `ProjectUsage` of the library's commit; the project usage of a library element; `excludeUsed` on elements and roots | 2, 7, 15, 21, 19, 22 |
+| 11 | **External data** | on `data`: commit `ExternalData` and an `ExternalRelationship` to the root package, update both, delete both | 15, 17, 18 |
 | 12 | **Delete model elements** | per metamodel package, delete the subjects with their owning memberships (`payload = null`), updating owners' `ownedRelationship` in the same commit; the deleted elements are gone at head and readable at the previous commit; `DiffAsync` shows `DELETED` | 15, 19, 20, 24 |
-| 13 | **Tear down** | delete tag (13), branch (9), the `Library` project and the main project (5); each is unreadable afterwards; negative cases (§6.3) | 13, 9, 5, 3, 8, 12 |
+| 13 | **Tear down** | delete tag (13), branch (9), the `UsedLibrary` project and the main project (5); each is unreadable afterwards; negative cases (§6.3) | 13, 9, 5, 3, 8, 12 |
 | 14 | **Coverage verdict** | — | asserts §7 |
+
+Step 9's expected results are computed from the expected model with a predicate per query
+(`Helpers/ScenarioQueries.cs`); every `@type` a query names is a metaclass that no other metaclass
+specializes, so open question 1 does not change them. The PSM `QueryRequest` has only `select` and
+`where`; `scope` and `orderBy` belong to the PIM `Query` alone. On `select` the specification
+disagrees with itself: Systems Modeling API and Services, Clause 7.1.4, says `select` lists the
+properties included for each `Data` object of the response, while the OpenAPI document declares
+every result a complete `Data` item. The scenario follows the OpenAPI document, which Clause 2 ranks
+first, so a result that keeps only the selected properties is the divergence
+`QueryResultsProjected`; Flexo follows Clause 7.1.4.
+
+Steps 10 and 11 commit data that is no element. A client reads it back through the changes of its
+commit (`VerifyDataCommitAsync`), since the element operations answer elements only. The steps
+commit on their own branch `data`, so that the default branch, which steps 12 and 13 build on,
+keeps a model of elements only.
 
 Steps 6 and 7 follow the metamodel where the grammar differs from it (`ConjugatedPortTyping` has
 no `originalPortDefinition`). `validateSubjectMembershipOwningType` and
@@ -324,7 +339,8 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `RootsIgnoreOwningRelationship`: the roots are every element without an `owningRelatedElement`,
   including the elements owned through their `owningRelationship` (step 2);
 - `UnknownResourceNotFound`, `UnknownResourceAccepted`: an unknown project answers 403 instead of
-  404, and the relationships of an unknown element answer 200 (step 2);
+  404, and the relationships of an unknown element answer 200 (step 2), as do the results of an
+  unknown query and an update of one, which creates it (step 9);
 - `ErrorWithoutErrorBody`: an error answer carries an empty or `text/plain` body, never an
   `application/json` `Error` (steps 1, 2);
 - `CreatedAnsweredOk`: `POST /projects` and `POST …/commits` answer 200 instead of 201 (step 2);
@@ -343,7 +359,21 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `MergeNotImplemented`: merge answers 501 Not Implemented (step 8);
 - `MergeRequiresArrayBody`: merge reads its optional body as a required array, so a merge without
   a body answers 500 and one with a `null` body 400, before the 501 (step 8). Step 8 then sends
-  the resolution merge, whose body is an array, and stops at its 501.
+  the resolution merge, whose body is an array, and stops at its 501;
+- `QueryLosesNameAndDescription`: a query is stored without its `name`, `alias` and `description`
+  (step 9);
+- `QueryResultsProjected`: query results keep only the properties in `select`, as Clause 7.1.4
+  says and the OpenAPI document does not allow, leaving out `@type`, so the client cannot read them
+  (step 9);
+- `InstanceOfRejected`: a `PrimitiveConstraint` with the `instanceOf` operator answers 400 (step 9);
+- `QueryResultsGetNotImplemented`: `GET /projects/{projectId}/query-results` answers 501 (step 9);
+- `DataListedAsElements`: the elements and roots of a commit include its project usages, external
+  data and external relationships, so the client cannot read the list (steps 10, 11);
+- `ProjectUsageAsArray`: the project usage of an element is answered as an array of every project
+  usage of the commit, whatever the element, so the client cannot read it (step 10).
+
+The conformance check reports an item of a list whose `@type` is none of the types the schema
+admits at that item, so such an item cannot hide behind the errors of the other items.
 
 Not a divergence from the specification, but it sets the run time: layer1's requests to the quad
 store slow down during a run, from a few milliseconds to hundreds, while the quad store stays fast
@@ -364,6 +394,10 @@ Client defects found so far, each red until fixed:
 - #429 — `MergeAsync` sends its resolution elements without the derived properties that the
   `Data` schema of the merge body requires (step 8).
 
+#425 also covers the `inverse: null` of a `PrimitiveConstraintRequest` that leaves `inverse` unset;
+Flexo answers such a request 400. Step 9 sets `inverse` on every query but one, the query
+definition sent with `GET`, so that #425 stays visible there while the other query operations run.
+
 SDK defects found while building the fixture, outside the client:
 
 - #426 — the generated comparers treat equal floating-point values as different, so a
@@ -380,7 +414,7 @@ SDK defects found while building the fixture, outside the client:
 ## 9. Open questions
 
 1. **Query by `@type` and subtypes** — Flexo matches subtypes; check whether the spec requires it.
-2. **ProjectUsage / ExternalData / ExternalRelationship on Flexo** — stored generically, untested.
+2. **ProjectUsage / ExternalData / ExternalRelationship on Flexo** — answered: stored and read back through the changes as sent, but listed as elements (`DataListedAsElements`, step 10).
 3. **Flexo image** — decided: the `develop` build pinned by digest (§3.1).
 4. **CI** — local only (recommended for now), or a separate opt-in workflow.
 5. **One `[Test]` per step vs `TESTING.md` §2** — decided: in the scope of this integration test, going against the rules of `TESTING.md` is accepted. One scenario is split into one `[Test]` per step, and the order is set with `[DependsOnTest(…, AllowFailure = true)]` (§5).

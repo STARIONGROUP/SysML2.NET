@@ -12,6 +12,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Reflection;
@@ -34,6 +35,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
     using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
+    using SysML2.NET.PSM.Enumerations;
     using SysML2.NET.REST.Exceptions;
 
     using Direction = SysML2.NET.PSM.Enumerations.Direction;
@@ -245,6 +247,83 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         }
 
         [Test]
+        public async Task VerifyVerifyDataCommitAsync()
+        {
+            var branchId = Guid.NewGuid();
+            var previousId = Guid.NewGuid();
+            var commit = new Commit { Id = this.commitId, OwningProject = this.projectId, PreviousCommit = [previousId] };
+            var data = new ExternalData { Id = Guid.NewGuid(), ResourceIdentifier = new Uri("https://example.org/r") };
+            var usage = new ProjectUsage { Id = Guid.NewGuid(), UsedProject = Guid.NewGuid(), UsedCommit = Guid.NewGuid() };
+            var package = new Package { Id = Guid.NewGuid(), DeclaredName = "P" };
+            var deletedId = Guid.NewGuid();
+            Guid? head = this.commitId;
+            var changesUnreadable = false;
+
+            List<DataVersion> Changes(IData dataPayload, IData usagePayload, IData deletedPayload) =>
+            [
+                new() { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = data.Id }, Payload = dataPayload },
+                new() { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = usage.Id }, Payload = usagePayload },
+                new() { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = package.Id }, Payload = Clone(package) },
+                new() { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = deletedId }, Payload = deletedPayload }
+            ];
+
+            var changes = Changes(new ExternalData { Id = data.Id, ResourceIdentifier = new Uri("https://example.org/r") }, new ProjectUsage { Id = usage.Id, UsedProject = usage.UsedProject, UsedCommit = usage.UsedCommit }, null);
+
+            this.client.Setup(api => api.GetCommitByProjectAndIdAsync(this.projectId, this.commitId, It.IsAny<CancellationToken>())).ReturnsAsync(() => commit);
+            this.client.Setup(api => api.GetCommitsByProjectAsync(this.projectId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, QueryParameters parameters, CancellationToken _) => Paged([commit], parameters));
+            this.client.Setup(api => api.GetBranchesByProjectAndIdAsync(this.projectId, branchId, It.IsAny<CancellationToken>())).ReturnsAsync(() => new Branch { Id = branchId, Head = head });
+            this.client.Setup(api => api.GetChangesByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, Guid _, QueryParameters parameters, CancellationToken _) => changesUnreadable ? throw new InvalidOperationException("no changes") : Paged(changes, parameters));
+
+            List<(Guid Id, IData Payload)> expected = [(data.Id, data), (usage.Id, usage), (package.Id, package), (deletedId, null)];
+
+            var matching = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            changes = Changes(new ExternalData { Id = data.Id, ResourceIdentifier = new Uri("https://example.org/other") }, usage, null);
+
+            var dataChanged = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            changes = Changes(data, new ExternalData { Id = usage.Id }, null);
+
+            var otherKind = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            changes = Changes(data, usage, new ExternalData { Id = deletedId });
+
+            var notDeleted = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            changes = Changes(null, usage, null);
+
+            var deletedInstead = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            changes = Changes(data, usage, null)[..3];
+
+            var changeMissing = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            changes = Changes(data, usage, null);
+            head = previousId;
+
+            var headNotMoved = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            head = this.commitId;
+            changesUnreadable = true;
+
+            var unreadable = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(matching, Is.Empty);
+                Assert.That(dataChanged.Select(result => result.Message), Has.Some.Contains($"the payload of the change of ExternalData {data.Id} differs from what was sent").And.Some.Contains("ResourceIdentifier"));
+                Assert.That(otherKind.Select(result => result.Message), Has.Some.Contains($"the payload of the change of ProjectUsage {usage.Id} was read back as another kind of data"));
+                Assert.That(notDeleted.Select(result => result.Message), Has.Some.Contains($"the change of {deletedId} deletes it"));
+                Assert.That(deletedInstead, Has.Count.EqualTo(1), "a server that deletes what was written fails");
+                Assert.That(deletedInstead[0].Message, Does.Contain($"the payload of the change of ExternalData {data.Id} was read back as another kind of data"));
+                Assert.That(changeMissing.Select(result => result.Message), Has.Some.Contains("one change per data item"));
+                Assert.That(changeMissing, Has.Count.EqualTo(1));
+                Assert.That(headNotMoved, Has.Count.EqualTo(1));
+                Assert.That(unreadable.Select(result => result.Message), Is.EqualTo((string[])["GetChangesByProjectCommitAsync threw InvalidOperationException: no changes"]), "the commit record still passes");
+            }
+        }
+
+        [Test]
         public async Task VerifyVerifyDiffAsync()
         {
             var baseCommitId = Guid.NewGuid();
@@ -294,6 +373,32 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(notImplemented[0].Message, Does.Contain(KnownServerDivergences.DiffNotImplemented.Summary));
                 Assert.That(rejected.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
                 Assert.That(rejected[0].Message, Does.Contain("DiffAsync threw PsmApiException"));
+            }
+        }
+
+        [Test]
+        public async Task VerifyVerifyElementIdsAsync()
+        {
+            IReadOnlyList<IElement> listed = [new Package { Id = Guid.NewGuid() }, new Package { Id = Guid.NewGuid() }];
+            var unreadable = false;
+
+            Task<PagedResult<IElement>> ReadPage(QueryParameters parameters) => unreadable ? throw new InvalidOperationException("no list") : Paged(listed, parameters);
+
+            var expectedIds = listed.Select(element => element.Id).ToList();
+
+            var same = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyElementIdsAsync("the list", ReadPage, expectedIds));
+            var missing = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyElementIdsAsync("the list", ReadPage, [.. expectedIds, Guid.NewGuid()]));
+
+            unreadable = true;
+
+            var failed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyElementIdsAsync("the list", ReadPage, expectedIds));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(same, Is.Empty);
+                Assert.That(missing, Has.Count.EqualTo(1));
+                Assert.That(missing[0].Message, Does.StartWith("  the list"));
+                Assert.That(failed.Select(result => result.Message), Is.EqualTo((string[])["the list threw InvalidOperationException: no list"]));
             }
         }
 
@@ -562,6 +667,154 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(recordedWithoutList, Is.EquivalentTo(changed.GroupBy(element => element.GetType()).Select(metaclass => (IData)readBack[metaclass.First().Id])).Using<IData>((actual, expected) => ReferenceEquals(actual, expected)), "without the list, the elements read by id are recorded");
                 Assert.That(incomingUnreadable.Select(result => result.Message), Is.EqualTo((string[])["GetRelationshipsByProjectCommitRelatedElementAsync in threw InvalidOperationException: no relationships"]), "the out and both directions still pass");
                 Assert.That(elementUnreadable.Select(result => result.Message), Is.EqualTo((string[])[$"GetElementByProjectCommitIdAsync of Package {model.Nested.Id} threw InvalidOperationException: not deserializable"]));
+            }
+        }
+
+        [Test]
+        public async Task VerifyVerifyProjectUsageAsync()
+        {
+            var elementId = Guid.NewGuid();
+            var openApi = OpenApiDocument.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "ptc-25-02-30.json"));
+            var usageOperation = openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}/commits/{commitId}/elements/{elementId}/projectUsage");
+            var usage = new ProjectUsage { Id = Guid.NewGuid(), UsedProject = Guid.NewGuid(), UsedCommit = Guid.NewGuid() };
+            ProjectUsage answered = new() { Id = usage.Id, UsedProject = usage.UsedProject, UsedCommit = usage.UsedCommit };
+            Exception failure = null;
+            var recorded = new List<EndpointCall>();
+
+            this.client.Setup(api => api.GetProjectUsageByProjectCommitElementAsync(this.projectId, this.commitId, elementId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => failure != null ? throw failure : answered);
+
+            var same = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyProjectUsageAsync(this.commitId, elementId, usage));
+
+            answered = new ProjectUsage { Id = usage.Id, UsedProject = usage.UsedProject, UsedCommit = Guid.NewGuid() };
+
+            var otherCommit = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyProjectUsageAsync(this.commitId, elementId, usage));
+
+            failure = new InvalidOperationException("an array");
+
+            var failed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyProjectUsageAsync(this.commitId, elementId, usage));
+
+            var recording = new ReadBackAssertions(this.client.Object, this.state, () => recorded, [KnownServerDivergences.ProjectUsageAsArray]);
+            this.client.Setup(api => api.GetProjectUsageByProjectCommitElementAsync(this.projectId, this.commitId, elementId, It.IsAny<CancellationToken>()))
+                .Returns(() =>
+                {
+                    recorded.Add(new EndpointCall(usageOperation, "GET /projects/p/commits/c/elements/e/projectUsage", HttpStatusCode.OK) { ResponseViolations = [new ContractViolation(ContractViolationKind.SchemaMismatch, "/ type: Value is \"array\" but should be \"object\"")] });
+                    throw new InvalidOperationException("an array");
+                });
+
+            var excused = await IsolatedAssertions.RunAsync(() => recording.VerifyProjectUsageAsync(this.commitId, elementId, usage));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(same, Is.Empty);
+                Assert.That(otherCommit.Select(result => result.Message), Has.Some.Contains($"the project usage of {elementId} differs from what was sent"));
+                Assert.That(failed.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
+                Assert.That(excused.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]), "its own breaking response excuses the read");
+            }
+        }
+
+        [Test]
+        public async Task VerifyVerifyQueryRecord()
+        {
+            var projectId = Guid.NewGuid();
+            var sent = ScenarioQueries.Stored;
+            var sentWhere = (CompositeConstraintRequest)sent.Where;
+
+            Query Record(Action<Query> change = null)
+            {
+                var query = new Query { Id = Guid.NewGuid(), OwningProject = projectId, Name = sent.Name, Description = sent.Description, Alias = [.. sent.Alias], Select = [.. sent.Select], Where = new CompositeConstraint { Operator = CompositeConstraintOperator.or, Constraint = sentWhere.Constraint } };
+                change?.Invoke(query);
+                return query;
+            }
+
+            Task<IReadOnlyList<AssertionResult>> Verify(Query query) => IsolatedAssertions.RunAsync(() =>
+            {
+                ReadBackAssertions.VerifyQueryRecord(query, sent, projectId, "the query");
+                return Task.CompletedTask;
+            });
+
+            var same = await Verify(Record());
+            var lost = await Verify(Record(query => { query.Name = null; query.Description = null; query.Alias = []; }));
+            var descriptionLost = await Verify(Record(query => query.Description = null));
+            var otherProject = await Verify(Record(query => query.OwningProject = Guid.NewGuid()));
+            var otherSelect = await Verify(Record(query => query.Select = ["@id"]));
+            var otherWhere = await Verify(Record(query => query.Where = new CompositeConstraint { Operator = CompositeConstraintOperator.and, Constraint = sentWhere.Constraint }));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(same, Is.Empty);
+                Assert.That(lost.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
+                Assert.That(lost[0].Message, Does.Contain(KnownServerDivergences.QueryLosesNameAndDescription.Summary));
+                Assert.That(descriptionLost.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]), "losing the description alone is no known divergence");
+                Assert.That(otherProject.Select(result => result.Message), Has.Some.Contains("the query belongs to the project"));
+                Assert.That(otherSelect.Select(result => result.Message), Has.Some.Contains("the query selects what was sent"));
+                Assert.That(otherWhere.Select(result => result.Message), Has.Some.Contains("the query has the constraint that was sent"));
+            }
+        }
+
+        [Test]
+        public async Task VerifyVerifyResultsAsync()
+        {
+            var first = new Package { Id = Guid.NewGuid(), DeclaredName = "First" };
+            var second = new Package { Id = Guid.NewGuid(), DeclaredName = "Second" };
+            IReadOnlyList<IData> results = [Clone(first), Clone(second)];
+            var unreadable = false;
+
+            Task<PagedResult<IData>> ReadPage(QueryParameters parameters) => unreadable ? throw new InvalidOperationException("no results") : Paged(results, parameters);
+
+            var same = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyResultsAsync("the results", ReadPage, [first, second]));
+            var extra = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyResultsAsync("the results", ReadPage, [first]));
+
+            var renamed = (Package)Clone(second);
+            renamed.DeclaredName = "Renamed";
+            results = [Clone(first), renamed];
+
+            var changed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyResultsAsync("the results", ReadPage, [first, second]));
+
+            unreadable = true;
+
+            var failed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyResultsAsync("the results", ReadPage, [first, second]));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(same, Is.Empty);
+                Assert.That(extra, Has.Count.EqualTo(1));
+                Assert.That(changed.Select(result => result.Message), Is.EqualTo((string[])[$"Package {second.Id} in the results differs from what was sent: Element.DeclaredName"]));
+                Assert.That(failed.Select(result => result.Message), Is.EqualTo((string[])["the results threw InvalidOperationException: no results"]));
+            }
+        }
+
+        [Test]
+        public async Task VerifyVerifyRootsAsync()
+        {
+            var elements = new RootModel().Builder.ToDtos();
+            var unowned = elements.Where(element => element.OwningRelationship == null).ToList<IElement>();
+            IReadOnlyList<IElement> roots = unowned;
+            var unreadable = false;
+
+            Task<PagedResult<IElement>> ReadPage(QueryParameters parameters) => unreadable ? throw new InvalidOperationException("no roots") : Paged(roots, parameters);
+
+            var exact = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyRootsAsync("the roots", ReadPage, elements));
+
+            roots = [.. elements.Where(element => element is not IRelationship { OwningRelatedElement: not null })];
+
+            var divergent = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyRootsAsync("the roots", ReadPage, elements));
+
+            roots = elements;
+
+            var everyElement = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyRootsAsync("the roots", ReadPage, elements));
+
+            unreadable = true;
+
+            var failed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyRootsAsync("the roots", ReadPage, elements));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exact, Is.Empty);
+                Assert.That(divergent.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]), "the known divergence is reported");
+                Assert.That(divergent[0].Message, Does.Contain(KnownServerDivergences.RootsIgnoreOwningRelationship.Summary));
+                Assert.That(everyElement.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
+                Assert.That(failed.Select(result => result.Message), Is.EqualTo((string[])["the roots threw InvalidOperationException: no roots"]));
             }
         }
 

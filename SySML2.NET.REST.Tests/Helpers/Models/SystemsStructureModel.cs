@@ -42,6 +42,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
     ///     part def Q;  attribute def A;  occurrence def O;  item def I { attribute content : A; }
     ///     abstract enum def E { enum e1; enum e2; }
     ///     abstract variation part def PV { variant part pv1 : PV; }
+    ///     abstract variation part vu { variant part vu1 :> vu; }
     ///     port def PD { attribute pa : A; }   // owns ~PD through a port conjugation
     ///     connection def CD { end ref cdA : P [1]; end ref cdB : P [1]; }
     ///     interface def IF { end port ifA : PD [1]; end port ifB : ~PD [1]; }
@@ -99,6 +100,13 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             var variant = this.CreateNamed<PartUsage>("pv1", "pv1", PartUsageExtensions.ToDto);
             variation.AssignOwnership(this.Builder.Create<VariantMembership>("PV/pv1/membership", VariantMembershipExtensions.ToDto), variant);
             this.Typed(variant, variation);
+
+            var variationUsage = this.Member<PartUsage>("vu", PartUsageExtensions.ToDto);
+            variationUsage.IsVariation = true;
+            variationUsage.IsAbstract = true;
+            var variantUsage = this.CreateNamed<PartUsage>("vu1", "vu1", PartUsageExtensions.ToDto);
+            variationUsage.AssignOwnership(this.Builder.Create<VariantMembership>("vu/vu1/membership", VariantMembershipExtensions.ToDto), variantUsage);
+            this.Subsets(variantUsage, variationUsage);
 
             this.PortDefinition = this.Member<PortDefinition>("PD", PortDefinitionExtensions.ToDto);
             this.Owned<AttributeUsage>(this.PortDefinition, "pa", AttributeUsageExtensions.ToDto, this.AttributeDefinition);

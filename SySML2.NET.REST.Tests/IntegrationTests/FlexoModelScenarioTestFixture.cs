@@ -24,6 +24,7 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
     using SySML2.NET.REST.Tests.Helpers;
     using SySML2.NET.REST.Tests.Helpers.Models;
 
+    using SysML2.NET.Common;
     using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
@@ -401,6 +402,163 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
 
         [Test]
         [DependsOnTest(nameof(VerifyMerge), AllowFailure = true)]
+        public async Task VerifyQueries()
+        {
+            if (this.rootModel == null || this.state.HeadCommitId == null || !this.state.TagIds.ContainsKey("kernel"))
+            {
+                Assert.Ignore("the default branch has no model or no kernel tag to query");
+            }
+
+            var projectId = this.state.ProjectId!.Value;
+            var head = this.state.HeadCommitId.Value;
+            var model = this.state.ExpectedModels[head];
+            var rootName = model.Single(element => element.Id == this.rootModel.Root.Id).DeclaredName;
+            var kernelCommit = (await this.client.GetTagByProjectAndIdAsync(projectId, this.state.TagIds["kernel"])).TaggedCommit;
+            var atKernel = this.state.ExpectedModels[kernelCommit];
+
+            using (Assert.EnterMultipleScope())
+            {
+                var stored = ScenarioQueries.Stored;
+                var created = await this.client.PostQueryByProjectAsync(projectId, stored);
+
+                Assert.That(created.Id, Is.Not.EqualTo(Guid.Empty));
+                ReadBackAssertions.VerifyQueryRecord(created, stored, projectId, "the created query");
+
+                var read = await this.client.GetQueryByProjectAndIdAsync(projectId, created.Id);
+
+                Assert.That(read.Id, Is.EqualTo(created.Id));
+                ReadBackAssertions.VerifyQueryRecord(read, stored, projectId, "the query read by id");
+
+                var (queries, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetQueriesByProjectAsync(projectId, parameters));
+
+                Assert.That(queries.Select(query => query.Id), Is.EquivalentTo((Guid[])[created.Id]));
+
+                await this.readBack.VerifyResultsAsync("the results of the stored query at the default head", parameters => this.client.GetQueryResultsByProjectIdQueryIdAsync(projectId, created.Id, queryParameters: parameters), [.. model.Where(ScenarioQueries.IsStoredResult)]);
+                await this.readBack.VerifyResultsAsync("the results of the stored query at the kernel commit", parameters => this.client.GetQueryResultsByProjectIdQueryIdAsync(projectId, created.Id, kernelCommit, parameters), [.. atKernel.Where(ScenarioQueries.IsStoredResult)]);
+
+                var updatedRequest = ScenarioQueries.Updated;
+                var updated = await this.client.PutQueryByProjectAndIdAsync(projectId, created.Id, updatedRequest);
+
+                Assert.That(updated.Id, Is.EqualTo(created.Id));
+                ReadBackAssertions.VerifyQueryRecord(updated, updatedRequest, projectId, "the updated query");
+
+                await this.readBack.VerifyResultsAsync("the results of the updated query", parameters => this.client.GetQueryResultsByProjectIdQueryIdAsync(projectId, created.Id, head, parameters), [.. model.Where(ScenarioQueries.IsUpdatedResult)]);
+                await this.readBack.VerifyResultsAsync("the results of a query definition sent with POST, at the kernel commit", parameters => this.client.GetQueryResultsByProjectIdQueryPostAsync(projectId, ScenarioQueries.AtLeast42, kernelCommit, parameters), [.. atKernel.Where(ScenarioQueries.IsAtLeast42)]);
+                await this.readBack.VerifyResultsAsync("the results of a query definition that selects the id and name", parameters => this.client.GetQueryResultsByProjectIdQueryPostAsync(projectId, ScenarioQueries.Named(rootName), head, parameters), [.. model.Where(element => element.DeclaredName == rootName)]);
+
+                try
+                {
+                    var (namespaces, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetQueryResultsByProjectIdQueryPostAsync(projectId, ScenarioQueries.Namespaces, head, parameters));
+
+                    Assert.That(namespaces.Select(result => result.Id), Is.EquivalentTo(model.Where(ScenarioQueries.IsNamespace).Select(element => element.Id)), "the results of instanceOf Namespace");
+                }
+                catch (PsmApiException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    KnownServerDivergences.Report(KnownServerDivergences.InstanceOfRejected, "the query definition of the namespaces answered 400");
+                }
+
+                try
+                {
+                    var (named, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetQueryResultsByProjectIdQueryAsync(projectId, ScenarioQueries.NamedWithoutInverse(rootName), head, parameters));
+
+                    Assert.That(named.Select(result => result.Id), Is.EquivalentTo(model.Where(element => element.DeclaredName == rootName).Select(element => element.Id)), "the results of a query definition sent with GET");
+                }
+                catch (PsmApiException exception) when (exception.StatusCode == HttpStatusCode.NotImplemented)
+                {
+                    KnownServerDivergences.Report(KnownServerDivergences.QueryResultsGetNotImplemented, "GetQueryResultsByProjectIdQueryAsync answered 501");
+                }
+
+                var unknown = Guid.NewGuid();
+
+                await this.ExpectNotFoundAsync(() => this.client.GetQueryByProjectAndIdAsync(projectId, unknown));
+                await this.ExpectNotFoundAsync(() => this.client.GetQueriesByProjectAsync(unknown));
+                await this.ExpectNotFoundAsync(() => this.client.GetQueryResultsByProjectIdQueryIdAsync(projectId, unknown), KnownServerDivergences.UnknownResourceAccepted);
+                await this.ExpectNotFoundAsync(() => this.client.PutQueryByProjectAndIdAsync(projectId, unknown, ScenarioQueries.Updated), KnownServerDivergences.UnknownResourceAccepted);
+                await this.ExpectNotFoundAsync(() => this.client.GetQueryResultsByProjectIdQueryPostAsync(unknown, ScenarioQueries.AtLeast42));
+
+                var deleted = await this.client.DeleteQueryByProjectAndIdAsync(projectId, created.Id);
+
+                Assert.That(deleted.Id, Is.EqualTo(created.Id));
+
+                await this.ExpectNotFoundAsync(() => this.client.GetQueryByProjectAndIdAsync(projectId, created.Id));
+                await this.ExpectNotFoundAsync(() => this.client.DeleteQueryByProjectAndIdAsync(projectId, created.Id));
+            }
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyQueries), AllowFailure = true)]
+        public async Task VerifyProjectUsage()
+        {
+            if (this.rootModel == null || this.state.HeadCommitId == null)
+            {
+                Assert.Ignore("the default branch has no commit to branch from");
+            }
+
+            var projectId = this.state.ProjectId!.Value;
+            var head = this.state.HeadCommitId.Value;
+            var own = this.state.ExpectedModels[head];
+
+            var library = await this.client.PostProjectAsync(new ProjectRequest { Name = "UsedLibrary", Description = "The project that the model of the scenario uses" });
+            this.state.LibraryProjectId = library.Id;
+
+            var libraryModel = new LibraryModel();
+            var libraryElements = libraryModel.Builder.ToDtos();
+            var libraryCommit = await this.client.PostCommitByProjectAsync(library.Id, ModelBuilder.ToCommitRequest(libraryElements, "The used library"), library.DefaultBranch);
+
+            var branch = await this.client.PostBranchByProjectAsync(projectId, new BranchRequest { Name = "data", Description = "The project usage and external data of steps 10 and 11", Head = head });
+            this.state.BranchIds["data"] = branch.Id;
+            this.state.BranchHeads[branch.Id] = head;
+
+            var usage = new ProjectUsage { Id = DeterministicGuid.Create("data/usage"), UsedProject = library.Id, UsedCommit = libraryCommit.Id };
+            var committed = await this.CommitDataAsync([(usage.Id, new ProjectUsageRequest { Id = usage.Id, UsedProject = usage.UsedProject, UsedCommit = usage.UsedCommit })], "A usage of the library", branch.Id);
+
+            using (Assert.EnterMultipleScope())
+            {
+                await this.readBack.VerifyDataCommitAsync(committed.Commit, branch.Id, committed.PreviousHead, [(usage.Id, usage)]);
+                await this.readBack.VerifyProjectUsageAsync(committed.Commit.Id, libraryModel.Used.Id, usage);
+
+                await this.ExpectNotFoundAsync(() => this.client.GetProjectUsageByProjectCommitElementAsync(Guid.NewGuid(), committed.Commit.Id, libraryModel.Used.Id));
+
+                await this.readBack.VerifyElementIdsAsync("the elements with the used ones", parameters => this.client.GetElementsByProjectCommitAsync(projectId, committed.Commit.Id, false, parameters), [.. own.Concat(libraryElements).Select(element => element.Id)]);
+                await this.readBack.VerifyElementIdsAsync("the elements without the used ones", parameters => this.client.GetElementsByProjectCommitAsync(projectId, committed.Commit.Id, true, parameters), [.. own.Select(element => element.Id)]);
+                await this.readBack.VerifyRootsAsync("the roots without the used ones", parameters => this.client.GetRootsByProjectCommitAsync(projectId, committed.Commit.Id, true, parameters), own);
+            }
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyProjectUsage), AllowFailure = true)]
+        public async Task VerifyExternalData()
+        {
+            if (this.rootModel == null || !this.state.BranchIds.ContainsKey("data"))
+            {
+                Assert.Ignore("step 10 created no branch for the external data");
+            }
+
+            var branch = this.state.BranchIds["data"];
+            var data = new ExternalData { Id = DeterministicGuid.Create("data/external"), ResourceIdentifier = new Uri("https://example.org/requirements/R-1") };
+            var relationship = new ExternalRelationship { Id = DeterministicGuid.Create("data/external relationship"), ElementEnd = this.rootModel.Root.Id, ExternalDataEnd = data.Id, Language = "text", Specification = "traces to R-1" };
+
+            var created = await this.CommitDataAsync([(data.Id, Request(data)), (relationship.Id, Request(relationship))], "External data", branch);
+
+            var changedData = new ExternalData { Id = data.Id, ResourceIdentifier = new Uri("https://example.org/requirements/R-2") };
+            var changedRelationship = new ExternalRelationship { Id = relationship.Id, ElementEnd = relationship.ElementEnd, ExternalDataEnd = data.Id, Language = "natural", Specification = "Traces to the second requirement" };
+
+            using (Assert.EnterMultipleScope())
+            {
+                await this.readBack.VerifyDataCommitAsync(created.Commit, branch, created.PreviousHead, [(data.Id, data), (relationship.Id, relationship)]);
+
+                var changed = await this.CommitDataAsync([(data.Id, Request(changedData)), (relationship.Id, Request(changedRelationship))], "Changed external data", branch);
+
+                await this.readBack.VerifyDataCommitAsync(changed.Commit, branch, changed.PreviousHead, [(data.Id, changedData), (relationship.Id, changedRelationship)]);
+
+                var deleted = await this.CommitDataAsync([(data.Id, null), (relationship.Id, null)], "Deleted external data", branch);
+
+                await this.readBack.VerifyDataCommitAsync(deleted.Commit, branch, deleted.PreviousHead, [(data.Id, null), (relationship.Id, null)]);
+            }
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyExternalData), AllowFailure = true)]
         public async Task VerifyCoverage()
         {
             var verdict = new CoverageVerdict(this.state.ReadBack, this.httpClientFactory.Recorder.Calls, this.openApi);
@@ -431,6 +589,22 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
         }
 
         private static IReadOnlyList<IElement> Replace(IReadOnlyList<IElement> model, IElement replacement) => [.. model.Select(element => element.Id == replacement.Id ? replacement : element)];
+
+        private static ExternalDataRequest Request(ExternalData data) => new() { Id = data.Id, ResourceIdentifier = data.ResourceIdentifier };
+
+        private static ExternalRelationshipRequest Request(ExternalRelationship relationship) => new() { Id = relationship.Id, ElementEnd = relationship.ElementEnd, ExternalDataEnd = relationship.ExternalDataEnd, Language = relationship.Language, Specification = relationship.Specification };
+
+        private async Task<(Commit Commit, Guid PreviousHead)> CommitDataAsync(IReadOnlyList<(Guid Id, IDataRequest Payload)> change, string description, Guid branch)
+        {
+            var previousHead = this.state.BranchHeads[branch];
+
+            var commit = await this.client.PostCommitByProjectAsync(this.state.ProjectId!.Value, new CommitRequest { Description = description, Change = [.. change.Select(entry => new DataVersionRequest { Identity = new DataIdentityRequest { Id = entry.Id }, Payload = entry.Payload })] }, branch);
+
+            this.state.BranchHeads[branch] = commit.Id;
+            this.state.ExpectedModels[commit.Id] = this.state.ExpectedModels[previousHead];
+
+            return (commit, previousHead);
+        }
 
         private async Task<(Commit Commit, IReadOnlyList<IElement> Model, IReadOnlyList<IElement> Changed, Guid? PreviousHead, Guid BranchId)> CommitElementsAsync(IReadOnlyList<IElement> model, IReadOnlyList<IElement> changed, string description, Guid branch)
         {

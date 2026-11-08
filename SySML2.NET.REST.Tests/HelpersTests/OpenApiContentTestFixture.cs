@@ -85,6 +85,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
 
             var missingB = single.Check("application/json", "{\"@type\":\"B\"}");
             var listMissingB = list.Check("application/json", "[{\"@type\":\"A\",\"a\":\"x\"},{\"@type\":\"B\"}]");
+            var listUnknownType = list.Check("application/json", "[{\"@type\":\"B\"},{\"@type\":\"C\"}]");
 
             using (Assert.EnterMultipleScope())
             {
@@ -94,6 +95,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(missingB.Select(violation => violation.Message), Is.EqualTo((string[])["/ required: Required properties [\"b\"] are not present"]));
                 Assert.That(list.Check("application/json", "[{\"@type\":\"A\",\"a\":\"x\"},{\"@type\":\"B\",\"b\":\"y\"}]"), Is.Empty);
                 Assert.That(listMissingB.Select(violation => violation.Message), Is.EqualTo((string[])["/1 required: Required properties [\"b\"] are not present"]));
+                Assert.That(listUnknownType.Select(violation => violation.Message), Is.EqualTo((string[])["/1/@type const: \"C\" is none of the types the schema admits", "/0 required: Required properties [\"b\"] are not present"]), "an item of an unknown @type is reported first, at its place, and the other items are still checked by type");
                 Assert.That(single.Check("application/json", "{\"@type\":\"C\"}")[0].Message, Does.Contain("@type const"), "an unknown @type is left to the declared schema");
                 Assert.That(Kinds(single.Check("application/json", "5")), Is.Not.Empty.And.All.EqualTo(ContractViolationKind.SchemaMismatch), "a body that is no object is left to the declared schema");
                 Assert.That(list.Check("application/json", "{\"@type\":\"A\",\"a\":\"x\"}"), Is.Not.Empty, "an object where an array is declared is left to the declared schema");
