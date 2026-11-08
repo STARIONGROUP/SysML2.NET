@@ -13,6 +13,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using NUnit.Framework;
@@ -44,6 +45,11 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// The maximum number of pages read from one list, guarding against a server that never ends a list
         /// </summary>
         private const int MaximumPages = 1000;
+
+        /// <summary>
+        /// The number of independent reads sent to the server at the same time
+        /// </summary>
+        private const int ReadConcurrency = 4;
 
         /// <summary>
         /// The client under test
@@ -188,7 +194,10 @@ namespace SySML2.NET.REST.Tests.Helpers
                 }
 
                 Assert.That(changes.Select(change => change.Identity.Id), Is.EquivalentTo(changed.Select(element => element.Id)));
-                Assert.That(changePages, Is.GreaterThan(1), "the changes did not span several pages, so paging is untested");
+                if (changed.Count > PageSize)
+                {
+                    Assert.That(changePages, Is.GreaterThan(1), "the changes did not span several pages, so paging is untested");
+                }
 
                 var sentById = changed.ToDictionary(element => element.Id);
 
@@ -331,14 +340,15 @@ namespace SySML2.NET.REST.Tests.Helpers
 
             using (Assert.EnterMultipleScope())
             {
-                foreach (var element in changed)
-                {
-                    var (succeeded, actual) = await this.TryReadAsync(() => this.client.GetElementByProjectCommitIdAsync(projectId, commitId, element.Id), $"GetElementByProjectCommitIdAsync of {element.GetType().Name} {element.Id}");
+                var byId = await this.ReadManyAsync(
+                    changed,
+                    element => this.client.GetElementByProjectCommitIdAsync(projectId, commitId, element.Id),
+                    element => $"GetElementByProjectCommitIdAsync of {element.GetType().Name} {element.Id}",
+                    (element, call) => call.RequestLine.Contains(element.Id.ToString(), StringComparison.OrdinalIgnoreCase));
 
-                    if (succeeded)
-                    {
-                        readById[element.Id] = actual;
-                    }
+                foreach (var (element, actual) in byId.Where(outcome => outcome.Succeeded).Select(outcome => (outcome.Key, outcome.Value)))
+                {
+                    readById[element.Id] = actual;
                 }
 
                 var read = changed.Where(element => readById.ContainsKey(element.Id)).ToList();
@@ -508,12 +518,105 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
+        /// Runs independent reads, <see cref="ReadConcurrency"/> at a time, and reports every read that throws once all
+        /// have ended, so that every assertion runs on the context of the test
+        /// </summary>
+        /// <typeparam name="TKey">
+        /// The type of what a read is about
+        /// </typeparam>
+        /// <typeparam name="T">
+        /// The type of what is read
+        /// </typeparam>
+        /// <param name="keys">
+        /// What the reads are about, one read each
+        /// </param>
+        /// <param name="read">
+        /// The read for a key
+        /// </param>
+        /// <param name="describe">
+        /// The description of the read for a key in the failure message
+        /// </param>
+        /// <param name="isCallOf">
+        /// Whether a recorded call is the request of the read for a key; concurrent reads share the recorder
+        /// </param>
+        /// <returns>
+        /// Per key, in order, whether its read succeeded and what it read
+        /// </returns>
+        private async Task<IReadOnlyList<(TKey Key, bool Succeeded, T Value)>> ReadManyAsync<TKey, T>(IReadOnlyList<TKey> keys, Func<TKey, Task<T>> read, Func<TKey, string> describe, Func<TKey, EndpointCall, bool> isCallOf)
+        {
+            var callsBefore = this.recordedCalls?.Invoke().Count ?? 0;
+
+            using var gate = new SemaphoreSlim(ReadConcurrency);
+
+            var outcomes = await Task.WhenAll(keys.Select(async key =>
+            {
+                await gate.WaitAsync();
+
+                try
+                {
+                    return (Key: key, Failure: (Exception)null, Value: await read(key));
+                }
+                catch (Exception exception) when (exception is not ResultStateException)
+                {
+                    return (Key: key, Failure: exception, Value: default(T));
+                }
+                finally
+                {
+                    gate.Release();
+                }
+            }));
+
+            var recorded = (this.recordedCalls?.Invoke() ?? []).Skip(callsBefore).ToList();
+
+            foreach (var (key, failure, _) in outcomes.Where(outcome => outcome.Failure != null))
+            {
+                this.ReportFailedRead(describe(key), failure, recorded.Where(call => isCallOf(key, call)));
+            }
+
+            return [.. outcomes.Select(outcome => (outcome.Key, outcome.Failure == null, outcome.Value))];
+        }
+
+        /// <summary>
+        /// Reports a read that threw: as a warning when one of its calls got a response showing a known divergence that
+        /// breaks deserialization, which <see cref="OpenApiConformance"/> reports, and as a failure otherwise
+        /// </summary>
+        /// <remarks>
+        /// Every Flexo response breaks the document in some tolerated way, so only a divergence that breaks
+        /// deserialization excuses a failed read; a client defect must still fail.
+        /// </remarks>
+        /// <param name="description">
+        /// The description of the read
+        /// </param>
+        /// <param name="exception">
+        /// What the read threw
+        /// </param>
+        /// <param name="calls">
+        /// The calls that the read made
+        /// </param>
+        private void ReportFailedRead(string description, Exception exception, IEnumerable<EndpointCall> calls)
+        {
+            var failure = $"{description} threw {exception.GetType().Name}: {exception.Message}";
+
+            var excused = calls
+                .SelectMany(call => call.ResponseViolations.Select(violation => (Call: call, Divergence: this.divergences.FirstOrDefault(divergence => divergence.BreaksDeserialization && divergence.Explains?.Invoke(call, violation) == true))))
+                .FirstOrDefault(entry => entry.Divergence != null);
+
+            if (excused.Divergence != null)
+            {
+                Assert.Warn($"{failure}, on a response that shows the known divergence that {excused.Divergence.Summary} ({excused.Call.RequestLine}); the OpenAPI conformance check reports the response");
+            }
+            else
+            {
+                Assert.Fail(failure);
+            }
+        }
+
+        /// <summary>
         /// Reads from the server, reporting a read that throws as a failure, or as a warning when a response of that
         /// read shows a known divergence that breaks deserialization, which <see cref="OpenApiConformance"/> reports
         /// </summary>
         /// <remarks>
-        /// Only the calls recorded while the read ran count, and only divergences that break deserialization: every
-        /// Flexo response breaks the document in some tolerated way, and a client defect must still fail.
+        /// Only the calls recorded while the read ran count, so that a response of an earlier read excuses nothing.
         /// </remarks>
         /// <typeparam name="T">
         /// The type of what is read
@@ -537,21 +640,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             }
             catch (Exception exception) when (exception is not ResultStateException)
             {
-                var failure = $"{description} threw {exception.GetType().Name}: {exception.Message}";
-
-                var excused = (this.recordedCalls?.Invoke() ?? []).Skip(callsBefore)
-                    .SelectMany(call => call.ResponseViolations.Select(violation => (Call: call, Divergence: this.divergences.FirstOrDefault(divergence => divergence.BreaksDeserialization && divergence.Explains?.Invoke(call, violation) == true))))
-                    .FirstOrDefault(entry => entry.Divergence != null);
-
-                if (excused.Divergence != null)
-                {
-                    Assert.Warn($"{failure}, on a response that shows the known divergence that {excused.Divergence.Summary} ({excused.Call.RequestLine}); the OpenAPI conformance check reports the response");
-                }
-                else
-                {
-                    Assert.Fail(failure);
-                }
-
+                this.ReportFailedRead(description, exception, (this.recordedCalls?.Invoke() ?? []).Skip(callsBefore));
                 return (false, default);
             }
         }
@@ -586,14 +675,15 @@ namespace SySML2.NET.REST.Tests.Helpers
                 Assert.That(outgoing, Is.Not.Empty, "the subject is the source of no relationship, so the out direction is untested");
                 Assert.That(incoming, Is.Not.Empty, "the subject is the target of no relationship, so the in direction is untested");
 
-                foreach (var (direction, expectedIds) in directions)
-                {
-                    var (read, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(projectId, commitId, subjectId, direction, queryParameters: parameters)), $"GetRelationshipsByProjectCommitRelatedElementAsync {direction}");
+                var reads = await this.ReadManyAsync(
+                    directions,
+                    entry => ReadAllPagesAsync(parameters => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(projectId, commitId, subjectId, entry.Direction, queryParameters: parameters)),
+                    entry => $"GetRelationshipsByProjectCommitRelatedElementAsync {entry.Direction}",
+                    (entry, call) => call.RequestLine.Contains($"direction={entry.Direction}", StringComparison.Ordinal));
 
-                    if (read != null)
-                    {
-                        Assert.That(read.Select(relationship => relationship.Id), Is.EquivalentTo(expectedIds), $"the {direction} relationships");
-                    }
+                foreach (var ((direction, expectedIds), _, (read, _)) in reads.Where(outcome => outcome.Succeeded))
+                {
+                    Assert.That(read.Select(relationship => relationship.Id), Is.EquivalentTo(expectedIds), $"the {direction} relationships");
                 }
             }
         }

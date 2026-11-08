@@ -89,6 +89,16 @@ namespace SySML2.NET.REST.Tests.Helpers
         public static ServerDivergence DiffNotImplemented { get; } = new("GET /projects/{projectId}/commits/{compareCommitId}/diff answers 501 Not Implemented", $"{FlexoRevision}, observed on GET /projects/{{projectId}}/commits/{{compareCommitId}}/diff");
 
         /// <summary>
+        /// Gets the divergence that the merge of commits into a branch is not implemented
+        /// </summary>
+        public static ServerDivergence MergeNotImplemented { get; } = new("POST /projects/{projectId}/branches/{targetBranchId}/merge answers 501 Not Implemented", $"{FlexoRevision}, observed on POST /projects/{{projectId}}/branches/{{targetBranchId}}/merge");
+
+        /// <summary>
+        /// Gets the divergence that a merge fails on the request bodies the OpenAPI document allows besides an array
+        /// </summary>
+        public static ServerDivergence MergeRequiresArrayBody { get; } = new("POST /projects/{projectId}/branches/{targetBranchId}/merge answers 500 Internal Server Error without a body and 400 Bad Request for a null body, both of which the OpenAPI document allows", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/DiffMergeApi.kt, the route receives the body as a list");
+
+        /// <summary>
         /// Gets the divergence that a create answers 200 OK, where the OpenAPI document declares 201 Created and no 200
         /// </summary>
         public static ServerDivergence CreatedAnsweredOk { get; } = new(
@@ -135,7 +145,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <summary>
         /// Gets every known divergence
         /// </summary>
-        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri];
+        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, MergeNotImplemented, MergeRequiresArrayBody, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri];
 
         /// <summary>
         /// Asserts that a call for an unknown resource fails with 404 Not Found, or reports the one tolerated divergence

@@ -33,9 +33,19 @@ namespace SySML2.NET.REST.Tests.Helpers
         public Guid? DefaultBranchId { get; set; }
 
         /// <summary>
-        /// Gets or sets the id of the latest commit on the default branch, or <c>null</c> before the first commit
+        /// Gets the head commit of every branch the scenario committed on, by branch id
         /// </summary>
-        public Guid? HeadCommitId { get; set; }
+        public Dictionary<Guid, Guid> BranchHeads { get; } = [];
+
+        /// <summary>
+        /// Gets the ids of the branches the scenario created, by name
+        /// </summary>
+        public Dictionary<string, Guid> BranchIds { get; } = [];
+
+        /// <summary>
+        /// Gets the head commit of the default branch, or <c>null</c> before its first commit
+        /// </summary>
+        public Guid? HeadCommitId => this.DefaultBranchId is { } branch && this.BranchHeads.TryGetValue(branch, out var head) ? head : null;
 
         /// <summary>
         /// Gets the expected model at each commit, by commit id

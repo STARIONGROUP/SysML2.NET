@@ -10,6 +10,7 @@
 namespace SySML2.NET.REST.Tests.HelpersTests
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
@@ -110,6 +111,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             DataVersion changeById = null;
             Guid? head = this.commitId;
             var changesUnreadable = false;
+            var changesOnOnePage = false;
 
             var commitUnreadable = false;
 
@@ -127,7 +129,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             });
             this.client.Setup(api => api.GetCommitsByProjectAsync(this.projectId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, QueryParameters parameters, CancellationToken _) => Paged(commits, parameters));
             this.client.Setup(api => api.GetBranchesByProjectAndIdAsync(this.projectId, branchId, It.IsAny<CancellationToken>())).ReturnsAsync(() => new Branch { Id = branchId, Head = head });
-            this.client.Setup(api => api.GetChangesByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, Guid _, QueryParameters parameters, CancellationToken _) => changesUnreadable ? throw new InvalidOperationException("no changes") : Paged(changes, parameters));
+            this.client.Setup(api => api.GetChangesByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>())).Returns((Guid _, Guid _, QueryParameters parameters, CancellationToken _) => changesUnreadable ? throw new InvalidOperationException("no changes") : Paged(changes, changesOnOnePage ? null : parameters));
             this.client.Setup(api => api.GetChangeByProjectCommitIdAsync(this.projectId, this.commitId, It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync((Guid _, Guid _, Guid changeId, CancellationToken _) => changeById ?? changes.Single(change => change.Id == changeId));
 
             var firstCommit = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, null, changed));
@@ -168,9 +170,14 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             var changeByIdOther = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, changed));
 
             changeById = null;
+            changesOnOnePage = true;
+
+            var onePage = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, changed));
+
+            changesOnOnePage = false;
             changes = changes[..5];
 
-            var onePage = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, changed[..5]));
+            var smallCommit = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, changed[..5]));
             var missingChanges = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCommitAsync(commit, branchId, previousId, changed));
 
             changes = [];
@@ -221,16 +228,17 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(changeByIdOther, Has.Count.EqualTo(1));
                 Assert.That(onePage, Has.Count.EqualTo(1));
                 Assert.That(onePage[0].Message, Does.Contain("paging is untested"));
+                Assert.That(smallCommit, Is.Empty, "a commit that fits on one page does not test paging, and need not");
                 Assert.That(missingChanges, Has.Count.EqualTo(2));
-                Assert.That(noChanges, Has.Count.EqualTo(1));
+                Assert.That(noChanges, Is.Empty);
                 Assert.That(unreadableChanges.Select(result => result.Message), Is.EqualTo((string[])["GetChangesByProjectCommitAsync threw InvalidOperationException: no changes"]), "the commit, the list and the branch head still pass");
                 Assert.That(unreadableCommit.Select(result => result.Message), Has.Some.Contains("GetCommitByProjectAndIdAsync threw InvalidOperationException: previousCommit is an object"));
-                Assert.That(unreadableCommit, Has.Count.EqualTo(2), "the commit read fails, and the other commit checks still run");
-                Assert.That(unreadableOnBreakingResponse.Select(result => result.Status), Is.EquivalentTo((AssertionStatus[])[AssertionStatus.Warning, AssertionStatus.Failed]));
+                Assert.That(unreadableCommit, Has.Count.EqualTo(1), "the commit read fails, and the other commit checks still run");
+                Assert.That(unreadableOnBreakingResponse.Select(result => result.Status), Is.EquivalentTo((AssertionStatus[])[AssertionStatus.Warning]));
                 Assert.That(unreadableOnBreakingResponse.Single(result => result.Status == AssertionStatus.Warning).Message, Does.Contain(KnownServerDivergences.PreviousCommitAsObject.Summary).And.Contain("(GET /projects/p/commits/c)"));
-                Assert.That(unreadableOnToleratedResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed, AssertionStatus.Failed]), "a tolerated divergence that does not break deserialization excuses nothing");
-                Assert.That(unreadableOnConformingResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed, AssertionStatus.Failed]));
-                Assert.That(unreadableAfterEarlierBreakingResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed, AssertionStatus.Failed]), "a breaking response of an earlier call excuses nothing");
+                Assert.That(unreadableOnToleratedResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]), "a tolerated divergence that does not break deserialization excuses nothing");
+                Assert.That(unreadableOnConformingResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
+                Assert.That(unreadableAfterEarlierBreakingResponse.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]), "a breaking response of an earlier call excuses nothing");
             }
 
             this.client.Verify(api => api.GetChangeByProjectCommitIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -333,12 +341,26 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             IReadOnlyList<IElement> listed = elements;
             var onePage = false;
             var unreadable = new HashSet<Guid>();
+            var breakingFor = new HashSet<Guid>();
+            var breaking = new ContractViolation(ContractViolationKind.SchemaMismatch, "/previousCommit type: Value is \"object\" but should be \"array\"");
+            var recordedReads = new ConcurrentQueue<EndpointCall>();
+            var inFlight = 0;
+            var maximumInFlight = 0;
             var dropIncoming = false;
             var listUnreadable = false;
             Direction? unreadableDirection = null;
 
             this.client.Setup(api => api.GetElementByProjectCommitIdAsync(this.projectId, this.commitId, It.IsAny<Guid>(), It.IsAny<bool?>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Guid _, Guid _, Guid elementId, bool? _, CancellationToken _) => unreadable.Contains(elementId) ? throw new InvalidOperationException("not deserializable") : readBack[elementId]);
+                .Returns(async (Guid _, Guid _, Guid elementId, bool? _, CancellationToken _) =>
+                {
+                    var now = Interlocked.Increment(ref inFlight);
+                    Interlocked.Exchange(ref maximumInFlight, Math.Max(Interlocked.CompareExchange(ref maximumInFlight, 0, 0), now));
+                    await Task.Delay(5);
+                    recordedReads.Enqueue(new EndpointCall(null, $"GET /elements/{elementId}", HttpStatusCode.OK) { ResponseViolations = breakingFor.Contains(elementId) ? [breaking] : [] });
+                    Interlocked.Decrement(ref inFlight);
+
+                    return unreadable.Contains(elementId) ? throw new InvalidOperationException("not deserializable") : readBack[elementId];
+                });
 
             this.client.Setup(api => api.GetElementsByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<bool?>(), It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>()))
                 .Returns((Guid _, Guid _, bool? _, QueryParameters parameters, CancellationToken _) => listUnreadable ? throw new InvalidOperationException("no list") : Paged(listed, onePage ? null : parameters));
@@ -466,6 +488,16 @@ namespace SySML2.NET.REST.Tests.HelpersTests
 
             this.client.Verify(api => api.GetElementByProjectCommitIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<bool?>(), It.IsAny<CancellationToken>()), Times.Never, "an element that the commit did not change is not read by id");
 
+            listed = elements;
+            unreadable.UnionWith([model.Nested.Id, model.Root.Id]);
+            breakingFor.Add(model.Root.Id);
+            var recording = new ReadBackAssertions(this.client.Object, this.state, () => [.. recordedReads], [KnownServerDivergences.PreviousCommitAsObject with { Explains = (_, violation) => violation == breaking }]);
+            Interlocked.Exchange(ref maximumInFlight, 0);
+
+            var concurrentFailures = await IsolatedAssertions.RunAsync(() => recording.VerifyModelAsync(this.commitId, elements, elements, model.Nested.Id));
+
+            unreadable.Clear();
+
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(identical, Is.Empty);
@@ -494,6 +526,9 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(memberNameLost.Select(result => result.Message), Has.Some.Contains("lost its memberName (#424)"));
                 Assert.That(memberNameLost.Select(result => result.Message), Has.None.Contains("holds empty references"));
                 Assert.That(emptyReference.Select(result => result.Message), Has.Some.Contains($"Dependency {dependency.Id} holds empty references (#424)"));
+                Assert.That(concurrentFailures.Single(result => result.Message.Contains(model.Nested.Id.ToString()) && result.Message.Contains("threw")).Status, Is.EqualTo(AssertionStatus.Failed), "a breaking response of a concurrent read excuses nothing");
+                Assert.That(concurrentFailures.Single(result => result.Message.Contains(model.Root.Id.ToString()) && result.Message.Contains("threw")).Status, Is.EqualTo(AssertionStatus.Warning), "its own breaking response excuses a read");
+                Assert.That(maximumInFlight, Is.InRange(2, 4), "the reads run concurrently, at most four at a time");
                 Assert.That(unchangedListedDifferently.Select(result => result.Message), Is.EqualTo((string[])[$"Package {model.Nested.Id} as listed differs from what was sent: Element.DeclaredName"]));
                 Assert.That(listUnreadableResults.Select(result => result.Message), Is.EqualTo((string[])["GetElementsByProjectCommitAsync threw InvalidOperationException: no list"]));
                 Assert.That(recordedWithoutList, Is.EquivalentTo(elements.Select(element => (IData)readBack[element.Id])).Using<IData>((actual, expected) => ReferenceEquals(actual, expected)), "without the list, the elements read by id are recorded");

@@ -36,7 +36,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         {
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(KnownServerDivergences.All, Is.EquivalentTo((ServerDivergence[])[KnownServerDivergences.RootsIgnoreOwningRelationship, KnownServerDivergences.DiffNotImplemented, KnownServerDivergences.UnknownResourceNotFound, KnownServerDivergences.UnknownResourceAccepted, KnownServerDivergences.ErrorWithoutErrorBody, KnownServerDivergences.CreatedAnsweredOk, KnownServerDivergences.RecordsWithoutRequiredProperties, KnownServerDivergences.PreviousCommitAsObject, KnownServerDivergences.ElementsWithoutDerivedProperties, KnownServerDivergences.DatatypeIdNotUri]));
+                Assert.That(KnownServerDivergences.All, Is.EquivalentTo((ServerDivergence[])[KnownServerDivergences.RootsIgnoreOwningRelationship, KnownServerDivergences.DiffNotImplemented, KnownServerDivergences.MergeNotImplemented, KnownServerDivergences.MergeRequiresArrayBody, KnownServerDivergences.UnknownResourceNotFound, KnownServerDivergences.UnknownResourceAccepted, KnownServerDivergences.ErrorWithoutErrorBody, KnownServerDivergences.CreatedAnsweredOk, KnownServerDivergences.RecordsWithoutRequiredProperties, KnownServerDivergences.PreviousCommitAsObject, KnownServerDivergences.ElementsWithoutDerivedProperties, KnownServerDivergences.DatatypeIdNotUri]));
                 Assert.That(KnownServerDivergences.All.Select(divergence => divergence.Reference), Has.All.Contains("Open-MBEE/flexo-mms-sysmlv2@836d904d"));
             }
         }

@@ -26,7 +26,9 @@ SySML2.NET.REST.Tests/
 │       ├── RootModel.cs              step 2: KerML Root and Packages
 │       ├── CoreModel.cs              step 3: KerML Core
 │       ├── KernelModel.cs            step 4: KerML Kernel
-│       └── KerMLUpdateModel.cs       step 5: updates U1–U4 of steps 2–4
+│       ├── KerMLUpdateModel.cs       step 5: updates U1–U4 of steps 2–4
+│       ├── SystemsStructureModel.cs  step 6: SysML structure, on the branch systems
+│       └── SystemsBehaviorModel.cs   step 7: SysML behaviour, requirements, cases and views
 ├── HelpersTests/                     offline: one fixture per helper, mirroring Helpers/
 │   ├── FlexoJwtTestFixture.cs, ModelBuilderTestFixture.cs, …
 │   └── Models/                       one fixture per model class
@@ -97,16 +99,16 @@ Session → PsmApiClient → HttpClient
 
 | Type | Responsibility |
 |---|---|
-| `ModelBuilder` | Holds the whole model across the steps: each step starts its own scope (`BeginStep`) and creates POCOs with deterministic ids, wired with `AssignOwnership`. It converts them with the Dal's `ToDto(includeDerivedProperties: true)`, `Changed` selects the delta a commit sends, and `Find` looks an element up by its scoped name. An element whose derived values cannot be computed without the model library is converted without them and listed in `WithoutDerivedValues`. POCOs are used because a hand-built DTO cannot set members that a derived property redefines. |
+| `ModelBuilder` | Holds the whole model across the steps: each step starts its own scope (`BeginStep`) and creates POCOs with deterministic ids, wired with `AssignOwnership`. It converts them with the Dal's `ToDto(includeDerivedProperties: true)`, `Changed` selects the delta a commit sends, `Copy` copies a DTO for a change outside the builder, and `Find` looks an element up by its scoped name. An element whose derived values cannot be computed without the model library is converted without them and listed in `WithoutDerivedValues`. POCOs are used because a hand-built DTO cannot set members that a derived property redefines. |
 | `DeterministicGuid` | Name-based UUID v5 of `"<step>/<name>"`, so the elements have the same ids in every run. |
-| `Models/*` | One class per step, deriving from `StepModel`, describing what that step adds to or changes in the model: `RootModel` (step 2), `CoreModel` (step 3), `KernelModel` (step 4), `KerMLUpdateModel` (step 5). |
+| `Models/*` | One class per step, deriving from `StepModel`, describing what that step adds to or changes in the model: `RootModel` (step 2), `CoreModel` (step 3), `KernelModel` (step 4), `KerMLUpdateModel` (step 5), `SystemsStructureModel` (step 6), `SystemsBehaviorModel` (step 7). The base class holds the helpers the steps share: naming, ownership, features, parameters, results, literals and multiplicities. |
 
 ### 5. Checking what came back
 
 | Type | Responsibility |
 |---|---|
-| `ScenarioState` | What the steps hand on to each other: the ids the server assigned (project, branch, commits), the expected model at each commit, and everything the server returned. |
-| `ReadBackAssertions` | The checks each model step runs after a commit: the commit and its predecessor, the branch head, the changes and their payloads, the changed elements by id, every element as listed, roots (the elements without an `owner`), relationships, the member element and name of every membership, that no returned DTO holds an empty GUID, and that an earlier commit still reads as it was. Element equality uses `ComparerProvider` from `SysML2.NET.Extensions`; a difference names the properties that differ. Every read is guarded: a read that throws fails, or warns when the response it failed on breaks the OpenAPI document. |
+| `ScenarioState` | What the steps hand on to each other: the ids the server assigned (project, branches, commits), the head of every branch the scenario committed on, the expected model at each commit, and everything the server returned. |
+| `ReadBackAssertions` | The checks each model step runs after a commit: the commit and its predecessor, the branch head, the changes and their payloads, the changed elements by id, every element as listed, roots (the elements without an `owner`), relationships, the member element and name of every membership, that no returned DTO holds an empty GUID, and that an earlier commit still reads as it was. Element equality uses `ComparerProvider` from `SysML2.NET.Extensions`; a difference names the properties that differ. Reads by id run four at a time. Every read is guarded: a read that throws fails, or warns when its own response shows a known divergence that breaks deserialization. |
 | `KnownServerDivergences`, `ServerDivergence` | The named ways Flexo diverges from the specification, each with a reference: an upstream issue, or a Flexo source location at the pinned commit. A divergence can explain response violations. `Report` raises an `Assert.Warn`. `ExpectNotFoundAsync` expects a 404, tolerates one named divergence, and fails when a conforming 404 reaches the caller without its `Error`. |
 | `IsolatedAssertions` | Runs a check in an isolated NUnit context and returns its failures and warnings, without failing the calling test. The offline fixtures use it to prove that a check fails when it should. |
 
@@ -127,6 +129,7 @@ Session → PsmApiClient → HttpClient
 - The last test, `VerifyCoverage`, always runs and prints the coverage verdict. It stays red until the scenario covers everything.
 - `[OneTimeTearDown]` closes the session and disposes the handler chain and the containers.
 - Starting the host has a 15-minute timeout.
+- Steps 1–8 take about 75 minutes, most of it waiting for Flexo, whose answers slow down as the model grows; steps 6 and 7 take about an hour together.
 
 Having one `[Test]` per step goes against the one-test-per-method rule in `TESTING.md`. This is accepted for this scenario only (see plan §9).
 
@@ -137,7 +140,10 @@ Having one `[Test]` per step goes against the one-test-per-method rule in `TESTI
 | 3 | `VerifyKerMLCore` | implemented |
 | 4 | `VerifyKerMLKernel` | implemented, with the tag `kernel` |
 | 5 | `VerifyKerMLUpdate` | implemented, with the diff from the tag `kernel` |
-| 6–13 | see plan §5 | planned |
+| 6 | `VerifySystemsStructure` | implemented, on the branch `systems` |
+| 7 | `VerifySystemsBehavior` | implemented, on the branch `systems` |
+| 8 | `VerifyMerge` | implemented: a conflict, its resolution, and a clean merge into the default branch |
+| 9–13 | see plan §5 | planned |
 | 14 | `VerifyCoverage` | implemented, red by design |
 
 ### Reading the outcome

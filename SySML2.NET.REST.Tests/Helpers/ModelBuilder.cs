@@ -38,6 +38,11 @@ namespace SySML2.NET.REST.Tests.Helpers
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> StringListsByClass = new();
 
         /// <summary>
+        /// The memberwise copy of <see cref="object"/>, which copies a DTO of any class
+        /// </summary>
+        private static readonly MethodInfo CopyMethod = typeof(object).GetMethod(nameof(MemberwiseClone), BindingFlags.Instance | BindingFlags.NonPublic);
+
+        /// <summary>
         /// The prefix of the names that the ids of the current step are derived from
         /// </summary>
         private string scope;
@@ -94,6 +99,26 @@ namespace SySML2.NET.REST.Tests.Helpers
             return current
                 .Where(element => !previousById.TryGetValue(element.Id, out var before) || before.GetType() != element.GetType() || !ComparerProvider.Resolve(element).Equals(before, element))
                 .ToList();
+        }
+
+        /// <summary>
+        /// Copies a DTO, with its own string lists, so that a change to the copy leaves the expected model it came from
+        /// intact
+        /// </summary>
+        /// <typeparam name="TElement">
+        /// The type of the DTO
+        /// </typeparam>
+        /// <param name="dto">
+        /// The DTO
+        /// </param>
+        /// <returns>
+        /// The copy
+        /// </returns>
+        public static TElement Copy<TElement>(TElement dto) where TElement : DtoElement
+        {
+            ArgumentNullException.ThrowIfNull(dto);
+
+            return (TElement)Detach((DtoElement)CopyMethod.Invoke(dto, null));
         }
 
         /// <summary>

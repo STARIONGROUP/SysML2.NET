@@ -71,6 +71,31 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         }
 
         [Test]
+        public void VerifyCopy()
+        {
+            Assert.That(() => ModelBuilder.Copy<DtoElement>(null), Throws.ArgumentNullException);
+
+            var builder = new ModelBuilder("scope");
+            var package = builder.Create<Package>("Package", PackageExtensions.ToDto);
+            package.DeclaredName = "Original";
+            package.AliasIds = ["first"];
+            var dto = builder.ToDtos()[0];
+
+            var copy = ModelBuilder.Copy(dto);
+            copy.DeclaredName = "Copy";
+            copy.AliasIds.Add("second");
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(copy, Is.Not.SameAs(dto));
+                Assert.That(copy, Is.TypeOf(dto.GetType()));
+                Assert.That(copy.Id, Is.EqualTo(dto.Id));
+                Assert.That(dto.DeclaredName, Is.EqualTo("Original"));
+                Assert.That(dto.AliasIds, Is.EqualTo((string[])["first"]));
+            }
+        }
+
+        [Test]
         public void VerifyCreate()
         {
             var builder = new ModelBuilder("first");

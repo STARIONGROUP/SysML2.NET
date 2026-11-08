@@ -137,13 +137,13 @@ references it by that `$id`.
   the `DataVersionRequest`s for the commit.
 - **One builder holds the whole model.** Each step starts its own scope (`BeginStep`) and wires into
   the elements of earlier steps, through the `StepModel` base class (`Helpers/Models/`). A commit
-  sends only the delta: the elements that are new, or whose DTO differs from the previous commit
+  sends only the delta against the head of its branch: the elements that are new, or whose DTO differs from the previous commit
   under `ComparerProvider` (`ModelBuilder.Changed`); every check runs against the whole model.
 - **Derived values that cannot be computed.** Without the model library, an operator expression has
   no instantiated type, and the generated `ToDto(true)` dereferences it. Such an element is
   converted without derived values and listed in `ModelBuilder.WithoutDerivedValues`; derived values
   are never sent, so the payload is unaffected. The Kernel fixture pins that list to the five
-  operator expressions.
+  operator expressions, and the behaviour fixture to the three trigger invocations of step 7.
 - Why POCOs: a DTO cannot hold the value of a non-derived member that a derived property redefines
   (`OwningMembership.memberElement`, `Import.source`, … — 173 no-op setters in 90 DTO classes), so a
   hand-built DTO would send the empty GUID for it. Only the POCO conversion fills those values.
@@ -176,11 +176,12 @@ After each commit:
 - `PostCommitByProjectAsync` returned a commit on the expected branch whose `previousCommits` is
   the previous head; the branch `head` moved (`GetBranchesByProjectAndIdAsync`).
 - `GetChangesByProjectCommitAsync` / `GetChangeByProjectCommitIdAsync` → exactly the sent
-  `DataVersion`s: one per element, its payload equal to the element sent.
+  `DataVersion`s: one per element, its payload equal to the element sent; a commit that changes
+  more than a page of elements must be read over several pages.
 - `GetElementByProjectCommitIdAsync` for each element the commit created or changed → equal to the
   expected DTO under `ComparerProvider`. An unchanged element was read by id at the commit that
   last changed it; its content is compared as listed instead, which keeps a step on a large model
-  fast.
+  fast. Reads by id run four at a time; a read that fails is excused only by its own response.
 - `GetElementsByProjectCommitAsync`, paged (`page[size]=10`, following `Link` to the end, so that
   every step's model spans several pages) → exactly the expected id set at that commit, no
   duplicates, and every element equal to the expected DTO.
@@ -238,6 +239,15 @@ a step ignores itself only when the state it builds on is missing. The verdict a
 | 12 | **Delete model elements** | per metamodel package, delete the subjects with their owning memberships (`payload = null`), updating owners' `ownedRelationship` in the same commit; the deleted elements are gone at head and readable at the previous commit; `DiffAsync` shows `DELETED` | 15, 19, 20, 24 |
 | 13 | **Tear down** | delete tag (13), branch (9), the `Library` project and the main project (5); each is unreadable afterwards; negative cases (§6.3) | 13, 9, 5, 3, 8, 12 |
 | 14 | **Coverage verdict** | — | asserts §7 |
+
+Steps 6 and 7 follow the metamodel where the grammar differs from it (`ConjugatedPortTyping` has
+no `originalPortDefinition`). `validateSubjectMembershipOwningType` and
+`validateObjectiveMembershipOwningType` test the owning type with `oclIsType`, which, read
+literally, admits only the exact metaclass; the OCL admits a second reading (any kind of it), so
+step 7 declares the subject and objective on a `RequirementDefinition` and a `CaseDefinition` and
+lets the other definitions inherit them by specialization, which satisfies both. Step 8 checks the
+two conflicting commits in the same scope as the merges, so a red read-back does not hide the
+merge.
 
 Step numbers are fixed in Appendix A.1, which assigns every concrete metaclass to the step that
 creates it.
@@ -325,11 +335,15 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `ElementsWithoutDerivedProperties`: elements come back without their derived properties
   (`owner`, `qualifiedName`, …), which the response schemas require; it matches only when every
   missing property is derived, so a missing non-derived property still fails (step 2);
-- `DatatypeIdNotUri`: a datatype comes back with an `$id` that is not a URI (step 1).
+- `DatatypeIdNotUri`: a datatype comes back with an `$id` that is not a URI (step 1);
+- `DiffNotImplemented`: diff answers 501 Not Implemented (step 5);
+- `MergeNotImplemented`: merge answers 501 Not Implemented (step 8);
+- `MergeRequiresArrayBody`: merge reads its optional body as a required array, so a merge without
+  a body answers 500 and one with a `null` body 400, before the 501 (step 8). Step 8 then sends
+  the resolution merge, whose body is an array, and stops at its 501.
 
 Expected from the Flexo source, added with the step that observes them:
 
-- merge answers 501 Not Implemented (step 8);
 - real values come back as single-precision floats (step 4); 2.5 and 3.5 are exact in single
   precision, so this is not observed yet;
 - deleting an element leaves the elements it owns in place (no cascade, §6.2 D3, step 12).
@@ -339,12 +353,15 @@ Client defects found so far, each red until fixed:
 - #424 — the JSON round trip loses non-derived members that a derived property redefines
   (`memberElement`, `memberName`, `source`, `target`);
 - #425 — the PSM JSON serializers write `null` for optional references that the OpenAPI document
-  does not make nullable (`ProjectRequest.defaultBranch`, …).
+  does not make nullable (`ProjectRequest.defaultBranch`, …);
+- #429 — `MergeAsync` sends its resolution elements without the derived properties that the
+  `Data` schema of the merge body requires (step 8).
 
 SDK defects found while building the fixture, outside the client:
 
 - #426 — the generated comparers treat equal floating-point values as different, so a
-  `LiteralRational` read back equal is reported as differing (step 4);
+  `LiteralRational` read back equal is reported as differing (step 4); from step 6 on it also puts
+  that literal in the delta, so the changes of a commit miss one expected element;
 - #427 — `AssignOwnership` duplicates the member when an owning membership is re-assigned, and the
   public API cannot reorder or shrink an ownership list or let any relationship other than an
   owning membership or an annotation own a related element. Step 3 therefore makes the feature
