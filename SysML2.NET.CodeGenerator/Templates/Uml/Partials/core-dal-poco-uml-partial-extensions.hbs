@@ -7,6 +7,8 @@
         {{ else }}
             dto.{{Property.WritePropertyName property}} = poco.{{Property.WritePropertyName property}}.Id;
         {{/if}}
+    {{ else if (Property.QueryIsEnumerable property)}}
+        dto.{{Property.WritePropertyName property}} = [..poco.{{Property.WritePropertyName property}}];
     {{ else }}
         dto.{{Property.WritePropertyName property}} = poco.{{Property.WritePropertyName property}};
     {{/if}}
