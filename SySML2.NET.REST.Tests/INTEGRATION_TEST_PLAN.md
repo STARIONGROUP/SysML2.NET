@@ -417,14 +417,11 @@ Client defects found so far, each red until fixed:
 
 - #424 — the JSON round trip loses non-derived members that a derived property redefines
   (`memberElement`, `memberName`, `source`, `target`);
-- #425 — the PSM JSON serializers write `null` for optional references that the OpenAPI document
-  does not make nullable (`ProjectRequest.defaultBranch`, …);
 - #429 — `MergeAsync` sends its resolution elements without the derived properties that the
   `Data` schema of the merge body requires (step 8).
 
-#425 also covers the `inverse: null` of a `PrimitiveConstraintRequest` that leaves `inverse` unset;
-Flexo answers such a request 400. Step 9 sets `inverse` on every query but one, the query
-definition sent with `GET`, so that #425 stays visible there while the other query operations run.
+Step 9 sets `inverse` on every query but one, the query definition sent with `GET`, which checks
+that an unset `inverse` is left out of the request.
 
 SDK defects found while building the fixture, outside the client:
 
@@ -435,9 +432,12 @@ SDK defects found while building the fixture, outside the client:
   public API cannot reorder or shrink an ownership list or let any relationship other than an
   owning membership or an annotation own a related element. Step 3 therefore makes the feature
   chain of its `CrossSubsetting` a member of the package, and step 5 only extends (U4).
-- #428 — the Dal conversions share value lists (`aliasIds`, `text`) between a POCO and its DTO, so a
-  later change to the POCO rewrites the expected model of an earlier commit; `ModelBuilder` gives
-  every DTO its own copy.
+
+Fixed defects, whose checks the scenario keeps:
+
+- #425 — the PSM JSON serializers wrote `null` for optional references that the OpenAPI document
+  does not make nullable (`ProjectRequest.defaultBranch`, `PrimitiveConstraintRequest.inverse`, …);
+- #428 — the Dal conversions shared value lists (`aliasIds`, `text`) between a POCO and its DTO.
 
 ## 9. Open questions
 

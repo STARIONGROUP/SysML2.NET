@@ -34,8 +34,8 @@ namespace SySML2.NET.REST.Tests.Helpers
     public sealed class ModelBuilder
     {
         /// <summary>
-        /// The settable string and reference list properties per DTO class, which the Dal conversion shares with the
-        /// POCO (#428) and a memberwise copy shares with the DTO it copies
+        /// The settable string and reference list properties per DTO class, which a memberwise copy shares with the
+        /// DTO it copies
         /// </summary>
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> ListsByClass = new();
 
@@ -271,10 +271,6 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// computed, such as an operator expression without the model library, is converted without them and listed
         /// in <see cref="WithoutDerivedValues"/>
         /// </summary>
-        /// <remarks>
-        /// Every DTO gets its own copy of the string lists that the Dal conversion shares with the POCO (#428), so that
-        /// a DTO stays the snapshot of the model at its commit when a later step changes the POCO.
-        /// </remarks>
         /// <returns>
         /// The DTOs, in creation order
         /// </returns>
@@ -289,7 +285,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             {
                 try
                 {
-                    return Detach(entry.Convert(true));
+                    return entry.Convert(true);
                 }
                 catch (Exception)
                 {
@@ -298,7 +294,7 @@ namespace SySML2.NET.REST.Tests.Helpers
 
                 try
                 {
-                    return Detach(entry.Convert(false));
+                    return entry.Convert(false);
                 }
                 catch (Exception exception)
                 {
