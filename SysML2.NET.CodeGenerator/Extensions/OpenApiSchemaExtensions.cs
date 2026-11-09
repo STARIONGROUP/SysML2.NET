@@ -275,10 +275,17 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             ArgumentNullException.ThrowIfNull(schema);
 
-            if (!isRequired)
-            {
-                return true;
-            }
+            return !isRequired || schema.QueryAdmitsNull();
+        }
+
+        /// <summary>
+        /// Queries whether the schema accepts an explicit JSON <c>null</c> value
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>True when the schema has a <c>oneOf</c> branch of type <c>null</c>.</returns>
+        public static bool QueryAdmitsNull(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
 
             return schema is not OpenApiSchemaReference
                    && schema.OneOf?.Any(branch => branch is not OpenApiSchemaReference && branch.Type == JsonSchemaType.Null) == true;

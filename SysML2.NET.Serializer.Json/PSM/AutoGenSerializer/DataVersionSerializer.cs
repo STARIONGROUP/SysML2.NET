@@ -86,10 +86,6 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WritePropertyName("identity"u8);
                 DataIdentitySerializer.Serialize(dataVersion.Identity, writer, serializationModeKind, includeDerivedProperties);
             }
-            else
-            {
-                writer.WriteNull("identity"u8);
-            }
 
             writer.WriteString("name"u8, dataVersion.Name);
 

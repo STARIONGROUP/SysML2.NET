@@ -69,10 +69,6 @@ namespace SysML2.NET.Serializer.Json.PSM
             {
                 writer.WriteBoolean("inverse"u8, primitiveConstraintRequest.Inverse.Value);
             }
-            else
-            {
-                writer.WriteNull("inverse"u8);
-            }
 
             writer.WriteString("operator"u8, PrimitiveConstraintRequestOperatorProvider.ToUtf8Bytes(primitiveConstraintRequest.Operator));
 

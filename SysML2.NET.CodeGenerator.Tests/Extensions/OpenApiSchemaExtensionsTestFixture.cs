@@ -131,6 +131,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Extensions
         {
             Assert.That(() => ((IOpenApiSchema)null).QueryIsCollection(), Throws.TypeOf<ArgumentNullException>());
             Assert.That(() => ((IOpenApiSchema)null).QueryIsNullable(true), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((IOpenApiSchema)null).QueryAdmitsNull(), Throws.TypeOf<ArgumentNullException>());
             Assert.That(() => ((IOpenApiSchema)null).QueryIsValueType(), Throws.TypeOf<ArgumentNullException>());
 
             using (Assert.EnterMultipleScope())
@@ -146,6 +147,10 @@ namespace SysML2.NET.CodeGenerator.Tests.Extensions
                 Assert.That(this.schemas["Branch"].Properties["deleted"].QueryIsNullable(true), Is.True);
                 Assert.That(this.schemas["Branch"].Properties["head"].QueryIsNullable(true), Is.True);
                 Assert.That(this.schemas["ProjectRequest"].Properties["defaultBranch"].QueryIsNullable(false), Is.True);
+
+                Assert.That(this.schemas["Branch"].Properties["head"].QueryAdmitsNull(), Is.True);
+                Assert.That(this.schemas["ProjectRequest"].Properties["defaultBranch"].QueryAdmitsNull(), Is.False);
+                Assert.That(this.schemas["ExternalDataRequest"].Properties["resourceIdentifier"].QueryAdmitsNull(), Is.False);
 
                 Assert.That(this.schemas["Branch"].Properties["created"].QueryIsValueType(), Is.True);
                 Assert.That(this.schemas["Branch"].Properties["owningProject"].QueryIsValueType(), Is.True);
