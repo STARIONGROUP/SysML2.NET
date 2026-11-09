@@ -559,6 +559,107 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
 
         [Test]
         [DependsOnTest(nameof(VerifyExternalData), AllowFailure = true)]
+        public async Task VerifyDeletions()
+        {
+            if (this.rootModel == null || this.state.HeadCommitId == null)
+            {
+                Assert.Ignore("the default branch has no model to delete from");
+            }
+
+            var deletion = new DeletionModel(this.rootModel);
+            var created = await this.CommitModelAsync(deletion.Builder, "Content to delete");
+
+            using (Assert.EnterMultipleScope())
+            {
+                await this.readBack.VerifyCommitAsync(created.Commit, created.BranchId, created.PreviousHead, created.Changed);
+
+                await this.DeleteAsync([deletion.Single.Id], deletion.Package.Id, "D1, a package and its owning membership");
+                await this.DeleteAsync([deletion.First.Id, deletion.Second.Id], deletion.Emptied.Id, "D2, the whole content of a package");
+
+                var owned = ModelBuilder.OwnedTree(this.state.ExpectedModels[this.state.HeadCommitId.Value], deletion.Cascade.Id);
+
+                await this.DeleteAsync([deletion.Cascade.Id], deletion.Package.Id, "D3, a package alone", owned);
+            }
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyDeletions), AllowFailure = true)]
+        public async Task VerifyTeardown()
+        {
+            if (this.state.ProjectId == null)
+            {
+                Assert.Ignore("there is no project to tear down");
+            }
+
+            var projectId = this.state.ProjectId.Value;
+            var unknown = Guid.NewGuid();
+
+            using (Assert.EnterMultipleScope())
+            {
+                if (this.state.TagIds.TryGetValue("kernel", out var tagId))
+                {
+                    var deletedTag = await this.client.DeleteTagByProjectAndIdAsync(projectId, tagId);
+
+                    Assert.That(deletedTag, Is.Null.Or.Property(nameof(IData.Id)).EqualTo(tagId), "a deletion answers the deleted tag, or nothing with 204");
+
+                    await this.ExpectNotFoundAsync(() => this.client.GetTagByProjectAndIdAsync(projectId, tagId));
+
+                    var (tags, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetTagsByProjectAsync(projectId, parameters));
+
+                    Assert.That(tags.Select(tag => tag.Id), Does.Not.Contain(tagId), "a deleted tag is not listed");
+
+                    await this.ExpectNotFoundAsync(() => this.client.DeleteTagByProjectAndIdAsync(projectId, tagId), KnownServerDivergences.UnknownResourceAccepted);
+                }
+
+                await this.ExpectNotFoundAsync(() => this.client.DeleteTagByProjectAndIdAsync(projectId, unknown));
+                await this.ExpectNotFoundAsync(() => this.client.GetTagsByProjectAsync(unknown), KnownServerDivergences.UnknownResourceNotFound);
+
+                foreach (var branchId in this.state.BranchIds.Values.ToList())
+                {
+                    var deletedBranch = await this.client.DeleteBranchByProjectAndIdAsync(projectId, branchId);
+
+                    Assert.That(deletedBranch, Is.Null.Or.Property(nameof(IData.Id)).EqualTo(branchId), "a deletion answers the deleted branch, or nothing with 204");
+
+                    await this.ExpectNotFoundAsync(() => this.client.GetBranchesByProjectAndIdAsync(projectId, branchId));
+                    await this.ExpectNotFoundAsync(() => this.client.DeleteBranchByProjectAndIdAsync(projectId, branchId), KnownServerDivergences.UnknownResourceAccepted);
+                }
+
+                var (branches, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetBranchesByProjectAsync(projectId, parameters));
+
+                Assert.That(branches.Select(branch => branch.Id), Is.EquivalentTo((Guid[])[this.state.DefaultBranchId!.Value]), "only the default branch is left");
+
+                await this.ExpectNotFoundAsync(() => this.client.DeleteBranchByProjectAndIdAsync(projectId, unknown), KnownServerDivergences.DeleteUnknownBranchFails);
+
+                if (this.state.HeadCommitId is { } head)
+                {
+                    await this.ExpectNotFoundAsync(() => this.client.GetRelationshipsByProjectCommitRelatedElementAsync(unknown, head, this.rootModel?.Root.Id ?? unknown));
+                }
+
+                if (this.state.LibraryProjectId is { } libraryId)
+                {
+                    var deletedLibrary = await this.client.DeleteProjectByIdAsync(libraryId);
+
+                    Assert.That(deletedLibrary, Is.Null.Or.Property(nameof(IData.Id)).EqualTo(libraryId), "a deletion answers the deleted project, or nothing with 204");
+
+                    await this.ExpectNotFoundAsync(() => this.client.GetProjectByIdAsync(libraryId));
+                }
+
+                var deletedProject = await this.client.DeleteProjectByIdAsync(projectId);
+
+                Assert.That(deletedProject, Is.Null.Or.Property(nameof(IData.Id)).EqualTo(projectId), "a deletion answers the deleted project, or nothing with 204");
+
+                await this.ExpectNotFoundAsync(() => this.client.GetProjectByIdAsync(projectId));
+                await ExpectClientErrorAsync(() => this.client.DeleteProjectByIdAsync(projectId), KnownServerDivergences.DeletedProjectDeletedAgain);
+                await ExpectClientErrorAsync(() => this.client.DeleteProjectByIdAsync(unknown));
+
+                var (projects, _) = await ReadBackAssertions.ReadAllPagesAsync(parameters => this.client.GetProjectsAsync(parameters));
+
+                Assert.That(projects.Select(project => project.Id), Has.None.EqualTo(projectId).And.None.EqualTo(this.state.LibraryProjectId), "the deleted projects are not listed");
+            }
+        }
+
+        [Test]
+        [DependsOnTest(nameof(VerifyTeardown), AllowFailure = true)]
         public async Task VerifyCoverage()
         {
             var verdict = new CoverageVerdict(this.state.ReadBack, this.httpClientFactory.Recorder.Calls, this.openApi);
@@ -583,9 +684,31 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             }
         }
 
-        private static async Task ExpectClientErrorAsync(Func<Task> call, [CallerArgumentExpression(nameof(call))] string description = null)
+        private static async Task ExpectClientErrorAsync(Func<Task> call, ServerDivergence accepted = null, [CallerArgumentExpression(nameof(call))] string description = null)
         {
-            await Assert.ThatAsync(() => call(), Throws.InstanceOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).Matches<HttpStatusCode>(status => (int)status is >= 400 and < 500), description);
+            try
+            {
+                await call();
+            }
+            catch (PsmApiException exception)
+            {
+                Assert.That((int)exception.StatusCode, Is.InRange(400, 499), description);
+                return;
+            }
+            catch (Exception exception) when (exception is not ResultStateException)
+            {
+                Assert.Fail($"{description} threw {exception.GetType().Name}: {exception.Message}");
+                return;
+            }
+
+            if (accepted == null)
+            {
+                Assert.Fail($"{description} succeeded");
+            }
+            else
+            {
+                KnownServerDivergences.Report(accepted, $"{description} answered a success");
+            }
         }
 
         private static IReadOnlyList<IElement> Replace(IReadOnlyList<IElement> model, IElement replacement) => [.. model.Select(element => element.Id == replacement.Id ? replacement : element)];
@@ -625,6 +748,48 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             var model = builder.ToDtos();
 
             return this.CommitElementsAsync(model, ModelBuilder.Changed(previous, model), description, branch);
+        }
+
+        private async Task DeleteAsync(IReadOnlyList<Guid> elementIds, Guid ownerId, string description, IReadOnlyList<IElement> cascaded = null)
+        {
+            var projectId = this.state.ProjectId!.Value;
+            var branch = this.state.DefaultBranchId!.Value;
+            var previousHead = this.state.BranchHeads[branch];
+            var previous = this.state.ExpectedModels[previousHead];
+
+            var memberships = elementIds.Select(id => previous.Single(element => element.Id == id).OwningRelationship!.Value).ToList();
+            List<Guid> deleted = [.. elementIds, .. memberships];
+            var owner = ModelBuilder.Copy(previous.Single(element => element.Id == ownerId));
+            owner.OwnedRelationship.RemoveAll(memberships.Contains);
+
+            List<Guid> cascadedIds = [.. (cascaded ?? []).Select(element => element.Id)];
+            var gone = deleted.Concat(cascadedIds).ToHashSet();
+            List<IElement> model = [.. previous.Where(element => !gone.Contains(element.Id)).Select(element => element.Id == ownerId ? owner : element)];
+
+            var request = new CommitRequest { Description = description, Change = [.. deleted.Select(id => new DataVersionRequest { Identity = new DataIdentityRequest { Id = id }, Payload = null }), new DataVersionRequest { Identity = new DataIdentityRequest { Id = owner.Id }, Payload = owner }] };
+            var commit = await this.client.PostCommitByProjectAsync(projectId, request, branch);
+
+            this.state.BranchHeads[branch] = commit.Id;
+            this.state.ExpectedModels[commit.Id] = model;
+
+            await this.readBack.VerifyDataCommitAsync(commit, branch, previousHead, [.. deleted.Select(id => (id, (IData)null)), (owner.Id, owner)], cascadedIds);
+
+            foreach (var id in deleted)
+            {
+                await this.ExpectNotFoundAsync(() => this.client.GetElementByProjectCommitIdAsync(projectId, commit.Id, id), description: $"reading {id}, deleted by {description}");
+            }
+
+            if (cascaded == null)
+            {
+                await this.readBack.VerifyElementIdsAsync($"the elements after {description}", parameters => this.client.GetElementsByProjectCommitAsync(projectId, commit.Id, queryParameters: parameters), [.. model.Select(element => element.Id)]);
+            }
+            else
+            {
+                await this.readBack.VerifyCascadeAsync(commit.Id, cascaded, model);
+            }
+
+            await this.readBack.VerifyHistoryAsync(previousHead, previous.Single(element => element.Id == elementIds[0]));
+            await this.readBack.VerifyDiffAsync(previousHead, commit.Id, [owner], deleted, cascadedIds);
         }
 
         private Task ExpectNotFoundAsync(Func<Task> call, ServerDivergence tolerated = null, [CallerArgumentExpression(nameof(call))] string description = null)

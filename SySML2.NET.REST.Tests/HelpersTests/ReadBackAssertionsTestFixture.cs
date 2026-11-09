@@ -101,6 +101,70 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         }
 
         [Test]
+        public async Task VerifyVerifyCascadeAsync()
+        {
+            var kept = new Package { Id = Guid.NewGuid() };
+            var inner = new Package { Id = Guid.NewGuid() };
+            var note = new Package { Id = Guid.NewGuid() };
+            IReadOnlyList<IElement> listed = [kept];
+            var readable = new HashSet<Guid>();
+            var readFailures = new Dictionary<Guid, Exception>();
+            var unreadable = false;
+
+            this.client.Setup(api => api.GetElementsByProjectCommitAsync(this.projectId, this.commitId, It.IsAny<bool?>(), It.IsAny<QueryParameters>(), It.IsAny<CancellationToken>()))
+                .Returns((Guid _, Guid _, bool? _, QueryParameters parameters, CancellationToken _) => unreadable ? throw new InvalidOperationException("no list") : Paged(listed, parameters));
+            this.client.Setup(api => api.GetElementByProjectCommitIdAsync(this.projectId, this.commitId, It.IsAny<Guid>(), It.IsAny<bool?>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Guid _, Guid _, Guid elementId, bool? _, CancellationToken _) => readFailures.TryGetValue(elementId, out var readFailure) ? throw readFailure : readable.Contains(elementId) ? new Package { Id = elementId } : throw new PsmApiException(HttpStatusCode.NotFound, null));
+
+            var cascaded = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            readable.Add(note.Id);
+
+            var stillReadable = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            readable.Clear();
+            readFailures[note.Id] = new PsmApiException(HttpStatusCode.InternalServerError, null);
+
+            var serverError = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            readFailures[note.Id] = new InvalidOperationException("unreadable");
+
+            var clientError = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            readFailures.Clear();
+            listed = [kept, inner, note];
+
+            var notCascaded = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            listed = [kept, inner];
+
+            var partly = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            listed = [inner, note];
+
+            var keptLost = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            unreadable = true;
+
+            var failed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyCascadeAsync(this.commitId, [inner, note], [kept]));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(cascaded, Is.Empty);
+                Assert.That(stillReadable, Has.Count.EqualTo(1));
+                Assert.That(stillReadable[0].Message, Does.Contain($"reading Package {note.Id}, owned by the deleted element"));
+                Assert.That(serverError.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]), "a 500 fails without ending the check");
+                Assert.That(serverError[0].Message, Does.Contain($"reading Package {note.Id}, owned by the deleted element"));
+                Assert.That(clientError.Select(result => result.Message), Is.EqualTo((string[])[$"reading Package {note.Id}, owned by the deleted element threw InvalidOperationException: unreadable"]));
+                Assert.That(notCascaded.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
+                Assert.That(notCascaded[0].Message, Does.Contain(KnownServerDivergences.DeleteDoesNotCascade.Summary));
+                Assert.That(partly.Select(result => result.Status), Has.Some.EqualTo(AssertionStatus.Failed), "a partial cascade is no known divergence");
+                Assert.That(keptLost.Select(result => result.Status), Has.Some.EqualTo(AssertionStatus.Failed), "an element that was not deleted must stay");
+                Assert.That(failed.Select(result => result.Message), Is.EqualTo((string[])["GetElementsByProjectCommitAsync after the cascading delete threw InvalidOperationException: no list"]));
+            }
+        }
+
+        [Test]
         public async Task VerifyVerifyCommitAsync()
         {
             var branchId = Guid.NewGuid();
@@ -298,6 +362,16 @@ namespace SySML2.NET.REST.Tests.HelpersTests
 
             var changeMissing = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
 
+            var cascadedId = Guid.NewGuid();
+            changes = [.. Changes(data, usage, null), new DataVersion { Id = Guid.NewGuid(), Identity = new DataIdentity { Id = cascadedId } }];
+
+            var cascadeDeleted = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected, [cascadedId]));
+
+            changes[^1].Payload = new Package { Id = cascadedId };
+
+            var cascadeEdited = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected, [cascadedId]));
+            var notCascaded = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDataCommitAsync(commit, branchId, previousId, expected));
+
             changes = Changes(data, usage, null);
             head = previousId;
 
@@ -318,6 +392,10 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(deletedInstead[0].Message, Does.Contain($"the payload of the change of ExternalData {data.Id} was read back as another kind of data"));
                 Assert.That(changeMissing.Select(result => result.Message), Has.Some.Contains("one change per data item"));
                 Assert.That(changeMissing, Has.Count.EqualTo(1));
+                Assert.That(cascadeDeleted, Is.Empty, "an element deleted with its owner may be listed as deleted");
+                Assert.That(cascadeEdited.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
+                Assert.That(cascadeEdited[0].Message, Does.Contain(KnownServerDivergences.DeleteDoesNotCascade.Summary));
+                Assert.That(notCascaded.Select(result => result.Message), Has.Some.Contains("one change per data item"), "a change of an element the commit does not delete");
                 Assert.That(headNotMoved, Has.Count.EqualTo(1));
                 Assert.That(unreadable.Select(result => result.Message), Is.EqualTo((string[])["GetChangesByProjectCommitAsync threw InvalidOperationException: no changes"]), "the commit record still passes");
             }
@@ -354,6 +432,34 @@ namespace SySML2.NET.REST.Tests.HelpersTests
 
             var deletedAndUnnamed = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
 
+            var removed = new Package { Id = Guid.NewGuid() };
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { BaseData = Version(removed) }];
+
+            var deletion = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated], [removed.Id]));
+
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { BaseData = Version(removed), CompareData = Version(removed) }];
+
+            var deletionAsUpdate = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated], [removed.Id]));
+
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }];
+
+            var deletionMissing = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated], [removed.Id]));
+
+            var owned = new Package { Id = Guid.NewGuid() };
+            var ownedMembership = new Package { Id = Guid.NewGuid() };
+            this.state.ExpectedModels[baseCommitId] = [updated, removed, owned, ownedMembership];
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { BaseData = Version(removed) }, new DataDifference { BaseData = Version(owned) }, new DataDifference { BaseData = Version(ownedMembership) }];
+
+            var cascade = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated], [removed.Id], [owned.Id, ownedMembership.Id]));
+
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { BaseData = Version(removed) }, new DataDifference { BaseData = Version(ownedMembership), CompareData = Version(ownedMembership) }];
+
+            var notCascaded = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated], [removed.Id], [owned.Id, ownedMembership.Id]));
+
+            differences = [new DataDifference { BaseData = Version(updated), CompareData = Version(updated) }, new DataDifference { BaseData = Version(removed) }, new DataDifference { BaseData = Version(owned) }];
+
+            var partlyCascaded = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated], [removed.Id], [owned.Id, ownedMembership.Id]));
+
             failure = new PsmApiException(HttpStatusCode.NotImplemented, null);
 
             var notImplemented = await IsolatedAssertions.RunAsync(() => this.assertions.VerifyDiffAsync(baseCommitId, compareCommitId, [updated, created]));
@@ -369,6 +475,13 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(misclassified.Select(result => result.Message), Has.Some.Contains("UPDATED"));
                 Assert.That(misclassified.Select(result => result.Message), Has.Some.Contains("CREATED"));
                 Assert.That(deletedAndUnnamed.Select(result => result.Message), Has.Some.Contains("a difference names the data it is about"));
+                Assert.That(deletion, Is.Empty);
+                Assert.That(deletionAsUpdate.Select(result => result.Message), Has.Some.Contains("a deleted element is DELETED"));
+                Assert.That(deletionMissing, Has.Count.EqualTo(1));
+                Assert.That(cascade, Is.Empty);
+                Assert.That(notCascaded.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
+                Assert.That(notCascaded[0].Message, Does.Contain(KnownServerDivergences.DeleteDoesNotCascade.Summary));
+                Assert.That(partlyCascaded.Select(result => result.Message), Has.Some.Contains("an element deleted with its owner is DELETED"));
                 Assert.That(notImplemented.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
                 Assert.That(notImplemented[0].Message, Does.Contain(KnownServerDivergences.DiffNotImplemented.Summary));
                 Assert.That(rejected.Select(result => result.Status), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));

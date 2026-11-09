@@ -239,8 +239,8 @@ a step ignores itself only when the state it builds on is missing. The verdict a
 | 9 | **Queries** | `POST` a query with an `or` `CompositeConstraint` holding a nested `and` and `PrimitiveConstraint`s; across the step's queries all 7 `Operator` literals and `inverse`; `select`; list, get, `PUT`, results three ways, at the default head and at the `kernel` commit; negative cases; `DELETE` | 27, 26, 28, 29, 31, 32, 33, 30 |
 | 10 | **Project usage** | second project `UsedLibrary` with a small model; **branch** `data` from the default head; a commit of a `ProjectUsage` of the library's commit; the project usage of a library element; `excludeUsed` on elements and roots | 2, 7, 15, 21, 19, 22 |
 | 11 | **External data** | on `data`: commit `ExternalData` and an `ExternalRelationship` to the root package, update both, delete both | 15, 17, 18 |
-| 12 | **Delete model elements** | per metamodel package, delete the subjects with their owning memberships (`payload = null`), updating owners' `ownedRelationship` in the same commit; the deleted elements are gone at head and readable at the previous commit; `DiffAsync` shows `DELETED` | 15, 19, 20, 24 |
-| 13 | **Tear down** | delete tag (13), branch (9), the `UsedLibrary` project and the main project (5); each is unreadable afterwards; negative cases (§6.3) | 13, 9, 5, 3, 8, 12 |
+| 12 | **Delete model elements** | commit a package `Deletions` built for the cases D1–D3 (§6.2), then one commit per case deleting elements with their owning memberships (`payload = null`) and updating the owner's `ownedRelationship` in the same commit; the deleted elements answer 404 at the new commit and are readable at the previous one; `DiffAsync` shows `DELETED` | 15, 19, 20, 24 |
+| 13 | **Tear down** | delete the tag `kernel` (13), the branches `systems` and `data` (9), the `UsedLibrary` project and the main project (5); each is unreadable and unlisted afterwards; deleting a tag or branch again answers 404, a project a client error, as the OpenAPI document declares no 404 for it; negative cases (§6.3) | 13, 9, 5, 3, 8, 12, 10, 6, 1, 22 |
 | 14 | **Coverage verdict** | — | asserts §7 |
 
 Step 9's expected results are computed from the expected model with a predicate per query
@@ -289,6 +289,9 @@ feature. A connector, flow or association is retargeted through the reference or
 
 ### 6.2 Delete scenarios
 
+The cases delete the content of a package `Deletions` that step 12 first commits for them
+(`Helpers/Models/DeletionModel.cs`), so that no element of an earlier step loses a reference.
+
 - D1 (step 12): a subject deleted together with its owning membership, the owner updated in the
   same commit — keeps the model well-formed.
 - D2 (step 12): a whole nested package's content deleted in one commit.
@@ -296,7 +299,9 @@ feature. A connector, flow or association is retargeted through the reference or
   own owning membership, so its parent stays well-formed); none of its owned elements is listed. At
   the new commit, everything in the owner's composition tree is gone: its `ownedRelationship`s,
   their `ownedRelatedElement`s, and so on down. Basis: both properties are composite in KerML
-  (`Element::ownedRelationship`, `Relationship::ownedRelatedElement`; Hypha 2026-07). Asserted on:
+  (`Element::ownedRelationship`, `Relationship::ownedRelatedElement`; KerML 1.0, Clauses 8.3.2.1.2
+  and 8.3.2.1.3). The Systems Modeling API & Services specification does not say whether a commit
+  that deletes an element deletes what it owns, so this reading admits another. Asserted on:
   - `GetElementByProjectCommitIdAsync` → 404 for every element of the tree;
   - `GetElementsByProjectCommitAsync` → the tree's ids are absent, everything else is unchanged;
   - `DiffAsync` previous → new commit → `DELETED` for every element of the tree, not only the owner;
@@ -370,7 +375,14 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `DataListedAsElements`: the elements and roots of a commit include its project usages, external
   data and external relationships, so the client cannot read the list (steps 10, 11);
 - `ProjectUsageAsArray`: the project usage of an element is answered as an array of every project
-  usage of the commit, whatever the element, so the client cannot read it (step 10).
+  usage of the commit, whatever the element, so the client cannot read it (step 10);
+- `DeleteDoesNotCascade`: deleting an element leaves the elements it owns in the model, listed
+  and readable, and removes their reference to it, which the commit lists as a further change
+  (§6.2 D3, step 12);
+- `DeleteUnknownBranchFails`: deleting an unknown branch answers 500, not 404 (step 13); deleting
+  a deleted tag or branch answers 200 with its record again, which `UnknownResourceAccepted` covers;
+- `DeletedProjectDeletedAgain`: deleting a deleted project answers 200 again instead of a client
+  error (step 13).
 
 The conformance check reports an item of a list whose `@type` is none of the types the schema
 admits at that item, so such an item cannot hide behind the errors of the other items.
@@ -382,8 +394,7 @@ store slow down during a run, from a few milliseconds to hundreds, while the qua
 Expected from the Flexo source, added with the step that observes them:
 
 - real values come back as single-precision floats (step 4); 2.5 and 3.5 are exact in single
-  precision, so this is not observed yet;
-- deleting an element leaves the elements it owns in place (no cascade, §6.2 D3, step 12).
+  precision, so this is not observed yet.
 
 Client defects found so far, each red until fixed:
 

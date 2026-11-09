@@ -19,6 +19,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     using SysML2.NET.PSM.DTO;
 
     using DtoElement = SysML2.NET.Core.DTO.Root.Elements.IElement;
+    using DtoRelationship = SysML2.NET.Core.DTO.Root.Elements.IRelationship;
     using PocoElement = SysML2.NET.Core.POCO.Root.Elements.IElement;
 
     /// <summary>
@@ -119,6 +120,51 @@ namespace SySML2.NET.REST.Tests.Helpers
             ArgumentNullException.ThrowIfNull(dto);
 
             return (TElement)Detach((DtoElement)CopyMethod.Invoke(dto, null));
+        }
+
+        /// <summary>
+        /// Finds the elements that an element owns, directly or indirectly, through its owned relationships and their
+        /// owned related elements, both composite in KerML
+        /// </summary>
+        /// <param name="model">
+        /// The model
+        /// </param>
+        /// <param name="ownerId">
+        /// The owning element
+        /// </param>
+        /// <returns>
+        /// The owned elements, without the owner
+        /// </returns>
+        public static IReadOnlyList<DtoElement> OwnedTree(IReadOnlyList<DtoElement> model, Guid ownerId)
+        {
+            ArgumentNullException.ThrowIfNull(model);
+
+            var byId = model.ToDictionary(element => element.Id);
+            var found = new List<DtoElement>();
+            var visited = new HashSet<Guid> { ownerId };
+            var pending = new Queue<Guid>([ownerId]);
+
+            while (pending.Count > 0)
+            {
+                if (!byId.TryGetValue(pending.Dequeue(), out var element))
+                {
+                    continue;
+                }
+
+                IEnumerable<Guid> owned = element is DtoRelationship relationship ? [.. element.OwnedRelationship, .. relationship.OwnedRelatedElement] : element.OwnedRelationship;
+
+                foreach (var id in owned.Where(visited.Add))
+                {
+                    pending.Enqueue(id);
+
+                    if (byId.TryGetValue(id, out var child))
+                    {
+                        found.Add(child);
+                    }
+                }
+            }
+
+            return found;
         }
 
         /// <summary>

@@ -162,6 +162,62 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
+        /// Verifies that deleting an element deleted what it owns: none of the owned elements is listed or readable at
+        /// the commit, or, as the known divergence <see cref="KnownServerDivergences.DeleteDoesNotCascade"/>, all of
+        /// them are still listed and nothing else differs
+        /// </summary>
+        /// <param name="commitId">
+        /// The commit that deleted the owner
+        /// </param>
+        /// <param name="owned">
+        /// The elements the deleted owner owned, directly or indirectly, that the commit did not list
+        /// </param>
+        /// <param name="expected">
+        /// The model expected at <paramref name="commitId"/>, without the owned elements
+        /// </param>
+        /// <returns>
+        /// An awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task VerifyCascadeAsync(Guid commitId, IReadOnlyList<IElement> owned, IReadOnlyList<IElement> expected)
+        {
+            var projectId = this.state.ProjectId!.Value;
+            var (listed, _) = await this.ReadAsync(() => ReadAllPagesAsync(parameters => this.client.GetElementsByProjectCommitAsync(projectId, commitId, queryParameters: parameters)), "GetElementsByProjectCommitAsync after the cascading delete");
+
+            if (listed == null)
+            {
+                return;
+            }
+
+            var listedIds = listed.Select(element => element.Id).ToHashSet();
+            var expectedIds = expected.Select(element => element.Id).ToHashSet();
+
+            if (owned.Count > 0 && owned.All(element => listedIds.Contains(element.Id)) && listedIds.SetEquals(expectedIds.Union(owned.Select(element => element.Id))))
+            {
+                KnownServerDivergences.Report(KnownServerDivergences.DeleteDoesNotCascade, $"the {owned.Count} elements the deleted element owned are still listed");
+                return;
+            }
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(listedIds, Is.EquivalentTo(expectedIds), "deleting an element deletes what it owns");
+
+                foreach (var element in owned)
+                {
+                    var description = $"reading {element.GetType().Name} {element.Id}, owned by the deleted element";
+
+                    try
+                    {
+                        await KnownServerDivergences.ExpectNotFoundAsync(() => this.client.GetElementByProjectCommitIdAsync(projectId, commitId, element.Id), () => this.recordedCalls?.Invoke().LastOrDefault(), null, description);
+                    }
+                    catch (Exception exception) when (exception is not ResultStateException)
+                    {
+                        this.ReportFailedRead(description, exception, (this.recordedCalls?.Invoke() ?? []).TakeLast(1));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Verifies a commit on a branch: the commit itself, its place in the history, the branch head and its changes
         /// </summary>
         /// <param name="commit">
@@ -247,10 +303,14 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <param name="expected">
         /// Per data item, its id and the payload the commit sent, or <c>null</c> when the commit deletes it
         /// </param>
+        /// <param name="cascaded">
+        /// The ids of the elements that the commit deletes with their owner, which may also be listed as deleted; none
+        /// when <c>null</c>
+        /// </param>
         /// <returns>
         /// An awaitable <see cref="Task"/>
         /// </returns>
-        public async Task VerifyDataCommitAsync(Commit commit, Guid branchId, Guid? previousCommitId, IReadOnlyList<(Guid Id, IData Payload)> expected)
+        public async Task VerifyDataCommitAsync(Commit commit, Guid branchId, Guid? previousCommitId, IReadOnlyList<(Guid Id, IData Payload)> expected, IReadOnlyCollection<Guid> cascaded = null)
         {
             var projectId = this.state.ProjectId!.Value;
 
@@ -265,7 +325,15 @@ namespace SySML2.NET.REST.Tests.Helpers
                     return;
                 }
 
-                Assert.That(changes.Select(change => change.Identity?.Id), Is.EquivalentTo(expected.Select(entry => (Guid?)entry.Id)), "one change per data item");
+                var cascadedChanges = changes.Where(change => change.Identity != null && (cascaded ?? []).Contains(change.Identity.Id) && expected.All(entry => entry.Id != change.Identity.Id)).ToList();
+                var edited = cascadedChanges.Count(change => change.Payload != null);
+
+                if (edited > 0)
+                {
+                    KnownServerDivergences.Report(KnownServerDivergences.DeleteDoesNotCascade, $"the commit also lists {edited} element(s) owned by the deleted element as changed");
+                }
+
+                Assert.That(changes.Select(change => change.Identity?.Id), Is.EquivalentTo(expected.Select(entry => (Guid?)entry.Id).Concat(cascadedChanges.Select(change => (Guid?)change.Identity.Id))), "one change per data item");
 
                 var changesById = changes.Where(change => change.Identity != null).GroupBy(change => change.Identity.Id).ToDictionary(group => group.Key, group => group.First());
 
@@ -296,11 +364,21 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <param name="changed">
         /// The elements created or changed between the two commits
         /// </param>
+        /// <param name="deleted">
+        /// The ids of the elements deleted between the two commits, none when <c>null</c>
+        /// </param>
+        /// <param name="cascaded">
+        /// The ids of the elements deleted with their deleted owner, none when <c>null</c>
+        /// </param>
         /// <returns>
         /// An awaitable <see cref="Task"/>
         /// </returns>
-        public async Task VerifyDiffAsync(Guid baseCommitId, Guid compareCommitId, IReadOnlyList<IElement> changed)
+        public async Task VerifyDiffAsync(Guid baseCommitId, Guid compareCommitId, IReadOnlyList<IElement> changed, IReadOnlyCollection<Guid> deleted = null, IReadOnlyCollection<Guid> cascaded = null)
         {
+            static Guid? IdOf(DataDifference difference) => (difference.CompareData ?? difference.BaseData)?.Identity?.Id;
+
+            static bool IsDeletion(DataDifference difference) => difference.BaseData != null && difference.CompareData == null;
+
             var projectId = this.state.ProjectId!.Value;
             var notImplemented = false;
 
@@ -332,9 +410,22 @@ namespace SySML2.NET.REST.Tests.Helpers
 
                 var atBase = this.state.ExpectedModels[baseCommitId].Select(element => element.Id).ToHashSet();
                 var compared = differences.Where(difference => difference.CompareData?.Identity != null).ToList();
+                var cascadedIds = (cascaded ?? []).ToHashSet();
+                var cascadedDifferences = differences.Where(difference => IdOf(difference) is { } id && cascadedIds.Contains(id)).ToList();
 
                 Assert.That(differences, Has.None.Matches<DataDifference>(difference => (difference.CompareData ?? difference.BaseData)?.Identity == null), "a difference names the data it is about");
-                Assert.That(differences.Select(difference => (difference.CompareData ?? difference.BaseData)?.Identity?.Id), Is.EquivalentTo(changed.Select(element => (Guid?)element.Id)));
+                Assert.That(differences.Select(IdOf), Is.EquivalentTo(changed.Select(element => (Guid?)element.Id).Concat((deleted ?? []).Select(id => (Guid?)id)).Concat(cascadedDifferences.Select(IdOf))));
+                Assert.That(differences.Where(difference => (deleted ?? []).Contains(IdOf(difference) ?? Guid.Empty)), Has.All.Matches<DataDifference>(IsDeletion), "a deleted element is DELETED");
+
+                if (cascadedIds.Count > 0 && !cascadedDifferences.Exists(IsDeletion))
+                {
+                    KnownServerDivergences.Report(KnownServerDivergences.DeleteDoesNotCascade, $"the diff shows none of the {cascadedIds.Count} elements the deleted element owned as DELETED");
+                }
+                else
+                {
+                    Assert.That(cascadedDifferences.Where(IsDeletion).Select(IdOf), Is.EquivalentTo(cascadedIds.Select(id => (Guid?)id)), "an element deleted with its owner is DELETED");
+                }
+
                 Assert.That(compared.Where(difference => atBase.Contains(difference.CompareData.Identity.Id)), Has.All.Matches<DataDifference>(difference => difference.BaseData != null), "an element of the base commit is UPDATED");
                 Assert.That(compared.Where(difference => !atBase.Contains(difference.CompareData.Identity.Id)), Has.All.Matches<DataDifference>(difference => difference.BaseData == null), "an element added since is CREATED");
             }

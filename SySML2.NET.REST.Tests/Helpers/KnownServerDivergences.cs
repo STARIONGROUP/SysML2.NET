@@ -87,7 +87,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// Gets the divergence that a request naming an unknown resource succeeds, where the OpenAPI document declares
         /// 404 Not Found for it
         /// </summary>
-        public static ServerDivergence UnknownResourceAccepted { get; } = new("a request naming an unknown resource succeeds instead of answering 404 Not Found", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/RelationshipApi.kt, and QueryApi.kt, whose PUT creates a missing query");
+        public static ServerDivergence UnknownResourceAccepted { get; } = new("a request naming an unknown resource succeeds instead of answering 404 Not Found", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/RelationshipApi.kt; QueryApi.kt, whose PUT creates a missing query; and the tag and branch delete routes, which delete a deleted tag or branch again");
 
         /// <summary>
         /// Gets the divergence that an error answer carries an empty or plain-text body, where the OpenAPI document
@@ -203,9 +203,27 @@ namespace SySML2.NET.REST.Tests.Helpers
         public static ServerDivergence QueryResultsGetNotImplemented { get; } = new("GET /projects/{projectId}/query-results answers 501 Not Implemented", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/QueryApi.kt");
 
         /// <summary>
+        /// Gets the divergence that deleting an element leaves what it owns in place, where its owned relationships and
+        /// their owned related elements are composite in KerML
+        /// </summary>
+        public static ServerDivergence DeleteDoesNotCascade { get; } = new("deleting an element leaves the elements it owns, through its owned relationships, in the model, and lists those that referenced it as changes of the commit, with the reference removed", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/CommitApi.kt, a deletion removes the listed subjects and the references to them only");
+
+        /// <summary>
+        /// Gets the divergence that deleting an unknown branch fails on the server, where the OpenAPI document declares
+        /// 404 Not Found
+        /// </summary>
+        public static ServerDivergence DeleteUnknownBranchFails { get; } = new("DELETE /projects/{projectId}/branches/{branchId} of an unknown branch answers 500 Internal Server Error", $"{FlexoRevision}, layer1 ServerBugException on the branch delete transaction");
+
+        /// <summary>
+        /// Gets the divergence that deleting a deleted project succeeds again, where the project no longer exists and
+        /// the OpenAPI document leaves the client error to its default response
+        /// </summary>
+        public static ServerDivergence DeletedProjectDeletedAgain { get; } = new("DELETE /projects/{projectId} of a deleted project succeeds instead of answering a client error", $"{FlexoRevision}, observed on DELETE /projects/{{projectId}}");
+
+        /// <summary>
         /// Gets every known divergence
         /// </summary>
-        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, MergeNotImplemented, MergeRequiresArrayBody, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri, DataListedAsElements, ProjectUsageAsArray, QueryResultsProjected, QueryLosesNameAndDescription, InstanceOfRejected, QueryResultsGetNotImplemented];
+        public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, MergeNotImplemented, MergeRequiresArrayBody, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri, DataListedAsElements, ProjectUsageAsArray, QueryResultsProjected, QueryLosesNameAndDescription, InstanceOfRejected, QueryResultsGetNotImplemented, DeleteDoesNotCascade, DeleteUnknownBranchFails, DeletedProjectDeletedAgain];
 
         /// <summary>
         /// Asserts that a call for an unknown resource fails with 404 Not Found, or reports the one tolerated divergence
@@ -222,8 +240,8 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// Gets the call that the <see cref="EndpointRecorder"/> recorded last, or <c>null</c>
         /// </param>
         /// <param name="tolerated">
-        /// The divergence the call may show, either <see cref="UnknownResourceNotFound"/> or
-        /// <see cref="UnknownResourceAccepted"/>, or <c>null</c> to tolerate none
+        /// The divergence the call may show, <see cref="UnknownResourceNotFound"/>, <see cref="UnknownResourceAccepted"/>
+        /// or <see cref="DeleteUnknownBranchFails"/>, or <c>null</c> to tolerate none
         /// </param>
         /// <param name="description">
         /// The description of the call in assertion messages
@@ -244,7 +262,12 @@ namespace SySML2.NET.REST.Tests.Helpers
                 failure = exception;
             }
 
-            var tolerates = tolerated == UnknownResourceAccepted ? failure == null : failure is { StatusCode: not HttpStatusCode.NotFound } && (int)failure.StatusCode is >= 400 and < 500;
+            var tolerates = tolerated switch
+            {
+                _ when tolerated == UnknownResourceAccepted => failure == null,
+                _ when tolerated == DeleteUnknownBranchFails => failure is { StatusCode: HttpStatusCode.InternalServerError },
+                _ => failure is { StatusCode: not HttpStatusCode.NotFound } && (int)failure.StatusCode is >= 400 and < 500
+            };
 
             if (tolerated != null && tolerates)
             {

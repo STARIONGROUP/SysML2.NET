@@ -18,6 +18,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
     using SysML2.NET.Dal;
 
     using SySML2.NET.REST.Tests.Helpers;
+    using SySML2.NET.REST.Tests.Helpers.Models;
 
     using DtoElement = SysML2.NET.Core.DTO.Root.Elements.IElement;
 
@@ -181,6 +182,28 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(builder.Find<Package>("scope/Package"), Is.SameAs(package));
                 Assert.That(() => builder.Find<Package>("scope/Missing"), Throws.ArgumentException.With.Message.Contains("scope/Missing"));
                 Assert.That(() => builder.Find<SysML2.NET.Core.POCO.Root.Namespaces.Namespace>("scope/Package"), Throws.ArgumentException);
+            }
+        }
+
+        [Test]
+        public void VerifyOwnedTree()
+        {
+            Assert.That(() => ModelBuilder.OwnedTree(null, Guid.NewGuid()), Throws.ArgumentNullException);
+
+            var root = new RootModel();
+            var deletion = new DeletionModel(root);
+            var model = root.Builder.ToDtos();
+            var tree = ModelBuilder.OwnedTree(model, deletion.Cascade.Id);
+            var innerMembership = model.Single(element => element.Id == deletion.Inner.Id).OwningRelationship;
+            var noteMembership = model.Single(element => element.Id == deletion.Note.Id).OwningRelationship;
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(tree.Select(element => element.Id), Is.EquivalentTo((Guid?[])[innerMembership, deletion.Inner.Id, noteMembership, deletion.Note.Id]), "both levels of the composition, relationships and related elements alike");
+                Assert.That(tree.Select(element => element.Id), Does.Not.Contain(deletion.Cascade.Id).And.Not.Contain(model.Single(element => element.Id == deletion.Cascade.Id).OwningRelationship), "neither the owner nor its own owning membership");
+                Assert.That(ModelBuilder.OwnedTree(model, deletion.Single.Id), Is.Empty);
+                Assert.That(ModelBuilder.OwnedTree(model, Guid.NewGuid()), Is.Empty);
+                Assert.That(ModelBuilder.OwnedTree(model, root.Root.Id), Has.Count.EqualTo(model.Count - 1), "the root owns every other element");
             }
         }
 

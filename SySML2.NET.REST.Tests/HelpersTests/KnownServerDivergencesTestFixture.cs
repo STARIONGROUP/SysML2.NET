@@ -36,7 +36,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         {
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(KnownServerDivergences.All, Is.EquivalentTo((ServerDivergence[])[KnownServerDivergences.RootsIgnoreOwningRelationship, KnownServerDivergences.DiffNotImplemented, KnownServerDivergences.MergeNotImplemented, KnownServerDivergences.MergeRequiresArrayBody, KnownServerDivergences.UnknownResourceNotFound, KnownServerDivergences.UnknownResourceAccepted, KnownServerDivergences.ErrorWithoutErrorBody, KnownServerDivergences.CreatedAnsweredOk, KnownServerDivergences.RecordsWithoutRequiredProperties, KnownServerDivergences.PreviousCommitAsObject, KnownServerDivergences.ElementsWithoutDerivedProperties, KnownServerDivergences.DatatypeIdNotUri, KnownServerDivergences.DataListedAsElements, KnownServerDivergences.ProjectUsageAsArray, KnownServerDivergences.QueryResultsProjected, KnownServerDivergences.QueryLosesNameAndDescription, KnownServerDivergences.InstanceOfRejected, KnownServerDivergences.QueryResultsGetNotImplemented]));
+                Assert.That(KnownServerDivergences.All, Is.EquivalentTo((ServerDivergence[])[KnownServerDivergences.RootsIgnoreOwningRelationship, KnownServerDivergences.DiffNotImplemented, KnownServerDivergences.MergeNotImplemented, KnownServerDivergences.MergeRequiresArrayBody, KnownServerDivergences.UnknownResourceNotFound, KnownServerDivergences.UnknownResourceAccepted, KnownServerDivergences.ErrorWithoutErrorBody, KnownServerDivergences.CreatedAnsweredOk, KnownServerDivergences.RecordsWithoutRequiredProperties, KnownServerDivergences.PreviousCommitAsObject, KnownServerDivergences.ElementsWithoutDerivedProperties, KnownServerDivergences.DatatypeIdNotUri, KnownServerDivergences.DataListedAsElements, KnownServerDivergences.ProjectUsageAsArray, KnownServerDivergences.QueryResultsProjected, KnownServerDivergences.QueryLosesNameAndDescription, KnownServerDivergences.InstanceOfRejected, KnownServerDivergences.QueryResultsGetNotImplemented, KnownServerDivergences.DeleteDoesNotCascade, KnownServerDivergences.DeleteUnknownBranchFails, KnownServerDivergences.DeletedProjectDeletedAgain]));
                 Assert.That(KnownServerDivergences.All.Select(divergence => divergence.Reference), Has.All.Contains("Open-MBEE/flexo-mms-sysmlv2@836d904d"));
             }
         }
@@ -149,6 +149,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         {
             var notFound = KnownServerDivergences.UnknownResourceNotFound;
             var accepted = KnownServerDivergences.UnknownResourceAccepted;
+            var branchFails = KnownServerDivergences.DeleteUnknownBranchFails;
 
             using (Assert.EnterMultipleScope())
             {
@@ -167,6 +168,11 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(await Outcome(Succeed, accepted, Conforming), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
                 Assert.That(await Outcome(Answer(HttpStatusCode.NotFound), accepted, Conforming), Is.Empty);
                 Assert.That(await Outcome(Answer(HttpStatusCode.Forbidden), accepted, Conforming), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
+
+                Assert.That(await Outcome(Answer(HttpStatusCode.InternalServerError), branchFails, Conforming), Is.EqualTo((AssertionStatus[])[AssertionStatus.Warning]));
+                Assert.That(await Outcome(Answer(HttpStatusCode.NotFound), branchFails, Conforming), Is.Empty);
+                Assert.That(await Outcome(Answer(HttpStatusCode.Forbidden), branchFails, Conforming), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
+                Assert.That(await Outcome(Succeed, branchFails, Conforming), Is.EqualTo((AssertionStatus[])[AssertionStatus.Failed]));
             }
 
             var warning = await IsolatedAssertions.RunAsync(() => KnownServerDivergences.ExpectNotFoundAsync(Answer(HttpStatusCode.Forbidden), () => Conforming, notFound, "the call"));
