@@ -39,7 +39,8 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
     /// membership or an annotation own a related element, and every owned feature is also featured by its owning type. The end features <c>e1</c> and <c>e2</c> get the multiplicity <c>[1]</c> that
     /// KerML requires of an end feature (<c>validateFeatureEndMultiplicity</c>) in step 4, because
     /// <c>MultiplicityRange</c> is a Kernel metaclass. Rules that need the model library (<c>checkTypeSpecialization</c>
-    /// and the like) cannot hold without one.
+    /// and the like) cannot hold without one. The type featuring of <c>f</c> by <c>A</c> is marked implied, so <c>f</c>
+    /// includes its implied relationships (<c>validateElementIsImpliedIncluded</c>).
     /// </remarks>
     public sealed class CoreModel : StepModel
     {
@@ -69,6 +70,9 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             this.OwnFeature(this.A, f);
             this.OwnFeature(this.A, this.G);
             this.OwnFeature(this.A, k);
+
+            f.OwnedRelationship.OfType<TypeFeaturing>().Single().IsImplied = true;
+            f.IsImpliedIncluded = true;
 
             var h = this.CreateNamed<Feature>("h", "h", FeatureExtensions.ToDto);
             h.Direction = FeatureDirectionKind.In;

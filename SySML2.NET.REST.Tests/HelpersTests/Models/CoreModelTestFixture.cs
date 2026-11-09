@@ -9,6 +9,7 @@
 
 namespace SySML2.NET.REST.Tests.HelpersTests.Models
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -16,10 +17,13 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
 
     using NUnit.Framework;
 
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Serializer.Json;
 
     using SySML2.NET.REST.Tests.Helpers;
     using SySML2.NET.REST.Tests.Helpers.Models;
+
+    using PocoFeature = SysML2.NET.Core.POCO.Core.Features.Feature;
 
     [TestFixture]
     public class CoreModelTestFixture
@@ -57,6 +61,8 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(json, Does.Not.Contain("00000000-0000-0000-0000-000000000000"));
                 Assert.That(model.Builder.WithoutDerivedValues, Is.Empty);
                 Assert.That(model.FirstEnd.IsEnd && model.SecondEnd.IsEnd, Is.True);
+                Assert.That(dtos.OfType<IRelationship>().Where(relationship => relationship.IsImplied).Select(relationship => relationship.OwningRelatedElement), Is.EqualTo((Guid?[])[model.Builder.Find<PocoFeature>("core/f").Id]), "one implied relationship, owned by f");
+                Assert.That(dtos.Where(dto => dto.IsImpliedIncluded).Select(dto => dto.DeclaredName), Is.EqualTo((string[])["f"]), "the owner of an implied relationship includes its implied relationships");
             }
 
             Assert.That(new CoreModel(new RootModel()).Builder.ToDtos().Select(dto => dto.Id), Is.EqualTo(dtos.Select(dto => dto.Id)));

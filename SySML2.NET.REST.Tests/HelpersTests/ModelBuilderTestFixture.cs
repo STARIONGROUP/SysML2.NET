@@ -85,6 +85,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             var copy = ModelBuilder.Copy(dto);
             copy.DeclaredName = "Copy";
             copy.AliasIds.Add("second");
+            copy.OwnedRelationship.Add(Guid.NewGuid());
 
             using (Assert.EnterMultipleScope())
             {
@@ -93,6 +94,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(copy.Id, Is.EqualTo(dto.Id));
                 Assert.That(dto.DeclaredName, Is.EqualTo("Original"));
                 Assert.That(dto.AliasIds, Is.EqualTo((string[])["first"]));
+                Assert.That(dto.OwnedRelationship, Is.Empty, "a reference list of the copy is its own");
             }
         }
 

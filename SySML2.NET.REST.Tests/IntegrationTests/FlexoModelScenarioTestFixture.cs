@@ -114,7 +114,11 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             var unverified = calls[this.verifiedCalls..];
             this.verifiedCalls = calls.Count;
 
-            OpenApiConformance.Verify(unverified, KnownServerDivergences.All);
+            var divergences = TestContext.CurrentContext.Test.MethodName == nameof(this.VerifyDeletions)
+                ? KnownServerDivergences.All
+                : [.. KnownServerDivergences.All.Where(divergence => divergence != KnownServerDivergences.DeleteDoesNotCascade)];
+
+            OpenApiConformance.Verify(unverified, divergences);
         }
 
         [Test]
@@ -323,6 +327,11 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
             using (Assert.EnterMultipleScope())
             {
                 var systems = this.state.BranchIds["systems"];
+
+                var update = new SystemsUpdateModel(this.structureModel, this.behaviorModel);
+                var updated = await this.CommitModelAsync(update.Builder, "SysML update", systems);
+
+                await this.VerifyCommittedModelAsync(updated, this.structureModel.Part.Id);
 
                 var projectId = this.state.ProjectId!.Value;
                 var defaultBranch = this.state.DefaultBranchId!.Value;
@@ -566,12 +575,15 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
                 Assert.Ignore("the default branch has no model to delete from");
             }
 
+            var moves = new MoveModel(this.rootModel);
             var deletion = new DeletionModel(this.rootModel);
-            var created = await this.CommitModelAsync(deletion.Builder, "Content to delete");
+            var created = await this.CommitModelAsync(deletion.Builder, "Content to move and delete");
 
             using (Assert.EnterMultipleScope())
             {
-                await this.readBack.VerifyCommitAsync(created.Commit, created.BranchId, created.PreviousHead, created.Changed);
+                await this.VerifyCommittedModelAsync(created, moves.Moves[0].From);
+
+                await this.MoveAsync(moves);
 
                 await this.DeleteAsync([deletion.Single.Id], deletion.Package.Id, "D1, a package and its owning membership");
                 await this.DeleteAsync([deletion.First.Id, deletion.Second.Id], deletion.Emptied.Id, "D2, the whole content of a package");
@@ -795,6 +807,20 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
         private Task ExpectNotFoundAsync(Func<Task> call, ServerDivergence tolerated = null, [CallerArgumentExpression(nameof(call))] string description = null)
         {
             return KnownServerDivergences.ExpectNotFoundAsync(call, () => this.httpClientFactory.Recorder.LastCall, tolerated, description);
+        }
+
+        private async Task MoveAsync(MoveModel moves)
+        {
+            var branch = this.state.DefaultBranchId!.Value;
+            var previous = this.state.ExpectedModels[this.state.BranchHeads[branch]];
+            var moved = moves.Moved(previous);
+            var movedById = moved.ToDictionary(element => element.Id);
+            List<IElement> model = [.. previous.Select(element => movedById.GetValueOrDefault(element.Id, element))];
+
+            var committed = await this.CommitElementsAsync(model, moved, "U5, relationships moved to new owners", branch);
+
+            await this.VerifyCommittedModelAsync(committed, moves.Moves[0].To);
+            await this.readBack.VerifyDiffAsync(committed.PreviousHead!.Value, committed.Commit.Id, moved);
         }
 
         private async Task VerifyCommittedModelAsync((Commit Commit, IReadOnlyList<IElement> Model, IReadOnlyList<IElement> Changed, Guid? PreviousHead, Guid BranchId) committed, Guid relationshipSubjectId)

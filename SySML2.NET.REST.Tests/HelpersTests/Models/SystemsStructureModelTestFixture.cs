@@ -20,7 +20,9 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
     using SysML2.NET.Core.DTO.Core.Features;
     using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Core.DTO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.DTO.Systems.Occurrences;
     using SysML2.NET.Core.DTO.Systems.Parts;
+    using SysML2.NET.Core.DTO.Systems.Ports;
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Serializer.Json;
 
@@ -82,6 +84,22 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(ownedByVariation[0].OwnedRelatedElement, Is.EqualTo((Guid[])[variant.Id]));
                 Assert.That(variant.IsVariation, Is.False);
                 Assert.That(dtos.OfType<Subsetting>().Where(subsetting => subsetting.OwningRelatedElement == variant.Id).Select(subsetting => subsetting.SubsettedFeature), Is.EqualTo((Guid[])[variation.Id]), "a variant specializes its variation usage");
+            }
+
+            var byId = dtos.ToDictionary(dto => dto.Id);
+            var individualUsage = (OccurrenceUsage)byId[model.IndividualUsage.Id];
+            var spareTyping = dtos.OfType<ConjugatedPortTyping>().Single(typing => typing.OwningRelatedElement == model.SparePort.Id);
+            var otherConjugation = dtos.OfType<PortConjugation>().Single(conjugation => conjugation.OwningRelatedElement == model.OtherConjugatedPortDefinition.Id);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(((OccurrenceDefinition)byId[model.IndividualDefinition.Id]).IsIndividual, Is.True);
+                Assert.That(individualUsage.IsIndividual, Is.True);
+                Assert.That(dtos.OfType<FeatureTyping>().Where(typing => typing.OwningRelatedElement == individualUsage.Id).Select(typing => typing.Type), Is.EqualTo((Guid[])[model.IndividualDefinition.Id]), "an individual usage is typed by an individual definition");
+                Assert.That(byId[model.PlainDefinition.Id].OwnedRelationship, Is.Empty, "a definition that may become a variation owns no feature membership");
+                Assert.That(byId[model.PlainUsage.Id].OwnedRelationship, Is.Empty, "a usage that may become a variation owns no feature membership");
+                Assert.That(spareTyping.ConjugatedPortDefinition, Is.EqualTo(model.ConjugatedPortDefinition.Id));
+                Assert.That(otherConjugation.OriginalPortDefinition, Is.EqualTo(byId[model.OtherConjugatedPortDefinition.Id].OwningRelationship is { } membership ? ((IRelationship)byId[membership]).OwningRelatedElement : null), "a conjugated port definition conjugates the port definition that owns it");
             }
         }
     }

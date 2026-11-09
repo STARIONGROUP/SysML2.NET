@@ -206,7 +206,17 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// Gets the divergence that deleting an element leaves what it owns in place, where its owned relationships and
         /// their owned related elements are composite in KerML
         /// </summary>
-        public static ServerDivergence DeleteDoesNotCascade { get; } = new("deleting an element leaves the elements it owns, through its owned relationships, in the model, and lists those that referenced it as changes of the commit, with the reference removed", $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/CommitApi.kt, a deletion removes the listed subjects and the references to them only");
+        /// <remarks>
+        /// The scenario applies it to the responses of step 12 only, the step that deletes elements.
+        /// </remarks>
+        public static ServerDivergence DeleteDoesNotCascade { get; } = new(
+            "deleting an element leaves the elements it owns, through its owned relationships, in the model, and lists those that referenced it as changes of the commit, with the reference removed",
+            $"{FlexoRevision} src/main/kotlin/org/openmbee/flexo/sysmlv2/apis/CommitApi.kt, a deletion removes the listed subjects and the references to them only",
+            (call, violation) => call.Operation?.PathTemplate.StartsWith("/projects/{projectId}/commits/{commitId}/", StringComparison.Ordinal) == true
+                && violation.Kind == ContractViolationKind.SchemaMismatch
+                && MissingNames(violation) is { } names
+                && names.Contains("owningRelatedElement")
+                && names.All(name => name == "owningRelatedElement" || DtoMetadata.DerivedPropertyNames.Contains(name)));
 
         /// <summary>
         /// Gets the divergence that deleting an unknown branch fails on the server, where the OpenAPI document declares

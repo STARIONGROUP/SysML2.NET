@@ -29,7 +29,9 @@ SySML2.NET.REST.Tests/
 │       ├── KerMLUpdateModel.cs       step 5: updates U1–U4 of steps 2–4
 │       ├── SystemsStructureModel.cs  step 6: SysML structure, on the branch systems
 │       ├── SystemsBehaviorModel.cs   step 7: SysML behaviour, requirements, cases and views
+│       ├── SystemsUpdateModel.cs     step 8: updates U1–U2 of steps 6–7
 │       ├── LibraryModel.cs           step 10: the model of the project that the main model uses
+│       ├── MoveModel.cs              step 12: the content that update U5 moves
 │       └── DeletionModel.cs          step 12: the content that the deletion cases delete
 ├── HelpersTests/                     offline: one fixture per helper, mirroring Helpers/
 │   ├── FlexoJwtTestFixture.cs, ModelBuilderTestFixture.cs, …
@@ -104,7 +106,7 @@ Session → PsmApiClient → HttpClient
 | `ModelBuilder` | Holds the whole model across the steps: each step starts its own scope (`BeginStep`) and creates POCOs with deterministic ids, wired with `AssignOwnership`. It converts them with the Dal's `ToDto(includeDerivedProperties: true)`, `Changed` selects the delta a commit sends, `Copy` copies a DTO for a change outside the builder, `OwnedTree` finds everything an element owns, and `Find` looks an element up by its scoped name. An element whose derived values cannot be computed without the model library is converted without them and listed in `WithoutDerivedValues`. POCOs are used because a hand-built DTO cannot set members that a derived property redefines. |
 | `ScenarioQueries` | The queries of step 9, each with a predicate that picks its results from the expected model. |
 | `DeterministicGuid` | Name-based UUID v5 of `"<step>/<name>"`, so the elements have the same ids in every run. |
-| `Models/*` | One class per step, deriving from `StepModel`, describing what that step adds to or changes in the model: `RootModel` (step 2), `CoreModel` (step 3), `KernelModel` (step 4), `KerMLUpdateModel` (step 5), `SystemsStructureModel` (step 6), `SystemsBehaviorModel` (step 7), `LibraryModel` (step 10, in a second project), `DeletionModel` (step 12). The base class holds the helpers the steps share: naming, ownership, features, parameters, results, literals and multiplicities. |
+| `Models/*` | One class per step, deriving from `StepModel`, describing what that step adds to or changes in the model: `RootModel` (step 2), `CoreModel` (step 3), `KernelModel` (step 4), `KerMLUpdateModel` (step 5), `SystemsStructureModel` (step 6), `SystemsBehaviorModel` (step 7), `SystemsUpdateModel` (step 8), `LibraryModel` (step 10, in a second project), `MoveModel` and `DeletionModel` (step 12). The base class holds the helpers the steps share: naming, ownership, features, parameters, results, literals and multiplicities. |
 
 ### 5. Checking what came back
 
@@ -119,7 +121,7 @@ Session → PsmApiClient → HttpClient
 
 | Type | Responsibility |
 |---|---|
-| `CoverageVerdict` | Lists what the scenario has not yet exercised: concrete metaclasses never sent; non-derived properties never set to a non-default value, or never changed; enumeration literals never used; OpenAPI operations never answered with a 2xx and with a 4xx. A 5xx answer does not count as coverage. |
+| `CoverageVerdict` | Lists what the scenario has not yet exercised: concrete metaclasses never sent; non-derived properties never set to a non-default value, or never changed; enumeration literals never used; OpenAPI operations never answered with a 2xx and with a 4xx. A 5xx answer does not count as coverage. Properties whose value a constraint fixes, or that no update may change, are exempt, each with its reason. |
 | `DtoMetadata`, `MetamodelProperty` | Read the metaclasses and properties from the `[Class]`/`[Property]` decorators on the generated DTOs, so the lists keep up with the generator. |
 
 ## The scenario
@@ -145,11 +147,11 @@ Having one `[Test]` per step goes against the one-test-per-method rule in `TESTI
 | 5 | `VerifyKerMLUpdate` | implemented, with the diff from the tag `kernel` |
 | 6 | `VerifySystemsStructure` | implemented, on the branch `systems` |
 | 7 | `VerifySystemsBehavior` | implemented, on the branch `systems` |
-| 8 | `VerifyMerge` | implemented: a conflict, its resolution, and a clean merge into the default branch |
+| 8 | `VerifyMerge` | implemented: the SysML update on `systems`, a conflict, its resolution, and a clean merge into the default branch |
 | 9 | `VerifyQueries` | implemented |
 | 10 | `VerifyProjectUsage` | implemented, on the branch `data` |
 | 11 | `VerifyExternalData` | implemented, on the branch `data` |
-| 12 | `VerifyDeletions` | implemented: a deletion, an emptied package, and a deletion that must cascade |
+| 12 | `VerifyDeletions` | implemented: relationships moved to new owners, a deletion, an emptied package, and a deletion that must cascade |
 | 13 | `VerifyTeardown` | implemented: tag, branches and both projects deleted |
 | 14 | `VerifyCoverage` | implemented, red by design |
 

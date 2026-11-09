@@ -70,6 +70,9 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 Assert.That(verdict.MissingMetaclasses, Does.Contain(nameof(OwningMembership)).And.Not.Contain(nameof(Package)));
                 Assert.That(verdict.UnsetProperties, Does.Not.Contain("Element.DeclaredName").And.Contain("Element.DeclaredShortName"));
                 Assert.That(verdict.UnchangedProperties, Does.Not.Contain("Element.DeclaredName").And.Contain("Element.DeclaredShortName"));
+                Assert.That(verdict.UnsetProperties, Does.Contain("Element.ElementId").And.Not.Contain("Expose.Visibility"), "a fixed value is never unset, an unchangeable one may be");
+                Assert.That(verdict.UnchangedProperties, Does.Not.Contain("Element.ElementId").And.Not.Contain("Expose.Visibility"));
+                Assert.That(CoverageVerdict.FixedProperties.Keys.Concat(CoverageVerdict.UnchangeableProperties.Keys), Is.SubsetOf(DtoMetadata.DeclaredProperties.Select(property => property.Name)), "every exemption names a declared property");
                 Assert.That(verdict.MissingLiterals, Does.Contain("VisibilityKind.Private"));
                 Assert.That(verdict.MissingLiterals, Has.None.StartsWith("ClassKind."));
                 Assert.That(verdict.UncoveredOperations, Has.None.StartsWith("GET /projects ("));

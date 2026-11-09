@@ -111,6 +111,27 @@ namespace SySML2.NET.REST.Tests.HelpersTests
         }
 
         [Test]
+        public void VerifyDeleteDoesNotCascade()
+        {
+            var openApi = OpenApiDocument.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "ptc-25-02-30.json"));
+            var getChanges = new EndpointCall(openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}/commits/{commitId}/changes"), "GET /projects/p/commits/c/changes", HttpStatusCode.OK);
+            var getProject = new EndpointCall(openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}"), "GET /projects/p", HttpStatusCode.OK);
+            var getElement = new EndpointCall(openApi.Operations.Single(operation => operation.ToString() == "GET /projects/{projectId}/commits/{commitId}/elements/{elementId}"), "GET /projects/p/commits/c/elements/e", HttpStatusCode.OK);
+            var explains = KnownServerDivergences.DeleteDoesNotCascade.Explains;
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(explains(getChanges, Missing("/*/payload", "\"owner\",\"owningRelatedElement\"")), Is.True, "the reference to the deleted owner is gone");
+                Assert.That(explains(getChanges, Missing("/*/payload", "\"owner\"")), Is.False, "derived properties alone are another divergence");
+                Assert.That(explains(getChanges, Missing("/*/payload", "\"owningRelatedElement\",\"ownedRelatedElement\"")), Is.False, "a missing non-derived property other than the owner");
+                Assert.That(explains(getProject, Missing("", "\"owningRelatedElement\"")), Is.False, "only a read at a commit");
+                Assert.That(explains(getElement, Missing("", "\"owningRelatedElement\"")), Is.True, "an element read at a later commit");
+                Assert.That(explains(new EndpointCall(null, "GET /unknown", HttpStatusCode.OK), Missing("", "\"owningRelatedElement\"")), Is.False, "a request that addresses no operation");
+                Assert.That(explains(getChanges, new ContractViolation(ContractViolationKind.InvalidJson, "/*/payload required: Required properties [\"owningRelatedElement\"] are not present")), Is.False);
+            }
+        }
+
+        [Test]
         public void VerifyElementsWithoutDerivedProperties()
         {
             var explains = KnownServerDivergences.ElementsWithoutDerivedProperties.Explains;

@@ -235,11 +235,11 @@ a step ignores itself only when the state it builds on is missing. The verdict a
 | 5 | **Update the KerML model** | U1–U4 (§6.1) on step 2–4 content | 15, 17, 20; `DiffAsync` `kernel` → head shows `UPDATED` (24) |
 | 6 | **Branch, SysML structure** | **branch** `systems` from head (7, 6, 8); commits with `branchId`: definitions and usages, attributes, enumerations, occurrences, items, parts, ports (incl. conjugated), connections, interfaces, allocations, flows (31) | 15 with `branchId`; as step 2 on the branch |
 | 7 | **SysML behaviour and requirements** | actions (all node and loop kinds), states and transitions, calculations, constraints, requirements, concerns, cases, analysis / verification / use cases, views, viewpoints, renderings, metadata (58) | as step 6 |
-| 8 | **Merge** | update the same element on default and on `systems` → merge reports the conflict (`MergeConflictException`, `MergeResult.conflict`); merge again with a resolution body; then a clean merge of the remaining `systems` work; U1–U2 on SysML content after merge | 25, 24, 8 |
+| 8 | **Merge** | update the same element on default and on `systems` → merge reports the conflict (`MergeConflictException`, `MergeResult.conflict`); merge again with a resolution body; then a clean merge of the remaining `systems` work; U1–U2 on SysML content, committed on `systems` before the merges so that they do not depend on a working merge | 25, 24, 8 |
 | 9 | **Queries** | `POST` a query with an `or` `CompositeConstraint` holding a nested `and` and `PrimitiveConstraint`s; across the step's queries all 7 `Operator` literals and `inverse`; `select`; list, get, `PUT`, results three ways, at the default head and at the `kernel` commit; negative cases; `DELETE` | 27, 26, 28, 29, 31, 32, 33, 30 |
 | 10 | **Project usage** | second project `UsedLibrary` with a small model; **branch** `data` from the default head; a commit of a `ProjectUsage` of the library's commit; the project usage of a library element; `excludeUsed` on elements and roots | 2, 7, 15, 21, 19, 22 |
 | 11 | **External data** | on `data`: commit `ExternalData` and an `ExternalRelationship` to the root package, update both, delete both | 15, 17, 18 |
-| 12 | **Delete model elements** | commit a package `Deletions` built for the cases D1–D3 (§6.2), then one commit per case deleting elements with their owning memberships (`payload = null`) and updating the owner's `ownedRelationship` in the same commit; the deleted elements answer 404 at the new commit and are readable at the previous one; `DiffAsync` shows `DELETED` | 15, 19, 20, 24 |
+| 12 | **Move and delete model elements** | commit a package `Moves` for U5 (§6.1) and a package `Deletions` built for the cases D1–D3 (§6.2); one commit moves relationships to new owners; then one commit per case deleting elements with their owning memberships (`payload = null`) and updating the owner's `ownedRelationship` in the same commit; the deleted elements answer 404 at the new commit and are readable at the previous one; `DiffAsync` shows `DELETED` | 15, 19, 20, 24 |
 | 13 | **Tear down** | delete the tag `kernel` (13), the branches `systems` and `data` (9), the `UsedLibrary` project and the main project (5); each is unreadable and unlisted afterwards; deleting a tag or branch again answers 404, a project a client error, as the OpenAPI document declares no 404 for it; negative cases (§6.3) | 13, 9, 5, 3, 8, 12, 10, 6, 1, 22 |
 | 14 | **Coverage verdict** | — | asserts §7 |
 
@@ -286,6 +286,15 @@ feature. A connector, flow or association is retargeted through the reference or
 | U2 | the carried non-derived attribute changed (flip a boolean, another literal value, another enum literal) | every row of A.3 / A.4 |
 | U3 | a relationship end retargeted (`FeatureTyping.type`, `Redefinition.redefinedFeature`, …) | the 62 concrete `Relationship` subclasses |
 | U4 | an ordered collection reordered, extended and shrunk (`ownedRelationship` of a `Namespace`) | one per metamodel package — ordering survives the round trip; only *extended* for now: the public SDK cannot reorder or shrink an ownership list (#427) |
+| U5 | a relationship moved to a new owner, which becomes its source end (`Specialization.specific`, `FeatureTyping.typedFeature`, …); two port definitions exchanging their conjugated port definitions, so each still owns exactly one (`validatePortDefinitionConjugatedPortDefinition`); two members exchanging their owning memberships | every relationship whose source end is its owner, in step 12 (`Helpers/Models/MoveModel.cs`): the public SDK cannot take a relationship out of an ownership list (#427), so the moved content is built in a model builder of its own, with the same names and ids and correct derived values, and the moves come after the last commit built from the scenario's model builder |
+
+KerML lets a relationship's source end differ from its owner, but the owner's derived sets
+(`ownedSpecialization`, `ownedTypeFeaturing`, …) select by source end, so a moved relationship
+changes both. The SysML part of U2 (step 8) keeps the constraints it touches: a variation is
+abstract and owns no feature memberships, an initial value needs a variable feature, the subaction
+kinds of a state stay unique, an accept action stays an action as an effect, and the trigger of
+`accept at` becomes a `when` trigger, the kind its Boolean argument fits. Step 5 makes the feature
+`b`, with multiplicity `[1]` and no direction, an end feature.
 
 ### 6.2 Delete scenarios
 
@@ -322,6 +331,13 @@ Computed from what the **server returned**, not from what was sent:
   verdict until a step creates it).
 - **Attributes**: for every non-derived property (`[Property(isDerived: false)]` on the generated
   DTO interfaces), some element read back carried a non-default value, and some update changed it.
+  Exempt, each with its reason in `CoverageVerdict`:
+  - from both, a property whose value a constraint fixes: the operators of collect, feature chain,
+    index and select expressions, `ConnectionDefinition.isSufficient`,
+    `EnumerationDefinition.isVariation`, `Expose.isImportAll` and `visibility`, and the `kind` of a
+    framed concern or requirement verification membership;
+  - from "changed": `Element.elementId`, which "must not change during the lifetime of the
+    Element" (KerML 1.0, Clause 8.3.2.1.2).
 - **Literals**: every enumeration literal was read back at least once.
 - **Endpoints**: `EndpointRecorder` saw every `(method, path template)` of
   `Resources/ptc-25-02-30.json` (35) with a success status, and with a client error status where
@@ -377,7 +393,8 @@ Known divergences of the pinned build. Observed, in `Helpers/KnownServerDivergen
 - `ProjectUsageAsArray`: the project usage of an element is answered as an array of every project
   usage of the commit, whatever the element, so the client cannot read it (step 10);
 - `DeleteDoesNotCascade`: deleting an element leaves the elements it owns in the model, listed
-  and readable, and removes their reference to it, which the commit lists as a further change
+  and readable, and removes their reference to it, which the commit lists as a further change; a
+  read at a later commit returns such an element without the required `owningRelatedElement`
   (§6.2 D3, step 12);
 - `DeleteUnknownBranchFails`: deleting an unknown branch answers 500, not 404 (step 13); deleting
   a deleted tag or branch answers 200 with its record again, which `UnknownResourceAccepted` covers;

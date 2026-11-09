@@ -51,12 +51,15 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
     ///     part def P {
     ///         attribute x : A; attribute y : A; enum ev : E;
     ///         occurrence o1 : O; occurrence o2 : O; timeslice ts : O; snapshot sn : O; event occurrence ev1 = o1;
-    ///         item it1 : I; item it2 : I; part sub1 : Q; part sub2 : Q; port p1 : PD; port p2 : ~PD; ref r;
+    ///         item it1 : I; item it2 : I; part sub1 : Q; part sub2 : Q; port p1 : PD; port p2 : ~PD; port p3 : ~PD; ref r;
     ///         connection c : CD connect sub1 to sub2;   interface i : IF connect p1 to p2;
     ///         allocation al : AD allocate sub1 to it1;   binding b of x = y;   succession s first o1 then o2;
     ///         flow f : FD from it1.content to it2.content;   succession flow sf from it1.content to it2.content;
     ///     }
     ///     definition D { usage u; }
+    ///     individual occurrence def Ind;   individual occurrence solo : Ind;
+    ///     part def Plain;   part bare;
+    ///     port def PE;   // owns ~PE through a port conjugation
     /// }
     /// </code>
     /// Every end has the multiplicity <c>[1]</c>, every directed or end usage is referential, and the rules that need
@@ -111,13 +114,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             this.PortDefinition = this.Member<PortDefinition>("PD", PortDefinitionExtensions.ToDto);
             this.Owned<AttributeUsage>(this.PortDefinition, "pa", AttributeUsageExtensions.ToDto, this.AttributeDefinition);
 
-            this.ConjugatedPortDefinition = this.Builder.Create<ConjugatedPortDefinition>("PD/conjugated", ConjugatedPortDefinitionExtensions.ToDto);
-            this.OwnMember(this.PortDefinition, this.ConjugatedPortDefinition);
-
-            var conjugation = this.Builder.Create<PortConjugation>("PD/conjugated/conjugation", PortConjugationExtensions.ToDto);
-            conjugation.OriginalPortDefinition = this.PortDefinition;
-            conjugation.ConjugatedType = this.ConjugatedPortDefinition;
-            this.ConjugatedPortDefinition.AssignOwnership(conjugation);
+            this.ConjugatedPortDefinition = this.Conjugated(this.PortDefinition, "PD");
 
             this.Part = this.Member<PartDefinition>("P", PartDefinitionExtensions.ToDto);
 
@@ -165,6 +162,8 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             var p1 = this.Owned<PortUsage>(this.Part, "p1", PortUsageExtensions.ToDto, this.PortDefinition);
             var p2 = this.Owned<PortUsage>(this.Part, "p2", PortUsageExtensions.ToDto, null);
             this.ConjugatedTyping(p2);
+            this.SparePort = this.Owned<PortUsage>(this.Part, "p3", PortUsageExtensions.ToDto, null);
+            this.ConjugatedTyping(this.SparePort);
             this.Owned<ReferenceUsage>(this.Part, "r", ReferenceUsageExtensions.ToDto, null);
 
             this.Connect<ConnectionUsage, ReferenceUsage>("c", ConnectionUsageExtensions.ToDto, ReferenceUsageExtensions.ToDto, connection, sub1, sub2);
@@ -179,6 +178,18 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             var definition = this.Member<Definition>("D", DefinitionExtensions.ToDto);
             var usage = this.Owned<Usage>(definition, "u", UsageExtensions.ToDto, null);
             usage.IsComposite = true;
+
+            this.IndividualDefinition = this.Member<OccurrenceDefinition>("Ind", OccurrenceDefinitionExtensions.ToDto);
+            this.IndividualDefinition.IsIndividual = true;
+            this.IndividualUsage = this.Member<OccurrenceUsage>("solo", OccurrenceUsageExtensions.ToDto);
+            this.IndividualUsage.IsIndividual = true;
+            this.Typed(this.IndividualUsage, this.IndividualDefinition);
+
+            this.PlainDefinition = this.Member<PartDefinition>("Plain", PartDefinitionExtensions.ToDto);
+            this.PlainUsage = this.Member<PartUsage>("bare", PartUsageExtensions.ToDto);
+
+            var otherPort = this.Member<PortDefinition>("PE", PortDefinitionExtensions.ToDto);
+            this.OtherConjugatedPortDefinition = this.Conjugated(otherPort, "PE");
         }
 
         /// <summary>
@@ -225,6 +236,63 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// Gets the conjugated port definition <c>~PD</c>, owned by <see cref="PortDefinition"/>
         /// </summary>
         public ConjugatedPortDefinition ConjugatedPortDefinition { get; }
+
+        /// <summary>
+        /// Gets the conjugated port definition <c>~PE</c> of the port definition <c>PE</c>, to which step 8 retargets
+        /// the conjugated typing of <c>p3</c>
+        /// </summary>
+        public ConjugatedPortDefinition OtherConjugatedPortDefinition { get; }
+
+        /// <summary>
+        /// Gets the port usage <c>p3</c> of <see cref="Part"/>, typed by <see cref="ConjugatedPortDefinition"/> and connected
+        /// to nothing, whose conjugated typing step 8 retargets
+        /// </summary>
+        public PortUsage SparePort { get; }
+
+        /// <summary>
+        /// Gets the individual occurrence definition <c>Ind</c>
+        /// </summary>
+        public OccurrenceDefinition IndividualDefinition { get; }
+
+        /// <summary>
+        /// Gets the individual occurrence usage <c>solo</c>, typed by <see cref="IndividualDefinition"/>
+        /// </summary>
+        public OccurrenceUsage IndividualUsage { get; }
+
+        /// <summary>
+        /// Gets the part definition <c>Plain</c>, without features, which step 8 makes a variation
+        /// </summary>
+        public PartDefinition PlainDefinition { get; }
+
+        /// <summary>
+        /// Gets the part usage <c>bare</c>, without features, which step 8 makes a variation
+        /// </summary>
+        public PartUsage PlainUsage { get; }
+
+        /// <summary>
+        /// Creates the conjugated port definition of a port definition, with its port conjugation
+        /// </summary>
+        /// <param name="portDefinition">
+        /// The port definition, which owns the conjugated port definition
+        /// </param>
+        /// <param name="name">
+        /// The name of the port definition, which scopes the names of what is created
+        /// </param>
+        /// <returns>
+        /// The conjugated port definition
+        /// </returns>
+        private ConjugatedPortDefinition Conjugated(PortDefinition portDefinition, string name)
+        {
+            var conjugated = this.Builder.Create<ConjugatedPortDefinition>($"{name}/conjugated", ConjugatedPortDefinitionExtensions.ToDto);
+            this.OwnMember(portDefinition, conjugated);
+
+            var conjugation = this.Builder.Create<PortConjugation>($"{name}/conjugated/conjugation", PortConjugationExtensions.ToDto);
+            conjugation.OriginalPortDefinition = portDefinition;
+            conjugation.ConjugatedType = conjugated;
+            conjugated.AssignOwnership(conjugation);
+
+            return conjugated;
+        }
 
         /// <summary>
         /// Types a port usage by <see cref="ConjugatedPortDefinition"/> through a <see cref="ConjugatedPortTyping"/>

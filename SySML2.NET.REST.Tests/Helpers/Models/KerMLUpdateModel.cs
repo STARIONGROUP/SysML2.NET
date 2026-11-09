@@ -118,6 +118,10 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             this.Builder.Find<Type>("core/T").IsSufficient = false;
             this.Builder.Find<Feature>("core/g").IsDerived = false;
 
+            var f = this.Builder.Find<Feature>("core/f");
+            f.OwnedRelationship.OfType<TypeFeaturing>().Single().IsImplied = false;
+            f.IsImpliedIncluded = false;
+
             var h = this.Builder.Find<Feature>("core/h");
             h.IsUnique = true;
             h.IsOrdered = false;
@@ -129,6 +133,8 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
 
             this.Builder.Find<DataType>("kernel/D").IsSufficient = false;
 
+            this.Builder.Find<Feature>("kernel/b").IsEnd = true;
+
             var c = this.Builder.Find<Feature>("kernel/c");
             c.IsOrdered = false;
             c.IsUnique = true;
@@ -137,6 +143,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             this.Builder.Find<LiteralInteger>("kernel/a/value/42").Value = 43;
             this.Builder.Find<LiteralRational>("kernel/rational").Value = 3.5;
             this.Builder.Find<LiteralString>("kernel/text").Value = "t";
+            this.Builder.Find<OperatorExpression>("kernel/sum").Operator = "-";
             this.Builder.Find<Invariant>("kernel/inv").IsNegated = false;
             this.Builder.Find<LiteralBoolean>("kernel/P/body").Value = false;
         }
@@ -224,6 +231,8 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
             var dependency = this.Builder.Find<Dependency>("root/Uses");
             dependency.Supplier.Clear();
             dependency.Supplier.Add(space);
+            dependency.Client.Clear();
+            dependency.Client.Add(library);
 
             this.Builder.Find<NamespaceImport>("root/Nested/import Library").ImportedNamespace = space;
             this.Builder.Find<Membership>("root/Space/LibAlias").MemberElement = this.Builder.Find<Package>("root/Nested");

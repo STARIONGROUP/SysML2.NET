@@ -34,6 +34,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
         [
             ("Annotation", "root/Note/about Nested", "Annotation.AnnotatedElement"),
             ("Dependency", "root/Uses", "Dependency.Supplier"),
+            ("Dependency", "root/Uses", "Dependency.Client"),
             ("NamespaceImport", "root/Nested/import Library", "NamespaceImport.ImportedNamespace"),
             ("MembershipImport", "root/Nested/import LibAlias", "MembershipImport.ImportedMembership"),
             ("Membership", "root/Space/LibAlias", "Membership.MemberElement"),
@@ -115,6 +116,10 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(Value(byId, Element(model.Builder, "root/Nested/import Library").Id, "NamespaceImport.ImportedNamespace"), Is.EqualTo(Element(model.Builder, "root/Space").Id));
                 Assert.That(Value(byId, Element(model.Builder, "kernel/a/value/42").Id, "LiteralInteger.Value"), Is.EqualTo(43));
                 Assert.That(Value(byId, Element(model.Builder, "kernel/inv").Id, "Invariant.IsNegated"), Is.False);
+                Assert.That(Value(byId, Element(model.Builder, "kernel/sum").Id, "OperatorExpression.Operator"), Is.EqualTo("-"));
+                Assert.That(Value(byId, Element(model.Builder, "kernel/b").Id, "Feature.IsEnd"), Is.True, "a feature with multiplicity [1] and no direction becomes an end feature");
+                Assert.That(Differs(before, byId, Element(model.Builder, "core/f").Id, "Element.IsImpliedIncluded"), Is.True, "the implied type featuring of f is no longer included");
+                Assert.That(dtos.OfType<IRelationship>().Where(relationship => relationship.IsImplied), Is.Empty);
                 Assert.That(corePackage.OwnedRelationship, Is.EqualTo((Guid[])[.. corePackageBefore.OwnedRelationship, chain.OwningRelationship.Id, model.Added.OwningRelationship.Id]), "U4: Core is extended");
                 Assert.That(model.Builder.WithoutDerivedValues, Is.EquivalentTo((string[])["kernel/sum", "kernel/index", "kernel/select", "kernel/collect", "kernel/chain"]));
             }

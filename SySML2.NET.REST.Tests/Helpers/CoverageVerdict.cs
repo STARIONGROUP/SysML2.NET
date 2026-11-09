@@ -29,6 +29,32 @@ namespace SySML2.NET.REST.Tests.Helpers
         private static readonly ConcurrentDictionary<Type, object> Defaults = new();
 
         /// <summary>
+        /// Gets the properties whose value a metamodel constraint fixes, with that constraint; no well-formed model sets
+        /// them to another value or changes them
+        /// </summary>
+        public static IReadOnlyDictionary<string, string> FixedProperties { get; } = new Dictionary<string, string>
+        {
+            ["CollectExpression.Operator"] = "KerML validateCollectExpressionOperator",
+            ["FeatureChainExpression.Operator"] = "KerML validateFeatureChainExpressionOperator",
+            ["IndexExpression.Operator"] = "KerML validateIndexExpressionOperator",
+            ["SelectExpression.Operator"] = "KerML validateSelectExpressionOperator",
+            ["ConnectionDefinition.IsSufficient"] = "SysML validateConnectionDefinitionIsSufficient",
+            ["EnumerationDefinition.IsVariation"] = "SysML validateEnumerationDefinitionIsVariation",
+            ["Expose.IsImportAll"] = "SysML validateExposeIsImportAll",
+            ["Expose.Visibility"] = "SysML validateExposeVisibility",
+            ["FramedConcernMembership.Kind"] = "SysML validateFramedConcernMembershipConstraintKind",
+            ["RequirementVerificationMembership.Kind"] = "SysML validateRequirementVerificationMembershipKind"
+        };
+
+        /// <summary>
+        /// Gets the properties that no well-formed update of an element changes, with the reason
+        /// </summary>
+        public static IReadOnlyDictionary<string, string> UnchangeableProperties { get; } = new Dictionary<string, string>
+        {
+            ["Element.ElementId"] = "KerML 8.3.2.1.2: it must not change during the lifetime of the Element"
+        };
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CoverageVerdict"/> class
         /// </summary>
         /// <param name="readBack">
@@ -48,6 +74,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             this.MissingMetaclasses = DtoMetadata.ConcreteClasses.Where(type => !seenClasses.Contains(type)).Select(type => type.Name).ToList();
 
             this.UnsetProperties = DtoMetadata.DeclaredProperties
+                .Where(property => !FixedProperties.ContainsKey(property.Name))
                 .Where(property => !elements.Exists(entry => property.Interface.IsInstanceOfType(entry.Data) && !DtoMetadata.ValueEquals(property.ValueOf(entry.Data), property.ValueOf(DefaultOf(entry.Data.GetType())))))
                 .Select(property => property.Name)
                 .ToList();
@@ -55,6 +82,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             var versions = elements.GroupBy(entry => entry.Data.Id).ToList();
 
             this.UnchangedProperties = DtoMetadata.DeclaredProperties
+                .Where(property => !FixedProperties.ContainsKey(property.Name) && !UnchangeableProperties.ContainsKey(property.Name))
                 .Where(property => !versions.Exists(element => property.Interface.IsInstanceOfType(element.First().Data) && element.Select(entry => property.ValueOf(entry.Data)).Skip(1).Any(value => !DtoMetadata.ValueEquals(value, property.ValueOf(element.First().Data)))))
                 .Select(property => property.Name)
                 .ToList();

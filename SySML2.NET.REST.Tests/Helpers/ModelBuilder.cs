@@ -34,9 +34,10 @@ namespace SySML2.NET.REST.Tests.Helpers
     public sealed class ModelBuilder
     {
         /// <summary>
-        /// The settable string list properties per DTO class, which the Dal conversion shares with the POCO (#428)
+        /// The settable string and reference list properties per DTO class, which the Dal conversion shares with the
+        /// POCO (#428) and a memberwise copy shares with the DTO it copies
         /// </summary>
-        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> StringListsByClass = new();
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> ListsByClass = new();
 
         /// <summary>
         /// The memberwise copy of <see cref="object"/>, which copies a DTO of any class
@@ -103,8 +104,8 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
-        /// Copies a DTO, with its own string lists, so that a change to the copy leaves the expected model it came from
-        /// intact
+        /// Copies a DTO, with its own string and reference lists, so that a change to the copy leaves the expected model
+        /// it came from intact
         /// </summary>
         /// <typeparam name="TElement">
         /// The type of the DTO
@@ -311,7 +312,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         }
 
         /// <summary>
-        /// Gives a DTO its own copy of every string list it holds
+        /// Gives a DTO its own copy of every string and reference list it holds
         /// </summary>
         /// <param name="dto">
         /// The DTO
@@ -321,16 +322,21 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// </returns>
         private static DtoElement Detach(DtoElement dto)
         {
-            var stringLists = StringListsByClass.GetOrAdd(dto.GetType(), type => type
+            var lists = ListsByClass.GetOrAdd(dto.GetType(), type => type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(property => property.PropertyType == typeof(List<string>) && property.CanWrite && property.SetMethod is { IsPublic: true } or { IsAssembly: true })
+                .Where(property => (property.PropertyType == typeof(List<string>) || property.PropertyType == typeof(List<Guid>)) && property.CanWrite && property.SetMethod is { IsPublic: true } or { IsAssembly: true })
                 .ToArray());
 
-            foreach (var property in stringLists)
+            foreach (var property in lists)
             {
-                if (property.GetValue(dto) is List<string> list)
+                switch (property.GetValue(dto))
                 {
-                    property.SetValue(dto, new List<string>(list));
+                    case List<string> strings:
+                        property.SetValue(dto, new List<string>(strings));
+                        break;
+                    case List<Guid> references:
+                        property.SetValue(dto, new List<Guid>(references));
+                        break;
                 }
             }
 
