@@ -69,10 +69,6 @@ namespace SysML2.NET.Serializer.Json.PSM
             {
                 writer.WriteString("@id"u8, projectUsageRequest.Id.Value);
             }
-            else
-            {
-                writer.WriteNull("@id"u8);
-            }
 
             if (projectUsageRequest.UsedCommit.HasValue)
             {
@@ -80,20 +76,12 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WriteString("@id"u8, projectUsageRequest.UsedCommit.Value);
                 writer.WriteEndObject();
             }
-            else
-            {
-                writer.WriteNull("usedCommit"u8);
-            }
 
             if (projectUsageRequest.UsedProject.HasValue)
             {
                 writer.WriteStartObject("usedProject"u8);
                 writer.WriteString("@id"u8, projectUsageRequest.UsedProject.Value);
                 writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNull("usedProject"u8);
             }
 
             writer.WriteEndObject();

@@ -69,10 +69,6 @@ namespace SysML2.NET.Serializer.Json.PSM
             {
                 writer.WriteString("@id"u8, externalRelationshipRequest.Id.Value);
             }
-            else
-            {
-                writer.WriteNull("@id"u8);
-            }
 
             if (externalRelationshipRequest.ElementEnd.HasValue)
             {
@@ -80,20 +76,12 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WriteString("@id"u8, externalRelationshipRequest.ElementEnd.Value);
                 writer.WriteEndObject();
             }
-            else
-            {
-                writer.WriteNull("elementEnd"u8);
-            }
 
             if (externalRelationshipRequest.ExternalDataEnd.HasValue)
             {
                 writer.WriteStartObject("externalDataEnd"u8);
                 writer.WriteString("@id"u8, externalRelationshipRequest.ExternalDataEnd.Value);
                 writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNull("externalDataEnd"u8);
             }
 
             writer.WriteString("language"u8, externalRelationshipRequest.Language);

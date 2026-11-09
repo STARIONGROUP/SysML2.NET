@@ -84,6 +84,12 @@ namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
 
                 return propertySchema.QueryIsValueType() && propertySchema.QueryIsNullable(arguments.QueryIsRequired());
             });
+
+            handlebars.RegisterHelper("Property.QueryAdmitsNull", (_, arguments) =>
+                arguments.QueryPropertySchema().QueryAdmitsNull());
+
+            handlebars.RegisterHelper("Property.QueryIsOmittedWhenUnset", (_, arguments) =>
+                !arguments.QueryIsRequired() && !arguments.QueryPropertySchema().QueryAdmitsNull());
         }
     }
 }

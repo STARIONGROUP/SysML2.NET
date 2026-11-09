@@ -83,10 +83,6 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WriteString("@id"u8, projectRequest.DefaultBranch.Value);
                 writer.WriteEndObject();
             }
-            else
-            {
-                writer.WriteNull("defaultBranch"u8);
-            }
 
             writer.WriteString("description"u8, projectRequest.Description);
 

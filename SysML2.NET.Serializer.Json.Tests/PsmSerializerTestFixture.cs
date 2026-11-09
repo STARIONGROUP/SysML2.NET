@@ -133,9 +133,19 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             var withoutBranch = new ProjectRequest { Name = "no branch" };
 
-            var nullBranchJson = Serialize(stream => this.serializer.SerializeRequest(withoutBranch, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
+            var withoutBranchJson = Serialize(stream => this.serializer.SerializeRequest(withoutBranch, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
 
-            Assert.That(nullBranchJson, Does.Contain("\"defaultBranch\":null"));
+            Assert.That(withoutBranchJson, Does.Not.Contain("defaultBranch"));
+
+            var externalDataRequest = new ExternalDataRequest { ResourceIdentifier = new Uri("http://www.stariongroup.eu/external") };
+
+            var externalDataJson = Serialize(stream => this.serializer.SerializeRequest(externalDataRequest, SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
+
+            Assert.That(externalDataJson, Does.Contain("\"resourceIdentifier\":\"http://www.stariongroup.eu/external\""));
+
+            var withoutResourceIdentifierJson = Serialize(stream => this.serializer.SerializeRequest(new ExternalDataRequest(), SerializationModeKind.JSON, false, stream, this.jsonWriterOptions));
+
+            Assert.That(withoutResourceIdentifierJson, Does.Not.Contain("resourceIdentifier"));
         }
 
         [Test]
@@ -246,7 +256,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(nullPayloadDocument.RootElement.GetProperty("payload").ValueKind, Is.EqualTo(JsonValueKind.Null));
-                Assert.That(nullPayloadDocument.RootElement.GetProperty("identity").ValueKind, Is.EqualTo(JsonValueKind.Null));
+                Assert.That(nullPayloadDocument.RootElement.TryGetProperty("identity", out _), Is.False);
             }
 
             var commitRequest = new CommitRequest

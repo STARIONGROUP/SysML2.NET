@@ -69,12 +69,11 @@ namespace SysML2.NET.Serializer.Json.PSM
             {
                 writer.WriteString("@id"u8, externalDataRequest.Id.Value);
             }
-            else
-            {
-                writer.WriteNull("@id"u8);
-            }
 
-            writer.WriteString("resourceIdentifier"u8, externalDataRequest.ResourceIdentifier?.ToString());
+            if (externalDataRequest.ResourceIdentifier != null)
+            {
+                writer.WriteString("resourceIdentifier"u8, externalDataRequest.ResourceIdentifier.ToString());
+            }
 
             writer.WriteEndObject();
         }

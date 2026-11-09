@@ -118,10 +118,12 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WriteString("@id"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
                 writer.WriteEndObject();
             }
+            {{#if (Property.QueryAdmitsNull propertyName ../this.Key ../this.Value)}}
             else
             {
                 writer.WriteNull("{{propertyName}}"u8);
             }
+            {{/if}}
             {{else}}
             writer.WriteStartObject("{{propertyName}}"u8);
             writer.WriteString("@id"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
@@ -133,20 +135,24 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WritePropertyName("{{propertyName}}"u8);
                 PsmSerializationDispatcher.Provide({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.GetType())({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}, writer, serializationModeKind, includeDerivedProperties);
             }
+            {{#if (Property.QueryAdmitsNull propertyName ../this.Key ../this.Value)}}
             else
             {
                 writer.WriteNull("{{propertyName}}"u8);
             }
+            {{/if}}
             {{else if (Property.QueryIsComposite propertyName ../this.Key ../this.Value)}}
             if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} != null)
             {
                 writer.WritePropertyName("{{propertyName}}"u8);
                 {{#Property.WriteReferencedSerializer propertyName ../this.Key ../this.Value}}.Serialize({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}, writer, serializationModeKind, includeDerivedProperties);
             }
+            {{#if (Property.QueryAdmitsNull propertyName ../this.Key ../this.Value)}}
             else
             {
                 writer.WriteNull("{{propertyName}}"u8);
             }
+            {{/if}}
             {{else if (Property.QueryIsNullableValue propertyName ../this.Key ../this.Value)}}
             if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.HasValue)
             {
@@ -160,16 +166,27 @@ namespace SysML2.NET.Serializer.Json.PSM
                 writer.WriteString("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.Value);
                 {{/if}}
             }
+            {{#if (Property.QueryAdmitsNull propertyName ../this.Key ../this.Value)}}
             else
             {
                 writer.WriteNull("{{propertyName}}"u8);
             }
+            {{/if}}
             {{else if (Property.QueryIsEnumeration propertyName ../this.Key ../this.Value)}}
             writer.WriteString("{{propertyName}}"u8, {{#Property.WriteEnumerationProvider propertyName ../this.Key ../this.Value}}.ToUtf8Bytes({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}));
             {{else if (Property.QueryIsBoolean propertyName ../this.Key ../this.Value)}}
             writer.WriteBoolean("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
             {{else if (Property.QueryIsNumeric propertyName ../this.Key ../this.Value)}}
             writer.WriteNumber("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+            {{else if (Property.QueryIsOmittedWhenUnset propertyName ../this.Key ../this.Value)}}
+            if ({{#Property.WriteAccessor propertyName ../this.Key ../this.Value}} != null)
+            {
+                {{#if (Property.QueryIsUri propertyName ../this.Key ../this.Value)}}
+                writer.WriteString("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}.ToString());
+                {{else}}
+                writer.WriteString("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}});
+                {{/if}}
+            }
             {{else if (Property.QueryIsUri propertyName ../this.Key ../this.Value)}}
             writer.WriteString("{{propertyName}}"u8, {{#Property.WriteAccessor propertyName ../this.Key ../this.Value}}?.ToString());
             {{else}}
