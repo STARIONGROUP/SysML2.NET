@@ -108,7 +108,7 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.OwningRelationship != y.OwningRelationship) return false;
 
-            if (FloatingPointComparer.NearlyEqual(x.Value, y.Value, FloatingPointComparer.DefaultDoubleEpsilon)) return false;
+            if (!FloatingPointComparer.NearlyEqual(x.Value, y.Value, FloatingPointComparer.DefaultDoubleEpsilon)) return false;
 
             return true;
         }

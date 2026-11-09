@@ -17,8 +17,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-
     using SysML2.NET.CodeGenerator.Extensions;
 
     using uml4net.SimpleClassifiers;
@@ -123,8 +121,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new HandlebarsException("{{#Property.WriteForDTOClass}} helper must have exactly two arguments");
                 }
 
-                var property = (parameters[0] as IProperty)!;
-                var classContext = (parameters[1] as IClass)!;
+                var property = (IProperty)parameters[0];
+                var classContext = (IClass)parameters[1];
 
                 var sb = new StringBuilder();
                 var propertyName = property.Name.CapitalizeFirstLetter();
@@ -132,7 +130,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (!isRedefinedPropertyInContext)
                 {
-                    sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
+                    sb.Append(property.Visibility?.ToString().ToLower(CultureInfo.InvariantCulture));
                     sb.Append(' ');
                 }
 
@@ -356,7 +354,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (!isRedefinedPropertyInContext)
                 {
-                    sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
+                    sb.Append(property.Visibility?.ToString().ToLower(CultureInfo.InvariantCulture));
                     sb.Append(' ');
                 }
 
@@ -792,101 +790,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(sb);
             });
 
-            handlebars.RegisterHelper("Property.WriteForDTOComparer", (writer, _, parameters) =>
-            {
-                if (parameters.Length != 2)
-                {
-                    throw new HandlebarsException("{{#Property.WriteForDTOComparer}} helper must have exactly two arguments");
-                }
-
-                var property = (parameters[0] as IProperty)!;
-                var classContext = (parameters[1] as IClass)!;
-
-                var sb = new StringBuilder();
-                var propertyName = property.Name.CapitalizeFirstLetter();
-                var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var _);
-
-                if (isRedefinedPropertyInContext)
-                {
-                    throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for redefined properties");
-                }
-
-                if (property.IsDerived || property.IsDerivedUnion)
-                {
-                    throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for derived or derivedunion properties");
-                }
-
-                if (property.Type is IDataType)
-                {
-                    if (property.QueryIsString())
-                    {
-                        if (property.QueryIsEnumerable())
-                        {
-                            if (property.IsOrdered)
-                            {
-                                sb.AppendLine($"if (!StringSequenceEquality.OrderedEqual(x.{propertyName}, y.{propertyName})) return false;");
-                            }
-                            else
-                            {
-                                sb.AppendLine($"if (!StringSequenceEquality.UnorderedEqual(x.{propertyName}, y.{propertyName})) return false;");
-                            }
-                        }
-                        else
-                        {
-                            sb.AppendLine($"if (!OrdinalStringComparer.Equals(x.{propertyName}, y.{propertyName})) return false;");
-                        }
-                    }
-                    else if (property.QueryIsDouble())
-                    {
-                        if (property.QueryIsNullable())
-                        {
-                            sb.AppendLine($"if (x.{propertyName}.HasValue != y.{propertyName}.HasValue) return false;");
-
-                            sb.AppendLine($"if (x.{propertyName}.HasValue && FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultDoubleEpsilon)) return false;");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"if (FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultDoubleEpsilon)) return false;");
-                        }
-
-                    }
-                    else if (property.QueryIsFloat())
-                    {
-                        if (property.QueryIsNullable())
-                        {
-                            sb.AppendLine($"if (x.{propertyName}.HasValue != y.{propertyName}.HasValue) return false;");
-
-                            sb.AppendLine($"if (x.{propertyName}.HasValue && FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultFloatEpsilon)) return false;");
-                        }
-
-                        sb.AppendLine($"if (FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultDoubleEpsilon)) return false;");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"if (x.{propertyName} != y.{propertyName}) return false;");
-                    }
-                }
-                else
-                {
-                    if (property.QueryIsEnumerable())
-                    {
-                        if (property.IsOrdered)
-                        {
-                            sb.AppendLine($"if (!GuidSequenceEquality.OrderedEqual(x.{propertyName}, y.{propertyName})) return false;");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"if (!GuidSequenceEquality.UnorderedEqual(x.{propertyName}, y.{propertyName})) return false;");
-                        }
-                    }
-                    else
-                    {
-                        sb.AppendLine($"if (x.{propertyName} != y.{propertyName}) return false;");
-                    }
-                }
-
-                writer.WriteSafeString(sb + Environment.NewLine);
-            });
+            handlebars.RegisterHelper("Property.WriteForDTOComparer", (writer, _, parameters) => WriteForDtoComparer(writer, parameters));
 
             handlebars.RegisterHelper("Property.IsPropertyRedefinedInClass", (context, arguments) =>
             {
@@ -1154,16 +1058,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Builds a complete XML <c>&lt;remarks&gt;</c> block listing every constraint body carried by
-        /// the supplied <see cref="IConstraint"/> sequence, labelled by language. Returns the empty
-        /// string when no constraint carries an <see cref="IOpaqueExpression"/> body.
-        /// </summary>
-        /// <param name="constraints">The constraints to render.</param>
-        /// <returns>
-        /// A multi-line string starting with <c>/// &lt;remarks&gt;</c> and ending with <c>/// &lt;/remarks&gt;</c>,
-        /// each line prefixed for direct emission inside the Extend template; empty when nothing to emit.
-        /// </returns>
-        /// <summary>
         /// Returns <see langword="true"/> when at least one constraint in <paramref name="constraints"/>
         /// carries an <see cref="IOpaqueExpression"/> with at least one non-blank body line — i.e. when
         /// <see cref="BuildOwnedRulesRemarksBlock"/> would emit a non-empty <c>&lt;remarks&gt;</c> block.
@@ -1185,6 +1079,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             return false;
         }
 
+        /// <summary>
+        /// Builds a complete XML <c>&lt;remarks&gt;</c> block listing every constraint body carried by
+        /// the supplied <see cref="IConstraint"/> sequence, labelled by language. Returns the empty
+        /// string when no constraint carries an <see cref="IOpaqueExpression"/> body.
+        /// </summary>
+        /// <param name="constraints">The constraints to render.</param>
+        /// <returns>
+        /// A multi-line string starting with <c>/// &lt;remarks&gt;</c> and ending with <c>/// &lt;/remarks&gt;</c>,
+        /// each line prefixed for direct emission inside the Extend template; empty when nothing to emit.
+        /// </returns>
         private static string BuildOwnedRulesRemarksBlock(IEnumerable<IConstraint> constraints)
         {
             var entries = new List<(string Language, string Body)>();
@@ -1193,13 +1097,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 var opaqueExpression = constraint.Specification?.OfType<IOpaqueExpression>().FirstOrDefault();
 
-                if (opaqueExpression == null || opaqueExpression.Body == null)
+                if (opaqueExpression?.Body == null)
                 {
                     continue;
                 }
 
                 var bodies = opaqueExpression.Body;
-                var languages = opaqueExpression.Language;
 
                 for (var index = 0; index < bodies.Count; index++)
                 {
@@ -1208,11 +1111,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         continue;
                     }
 
-                    var language = languages != null && index < languages.Count && !string.IsNullOrWhiteSpace(languages[index])
-                        ? languages[index].Trim()
-                        : "Constraint";
-
-                    entries.Add((language, bodies[index].Trim()));
+                    entries.Add((GetConstraintLanguage(opaqueExpression.Language, index), bodies[index].Trim()));
                 }
             }
 
@@ -1245,6 +1144,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Gets the language label of the constraint body at <paramref name="index"/>, or <c>Constraint</c> when none is given
+        /// </summary>
+        /// <param name="languages">The languages of an <see cref="IOpaqueExpression"/>, positionally matching its bodies</param>
+        /// <param name="index">The 0-based index of the body</param>
+        /// <returns>The trimmed language label</returns>
+        private static string GetConstraintLanguage(IList<string> languages, int index)
+        {
+            if (languages == null || index >= languages.Count || string.IsNullOrWhiteSpace(languages[index]))
+            {
+                return "Constraint";
+            }
+
+            return languages[index].Trim();
+        }
+
+        /// <summary>
         /// Replaces XML-significant characters with their entity equivalents so the result is safe to
         /// embed inside an XML doc comment.
         /// </summary>
@@ -1256,6 +1171,120 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 .Replace("&", "&amp;")
                 .Replace("<", "&lt;")
                 .Replace(">", "&gt;");
+        }
+
+        /// <summary>
+        /// Writes the equality check of a DTO comparer for the <see cref="IProperty"/> and <see cref="IClass"/> passed as arguments
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> to write to</param>
+        /// <param name="parameters">The helper arguments: the <see cref="IProperty"/> and its <see cref="IClass"/> context</param>
+        private static void WriteForDtoComparer(EncodedTextWriter writer, Arguments parameters)
+        {
+            if (parameters.Length != 2)
+            {
+                throw new HandlebarsException("{{#Property.WriteForDTOComparer}} helper must have exactly two arguments");
+            }
+
+            var property = (IProperty)parameters[0];
+            var classContext = (IClass)parameters[1];
+
+            if (property.TryQueryRedefinedByProperty(classContext, out _))
+            {
+                throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for redefined properties");
+            }
+
+            if (property.IsDerived || property.IsDerivedUnion)
+            {
+                throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for derived or derivedunion properties");
+            }
+
+            var sb = new StringBuilder();
+            var propertyName = property.Name.CapitalizeFirstLetter();
+
+            if (property.Type is IDataType)
+            {
+                AppendDataTypeComparison(sb, property, propertyName);
+            }
+            else
+            {
+                AppendSequenceOrScalarComparison(sb, property, propertyName, "GuidSequenceEquality");
+            }
+
+            writer.WriteSafeString(sb + Environment.NewLine);
+        }
+
+        /// <summary>
+        /// Appends the equality check for an <see cref="IProperty"/> typed by an <see cref="IDataType"/>
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="property">The <see cref="IProperty"/> to compare</param>
+        /// <param name="propertyName">The C# name of the <paramref name="property"/></param>
+        private static void AppendDataTypeComparison(StringBuilder sb, IProperty property, string propertyName)
+        {
+            if (property.QueryIsString())
+            {
+                if (property.QueryIsEnumerable())
+                {
+                    AppendSequenceOrScalarComparison(sb, property, propertyName, "StringSequenceEquality");
+                }
+                else
+                {
+                    sb.AppendLine($"if (!OrdinalStringComparer.Equals(x.{propertyName}, y.{propertyName})) return false;");
+                }
+            }
+            else if (property.QueryIsDouble())
+            {
+                AppendFloatingPointComparison(sb, property, propertyName, "DefaultDoubleEpsilon");
+            }
+            else if (property.QueryIsFloat())
+            {
+                AppendFloatingPointComparison(sb, property, propertyName, "DefaultFloatEpsilon");
+            }
+            else
+            {
+                sb.AppendLine($"if (x.{propertyName} != y.{propertyName}) return false;");
+            }
+        }
+
+        /// <summary>
+        /// Appends the equality check for an <see cref="IProperty"/> compared as an ordered or unordered sequence, or as a single value
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="property">The <see cref="IProperty"/> to compare</param>
+        /// <param name="propertyName">The C# name of the <paramref name="property"/></param>
+        /// <param name="sequenceEquality">The name of the sequence-equality class used when the property is enumerable</param>
+        private static void AppendSequenceOrScalarComparison(StringBuilder sb, IProperty property, string propertyName, string sequenceEquality)
+        {
+            if (!property.QueryIsEnumerable())
+            {
+                sb.AppendLine($"if (x.{propertyName} != y.{propertyName}) return false;");
+                return;
+            }
+
+            var method = property.IsOrdered ? "OrderedEqual" : "UnorderedEqual";
+
+            sb.AppendLine($"if (!{sequenceEquality}.{method}(x.{propertyName}, y.{propertyName})) return false;");
+        }
+
+        /// <summary>
+        /// Appends the tolerance-based equality check for a floating-point <see cref="IProperty"/>
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="property">The floating-point <see cref="IProperty"/> to compare</param>
+        /// <param name="propertyName">The C# name of the <paramref name="property"/></param>
+        /// <param name="epsilon">The name of the <c>FloatingPointComparer</c> epsilon constant to compare with</param>
+        private static void AppendFloatingPointComparison(StringBuilder sb, IProperty property, string propertyName, string epsilon)
+        {
+            if (property.QueryIsNullable())
+            {
+                sb.AppendLine($"if (x.{propertyName}.HasValue != y.{propertyName}.HasValue) return false;");
+
+                sb.AppendLine($"if (x.{propertyName}.HasValue && !FloatingPointComparer.NearlyEqual(x.{propertyName}.Value, y.{propertyName}.Value, FloatingPointComparer.{epsilon})) return false;");
+            }
+            else
+            {
+                sb.AppendLine($"if (!FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.{epsilon})) return false;");
+            }
         }
 
         /// <summary>
@@ -1291,8 +1320,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     : $"[{redefinitionPropertyName}];";
             }
 
+            var defaultValue = redefinedProperty.QueryIsReferenceType() ? "Guid.Empty" : "default";
+
             return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition)
-                ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : {(redefinedProperty.QueryIsReferenceType() ? "Guid.Empty" : "default")};"
+                ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : {defaultValue};"
                 : $"{redefinitionPropertyName};";
         }
 
@@ -1416,39 +1447,61 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return redefinedProperty.Type == redefinition.Type ? $"{redefinitionPropertyName} = value;" : $"{redefinitionPropertyName} = [..value.OfType<{redefinitionPropertyTypeName}>()];";
             }
 
+            var isSameType = redefinedProperty.Type == redefinition.Type;
+
+            return redefinedProperty.QueryIsEnumerable()
+                ? GetSetterFromEnumerableForPoco(redefinitionPropertyName, redefinitionPropertyTypeName, isSameType)
+                : GetSetterFromSingleValueForPoco(redefinitionPropertyName, redefinitionPropertyTypeName, isSameType);
+        }
+
+        /// <summary>
+        /// Gets the POCO setter body that assigns the first value of an enumerable redefined property to a single-valued redefinition
+        /// </summary>
+        /// <param name="redefinitionPropertyName">The accessor of the redefining property</param>
+        /// <param name="redefinitionPropertyTypeName">The C# type name of the redefining property</param>
+        /// <param name="isSameType">Whether the redefined and redefining properties have the same type</param>
+        /// <returns>The setter implementation</returns>
+        private static string GetSetterFromEnumerableForPoco(string redefinitionPropertyName, string redefinitionPropertyTypeName, bool isSameType)
+        {
             var stringBuilder = new StringBuilder();
 
-            if (redefinedProperty.QueryIsEnumerable())
+            if (isSameType)
             {
-                if (redefinedProperty.Type == redefinition.Type)
-                {
-                    stringBuilder.AppendLine("if(value.Count != 0)");
-                    stringBuilder.AppendLine("{");
-                    stringBuilder.AppendLine($"\t{redefinitionPropertyName} = value[0];");
-                }
-                else
-                {
-                    stringBuilder.AppendLine($"if(value.OfType<{redefinitionPropertyTypeName}>().FirstOrDefault() is {{ }} firstValue)");
-                    stringBuilder.AppendLine("{");
-                    stringBuilder.AppendLine($"\t{redefinitionPropertyName} = firstValue;");
-                }
-                
-                stringBuilder.Append('}');
+                stringBuilder.AppendLine("if(value.Count != 0)");
+                stringBuilder.AppendLine("{");
+                stringBuilder.AppendLine($"\t{redefinitionPropertyName} = value[0];");
             }
             else
             {
-                if (redefinedProperty.Type == redefinition.Type)
-                {
-                    stringBuilder.Append($"{redefinitionPropertyName} = value;");
-                }
-                else
-                {
-                    stringBuilder.AppendLine($"if(value is {redefinitionPropertyTypeName} castedValue)");
-                    stringBuilder.AppendLine("{");
-                    stringBuilder.AppendLine($"\t{redefinitionPropertyName} = castedValue;");
-                    stringBuilder.Append('}');
-                }
+                stringBuilder.AppendLine($"if(value.OfType<{redefinitionPropertyTypeName}>().FirstOrDefault() is {{ }} firstValue)");
+                stringBuilder.AppendLine("{");
+                stringBuilder.AppendLine($"\t{redefinitionPropertyName} = firstValue;");
             }
+
+            stringBuilder.Append('}');
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Gets the POCO setter body that assigns a single-valued redefined property to its redefinition
+        /// </summary>
+        /// <param name="redefinitionPropertyName">The accessor of the redefining property</param>
+        /// <param name="redefinitionPropertyTypeName">The C# type name of the redefining property</param>
+        /// <param name="isSameType">Whether the redefined and redefining properties have the same type</param>
+        /// <returns>The setter implementation</returns>
+        private static string GetSetterFromSingleValueForPoco(string redefinitionPropertyName, string redefinitionPropertyTypeName, bool isSameType)
+        {
+            if (isSameType)
+            {
+                return $"{redefinitionPropertyName} = value;";
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"if(value is {redefinitionPropertyTypeName} castedValue)");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"\t{redefinitionPropertyName} = castedValue;");
+            stringBuilder.Append('}');
 
             return stringBuilder.ToString();
         }
