@@ -58,7 +58,7 @@ namespace SysML2.NET.Dal
 
             var identifiersOfObjectsToDelete = new List<Guid>();
 
-            poco.AliasIds = dto.AliasIds;
+            poco.AliasIds = [.. dto.AliasIds];
 
             poco.DeclaredName = dto.DeclaredName;
 
@@ -203,7 +203,7 @@ namespace SysML2.NET.Dal
             var dto = new Core.DTO.Core.Types.Conjugation();
 
             dto.Id = poco.Id;
-            dto.AliasIds = poco.AliasIds;
+            dto.AliasIds = [.. poco.AliasIds];
             dto.ConjugatedType = poco.ConjugatedType.Id;
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;

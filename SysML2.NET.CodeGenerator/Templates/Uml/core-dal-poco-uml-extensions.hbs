@@ -82,6 +82,9 @@ namespace SysML2.NET.Dal
                         {{/if}}
 
                     {{/if}}
+                {{else if (Property.QueryIsEnumerable property) }}
+                        poco.{{ String.PascalCase property.Name }} = [..dto.{{ String.PascalCase property.Name }}];
+
                 {{else}}
                         poco.{{ String.PascalCase property.Name }} = dto.{{ String.PascalCase property.Name }};
                 

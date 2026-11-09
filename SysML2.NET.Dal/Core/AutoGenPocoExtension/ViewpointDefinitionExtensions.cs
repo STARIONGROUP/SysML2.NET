@@ -58,7 +58,7 @@ namespace SysML2.NET.Dal
 
             var identifiersOfObjectsToDelete = new List<Guid>();
 
-            poco.AliasIds = dto.AliasIds;
+            poco.AliasIds = [.. dto.AliasIds];
 
             poco.DeclaredName = dto.DeclaredName;
 
@@ -162,7 +162,7 @@ namespace SysML2.NET.Dal
             var dto = new Core.DTO.Systems.Views.ViewpointDefinition();
 
             dto.Id = poco.Id;
-            dto.AliasIds = poco.AliasIds;
+            dto.AliasIds = [.. poco.AliasIds];
             dto.DeclaredName = poco.DeclaredName;
             dto.ElementId = poco.ElementId;
             dto.IsAbstract = poco.IsAbstract;
@@ -252,7 +252,7 @@ namespace SysML2.NET.Dal
                 dto.stakeholderParameter = poco.stakeholderParameter.Select(x => x.Id).ToList();
                 dto.step = poco.step.Select(x => x.Id).ToList();
                 dto.subjectParameter = poco.subjectParameter.Id;
-                dto.text = poco.text;
+                dto.text = [.. poco.text];
                 dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
                 dto.unioningType = poco.unioningType.Select(x => x.Id).ToList();
                 dto.usage = poco.usage.Select(x => x.Id).ToList();

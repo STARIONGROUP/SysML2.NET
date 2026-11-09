@@ -58,7 +58,7 @@ namespace SysML2.NET.Dal
 
             var identifiersOfObjectsToDelete = new List<Guid>();
 
-            poco.AliasIds = dto.AliasIds;
+            poco.AliasIds = [.. dto.AliasIds];
 
             var clientRetained = new HashSet<Guid>(dto.Client);
             var clientToDelete = poco.Client.Where(x => !clientRetained.Contains(x.Id)).ToList();
@@ -223,7 +223,7 @@ namespace SysML2.NET.Dal
             var dto = new Core.DTO.Root.Dependencies.Dependency();
 
             dto.Id = poco.Id;
-            dto.AliasIds = poco.AliasIds;
+            dto.AliasIds = [.. poco.AliasIds];
             dto.Client = poco.Client.Select(x => x.Id).ToList();
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
