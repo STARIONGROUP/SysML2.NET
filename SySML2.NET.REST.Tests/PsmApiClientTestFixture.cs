@@ -200,7 +200,7 @@ namespace SySML2.NET.REST.Tests
 
             this.mockHttp.Expect(HttpMethod.Post, commitsUri)
                 .WithExactQueryString($"branchId={BranchId}")
-                .With(request => request.Content is { Headers.ContentType.MediaType: JsonMediaType }
+                .With(request => request.Content.Headers.ContentType.MediaType == JsonMediaType
                                  && request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the commit description"))
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
 
@@ -209,7 +209,7 @@ namespace SySML2.NET.REST.Tests
             Assert.That(commit.Id, Is.EqualTo(CommitId));
 
             this.mockHttp.Expect(HttpMethod.Post, commitsUri)
-                .With(request => request.RequestUri != null && string.IsNullOrWhiteSpace(request.RequestUri.Query))
+                .With(request => string.IsNullOrWhiteSpace(request.RequestUri.Query))
                 .Respond(HttpStatusCode.BadRequest, JsonMediaType, ErrorPayload);
 
             await Assert.ThatAsync(() => this.client.PostCommitByProjectAsync(ProjectId, commitRequest),
@@ -312,7 +312,7 @@ namespace SySML2.NET.REST.Tests
 
             this.mockHttp.Expect(HttpMethod.Post, queryResultsUri)
                 .WithExactQueryString($"page[size]=2&commitId={CommitId}")
-                .With(request => request.Content != null && request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the query name"))
+                .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the query name"))
                 .Respond(JsonMediaType, ReadPayload("roots.json"));
 
             var results = await this.client.GetQueryResultsByProjectIdQueryPostAsync(ProjectId, queryRequest, CommitId, new QueryParameters { PageSize = 2 });
@@ -325,7 +325,7 @@ namespace SySML2.NET.REST.Tests
             }
 
             this.mockHttp.Expect(HttpMethod.Post, queryResultsUri)
-                .With(request => request.RequestUri != null && string.IsNullOrWhiteSpace(request.RequestUri.Query))
+                .With(request => string.IsNullOrWhiteSpace(request.RequestUri.Query))
                 .Respond(HttpStatusCode.BadRequest, JsonMediaType, ErrorPayload);
 
             await Assert.ThatAsync(() => this.client.GetQueryResultsByProjectIdQueryPostAsync(ProjectId, queryRequest),
@@ -341,7 +341,7 @@ namespace SySML2.NET.REST.Tests
             var projectRequest = new ProjectRequest { Name = "the project name" };
 
             this.mockHttp.Expect(HttpMethod.Put, projectUri)
-                .With(request => request.Content != null && request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the project name"))
+                .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains("the project name"))
                 .Respond(JsonMediaType, ReadPayload("project.json"));
 
             var project = await this.client.PutProjectByIdAsync(ProjectId, projectRequest);
@@ -377,7 +377,7 @@ namespace SySML2.NET.REST.Tests
 
             this.mockHttp.Expect(HttpMethod.Post, mergeUri)
                 .WithExactQueryString($"sourceCommitId={CommitId},{OtherCommitId}&description=the%20merge%20description")
-                .With(request => request.Content != null && request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains(RootNamespaceId.ToString()))
+                .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains(RootNamespaceId.ToString()))
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
 
             var mergeCommit = await this.client.MergeAsync(ProjectId, [CommitId, OtherCommitId], BranchId, [new Namespace { Id = RootNamespaceId }], "the merge description");

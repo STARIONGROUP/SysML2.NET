@@ -27,9 +27,9 @@ namespace SySML2.NET.REST.Tests.Integration
     public static class DefaultSeedModel
     {
         /// <summary>
-        /// The identifier of the <see cref="OwningMembership"/> between the package and the part definition
+        /// Gets the identifier of the <see cref="OwningMembership"/> between the package and the part definition
         /// </summary>
-        private static readonly Guid MembershipId = Guid.Parse("8c1f4b2a-3d5e-4f60-9a7b-1c2d3e4f5a61");
+        public static Guid MembershipId { get; } = Guid.Parse("8c1f4b2a-3d5e-4f60-9a7b-1c2d3e4f5a61");
 
         /// <summary>
         /// Gets the identifier of the root <see cref="Package"/>
