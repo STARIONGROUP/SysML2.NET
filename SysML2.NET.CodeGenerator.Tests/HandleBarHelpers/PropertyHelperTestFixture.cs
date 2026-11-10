@@ -9,6 +9,7 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -22,7 +23,9 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
     using uml4net.Classification;
     using uml4net.Extensions;
+    using uml4net.SimpleClassifiers;
     using uml4net.StructuredClassifiers;
+    using uml4net.Values;
 
     [TestFixture]
     public class PropertyHelperTestFixture
@@ -240,24 +243,39 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         // -------------------------------------------------------------------
 
         [Test]
-        public void Verify_that_WriteForDTOComparer_generates_comparison_code()
+        public void VerifyWriteForDTOComparer()
         {
-            var nonAbstractClass = this.allClasses.First(x => !x.IsAbstract);
+            const string helperExpression = "{{Property.WriteForDTOComparer this ../classObj}}";
+            var emptyClass = new Class { Name = "Empty" };
 
-            var nonDerivedNonRedefinedProperty = nonAbstractClass.QueryAllProperties()
-                .FirstOrDefault(p => !p.IsDerived && !p.IsDerivedUnion
-                    && !p.TryQueryRedefinedByProperty(nonAbstractClass, out _));
+            Assert.That(() => this.RenderWithPropertyContext("{{Property.WriteForDTOComparer this}}", this.testProperty),
+                Throws.InstanceOf<HandlebarsException>());
 
-            if (nonDerivedNonRedefinedProperty == null)
+            var redefiningClass = this.allClasses.First(c => c.QueryAllProperties().Any(p => p.TryQueryRedefinedByProperty(c, out _)));
+            var redefinedProperty = redefiningClass.QueryAllProperties().First(p => p.TryQueryRedefinedByProperty(redefiningClass, out _));
+
+            Assert.That(() => this.RenderWithPropertyAndClassContext(helperExpression, redefinedProperty, redefiningClass),
+                Throws.TypeOf<InvalidOperationException>());
+
+            Assert.That(() => this.RenderWithPropertyAndClassContext(helperExpression, this.derivedProperty, emptyClass),
+                Throws.TypeOf<InvalidOperationException>());
+
+            var doubleProperty = new Property { Name = "value", Type = new PrimitiveType { Name = "Real" } };
+
+            Assert.That(this.RenderWithPropertyAndClassContext(helperExpression, doubleProperty, emptyClass),
+                Does.Contain("if (!FloatingPointComparer.NearlyEqual(x.Value, y.Value, FloatingPointComparer.DefaultDoubleEpsilon)) return false;"));
+
+            var nullableFloatProperty = new Property { Name = "ratio", Type = new PrimitiveType { Name = "float" } };
+            nullableFloatProperty.LowerValue.Add(new LiteralInteger { Value = 0 });
+
+            var result = this.RenderWithPropertyAndClassContext(helperExpression, nullableFloatProperty, emptyClass);
+
+            using (Assert.EnterMultipleScope())
             {
-                Assert.Ignore("No suitable property found");
+                Assert.That(result, Does.Contain("if (x.Ratio.HasValue != y.Ratio.HasValue) return false;"));
+                Assert.That(result, Does.Contain("if (x.Ratio.HasValue && !FloatingPointComparer.NearlyEqual(x.Ratio.Value, y.Ratio.Value, FloatingPointComparer.DefaultFloatEpsilon)) return false;"));
+                Assert.That(result, Does.Not.Contain("DefaultDoubleEpsilon"));
             }
-
-            var result = this.RenderWithPropertyAndClassContext(
-                "{{Property.WriteForDTOComparer this ../classObj}}", nonDerivedNonRedefinedProperty, nonAbstractClass);
-
-            Assert.That(result.Trim(), Is.Not.Empty);
-            Assert.That(result, Does.Contain("return false"));
         }
 
         // -------------------------------------------------------------------
