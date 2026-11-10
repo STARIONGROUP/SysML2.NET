@@ -740,12 +740,12 @@ namespace SySML2.NET.REST.Tests.Integration
             }
         }
 
-        private static IResolveConstraint ThrowsClientError()
+        private static RangeConstraint ThrowsClientError()
         {
             return Throws.TypeOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).InRange(HttpStatusCode.BadRequest, LastClientError);
         }
 
-        private static IResolveConstraint ThrowsNotFound()
+        private static EqualConstraint<HttpStatusCode> ThrowsNotFound()
         {
             return Throws.TypeOf<PsmApiException>().With.Property(nameof(PsmApiException.StatusCode)).EqualTo(HttpStatusCode.NotFound);
         }
