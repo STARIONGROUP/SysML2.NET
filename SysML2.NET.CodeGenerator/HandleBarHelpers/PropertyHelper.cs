@@ -538,7 +538,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return;
                 }
 
-                // properties that have been redefined in the context of the 
+                // properties that have been redefined in the context of the
                 // generated class are ignored
                 if (property.TryQueryRedefinedByProperty(generatedClass, out _))
                 {
@@ -649,7 +649,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return;
                 }
 
-                // properties that have been redefined in the context of the 
+                // properties that have been redefined in the context of the
                 // generated class are ignored
                 if (property.TryQueryRedefinedByProperty(generatedClass, out _))
                 {
@@ -936,13 +936,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var oppositePropertyName = property.Opposite.Name.CapitalizeFirstLetter();
                 var childVariableName = property.Type.Name.LowerCaseFirstLetter();
                 var parentVariableName = property.Opposite.Type.Name.LowerCaseFirstLetter();
-                
+
                 stringBuilder.AppendLine($"(({interfaceName})this).{propertyName} = new ContainerList<I{property.Opposite.Type.Name}, I{property.Type.Name}>(this, ");
                 stringBuilder.AppendLine($"({childVariableName}, {parentVariableName}) => ((IContained{property.Type.Name}){childVariableName}).{oppositePropertyName} = {parentVariableName},");
                 stringBuilder.AppendLine($"{childVariableName} => {childVariableName}.{oppositePropertyName});");
                 writer.WriteSafeString(stringBuilder + Environment.NewLine);
             });
-            
+
             handlebars.RegisterHelper("Property.QueryHasDefaultValueWithDifferentValueThanDefault", (_, arguments) =>
             {
                 if (arguments.Length != 1)
@@ -955,8 +955,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("The #Property.QueryHasDefaultValueWithDifferentValueThanDefault argument supposed to be an IProperty");
                 }
 
-                return property.QueryIsEnum() 
-                    ? property.QueryIsEnumPropertyWithDefaultValue() 
+                return property.QueryIsEnum()
+                    ? property.QueryIsEnumPropertyWithDefaultValue()
                     : (property.QueryHasDefaultValue() && property.QueryIsDefaultValueDifferentThanDefault());
             });
 
@@ -985,7 +985,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"{property.QueryDefaultValueAsString()}");
                 }
             });
-            
+
             handlebars.RegisterHelper("Property.QueryIsEnumerableAndReferenceProperty", (_, arguments) =>
             {
                 if (arguments.Length != 1)
@@ -997,7 +997,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     throw new ArgumentException("The #Property.QueryIsEnumerableAndReferenceProperty argument supposed to be an IProperty");
                 }
-                
+
                 return property.QueryIsEnumerable() && property.QueryIsReferenceType();
             });
 
@@ -1149,7 +1149,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="languages">The languages of an <see cref="IOpaqueExpression"/>, positionally matching its bodies</param>
         /// <param name="index">The 0-based index of the body</param>
         /// <returns>The trimmed language label</returns>
-        private static string GetConstraintLanguage(IList<string> languages, int index)
+        private static string GetConstraintLanguage(List<string> languages, int index)
         {
             if (languages == null || index >= languages.Count || string.IsNullOrWhiteSpace(languages[index]))
             {
@@ -1441,7 +1441,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             var redefinitionPropertyTypeName = redefinition.QueryIsReferenceType() ? $"I{redefinition.Type.Name}" : redefinition.QueryCSharpTypeName();
-            
+
             if (redefinedProperty.QueryIsEnumerable() && redefinition.QueryIsEnumerable())
             {
                 return redefinedProperty.Type == redefinition.Type ? $"{redefinitionPropertyName} = value;" : $"{redefinitionPropertyName} = [..value.OfType<{redefinitionPropertyTypeName}>()];";
