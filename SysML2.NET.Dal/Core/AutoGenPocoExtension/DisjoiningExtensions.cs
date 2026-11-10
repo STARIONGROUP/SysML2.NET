@@ -29,8 +29,6 @@ namespace SysML2.NET.Dal
     {
         /// <summary>
         /// Updates the value properties of the <see cref="Core.POCO.Core.Types.Disjoining"/> by setting the value equal to that of the dto
-        /// Removes deleted objects from the reference properties and returns the unique identifiers
-        /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
         /// The <see cref="Core.POCO.Core.Types.Disjoining"/> that is to be updated
@@ -38,13 +36,10 @@ namespace SysML2.NET.Dal
         /// <param name="dto">
         /// The DTO that is used to update the <see cref="Core.DTO.Core.Types.Disjoining"/> with
         /// </param>
-        /// <returns>
-        /// The unique identifiers of the objects that have been removed from contained properties
-        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Core.Types.Disjoining poco, Core.DTO.Core.Types.Disjoining dto)
+        public static void UpdateValueProperties(this Core.POCO.Core.Types.Disjoining poco, Core.DTO.Core.Types.Disjoining dto)
         {
             if (poco == null)
             {
@@ -55,8 +50,6 @@ namespace SysML2.NET.Dal
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
-
-            var identifiersOfObjectsToDelete = new List<Guid>();
 
             poco.AliasIds = [.. dto.AliasIds];
 
@@ -70,33 +63,11 @@ namespace SysML2.NET.Dal
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
-            var ownedRelatedElementRetained = new HashSet<Guid>(dto.OwnedRelatedElement);
-            var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Where(x => !ownedRelatedElementRetained.Contains(x.Id)).ToList();
-
-            foreach (var ownedRelatedElement in ownedRelatedElementToDelete)
-            {
-                ((IContainedRelationship)poco).OwnedRelatedElement.Remove(ownedRelatedElement);
-            }
-
-            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete.Select(x => x.Id));
-
-            var ownedRelationshipRetained = new HashSet<Guid>(dto.OwnedRelationship);
-            var ownedRelationshipToDelete = poco.OwnedRelationship.Where(x => !ownedRelationshipRetained.Contains(x.Id)).ToList();
-
-            foreach (var ownedRelationship in ownedRelationshipToDelete)
-            {
-                ((IContainedElement)poco).OwnedRelationship.Remove(ownedRelationship);
-            }
-
-            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete.Select(x => x.Id));
-
-
-            return identifiersOfObjectsToDelete;
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Core.POCO.Core.Types.Disjoining"/> using the data (identifiers) encapsulated in the DTO
-        /// and the provided cache to find the referenced object.
+        /// Updates the Reference properties, containment included, of the <see cref="Core.POCO.Core.Types.Disjoining"/> using the data (identifiers)
+        /// encapsulated in the DTO and the provided cache to find the referenced object, preserving the order of the DTO.
         /// </summary>
         /// <param name="poco">
         /// The <see cref="Core.POCO.Core.Types.Disjoining"/> that is to be updated
@@ -108,7 +79,9 @@ namespace SysML2.NET.Dal
         /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="poco"/>, <paramref name="dto"/> or <paramref name="cache"/> is null
+        /// </exception>
         public static void UpdateReferenceProperties(this Core.POCO.Core.Types.Disjoining poco, Core.DTO.Core.Types.Disjoining dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
@@ -126,64 +99,26 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
-
-            if (cache.TryGetValue(dto.DisjoiningType, out lazyPoco))
+            if (cache.TryGetValue(dto.DisjoiningType, out var disjoiningTypePoco))
             {
-                poco.DisjoiningType = (Core.POCO.Core.Types.IType)lazyPoco.Value;
+                poco.DisjoiningType = (Core.POCO.Core.Types.IType)disjoiningTypePoco.Value;
             }
             else
             {
                 poco.DisjoiningType = null;
             }
 
-            var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
-
-            foreach (var identifier in ownedRelatedElementToAdd)
+            if (cache.TryGetValue(dto.TypeDisjoined, out var typeDisjoinedPoco))
             {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    ((IContainedRelationship)poco).OwnedRelatedElement.Add(lazyPoco.Value);
-                }
-            }
-
-            var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
-
-            foreach (var identifier in ownedRelationshipToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    ((IContainedElement)poco).OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
-                }
-            }
-
-            if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
-            {
-                ((IContainedRelationship)poco).OwningRelatedElement = lazyPoco.Value;
-            }
-            else
-            {
-                ((IContainedRelationship)poco).OwningRelatedElement = null;
-            }
-
-            if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
-            {
-                ((IContainedElement)poco).OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
-            }
-            else
-            {
-                ((IContainedElement)poco).OwningRelationship = null;
-            }
-
-            if (cache.TryGetValue(dto.TypeDisjoined, out lazyPoco))
-            {
-                poco.TypeDisjoined = (Core.POCO.Core.Types.IType)lazyPoco.Value;
+                poco.TypeDisjoined = (Core.POCO.Core.Types.IType)typeDisjoinedPoco.Value;
             }
             else
             {
                 poco.TypeDisjoined = null;
             }
 
+
+            poco.UpdateContainment(dto, cache);
         }
 
         /// <summary>

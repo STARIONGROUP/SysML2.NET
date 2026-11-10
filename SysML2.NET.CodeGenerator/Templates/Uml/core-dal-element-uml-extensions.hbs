@@ -25,8 +25,6 @@ namespace SysML2.NET.Dal
     {
         /// <summary>
         /// Updates the value properties of the <see cref="Core.POCO.Root.Elements.IElement"/> by setting the value equal to that of the dto.
-        /// Removes deleted objects from the reference properties and returns the unique identifiers
-        /// of the objects that have been removed from containment properties
         /// </summary>
         /// <param name="poco">
         /// The <see cref="Core.POCO.Root.Elements.IElement"/> that is to be updated
@@ -34,13 +32,10 @@ namespace SysML2.NET.Dal
         /// <param name="dto">
         /// The DTO that is used to update the <see cref="Core.POCO.Root.Elements.IElement"/> with
         /// </param>
-        /// <returns>
-        /// The unique identifiers of the objects that have been removed from containment properties
-        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.Root.Elements.IElement dto)
+        public static void UpdateValueProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.Root.Elements.IElement dto)
         {
             if (poco == null)
             {
@@ -52,17 +47,20 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            return poco switch
+            switch (poco)
             {
                 {{#each this as | class |}}
-                Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco => {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }})dto),
+                case Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco:
+                    {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateValueProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}) dto);
+                    break;
                 {{/each}}
-                _ => throw new NotSupportedException($"{poco.GetType().Name} not yet supported")
-            };
+                default:
+                    throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
+            }
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Core.POCO.Root.Elements.IElement"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties, containment included, of the <see cref="Core.POCO.Root.Elements.IElement"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">

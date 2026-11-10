@@ -47,9 +47,10 @@ namespace SysML2.NET.Tests.Extend
 
             // Two IFeatures in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoFeatureMembership = new ParameterMembership();
+            var firstFeature = new Feature();
             var secondFeature = new Feature();
 
-            ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(feature);
+            ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(firstFeature);
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(secondFeature);
 
             Assert.That(() => twoFeatureMembership.ComputeOwnedMemberParameter(), Throws.TypeOf<MultiplicityViolationException>());

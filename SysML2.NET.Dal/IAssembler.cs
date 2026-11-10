@@ -31,5 +31,16 @@ namespace SysML2.NET.Dal
         /// the DTOs used to update the cache with
         /// </param>
         void Synchronize(IEnumerable<Core.DTO.Root.Elements.IElement> dtos);
+
+        /// <summary>
+        /// Synchronize the Cache based on the provided <paramref name="dtos"/> and remove the <paramref name="deletedIdentifiers"/> from it
+        /// </summary>
+        /// <param name="dtos">
+        /// the DTOs used to update the cache with
+        /// </param>
+        /// <param name="deletedIdentifiers">
+        /// the identifiers of the deleted elements; an element no longer listed as owned is detached, not deleted
+        /// </param>
+        void Synchronize(IEnumerable<Core.DTO.Root.Elements.IElement> dtos, IEnumerable<Guid> deletedIdentifiers);
     }
 }

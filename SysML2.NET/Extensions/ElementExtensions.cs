@@ -13,234 +13,241 @@ namespace SysML2.NET.Extensions
     using System.Collections.Generic;
     using System.Linq;
 
-    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Collections;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Exceptions;
 
     /// <summary>
-    /// Extension method for the <see cref="IElement"/> interface
+    /// Extension methods for the <see cref="IElement"/> interface
     /// </summary>
     public static partial class ElementExtensions
     {
         /// <summary>
-        /// Assigns the containment ownership of the <paramref name="bridgeRelationship"/> to a source <see cref="IElement"/>,
-        /// without contributing any element to <see cref="IRelationship.OwnedRelatedElement"/>.
+        /// Ownership assignment for an <see cref="IElement"/>
         /// </summary>
-        /// <param name="source">The container <see cref="IElement"/> that will own the <paramref name="bridgeRelationship"/></param>
-        /// <param name="bridgeRelationship">The <see cref="IRelationship"/> to be owned by the <paramref name="source"/></param>
-        /// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="bridgeRelationship"/> is null</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="source"/> equals <paramref name="bridgeRelationship"/>,
-        /// if <paramref name="bridgeRelationship"/> is an <see cref="IOwningMembership"/> (which always owns its
-        /// member element and therefore requires the three-argument overload),
-        /// if <paramref name="source"/>'s runtime type does not satisfy the typed property declared by the bridge's
-        /// metaclass for its <see cref="IRelationship.OwningRelatedElement"/> (e.g. an <c>IFeatureMembership</c> requires
-        /// an <c>IType</c> source; an <c>IMembership</c> requires an <c>INamespace</c> source — per the KerML specification),
-        /// or if <paramref name="bridgeRelationship"/> already transitively contains <paramref name="source"/> (which would
-        /// produce a containment cycle)</exception>
-        /// <remarks>
-        /// Use this overload for the "owning reference" pattern, where the <paramref name="source"/> owns the relationship
-        /// but the relationship merely references its other related elements rather than containing them. Typical examples
-        /// are <c>FeatureTyping</c>, <c>Subsetting</c>, <c>Redefinition</c>, and <c>Conjugation</c>: the typed/specializing
-        /// feature owns the relationship, while the referenced type/specialized feature is not an owned related element.
-        /// For the "owning containment" pattern (e.g. <c>FeatureMembership</c>, <c>OwningMembership</c>), use the
-        /// <see cref="AssignOwnership(IElement, IRelationship, IElement)"/> overload instead.
-        /// </remarks>
-        public static void AssignOwnership(this IElement source, IRelationship bridgeRelationship)
+        /// <param name="source">The owning <see cref="IElement"/></param>
+        extension(IElement source)
+        {
+            /// <summary>
+            /// Makes the <paramref name="source"/> own the <paramref name="bridgeRelationship"/>, which merely references its other related elements.
+            /// </summary>
+            /// <param name="bridgeRelationship">The <see cref="IRelationship"/> to own</param>
+            /// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="bridgeRelationship"/> is null</exception>
+            /// <exception cref="InvalidOperationException">If the ownership breaks a containment rule, or the relationship is an <see cref="IOwningMembership"/></exception>
+            public void AssignOwnership(IRelationship bridgeRelationship)
+            {
+                AssertCanOwnRelationship(source, bridgeRelationship);
+
+                if (bridgeRelationship is IOwningMembership)
+                {
+                    throw new InvalidOperationException(
+                        $"The relationship of type '{bridgeRelationship.GetType().Name}' is an IOwningMembership and always owns a member element. Use the AssignOwnership(IElement, IRelationship, IElement) overload to supply the owned target element.");
+                }
+
+                AppendOwnedRelationship(source, bridgeRelationship);
+            }
+
+            /// <summary>
+            /// Makes the <paramref name="source"/> own the <paramref name="bridgeRelationship"/>, which in turn owns the <paramref name="target"/>.
+            /// </summary>
+            /// <param name="bridgeRelationship">The <see cref="IRelationship"/> to own</param>
+            /// <param name="target">The <see cref="IElement"/> owned by the <paramref name="bridgeRelationship"/></param>
+            /// <exception cref="ArgumentNullException">If one of the parameters is null</exception>
+            /// <exception cref="InvalidOperationException">If the ownership breaks a containment rule, or an <see cref="IOwningMembership"/> already owns another element</exception>
+            /// <remarks>
+            /// An element the <paramref name="bridgeRelationship"/> already owns keeps its position.
+            /// </remarks>
+            public void AssignOwnership(IRelationship bridgeRelationship, IElement target)
+            {
+                AssertCanOwnRelationship(source, bridgeRelationship);
+                AssertCanOwnRelatedElement(bridgeRelationship, target);
+
+                if (source == target)
+                {
+                    throw new InvalidOperationException("The parent cannot own itself.");
+                }
+
+                if (IsContainedTransitivelyBy(source, target))
+                {
+                    throw new InvalidOperationException(
+                        $"Containment cycle: the supplied source of type '{source.GetType().Name}' is already transitively contained by the target of type '{target.GetType().Name}'.");
+                }
+
+                AppendOwnedRelationship(source, bridgeRelationship);
+                AppendOwnedRelatedElement(bridgeRelationship, target);
+            }
+        }
+
+        /// <summary>
+        /// Appends the <paramref name="element"/> to the owned related elements of the <paramref name="owner"/>, unless already there.
+        /// </summary>
+        /// <param name="owner">The owning <see cref="IRelationship"/></param>
+        /// <param name="element">The <see cref="IElement"/> to own</param>
+        internal static void AppendOwnedRelatedElement(IRelationship owner, IElement element)
+        {
+            Append(((IContainedRelationship)owner).OwnedRelatedElement, element);
+        }
+
+        /// <summary>
+        /// Appends the <paramref name="relationship"/> to the owned relationships of the <paramref name="owner"/>, unless already there.
+        /// </summary>
+        /// <param name="owner">The owning <see cref="IElement"/></param>
+        /// <param name="relationship">The <see cref="IRelationship"/> to own</param>
+        internal static void AppendOwnedRelationship(IElement owner, IRelationship relationship)
+        {
+            Append(((IContainedElement)owner).OwnedRelationship, relationship);
+        }
+
+        /// <summary>
+        /// Asserts that the <paramref name="relationship"/> may own the <paramref name="element"/>.
+        /// </summary>
+        /// <param name="relationship">The owning <see cref="IRelationship"/></param>
+        /// <param name="element">The <see cref="IElement"/> to own</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="relationship"/> or <paramref name="element"/> is null</exception>
+        /// <exception cref="InvalidOperationException">If a containment rule is broken</exception>
+        internal static void AssertCanOwnRelatedElement(IRelationship relationship, IElement element)
+        {
+            AssertCanContain(relationship, element);
+
+            // OwningMembership::ownedMemberElement [1..1] has no first-of-many derivation, unlike Annotation::ownedAnnotatingElement
+            if (relationship is IOwningMembership && relationship.OwnedRelatedElement.Any(ownedElement => ownedElement != element))
+            {
+                throw new InvalidOperationException($"The relationship of type '{relationship.GetType().Name}' already owns another element; remove it before assigning a new one.");
+            }
+        }
+
+        /// <summary>
+        /// Asserts that the <paramref name="relationship"/> may own exactly the <paramref name="elements"/>.
+        /// </summary>
+        /// <param name="relationship">The owning <see cref="IRelationship"/></param>
+        /// <param name="elements">The <see cref="IElement"/>s to own</param>
+        /// <exception cref="ArgumentNullException">If an argument or an element is null</exception>
+        /// <exception cref="ArgumentException">If an element is listed twice</exception>
+        /// <exception cref="InvalidOperationException">If a containment rule is broken</exception>
+        internal static void AssertCanOwnRelatedElements(IRelationship relationship, IReadOnlyList<IElement> elements)
+        {
+            if (relationship == null)
+            {
+                throw new ArgumentNullException(nameof(relationship));
+            }
+
+            if (elements == null)
+            {
+                throw new ArgumentNullException(nameof(elements));
+            }
+
+            foreach (var element in elements)
+            {
+                AssertCanContain(relationship, element);
+            }
+
+            AssertDistinct(elements, nameof(elements));
+
+            if (relationship is IOwningMembership && elements.Count > 1)
+            {
+                throw new InvalidOperationException($"The relationship of type '{relationship.GetType().Name}' owns a single member element; {elements.Count} were supplied.");
+            }
+        }
+
+        /// <summary>
+        /// Asserts that the <paramref name="source"/> may own exactly the <paramref name="relationships"/>.
+        /// </summary>
+        /// <param name="source">The owning <see cref="IElement"/></param>
+        /// <param name="relationships">The <see cref="IRelationship"/>s to own</param>
+        /// <exception cref="ArgumentNullException">If an argument or a relationship is null</exception>
+        /// <exception cref="ArgumentException">If a relationship is listed twice</exception>
+        /// <exception cref="InvalidOperationException">If a containment rule is broken</exception>
+        internal static void AssertCanOwnRelationships(IElement source, IReadOnlyList<IRelationship> relationships)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (bridgeRelationship == null)
+            if (relationships == null)
             {
-                throw new ArgumentNullException(nameof(bridgeRelationship));
+                throw new ArgumentNullException(nameof(relationships));
             }
 
-            if (source == bridgeRelationship)
+            foreach (var relationship in relationships)
             {
-                throw new InvalidOperationException("The relationship can not own itself.");
+                AssertCanOwnRelationship(source, relationship);
             }
 
-            if (bridgeRelationship is IOwningMembership)
-            {
-                throw new InvalidOperationException(
-                    $"The relationship of type '{bridgeRelationship.GetType().Name}' is an IOwningMembership and always owns a member element. Use the AssignOwnership(IElement, IRelationship, IElement) overload to supply the owned target element.");
-            }
-
-            if (!bridgeRelationship.QueryIsValidContainmentOwner(source))
-            {
-                throw new InvalidOperationException(
-                    $"The source of type '{source.GetType().Name}' is not a valid containment owner for the relationship of type '{bridgeRelationship.GetType().Name}'; expected an instance of '{bridgeRelationship.ExpectedContainmentOwnerTypeName()}'.");
-            }
-
-            if (IsContainedTransitivelyBy(source, bridgeRelationship))
-            {
-                throw new InvalidOperationException(
-                    $"Containment cycle: the supplied source of type '{source.GetType().Name}' is already transitively contained by the bridge relationship of type '{bridgeRelationship.GetType().Name}'.");
-            }
-
-            AssignOwnershipCore(source, bridgeRelationship);
+            AssertDistinct(relationships, nameof(relationships));
         }
 
         /// <summary>
-        /// Assigns the containment ownership of a target <see cref="IElement"/> to a source <see cref="IElement"/> via the bridge <see cref="IRelationship"/>
+        /// Asserts that the <paramref name="source"/> may own the <paramref name="relationship"/>.
         /// </summary>
-        /// <param name="source">The container<see cref="IElement"/></param>
-        /// <param name="bridgeRelationship">The bridge <see cref="IRelationship"/></param>
-        /// <param name="target">The contained <see cref="IElement"/></param>
-        /// <exception cref="ArgumentNullException">If one of the parameter is null</exception>
-        /// <exception cref="InvalidOperationException">If the <paramref name="source"/> equals the <paramref name="target"/>,
-        ///  if the <paramref name="bridgeRelationship"/> equals the <paramref name="target"/>,
-        ///  if <paramref name="bridgeRelationship"/> is neither an <see cref="IOwningMembership"/> nor an
-        ///  <see cref="IAnnotation"/> (the only relationship metaclasses that subset
-        ///  <see cref="IRelationship.OwnedRelatedElement"/> with composite aggregation),
-        ///  if <paramref name="source"/>'s runtime type does not satisfy the typed property declared by the bridge's
-        ///  metaclass for its <see cref="IRelationship.OwningRelatedElement"/> (e.g. an <c>IFeatureMembership</c>
-        ///  requires an <c>IType</c> source; an <c>IMembership</c> requires an <c>INamespace</c> source — per the
-        ///  KerML specification),
-        ///  if <paramref name="target"/>'s runtime type does not satisfy the typed composite property declared by the
-        ///  bridge's metaclass for its <see cref="IRelationship.OwnedRelatedElement"/> (e.g. an
-        ///  <c>IFeatureMembership</c> requires an <c>IFeature</c> target),
-        ///  or if <paramref name="bridgeRelationship"/> or <paramref name="target"/> already transitively contains
-        ///  <paramref name="source"/> (which would produce a containment cycle)</exception>
-        /// <remarks>
-        /// Use this overload for the "owning containment" pattern, where the <paramref name="bridgeRelationship"/> contains
-        /// the <paramref name="target"/> as one of its <see cref="IRelationship.OwnedRelatedElement"/>. The only relationship
-        /// metaclasses that can carry an owned related element are <see cref="IOwningMembership"/> (and all its specialisations
-        /// such as <c>FeatureMembership</c>, <c>ParameterMembership</c>, <c>VariantMembership</c>, <c>FeatureValue</c>, etc.)
-        /// and <see cref="IAnnotation"/>. For the "owning reference" pattern (e.g. <c>FeatureTyping</c>, <c>Subsetting</c>),
-        /// use the <see cref="AssignOwnership(IElement, IRelationship)"/> overload instead.
-        /// Note: the source is the container element and the target is the containee.
-        /// </remarks>
-        public static void AssignOwnership(this IElement source, IRelationship bridgeRelationship, IElement target)
+        /// <param name="source">The owning <see cref="IElement"/></param>
+        /// <param name="relationship">The <see cref="IRelationship"/> to own</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="relationship"/> is null</exception>
+        /// <exception cref="InvalidOperationException">If a containment rule is broken</exception>
+        internal static void AssertCanOwnRelationship(IElement source, IRelationship relationship)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (bridgeRelationship == null)
+            if (relationship == null)
             {
-                throw new ArgumentNullException(nameof(bridgeRelationship));
+                throw new ArgumentNullException(nameof(relationship));
             }
 
-            if (target == null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
-
-            if (source == bridgeRelationship)
+            if (source == relationship)
             {
                 throw new InvalidOperationException("The relationship can not own itself.");
             }
 
-            if (source == target)
-            {
-                throw new InvalidOperationException("The parent cannot own itself.");
-            }
-
-            if (bridgeRelationship == target)
-            {
-                throw new InvalidOperationException("The relationship can not own itself.");
-            }
-
-            if (bridgeRelationship is not IOwningMembership and not IAnnotation)
+            if (!relationship.QueryIsValidContainmentOwner(source))
             {
                 throw new InvalidOperationException(
-                    $"The relationship of type '{bridgeRelationship.GetType().Name}' is neither an IOwningMembership nor an IAnnotation and therefore cannot own a related element. Use the AssignOwnership(IElement, IRelationship) overload instead.");
+                    $"The source of type '{source.GetType().Name}' is not a valid containment owner for the relationship of type '{relationship.GetType().Name}'; expected an instance of '{relationship.ExpectedContainmentOwnerTypeName()}'.");
             }
 
-            if (!bridgeRelationship.QueryIsValidContainmentOwner(source))
+            if (IsContainedTransitivelyBy(source, relationship))
             {
                 throw new InvalidOperationException(
-                    $"The source of type '{source.GetType().Name}' is not a valid containment owner for the relationship of type '{bridgeRelationship.GetType().Name}'; expected an instance of '{bridgeRelationship.ExpectedContainmentOwnerTypeName()}'.");
+                    $"Containment cycle: the supplied source of type '{source.GetType().Name}' is already transitively contained by the bridge relationship of type '{relationship.GetType().Name}'.");
             }
-
-            if (!bridgeRelationship.QueryIsValidForContainment(target))
-            {
-                throw new InvalidOperationException(
-                    $"The target of type '{target.GetType().Name}' is not a valid containment target for the relationship of type '{bridgeRelationship.GetType().Name}'; expected an instance of '{ExpectedContainmentTypeName(bridgeRelationship)}'.");
-            }
-
-            if (IsContainedTransitivelyBy(source, bridgeRelationship))
-            {
-                throw new InvalidOperationException(
-                    $"Containment cycle: the supplied source of type '{source.GetType().Name}' is already transitively contained by the bridge relationship of type '{bridgeRelationship.GetType().Name}'.");
-            }
-
-            if (IsContainedTransitivelyBy(source, target))
-            {
-                throw new InvalidOperationException(
-                    $"Containment cycle: the supplied source of type '{source.GetType().Name}' is already transitively contained by the target of type '{target.GetType().Name}'.");
-            }
-
-            AssignOwnershipCore(source, bridgeRelationship);
-
-            if (target.OwningRelationship != null && target.OwningRelationship != bridgeRelationship)
-            {
-                ((IContainedRelationship)target.OwningRelationship).OwnedRelatedElement.Remove(target);
-            }
-
-            ((IContainedRelationship)bridgeRelationship).OwnedRelatedElement.Add(target);
         }
 
         /// <summary>
-        /// Performs the owner-side mutation that attaches a <paramref name="bridgeRelationship"/> to a <paramref name="source"/>
-        /// without applying any of the public-overload guard rules.
+        /// Places the <paramref name="element"/> at <paramref name="index"/> in the owned related elements of the <paramref name="owner"/>.
         /// </summary>
-        /// <param name="source">The container <see cref="IElement"/></param>
-        /// <param name="bridgeRelationship">The <see cref="IRelationship"/> to be attached to the <paramref name="source"/></param>
-        /// <remarks>
-        /// Internal helper shared by both <c>AssignOwnership</c> public overloads. Callers are responsible for argument
-        /// validation; this method performs no checks of its own.
-        /// </remarks>
-        private static void AssignOwnershipCore(IElement source, IRelationship bridgeRelationship)
+        /// <param name="owner">The owning <see cref="IRelationship"/></param>
+        /// <param name="element">The <see cref="IElement"/> to own</param>
+        /// <param name="index">The zero-based position afterwards</param>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not a valid position</exception>
+        internal static void InsertOwnedRelatedElement(IRelationship owner, IElement element, int index)
         {
-            if (bridgeRelationship.OwningRelatedElement != null && bridgeRelationship.OwningRelatedElement != source)
-            {
-                ((IContainedElement)bridgeRelationship.OwningRelatedElement).OwnedRelationship.Remove(bridgeRelationship);
-            }
-
-            ((IContainedRelationship)bridgeRelationship).OwningRelatedElement = source;
-
-            if (!source.OwnedRelationship.Contains(bridgeRelationship))
-            {
-                ((IContainedElement)source).OwnedRelationship.Add(bridgeRelationship);
-            }
+            Attach(((IContainedRelationship)owner).OwnedRelatedElement, element, index);
         }
 
         /// <summary>
-        /// Returns the single element from <paramref name="source"/>, throwing
-        /// <see cref="IncompleteModelException"/> if the source is empty and
-        /// <see cref="MultiplicityViolationException"/> if it contains more than one element.
+        /// Places the <paramref name="relationship"/> at <paramref name="index"/> in the owned relationships of the <paramref name="owner"/>.
         /// </summary>
-        /// <typeparam name="T">The element type of the sequence (reference type).</typeparam>
-        /// <param name="source">
-        /// The (already-projected) sequence of candidate matches — typically the tail of a LINQ chain
-        /// such as <c>subject.OwnedRelationship.OfType&lt;IFeatureTyping&gt;().Select(t => t.Type).OfType&lt;TFinal&gt;()</c>.
-        /// </param>
-        /// <param name="subjectName">
-        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
-        /// embedded in the diagnostic message produced on a multiplicity violation.
-        /// </param>
-        /// <returns>The single element of the sequence.</returns>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when <paramref name="source"/> is empty (lower-bound violation — the model is missing
-        /// the required element).
-        /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when <paramref name="source"/> contains more than one element (upper-bound violation
-        /// against the derived <c>[1..1]</c> property).
-        /// </exception>
-        /// <remarks>
-        /// <para>
-        /// Canonical helper for derived <c>[1..1]</c> properties whose projection ends with a final
-        /// type-filter or predicate over a structurally <c>[0..*]</c> storage collection. The helper
-        /// iterates the sequence once with early-exit on the second match; no full materialisation.
-        /// </para>
-        /// </remarks>
+        /// <param name="owner">The owning <see cref="IElement"/></param>
+        /// <param name="relationship">The <see cref="IRelationship"/> to own</param>
+        /// <param name="index">The zero-based position afterwards</param>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not a valid position</exception>
+        internal static void InsertOwnedRelationship(IElement owner, IRelationship relationship, int index)
+        {
+            Attach(((IContainedElement)owner).OwnedRelationship, relationship, index);
+        }
+
+        /// <summary>
+        /// Returns the single element of <paramref name="source"/>, for a derived <c>[1..1]</c> property.
+        /// </summary>
+        /// <typeparam name="T">The element type</typeparam>
+        /// <param name="source">The candidate matches</param>
+        /// <param name="subjectName">The subject name used in the exception messages</param>
+        /// <returns>The single element</returns>
+        /// <exception cref="IncompleteModelException">If <paramref name="source"/> is empty</exception>
+        /// <exception cref="MultiplicityViolationException">If <paramref name="source"/> holds more than one element</exception>
         internal static T SingleStrict<T>(this IEnumerable<T> source, string subjectName)
             where T : class
         {
@@ -260,77 +267,28 @@ namespace SysML2.NET.Extensions
         }
 
         /// <summary>
-        /// Filters <paramref name="source"/> to elements of type <typeparamref name="TResult"/> and
-        /// returns the single match, throwing <see cref="IncompleteModelException"/> if none is
-        /// present and <see cref="MultiplicityViolationException"/> if more than one is present.
+        /// Returns the single element of type <typeparamref name="TResult"/> in <paramref name="source"/>, for a derived <c>[1..1]</c> property.
         /// </summary>
-        /// <typeparam name="TResult">The narrowed type to filter to (reference type).</typeparam>
-        /// <param name="source">
-        /// The source sequence — typically a <c>[0..*]</c> storage collection such as
-        /// <see cref="IRelationship.OwnedRelatedElement"/>, <see cref="IElement.OwnedRelationship"/>,
-        /// or a derived enumerable such as <c>Feature::type</c>.
-        /// </param>
-        /// <param name="subjectName">
-        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
-        /// embedded in the diagnostic message produced on a multiplicity violation.
-        /// </param>
-        /// <returns>The single element of type <typeparamref name="TResult"/>.</returns>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when no element of type <typeparamref name="TResult"/> is present (lower-bound
-        /// violation — the model is missing the required element).
-        /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one element of type <typeparamref name="TResult"/> is present
-        /// (upper-bound violation against the derived <c>[1..1]</c> property).
-        /// </exception>
-        /// <remarks>
-        /// Convenience overload that bundles a <c>OfType&lt;TResult&gt;()</c> filter before delegating
-        /// to <see cref="SingleStrict{T}(IEnumerable{T}, string)"/>. Use this form when the source is
-        /// a heterogeneous storage collection and the caller wants the single element of a particular
-        /// narrowed type (e.g. <c>FeatureMembership::ownedMemberFeature</c> = the single <c>IFeature</c>
-        /// in <c>OwnedRelatedElement</c>).
-        /// </remarks>
+        /// <typeparam name="TResult">The type to filter on</typeparam>
+        /// <param name="source">The candidate matches</param>
+        /// <param name="subjectName">The subject name used in the exception messages</param>
+        /// <returns>The single element of type <typeparamref name="TResult"/></returns>
+        /// <exception cref="IncompleteModelException">If no element of type <typeparamref name="TResult"/> is present</exception>
+        /// <exception cref="MultiplicityViolationException">If more than one element of type <typeparamref name="TResult"/> is present</exception>
         internal static TResult SingleStrict<TResult>(this System.Collections.IEnumerable source, string subjectName)
             where TResult : class
             => source.OfType<TResult>().SingleStrict(subjectName);
 
         /// <summary>
-        /// Returns the at-most-one element from <paramref name="source"/>, throwing
-        /// <see cref="MultiplicityViolationException"/> if the source contains more than one element.
+        /// Returns the element of <paramref name="source"/>, if any, for a derived <c>[0..1]</c> property.
         /// </summary>
-        /// <typeparam name="T">The element type of the sequence (reference type).</typeparam>
-        /// <param name="source">
-        /// The (already-projected) sequence of candidate matches — typically the tail of a LINQ chain
-        /// such as <c>subject.OwnedRelationship.OfType&lt;IFeatureTyping&gt;().Select(t => t.Type).OfType&lt;TFinal&gt;()</c>.
-        /// </param>
-        /// <param name="subjectName">
-        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
-        /// embedded in the diagnostic message produced on a multiplicity violation.
-        /// </param>
-        /// <returns>
-        /// <c>null</c> when <paramref name="source"/> is empty; the single element when it contains
-        /// exactly one.
-        /// </returns>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when <paramref name="source"/> contains more than one element (upper-bound violation
-        /// against the derived <c>[0..1]</c> property).
-        /// </exception>
+        /// <typeparam name="T">The element type</typeparam>
+        /// <param name="source">The candidate matches</param>
+        /// <param name="subjectName">The subject name used in the exception message</param>
+        /// <returns>The single element, or <c>null</c> when <paramref name="source"/> is empty</returns>
+        /// <exception cref="MultiplicityViolationException">If <paramref name="source"/> holds more than one element</exception>
         /// <remarks>
-        /// <para>
-        /// Canonical helper for derived <c>[0..1]</c> properties whose projection ends with a final
-        /// type-filter or predicate. The helper iterates the sequence once with early-exit on the
-        /// second match; no full materialisation.
-        /// </para>
-        /// <para>
-        /// Sibling of <see cref="SingleStrict{T}(IEnumerable{T}, string)"/> — same shape, but with
-        /// <c>[0..1]</c> semantics: the empty case returns <c>null</c> rather than throwing, because
-        /// the lower bound is 0.
-        /// </para>
-        /// <para>
-        /// Do NOT use this helper when the OCL derivation body explicitly elects the first of many
-        /// (<c>->first()</c>, <c>->at(1)</c>); the spec contract is "pick the first if multiple",
-        /// not "0 or 1". For those sites, keep <c>FirstOrDefault</c>.
-        /// </para>
+        /// Not for an OCL derivation that elects the first of many (<c>->first()</c>, <c>->at(1)</c>); keep <c>FirstOrDefault</c> there.
         /// </remarks>
         internal static T SingleOrDefaultStrict<T>(this IEnumerable<T> source, string subjectName)
             where T : class
@@ -351,110 +309,209 @@ namespace SysML2.NET.Extensions
         }
 
         /// <summary>
-        /// Filters <paramref name="source"/> to elements of type <typeparamref name="TResult"/> and
-        /// returns the at-most-one match, throwing <see cref="MultiplicityViolationException"/> if
-        /// more than one is present.
+        /// Returns the element of type <typeparamref name="TResult"/> in <paramref name="source"/>, if any, for a derived <c>[0..1]</c> property.
         /// </summary>
-        /// <typeparam name="TResult">The narrowed type to filter to (reference type).</typeparam>
-        /// <param name="source">
-        /// The source sequence — typically a <c>[0..*]</c> storage collection such as
-        /// <see cref="IRelationship.OwnedRelatedElement"/>, <see cref="IElement.OwnedRelationship"/>,
-        /// or a derived enumerable such as <c>Feature::type</c>.
-        /// </param>
-        /// <param name="subjectName">
-        /// The name of the subject parameter in the calling method (typically <c>nameof(...)</c>),
-        /// embedded in the diagnostic message produced on a multiplicity violation.
-        /// </param>
-        /// <returns>
-        /// <c>null</c> when no element of type <typeparamref name="TResult"/> is present; the single
-        /// match when exactly one is present.
-        /// </returns>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one element of type <typeparamref name="TResult"/> is present
-        /// (upper-bound violation against the derived <c>[0..1]</c> property).
-        /// </exception>
+        /// <typeparam name="TResult">The type to filter on</typeparam>
+        /// <param name="source">The candidate matches</param>
+        /// <param name="subjectName">The subject name used in the exception message</param>
+        /// <returns>The single element of type <typeparamref name="TResult"/>, or <c>null</c> when there is none</returns>
+        /// <exception cref="MultiplicityViolationException">If more than one element of type <typeparamref name="TResult"/> is present</exception>
         /// <remarks>
-        /// <para>
-        /// Convenience overload that bundles a <c>OfType&lt;TResult&gt;()</c> filter before delegating
-        /// to <see cref="SingleOrDefaultStrict{T}(IEnumerable{T}, string)"/>. Use this form when the
-        /// source is a heterogeneous storage collection and the caller wants the optional single
-        /// element of a particular narrowed type (e.g.
-        /// <c>ConstraintUsage::constraintDefinition</c> = the single <c>IPredicate</c> in
-        /// <c>type</c>).
-        /// </para>
-        /// <para>
-        /// Do NOT use this helper when the OCL derivation body explicitly elects the first of many
-        /// (<c>->first()</c>, <c>->at(1)</c>); the spec contract is "pick the first if multiple",
-        /// not "0 or 1". For those sites, keep <c>FirstOrDefault</c>.
-        /// </para>
+        /// Not for an OCL derivation that elects the first of many (<c>->first()</c>, <c>->at(1)</c>); keep <c>FirstOrDefault</c> there.
         /// </remarks>
         internal static TResult SingleOrDefaultStrict<TResult>(this System.Collections.IEnumerable source, string subjectName)
             where TResult : class
             => source.OfType<TResult>().SingleOrDefaultStrict(subjectName);
 
         /// <summary>
-        /// Determines whether <paramref name="element"/> is currently — directly or transitively — contained by
-        /// <paramref name="candidateBridge"/> via the chain of <see cref="IContainedElement.OwningRelationship"/> and
-        /// <see cref="IContainedRelationship.OwningRelatedElement"/> pointers.
+        /// Makes the owned related elements of the <paramref name="owner"/> exactly the <paramref name="orderedElements"/>, without checking the containment rules.
         /// </summary>
-        /// <param name="element">The <see cref="IElement"/> whose ancestor chain is walked</param>
-        /// <param name="candidateBridge">The <see cref="IRelationship"/> looked for in the ancestor chain</param>
-        /// <returns><c>true</c> if <paramref name="candidateBridge"/> appears as an <see cref="IContainedElement.OwningRelationship"/>
-        /// at any level above <paramref name="element"/>; otherwise <c>false</c></returns>
-        /// <remarks>
-        /// Used by the public <c>AssignOwnership</c> overloads to reject containment cycles before any state mutation.
-        /// </remarks>
-        private static bool IsContainedTransitivelyBy(IElement element, IRelationship candidateBridge)
+        /// <param name="owner">The owning <see cref="IRelationship"/></param>
+        /// <param name="orderedElements">The <see cref="IElement"/>s to own, in order</param>
+        internal static void SynchronizeOwnedRelatedElements(IRelationship owner, IEnumerable<IElement> orderedElements)
         {
-            var current = element;
-            
-            while (current != null)
-            {
-                var owningRelationship = current.OwningRelationship;
-            
-                if (owningRelationship == null)
-                {
-                    return false;
-                }
+            Synchronize(((IContainedRelationship)owner).OwnedRelatedElement, orderedElements);
+        }
 
-                if (owningRelationship == candidateBridge)
+        /// <summary>
+        /// Makes the owned relationships of the <paramref name="owner"/> exactly the <paramref name="orderedRelationships"/>, without checking the containment rules.
+        /// </summary>
+        /// <param name="owner">The owning <see cref="IElement"/></param>
+        /// <param name="orderedRelationships">The <see cref="IRelationship"/>s to own, in order</param>
+        internal static void SynchronizeOwnedRelationships(IElement owner, IEnumerable<IRelationship> orderedRelationships)
+        {
+            Synchronize(((IContainedElement)owner).OwnedRelationship, orderedRelationships);
+        }
+
+        /// <summary>
+        /// Appends the <paramref name="child"/> to the <paramref name="ownedList"/>, unless already there.
+        /// </summary>
+        /// <typeparam name="TParent">The owner type</typeparam>
+        /// <typeparam name="TChild">The owned type</typeparam>
+        /// <param name="ownedList">The containment list</param>
+        /// <param name="child">The element to own</param>
+        private static void Append<TParent, TChild>(ContainerList<TParent, TChild> ownedList, TChild child)
+            where TParent : IElement
+            where TChild : IElement
+        {
+            if (!ownedList.Contains(child))
+            {
+                Attach(ownedList, child, ownedList.Count);
+            }
+        }
+
+        /// <summary>
+        /// Asserts that the <paramref name="relationship"/> may contain the <paramref name="element"/>, whatever it already owns.
+        /// </summary>
+        /// <param name="relationship">The owning <see cref="IRelationship"/></param>
+        /// <param name="element">The <see cref="IElement"/> to own</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="relationship"/> or <paramref name="element"/> is null</exception>
+        /// <exception cref="InvalidOperationException">If the element is the relationship, has the wrong type, or contains the relationship</exception>
+        private static void AssertCanContain(IRelationship relationship, IElement element)
+        {
+            if (relationship == null)
+            {
+                throw new ArgumentNullException(nameof(relationship));
+            }
+
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
+            if (relationship == element)
+            {
+                throw new InvalidOperationException("The relationship can not own itself.");
+            }
+
+            if (!relationship.QueryIsValidForContainment(element))
+            {
+                throw new InvalidOperationException(
+                    $"The target of type '{element.GetType().Name}' is not a valid containment target for the relationship of type '{relationship.GetType().Name}'; expected an instance of '{relationship.ExpectedContainmentTypeName()}'.");
+            }
+
+            if (IsContainedTransitivelyBy(relationship, element))
+            {
+                throw new InvalidOperationException(
+                    $"Containment cycle: the relationship of type '{relationship.GetType().Name}' is already transitively contained by the target of type '{element.GetType().Name}'.");
+            }
+        }
+
+        /// <summary>
+        /// Asserts that no element is listed twice in the <paramref name="items"/>.
+        /// </summary>
+        /// <typeparam name="T">The element type</typeparam>
+        /// <param name="items">The items to check</param>
+        /// <param name="parameterName">The name of the parameter that supplied the <paramref name="items"/></param>
+        /// <exception cref="ArgumentException">If an element is listed twice</exception>
+        private static void AssertDistinct<T>(IReadOnlyList<T> items, string parameterName) where T : IElement
+        {
+            if (items.Distinct().Count() != items.Count)
+            {
+                throw new ArgumentException("An owned element can be listed only once.", parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Places the <paramref name="child"/> at <paramref name="index"/> in the <paramref name="ownedList"/>, detaching it from any other owner first.
+        /// </summary>
+        /// <typeparam name="TParent">The owner type</typeparam>
+        /// <typeparam name="TChild">The owned type</typeparam>
+        /// <param name="ownedList">The containment list</param>
+        /// <param name="child">The element to own</param>
+        /// <param name="index">The zero-based position afterwards</param>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not a valid position</exception>
+        private static void Attach<TParent, TChild>(ContainerList<TParent, TChild> ownedList, TChild child, int index)
+            where TParent : IElement
+            where TChild : IElement
+        {
+            var currentIndex = ownedList.IndexOf(child);
+            var lastValidIndex = currentIndex >= 0 ? ownedList.Count - 1 : ownedList.Count;
+
+            if (index < 0 || index > lastValidIndex)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), $"The index {index} is outside the range [0, {lastValidIndex}].");
+            }
+
+            if (currentIndex >= 0)
+            {
+                ownedList.Move(currentIndex, index);
+                return;
+            }
+
+            DetachFromOwner(child);
+            ownedList.Insert(index, child);
+        }
+
+        /// <summary>
+        /// Removes the <paramref name="element"/> from whichever owner holds it.
+        /// </summary>
+        /// <param name="element">The <see cref="IElement"/> to detach</param>
+        private static void DetachFromOwner(IElement element)
+        {
+            if (element.OwningRelationship != null && !((IContainedRelationship)element.OwningRelationship).OwnedRelatedElement.Remove(element))
+            {
+                ((IContainedElement)element).OwningRelationship = null;
+            }
+
+            if (element is IRelationship { OwningRelatedElement: not null } relationship
+                && !((IContainedElement)relationship.OwningRelatedElement).OwnedRelationship.Remove(relationship))
+            {
+                ((IContainedRelationship)relationship).OwningRelatedElement = null;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the <paramref name="candidateAncestor"/> transitively owns the <paramref name="element"/>.
+        /// </summary>
+        /// <param name="element">The <see cref="IElement"/> whose ownership chain is walked</param>
+        /// <param name="candidateAncestor">The <see cref="IElement"/> looked for in that chain</param>
+        /// <returns><c>true</c> if the <paramref name="candidateAncestor"/> is in the chain</returns>
+        private static bool IsContainedTransitivelyBy(IElement element, IElement candidateAncestor)
+        {
+            for (var current = OwnerOf(element); current != null; current = OwnerOf(current))
+            {
+                if (current == candidateAncestor)
                 {
                     return true;
                 }
-
-                current = owningRelationship.OwningRelatedElement;
             }
 
             return false;
         }
 
         /// <summary>
-        /// Determines whether <paramref name="element"/> is currently — directly or transitively — contained by
-        /// <paramref name="candidateAncestor"/> via the chain of <see cref="IContainedElement.OwningRelationship"/> and
-        /// <see cref="IContainedRelationship.OwningRelatedElement"/> pointers.
+        /// Returns the direct owner of the <paramref name="element"/>: its owning relationship, or for a relationship its owning related element.
         /// </summary>
-        /// <param name="element">The <see cref="IElement"/> whose ancestor chain is walked</param>
-        /// <param name="candidateAncestor">The <see cref="IElement"/> looked for in the ancestor chain</param>
-        /// <returns><c>true</c> if <paramref name="candidateAncestor"/> appears as an ancestor of <paramref name="element"/>;
-        /// otherwise <c>false</c></returns>
-        /// <remarks>
-        /// Used by the public <c>AssignOwnership</c> overloads to reject containment cycles before any state mutation.
-        /// </remarks>
-        private static bool IsContainedTransitivelyBy(IElement element, IElement candidateAncestor)
+        /// <param name="element">The owned <see cref="IElement"/></param>
+        /// <returns>The direct owner, or <c>null</c></returns>
+        private static IElement OwnerOf(IElement element)
         {
-            var current = element.OwningRelationship?.OwningRelatedElement;
-           
-            while (current != null)
-            {
-                if (current == candidateAncestor)
-                {
-                    return true;
-                }
+            return (IElement)element.OwningRelationship ?? (element as IRelationship)?.OwningRelatedElement;
+        }
 
-                current = current.OwningRelationship?.OwningRelatedElement;
+        /// <summary>
+        /// Makes the <paramref name="ownedList"/> exactly the <paramref name="orderedChildren"/>, in order.
+        /// </summary>
+        /// <typeparam name="TParent">The owner type</typeparam>
+        /// <typeparam name="TChild">The owned type</typeparam>
+        /// <param name="ownedList">The containment list</param>
+        /// <param name="orderedChildren">The elements to own, in order</param>
+        private static void Synchronize<TParent, TChild>(ContainerList<TParent, TChild> ownedList, IEnumerable<TChild> orderedChildren)
+            where TParent : IElement
+            where TChild : IElement
+        {
+            var children = orderedChildren.Distinct().ToList();
+
+            foreach (var removedChild in ownedList.Except(children).ToList())
+            {
+                ownedList.Remove(removedChild);
             }
 
-            return false;
+            for (var childIndex = 0; childIndex < children.Count; childIndex++)
+            {
+                Attach(ownedList, children[childIndex], childIndex);
+            }
         }
     }
 }

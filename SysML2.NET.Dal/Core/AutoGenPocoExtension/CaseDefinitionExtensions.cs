@@ -29,8 +29,6 @@ namespace SysML2.NET.Dal
     {
         /// <summary>
         /// Updates the value properties of the <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> by setting the value equal to that of the dto
-        /// Removes deleted objects from the reference properties and returns the unique identifiers
-        /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
         /// The <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> that is to be updated
@@ -38,13 +36,10 @@ namespace SysML2.NET.Dal
         /// <param name="dto">
         /// The DTO that is used to update the <see cref="Core.DTO.Systems.Cases.CaseDefinition"/> with
         /// </param>
-        /// <returns>
-        /// The unique identifiers of the objects that have been removed from contained properties
-        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Systems.Cases.CaseDefinition poco, Core.DTO.Systems.Cases.CaseDefinition dto)
+        public static void UpdateValueProperties(this Core.POCO.Systems.Cases.CaseDefinition poco, Core.DTO.Systems.Cases.CaseDefinition dto)
         {
             if (poco == null)
             {
@@ -55,8 +50,6 @@ namespace SysML2.NET.Dal
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
-
-            var identifiersOfObjectsToDelete = new List<Guid>();
 
             poco.AliasIds = [.. dto.AliasIds];
 
@@ -76,23 +69,11 @@ namespace SysML2.NET.Dal
 
             poco.IsVariation = dto.IsVariation;
 
-            var ownedRelationshipRetained = new HashSet<Guid>(dto.OwnedRelationship);
-            var ownedRelationshipToDelete = poco.OwnedRelationship.Where(x => !ownedRelationshipRetained.Contains(x.Id)).ToList();
-
-            foreach (var ownedRelationship in ownedRelationshipToDelete)
-            {
-                ((IContainedElement)poco).OwnedRelationship.Remove(ownedRelationship);
-            }
-
-            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete.Select(x => x.Id));
-
-
-            return identifiersOfObjectsToDelete;
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> using the data (identifiers) encapsulated in the DTO
-        /// and the provided cache to find the referenced object.
+        /// Updates the Reference properties, containment included, of the <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> using the data (identifiers)
+        /// encapsulated in the DTO and the provided cache to find the referenced object, preserving the order of the DTO.
         /// </summary>
         /// <param name="poco">
         /// The <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> that is to be updated
@@ -104,7 +85,9 @@ namespace SysML2.NET.Dal
         /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="poco"/>, <paramref name="dto"/> or <paramref name="cache"/> is null
+        /// </exception>
         public static void UpdateReferenceProperties(this Core.POCO.Systems.Cases.CaseDefinition poco, Core.DTO.Systems.Cases.CaseDefinition dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
@@ -122,27 +105,8 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
-            var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
-
-            foreach (var identifier in ownedRelationshipToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    ((IContainedElement)poco).OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
-                }
-            }
-
-            if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
-            {
-                ((IContainedElement)poco).OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
-            }
-            else
-            {
-                ((IContainedElement)poco).OwningRelationship = null;
-            }
-
+            poco.UpdateContainment(dto, cache);
         }
 
         /// <summary>
