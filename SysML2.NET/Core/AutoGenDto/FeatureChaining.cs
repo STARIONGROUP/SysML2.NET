@@ -248,7 +248,10 @@ namespace SysML2.NET.Core.DTO.Core.Features
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.featureChained];
-            set { }
+            set
+            {
+                this.featureChained = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

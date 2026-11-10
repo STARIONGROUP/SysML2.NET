@@ -238,7 +238,10 @@ namespace SysML2.NET.Core.DTO.Core.Types
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.typeDifferenced];
-            set { }
+            set
+            {
+                this.typeDifferenced = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

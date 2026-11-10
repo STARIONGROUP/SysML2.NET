@@ -207,6 +207,7 @@ namespace SysML2.NET.Dal
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
+            ((Core.DTO.Core.Types.ISpecialization)dto).General = ((Core.POCO.Core.Types.ISpecialization)poco).General.Id;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
@@ -215,6 +216,11 @@ namespace SysML2.NET.Dal
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.RedefinedFeature = poco.RedefinedFeature.Id;
             dto.RedefiningFeature = poco.RedefiningFeature.Id;
+            ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList();
+            ((Core.DTO.Core.Types.ISpecialization)dto).Specific = ((Core.POCO.Core.Types.ISpecialization)poco).Specific.Id;
+            ((Core.DTO.Core.Features.ISubsetting)dto).SubsettedFeature = ((Core.POCO.Core.Features.ISubsetting)poco).SubsettedFeature.Id;
+            ((Core.DTO.Core.Features.ISubsetting)dto).SubsettingFeature = ((Core.POCO.Core.Features.ISubsetting)poco).SubsettingFeature.Id;
+            ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList();
 
             if (includeDerivedProperties)
             {

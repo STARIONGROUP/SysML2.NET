@@ -193,10 +193,15 @@ namespace SysML2.NET.Dal
             dto.ElementId = poco.ElementId;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            ((Core.DTO.Root.Namespaces.IMembership)dto).MemberElement = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.Id;
+            ((Core.DTO.Root.Namespaces.IMembership)dto).MemberName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberName;
+            ((Core.DTO.Root.Namespaces.IMembership)dto).MemberShortName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+            ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList();
+            ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList();
             dto.Visibility = poco.Visibility;
 
             if (includeDerivedProperties)

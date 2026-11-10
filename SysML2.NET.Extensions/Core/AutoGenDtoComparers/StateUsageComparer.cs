@@ -107,6 +107,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.IsUnique != y.IsUnique) return false;
 
+            if (x.IsVariable != y.IsVariable) return false;
+
             if (x.IsVariation != y.IsVariation) return false;
 
             if (!GuidSequenceEquality.OrderedEqual(x.OwnedRelationship, y.OwnedRelationship)) return false;

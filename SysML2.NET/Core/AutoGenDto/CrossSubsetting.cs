@@ -345,7 +345,10 @@ namespace SysML2.NET.Core.DTO.Core.Features
         Guid ISubsetting.SubsettingFeature
         {
             get => this.crossingFeature;
-            set { }
+            set
+            {
+                this.crossingFeature = value;
+            }
         }
 
         /// <summary>

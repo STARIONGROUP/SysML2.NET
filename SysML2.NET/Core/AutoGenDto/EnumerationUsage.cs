@@ -396,7 +396,10 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         bool Core.Features.IFeature.IsVariable
         {
             get => this.mayTimeVary;
-            set { }
+            set
+            {
+                this.mayTimeVary = value;
+            }
         }
 
         /// <summary>

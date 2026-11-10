@@ -196,6 +196,7 @@ namespace SysML2.NET.Dal
             dto.IsPortion = poco.IsPortion;
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
+            ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable;
             dto.IsVariation = poco.IsVariation;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;

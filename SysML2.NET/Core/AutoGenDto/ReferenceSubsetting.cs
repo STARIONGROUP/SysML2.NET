@@ -337,7 +337,10 @@ namespace SysML2.NET.Core.DTO.Core.Features
         Guid ISubsetting.SubsettingFeature
         {
             get => this.referencingFeature;
-            set { }
+            set
+            {
+                this.referencingFeature = value;
+            }
         }
 
         /// <summary>

@@ -407,7 +407,10 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         bool Core.Features.IFeature.IsVariable
         {
             get => this.mayTimeVary;
-            set { }
+            set
+            {
+                this.mayTimeVary = value;
+            }
         }
 
         /// <summary>

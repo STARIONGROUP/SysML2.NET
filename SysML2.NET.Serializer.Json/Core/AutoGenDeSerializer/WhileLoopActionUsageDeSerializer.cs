@@ -206,6 +206,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var variantMembershipSeen = false;
             var whileArgumentSeen = false;
 
+            var isVariableRedefinitionSeen = false;
+            bool? isVariableRedefinitionValue = null;
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -2138,9 +2142,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("isVariable"u8))
+                {
+                    isVariableRedefinitionSeen = true;
+                    reader.Read();
+                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
+            {
+                if (!mayTimeVarySeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable != isVariableRedefinitionValue.Value && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The isVariable Json property of the WhileLoopActionUsage {Id} disagrees with mayTimeVary; the mayTimeVary value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -2640,6 +2666,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelationshipSeen = false;
             var portionKindSeen = false;
 
+            var isVariableRedefinitionSeen = false;
+            bool? isVariableRedefinitionValue = null;
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -2927,9 +2957,24 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("isVariable"u8))
+                {
+                    isVariableRedefinitionSeen = true;
+                    reader.Read();
+                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
+            {
+                ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

@@ -76,6 +76,9 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
                 {{#unless (Property.IsPropertyRedefinedInClass this ../)}}
                     {{ #Property.WriteForDTOComparer property ../ }}
                 {{/unless}}
+                {{#if (Property.IsSerializedRedefinition property ../)}}
+                    {{ #Property.WriteForDTOComparer property ../ }}
+                {{/if}}
             {{/each}}
             return true;
         }

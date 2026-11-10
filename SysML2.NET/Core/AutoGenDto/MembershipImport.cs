@@ -270,7 +270,10 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.importOwningNamespace];
-            set { }
+            set
+            {
+                this.importOwningNamespace = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

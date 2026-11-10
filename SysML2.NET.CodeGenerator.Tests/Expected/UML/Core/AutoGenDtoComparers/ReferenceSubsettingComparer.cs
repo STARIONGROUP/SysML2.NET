@@ -79,6 +79,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (!OrdinalStringComparer.Equals(x.ElementId, y.ElementId)) return false;
 
+            if (x.General != y.General) return false;
+
             if (x.IsImplied != y.IsImplied) return false;
 
             if (x.IsImpliedIncluded != y.IsImpliedIncluded) return false;
@@ -92,6 +94,16 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
             if (x.OwningRelationship != y.OwningRelationship) return false;
 
             if (x.ReferencedFeature != y.ReferencedFeature) return false;
+
+            if (!GuidSequenceEquality.OrderedEqual(x.Source, y.Source)) return false;
+
+            if (x.Specific != y.Specific) return false;
+
+            if (x.SubsettedFeature != y.SubsettedFeature) return false;
+
+            if (x.SubsettingFeature != y.SubsettingFeature) return false;
+
+            if (!GuidSequenceEquality.OrderedEqual(x.Target, y.Target)) return false;
 
             return true;
         }
