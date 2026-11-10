@@ -212,7 +212,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// <returns>
         /// The DTO of every element of this step that differs from its version in <paramref name="model"/>
         /// </returns>
-        public IReadOnlyList<DtoElement> Moved(IReadOnlyList<DtoElement> model)
+        public static IReadOnlyList<DtoElement> Moved(IReadOnlyList<DtoElement> model)
         {
             ArgumentNullException.ThrowIfNull(model);
 

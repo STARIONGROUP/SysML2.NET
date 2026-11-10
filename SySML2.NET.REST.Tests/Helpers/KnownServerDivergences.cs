@@ -29,7 +29,7 @@ namespace SySML2.NET.REST.Tests.Helpers
     /// <remarks>
     /// The expectations of the scenario stay those of the specification; only the outcome is reported differently.
     /// </remarks>
-    public static class KnownServerDivergences
+    public static partial class KnownServerDivergences
     {
         /// <summary>
         /// The source revision of Flexo that the divergences were found in
@@ -40,26 +40,6 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// The properties of the API records that the server leaves out
         /// </summary>
         private static readonly HashSet<string> OmittedRecordProperties = ["alias", "name", "description", "deleted"];
-
-        /// <summary>
-        /// Matches a schema error that lists missing required properties, capturing their quoted names
-        /// </summary>
-        private static readonly Regex MissingRequired = new(@"^\S* required: Required properties \[(?<names>[^\]]*)\] are not present$", RegexOptions.Compiled);
-
-        /// <summary>
-        /// Matches a schema error on a list property sent as <c>null</c>
-        /// </summary>
-        private static readonly Regex NullList = new(@"^\S* type: Value is ""null"" but should be ""array""$", RegexOptions.Compiled);
-
-        /// <summary>
-        /// Matches a schema error on a <c>previousCommit</c> sent as one object
-        /// </summary>
-        private static readonly Regex PreviousCommitObject = new(@"^\S*/previousCommit type: Value is ""object"" but should be ""array""$", RegexOptions.Compiled);
-
-        /// <summary>
-        /// Matches the schema error on an item of an element list whose <c>@type</c> is a kind of data that is no element
-        /// </summary>
-        private static readonly Regex DataItemInElementList = new(@"^/\d+/@type const: ""(ExternalData|ExternalRelationship|ProjectUsage)"" is none of the types the schema admits$", RegexOptions.Compiled);
 
         /// <summary>
         /// The path templates of the operations that list elements
@@ -236,6 +216,30 @@ namespace SySML2.NET.REST.Tests.Helpers
         public static IReadOnlyList<ServerDivergence> All { get; } = [RootsIgnoreOwningRelationship, DiffNotImplemented, MergeNotImplemented, MergeRequiresArrayBody, UnknownResourceNotFound, UnknownResourceAccepted, ErrorWithoutErrorBody, CreatedAnsweredOk, RecordsWithoutRequiredProperties, PreviousCommitAsObject, ElementsWithoutDerivedProperties, DatatypeIdNotUri, DataListedAsElements, ProjectUsageAsArray, QueryResultsProjected, QueryLosesNameAndDescription, InstanceOfRejected, QueryResultsGetNotImplemented, DeleteDoesNotCascade, DeleteUnknownBranchFails, DeletedProjectDeletedAgain];
 
         /// <summary>
+        /// Matches a schema error that lists missing required properties, capturing their quoted names
+        /// </summary>
+        [GeneratedRegex(@"^\S* required: Required properties \[(?<names>[^\]]*)\] are not present$")]
+        private static partial Regex MissingRequired { get; }
+
+        /// <summary>
+        /// Matches a schema error on a list property sent as <c>null</c>
+        /// </summary>
+        [GeneratedRegex(@"^\S* type: Value is ""null"" but should be ""array""$")]
+        private static partial Regex NullList { get; }
+
+        /// <summary>
+        /// Matches a schema error on a <c>previousCommit</c> sent as one object
+        /// </summary>
+        [GeneratedRegex(@"^\S*/previousCommit type: Value is ""object"" but should be ""array""$")]
+        private static partial Regex PreviousCommitObject { get; }
+
+        /// <summary>
+        /// Matches the schema error on an item of an element list whose <c>@type</c> is a kind of data that is no element
+        /// </summary>
+        [GeneratedRegex(@"^/\d+/@type const: ""(ExternalData|ExternalRelationship|ProjectUsage)"" is none of the types the schema admits$")]
+        private static partial Regex DataItemInElementList { get; }
+
+        /// <summary>
         /// Asserts that a call for an unknown resource fails with 404 Not Found, or reports the one tolerated divergence
         /// when the server answers the way it describes
         /// </summary>
@@ -316,7 +320,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <returns>
         /// The names, or <c>null</c> when the violation is about something else
         /// </returns>
-        private static IReadOnlyList<string> MissingNames(ContractViolation violation)
+        private static List<string> MissingNames(ContractViolation violation)
         {
             var match = MissingRequired.Match(violation.Message);
 

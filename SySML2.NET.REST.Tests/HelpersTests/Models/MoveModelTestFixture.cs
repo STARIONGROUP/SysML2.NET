@@ -51,7 +51,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(() => model.Moved(null), Throws.ArgumentNullException);
+                Assert.That(() => MoveModel.Moved(null), Throws.ArgumentNullException);
                 Assert.That(dtos.Select(dto => dto.Id), Is.Unique);
                 Assert.That(changed.Where(dto => atStep2.Any(earlier => earlier.Id == dto.Id)).Select(dto => dto.Id), Is.EqualTo((Guid[])[root.Root.Id]), "only the root package changes, to own the new package");
                 Assert.That(model.Moves.Select(move => before[move.Relationship].GetType().Name), Is.EquivalentTo((string[])["Specialization", "Conjugation", "Disjoining", "Subclassification", "FeatureTyping", "Subsetting", "FeatureInverting", "TypeFeaturing", "Redefinition", "OwningMembership", "OwningMembership"]));
@@ -60,7 +60,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
                 Assert.That(ConjugatedPortDefinitionsOf(before, model.SecondPortDefinition.Id), Is.EqualTo((Guid[])[model.SecondConjugatedPortDefinition.Id]));
             }
 
-            var moved = model.Moved(dtos);
+            var moved = MoveModel.Moved(dtos);
             var movedById = moved.ToDictionary(dto => dto.Id);
             var after = dtos.Select(dto => movedById.GetValueOrDefault(dto.Id, dto)).ToDictionary(dto => dto.Id);
             var unmoved = MovedProperties.Where(name =>
@@ -103,11 +103,11 @@ namespace SySML2.NET.REST.Tests.HelpersTests.Models
             {
                 Assert.That(scenarioDtos.Select(dto => dto.Id), Is.Unique, "the content of step 12 shares the builder with steps 2 to 5");
                 Assert.That(ModelBuilder.Changed(atStep11, scenarioDtos).Where(dto => atStep11.Any(earlier => earlier.Id == dto.Id)).Select(dto => dto.Id), Is.EquivalentTo((Guid[])[fullRoot.Root.Id, fullRoot.Builder.Find<PocoLiteralRational>("kernel/rational").Id]), "only the root package, and the rational literal that its comparer reports as changed (#426)");
-                Assert.That(inScenario.Moved(scenarioDtos).Select(dto => dto.Id), Is.EquivalentTo(moved.Select(dto => dto.Id)), "the moves are the same in the scenario");
+                Assert.That(MoveModel.Moved(scenarioDtos).Select(dto => dto.Id), Is.EquivalentTo(moved.Select(dto => dto.Id)), "the moves are the same in the scenario");
             }
         }
 
-        private static Guid[] ConjugatedPortDefinitionsOf(IReadOnlyDictionary<Guid, IElement> model, Guid portDefinitionId)
+        private static Guid[] ConjugatedPortDefinitionsOf(Dictionary<Guid, IElement> model, Guid portDefinitionId)
         {
             return [.. model[portDefinitionId].OwnedRelationship.Select(id => model[id]).OfType<OwningMembership>().SelectMany(membership => membership.OwnedRelatedElement).Where(id => model[id] is ConjugatedPortDefinition)];
         }

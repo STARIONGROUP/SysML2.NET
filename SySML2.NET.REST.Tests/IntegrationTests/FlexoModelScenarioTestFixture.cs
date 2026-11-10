@@ -813,7 +813,7 @@ namespace SySML2.NET.REST.Tests.IntegrationTests
         {
             var branch = this.state.DefaultBranchId!.Value;
             var previous = this.state.ExpectedModels[this.state.BranchHeads[branch]];
-            var moved = moves.Moved(previous);
+            var moved = MoveModel.Moved(previous);
             var movedById = moved.ToDictionary(element => element.Id);
             List<IElement> model = [.. previous.Select(element => movedById.GetValueOrDefault(element.Id, element))];
 

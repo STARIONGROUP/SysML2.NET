@@ -64,7 +64,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
 
             var firstInstances = this.Builder.Elements.GroupBy(entry => entry.Element.GetType()).Select(group => group.First().Element).ToList();
 
-            this.Rename(firstInstances);
+            Rename(firstInstances);
             this.ChangeAttributes(root);
             this.Retarget(core, kernel);
             this.Complete(firstInstances);
@@ -75,6 +75,21 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// Gets the classifier that step 5 adds to the package <c>Core</c>
         /// </summary>
         public Classifier Added { get; private set; }
+
+        /// <summary>
+        /// U1: renames the first instance of every metaclass that steps 2 to 4 created
+        /// </summary>
+        /// <param name="firstInstances">
+        /// The first instance of every metaclass that steps 2 to 4 created
+        /// </param>
+        private static void Rename(IReadOnlyList<PocoElement> firstInstances)
+        {
+            foreach (var element in firstInstances)
+            {
+                element.DeclaredName = $"{element.DeclaredName ?? element.GetType().Name} renamed";
+                element.DeclaredShortName = $"{element.DeclaredShortName ?? element.GetType().Name.ToLowerInvariant()}2";
+            }
+        }
 
         /// <summary>
         /// U2: changes every non-derived attribute that steps 2 to 4 set, to another legal value
@@ -190,21 +205,6 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
                         annotating.AssignOwnership(annotation);
                         break;
                 }
-            }
-        }
-
-        /// <summary>
-        /// U1: renames the first instance of every metaclass that steps 2 to 4 created
-        /// </summary>
-        /// <param name="firstInstances">
-        /// The first instance of every metaclass that steps 2 to 4 created
-        /// </param>
-        private void Rename(IReadOnlyList<PocoElement> firstInstances)
-        {
-            foreach (var element in firstInstances)
-            {
-                element.DeclaredName = $"{element.DeclaredName ?? element.GetType().Name} renamed";
-                element.DeclaredShortName = $"{element.DeclaredShortName ?? element.GetType().Name.ToLowerInvariant()}2";
             }
         }
 

@@ -130,7 +130,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
             }
         }
 
-        private static IReadOnlyList<ContractViolationKind> Kinds(IReadOnlyList<ContractViolation> violations) => violations.Select(violation => violation.Kind).ToList();
+        private static List<ContractViolationKind> Kinds(IReadOnlyList<ContractViolation> violations) => violations.Select(violation => violation.Kind).ToList();
 
         private string Example(string name)
         {

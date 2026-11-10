@@ -220,7 +220,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// <returns>
         /// The argument feature
         /// </returns>
-        private IFeature Argument(IExpression expression, string name, IExpression value)
+        private Feature Argument(IExpression expression, string name, IExpression value)
         {
             var argument = this.Parameter<ParameterMembership>(expression, name, FeatureDirectionKind.In, ParameterMembershipExtensions.ToDto);
             var argumentValue = this.Builder.Create<FeatureValue>($"{argument.ElementId}/value", FeatureValueExtensions.ToDto);
@@ -546,7 +546,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// <returns>
         /// The feature
         /// </returns>
-        private IFeature TypedFeature(IType owner, string name, IType type) => this.TypedFeature<Feature>(owner, name, type, FeatureExtensions.ToDto);
+        private Feature TypedFeature(IType owner, string name, IType type) => this.TypedFeature<Feature>(owner, name, type, FeatureExtensions.ToDto);
 
         /// <summary>
         /// Creates a feature of a given metaclass that a type owns, typed by another type

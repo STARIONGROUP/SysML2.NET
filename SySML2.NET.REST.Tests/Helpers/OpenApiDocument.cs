@@ -373,7 +373,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             /// <returns>
             /// The built member for each <c>@type</c>
             /// </returns>
-            public IReadOnlyDictionary<string, JsonSchema> UnionMembers(JsonNode schema)
+            public Dictionary<string, JsonSchema> UnionMembers(JsonNode schema)
             {
                 var byType = new Dictionary<string, JsonObject>(StringComparer.Ordinal);
                 var ambiguous = new HashSet<string>(StringComparer.Ordinal);

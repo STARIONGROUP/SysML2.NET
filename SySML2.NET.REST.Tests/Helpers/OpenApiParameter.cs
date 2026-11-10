@@ -115,7 +115,7 @@ namespace SySML2.NET.REST.Tests.Helpers
             {
                 "integer" when long.TryParse(value, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var integer) => JsonValue.Create(integer),
                 "number" when double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var number) => JsonValue.Create(number),
-                "boolean" when bool.TryParse(value, out var boolean) && value == value.ToLowerInvariant() => JsonValue.Create(boolean),
+                "boolean" when bool.TryParse(value, out var boolean) && !value.Any(char.IsUpper) => JsonValue.Create(boolean),
                 "array" => new JsonArray([.. value.Split(',').Select(item => (JsonNode)JsonValue.Create(item))]),
                 _ => JsonValue.Create(value)
             };

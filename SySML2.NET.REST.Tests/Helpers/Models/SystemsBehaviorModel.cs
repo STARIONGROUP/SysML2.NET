@@ -415,7 +415,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// <param name="redefined">
         /// The redefined feature
         /// </param>
-        private void Redefine(IFeature feature, IFeature redefined)
+        private void Redefine(ReferenceUsage feature, IFeature redefined)
         {
             var redefinition = this.Builder.Create<Redefinition>($"{feature.ElementId}/redefinition", RedefinitionExtensions.ToDto);
             redefinition.RedefiningFeature = feature;
@@ -643,7 +643,7 @@ namespace SySML2.NET.REST.Tests.Helpers.Models
         /// <param name="value">
         /// The value expression
         /// </param>
-        private void Value(IFeature feature, IExpression value)
+        private void Value(ReferenceUsage feature, IExpression value)
         {
             feature.AssignOwnership(this.Builder.Create<FeatureValue>($"{feature.ElementId}/value", FeatureValueExtensions.ToDto), value);
         }

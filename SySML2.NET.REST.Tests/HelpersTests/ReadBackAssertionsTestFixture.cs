@@ -575,7 +575,7 @@ namespace SySML2.NET.REST.Tests.HelpersTests
                 {
                     var now = Interlocked.Increment(ref inFlight);
                     Interlocked.Exchange(ref maximumInFlight, Math.Max(Interlocked.CompareExchange(ref maximumInFlight, 0, 0), now));
-                    await Task.Delay(5);
+                    await Task.Delay(5, CancellationToken.None);
                     recordedReads.Enqueue(new EndpointCall(null, $"GET /elements/{elementId}", HttpStatusCode.OK) { ResponseViolations = breakingFor.Contains(elementId) ? [breaking] : [] });
                     Interlocked.Decrement(ref inFlight);
 

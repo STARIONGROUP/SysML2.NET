@@ -23,12 +23,13 @@ namespace SySML2.NET.REST.Tests.Helpers
     /// Violations are grouped by operation, status, kind and message, with array indices folded, so that one shape of
     /// violation is reported once with its count and an example request.
     /// </remarks>
-    public static class OpenApiConformance
+    public static partial class OpenApiConformance
     {
         /// <summary>
         /// Matches an array index in an instance location, e.g. the <c>/3</c> of <c>/3/identity</c>
         /// </summary>
-        private static readonly Regex ArrayIndex = new(@"/\d+(?=[/ ])", RegexOptions.Compiled);
+        [GeneratedRegex(@"/\d+(?=[/ ])")]
+        private static partial Regex ArrayIndex { get; }
 
         /// <summary>
         /// Verifies that recorded calls conform to the OpenAPI document, and writes every violation to the test output

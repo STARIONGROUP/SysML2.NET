@@ -711,7 +711,7 @@ namespace SySML2.NET.REST.Tests.Helpers
         /// <param name="readById">
         /// The elements read back, by id
         /// </param>
-        private static void VerifyMemberships(IReadOnlyList<IElement> expected, IReadOnlyDictionary<Guid, IElement> readById)
+        private static void VerifyMemberships(IReadOnlyList<IElement> expected, Dictionary<Guid, IElement> readById)
         {
             foreach (var membership in expected.OfType<IMembership>())
             {
