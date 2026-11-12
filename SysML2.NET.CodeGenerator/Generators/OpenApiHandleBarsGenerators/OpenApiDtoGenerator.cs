@@ -28,7 +28,7 @@ namespace SysML2.NET.CodeGenerator.Generators.OpenApiHandleBarsGenerators
         /// <summary>
         /// The suffix that marks a schema as one that is sent to the Systems Modeling API and Services
         /// </summary>
-        private const string RequestSchemaNameSuffix = "Request";
+        public const string RequestSchemaNameSuffix = "Request";
 
         /// <summary>
         /// The name of the template that generates a data transfer object class

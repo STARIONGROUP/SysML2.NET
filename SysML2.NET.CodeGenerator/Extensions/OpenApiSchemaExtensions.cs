@@ -292,6 +292,18 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
+        /// Queries the minimum number of items of the list that the schema declares, looking through a nullable wrapper
+        /// </summary>
+        /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>
+        /// <returns>The minimum number of items, or <c>null</c> when the schema declares no list or no lower bound.</returns>
+        public static int? QueryMinItems(this IOpenApiSchema schema)
+        {
+            ArgumentNullException.ThrowIfNull(schema);
+
+            return schema.QueryIsCollection() ? schema.QueryUnwrapped().MinItems : null;
+        }
+
+        /// <summary>
         /// Queries the C# type of the schema, without its list wrapper or nullable annotation
         /// </summary>
         /// <param name="schema">The subject <see cref="IOpenApiSchema"/>.</param>

@@ -31,6 +31,7 @@ project                                                                         
 [SysML2.NET.Kpar](https://www.nuget.org/packages/SysML2.NET.Kpar)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Kpar)
 [SysML2.NET.REST](https://www.nuget.org/packages/SysML2.NET.REST)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.REST)
 [SysML2.NET.DAL](https://www.nuget.org/packages/SysML2.NET.DAL)                                       | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.DAL)
+[SysML2.NET.Validation](https://www.nuget.org/packages/SysML2.NET.Validation)                         | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Validation)
 
 The reference web-application is available on [docker-hub](https://hub.docker.com/r/stariongroup/sysml2.net.viewer). A demo-version is hosted at http://viewer.sysml2.net.
 
@@ -53,7 +54,7 @@ Every NuGet version is declared once, in [Directory.Packages.props](Directory.Pa
 
 The redistributable libraries multi-target `netstandard2.1;net10.0`, so a referenced version is a **minimum floor** for every downstream consumer. The version policy follows from that:
 
-- **Libraries** (`SysML2.NET`, `SysML2.NET.Serializer.*`, `SysML2.NET.Dal`, `SysML2.NET.REST`, `SysML2.NET.Kpar`, `SysML2.NET.Extensions`, `SysML2.NET.Semantics`) reference the lowest version that provides the APIs used. Stable framework abstractions stay at an LTS floor; serialization and cryptography packages track current.
+- **Libraries** (`SysML2.NET`, `SysML2.NET.Serializer.*`, `SysML2.NET.Dal`, `SysML2.NET.REST`, `SysML2.NET.Kpar`, `SysML2.NET.Extensions`, `SysML2.NET.Semantics`, `SysML2.NET.Validation`) reference the lowest version that provides the APIs used. Stable framework abstractions stay at an LTS floor; serialization and cryptography packages track current.
 - **Applications and test projects** track current versions.
 - A library dependency is raised only when a required new API needs it, or when a CVE affects that package.
 

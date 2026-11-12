@@ -100,6 +100,15 @@ Favour duplicated, statically-defined generated methods over reflection-based co
 
 When working on the grammar/textual-notation generator (`SysML2.NET.CodeGenerator/HandleBarHelpers/RulesHelper.cs`), read `SysML2.NET.CodeGenerator/GRAMMAR.md` for the KEBNF model, cursor/builder conventions, and existing code-gen patterns.
 
+### OpenAPI-based generation: the `PrimitiveConstraint[Request].value` rule
+
+The `OpenApi*Generator`s read `Resources/ptc-25-02-30.json` and emit the PSM DTOs, REST client, serializers and validators. One property in that document has no C# equivalent in its schema: `PrimitiveConstraint.value` and `PrimitiveConstraintRequest.value`. Each is `oneOf [array of oneOf(boolean | number | string | Identified | null), null]`, which `QueryCoreTypeName` cannot resolve.
+
+- **The specific rule:** `PropertyTypeOverrides` in `SysML2.NET.CodeGenerator/Generators/OpenApiHandleBarsGenerators/OpenApiDtoGenerator.cs` maps both to `List<ConstraintValue>`. `ConstraintValue` is the hand-written tagged union `SysML2.NET/PSM/DTO/ConstraintValue.cs`.
+- **The DTO generator is the single owner of that mapping.** Do not copy the override into another generator, and do not expose it for reuse. A downstream generator relies on the generated DTO already carrying `List<ConstraintValue> Value`.
+- **Derive downstream rules from the schema keywords, not from the C# type.** For example, the request validator walks `schema.Properties` (minus `@type`) rather than `QueryMappableProperties`. `QueryMappableProperties` drops `value` because it is unmappable, and that would silently lose its `minItems: 1`.
+- **A property the DTO lacks surfaces as a compile error** in the generated code, never as a skipped rule.
+
 ### Textual notation reviewer is MANDATORY
 
 **Every change touching these paths MUST be verified by the `textual-notation-reviewer` agent (`.claude/agents/textual-notation-reviewer.md`) before being reported complete or committed:**
@@ -132,6 +141,7 @@ SysML2.NET.Serializer.TextualNotation - Writers/, AutoGenTextualNotationBuilder/
 SysML2.NET.Dal               - Data Access Layer (Assembler, ElementFactory)
 SysML2.NET.REST              - REST client + Session
 SysML2.NET.Kpar              - Reader/Writer for .kpar archives
+SysML2.NET.Validation        - FluentValidation validators for the PSM request DTOs (PSM/AutoGenValidator/, generated)
 SysML2.NET.Viewer            - Blazor WebAssembly app (net9.0)
 SysML2.NET.CodeGenerator     - Code generation tool (net10.0, not packaged)
 ```

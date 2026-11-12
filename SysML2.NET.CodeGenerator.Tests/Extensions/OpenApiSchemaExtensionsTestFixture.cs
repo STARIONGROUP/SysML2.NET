@@ -133,6 +133,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Extensions
             Assert.That(() => ((IOpenApiSchema)null).QueryIsNullable(true), Throws.TypeOf<ArgumentNullException>());
             Assert.That(() => ((IOpenApiSchema)null).QueryAdmitsNull(), Throws.TypeOf<ArgumentNullException>());
             Assert.That(() => ((IOpenApiSchema)null).QueryIsValueType(), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => ((IOpenApiSchema)null).QueryMinItems(), Throws.TypeOf<ArgumentNullException>());
 
             using (Assert.EnterMultipleScope())
             {
@@ -160,6 +161,11 @@ namespace SysML2.NET.CodeGenerator.Tests.Extensions
                 Assert.That(this.schemas["ExternalData"].Properties["resourceIdentifier"].QueryIsValueType(), Is.False);
                 Assert.That(this.schemas["Project"].Properties["alias"].QueryIsValueType(), Is.False);
                 Assert.That(this.schemas["DataVersion"].Properties["payload"].QueryIsValueType(), Is.False);
+
+                Assert.That(this.schemas["CompositeConstraintRequest"].Properties["constraint"].QueryMinItems(), Is.EqualTo(2));
+                Assert.That(this.schemas["PrimitiveConstraintRequest"].Properties["value"].QueryMinItems(), Is.EqualTo(1));
+                Assert.That(this.schemas["CommitRequest"].Properties["change"].QueryMinItems(), Is.Null);
+                Assert.That(this.schemas["ProjectRequest"].Properties["name"].QueryMinItems(), Is.Null);
             }
         }
 
