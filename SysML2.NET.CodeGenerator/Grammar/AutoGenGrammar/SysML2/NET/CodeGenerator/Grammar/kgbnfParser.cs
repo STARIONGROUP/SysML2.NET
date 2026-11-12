@@ -38,29 +38,24 @@ public partial class kgbnfParser : Parser {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, PARTIAL_ASSIGN=4, ASSIGN=5, PIPE=6, LPAREN=7, 
-		RPAREN=8, AMPERSAND=9, IMG_OPEN=10, TAG_CLOSE=11, GRAPHICAL_NAME=12, TEXTUAL_NAME=13, 
-		SINGLE_QUOTED_STRING=14, DOUBLE_QUOTED_STRING=15, COMMENT=16, WS=17, CONTINUATION=18, 
-		NL=19;
+		RPAREN=8, AMPERSAND=9, IMAGE=10, GRAPHICAL_NAME=11, TEXTUAL_NAME=12, SINGLE_QUOTED_STRING=13, 
+		COMMENT=14, WS=15, CONTINUATION=16, NL=17;
 	public const int
 		RULE_specification = 0, RULE_rule_definition = 1, RULE_alternatives = 2, 
 		RULE_alternative = 3, RULE_element = 4, RULE_group = 5, RULE_terminal = 6, 
-		RULE_image = 7, RULE_attribute = 8, RULE_edge_end = 9, RULE_non_terminal = 10, 
-		RULE_suffix_op = 11;
+		RULE_image = 7, RULE_edge_end = 8, RULE_non_terminal = 9, RULE_suffix_op = 10;
 	public static readonly string[] ruleNames = {
 		"specification", "rule_definition", "alternatives", "alternative", "element", 
-		"group", "terminal", "image", "attribute", "edge_end", "non_terminal", 
-		"suffix_op"
+		"group", "terminal", "image", "edge_end", "non_terminal", "suffix_op"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "'*'", "'+'", "'?'", null, "'='", "'|'", "'('", "')'", "'&'", "'<img'", 
-		"'>'"
+		null, "'*'", "'+'", "'?'", null, "'='", "'|'", "'('", "')'", "'&'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, "PARTIAL_ASSIGN", "ASSIGN", "PIPE", "LPAREN", 
-		"RPAREN", "AMPERSAND", "IMG_OPEN", "TAG_CLOSE", "GRAPHICAL_NAME", "TEXTUAL_NAME", 
-		"SINGLE_QUOTED_STRING", "DOUBLE_QUOTED_STRING", "COMMENT", "WS", "CONTINUATION", 
-		"NL"
+		"RPAREN", "AMPERSAND", "IMAGE", "GRAPHICAL_NAME", "TEXTUAL_NAME", "SINGLE_QUOTED_STRING", 
+		"COMMENT", "WS", "CONTINUATION", "NL"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -137,35 +132,35 @@ public partial class kgbnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 27;
+			State = 25;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==NL) {
 				{
 				{
-				State = 24;
+				State = 22;
 				Match(NL);
 				}
 				}
-				State = 29;
+				State = 27;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 31;
+			State = 29;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 30;
+				State = 28;
 				rule_definition();
 				}
 				}
-				State = 33;
+				State = 31;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==GRAPHICAL_NAME );
-			State = 35;
+			State = 33;
 			Match(Eof);
 			}
 		}
@@ -225,9 +220,9 @@ public partial class kgbnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 37;
+			State = 35;
 			_localctx.name = Match(GRAPHICAL_NAME);
-			State = 38;
+			State = 36;
 			_localctx.op = TokenStream.LT(1);
 			_la = TokenStream.LA(1);
 			if ( !(_la==PARTIAL_ASSIGN || _la==ASSIGN) ) {
@@ -237,19 +232,19 @@ public partial class kgbnfParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 39;
+			State = 37;
 			_localctx.rule_body = alternatives();
-			State = 41;
+			State = 39;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 40;
+				State = 38;
 				Match(NL);
 				}
 				}
-				State = 43;
+				State = 41;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==NL );
@@ -308,21 +303,21 @@ public partial class kgbnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 45;
+			State = 43;
 			alternative();
-			State = 50;
+			State = 48;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==PIPE) {
 				{
 				{
-				State = 46;
+				State = 44;
 				Match(PIPE);
-				State = 47;
+				State = 45;
 				alternative();
 				}
 				}
-				State = 52;
+				State = 50;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -377,17 +372,17 @@ public partial class kgbnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 56;
+			State = 54;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 30336L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 16000L) != 0)) {
 				{
 				{
-				State = 53;
+				State = 51;
 				element();
 				}
 				}
-				State = 58;
+				State = 56;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -448,34 +443,34 @@ public partial class kgbnfParser : Parser {
 		ElementContext _localctx = new ElementContext(Context, State);
 		EnterRule(_localctx, 8, RULE_element);
 		try {
-			State = 64;
+			State = 62;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case LPAREN:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 59;
+				State = 57;
 				group();
 				}
 				break;
 			case SINGLE_QUOTED_STRING:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 60;
+				State = 58;
 				terminal();
 				}
 				break;
-			case IMG_OPEN:
+			case IMAGE:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 61;
+				State = 59;
 				image();
 				}
 				break;
 			case AMPERSAND:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 62;
+				State = 60;
 				edge_end();
 				}
 				break;
@@ -483,7 +478,7 @@ public partial class kgbnfParser : Parser {
 			case TEXTUAL_NAME:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 63;
+				State = 61;
 				non_terminal();
 				}
 				break;
@@ -543,18 +538,18 @@ public partial class kgbnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 66;
+			State = 64;
 			Match(LPAREN);
-			State = 67;
+			State = 65;
 			alternatives();
-			State = 68;
+			State = 66;
 			Match(RPAREN);
-			State = 70;
+			State = 68;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) {
 				{
-				State = 69;
+				State = 67;
 				_localctx.suffix = suffix_op();
 				}
 			}
@@ -610,14 +605,14 @@ public partial class kgbnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 72;
+			State = 70;
 			_localctx.val = Match(SINGLE_QUOTED_STRING);
-			State = 74;
+			State = 72;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) {
 				{
-				State = 73;
+				State = 71;
 				_localctx.suffix = suffix_op();
 				}
 			}
@@ -636,14 +631,7 @@ public partial class kgbnfParser : Parser {
 	}
 
 	public partial class ImageContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IMG_OPEN() { return GetToken(kgbnfParser.IMG_OPEN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TAG_CLOSE() { return GetToken(kgbnfParser.TAG_CLOSE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext[] attribute() {
-			return GetRuleContexts<AttributeContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext attribute(int i) {
-			return GetRuleContext<AttributeContext>(i);
-		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IMAGE() { return GetToken(kgbnfParser.IMAGE, 0); }
 		public ImageContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -671,83 +659,11 @@ public partial class kgbnfParser : Parser {
 	public ImageContext image() {
 		ImageContext _localctx = new ImageContext(Context, State);
 		EnterRule(_localctx, 14, RULE_image);
-		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 76;
-			Match(IMG_OPEN);
-			State = 80;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==GRAPHICAL_NAME) {
-				{
-				{
-				State = 77;
-				attribute();
-				}
-				}
-				State = 82;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-			}
-			State = 83;
-			Match(TAG_CLOSE);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class AttributeContext : ParserRuleContext {
-		public IToken attribute_name;
-		public IToken attribute_value;
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ASSIGN() { return GetToken(kgbnfParser.ASSIGN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GRAPHICAL_NAME() { return GetToken(kgbnfParser.GRAPHICAL_NAME, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DOUBLE_QUOTED_STRING() { return GetToken(kgbnfParser.DOUBLE_QUOTED_STRING, 0); }
-		public AttributeContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_attribute; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IkgbnfListener typedListener = listener as IkgbnfListener;
-			if (typedListener != null) typedListener.EnterAttribute(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IkgbnfListener typedListener = listener as IkgbnfListener;
-			if (typedListener != null) typedListener.ExitAttribute(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IkgbnfVisitor<TResult> typedVisitor = visitor as IkgbnfVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAttribute(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public AttributeContext attribute() {
-		AttributeContext _localctx = new AttributeContext(Context, State);
-		EnterRule(_localctx, 16, RULE_attribute);
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 85;
-			_localctx.attribute_name = Match(GRAPHICAL_NAME);
-			State = 86;
-			Match(ASSIGN);
-			State = 87;
-			_localctx.attribute_value = Match(DOUBLE_QUOTED_STRING);
+			State = 74;
+			Match(IMAGE);
 			}
 		}
 		catch (RecognitionException re) {
@@ -795,21 +711,21 @@ public partial class kgbnfParser : Parser {
 	[RuleVersion(0)]
 	public Edge_endContext edge_end() {
 		Edge_endContext _localctx = new Edge_endContext(Context, State);
-		EnterRule(_localctx, 18, RULE_edge_end);
+		EnterRule(_localctx, 16, RULE_edge_end);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 89;
+			State = 76;
 			Match(AMPERSAND);
-			State = 90;
+			State = 77;
 			_localctx.name = Match(GRAPHICAL_NAME);
-			State = 92;
+			State = 79;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) {
 				{
-				State = 91;
+				State = 78;
 				_localctx.suffix = suffix_op();
 				}
 			}
@@ -861,12 +777,12 @@ public partial class kgbnfParser : Parser {
 	[RuleVersion(0)]
 	public Non_terminalContext non_terminal() {
 		Non_terminalContext _localctx = new Non_terminalContext(Context, State);
-		EnterRule(_localctx, 20, RULE_non_terminal);
+		EnterRule(_localctx, 18, RULE_non_terminal);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 94;
+			State = 81;
 			_localctx.name = TokenStream.LT(1);
 			_la = TokenStream.LA(1);
 			if ( !(_la==GRAPHICAL_NAME || _la==TEXTUAL_NAME) ) {
@@ -876,12 +792,12 @@ public partial class kgbnfParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 96;
+			State = 83;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) {
 				{
-				State = 95;
+				State = 82;
 				_localctx.suffix = suffix_op();
 				}
 			}
@@ -926,12 +842,12 @@ public partial class kgbnfParser : Parser {
 	[RuleVersion(0)]
 	public Suffix_opContext suffix_op() {
 		Suffix_opContext _localctx = new Suffix_opContext(Context, State);
-		EnterRule(_localctx, 22, RULE_suffix_op);
+		EnterRule(_localctx, 20, RULE_suffix_op);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 98;
+			State = 85;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -954,35 +870,32 @@ public partial class kgbnfParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,19,101,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,1,0,5,0,26,8,0,10,0,12,0,29,9,
-		0,1,0,4,0,32,8,0,11,0,12,0,33,1,0,1,0,1,1,1,1,1,1,1,1,4,1,42,8,1,11,1,
-		12,1,43,1,2,1,2,1,2,5,2,49,8,2,10,2,12,2,52,9,2,1,3,5,3,55,8,3,10,3,12,
-		3,58,9,3,1,4,1,4,1,4,1,4,1,4,3,4,65,8,4,1,5,1,5,1,5,1,5,3,5,71,8,5,1,6,
-		1,6,3,6,75,8,6,1,7,1,7,5,7,79,8,7,10,7,12,7,82,9,7,1,7,1,7,1,8,1,8,1,8,
-		1,8,1,9,1,9,1,9,3,9,93,8,9,1,10,1,10,3,10,97,8,10,1,11,1,11,1,11,0,0,12,
-		0,2,4,6,8,10,12,14,16,18,20,22,0,3,1,0,4,5,1,0,12,13,1,0,1,3,102,0,27,
-		1,0,0,0,2,37,1,0,0,0,4,45,1,0,0,0,6,56,1,0,0,0,8,64,1,0,0,0,10,66,1,0,
-		0,0,12,72,1,0,0,0,14,76,1,0,0,0,16,85,1,0,0,0,18,89,1,0,0,0,20,94,1,0,
-		0,0,22,98,1,0,0,0,24,26,5,19,0,0,25,24,1,0,0,0,26,29,1,0,0,0,27,25,1,0,
-		0,0,27,28,1,0,0,0,28,31,1,0,0,0,29,27,1,0,0,0,30,32,3,2,1,0,31,30,1,0,
-		0,0,32,33,1,0,0,0,33,31,1,0,0,0,33,34,1,0,0,0,34,35,1,0,0,0,35,36,5,0,
-		0,1,36,1,1,0,0,0,37,38,5,12,0,0,38,39,7,0,0,0,39,41,3,4,2,0,40,42,5,19,
-		0,0,41,40,1,0,0,0,42,43,1,0,0,0,43,41,1,0,0,0,43,44,1,0,0,0,44,3,1,0,0,
-		0,45,50,3,6,3,0,46,47,5,6,0,0,47,49,3,6,3,0,48,46,1,0,0,0,49,52,1,0,0,
-		0,50,48,1,0,0,0,50,51,1,0,0,0,51,5,1,0,0,0,52,50,1,0,0,0,53,55,3,8,4,0,
-		54,53,1,0,0,0,55,58,1,0,0,0,56,54,1,0,0,0,56,57,1,0,0,0,57,7,1,0,0,0,58,
-		56,1,0,0,0,59,65,3,10,5,0,60,65,3,12,6,0,61,65,3,14,7,0,62,65,3,18,9,0,
-		63,65,3,20,10,0,64,59,1,0,0,0,64,60,1,0,0,0,64,61,1,0,0,0,64,62,1,0,0,
-		0,64,63,1,0,0,0,65,9,1,0,0,0,66,67,5,7,0,0,67,68,3,4,2,0,68,70,5,8,0,0,
-		69,71,3,22,11,0,70,69,1,0,0,0,70,71,1,0,0,0,71,11,1,0,0,0,72,74,5,14,0,
-		0,73,75,3,22,11,0,74,73,1,0,0,0,74,75,1,0,0,0,75,13,1,0,0,0,76,80,5,10,
-		0,0,77,79,3,16,8,0,78,77,1,0,0,0,79,82,1,0,0,0,80,78,1,0,0,0,80,81,1,0,
-		0,0,81,83,1,0,0,0,82,80,1,0,0,0,83,84,5,11,0,0,84,15,1,0,0,0,85,86,5,12,
-		0,0,86,87,5,5,0,0,87,88,5,15,0,0,88,17,1,0,0,0,89,90,5,9,0,0,90,92,5,12,
-		0,0,91,93,3,22,11,0,92,91,1,0,0,0,92,93,1,0,0,0,93,19,1,0,0,0,94,96,7,
-		1,0,0,95,97,3,22,11,0,96,95,1,0,0,0,96,97,1,0,0,0,97,21,1,0,0,0,98,99,
-		7,2,0,0,99,23,1,0,0,0,11,27,33,43,50,56,64,70,74,80,92,96
+		4,1,17,88,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		7,7,2,8,7,8,2,9,7,9,2,10,7,10,1,0,5,0,24,8,0,10,0,12,0,27,9,0,1,0,4,0,
+		30,8,0,11,0,12,0,31,1,0,1,0,1,1,1,1,1,1,1,1,4,1,40,8,1,11,1,12,1,41,1,
+		2,1,2,1,2,5,2,47,8,2,10,2,12,2,50,9,2,1,3,5,3,53,8,3,10,3,12,3,56,9,3,
+		1,4,1,4,1,4,1,4,1,4,3,4,63,8,4,1,5,1,5,1,5,1,5,3,5,69,8,5,1,6,1,6,3,6,
+		73,8,6,1,7,1,7,1,8,1,8,1,8,3,8,80,8,8,1,9,1,9,3,9,84,8,9,1,10,1,10,1,10,
+		0,0,11,0,2,4,6,8,10,12,14,16,18,20,0,3,1,0,4,5,1,0,11,12,1,0,1,3,89,0,
+		25,1,0,0,0,2,35,1,0,0,0,4,43,1,0,0,0,6,54,1,0,0,0,8,62,1,0,0,0,10,64,1,
+		0,0,0,12,70,1,0,0,0,14,74,1,0,0,0,16,76,1,0,0,0,18,81,1,0,0,0,20,85,1,
+		0,0,0,22,24,5,17,0,0,23,22,1,0,0,0,24,27,1,0,0,0,25,23,1,0,0,0,25,26,1,
+		0,0,0,26,29,1,0,0,0,27,25,1,0,0,0,28,30,3,2,1,0,29,28,1,0,0,0,30,31,1,
+		0,0,0,31,29,1,0,0,0,31,32,1,0,0,0,32,33,1,0,0,0,33,34,5,0,0,1,34,1,1,0,
+		0,0,35,36,5,11,0,0,36,37,7,0,0,0,37,39,3,4,2,0,38,40,5,17,0,0,39,38,1,
+		0,0,0,40,41,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,3,1,0,0,0,43,48,3,6,
+		3,0,44,45,5,6,0,0,45,47,3,6,3,0,46,44,1,0,0,0,47,50,1,0,0,0,48,46,1,0,
+		0,0,48,49,1,0,0,0,49,5,1,0,0,0,50,48,1,0,0,0,51,53,3,8,4,0,52,51,1,0,0,
+		0,53,56,1,0,0,0,54,52,1,0,0,0,54,55,1,0,0,0,55,7,1,0,0,0,56,54,1,0,0,0,
+		57,63,3,10,5,0,58,63,3,12,6,0,59,63,3,14,7,0,60,63,3,16,8,0,61,63,3,18,
+		9,0,62,57,1,0,0,0,62,58,1,0,0,0,62,59,1,0,0,0,62,60,1,0,0,0,62,61,1,0,
+		0,0,63,9,1,0,0,0,64,65,5,7,0,0,65,66,3,4,2,0,66,68,5,8,0,0,67,69,3,20,
+		10,0,68,67,1,0,0,0,68,69,1,0,0,0,69,11,1,0,0,0,70,72,5,13,0,0,71,73,3,
+		20,10,0,72,71,1,0,0,0,72,73,1,0,0,0,73,13,1,0,0,0,74,75,5,10,0,0,75,15,
+		1,0,0,0,76,77,5,9,0,0,77,79,5,11,0,0,78,80,3,20,10,0,79,78,1,0,0,0,79,
+		80,1,0,0,0,80,17,1,0,0,0,81,83,7,1,0,0,82,84,3,20,10,0,83,82,1,0,0,0,83,
+		84,1,0,0,0,84,19,1,0,0,0,85,86,7,2,0,0,86,21,1,0,0,0,10,25,31,41,48,54,
+		62,68,72,79,83
 	};
 
 	public static readonly ATN _ATN =

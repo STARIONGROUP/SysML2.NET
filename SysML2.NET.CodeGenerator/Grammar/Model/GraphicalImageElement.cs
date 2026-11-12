@@ -10,13 +10,9 @@
 namespace SysML2.NET.CodeGenerator.Grammar.Model
 {
     /// <summary>
-    /// Describes a graphical shape or line of a production, given as an embedded image
+    /// Marks the position of a graphical shape or line that the production gives as an embedded image, whose content is not read
     /// </summary>
     public class GraphicalImageElement : GraphicalRuleElement
     {
-        /// <summary>
-        /// Gets or sets the image path, relative to the grammar file
-        /// </summary>
-        public string Source { get; set; }
     }
 }

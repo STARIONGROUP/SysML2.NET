@@ -10,6 +10,7 @@
 namespace SysML2.NET.CodeGenerator.Grammar.Model
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Describes one production definition of the graphical notation
@@ -31,5 +32,34 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         /// Gets the <see cref="GraphicalAlternatives" /> defined by the production
         /// </summary>
         public List<GraphicalAlternatives> Alternatives { get; } = [];
+
+        /// <summary>
+        /// Queries every element of the production, including those nested in groups
+        /// </summary>
+        /// <returns>The <see cref="GraphicalRuleElement" />s, each before the elements it contains</returns>
+        public IEnumerable<GraphicalRuleElement> QueryAllElements() => QueryAllElements(this.Alternatives);
+
+        /// <summary>
+        /// Queries every element of the given alternatives, recursively
+        /// </summary>
+        /// <param name="alternatives">The <see cref="GraphicalAlternatives" /> to walk</param>
+        /// <returns>The <see cref="GraphicalRuleElement" />s, each before the elements it contains</returns>
+        private static IEnumerable<GraphicalRuleElement> QueryAllElements(IEnumerable<GraphicalAlternatives> alternatives)
+        {
+            foreach (var element in alternatives.SelectMany(alternative => alternative.Elements))
+            {
+                yield return element;
+
+                if (element is not GraphicalGroupElement group)
+                {
+                    continue;
+                }
+
+                foreach (var nestedElement in QueryAllElements(group.Alternatives))
+                {
+                    yield return nestedElement;
+                }
+            }
+        }
     }
 }

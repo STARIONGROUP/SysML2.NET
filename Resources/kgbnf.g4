@@ -33,11 +33,7 @@ terminal
     ;
 
 image
-    : IMG_OPEN attribute* TAG_CLOSE
-    ;
-
-attribute
-    : attribute_name=GRAPHICAL_NAME ASSIGN attribute_value=DOUBLE_QUOTED_STRING
+    : IMAGE
     ;
 
 edge_end
@@ -57,13 +53,11 @@ PIPE : '|' ;
 LPAREN : '(' ;
 RPAREN : ')' ;
 AMPERSAND : '&' ;
-IMG_OPEN : '<img' ;
-TAG_CLOSE : '>' ;
+IMAGE : '<img' ~[>]* '>' ;
 
 GRAPHICAL_NAME : [a-z]+ ('-' [a-z]+)* ;
 TEXTUAL_NAME : [a-zA-Z_] [a-zA-Z0-9_]* ;
 SINGLE_QUOTED_STRING : '\'' (~['\\] | '\\' .)* '\'' ;
-DOUBLE_QUOTED_STRING : '"' ~["\r\n]* '"' ;
 
 COMMENT : '//' ~[\r\n]* -> skip ;
 WS : [ \t]+ -> skip ;

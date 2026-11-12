@@ -133,18 +133,6 @@ public partial class kgbnfBaseListener : IkgbnfListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitImage([NotNull] kgbnfParser.ImageContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="kgbnfParser.attribute"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterAttribute([NotNull] kgbnfParser.AttributeContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="kgbnfParser.attribute"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitAttribute([NotNull] kgbnfParser.AttributeContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="kgbnfParser.edge_end"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

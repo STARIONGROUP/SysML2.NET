@@ -112,16 +112,6 @@ public interface IkgbnfListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitImage([NotNull] kgbnfParser.ImageContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="kgbnfParser.attribute"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterAttribute([NotNull] kgbnfParser.AttributeContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="kgbnfParser.attribute"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitAttribute([NotNull] kgbnfParser.AttributeContext context);
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="kgbnfParser.edge_end"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

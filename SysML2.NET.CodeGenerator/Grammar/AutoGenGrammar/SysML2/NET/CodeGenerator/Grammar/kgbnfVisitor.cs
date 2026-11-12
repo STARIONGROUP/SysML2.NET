@@ -81,12 +81,6 @@ public interface IkgbnfVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitImage([NotNull] kgbnfParser.ImageContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="kgbnfParser.attribute"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitAttribute([NotNull] kgbnfParser.AttributeContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="kgbnfParser.edge_end"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

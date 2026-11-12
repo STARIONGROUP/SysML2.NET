@@ -72,14 +72,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <returns>The visitor result, as <see cref="GraphicalImageElement" />.</returns>
-        public override object VisitImage(kgbnfParser.ImageContext context)
-            => new GraphicalImageElement
-            {
-                Source = context.attribute()
-                    .Where(attribute => attribute.attribute_name.Text == "src")
-                    .Select(attribute => attribute.attribute_value.Text.Trim('"'))
-                    .SingleOrDefault()
-            };
+        public override object VisitImage(kgbnfParser.ImageContext context) => new GraphicalImageElement();
 
         /// <summary>
         /// Visits a parse tree produced by <see cref="kgbnfParser.non_terminal" />.
