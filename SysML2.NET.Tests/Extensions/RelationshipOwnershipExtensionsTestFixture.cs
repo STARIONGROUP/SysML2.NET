@@ -106,7 +106,7 @@ namespace SysML2.NET.Tests.Extensions
             var replacingMember = new Package();
             package.AssignOwnership(membership, member);
 
-            Assert.That(() => membership.SetOwnedRelatedElements([member, replacingMember]), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("single member element"));
+            Assert.That(() => membership.SetOwnedRelatedElements([member, replacingMember]), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("owns a single element"));
 
             membership.SetOwnedRelatedElements([replacingMember]);
 

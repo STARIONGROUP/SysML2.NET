@@ -18,8 +18,6 @@ namespace SysML2.NET.Dal
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.Extensions;
-
     /// <summary>
     /// The purpose of the <see cref="IAssembler"/> is to assemble a SysML2.NET POCO object graph from a
     /// list of data-transfer-objects (DTO)
@@ -172,20 +170,6 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Detaches the <paramref name="element"/> from whichever owner currently holds it.
-        /// </summary>
-        /// <param name="element">The POCO to detach</param>
-        private static void DetachFromOwner(Core.POCO.Root.Elements.IElement element)
-        {
-            element.OwningRelationship?.RemoveOwnedRelatedElement(element);
-
-            if (element is Core.POCO.Root.Elements.IRelationship { OwningRelatedElement: not null } relationship)
-            {
-                relationship.OwningRelatedElement.RemoveOwnedRelationship(relationship);
-            }
-        }
-
-        /// <summary>
         /// Removes the elements identified by <paramref name="deletedIdentifiers"/> from the Cache and from their owners.
         /// </summary>
         /// <param name="deletedIdentifiers">The identifiers of the deleted elements</param>
@@ -206,7 +190,7 @@ namespace SysML2.NET.Dal
                     continue;
                 }
 
-                DetachFromOwner(deletedLazyPoco.Value);
+                Extensions.ElementExtensions.DetachFromOwner(deletedLazyPoco.Value);
                 deletedCount++;
 
                 if (this.logger.IsEnabled(LogLevel.Trace))

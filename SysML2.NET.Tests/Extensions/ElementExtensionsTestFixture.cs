@@ -321,25 +321,36 @@ namespace SysML2.NET.Tests.Extensions
         }
 
         [Test]
-        public void AssignOwnership_WithSecondOwnedElement_ThrowsForOwningMembershipOnly()
+        public void AssignOwnership_WithSecondOwnedElement_ThrowsForMembershipAndAnnotationOnly()
         {
             var package = new Package();
-            var membership = new OwningMembership();
+            var owningMembership = new OwningMembership();
             var member = new Package();
-            package.AssignOwnership(membership, member);
+            package.AssignOwnership(owningMembership, member);
+
+            var membership = new Membership();
+            var referencedMember = new Package();
+            package.AssignOwnership(membership, referencedMember);
 
             var annotation = new Annotation();
-            var firstComment = new Comment();
-            var secondComment = new Comment();
-            this.source.AssignOwnership(annotation, firstComment);
+            var comment = new Comment();
+            this.source.AssignOwnership(annotation, comment);
+
+            var dependency = new Dependency();
+            var firstClient = new Comment();
+            var secondClient = new Comment();
+            this.source.AssignOwnership(dependency, firstClient);
 
             using (Assert.EnterMultipleScope())
             {
+                Assert.That(() => package.AssignOwnership(owningMembership, new Package()), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("already owns another element"));
+                Assert.That(owningMembership.OwnedRelatedElement, Is.EqualTo([member]));
                 Assert.That(() => package.AssignOwnership(membership, new Package()), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("already owns another element"));
-                Assert.That(membership.OwnedRelatedElement, Is.EqualTo([member]));
-                Assert.That(() => this.source.AssignOwnership(annotation, secondComment), Throws.Nothing);
-                Assert.That(annotation.OwnedRelatedElement, Is.EqualTo([firstComment, secondComment]));
-                Assert.That(annotation.ownedAnnotatingElement, Is.SameAs(firstComment));
+                Assert.That(membership.OwnedRelatedElement, Is.EqualTo([referencedMember]));
+                Assert.That(() => this.source.AssignOwnership(annotation, new Comment()), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("already owns another element"));
+                Assert.That(annotation.OwnedRelatedElement, Is.EqualTo([comment]));
+                Assert.That(() => this.source.AssignOwnership(dependency, secondClient), Throws.Nothing);
+                Assert.That(dependency.OwnedRelatedElement, Is.EqualTo([firstClient, secondClient]));
             }
         }
 
@@ -349,6 +360,28 @@ namespace SysML2.NET.Tests.Extensions
             Assert.That(
                 () => this.source.AssignOwnership(this.bridgeRelationship, this.source),
                 Throws.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
+        public void AssignOwnership_WithTargetOwningTheBridge_MovesTheBridgeUnderTheSource()
+        {
+            var annotation = new Annotation();
+            var comment = new Comment();
+            comment.AssignOwnership(annotation);
+
+            Assert.That(() => this.source.AssignOwnership(annotation, comment), Throws.Nothing);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.source.OwnedRelationship, Is.EqualTo([annotation]));
+                Assert.That(annotation.OwnedRelatedElement, Is.EqualTo([comment]));
+                Assert.That(comment.OwnedRelationship, Is.Empty);
+                Assert.That(comment.OwningRelationship, Is.SameAs(annotation));
+            }
+
+            Assert.That(
+                () => comment.AssignOwnership(annotation, new Comment()),
+                Throws.TypeOf<InvalidOperationException>().With.Message.Contains("Containment cycle"));
         }
 
         [Test]

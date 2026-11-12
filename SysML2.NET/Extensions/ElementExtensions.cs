@@ -14,6 +14,7 @@ namespace SysML2.NET.Extensions
     using System.Linq;
 
     using SysML2.NET.Collections;
+    using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Exceptions;
@@ -54,14 +55,14 @@ namespace SysML2.NET.Extensions
             /// <param name="bridgeRelationship">The <see cref="IRelationship"/> to own</param>
             /// <param name="target">The <see cref="IElement"/> owned by the <paramref name="bridgeRelationship"/></param>
             /// <exception cref="ArgumentNullException">If one of the parameters is null</exception>
-            /// <exception cref="InvalidOperationException">If the ownership breaks a containment rule, or an <see cref="IOwningMembership"/> already owns another element</exception>
+            /// <exception cref="InvalidOperationException">If the ownership breaks a containment rule, or an <see cref="IMembership"/> or <see cref="IAnnotation"/> already owns another element</exception>
             /// <remarks>
             /// An element the <paramref name="bridgeRelationship"/> already owns keeps its position.
             /// </remarks>
             public void AssignOwnership(IRelationship bridgeRelationship, IElement target)
             {
                 AssertCanOwnRelationship(source, bridgeRelationship);
-                AssertCanOwnRelatedElement(bridgeRelationship, target);
+                AssertCanAttachRelatedElement(bridgeRelationship, target);
 
                 if (source == target)
                 {
@@ -108,13 +109,8 @@ namespace SysML2.NET.Extensions
         /// <exception cref="InvalidOperationException">If a containment rule is broken</exception>
         internal static void AssertCanOwnRelatedElement(IRelationship relationship, IElement element)
         {
-            AssertCanContain(relationship, element);
-
-            // OwningMembership::ownedMemberElement [1..1] has no first-of-many derivation, unlike Annotation::ownedAnnotatingElement
-            if (relationship is IOwningMembership && relationship.OwnedRelatedElement.Any(ownedElement => ownedElement != element))
-            {
-                throw new InvalidOperationException($"The relationship of type '{relationship.GetType().Name}' already owns another element; remove it before assigning a new one.");
-            }
+            AssertCanAttachRelatedElement(relationship, element);
+            AssertNotContainedBy(relationship, element);
         }
 
         /// <summary>
@@ -139,14 +135,15 @@ namespace SysML2.NET.Extensions
 
             foreach (var element in elements)
             {
-                AssertCanContain(relationship, element);
+                AssertIsValidContainment(relationship, element);
+                AssertNotContainedBy(relationship, element);
             }
 
             AssertDistinct(elements, nameof(elements));
 
-            if (relationship is IOwningMembership && elements.Count > 1)
+            if (OwnsAtMostOneElement(relationship) && elements.Count > 1)
             {
-                throw new InvalidOperationException($"The relationship of type '{relationship.GetType().Name}' owns a single member element; {elements.Count} were supplied.");
+                throw new InvalidOperationException($"The relationship of type '{relationship.GetType().Name}' owns a single element; {elements.Count} were supplied.");
             }
         }
 
@@ -212,6 +209,24 @@ namespace SysML2.NET.Extensions
             {
                 throw new InvalidOperationException(
                     $"Containment cycle: the supplied source of type '{source.GetType().Name}' is already transitively contained by the bridge relationship of type '{relationship.GetType().Name}'.");
+            }
+        }
+
+        /// <summary>
+        /// Removes the <paramref name="element"/> from whichever owner holds it, clearing a back-pointer its owner's list does not match.
+        /// </summary>
+        /// <param name="element">The <see cref="IElement"/> to detach</param>
+        internal static void DetachFromOwner(IElement element)
+        {
+            if (element.OwningRelationship != null && !((IContainedRelationship)element.OwningRelationship).OwnedRelatedElement.Remove(element))
+            {
+                ((IContainedElement)element).OwningRelationship = null;
+            }
+
+            if (element is IRelationship { OwningRelatedElement: not null } relationship
+                && !((IContainedElement)relationship.OwningRelatedElement).OwnedRelationship.Remove(relationship))
+            {
+                ((IContainedRelationship)relationship).OwningRelatedElement = null;
             }
         }
 
@@ -361,13 +376,45 @@ namespace SysML2.NET.Extensions
         }
 
         /// <summary>
-        /// Asserts that the <paramref name="relationship"/> may contain the <paramref name="element"/>, whatever it already owns.
+        /// Asserts that the <paramref name="relationship"/> may own the <paramref name="element"/>, leaving its current ownership chain out of account.
         /// </summary>
         /// <param name="relationship">The owning <see cref="IRelationship"/></param>
         /// <param name="element">The <see cref="IElement"/> to own</param>
         /// <exception cref="ArgumentNullException">If <paramref name="relationship"/> or <paramref name="element"/> is null</exception>
-        /// <exception cref="InvalidOperationException">If the element is the relationship, has the wrong type, or contains the relationship</exception>
-        private static void AssertCanContain(IRelationship relationship, IElement element)
+        /// <exception cref="InvalidOperationException">If the element has the wrong type, or a relationship that owns at most one element already owns another</exception>
+        private static void AssertCanAttachRelatedElement(IRelationship relationship, IElement element)
+        {
+            AssertIsValidContainment(relationship, element);
+
+            if (OwnsAtMostOneElement(relationship) && relationship.OwnedRelatedElement.Any(ownedElement => ownedElement != element))
+            {
+                throw new InvalidOperationException($"The relationship of type '{relationship.GetType().Name}' already owns another element; remove it before assigning a new one.");
+            }
+        }
+
+        /// <summary>
+        /// Asserts that no element is listed twice in the <paramref name="items"/>.
+        /// </summary>
+        /// <typeparam name="T">The element type</typeparam>
+        /// <param name="items">The items to check</param>
+        /// <param name="parameterName">The name of the parameter that supplied the <paramref name="items"/></param>
+        /// <exception cref="ArgumentException">If an element is listed twice</exception>
+        private static void AssertDistinct<T>(IReadOnlyList<T> items, string parameterName) where T : IElement
+        {
+            if (items.Distinct().Count() != items.Count)
+            {
+                throw new ArgumentException("An owned element can be listed only once.", parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Asserts that the <paramref name="relationship"/> may contain an element of the type of the <paramref name="element"/>.
+        /// </summary>
+        /// <param name="relationship">The owning <see cref="IRelationship"/></param>
+        /// <param name="element">The <see cref="IElement"/> to own</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="relationship"/> or <paramref name="element"/> is null</exception>
+        /// <exception cref="InvalidOperationException">If the element is the relationship or has the wrong type</exception>
+        private static void AssertIsValidContainment(IRelationship relationship, IElement element)
         {
             if (relationship == null)
             {
@@ -389,26 +436,20 @@ namespace SysML2.NET.Extensions
                 throw new InvalidOperationException(
                     $"The target of type '{element.GetType().Name}' is not a valid containment target for the relationship of type '{relationship.GetType().Name}'; expected an instance of '{relationship.ExpectedContainmentTypeName()}'.");
             }
+        }
 
+        /// <summary>
+        /// Asserts that the <paramref name="element"/> does not transitively own the <paramref name="relationship"/> in its current ownership chain.
+        /// </summary>
+        /// <param name="relationship">The owning <see cref="IRelationship"/></param>
+        /// <param name="element">The <see cref="IElement"/> to own</param>
+        /// <exception cref="InvalidOperationException">If the element contains the relationship</exception>
+        private static void AssertNotContainedBy(IRelationship relationship, IElement element)
+        {
             if (IsContainedTransitivelyBy(relationship, element))
             {
                 throw new InvalidOperationException(
                     $"Containment cycle: the relationship of type '{relationship.GetType().Name}' is already transitively contained by the target of type '{element.GetType().Name}'.");
-            }
-        }
-
-        /// <summary>
-        /// Asserts that no element is listed twice in the <paramref name="items"/>.
-        /// </summary>
-        /// <typeparam name="T">The element type</typeparam>
-        /// <param name="items">The items to check</param>
-        /// <param name="parameterName">The name of the parameter that supplied the <paramref name="items"/></param>
-        /// <exception cref="ArgumentException">If an element is listed twice</exception>
-        private static void AssertDistinct<T>(IReadOnlyList<T> items, string parameterName) where T : IElement
-        {
-            if (items.Distinct().Count() != items.Count)
-            {
-                throw new ArgumentException("An owned element can be listed only once.", parameterName);
             }
         }
 
@@ -444,24 +485,6 @@ namespace SysML2.NET.Extensions
         }
 
         /// <summary>
-        /// Removes the <paramref name="element"/> from whichever owner holds it.
-        /// </summary>
-        /// <param name="element">The <see cref="IElement"/> to detach</param>
-        private static void DetachFromOwner(IElement element)
-        {
-            if (element.OwningRelationship != null && !((IContainedRelationship)element.OwningRelationship).OwnedRelatedElement.Remove(element))
-            {
-                ((IContainedElement)element).OwningRelationship = null;
-            }
-
-            if (element is IRelationship { OwningRelatedElement: not null } relationship
-                && !((IContainedElement)relationship.OwningRelatedElement).OwnedRelationship.Remove(relationship))
-            {
-                ((IContainedRelationship)relationship).OwningRelatedElement = null;
-            }
-        }
-
-        /// <summary>
         /// Determines whether the <paramref name="candidateAncestor"/> transitively owns the <paramref name="element"/>.
         /// </summary>
         /// <param name="element">The <see cref="IElement"/> whose ownership chain is walked</param>
@@ -491,6 +514,16 @@ namespace SysML2.NET.Extensions
         }
 
         /// <summary>
+        /// Determines whether the <paramref name="relationship"/> may own at most one related element.
+        /// </summary>
+        /// <param name="relationship">The owning <see cref="IRelationship"/></param>
+        /// <returns><c>true</c> for an <see cref="IMembership"/> or an <see cref="IAnnotation"/></returns>
+        /// <remarks>
+        /// KerML §8.3.2.1.3: ownedRelatedElement subsets relatedElement = source->union(target); both ends are [1..1] and the owner is one of them.
+        /// </remarks>
+        private static bool OwnsAtMostOneElement(IRelationship relationship) => relationship is IMembership or IAnnotation;
+
+        /// <summary>
         /// Makes the <paramref name="ownedList"/> exactly the <paramref name="orderedChildren"/>, in order.
         /// </summary>
         /// <typeparam name="TParent">The owner type</typeparam>
@@ -510,7 +543,10 @@ namespace SysML2.NET.Extensions
 
             for (var childIndex = 0; childIndex < children.Count; childIndex++)
             {
-                Attach(ownedList, children[childIndex], childIndex);
+                if (childIndex >= ownedList.Count || !ReferenceEquals(ownedList[childIndex], children[childIndex]))
+                {
+                    Attach(ownedList, children[childIndex], childIndex);
+                }
             }
         }
     }

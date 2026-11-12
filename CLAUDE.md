@@ -161,7 +161,7 @@ Consequences that matter in practice:
 - **`ptc/25-02-29` is not in the repository** — only the OpenAPI is. Fetch it from `https://www.omg.org/spec/SystemsModelingAPI/20250201/Systems-Modeling-API.xmi` when a PIM structural claim has to be verified; do not substitute the OpenAPI or the specification PDF's diagrams for it.
 - **Clause 2 ranks the sources:** where the document and the machine-readable files conflict, the machine-readable files win. That is why `Query::orderBy` carries `isOrdered: false` even though the Clause 7.1.4 prose says the order is significant.
 - **`[Property(xmiId: …)]` on a PIM type carries the real `xmi:id` from `ptc/25-02-29`**, so the decorator is traceable to the model. `xmiId: "sysml2.net"` means "no element in `ptc/25-02-29`" — the repo-wide placeholder for a member the source model does not define.
-- Hypha does **not** cover this specification. It fetches `3-Systems_Modeling_API_and_Services.pdf` but generates no queryable spec knowledge for it, so API/Services questions are answered from the PDF and the two `ptc` artifacts, not from `hypha:spec-citation`.
+- **Hypha covers the specification text**: use `hypha:spec-citation` for API/Services prose (Clause 7 PIM, Clause 8 PSM). It holds no queryable PIM *model*, so structural PIM claims are still checked against `ptc/25-02-29` and PSM claims against the OpenAPI.
 
 ## Key conventions
 

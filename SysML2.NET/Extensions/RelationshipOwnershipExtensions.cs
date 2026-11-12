@@ -13,6 +13,7 @@ namespace SysML2.NET.Extensions
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
@@ -73,7 +74,7 @@ namespace SysML2.NET.Extensions
             /// <exception cref="ArgumentNullException">If <paramref name="relationship"/>, <paramref name="orderedElements"/> or one of them is null</exception>
             /// <exception cref="ArgumentException">If <paramref name="orderedElements"/> lists an element more than once</exception>
             /// <exception cref="InvalidOperationException">If the <paramref name="relationship"/> may not own one of the <paramref name="orderedElements"/>,
-            /// or is an <see cref="IOwningMembership"/> given more than one element, in which case nothing changes</exception>
+            /// or is an <see cref="IMembership"/> or <see cref="IAnnotation"/> given more than one element, in which case nothing changes</exception>
             public void SetOwnedRelatedElements(IEnumerable<IElement> orderedElements)
             {
                 var elements = orderedElements?.ToList();
