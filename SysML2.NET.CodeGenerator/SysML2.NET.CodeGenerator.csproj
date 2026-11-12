@@ -335,12 +335,19 @@
     <Content Include="..\Resources\kebnf.g4">
       <Link>datamodel\kebnf.g4</Link>
     </Content>
+    <Content Include="..\Resources\kgbnf.g4">
+      <Link>datamodel\kgbnf.g4</Link>
+    </Content>
     <Content Include="..\Resources\KerML-textual-bnf.kebnf">
       <Link>datamodel\KerML-textual-bnf.kebnf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Resources\ptc-25-02-30.json">
       <Link>datamodel\ptc-25-02-30.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\SysML-graphical-bnf.kgbnf">
+      <Link>datamodel\SysML-graphical-bnf.kgbnf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Resources\SysML-textual-bnf.kebnf">
