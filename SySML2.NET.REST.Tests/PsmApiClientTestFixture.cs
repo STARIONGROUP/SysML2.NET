@@ -374,15 +374,27 @@ namespace SySML2.NET.REST.Tests
         public async Task VerifyMergeAsync()
         {
             var mergeUri = $"{BaseAddress}projects/{ProjectId}/branches/{BranchId}/merge";
+            string mergeBody = null;
 
             this.mockHttp.Expect(HttpMethod.Post, mergeUri)
                 .WithExactQueryString($"sourceCommitId={CommitId},{OtherCommitId}&description=the%20merge%20description")
-                .With(request => request.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains(RootNamespaceId.ToString()))
+                .With(request =>
+                {
+                    mergeBody = request.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    return true;
+                })
                 .Respond(HttpStatusCode.Created, JsonMediaType, ReadPayload("commit.json"));
 
             var mergeCommit = await this.client.MergeAsync(ProjectId, [CommitId, OtherCommitId], BranchId, [new Namespace { Id = RootNamespaceId }], "the merge description");
 
-            Assert.That(mergeCommit.Id, Is.EqualTo(CommitId));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(mergeCommit.Id, Is.EqualTo(CommitId));
+                Assert.That(mergeBody, Does.Contain(RootNamespaceId.ToString()));
+                Assert.That(mergeBody, Does.Contain("\"qualifiedName\""));
+                Assert.That(mergeBody, Does.Contain("\"owner\""));
+                Assert.That(mergeBody, Does.Contain("\"membership\""));
+            }
 
             await Assert.ThatAsync(() => this.client.MergeAsync(ProjectId, null, BranchId), Throws.TypeOf<ArgumentNullException>());
 
