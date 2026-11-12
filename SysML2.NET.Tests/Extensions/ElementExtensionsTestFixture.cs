@@ -21,6 +21,7 @@ namespace SysML2.NET.Tests.Extensions
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Dependencies;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
@@ -102,6 +103,37 @@ namespace SysML2.NET.Tests.Extensions
         }
 
         [Test]
+        public void AssignOwnership_WithAlreadyOwnedTarget_KeepsASingleOwnership()
+        {
+            var package = new Package();
+            var other = new Package();
+            var membership = new OwningMembership();
+            var secondMembership = new OwningMembership();
+            var member = new Package();
+            var secondMember = new Package();
+
+            package.AssignOwnership(membership, member);
+            package.AssignOwnership(secondMembership, secondMember);
+            package.AssignOwnership(membership, member);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(package.OwnedRelationship, Is.EqualTo([membership, secondMembership]));
+                Assert.That(membership.OwnedRelatedElement, Is.EqualTo([member]));
+            }
+
+            other.AssignOwnership(membership, member);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(package.OwnedRelationship, Is.EqualTo([secondMembership]));
+                Assert.That(other.OwnedRelationship, Is.EqualTo([membership]));
+                Assert.That(membership.OwnedRelatedElement, Is.EqualTo([member]));
+                Assert.That(other.member, Is.EqualTo([member]));
+            }
+        }
+
+        [Test]
         public void AssignOwnership_WithAnnotation_AssignsOwnershipCorrectly()
         {
             var annotation = new Annotation();
@@ -152,6 +184,15 @@ namespace SysML2.NET.Tests.Extensions
         [Test]
         public void AssignOwnership_WithContainmentCycle_ThrowsInvalidOperationException()
         {
+            var owningComment = new Comment();
+            var dependency = new Dependency();
+            owningComment.AssignOwnership(dependency);
+
+            Assert.That(
+                () => dependency.AssignOwnership(new Annotation(), owningComment),
+                Throws.TypeOf<InvalidOperationException>().With.Message.Contains("Containment cycle"));
+
+
             // Scenario 1: bridge directly contains source.
             var bridgeWithSourceInside = new FeatureMembership();
             var sourceInsideBridge = new PartDefinition();
@@ -267,11 +308,50 @@ namespace SysML2.NET.Tests.Extensions
         }
 
         [Test]
-        public void AssignOwnership_WithReferenceOnlyRelationship_ThrowsInvalidOperationException()
+        public void AssignOwnership_WithRelationshipOtherThanMembership_OwnsTheTarget()
         {
-            Assert.That(
-                () => this.source.AssignOwnership(this.referenceBridgeRelationship, this.target),
-                Throws.TypeOf<InvalidOperationException>());
+            this.source.AssignOwnership(this.referenceBridgeRelationship, this.target);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.referenceBridgeRelationship.OwningRelatedElement, Is.SameAs(this.source));
+                Assert.That(this.referenceBridgeRelationship.OwnedRelatedElement, Is.EqualTo([this.target]));
+                Assert.That(this.target.OwningRelationship, Is.SameAs(this.referenceBridgeRelationship));
+            }
+        }
+
+        [Test]
+        public void AssignOwnership_WithSecondOwnedElement_ThrowsForMembershipAndAnnotationOnly()
+        {
+            var package = new Package();
+            var owningMembership = new OwningMembership();
+            var member = new Package();
+            package.AssignOwnership(owningMembership, member);
+
+            var membership = new Membership();
+            var referencedMember = new Package();
+            package.AssignOwnership(membership, referencedMember);
+
+            var annotation = new Annotation();
+            var comment = new Comment();
+            this.source.AssignOwnership(annotation, comment);
+
+            var dependency = new Dependency();
+            var firstClient = new Comment();
+            var secondClient = new Comment();
+            this.source.AssignOwnership(dependency, firstClient);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(() => package.AssignOwnership(owningMembership, new Package()), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("already owns another element"));
+                Assert.That(owningMembership.OwnedRelatedElement, Is.EqualTo([member]));
+                Assert.That(() => package.AssignOwnership(membership, new Package()), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("already owns another element"));
+                Assert.That(membership.OwnedRelatedElement, Is.EqualTo([referencedMember]));
+                Assert.That(() => this.source.AssignOwnership(annotation, new Comment()), Throws.TypeOf<InvalidOperationException>().With.Message.Contains("already owns another element"));
+                Assert.That(annotation.OwnedRelatedElement, Is.EqualTo([comment]));
+                Assert.That(() => this.source.AssignOwnership(dependency, secondClient), Throws.Nothing);
+                Assert.That(dependency.OwnedRelatedElement, Is.EqualTo([firstClient, secondClient]));
+            }
         }
 
         [Test]
@@ -280,6 +360,28 @@ namespace SysML2.NET.Tests.Extensions
             Assert.That(
                 () => this.source.AssignOwnership(this.bridgeRelationship, this.source),
                 Throws.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
+        public void AssignOwnership_WithTargetOwningTheBridge_MovesTheBridgeUnderTheSource()
+        {
+            var annotation = new Annotation();
+            var comment = new Comment();
+            comment.AssignOwnership(annotation);
+
+            Assert.That(() => this.source.AssignOwnership(annotation, comment), Throws.Nothing);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(this.source.OwnedRelationship, Is.EqualTo([annotation]));
+                Assert.That(annotation.OwnedRelatedElement, Is.EqualTo([comment]));
+                Assert.That(comment.OwnedRelationship, Is.Empty);
+                Assert.That(comment.OwningRelationship, Is.SameAs(annotation));
+            }
+
+            Assert.That(
+                () => comment.AssignOwnership(annotation, new Comment()),
+                Throws.TypeOf<InvalidOperationException>().With.Message.Contains("Containment cycle"));
         }
 
         [Test]

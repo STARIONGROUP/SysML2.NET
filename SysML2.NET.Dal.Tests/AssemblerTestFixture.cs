@@ -157,7 +157,7 @@ namespace SysML2.NET.Dal.Tests
         }
 
         [Test]
-        public void Synchronize_WithRemovedOwnedRelationship_RemovesThePocoFromTheCache()
+        public void Synchronize_WithDetachedAndDeletedElements_RemovesOnlyTheDeletedOnes()
         {
             var ownerId = Guid.Parse("1b7c1f14-9a2e-4c8d-8f3b-2c6e0d5a4b91");
             var membershipId = Guid.Parse("2c8d2f25-8b3f-4d9e-9a4c-3d7f1e6b5c02");
@@ -201,16 +201,149 @@ namespace SysML2.NET.Dal.Tests
                 Assert.That(ownerPoco.OwnedRelationship, Has.Count.EqualTo(1));
             }
 
-            // drop the membership from the owner and from the delta, which is what a server-side removal looks like
-            ownerDto.OwnedRelationship = [];
+            var membershipPoco = (Core.POCO.Root.Namespaces.OwningMembership)this.assembler.Cache[membershipId].Value;
+            var packagePoco = this.assembler.Cache[packageId].Value;
 
-            Assert.That(() => this.assembler.Synchronize([ownerDto, packageDto]), Throws.Nothing);
+            Assert.That(() => this.assembler.Synchronize([], null), Throws.TypeOf<ArgumentNullException>());
+            Assert.That(() => this.assembler.Synchronize([ownerDto], [ownerId]), Throws.TypeOf<ArgumentException>());
+
+            ownerDto.OwnedRelationship = [];
+            membershipDto.OwningRelatedElement = null;
+
+            this.assembler.Synchronize([ownerDto, membershipDto]);
 
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(ownerPoco.OwnedRelationship, Has.Count.EqualTo(0));
+                Assert.That(membershipPoco.OwningRelatedElement, Is.Null);
+                Assert.That(this.assembler.Cache[membershipId].Value, Is.SameAs(membershipPoco));
+                Assert.That(membershipPoco.OwnedRelatedElement, Is.EqualTo([packagePoco]));
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(3));
+            }
+
+            packageDto.OwningRelationship = null;
+
+            this.assembler.Synchronize([packageDto], [membershipId]);
+
+            using (Assert.EnterMultipleScope())
+            {
                 Assert.That(this.assembler.Cache.ContainsKey(membershipId), Is.False);
+                Assert.That(packagePoco.OwningRelationship, Is.Null);
+                Assert.That(this.assembler.Cache[packageId].Value, Is.SameAs(packagePoco));
                 Assert.That(this.assembler.Cache, Has.Count.EqualTo(2));
+            }
+
+            Assert.That(() => this.assembler.Synchronize([], [membershipId]), Throws.Nothing);
+
+            this.assembler.Synchronize([], [ownerId, packageId]);
+
+            Assert.That(this.assembler.Cache, Has.Count.EqualTo(0));
+        }
+
+        [Test]
+        public void Synchronize_WithDeletedOwnedElement_DetachesItFromItsSurvivingOwner()
+        {
+            var ownerDto = new Core.DTO.Kernel.Packages.Package { Id = Guid.NewGuid() };
+            var membershipDto = new Core.DTO.Root.Namespaces.OwningMembership { Id = Guid.NewGuid(), OwningRelatedElement = ownerDto.Id };
+            var memberDto = new Core.DTO.Kernel.Packages.Package { Id = Guid.NewGuid(), OwningRelationship = membershipDto.Id };
+            membershipDto.OwnedRelatedElement = [memberDto.Id];
+            ownerDto.OwnedRelationship = [membershipDto.Id];
+
+            this.assembler.Synchronize([ownerDto, membershipDto, memberDto]);
+
+            var ownerPoco = this.assembler.Cache[ownerDto.Id].Value;
+            var membershipPoco = (Core.POCO.Root.Namespaces.OwningMembership)this.assembler.Cache[membershipDto.Id].Value;
+
+            this.assembler.Synchronize([], [memberDto.Id]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(membershipPoco.OwnedRelatedElement, Has.Count.EqualTo(0));
+                Assert.That(ownerPoco.OwnedRelationship, Is.EqualTo([membershipPoco]));
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(2));
+            }
+
+            this.assembler.Synchronize([], [membershipDto.Id]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(ownerPoco.OwnedRelationship, Has.Count.EqualTo(0));
+                Assert.That(this.assembler.Cache.ContainsKey(ownerDto.Id), Is.True);
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(1));
+            }
+        }
+
+        [Test]
+        public void Synchronize_WithReorderedAndMovedOwnedRelationships_KeepsThePocoInstances()
+        {
+            var firstOwnerDto = new Core.DTO.Kernel.Packages.Package { Id = Guid.NewGuid() };
+            var secondOwnerDto = new Core.DTO.Kernel.Packages.Package { Id = Guid.NewGuid() };
+            var membershipDtos = new List<Core.DTO.Root.Namespaces.OwningMembership>();
+            var memberDtos = new List<Core.DTO.Kernel.Packages.Package>();
+
+            for (var memberIndex = 0; memberIndex < 3; memberIndex++)
+            {
+                var membershipDto = new Core.DTO.Root.Namespaces.OwningMembership { Id = Guid.NewGuid(), OwningRelatedElement = firstOwnerDto.Id };
+                var memberDto = new Core.DTO.Kernel.Packages.Package { Id = Guid.NewGuid(), OwningRelationship = membershipDto.Id };
+                membershipDto.OwnedRelatedElement = [memberDto.Id];
+                membershipDtos.Add(membershipDto);
+                memberDtos.Add(memberDto);
+            }
+
+            firstOwnerDto.OwnedRelationship = [..membershipDtos.Select(membershipDto => membershipDto.Id)];
+
+            this.assembler.Synchronize([firstOwnerDto, secondOwnerDto, ..membershipDtos, ..memberDtos]);
+
+            var firstOwner = (Core.POCO.Kernel.Packages.Package)this.assembler.Cache[firstOwnerDto.Id].Value;
+            var secondOwner = (Core.POCO.Kernel.Packages.Package)this.assembler.Cache[secondOwnerDto.Id].Value;
+            var memberships = membershipDtos.Select(membershipDto => this.assembler.Cache[membershipDto.Id].Value).ToList();
+            var secondMember = this.assembler.Cache[memberDtos[1].Id].Value;
+
+            Assert.That(firstOwner.OwnedRelationship, Is.EqualTo(memberships));
+
+            firstOwnerDto.OwnedRelationship = [membershipDtos[2].Id, membershipDtos[0].Id, membershipDtos[1].Id];
+
+            this.assembler.Synchronize([firstOwnerDto]);
+
+            Assert.That(firstOwner.OwnedRelationship, Is.EqualTo([memberships[2], memberships[0], memberships[1]]));
+
+            firstOwnerDto.OwnedRelationship = [membershipDtos[2].Id, membershipDtos[0].Id];
+            secondOwnerDto.OwnedRelationship = [membershipDtos[1].Id];
+            membershipDtos[1].OwningRelatedElement = secondOwnerDto.Id;
+
+            this.assembler.Synchronize([firstOwnerDto, secondOwnerDto, membershipDtos[1]]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(firstOwner.OwnedRelationship, Is.EqualTo([memberships[2], memberships[0]]));
+                Assert.That(secondOwner.OwnedRelationship, Is.EqualTo([memberships[1]]));
+                Assert.That(this.assembler.Cache[membershipDtos[1].Id].Value, Is.SameAs(memberships[1]));
+                Assert.That(this.assembler.Cache[memberDtos[1].Id].Value, Is.SameAs(secondMember));
+                Assert.That(secondOwner.ownedMember, Is.EqualTo([secondMember]));
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(8));
+            }
+
+            membershipDtos[0].OwningRelatedElement = secondOwnerDto.Id;
+
+            this.assembler.Synchronize([membershipDtos[0]]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(firstOwner.OwnedRelationship, Is.EqualTo([memberships[2]]));
+                Assert.That(secondOwner.OwnedRelationship, Is.EqualTo([memberships[1], memberships[0]]));
+            }
+
+            secondOwnerDto.OwnedRelationship = [membershipDtos[0].Id];
+
+            this.assembler.Synchronize([secondOwnerDto]);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(secondOwner.OwnedRelationship, Is.EqualTo([memberships[0]]));
+                Assert.That(((Core.POCO.Root.Elements.IRelationship)memberships[1]).OwningRelatedElement, Is.Null);
+                Assert.That(this.assembler.Cache[membershipDtos[1].Id].Value, Is.SameAs(memberships[1]));
+                Assert.That(this.assembler.Cache[memberDtos[1].Id].Value, Is.SameAs(secondMember));
+                Assert.That(this.assembler.Cache, Has.Count.EqualTo(8));
             }
         }
 
