@@ -20,6 +20,8 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
     [TestFixture]
     public class QueryRequestValidatorTestFixture
     {
+        private static readonly string[] NameFailure = ["Name"];
+
         [Test]
         public void VerifyValidate()
         {
@@ -43,7 +45,15 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
             queryRequest.Where = null;
             queryRequest.Name = null;
 
-            Assert.That(validator.Validate(queryRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["Name"]));
+            Assert.That(validator.Validate(queryRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
+
+            queryRequest.Name = string.Empty;
+
+            Assert.That(validator.Validate(queryRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
+
+            queryRequest.Name = " ";
+
+            Assert.That(validator.Validate(queryRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
         }
     }
 }

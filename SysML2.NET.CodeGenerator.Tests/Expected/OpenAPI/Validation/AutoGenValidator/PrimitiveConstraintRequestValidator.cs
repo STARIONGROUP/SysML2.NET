@@ -29,14 +29,13 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveConstraintRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public PrimitiveConstraintRequestValidator()
         {
             this.RuleFor(dto => dto.Operator).IsInEnum();
-            this.RuleFor(dto => dto.Property).NotNull();
+            this.RuleFor(dto => dto.Property).NotEmpty();
             this.RuleFor(dto => dto.Value).Must(value => value == null || value.Count >= 1);
-            this.AddCustomValidation();
         }
     }
 }

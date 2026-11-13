@@ -29,7 +29,7 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositeConstraintRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public CompositeConstraintRequestValidator()
         {
@@ -37,7 +37,6 @@ namespace SysML2.NET.Validation.PSM
             this.RuleFor(dto => dto.Constraint).Must(value => value == null || value.Count >= 2);
             this.RuleForEach(dto => dto.Constraint).NotNull();
             this.RuleFor(dto => dto.Operator).IsInEnum();
-            this.AddCustomValidation();
         }
     }
 }

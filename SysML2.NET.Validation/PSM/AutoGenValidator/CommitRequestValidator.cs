@@ -29,13 +29,12 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CommitRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public CommitRequestValidator()
         {
             this.RuleFor(dto => dto.Change).NotNull();
             this.RuleForEach(dto => dto.Change).NotNull().SetValidator(new DataVersionRequestValidator());
-            this.AddCustomValidation();
         }
     }
 }

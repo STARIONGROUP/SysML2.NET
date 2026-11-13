@@ -20,6 +20,8 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
     [TestFixture]
     public class ProjectRequestValidatorTestFixture
     {
+        private static readonly string[] NameFailure = ["Name"];
+
         [Test]
         public void VerifyValidate()
         {
@@ -28,7 +30,6 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
 
             Assert.That(validator.Validate(projectRequest).IsValid, Is.True);
 
-            projectRequest.Name = string.Empty;
             projectRequest.DefaultBranch = Guid.NewGuid();
 
             Assert.That(validator.Validate(projectRequest).IsValid, Is.True);
@@ -40,7 +41,15 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
             projectRequest.DefaultBranch = null;
             projectRequest.Name = null;
 
-            Assert.That(validator.Validate(projectRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["Name"]));
+            Assert.That(validator.Validate(projectRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
+
+            projectRequest.Name = string.Empty;
+
+            Assert.That(validator.Validate(projectRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
+
+            projectRequest.Name = " ";
+
+            Assert.That(validator.Validate(projectRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
         }
     }
 }

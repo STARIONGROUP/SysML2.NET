@@ -29,17 +29,16 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public QueryRequestValidator()
         {
-            this.RuleFor(dto => dto.Name).NotNull();
+            this.RuleFor(dto => dto.Name).NotEmpty();
             this.RuleFor(dto => dto.Where).SetInheritanceValidator(validators =>
             {
                 validators.Add<CompositeConstraintRequest>(new CompositeConstraintRequestValidator());
                 validators.Add<PrimitiveConstraintRequest>(new PrimitiveConstraintRequestValidator());
             });
-            this.AddCustomValidation();
         }
     }
 }

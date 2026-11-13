@@ -29,13 +29,12 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BranchRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public BranchRequestValidator()
         {
             this.RuleFor(dto => dto.Head).Must(value => !value.HasValue || value.Value != Guid.Empty);
-            this.RuleFor(dto => dto.Name).NotNull();
-            this.AddCustomValidation();
+            this.RuleFor(dto => dto.Name).NotEmpty();
         }
     }
 }

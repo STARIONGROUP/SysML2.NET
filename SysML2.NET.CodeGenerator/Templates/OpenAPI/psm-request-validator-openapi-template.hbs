@@ -29,12 +29,11 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="{{this.Key}}Validator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public {{this.Key}}Validator()
         {
             {{#Validator.WriteRules this.Key this.Value}}
-            this.AddCustomValidation();
         }
     }
 }

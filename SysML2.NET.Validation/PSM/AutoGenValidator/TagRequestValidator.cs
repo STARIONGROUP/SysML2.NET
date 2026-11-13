@@ -29,13 +29,12 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TagRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public TagRequestValidator()
         {
-            this.RuleFor(dto => dto.Name).NotNull();
+            this.RuleFor(dto => dto.Name).NotEmpty();
             this.RuleFor(dto => dto.TaggedCommit).NotEmpty();
-            this.AddCustomValidation();
         }
     }
 }

@@ -22,13 +22,29 @@ namespace SysML2.NET.Validation.PSM
     public abstract class RequestValidator<TRequest> : AbstractValidator<TRequest> where TRequest : IRequest
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="RequestValidator{TRequest}"/> class and registers its hand-coded rules
+        /// </summary>
+        protected RequestValidator()
+        {
+            this.RegisterCustomValidation();
+        }
+
+        /// <summary>
         /// Registers the hand-coded rules that complement the rules derived from the OpenAPI document
         /// </summary>
         /// <remarks>
-        /// The generated validator constructor invokes this method once, after registering its generated rules.
+        /// The base constructor invokes this method once, before the derived constructor registers the generated rules.
         /// </remarks>
         protected virtual void AddCustomValidation()
         {
+        }
+
+        /// <summary>
+        /// Invokes <see cref="AddCustomValidation"/> from the constructor through a non-virtual call site
+        /// </summary>
+        private void RegisterCustomValidation()
+        {
+            this.AddCustomValidation();
         }
     }
 }

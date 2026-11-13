@@ -46,19 +46,10 @@ namespace SysML2.NET.Validation.Tests.PSM
 
         private sealed class ValidatorWithoutCustomValidation : RequestValidator<ProjectRequest>
         {
-            public ValidatorWithoutCustomValidation()
-            {
-                this.AddCustomValidation();
-            }
         }
 
         private sealed class ValidatorWithCustomValidation : RequestValidator<ProjectRequest>
         {
-            public ValidatorWithCustomValidation()
-            {
-                this.AddCustomValidation();
-            }
-
             protected override void AddCustomValidation()
             {
                 base.AddCustomValidation();

@@ -29,12 +29,11 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DataIdentityRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public DataIdentityRequestValidator()
         {
             this.RuleFor(dto => dto.Id).NotEmpty();
-            this.AddCustomValidation();
         }
     }
 }

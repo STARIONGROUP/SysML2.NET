@@ -20,6 +20,8 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
     [TestFixture]
     public class PrimitiveConstraintRequestValidatorTestFixture
     {
+        private static readonly string[] PropertyFailure = ["Property"];
+
         [Test]
         public void VerifyValidate()
         {
@@ -47,6 +49,15 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
             primitiveConstraintRequest.Operator = (PrimitiveConstraintRequestOperator)99;
 
             Assert.That(validator.Validate(primitiveConstraintRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["Property", "Operator"]));
+
+            primitiveConstraintRequest.Operator = PrimitiveConstraintRequestOperator.equalto;
+            primitiveConstraintRequest.Property = string.Empty;
+
+            Assert.That(validator.Validate(primitiveConstraintRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(PropertyFailure));
+
+            primitiveConstraintRequest.Property = " ";
+
+            Assert.That(validator.Validate(primitiveConstraintRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(PropertyFailure));
         }
     }
 }

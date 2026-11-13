@@ -29,13 +29,12 @@ namespace SysML2.NET.Validation.PSM
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExternalDataRequestValidator"/> class
-        /// and registers its generated and hand-coded rules
+        /// and registers its generated rules
         /// </summary>
         public ExternalDataRequestValidator()
         {
             this.RuleFor(dto => dto.Id).Must(value => !value.HasValue || value.Value != Guid.Empty);
             this.RuleFor(dto => dto.ResourceIdentifier).Must(value => value == null || value.IsAbsoluteUri);
-            this.AddCustomValidation();
         }
     }
 }

@@ -93,6 +93,10 @@ namespace SysML2.NET.CodeGenerator.OpenApiHandleBarHelpers
                     ? $"this.RuleFor({selector}).NotEmpty();"
                     : $"this.RuleFor({selector}).Must(value => !value.HasValue || value.Value != Guid.Empty);";
             }
+            else if (coreTypeName == "string" && !isCollection && isPresenceRequired)
+            {
+                yield return $"this.RuleFor({selector}).NotEmpty();";
+            }
             else if (isPresenceRequired && (isCollection || !propertySchema.QueryIsValueType()))
             {
                 yield return $"this.RuleFor({selector}).NotNull();";

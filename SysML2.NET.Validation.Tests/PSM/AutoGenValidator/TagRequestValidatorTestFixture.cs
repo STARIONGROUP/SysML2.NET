@@ -20,6 +20,8 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
     [TestFixture]
     public class TagRequestValidatorTestFixture
     {
+        private static readonly string[] NameFailure = ["Name"];
+
         [Test]
         public void VerifyValidate()
         {
@@ -35,7 +37,15 @@ namespace SysML2.NET.Validation.Tests.PSM.AutoGenValidator
             tagRequest.TaggedCommit = Guid.NewGuid();
             tagRequest.Name = null;
 
-            Assert.That(validator.Validate(tagRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["Name"]));
+            Assert.That(validator.Validate(tagRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
+
+            tagRequest.Name = string.Empty;
+
+            Assert.That(validator.Validate(tagRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
+
+            tagRequest.Name = " ";
+
+            Assert.That(validator.Validate(tagRequest).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(NameFailure));
         }
     }
 }
