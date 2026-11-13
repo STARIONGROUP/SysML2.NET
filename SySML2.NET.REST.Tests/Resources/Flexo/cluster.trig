@@ -1,0 +1,1311 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix mms: <https://mms.openmbee.org/rdf/ontology/>
+prefix mms-object: <https://mms.openmbee.org/rdf/objects/>
+prefix m: <http://layer1-service/>
+prefix ma: <http://layer1-service/access-control-scope/>
+prefix m-graph: <http://layer1-service/graphs/>
+prefix m-user: <http://layer1-service/users/>
+prefix m-group: <http://layer1-service/groups/>
+prefix m-policy: <http://layer1-service/policies/>
+prefix sysml: <https://www.omg.org/spec/SysML#>
+prefix sysx: <urn:opensysml:sysml:>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# users and groups which are the subjects of access control policies
+graph m-graph:AccessControl.Agents {
+	m-user:root a mms:User ;
+		mms:id "root" .
+
+	m-user:admin a mms:User ;
+		mms:group m-group:SuperAdmins ;
+		mms:id "admin" .
+
+	m-user:anon a mms:User ;
+		mms:id "anon" .
+
+    <http://layer1-service/users/ldap/user/user01> a mms:User ;
+    	mms:id "ldap/user/user01" .
+
+    <http://layer1-service/users/ldap/user/user02> a mms:User ;
+        mms:id "ldap/user/user02" .
+
+    <http://layer1-service/groups/ldap/group/group01> a mms:Group ;
+        mms:id "ldap/group/group01" .
+
+	m-group:SuperAdmins a mms:Group ;
+		mms:id "super_admins" ;
+		mms:etag "mms-init-etag-value-group-SuperAdmins" .
+}
+
+# default policies
+graph m-graph:AccessControl.Policies {
+	m-policy:DefaultSuperAdmins a mms:Policy ;
+		mms:subject m-user:root, m-group:SuperAdmins, <http://layer1-service/users/ldap/user/user01>, <http://layer1-service/groups/ldap/group/group01> ;
+		mms:scope <http://layer1-service/> ;
+		mms:role mms-object:Role.AdminCluster, mms-object:Role.AdminOrg, mms-object:Role.AdminRepo, mms-object:Role.AdminMetadata, mms-object:Role.AdminModel, mms-object:Role.AdminAccessControlAny .
+}
+
+# cluster-specific classes
+graph m-graph:Cluster {
+	<http://layer1-service/> a mms:Cluster .
+
+	<http://layer1-service/access-control-scope/> a mms:AccessControlAny .
+}
+
+# copy of static schema inherited from global MMS definitions
+graph m-graph:Schema {
+	# ====================================
+	# ==            Classes             ==
+	# ====================================
+	mms:Project a rdfs:Class ;
+		rdfs:label "Project" .
+
+	mms:Collection a rdfs:Class ;
+		rdfs:label "Collection" ;
+		rdfs:subClassOf mms:Project .
+
+	mms:Repo a rdfs:Class ;
+		rdfs:label "Repo" ;
+		rdfs:subClassOf mms:Project .
+
+	mms:Ref a rdfs:Class ;
+		rdfs:label "Ref" .
+
+	mms:Branch a rdfs:Class ;
+		rdfs:label "Branch" ;
+		rdfs:subClassOf mms:Ref .
+
+	mms:Lock a rdfs:Class ;
+		rdfs:label "Lock" ;
+		rdfs:subClassOf mms:Ref .
+
+	mms:InterimLock a rdfs:Class ;
+		rdfs:label "InterimLock" ;
+		rdfs:subClassOf mms:Lock .
+
+	mms:Artifact a rdfs:Class ;
+		rdfs:label "Artifact" .
+
+	mms:Scratch a rdfs:Class ;
+		rdfs:label "Scratch" .
+
+	mms:Snapshot a rdfs:Class ;
+		rdfs:label "Snapshot" .
+
+	mms:Model a rdfs:Class ;
+		rdfs:label "Model" ;
+		rdfs:subClassOf mms:Snapshot .
+
+	mms:Staging a rdfs:Class ;
+		rdfs:label "Staging" ;
+		rdfs:subClassOf mms:Snapshot .
+
+	mms:Commit a rdfs:Class ;
+		rdfs:label "Commit" .
+
+	mms:Agent a rdfs:Class ;
+		rdfs:label "Agent" .
+
+	mms:User a rdfs:Class ;
+		rdfs:label "User" ;
+		rdfs:subClassOf mms:Agent .
+
+	mms:Group a rdfs:Class ;
+		rdfs:label "Group" ;
+		rdfs:subClassOf mms:Agent .
+
+	mms:Policy a rdfs:Class ;
+		rdfs:label "Policy" .
+
+	# ====================================
+	# ==           Properties           ==
+	# ====================================
+	mms:ref a rdf:Property ;
+		rdfs:label "ref" ;
+		rdfs:range mms:Ref .
+
+	mms:commit a rdf:Property ;
+		rdfs:label "commit" ;
+		rdfs:range mms:Commit .
+
+	mms:snapshot a rdf:Property ;
+		rdfs:label "snapshot" ;
+		rdfs:range mms:Snapshot .
+}
+
+graph m-graph:AccessControl.Definitions {
+	# ====================================
+	# ==             Scopes             ==
+	# ====================================
+	mms:Cluster a rdfs:Class ;
+		rdfs:label "Cluster level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:Org, mms:AccessControlAny .
+
+	mms:Org a rdfs:Class ;
+		rdfs:label "Org level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:Project .
+
+	mms:Project a rdfs:Class ;
+		rdfs:label "Project level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:Repo, mms:Collection .
+
+	mms:Repo a rdfs:Class ;
+		rdfs:label "Repo level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:Ref, mms:Artifact, mms:Commit, mms:Scratch .
+
+	mms:Collection a rdfs:Class ;
+		rdfs:label "Collection level scope" ;
+		rdfs:subClassOf mms:Scope .
+
+	mms:Artifact a rdfs:Class ;
+		rdfs:label "Artifact level scope" ;
+		rdfs:subClassOf mms:Scope .
+
+	mms:Ref a rdfs:Class ;
+		rdfs:label "Ref level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:Branch, mms:Lock .
+
+	mms:AccessControlAny a rdfs:Class ;
+		rdfs:label "AccessControlAny level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:Agent, mms:Policy .
+
+	mms:Agent a rdfs:Class ;
+		rdfs:label "Agent level scope" ;
+		rdfs:subClassOf mms:Scope ;
+		mms:implies mms:User, mms:Group .
+
+	mms:User a rdfs:Class ;
+		rdfs:label "User level scope" ;
+		rdfs:subClassOf mms:Scope .
+
+	mms:Group a rdfs:Class ;
+		rdfs:label "Group level scope" ;
+		rdfs:subClassOf mms:Scope .
+
+	mms:Policy a rdfs:Class ;
+		rdfs:label "Policy level scope" ;
+		rdfs:subClassOf mms:Scope .
+
+	mms:Scratch a rdfs:Class ;
+		rdfs:label "Scratch level scope" ;
+		rdfs:subClassOf mms:Scope .
+
+	# ====================================
+	# ==   Object-Centric Permissions   ==
+	# ====================================
+	mms-object:Permission.CreateCluster a mms:Permission .
+
+	mms-object:Permission.ReadCluster a mms:Permission .
+
+	mms-object:Permission.UpdateCluster a mms:Permission ;
+		mms:implies mms-object:Permission.ReadCluster, mms-object:Permission.CreateOrg, mms-object:Permission.CreateAccessControlAny .
+
+	mms-object:Permission.DeleteCluster a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateCluster, mms-object:Permission.DeleteOrg, mms-object:Permission.DeleteAccessControlAny .
+
+	mms-object:Permission.CreateOrg a mms:Permission .
+
+	mms-object:Permission.ReadOrg a mms:Permission .
+
+	mms-object:Permission.UpdateOrg a mms:Permission ;
+		mms:implies mms-object:Permission.ReadOrg, mms-object:Permission.CreateProject .
+
+	mms-object:Permission.DeleteOrg a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateOrg, mms-object:Permission.DeleteProject .
+
+	mms-object:Permission.CreateProject a mms:Permission ;
+		mms:implies mms-object:Permission.CreateCollection, mms-object:Permission.CreateRepo .
+
+	mms-object:Permission.ReadProject a mms:Permission ;
+		mms:implies mms-object:Permission.ReadCollection, mms-object:Permission.ReadRepo .
+
+	mms-object:Permission.UpdateProject a mms:Permission ;
+		mms:implies mms-object:Permission.ReadProject, mms-object:Permission.UpdateCollection, mms-object:Permission.UpdateRepo .
+
+	mms-object:Permission.DeleteProject a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateProject, mms-object:Permission.DeleteCollection, mms-object:Permission.DeleteRepo .
+
+	mms-object:Permission.CreateCollection a mms:Permission .
+
+	mms-object:Permission.ReadCollection a mms:Permission .
+
+	mms-object:Permission.UpdateCollection a mms:Permission ;
+		mms:implies mms-object:Permission.ReadCollection .
+
+	mms-object:Permission.DeleteCollection a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateCollection .
+
+	mms-object:Permission.CreateRepo a mms:Permission .
+
+	mms-object:Permission.ReadRepo a mms:Permission .
+
+	mms-object:Permission.UpdateRepo a mms:Permission ;
+		mms:implies mms-object:Permission.ReadRepo, mms-object:Permission.ReadCommit, mms-object:Permission.ReadScratch, mms-object:Permission.UpdateBranch, mms-object:Permission.UpdateLock, mms-object:Permission.UpdateCommit, mms-object:Permission.UpdateRef, mms-object:Permission.UpdateArtifact, mms-object:Permission.UpdateScratch .
+
+	mms-object:Permission.DeleteRepo a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateRepo, mms-object:Permission.CreateRef, mms-object:Permission.DeleteRef, mms-object:Permission.CreateArtifact, mms-object:Permission.DeleteArtifact, mms-object:Permission.CreateDiff, mms-object:Permission.DeleteDiff, mms-object:Permission.CreateScratch, mms-object:Permission.DeleteScratch .
+
+	mms-object:Permission.CreateRef a mms:Permission .
+
+	mms-object:Permission.ReadRef a mms:Permission .
+
+	mms-object:Permission.UpdateRef a mms:Permission ;
+		mms:implies mms-object:Permission.ReadRef, mms-object:Permission.UpdateBranch, mms-object:Permission.UpdateLock .
+
+	mms-object:Permission.DeleteRef a mms:Permission ;
+		mms:implies mms-object:Permission.CreateBranch, mms-object:Permission.DeleteBranch, mms-object:Permission.CreateLock, mms-object:Permission.DeleteLock .
+
+	mms-object:Permission.CreateBranch a mms:Permission .
+
+	mms-object:Permission.ReadBranch a mms:Permission .
+
+	mms-object:Permission.UpdateBranch a mms:Permission ;
+		mms:implies mms-object:Permission.ReadBranch .
+
+	mms-object:Permission.DeleteBranch a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateBranch .
+
+	mms-object:Permission.CreateLock a mms:Permission .
+
+	mms-object:Permission.ReadLock a mms:Permission .
+
+	mms-object:Permission.UpdateLock a mms:Permission ;
+		mms:implies mms-object:Permission.ReadLock .
+
+	mms-object:Permission.DeleteLock a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateLock .
+
+	mms-object:Permission.CreateArtifact a mms:Permission .
+
+	mms-object:Permission.ReadArtifact a mms:Permission .
+
+	mms-object:Permission.UpdateArtifact a mms:Permission ;
+		mms:implies mms-object:Permission.ReadArtifact .
+
+	mms-object:Permission.DeleteArtifact a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateArtifact .
+
+	mms-object:Permission.CreateScratch a mms:Permission .
+
+	mms-object:Permission.ReadScratch a mms:Permission .
+
+	mms-object:Permission.UpdateScratch a mms:Permission ;
+		mms:implies mms-object:Permission.ReadScratch .
+
+	mms-object:Permission.DeleteScratch a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateScratch .
+
+	mms-object:Permission.CreateCommit a mms:Permission .
+
+	mms-object:Permission.ReadCommit a mms:Permission .
+
+	mms-object:Permission.UpdateCommit a mms:Permission ;
+		mms:implies mms-object:Permission.ReadCommit .
+
+	mms-object:Permission.DeleteCommit a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateCommit .
+
+	mms-object:Permission.CreateAccessControlAny a mms:Permission .
+
+	mms-object:Permission.ReadAccessControlAny a mms:Permission .
+
+	mms-object:Permission.UpdateAccessControlAny a mms:Permission ;
+		mms:implies mms-object:Permission.ReadAccessControlAny, mms-object:Permission.CreateAgent, mms-object:Permission.CreatePolicy .
+
+	mms-object:Permission.DeleteAccessControlAny a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateAccessControlAny, mms-object:Permission.DeleteAgent, mms-object:Permission.DeletePolicy .
+
+	mms-object:Permission.CreateAgent a mms:Permission .
+
+	mms-object:Permission.ReadAgent a mms:Permission .
+
+	mms-object:Permission.UpdateAgent a mms:Permission ;
+		mms:implies mms-object:Permission.ReadAgent, mms-object:Permission.CreateUser, mms-object:Permission.CreateGroup .
+
+	mms-object:Permission.DeleteAgent a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateAgent, mms-object:Permission.DeleteUser, mms-object:Permission.DeleteGroup .
+
+	mms-object:Permission.CreateUser a mms:Permission .
+
+	mms-object:Permission.ReadUser a mms:Permission .
+
+	mms-object:Permission.UpdateUser a mms:Permission ;
+		mms:implies mms-object:Permission.ReadUser .
+
+	mms-object:Permission.DeleteUser a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateUser .
+
+	mms-object:Permission.CreateGroup a mms:Permission .
+
+	mms-object:Permission.ReadGroup a mms:Permission .
+
+	mms-object:Permission.UpdateGroup a mms:Permission ;
+		mms:implies mms-object:Permission.ReadGroup .
+
+	mms-object:Permission.DeleteGroup a mms:Permission ;
+		mms:implies mms-object:Permission.UpdateGroup .
+
+	mms-object:Permission.CreatePolicy a mms:Permission .
+
+	mms-object:Permission.ReadPolicy a mms:Permission .
+
+	mms-object:Permission.UpdatePolicy a mms:Permission ;
+		mms:implies mms-object:Permission.ReadPolicy .
+
+	mms-object:Permission.DeletePolicy a mms:Permission ;
+		mms:implies mms-object:Permission.UpdatePolicy .
+
+	# ====================================
+	# ==             Roles              ==
+	# ====================================
+	mms-object:Role.AdminOrg a mms:Role ;
+		mms:permits mms-object:Permission.DeleteOrg .
+
+	mms-object:Role.WriteOrg a mms:Role ;
+		mms:permits mms-object:Permission.UpdateOrg .
+
+	mms-object:Role.ReadOrg a mms:Role ;
+		mms:permits mms-object:Permission.ReadOrg .
+
+	mms-object:Role.AdminRepo a mms:Role ;
+		mms:permits mms-object:Permission.DeleteRepo .
+
+	mms-object:Role.WriteRepo a mms:Role ;
+		mms:permits mms-object:Permission.UpdateRepo .
+
+	mms-object:Role.ReadRepo a mms:Role ;
+		mms:permits mms-object:Permission.ReadRepo .
+
+	mms-object:Role.AdminModel a mms:Role ;
+		mms:permits mms-object:Permission.DeleteModel .
+
+	mms-object:Role.WriteModel a mms:Role ;
+		mms:permits mms-object:Permission.UpdateModel .
+
+	mms-object:Role.ReadModel a mms:Role ;
+		mms:permits mms-object:Permission.ReadModel .
+
+	mms-object:Role.AdminMetadata a mms:Role ;
+		mms:permits mms-object:Permission.DeleteMetadata .
+
+	mms-object:Role.WriteMetadata a mms:Role ;
+		mms:permits mms-object:Permission.UpdateMetadata .
+
+	mms-object:Role.ReadMetadata a mms:Role ;
+		mms:permits mms-object:Permission.ReadMetadata .
+
+	mms-object:Role.AdminCluster a mms:Role ;
+		mms:permits mms-object:Permission.DeleteCluster .
+
+	mms-object:Role.WriteCluster a mms:Role ;
+		mms:permits mms-object:Permission.UpdateCluster .
+
+	mms-object:Role.ReadCluster a mms:Role ;
+		mms:permits mms-object:Permission.ReadCluster .
+
+	mms-object:Role.AdminAccessControlAny a mms:Role ;
+		mms:permits mms-object:Permission.DeleteAccessControlAny .
+
+	mms-object:Role.WriteAccessControlAny a mms:Role ;
+		mms:permits mms-object:Permission.UpdateAccessControlAny .
+
+	mms-object:Role.ReadAccessControlAny a mms:Role ;
+		mms:permits mms-object:Permission.ReadAccessControlAny .
+}
+
+
+# SysML metaclass hierarchy, copied verbatim from Open-MBEE/OpenSysML
+# internal/translate/rdf/ontology/sysml-metaclasses.ttl (written by `sysml -metaclass-graph`,
+# OpenSysML commit d4e050400; pilot metamodel 2026-08 / 0.62.0); also bundled as
+# src/main/resources/sysml-metaclasses.ttl. Lets a SPARQL consumer resolve metaclass
+# specializations with rdf:type/rdfs:subClassOf* against this named graph.
+graph <urn:sysmlv2:vocabulary:sysml-metaclasses> {
+	sysml:AcceptActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "AcceptActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:ActionDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ActionDefinition" ;
+	    rdfs:subClassOf sysml:Behavior, sysml:OccurrenceDefinition .
+
+	sysml:ActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "ActionUsage" ;
+	    rdfs:subClassOf sysml:OccurrenceUsage, sysml:Step .
+
+	sysml:ActorMembership
+	    a rdfs:Class ;
+	    rdfs:label "ActorMembership" ;
+	    rdfs:subClassOf sysml:ParameterMembership .
+
+	sysml:AllocationDefinition
+	    a rdfs:Class ;
+	    rdfs:label "AllocationDefinition" ;
+	    rdfs:subClassOf sysml:ConnectionDefinition .
+
+	sysml:AllocationUsage
+	    a rdfs:Class ;
+	    rdfs:label "AllocationUsage" ;
+	    rdfs:subClassOf sysml:ConnectionUsage .
+
+	sysml:AnalysisCaseDefinition
+	    a rdfs:Class ;
+	    rdfs:label "AnalysisCaseDefinition" ;
+	    rdfs:subClassOf sysml:CaseDefinition .
+
+	sysml:AnalysisCaseUsage
+	    a rdfs:Class ;
+	    rdfs:label "AnalysisCaseUsage" ;
+	    rdfs:subClassOf sysml:CaseUsage .
+
+	sysml:AnnotatingElement
+	    a rdfs:Class ;
+	    rdfs:label "AnnotatingElement" ;
+	    rdfs:subClassOf sysml:Element .
+
+	sysml:Annotation
+	    a rdfs:Class ;
+	    rdfs:label "Annotation" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:AssertConstraintUsage
+	    a rdfs:Class ;
+	    rdfs:label "AssertConstraintUsage" ;
+	    rdfs:subClassOf sysml:ConstraintUsage, sysml:Invariant .
+
+	sysml:AssignmentActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "AssignmentActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:Association
+	    a rdfs:Class ;
+	    rdfs:label "Association" ;
+	    rdfs:subClassOf sysml:Classifier, sysml:Relationship .
+
+	sysml:AssociationStructure
+	    a rdfs:Class ;
+	    rdfs:label "AssociationStructure" ;
+	    rdfs:subClassOf sysml:Association, sysml:Structure .
+
+	sysml:AttributeDefinition
+	    a rdfs:Class ;
+	    rdfs:label "AttributeDefinition" ;
+	    rdfs:subClassOf sysml:DataType, sysml:Definition .
+
+	sysml:AttributeUsage
+	    a rdfs:Class ;
+	    rdfs:label "AttributeUsage" ;
+	    rdfs:subClassOf sysml:Usage .
+
+	sysml:Behavior
+	    a rdfs:Class ;
+	    rdfs:label "Behavior" ;
+	    rdfs:subClassOf sysml:Class .
+
+	sysml:BindingConnector
+	    a rdfs:Class ;
+	    rdfs:label "BindingConnector" ;
+	    rdfs:subClassOf sysml:Connector .
+
+	sysml:BindingConnectorAsUsage
+	    a rdfs:Class ;
+	    rdfs:label "BindingConnectorAsUsage" ;
+	    rdfs:subClassOf sysml:BindingConnector, sysml:ConnectorAsUsage .
+
+	sysml:BooleanExpression
+	    a rdfs:Class ;
+	    rdfs:label "BooleanExpression" ;
+	    rdfs:subClassOf sysml:Expression .
+
+	sysml:CalculationDefinition
+	    a rdfs:Class ;
+	    rdfs:label "CalculationDefinition" ;
+	    rdfs:subClassOf sysml:ActionDefinition, sysml:Function .
+
+	sysml:CalculationUsage
+	    a rdfs:Class ;
+	    rdfs:label "CalculationUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage, sysml:Expression .
+
+	sysml:CaseDefinition
+	    a rdfs:Class ;
+	    rdfs:label "CaseDefinition" ;
+	    rdfs:subClassOf sysml:CalculationDefinition .
+
+	sysml:CaseUsage
+	    a rdfs:Class ;
+	    rdfs:label "CaseUsage" ;
+	    rdfs:subClassOf sysml:CalculationUsage .
+
+	sysml:Class
+	    a rdfs:Class ;
+	    rdfs:label "Class" ;
+	    rdfs:subClassOf sysml:Classifier .
+
+	sysml:Classifier
+	    a rdfs:Class ;
+	    rdfs:label "Classifier" ;
+	    rdfs:subClassOf sysml:Type .
+
+	sysml:CollectExpression
+	    a rdfs:Class ;
+	    rdfs:label "CollectExpression" ;
+	    rdfs:subClassOf sysml:OperatorExpression .
+
+	sysml:Comment
+	    a rdfs:Class ;
+	    rdfs:label "Comment" ;
+	    rdfs:subClassOf sysml:AnnotatingElement .
+
+	sysml:ConcernDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ConcernDefinition" ;
+	    rdfs:subClassOf sysml:RequirementDefinition .
+
+	sysml:ConcernUsage
+	    a rdfs:Class ;
+	    rdfs:label "ConcernUsage" ;
+	    rdfs:subClassOf sysml:RequirementUsage .
+
+	sysml:ConjugatedPortDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ConjugatedPortDefinition" ;
+	    rdfs:subClassOf sysml:PortDefinition .
+
+	sysml:ConjugatedPortTyping
+	    a rdfs:Class ;
+	    rdfs:label "ConjugatedPortTyping" ;
+	    rdfs:subClassOf sysml:FeatureTyping .
+
+	sysml:Conjugation
+	    a rdfs:Class ;
+	    rdfs:label "Conjugation" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:ConnectionDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ConnectionDefinition" ;
+	    rdfs:subClassOf sysml:AssociationStructure, sysml:PartDefinition .
+
+	sysml:ConnectionUsage
+	    a rdfs:Class ;
+	    rdfs:label "ConnectionUsage" ;
+	    rdfs:subClassOf sysml:ConnectorAsUsage, sysml:PartUsage .
+
+	sysml:Connector
+	    a rdfs:Class ;
+	    rdfs:label "Connector" ;
+	    rdfs:subClassOf sysml:Feature, sysml:Relationship .
+
+	sysml:ConnectorAsUsage
+	    a rdfs:Class ;
+	    rdfs:label "ConnectorAsUsage" ;
+	    rdfs:subClassOf sysml:Connector, sysml:Usage ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:ConstraintDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ConstraintDefinition" ;
+	    rdfs:subClassOf sysml:OccurrenceDefinition, sysml:Predicate .
+
+	sysml:ConstraintUsage
+	    a rdfs:Class ;
+	    rdfs:label "ConstraintUsage" ;
+	    rdfs:subClassOf sysml:BooleanExpression, sysml:OccurrenceUsage .
+
+	sysml:ConstructorExpression
+	    a rdfs:Class ;
+	    rdfs:label "ConstructorExpression" ;
+	    rdfs:subClassOf sysml:InstantiationExpression .
+
+	sysml:ControlNode
+	    a rdfs:Class ;
+	    rdfs:label "ControlNode" ;
+	    rdfs:subClassOf sysml:ActionUsage ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:CrossSubsetting
+	    a rdfs:Class ;
+	    rdfs:label "CrossSubsetting" ;
+	    rdfs:subClassOf sysml:Subsetting .
+
+	sysml:DataType
+	    a rdfs:Class ;
+	    rdfs:label "DataType" ;
+	    rdfs:subClassOf sysml:Classifier .
+
+	sysml:DecisionNode
+	    a rdfs:Class ;
+	    rdfs:label "DecisionNode" ;
+	    rdfs:subClassOf sysml:ControlNode .
+
+	sysml:Definition
+	    a rdfs:Class ;
+	    rdfs:label "Definition" ;
+	    rdfs:subClassOf sysml:Classifier .
+
+	sysml:Dependency
+	    a rdfs:Class ;
+	    rdfs:label "Dependency" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:Differencing
+	    a rdfs:Class ;
+	    rdfs:label "Differencing" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:Disjoining
+	    a rdfs:Class ;
+	    rdfs:label "Disjoining" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:Documentation
+	    a rdfs:Class ;
+	    rdfs:label "Documentation" ;
+	    rdfs:subClassOf sysml:Comment .
+
+	sysml:Element
+	    a rdfs:Class ;
+	    rdfs:label "Element" ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:ElementFilterMembership
+	    a rdfs:Class ;
+	    rdfs:label "ElementFilterMembership" ;
+	    rdfs:subClassOf sysml:OwningMembership .
+
+	sysml:EndFeatureMembership
+	    a rdfs:Class ;
+	    rdfs:label "EndFeatureMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:EnumerationDefinition
+	    a rdfs:Class ;
+	    rdfs:label "EnumerationDefinition" ;
+	    rdfs:subClassOf sysml:AttributeDefinition .
+
+	sysml:EnumerationUsage
+	    a rdfs:Class ;
+	    rdfs:label "EnumerationUsage" ;
+	    rdfs:subClassOf sysml:AttributeUsage .
+
+	sysml:EventOccurrenceUsage
+	    a rdfs:Class ;
+	    rdfs:label "EventOccurrenceUsage" ;
+	    rdfs:subClassOf sysml:OccurrenceUsage .
+
+	sysml:ExhibitStateUsage
+	    a rdfs:Class ;
+	    rdfs:label "ExhibitStateUsage" ;
+	    rdfs:subClassOf sysml:PerformActionUsage, sysml:StateUsage .
+
+	sysml:Expose
+	    a rdfs:Class ;
+	    rdfs:label "Expose" ;
+	    rdfs:subClassOf sysml:Import ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:Expression
+	    a rdfs:Class ;
+	    rdfs:label "Expression" ;
+	    rdfs:subClassOf sysml:Step .
+
+	sysml:Feature
+	    a rdfs:Class ;
+	    rdfs:label "Feature" ;
+	    rdfs:subClassOf sysml:Type .
+
+	sysml:FeatureChainExpression
+	    a rdfs:Class ;
+	    rdfs:label "FeatureChainExpression" ;
+	    rdfs:subClassOf sysml:OperatorExpression .
+
+	sysml:FeatureChaining
+	    a rdfs:Class ;
+	    rdfs:label "FeatureChaining" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:FeatureInverting
+	    a rdfs:Class ;
+	    rdfs:label "FeatureInverting" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:FeatureMembership
+	    a rdfs:Class ;
+	    rdfs:label "FeatureMembership" ;
+	    rdfs:subClassOf sysml:OwningMembership .
+
+	sysml:FeatureReferenceExpression
+	    a rdfs:Class ;
+	    rdfs:label "FeatureReferenceExpression" ;
+	    rdfs:subClassOf sysml:Expression .
+
+	sysml:FeatureTyping
+	    a rdfs:Class ;
+	    rdfs:label "FeatureTyping" ;
+	    rdfs:subClassOf sysml:Specialization .
+
+	sysml:FeatureValue
+	    a rdfs:Class ;
+	    rdfs:label "FeatureValue" ;
+	    rdfs:subClassOf sysml:OwningMembership .
+
+	sysml:Flow
+	    a rdfs:Class ;
+	    rdfs:label "Flow" ;
+	    rdfs:subClassOf sysml:Connector, sysml:Step .
+
+	sysml:FlowDefinition
+	    a rdfs:Class ;
+	    rdfs:label "FlowDefinition" ;
+	    rdfs:subClassOf sysml:ActionDefinition, sysml:Interaction .
+
+	sysml:FlowEnd
+	    a rdfs:Class ;
+	    rdfs:label "FlowEnd" ;
+	    rdfs:subClassOf sysml:Feature .
+
+	sysml:FlowUsage
+	    a rdfs:Class ;
+	    rdfs:label "FlowUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage, sysml:ConnectorAsUsage, sysml:Flow .
+
+	sysml:ForLoopActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "ForLoopActionUsage" ;
+	    rdfs:subClassOf sysml:LoopActionUsage .
+
+	sysml:ForkNode
+	    a rdfs:Class ;
+	    rdfs:label "ForkNode" ;
+	    rdfs:subClassOf sysml:ControlNode .
+
+	sysml:FramedConcernMembership
+	    a rdfs:Class ;
+	    rdfs:label "FramedConcernMembership" ;
+	    rdfs:subClassOf sysml:RequirementConstraintMembership .
+
+	sysml:Function
+	    a rdfs:Class ;
+	    rdfs:label "Function" ;
+	    rdfs:subClassOf sysml:Behavior .
+
+	sysml:IfActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "IfActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:Import
+	    a rdfs:Class ;
+	    rdfs:label "Import" ;
+	    rdfs:subClassOf sysml:Relationship ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:IncludeUseCaseUsage
+	    a rdfs:Class ;
+	    rdfs:label "IncludeUseCaseUsage" ;
+	    rdfs:subClassOf sysml:PerformActionUsage, sysml:UseCaseUsage .
+
+	sysml:IndexExpression
+	    a rdfs:Class ;
+	    rdfs:label "IndexExpression" ;
+	    rdfs:subClassOf sysml:OperatorExpression .
+
+	sysml:InstantiationExpression
+	    a rdfs:Class ;
+	    rdfs:label "InstantiationExpression" ;
+	    rdfs:subClassOf sysml:Expression ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:Interaction
+	    a rdfs:Class ;
+	    rdfs:label "Interaction" ;
+	    rdfs:subClassOf sysml:Association, sysml:Behavior .
+
+	sysml:InterfaceDefinition
+	    a rdfs:Class ;
+	    rdfs:label "InterfaceDefinition" ;
+	    rdfs:subClassOf sysml:ConnectionDefinition .
+
+	sysml:InterfaceUsage
+	    a rdfs:Class ;
+	    rdfs:label "InterfaceUsage" ;
+	    rdfs:subClassOf sysml:ConnectionUsage .
+
+	sysml:Intersecting
+	    a rdfs:Class ;
+	    rdfs:label "Intersecting" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:Invariant
+	    a rdfs:Class ;
+	    rdfs:label "Invariant" ;
+	    rdfs:subClassOf sysml:BooleanExpression .
+
+	sysml:InvocationExpression
+	    a rdfs:Class ;
+	    rdfs:label "InvocationExpression" ;
+	    rdfs:subClassOf sysml:InstantiationExpression .
+
+	sysml:ItemDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ItemDefinition" ;
+	    rdfs:subClassOf sysml:OccurrenceDefinition, sysml:Structure .
+
+	sysml:ItemUsage
+	    a rdfs:Class ;
+	    rdfs:label "ItemUsage" ;
+	    rdfs:subClassOf sysml:OccurrenceUsage .
+
+	sysml:JoinNode
+	    a rdfs:Class ;
+	    rdfs:label "JoinNode" ;
+	    rdfs:subClassOf sysml:ControlNode .
+
+	sysml:LibraryPackage
+	    a rdfs:Class ;
+	    rdfs:label "LibraryPackage" ;
+	    rdfs:subClassOf sysml:Package .
+
+	sysml:LiteralBoolean
+	    a rdfs:Class ;
+	    rdfs:label "LiteralBoolean" ;
+	    rdfs:subClassOf sysml:LiteralExpression .
+
+	sysml:LiteralExpression
+	    a rdfs:Class ;
+	    rdfs:label "LiteralExpression" ;
+	    rdfs:subClassOf sysml:Expression .
+
+	sysml:LiteralInfinity
+	    a rdfs:Class ;
+	    rdfs:label "LiteralInfinity" ;
+	    rdfs:subClassOf sysml:LiteralExpression .
+
+	sysml:LiteralInteger
+	    a rdfs:Class ;
+	    rdfs:label "LiteralInteger" ;
+	    rdfs:subClassOf sysml:LiteralExpression .
+
+	sysml:LiteralRational
+	    a rdfs:Class ;
+	    rdfs:label "LiteralRational" ;
+	    rdfs:subClassOf sysml:LiteralExpression .
+
+	sysml:LiteralString
+	    a rdfs:Class ;
+	    rdfs:label "LiteralString" ;
+	    rdfs:subClassOf sysml:LiteralExpression .
+
+	sysml:LoopActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "LoopActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:Membership
+	    a rdfs:Class ;
+	    rdfs:label "Membership" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:MembershipExpose
+	    a rdfs:Class ;
+	    rdfs:label "MembershipExpose" ;
+	    rdfs:subClassOf sysml:Expose, sysml:MembershipImport .
+
+	sysml:MembershipImport
+	    a rdfs:Class ;
+	    rdfs:label "MembershipImport" ;
+	    rdfs:subClassOf sysml:Import .
+
+	sysml:MergeNode
+	    a rdfs:Class ;
+	    rdfs:label "MergeNode" ;
+	    rdfs:subClassOf sysml:ControlNode .
+
+	sysml:Metaclass
+	    a rdfs:Class ;
+	    rdfs:label "Metaclass" ;
+	    rdfs:subClassOf sysml:Structure .
+
+	sysml:MetadataAccessExpression
+	    a rdfs:Class ;
+	    rdfs:label "MetadataAccessExpression" ;
+	    rdfs:subClassOf sysml:Expression .
+
+	sysml:MetadataDefinition
+	    a rdfs:Class ;
+	    rdfs:label "MetadataDefinition" ;
+	    rdfs:subClassOf sysml:ItemDefinition, sysml:Metaclass .
+
+	sysml:MetadataFeature
+	    a rdfs:Class ;
+	    rdfs:label "MetadataFeature" ;
+	    rdfs:subClassOf sysml:AnnotatingElement, sysml:Feature .
+
+	sysml:MetadataUsage
+	    a rdfs:Class ;
+	    rdfs:label "MetadataUsage" ;
+	    rdfs:subClassOf sysml:ItemUsage, sysml:MetadataFeature .
+
+	sysml:Multiplicity
+	    a rdfs:Class ;
+	    rdfs:label "Multiplicity" ;
+	    rdfs:subClassOf sysml:Feature .
+
+	sysml:MultiplicityRange
+	    a rdfs:Class ;
+	    rdfs:label "MultiplicityRange" ;
+	    rdfs:subClassOf sysml:Multiplicity .
+
+	sysml:Namespace
+	    a rdfs:Class ;
+	    rdfs:label "Namespace" ;
+	    rdfs:subClassOf sysml:Element .
+
+	sysml:NamespaceExpose
+	    a rdfs:Class ;
+	    rdfs:label "NamespaceExpose" ;
+	    rdfs:subClassOf sysml:Expose, sysml:NamespaceImport .
+
+	sysml:NamespaceImport
+	    a rdfs:Class ;
+	    rdfs:label "NamespaceImport" ;
+	    rdfs:subClassOf sysml:Import .
+
+	sysml:NullExpression
+	    a rdfs:Class ;
+	    rdfs:label "NullExpression" ;
+	    rdfs:subClassOf sysml:Expression .
+
+	sysml:ObjectiveMembership
+	    a rdfs:Class ;
+	    rdfs:label "ObjectiveMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:OccurrenceDefinition
+	    a rdfs:Class ;
+	    rdfs:label "OccurrenceDefinition" ;
+	    rdfs:subClassOf sysml:Class, sysml:Definition .
+
+	sysml:OccurrenceUsage
+	    a rdfs:Class ;
+	    rdfs:label "OccurrenceUsage" ;
+	    rdfs:subClassOf sysml:Usage .
+
+	sysml:OperatorExpression
+	    a rdfs:Class ;
+	    rdfs:label "OperatorExpression" ;
+	    rdfs:subClassOf sysml:InvocationExpression .
+
+	sysml:OwningMembership
+	    a rdfs:Class ;
+	    rdfs:label "OwningMembership" ;
+	    rdfs:subClassOf sysml:Membership .
+
+	sysml:Package
+	    a rdfs:Class ;
+	    rdfs:label "Package" ;
+	    rdfs:subClassOf sysml:Namespace .
+
+	sysml:ParameterMembership
+	    a rdfs:Class ;
+	    rdfs:label "ParameterMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:PartDefinition
+	    a rdfs:Class ;
+	    rdfs:label "PartDefinition" ;
+	    rdfs:subClassOf sysml:ItemDefinition .
+
+	sysml:PartUsage
+	    a rdfs:Class ;
+	    rdfs:label "PartUsage" ;
+	    rdfs:subClassOf sysml:ItemUsage .
+
+	sysml:PayloadFeature
+	    a rdfs:Class ;
+	    rdfs:label "PayloadFeature" ;
+	    rdfs:subClassOf sysml:Feature .
+
+	sysml:PerformActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "PerformActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage, sysml:EventOccurrenceUsage .
+
+	sysml:PortConjugation
+	    a rdfs:Class ;
+	    rdfs:label "PortConjugation" ;
+	    rdfs:subClassOf sysml:Conjugation .
+
+	sysml:PortDefinition
+	    a rdfs:Class ;
+	    rdfs:label "PortDefinition" ;
+	    rdfs:subClassOf sysml:OccurrenceDefinition, sysml:Structure .
+
+	sysml:PortUsage
+	    a rdfs:Class ;
+	    rdfs:label "PortUsage" ;
+	    rdfs:subClassOf sysml:OccurrenceUsage .
+
+	sysml:Predicate
+	    a rdfs:Class ;
+	    rdfs:label "Predicate" ;
+	    rdfs:subClassOf sysml:Function .
+
+	sysml:Redefinition
+	    a rdfs:Class ;
+	    rdfs:label "Redefinition" ;
+	    rdfs:subClassOf sysml:Subsetting .
+
+	sysml:ReferenceSubsetting
+	    a rdfs:Class ;
+	    rdfs:label "ReferenceSubsetting" ;
+	    rdfs:subClassOf sysml:Subsetting .
+
+	sysml:ReferenceUsage
+	    a rdfs:Class ;
+	    rdfs:label "ReferenceUsage" ;
+	    rdfs:subClassOf sysml:Usage .
+
+	sysml:Relationship
+	    a rdfs:Class ;
+	    rdfs:label "Relationship" ;
+	    rdfs:subClassOf sysml:Element ;
+	    sysx:abstract "true"^^xsd:boolean .
+
+	sysml:RenderingDefinition
+	    a rdfs:Class ;
+	    rdfs:label "RenderingDefinition" ;
+	    rdfs:subClassOf sysml:PartDefinition .
+
+	sysml:RenderingUsage
+	    a rdfs:Class ;
+	    rdfs:label "RenderingUsage" ;
+	    rdfs:subClassOf sysml:PartUsage .
+
+	sysml:RequirementConstraintMembership
+	    a rdfs:Class ;
+	    rdfs:label "RequirementConstraintMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:RequirementDefinition
+	    a rdfs:Class ;
+	    rdfs:label "RequirementDefinition" ;
+	    rdfs:subClassOf sysml:ConstraintDefinition .
+
+	sysml:RequirementUsage
+	    a rdfs:Class ;
+	    rdfs:label "RequirementUsage" ;
+	    rdfs:subClassOf sysml:ConstraintUsage .
+
+	sysml:RequirementVerificationMembership
+	    a rdfs:Class ;
+	    rdfs:label "RequirementVerificationMembership" ;
+	    rdfs:subClassOf sysml:RequirementConstraintMembership .
+
+	sysml:ResultExpressionMembership
+	    a rdfs:Class ;
+	    rdfs:label "ResultExpressionMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:ReturnParameterMembership
+	    a rdfs:Class ;
+	    rdfs:label "ReturnParameterMembership" ;
+	    rdfs:subClassOf sysml:ParameterMembership .
+
+	sysml:SatisfyRequirementUsage
+	    a rdfs:Class ;
+	    rdfs:label "SatisfyRequirementUsage" ;
+	    rdfs:subClassOf sysml:AssertConstraintUsage, sysml:RequirementUsage .
+
+	sysml:SelectExpression
+	    a rdfs:Class ;
+	    rdfs:label "SelectExpression" ;
+	    rdfs:subClassOf sysml:OperatorExpression .
+
+	sysml:SendActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "SendActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:Specialization
+	    a rdfs:Class ;
+	    rdfs:label "Specialization" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:StakeholderMembership
+	    a rdfs:Class ;
+	    rdfs:label "StakeholderMembership" ;
+	    rdfs:subClassOf sysml:ParameterMembership .
+
+	sysml:StateDefinition
+	    a rdfs:Class ;
+	    rdfs:label "StateDefinition" ;
+	    rdfs:subClassOf sysml:ActionDefinition .
+
+	sysml:StateSubactionMembership
+	    a rdfs:Class ;
+	    rdfs:label "StateSubactionMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:StateUsage
+	    a rdfs:Class ;
+	    rdfs:label "StateUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:Step
+	    a rdfs:Class ;
+	    rdfs:label "Step" ;
+	    rdfs:subClassOf sysml:Feature .
+
+	sysml:Structure
+	    a rdfs:Class ;
+	    rdfs:label "Structure" ;
+	    rdfs:subClassOf sysml:Class .
+
+	sysml:Subclassification
+	    a rdfs:Class ;
+	    rdfs:label "Subclassification" ;
+	    rdfs:subClassOf sysml:Specialization .
+
+	sysml:SubjectMembership
+	    a rdfs:Class ;
+	    rdfs:label "SubjectMembership" ;
+	    rdfs:subClassOf sysml:ParameterMembership .
+
+	sysml:Subsetting
+	    a rdfs:Class ;
+	    rdfs:label "Subsetting" ;
+	    rdfs:subClassOf sysml:Specialization .
+
+	sysml:Succession
+	    a rdfs:Class ;
+	    rdfs:label "Succession" ;
+	    rdfs:subClassOf sysml:Connector .
+
+	sysml:SuccessionAsUsage
+	    a rdfs:Class ;
+	    rdfs:label "SuccessionAsUsage" ;
+	    rdfs:subClassOf sysml:ConnectorAsUsage, sysml:Succession .
+
+	sysml:SuccessionFlow
+	    a rdfs:Class ;
+	    rdfs:label "SuccessionFlow" ;
+	    rdfs:subClassOf sysml:Flow, sysml:Succession .
+
+	sysml:SuccessionFlowUsage
+	    a rdfs:Class ;
+	    rdfs:label "SuccessionFlowUsage" ;
+	    rdfs:subClassOf sysml:FlowUsage, sysml:SuccessionFlow .
+
+	sysml:TerminateActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "TerminateActionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:TextualRepresentation
+	    a rdfs:Class ;
+	    rdfs:label "TextualRepresentation" ;
+	    rdfs:subClassOf sysml:AnnotatingElement .
+
+	sysml:TransitionFeatureMembership
+	    a rdfs:Class ;
+	    rdfs:label "TransitionFeatureMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:TransitionUsage
+	    a rdfs:Class ;
+	    rdfs:label "TransitionUsage" ;
+	    rdfs:subClassOf sysml:ActionUsage .
+
+	sysml:TriggerInvocationExpression
+	    a rdfs:Class ;
+	    rdfs:label "TriggerInvocationExpression" ;
+	    rdfs:subClassOf sysml:InvocationExpression .
+
+	sysml:Type
+	    a rdfs:Class ;
+	    rdfs:label "Type" ;
+	    rdfs:subClassOf sysml:Namespace .
+
+	sysml:TypeFeaturing
+	    a rdfs:Class ;
+	    rdfs:label "TypeFeaturing" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:Unioning
+	    a rdfs:Class ;
+	    rdfs:label "Unioning" ;
+	    rdfs:subClassOf sysml:Relationship .
+
+	sysml:Usage
+	    a rdfs:Class ;
+	    rdfs:label "Usage" ;
+	    rdfs:subClassOf sysml:Feature .
+
+	sysml:UseCaseDefinition
+	    a rdfs:Class ;
+	    rdfs:label "UseCaseDefinition" ;
+	    rdfs:subClassOf sysml:CaseDefinition .
+
+	sysml:UseCaseUsage
+	    a rdfs:Class ;
+	    rdfs:label "UseCaseUsage" ;
+	    rdfs:subClassOf sysml:CaseUsage .
+
+	sysml:VariantMembership
+	    a rdfs:Class ;
+	    rdfs:label "VariantMembership" ;
+	    rdfs:subClassOf sysml:OwningMembership .
+
+	sysml:VerificationCaseDefinition
+	    a rdfs:Class ;
+	    rdfs:label "VerificationCaseDefinition" ;
+	    rdfs:subClassOf sysml:CaseDefinition .
+
+	sysml:VerificationCaseUsage
+	    a rdfs:Class ;
+	    rdfs:label "VerificationCaseUsage" ;
+	    rdfs:subClassOf sysml:CaseUsage .
+
+	sysml:ViewDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ViewDefinition" ;
+	    rdfs:subClassOf sysml:PartDefinition .
+
+	sysml:ViewRenderingMembership
+	    a rdfs:Class ;
+	    rdfs:label "ViewRenderingMembership" ;
+	    rdfs:subClassOf sysml:FeatureMembership .
+
+	sysml:ViewUsage
+	    a rdfs:Class ;
+	    rdfs:label "ViewUsage" ;
+	    rdfs:subClassOf sysml:PartUsage .
+
+	sysml:ViewpointDefinition
+	    a rdfs:Class ;
+	    rdfs:label "ViewpointDefinition" ;
+	    rdfs:subClassOf sysml:RequirementDefinition .
+
+	sysml:ViewpointUsage
+	    a rdfs:Class ;
+	    rdfs:label "ViewpointUsage" ;
+	    rdfs:subClassOf sysml:RequirementUsage .
+
+	sysml:WhileLoopActionUsage
+	    a rdfs:Class ;
+	    rdfs:label "WhileLoopActionUsage" ;
+	    rdfs:subClassOf sysml:LoopActionUsage .
+}
