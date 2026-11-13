@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>14.0</LangVersion>
+        <Version>0.26.0</Version>
+        <Description>A .NET implementation of the OMG SysML v2 REST/HTTP PSM request validators</Description>
+        <PackageId>SysML2.NET.Validation</PackageId>
+        <Company>Starion Group S.A.</Company>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Authors>Sam Gerené</Authors>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GenerateSBOM>true</GenerateSBOM>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
+      <PackageReference Include="FluentValidation" />
+      <PackageReference Include="Microsoft.Sbom.Targets" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <InternalsVisibleTo Include="SysML2.NET.Validation.Tests" />
+    </ItemGroup>
+
+</Project>
