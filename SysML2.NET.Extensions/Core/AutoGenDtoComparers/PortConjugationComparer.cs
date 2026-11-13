@@ -87,6 +87,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.OriginalPortDefinition != y.OriginalPortDefinition) return false;
 
+            if (x.OriginalType != y.OriginalType) return false;
+
             if (!GuidSequenceEquality.OrderedEqual(x.OwnedRelatedElement, y.OwnedRelatedElement)) return false;
 
             if (!GuidSequenceEquality.OrderedEqual(x.OwnedRelationship, y.OwnedRelationship)) return false;
@@ -94,6 +96,10 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
             if (x.OwningRelatedElement != y.OwningRelatedElement) return false;
 
             if (x.OwningRelationship != y.OwningRelationship) return false;
+
+            if (!GuidSequenceEquality.OrderedEqual(x.Source, y.Source)) return false;
+
+            if (!GuidSequenceEquality.OrderedEqual(x.Target, y.Target)) return false;
 
             return true;
         }

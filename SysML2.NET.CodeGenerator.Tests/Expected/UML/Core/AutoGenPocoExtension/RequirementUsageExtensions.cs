@@ -146,6 +146,7 @@ namespace SysML2.NET.Dal
             dto.Id = poco.Id;
             dto.AliasIds = [.. poco.AliasIds];
             dto.DeclaredName = poco.DeclaredName;
+            ((Core.DTO.Root.Elements.IElement)dto).DeclaredShortName = ((Core.POCO.Root.Elements.IElement)poco).DeclaredShortName;
             dto.Direction = poco.Direction;
             dto.ElementId = poco.ElementId;
             dto.IsAbstract = poco.IsAbstract;
@@ -159,6 +160,7 @@ namespace SysML2.NET.Dal
             dto.IsPortion = poco.IsPortion;
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
+            ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable;
             dto.IsVariation = poco.IsVariation;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;

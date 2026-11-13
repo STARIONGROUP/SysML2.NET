@@ -138,7 +138,10 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         Guid Root.Namespaces.IMembership.MemberElement
         {
             get => ((SysML2.NET.Core.DTO.Root.Namespaces.IOwningMembership)this).ownedMemberElement;
-            set { }
+            set
+            {
+                this.ownedRequirement = value;
+            }
         }
 
         /// <summary>
@@ -158,7 +161,10 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         string Root.Namespaces.IMembership.MemberName
         {
             get => this.ownedMemberName;
-            set { }
+            set
+            {
+                this.ownedMemberName = value;
+            }
         }
 
         /// <summary>
@@ -181,7 +187,10 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         string Root.Namespaces.IMembership.MemberShortName
         {
             get => this.ownedMemberShortName;
-            set { }
+            set
+            {
+                this.ownedMemberShortName = value;
+            }
         }
 
         /// <summary>
@@ -393,7 +402,10 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).membershipOwningNamespace];
-            set { }
+            set
+            {
+                this.owningType = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

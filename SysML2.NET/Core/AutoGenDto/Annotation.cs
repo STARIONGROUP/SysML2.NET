@@ -273,7 +273,10 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.annotatingElement];
-            set { }
+            set
+            {
+                this.annotatingElement = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

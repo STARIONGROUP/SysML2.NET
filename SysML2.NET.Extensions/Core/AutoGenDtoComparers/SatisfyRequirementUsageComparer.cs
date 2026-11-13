@@ -77,6 +77,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (!OrdinalStringComparer.Equals(x.DeclaredName, y.DeclaredName)) return false;
 
+            if (!OrdinalStringComparer.Equals(x.DeclaredShortName, y.DeclaredShortName)) return false;
+
             if (x.Direction != y.Direction) return false;
 
             if (!OrdinalStringComparer.Equals(x.ElementId, y.ElementId)) return false;
@@ -104,6 +106,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
             if (x.IsSufficient != y.IsSufficient) return false;
 
             if (x.IsUnique != y.IsUnique) return false;
+
+            if (x.IsVariable != y.IsVariable) return false;
 
             if (x.IsVariation != y.IsVariation) return false;
 

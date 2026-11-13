@@ -431,7 +431,10 @@ namespace SysML2.NET.Core.DTO.Systems.States
         bool Core.Features.IFeature.IsVariable
         {
             get => this.mayTimeVary;
-            set { }
+            set
+            {
+                this.mayTimeVary = value;
+            }
         }
 
         /// <summary>

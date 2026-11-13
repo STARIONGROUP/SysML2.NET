@@ -238,7 +238,10 @@ namespace SysML2.NET.Core.DTO.Core.Types
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.typeIntersected];
-            set { }
+            set
+            {
+                this.typeIntersected = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

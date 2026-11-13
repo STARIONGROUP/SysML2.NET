@@ -185,6 +185,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var variantSeen = false;
             var variantMembershipSeen = false;
 
+            var declaredShortNameRedefinitionSeen = false;
+            string declaredShortNameRedefinitionValue = null;
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -1803,9 +1807,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameRedefinitionSeen = true;
+                    reader.Read();
+                    declaredShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (declaredShortNameRedefinitionSeen)
+            {
+                if (!reqIdSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName = declaredShortNameRedefinitionValue;
+                }
+                else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName, declaredShortNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The declaredShortName Json property of the ConcernDefinition {Id} disagrees with reqId; the reqId value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -2212,6 +2238,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelationshipSeen = false;
             var reqIdSeen = false;
 
+            var declaredShortNameRedefinitionSeen = false;
+            string declaredShortNameRedefinitionValue = null;
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -2388,9 +2418,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameRedefinitionSeen = true;
+                    reader.Read();
+                    declaredShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (declaredShortNameRedefinitionSeen)
+            {
+                if (!reqIdSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName = declaredShortNameRedefinitionValue;
+                }
+                else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName, declaredShortNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The declaredShortName Json property of the ConcernDefinition {Id} disagrees with reqId; the reqId value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

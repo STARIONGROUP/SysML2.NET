@@ -537,7 +537,10 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => this.sourceType.HasValue ? [this.sourceType.Value] : [];
-            set { }
+            set
+            {
+                this.sourceType = value.Count != 0 ? value[0] : null;
+            }
         }
 
         /// <summary>
@@ -567,7 +570,10 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         List<Guid> Root.Elements.IRelationship.Target
         {
             get => [.. this.targetType];
-            set { }
+            set
+            {
+                this.targetType = [.. value];
+            }
         }
 
         /// <summary>

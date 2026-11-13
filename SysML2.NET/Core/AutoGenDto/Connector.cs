@@ -758,7 +758,10 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => this.sourceFeature.HasValue ? [this.sourceFeature.Value] : [];
-            set { }
+            set
+            {
+                this.sourceFeature = value.Count != 0 ? value[0] : null;
+            }
         }
 
         /// <summary>
@@ -780,7 +783,10 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         List<Guid> Root.Elements.IRelationship.Target
         {
             get => [.. this.targetFeature];
-            set { }
+            set
+            {
+                this.targetFeature = [.. value];
+            }
         }
 
         /// <summary>

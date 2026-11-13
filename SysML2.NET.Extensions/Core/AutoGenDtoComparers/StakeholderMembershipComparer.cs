@@ -84,6 +84,12 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.IsImpliedIncluded != y.IsImpliedIncluded) return false;
 
+            if (x.MemberElement != y.MemberElement) return false;
+
+            if (!OrdinalStringComparer.Equals(x.MemberName, y.MemberName)) return false;
+
+            if (!OrdinalStringComparer.Equals(x.MemberShortName, y.MemberShortName)) return false;
+
             if (!GuidSequenceEquality.OrderedEqual(x.OwnedRelatedElement, y.OwnedRelatedElement)) return false;
 
             if (!GuidSequenceEquality.OrderedEqual(x.OwnedRelationship, y.OwnedRelationship)) return false;
@@ -91,6 +97,10 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
             if (x.OwningRelatedElement != y.OwningRelatedElement) return false;
 
             if (x.OwningRelationship != y.OwningRelationship) return false;
+
+            if (!GuidSequenceEquality.OrderedEqual(x.Source, y.Source)) return false;
+
+            if (!GuidSequenceEquality.OrderedEqual(x.Target, y.Target)) return false;
 
             if (x.Visibility != y.Visibility) return false;
 

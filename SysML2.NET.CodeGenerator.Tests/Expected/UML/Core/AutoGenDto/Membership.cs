@@ -274,7 +274,10 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.membershipOwningNamespace];
-            set { }
+            set
+            {
+                this.membershipOwningNamespace = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>

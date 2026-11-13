@@ -163,12 +163,15 @@ namespace SysML2.NET.Dal
             dto.IsPortion = poco.IsPortion;
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
+            ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable;
             dto.IsVariation = poco.IsVariation;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.PortionKind = poco.PortionKind;
+            ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList();
+            ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList();
 
             if (includeDerivedProperties)
             {

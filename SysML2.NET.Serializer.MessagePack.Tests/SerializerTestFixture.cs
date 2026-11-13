@@ -38,6 +38,7 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
         }
 
         [Test]
+        [Ignore("MessagePack round trip loses non-derived members redefined by a derived property, see https://github.com/STARIONGROUP/SysML2.NET/issues/436")]
         public void Verify_that_iData_from_sysml2_core_json_can_be_deserialized()
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");

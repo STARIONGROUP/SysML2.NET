@@ -213,6 +213,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var variantSeen = false;
             var variantMembershipSeen = false;
 
+            var isVariableRedefinitionSeen = false;
+            bool? isVariableRedefinitionValue = null;
+
+            var declaredShortNameRedefinitionSeen = false;
+            string declaredShortNameRedefinitionValue = null;
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -2268,9 +2275,51 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("isVariable"u8))
+                {
+                    isVariableRedefinitionSeen = true;
+                    reader.Read();
+                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameRedefinitionSeen = true;
+                    reader.Read();
+                    declaredShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
+            {
+                if (!mayTimeVarySeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable != isVariableRedefinitionValue.Value && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The isVariable Json property of the ConcernUsage {Id} disagrees with mayTimeVary; the mayTimeVary value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (declaredShortNameRedefinitionSeen)
+            {
+                if (!reqIdSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName = declaredShortNameRedefinitionValue;
+                }
+                else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName, declaredShortNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The declaredShortName Json property of the ConcernUsage {Id} disagrees with reqId; the reqId value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -2798,6 +2847,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var portionKindSeen = false;
             var reqIdSeen = false;
 
+            var isVariableRedefinitionSeen = false;
+            bool? isVariableRedefinitionValue = null;
+
+            var declaredShortNameRedefinitionSeen = false;
+            string declaredShortNameRedefinitionValue = null;
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -3085,9 +3141,44 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("isVariable"u8))
+                {
+                    isVariableRedefinitionSeen = true;
+                    reader.Read();
+                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("declaredShortName"u8))
+                {
+                    declaredShortNameRedefinitionSeen = true;
+                    reader.Read();
+                    declaredShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
+            {
+                ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
+            }
+
+            if (declaredShortNameRedefinitionSeen)
+            {
+                if (!reqIdSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName = declaredShortNameRedefinitionValue;
+                }
+                else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName, declaredShortNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The declaredShortName Json property of the ConcernUsage {Id} disagrees with reqId; the reqId value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

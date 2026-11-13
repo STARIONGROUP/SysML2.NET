@@ -120,6 +120,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var textualRepresentationSeen = false;
             var visibilitySeen = false;
 
+            var memberShortNameRedefinitionSeen = false;
+            string memberShortNameRedefinitionValue = null;
+
+            var memberElementRedefinitionSeen = false;
+            Guid? memberElementRedefinitionValue = null;
+
+            var memberNameRedefinitionSeen = false;
+            string memberNameRedefinitionValue = null;
+
+            var targetRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -565,9 +581,128 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("memberShortName"u8))
+                {
+                    memberShortNameRedefinitionSeen = true;
+                    reader.Read();
+                    memberShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberElement"u8))
+                {
+                    memberElementRedefinitionSeen = true;
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                    {
+                        memberElementRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberName"u8))
+                {
+                    memberNameRedefinitionSeen = true;
+                    reader.Read();
+                    memberNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("target"u8))
+                {
+                    targetRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            targetRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (memberShortNameRedefinitionSeen)
+            {
+                if (!ownedMemberShortNameSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberShortName = memberShortNameRedefinitionValue;
+                }
+                else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberShortName, memberShortNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The memberShortName Json property of the SubjectMembership {Id} disagrees with ownedMemberShortName; the ownedMemberShortName value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (memberElementRedefinitionSeen)
+            {
+                if (!ownedSubjectParameterSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberElement = (memberElementRedefinitionValue ?? Guid.Empty);
+                }
+                else if (((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberElement != (memberElementRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The memberElement Json property of the SubjectMembership {Id} disagrees with ownedSubjectParameter; the ownedSubjectParameter value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (memberNameRedefinitionSeen)
+            {
+                if (!ownedMemberNameSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberName = memberNameRedefinitionValue;
+                }
+                else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberName, memberNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The memberName Json property of the SubjectMembership {Id} disagrees with ownedMemberName; the ownedMemberName value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (targetRedefinitionSeen)
+            {
+                if (!ownedSubjectParameterSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The target Json property of the SubjectMembership {Id} disagrees with ownedSubjectParameter; the ownedSubjectParameter value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!owningTypeSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the SubjectMembership {Id} disagrees with owningType; the owningType value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -713,6 +848,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelatedElementSeen = false;
             var owningRelationshipSeen = false;
             var visibilitySeen = false;
+
+            var memberShortNameRedefinitionSeen = false;
+            string memberShortNameRedefinitionValue = null;
+
+            var memberElementRedefinitionSeen = false;
+            Guid? memberElementRedefinitionValue = null;
+
+            var memberNameRedefinitionSeen = false;
+            string memberNameRedefinitionValue = null;
+
+            var targetRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
@@ -896,9 +1047,93 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("memberShortName"u8))
+                {
+                    memberShortNameRedefinitionSeen = true;
+                    reader.Read();
+                    memberShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberElement"u8))
+                {
+                    memberElementRedefinitionSeen = true;
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                    {
+                        memberElementRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("memberName"u8))
+                {
+                    memberNameRedefinitionSeen = true;
+                    reader.Read();
+                    memberNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("target"u8))
+                {
+                    targetRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            targetRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (memberShortNameRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberShortName = memberShortNameRedefinitionValue;
+            }
+
+            if (memberElementRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberElement = (memberElementRedefinitionValue ?? Guid.Empty);
+            }
+
+            if (memberNameRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberName = memberNameRedefinitionValue;
+            }
+
+            if (targetRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

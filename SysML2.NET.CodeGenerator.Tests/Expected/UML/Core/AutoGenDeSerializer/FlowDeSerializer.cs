@@ -177,6 +177,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var textualRepresentationSeen = false;
             var unioningTypeSeen = false;
 
+            var targetRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -1595,9 +1602,65 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("target"u8))
+                {
+                    targetRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            targetRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (targetRedefinitionSeen)
+            {
+                if (!targetFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The target Json property of the Flow {Id} disagrees with targetFeature; the targetFeature value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!sourceFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the Flow {Id} disagrees with sourceFeature; the sourceFeature value is kept", dtoInstance.Id);
+                }
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -1982,6 +2045,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelatedElementSeen = false;
             var owningRelationshipSeen = false;
 
+            var targetRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -2294,9 +2364,51 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("target"u8))
+                {
+                    targetRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            targetRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+
                 reader.Read();
                 reader.Skip();
             }
+
+            if (targetRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+            }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

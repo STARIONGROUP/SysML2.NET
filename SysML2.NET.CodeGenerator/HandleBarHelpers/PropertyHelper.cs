@@ -32,6 +32,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     public static class PropertyHelper
     {
         /// <summary>
+        /// The placeholder for the local holding a deserialized redefined value in a <see cref="RedefinedDeserializationShape"/>
+        /// </summary>
+        private const string ValuePlaceholder = "{value}";
+
+        /// <summary>
+        /// The placeholder for the left operand of a <see cref="RedefinedDeserializationShape"/> comparison
+        /// </summary>
+        private const string LeftPlaceholder = "{left}";
+
+        /// <summary>
+        /// The placeholder for the right operand of a <see cref="RedefinedDeserializationShape"/> comparison
+        /// </summary>
+        private const string RightPlaceholder = "{right}";
+
+        /// <summary>
         /// Registers the <see cref="PropertyHelper"/>
         /// </summary>
         /// <param name="handlebars">
@@ -812,6 +827,36 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return property.TryQueryRedefinedByProperty(generatedClass, out _);
             });
 
+            handlebars.RegisterHelper("Property.IsSerializedRedefinition", (_, arguments) =>
+            {
+                if (arguments.Length != 2 || arguments[0] is not IProperty property || arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.IsSerializedRedefinition helper expects an IProperty and an IClass");
+                }
+
+                return property.QueryIsSerializedRedefinition(generatedClass);
+            });
+
+            handlebars.RegisterHelper("Property.WriteRedefinedToDto", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 1 || arguments[0] is not IProperty property)
+                {
+                    throw new HandlebarsException("{{#Property.WriteRedefinedToDto}} expects an IProperty");
+                }
+
+                writer.WriteSafeString(WriteRedefinedToDto(property));
+            });
+
+            handlebars.RegisterHelper("Property.WriteRedefinedDeserialization", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 3 || arguments[0] is not IClass generatedClass || arguments[1] is not string section || arguments[2] is not bool includeDerivedProperties)
+                {
+                    throw new HandlebarsException("{{#Property.WriteRedefinedDeserialization}} expects an IClass, a section name and an include-derived flag");
+                }
+
+                writer.WriteSafeString(WriteRedefinedDeserialization(generatedClass, section, includeDerivedProperties));
+            });
+
             handlebars.RegisterHelper("Property.IsRedefinedOrRedifines", (context, arguments) =>
             {
                 if (context.Value is not IProperty property)
@@ -1188,9 +1233,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var property = (IProperty)parameters[0];
             var classContext = (IClass)parameters[1];
 
-            if (property.TryQueryRedefinedByProperty(classContext, out _))
+            if (property.TryQueryRedefinedByProperty(classContext, out _) && !property.QueryIsSerializedRedefinition(classContext))
             {
-                throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for redefined properties");
+                throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for redefined properties that are not serialized under their own name");
             }
 
             if (property.IsDerived || property.IsDerivedUnion)
@@ -1384,7 +1429,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>The setter implementation</returns>
         private static string GetRedefinedPropertySetterImplementationForDto(IProperty redefinedProperty, IProperty redefinition, IClass context)
         {
-            if (redefinition.IsDerived || redefinition.IsDerivedUnion || redefinition.IsReadOnly)
+            if (redefinition.IsDerived || redefinition.IsDerivedUnion)
+            {
+                return GetSetterIntoDerivedStorageForDto(redefinedProperty, redefinition, context);
+            }
+
+            if (redefinition.IsReadOnly)
             {
                 return string.Empty;
             }
@@ -1412,6 +1462,202 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             stringBuilder.AppendLine($"\t{redefinitionPropertyName} = value[0];");
             stringBuilder.AppendLine("}");
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Writes one section of the JSON deserialization of the properties that the <paramref name="generatedClass"/> redefines but that are
+        /// still serialized under their own name.
+        /// </summary>
+        /// <param name="generatedClass">The <see cref="IClass"/> whose deserializer is generated</param>
+        /// <param name="section">Either <c>declarations</c>, <c>reads</c> or <c>assignments</c></param>
+        /// <param name="includeDerivedProperties">Whether the generated method also reads derived properties</param>
+        /// <returns>The generated code</returns>
+        /// <exception cref="HandlebarsException">If the <paramref name="section"/> is unknown or a property has an unsupported type</exception>
+        private static string WriteRedefinedDeserialization(IClass generatedClass, string section, bool includeDerivedProperties)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var property in generatedClass.QueryAllProperties().Where(property => property.QueryIsSerializedRedefinition(generatedClass)))
+            {
+                var shape = QueryRedefinedDeserializationShape(property);
+
+                switch (section)
+                {
+                    case "declarations":
+                        sb.AppendLine($"var {property.Name}RedefinitionSeen = false;");
+                        sb.AppendLine($"{shape.LocalType} {property.Name}RedefinitionValue = {shape.LocalDefault};");
+                        break;
+                    case "reads":
+                        sb.AppendLine($"if (reader.ValueTextEquals(\"{property.Name}\"u8))");
+                        sb.AppendLine("{");
+                        sb.AppendLine($"{property.Name}RedefinitionSeen = true;");
+                        sb.AppendLine("reader.Read();");
+                        sb.AppendLine(shape.Read.Replace(ValuePlaceholder, $"{property.Name}RedefinitionValue"));
+                        sb.AppendLine("continue;");
+                        sb.AppendLine("}");
+                        break;
+                    case "assignments":
+                        AppendRedefinedAssignment(sb, property, generatedClass, shape, includeDerivedProperties);
+                        break;
+                    default:
+                        throw new HandlebarsException($"Unknown redefined-deserialization section '{section}'");
+                }
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Writes the DAL statement that copies a redefined property still serialized under its own name from a POCO to its DTO.
+        /// </summary>
+        /// <param name="property">The redefined <see cref="IProperty"/></param>
+        /// <returns>The generated statement</returns>
+        private static string WriteRedefinedToDto(IProperty property)
+        {
+            var owner = (INamedElement)property.Owner;
+            var ownerNamespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
+            var propertyName = property.QueryPropertyNameBasedOnUmlProperties();
+            var target = $"((Core.DTO.{ownerNamespace}.I{owner.Name})dto).{propertyName}";
+            var source = $"((Core.POCO.{ownerNamespace}.I{owner.Name})poco).{propertyName}";
+
+            if (!property.QueryIsReferenceType())
+            {
+                return property.QueryIsEnumerable() ? $"{target} = [.. {source}];{Environment.NewLine}" : $"{target} = {source};{Environment.NewLine}";
+            }
+
+            if (property.QueryIsEnumerable())
+            {
+                return $"{target} = {source}.Select(x => x.Id).ToList();{Environment.NewLine}";
+            }
+
+            return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property)
+                ? $"{target} = {source}?.Id;{Environment.NewLine}"
+                : $"{target} = {source}.Id;{Environment.NewLine}";
+        }
+
+        /// <summary>
+        /// Appends the code that stores a deserialized redefined property, warning when the value disagrees with the one of its redefinition.
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="property">The redefined <see cref="IProperty"/></param>
+        /// <param name="generatedClass">The <see cref="IClass"/> whose deserializer is generated</param>
+        /// <param name="shape">The deserialization shape of the <paramref name="property"/></param>
+        /// <param name="includeDerivedProperties">Whether the generated method also reads derived properties</param>
+        private static void AppendRedefinedAssignment(StringBuilder sb, IProperty property, IClass generatedClass, RedefinedDeserializationShape shape, bool includeDerivedProperties)
+        {
+            var owner = (INamedElement)property.Owner;
+            var accessor = $"((SysML2.NET.Core.DTO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})dtoInstance).{property.QueryPropertyNameBasedOnUmlProperties()}";
+            var localValue = $"{property.Name}RedefinitionValue";
+            var value = shape.Convert.Replace(ValuePlaceholder, localValue);
+            var storage = property.QueryRedefinitionChainEnd(generatedClass);
+            var isStorageRead = includeDerivedProperties || !(storage.IsDerived || storage.IsDerivedUnion);
+
+            sb.AppendLine($"if ({property.Name}RedefinitionSeen{shape.HasValueCondition.Replace(ValuePlaceholder, localValue)})");
+            sb.AppendLine("{");
+
+            if (isStorageRead)
+            {
+                sb.AppendLine($"if (!{storage.Name}Seen)");
+                sb.AppendLine("{");
+                sb.AppendLine($"{accessor} = {value};");
+                sb.AppendLine("}");
+                sb.AppendLine($"else if ({shape.Differs.Replace(LeftPlaceholder, accessor).Replace(RightPlaceholder, value)} && logger.IsEnabled(LogLevel.Warning))");
+                sb.AppendLine("{");
+                sb.AppendLine($"logger.LogWarning(\"The {property.Name} Json property of the {generatedClass.Name} {{Id}} disagrees with {storage.Name}; the {storage.Name} value is kept\", dtoInstance.Id);");
+                sb.AppendLine("}");
+            }
+            else
+            {
+                sb.AppendLine($"{accessor} = {value};");
+            }
+
+            sb.AppendLine("}");
+        }
+
+        /// <summary>
+        /// Gets the code fragments that deserialize a redefined property according to its type and multiplicity.
+        /// </summary>
+        /// <param name="property">The redefined <see cref="IProperty"/></param>
+        /// <returns>The <see cref="RedefinedDeserializationShape"/></returns>
+        /// <exception cref="HandlebarsException">If the type of the <paramref name="property"/> is not supported</exception>
+        private static RedefinedDeserializationShape QueryRedefinedDeserializationShape(IProperty property)
+        {
+            const string sequenceDiffers = "!System.Linq.Enumerable.SequenceEqual({left}, {right})";
+            const string scalarDiffers = "{left} != {right}";
+
+            if (property.QueryIsReferenceType())
+            {
+                if (property.QueryIsEnumerable())
+                {
+                    return new RedefinedDeserializationShape("System.Collections.Generic.List<Guid>", "[]",
+                        "Utf8JsonReaderHelper.ExpectArrayStart(ref reader);\nwhile (reader.Read() && reader.TokenType != JsonTokenType.EndArray)\n{\nif (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))\n{\n{value}.Add(redefinitionItem);\n}\n}",
+                        ValuePlaceholder, string.Empty, sequenceDiffers);
+                }
+
+                var convert = uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) ? ValuePlaceholder : "({value} ?? Guid.Empty)";
+
+                return new RedefinedDeserializationShape("Guid?", "null",
+                    "if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))\n{\n{value} = redefinitionItem;\n}",
+                    convert, string.Empty, scalarDiffers);
+            }
+
+            if (property.QueryIsString() && !property.QueryIsEnumerable())
+            {
+                return new RedefinedDeserializationShape("string", "null", "{value} = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);",
+                    ValuePlaceholder, string.Empty, "!string.Equals({left}, {right}, StringComparison.Ordinal)");
+            }
+
+            if (property.QueryIsBool() && !property.QueryIsEnumerable())
+            {
+                return new RedefinedDeserializationShape("bool?", "null", "{value} = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);",
+                    "{value}.Value", " && {value}.HasValue", scalarDiffers);
+            }
+
+            throw new HandlebarsException($"The redefined property {property.Name} of type {property.Type.Name} cannot be deserialized under its own name");
+        }
+
+        /// <summary>
+        /// Gets the DTO setter body that stores the value of a non-derived property, redefined by a derived one, in the member that holds the
+        /// end of the redefinition chain in the class context.
+        /// </summary>
+        /// <param name="redefinedProperty">The non-derived redefined property</param>
+        /// <param name="redefinition">The derived property that redefines <paramref name="redefinedProperty"/></param>
+        /// <param name="context">The <see cref="IClass"/> context</param>
+        /// <returns>The setter implementation</returns>
+        private static string GetSetterIntoDerivedStorageForDto(IProperty redefinedProperty, IProperty redefinition, IClass context)
+        {
+            var storage = redefinition.QueryRedefinitionChainEnd(context);
+            var storageName = $"this.{storage.QueryPropertyNameBasedOnUmlProperties()}";
+
+            if (redefinedProperty.QueryIsEnumerable() && storage.QueryIsEnumerable())
+            {
+                return $"{storageName} = [.. value];";
+            }
+
+            if (!redefinedProperty.QueryIsEnumerable() && storage.QueryIsEnumerable())
+            {
+                return $"{storageName} = [value];";
+            }
+
+            if (!redefinedProperty.QueryIsEnumerable())
+            {
+                return $"{storageName} = value;";
+            }
+
+            string emptyValue;
+
+            if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(storage) || storage.QueryIsString())
+            {
+                emptyValue = "null";
+            }
+            else
+            {
+                emptyValue = storage.QueryIsReferenceType() ? "Guid.Empty" : "default";
+            }
+
+            return $"{storageName} = value.Count != 0 ? value[0] : {emptyValue};";
         }
 
         /// <summary>
@@ -1505,5 +1751,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             return stringBuilder.ToString();
         }
+
+        /// <summary>
+        /// The code fragments that deserialize a redefined property; <c>{value}</c>, <c>{left}</c> and <c>{right}</c> are placeholders.
+        /// </summary>
+        /// <param name="LocalType">The C# type of the local holding the read value</param>
+        /// <param name="LocalDefault">The initial value of that local</param>
+        /// <param name="Read">The statements that read the Json value into the local</param>
+        /// <param name="Convert">The expression that converts the local to the type of the property</param>
+        /// <param name="HasValueCondition">The extra condition under which the local holds a value to store</param>
+        /// <param name="Differs">The expression that tells whether two values of the property differ</param>
+        private sealed record RedefinedDeserializationShape(string LocalType, string LocalDefault, string Read, string Convert, string HasValueCondition, string Differs);
     }
 }
