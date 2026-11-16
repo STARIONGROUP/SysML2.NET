@@ -23,7 +23,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using uml4net.StructuredClassifiers;
 
     [TestFixture]
-    public class DtoValidatorHelperTestFixture
+    public partial class DtoValidatorHelperTestFixture
     {
         private List<IClass> concreteClasses;
 
@@ -63,7 +63,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         private static HashSet<string> QueryValidatedPropertyNames(IClass @class)
         {
             return DtoValidatorHelper.QueryRules(@class)
-                .Select(rule => Regex.Match(rule, @"dto => dto\.(\w+)").Groups[1].Value)
+                .Select(rule => RuleSelectorRegex().Match(rule).Groups[1].Value)
                 .ToHashSet(StringComparer.Ordinal);
         }
 
@@ -81,5 +81,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 .Except(nonDerivedNames)
                 .ToHashSet(StringComparer.Ordinal);
         }
+
+        [GeneratedRegex(@"dto => dto\.(\w+)")]
+        private static partial Regex RuleSelectorRegex();
     }
 }
