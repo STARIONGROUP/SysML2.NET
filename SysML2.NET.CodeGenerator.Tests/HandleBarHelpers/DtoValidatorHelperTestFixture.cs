@@ -49,6 +49,9 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 Assert.That(QueryValidatedPropertyNames(membership), Does.Contain("MemberElement"));
                 Assert.That(QueryValidatedPropertyNames(owningMembership), Does.Not.Contain("MemberElement"));
                 Assert.That(QueryValidatedPropertyNames(owningMembership), Does.Not.Contain("OwnedMemberElement"));
+                Assert.That(QueryValidatedPropertyNames(membership), Does.Not.Contain("OwnedRelatedElement"));
+                Assert.That(QueryValidatedPropertyNames(membership), Does.Not.Contain("OwningRelatedElement"));
+                Assert.That(DtoValidatorHelper.QueryRules(owningMembership), Does.Contain("this.RuleFor(dto => dto.OwnedRelatedElement).Cascade(CascadeMode.Stop).NotEmpty();"));
             }
 
             var violations = this.concreteClasses
