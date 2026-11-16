@@ -13,10 +13,6 @@
         <RepositoryType>Git</RepositoryType>
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-        <PackageReleaseNotes>
-            [Add] FluentValidation validators for the 12 request types of the Systems Modeling API and Services REST/HTTP PSM, generated from its OpenAPI description (#444)
-            [Add] RequestValidator&lt;TRequest&gt; base class, whose AddCustomValidation registers hand-coded rules alongside the generated ones (#444)
-        </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
     </PropertyGroup>

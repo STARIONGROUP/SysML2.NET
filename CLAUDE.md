@@ -157,7 +157,7 @@ SysML2.NET.Serializer.TextualNotation - Writers/, AutoGenTextualNotationBuilder/
 SysML2.NET.Dal               - Data Access Layer (Assembler, ElementFactory)
 SysML2.NET.REST              - REST client + Session
 SysML2.NET.Kpar              - Reader/Writer for .kpar archives
-SysML2.NET.Validation        - FluentValidation validators for the PSM request DTOs (PSM/AutoGenValidator/, generated)
+SysML2.NET.Validation        - FluentValidation validators for the PSM request DTOs (PSM/AutoGenValidator/) and the Core DTOs (Core/DTO/AutoGenValidator/), generated
 SysML2.NET.Viewer            - Blazor WebAssembly app (net9.0)
 SysML2.NET.CodeGenerator     - Code generation tool (net10.0, not packaged)
 ```
