@@ -25,10 +25,19 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
         public void VerifyValidate()
         {
             var validator = new RequirementConstraintMembershipValidator();
-            var membership = new RequirementConstraintMembership { Id = Guid.NewGuid(), ElementId = "the element id", Kind = RequirementConstraintKind.Requirement };
+            var membership = new RequirementConstraintMembership
+            {
+                Id = Guid.NewGuid(), ElementId = "the element id", Kind = RequirementConstraintKind.Requirement,
+                OwnedRelatedElement = [Guid.NewGuid()], OwningRelatedElement = Guid.NewGuid()
+            };
 
             Assert.That(validator.Validate(membership).IsValid, Is.True);
 
+            membership.OwnedRelatedElement = [];
+
+            Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwnedRelatedElement"]));
+
+            membership.OwnedRelatedElement = [Guid.NewGuid()];
             membership.Kind = (RequirementConstraintKind)int.MaxValue;
 
             Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["Kind"]));

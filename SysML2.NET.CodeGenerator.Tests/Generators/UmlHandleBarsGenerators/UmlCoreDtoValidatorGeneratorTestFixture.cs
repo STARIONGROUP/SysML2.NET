@@ -11,12 +11,16 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using NUnit.Framework;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
     using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+
+    using uml4net.StructuredClassifiers;
 
     [TestFixture]
     public class UmlCoreDtoValidatorGeneratorTestFixture
@@ -40,6 +44,19 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             await Assert.ThatAsync(() => this.umlCoreDtoValidatorGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, null), Throws.TypeOf<ArgumentNullException>());
 
             await Assert.ThatAsync(() => this.umlCoreDtoValidatorGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.outputDirectory), Throws.Nothing);
+
+            var expectedFileNames = GeneratorSetupFixture.XmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(package => package.PackagedElement.OfType<IClass>())
+                .Where(@class => !@class.IsAbstract)
+                .Select(@class => $"{@class.Name}Validator.cs");
+
+            var generatedFileNames = this.outputDirectory.GetFiles("*Validator.cs").Select(file => file.Name).ToList();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(generatedFileNames, Is.EquivalentTo(expectedFileNames));
+                Assert.That(generatedFileNames, Does.Not.Contain("ElementValidator.cs"));
+            }
         }
 
         [Test]

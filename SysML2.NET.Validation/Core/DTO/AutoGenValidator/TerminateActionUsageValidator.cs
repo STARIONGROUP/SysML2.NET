@@ -15,7 +15,6 @@
 namespace SysML2.NET.Validation.Core.DTO
 {
     using System.CodeDom.Compiler;
-    using System.Linq;
 
     using FluentValidation;
 
@@ -24,7 +23,8 @@ namespace SysML2.NET.Validation.Core.DTO
     using SysML2.NET.Core.DTO.Systems.Actions;
 
     /// <summary>
-    /// Validates a <see cref="TerminateActionUsage"/> against the multiplicities and types of the non-derived properties of the TerminateActionUsage metaclass
+    /// Validates a <see cref="TerminateActionUsage"/> against the multiplicities and types of the non-derived properties of the TerminateActionUsage metaclass.
+    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class TerminateActionUsageValidator : DtoValidator<TerminateActionUsage>
@@ -35,15 +35,8 @@ namespace SysML2.NET.Validation.Core.DTO
         /// </summary>
         public TerminateActionUsageValidator()
         {
-            this.RuleFor(dto => dto.AliasIds).NotNull();
-            this.RuleFor(dto => dto.AliasIds).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.AliasIds).NotNull();
             this.RuleFor(dto => dto.Direction).IsInEnum();
             this.RuleFor(dto => dto.ElementId).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.OwnedRelationship).NotEmpty();
-            this.RuleFor(dto => dto.OwningRelationship).Must(value => !value.HasValue || value.Value != System.Guid.Empty);
             this.RuleFor(dto => dto.PortionKind).IsInEnum();
         }
     }

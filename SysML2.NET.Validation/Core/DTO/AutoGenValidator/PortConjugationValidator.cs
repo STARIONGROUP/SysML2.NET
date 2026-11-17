@@ -15,14 +15,14 @@
 namespace SysML2.NET.Validation.Core.DTO
 {
     using System.CodeDom.Compiler;
-    using System.Linq;
 
     using FluentValidation;
 
     using SysML2.NET.Core.DTO.Systems.Ports;
 
     /// <summary>
-    /// Validates a <see cref="PortConjugation"/> against the multiplicities and types of the non-derived properties of the PortConjugation metaclass
+    /// Validates a <see cref="PortConjugation"/> against the multiplicities and types of the non-derived properties of the PortConjugation metaclass.
+    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class PortConjugationValidator : DtoValidator<PortConjugation>
@@ -33,20 +33,10 @@ namespace SysML2.NET.Validation.Core.DTO
         /// </summary>
         public PortConjugationValidator()
         {
-            this.RuleFor(dto => dto.AliasIds).NotNull();
-            this.RuleFor(dto => dto.AliasIds).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.AliasIds).NotNull();
             this.RuleFor(dto => dto.ConjugatedType).NotEmpty();
             this.RuleFor(dto => dto.ElementId).NotNull();
             this.RuleFor(dto => dto.OriginalPortDefinition).NotEmpty();
-            this.RuleFor(dto => dto.OwnedRelatedElement).NotNull();
-            this.RuleFor(dto => dto.OwnedRelatedElement).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.OwnedRelatedElement).NotEmpty();
-            this.RuleFor(dto => dto.OwnedRelationship).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.OwnedRelationship).NotEmpty();
-            this.RuleFor(dto => dto.OwningRelatedElement).Must(value => !value.HasValue || value.Value != System.Guid.Empty);
-            this.RuleFor(dto => dto.OwningRelationship).Must(value => !value.HasValue || value.Value != System.Guid.Empty);
+            this.RuleFor(dto => dto.OwningRelatedElement).NotEmpty();
         }
     }
 }
