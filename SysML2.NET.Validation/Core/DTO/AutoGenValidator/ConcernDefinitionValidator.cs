@@ -15,14 +15,14 @@
 namespace SysML2.NET.Validation.Core.DTO
 {
     using System.CodeDom.Compiler;
-    using System.Linq;
 
     using FluentValidation;
 
     using SysML2.NET.Core.DTO.Systems.Requirements;
 
     /// <summary>
-    /// Validates a <see cref="ConcernDefinition"/> against the multiplicities and types of the non-derived properties of the ConcernDefinition metaclass
+    /// Validates a <see cref="ConcernDefinition"/> against the multiplicities and types of the non-derived properties of the ConcernDefinition metaclass.
+    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class ConcernDefinitionValidator : DtoValidator<ConcernDefinition>
@@ -33,14 +33,7 @@ namespace SysML2.NET.Validation.Core.DTO
         /// </summary>
         public ConcernDefinitionValidator()
         {
-            this.RuleFor(dto => dto.AliasIds).NotNull();
-            this.RuleFor(dto => dto.AliasIds).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.AliasIds).NotNull();
             this.RuleFor(dto => dto.ElementId).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.OwnedRelationship).NotEmpty();
-            this.RuleFor(dto => dto.OwningRelationship).Must(value => !value.HasValue || value.Value != System.Guid.Empty);
         }
     }
 }

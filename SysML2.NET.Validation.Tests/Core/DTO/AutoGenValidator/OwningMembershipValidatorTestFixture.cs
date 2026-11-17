@@ -24,9 +24,15 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
         public void VerifyValidate()
         {
             var validator = new OwningMembershipValidator();
-            var owningMembership = new OwningMembership { Id = Guid.NewGuid(), ElementId = "the element id", OwnedRelatedElement = [Guid.NewGuid()] };
+            var owningMembership = new OwningMembership { Id = Guid.NewGuid(), ElementId = "the element id", OwnedRelatedElement = [Guid.NewGuid()], OwningRelatedElement = Guid.NewGuid() };
 
             Assert.That(validator.Validate(owningMembership).IsValid, Is.True);
+
+            owningMembership.OwningRelatedElement = null;
+
+            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwningRelatedElement"]));
+
+            owningMembership.OwningRelatedElement = Guid.NewGuid();
 
             owningMembership.OwnedRelatedElement = [];
 

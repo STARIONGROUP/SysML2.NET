@@ -15,14 +15,14 @@
 namespace SysML2.NET.Validation.Core.DTO
 {
     using System.CodeDom.Compiler;
-    using System.Linq;
 
     using FluentValidation;
 
     using SysML2.NET.Core.DTO.Root.Annotations;
 
     /// <summary>
-    /// Validates a <see cref="TextualRepresentation"/> against the multiplicities and types of the non-derived properties of the TextualRepresentation metaclass
+    /// Validates a <see cref="TextualRepresentation"/> against the multiplicities and types of the non-derived properties of the TextualRepresentation metaclass.
+    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class TextualRepresentationValidator : DtoValidator<TextualRepresentation>
@@ -33,16 +33,9 @@ namespace SysML2.NET.Validation.Core.DTO
         /// </summary>
         public TextualRepresentationValidator()
         {
-            this.RuleFor(dto => dto.AliasIds).NotNull();
-            this.RuleFor(dto => dto.AliasIds).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.AliasIds).NotNull();
             this.RuleFor(dto => dto.Body).NotNull();
             this.RuleFor(dto => dto.ElementId).NotNull();
             this.RuleFor(dto => dto.Language).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).NotNull();
-            this.RuleFor(dto => dto.OwnedRelationship).Must(value => value == null || value.Distinct().Count() == value.Count);
-            this.RuleForEach(dto => dto.OwnedRelationship).NotEmpty();
-            this.RuleFor(dto => dto.OwningRelationship).Must(value => !value.HasValue || value.Value != System.Guid.Empty);
         }
     }
 }

@@ -22,7 +22,8 @@ namespace SysML2.NET.Validation.Core.DTO
     using SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
 
     /// <summary>
-    /// Validates a <see cref="{{this.Name}}"/> against the multiplicities and types of the non-derived properties of the {{this.Name}} metaclass
+    /// Validates a <see cref="{{this.Name}}"/> against the multiplicities and types of the non-derived properties of the {{this.Name}} metaclass.
+    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class {{this.Name}}Validator : DtoValidator<{{this.Name}}>
