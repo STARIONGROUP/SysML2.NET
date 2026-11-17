@@ -459,34 +459,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iReferenceSubsetting.ReferencedFeature);
             writer.WriteEndObject();
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iReferenceSubsetting.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.Specific);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("subsettedFeature"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iReferenceSubsetting.SubsettedFeature);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("subsettingFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.SubsettingFeature);
             writer.WriteEndObject();
 
             writer.WriteStartArray("target"u8);

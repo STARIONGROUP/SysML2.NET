@@ -459,34 +459,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iCrossSubsetting.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iCrossSubsetting.Specific);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("subsettedFeature"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iCrossSubsetting.SubsettedFeature);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("subsettingFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iCrossSubsetting.SubsettingFeature);
             writer.WriteEndObject();
 
             writer.WriteStartArray("target"u8);

@@ -9,13 +9,22 @@
 
 namespace SysML2.NET.Serializer.Json.Tests
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Text.Json;
 
     using NUnit.Framework;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO.Core.Features;
+    using SysML2.NET.Core.DTO.Core.Types;
+    using SysML2.NET.Core.DTO.Kernel.Connectors;
+    using SysML2.NET.Core.DTO.Root.Elements;
+    using SysML2.NET.Core.DTO.Root.Namespaces;
+    using SysML2.NET.Core.DTO.Systems.Parts;
     using SysML2.NET.Extensions.Core.DTO.Comparers;
 
     using SysML2.NET.Serializer.Json;
@@ -81,6 +90,93 @@ namespace SysML2.NET.Serializer.Json.Tests
                         $"Round-trip semantic mismatch for id {id} ({left.GetType().Name}).");
                 }
             }
+        }
+
+        [Test]
+        public void SerializeAndDeSerialize_WithPropertiesRedefinedByDerivedOnes_ExchangesThemOnlyWithDerivedProperties()
+        {
+            var owningNamespace = Guid.NewGuid();
+            var member = Guid.NewGuid();
+
+            var membership = new Membership { Id = Guid.NewGuid() };
+            ((IRelationship)membership).Target = [member];
+
+            var owningMembership = new OwningMembership { Id = Guid.NewGuid() };
+            ((IMembership)owningMembership).MemberElement = member;
+            ((IMembership)owningMembership).MemberName = "Nested";
+            ((IRelationship)owningMembership).Source = [owningNamespace];
+
+            var featureMembership = new FeatureMembership { Id = Guid.NewGuid() };
+            ((IMembership)featureMembership).MemberElement = member;
+
+            var namespaceImport = new NamespaceImport { Id = Guid.NewGuid(), ImportedNamespace = Guid.NewGuid() };
+            ((IRelationship)namespaceImport).Source = [owningNamespace];
+
+            var connector = new Connector { Id = Guid.NewGuid() };
+            ((IRelationship)connector).Target = [member, owningNamespace];
+
+            var referenceSubsetting = new ReferenceSubsetting { Id = Guid.NewGuid(), ReferencedFeature = Guid.NewGuid() };
+            ((ISubsetting)referenceSubsetting).SubsettingFeature = member;
+
+            var partUsage = new PartUsage { Id = Guid.NewGuid() };
+            ((IFeature)partUsage).IsVariable = true;
+
+            List<IData> elements = [membership, owningMembership, featureMembership, namespaceImport, connector, referenceSubsetting, partUsage];
+
+            var withDerived = this.RoundTrip(elements, true);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(((IRelationship)withDerived[membership.Id]).Target, Is.EqualTo([member]));
+                Assert.That(((IMembership)withDerived[owningMembership.Id]).MemberElement, Is.EqualTo(member));
+                Assert.That(((IMembership)withDerived[owningMembership.Id]).MemberName, Is.EqualTo("Nested"));
+                Assert.That(((IRelationship)withDerived[owningMembership.Id]).Source, Is.EqualTo([owningNamespace]));
+                Assert.That(((IMembership)withDerived[featureMembership.Id]).MemberElement, Is.EqualTo(member));
+                Assert.That(((IRelationship)withDerived[namespaceImport.Id]).Source, Is.EqualTo([owningNamespace]));
+                Assert.That(((IRelationship)withDerived[connector.Id]).Target, Is.EqualTo([member, owningNamespace]));
+                Assert.That(((ISubsetting)withDerived[referenceSubsetting.Id]).SubsettingFeature, Is.EqualTo(member));
+                Assert.That(((IFeature)withDerived[partUsage.Id]).IsVariable, Is.True);
+                Assert.That(elements.All(element => ComparerProvider.Resolve(element).Equals(element, withDerived[element.Id])), Is.True);
+            }
+
+            var withoutDerived = this.RoundTrip(elements, false);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(((IRelationship)withoutDerived[membership.Id]).Target, Is.EqualTo([member]));
+                Assert.That(((IMembership)withoutDerived[owningMembership.Id]).MemberElement, Is.EqualTo(Guid.Empty));
+                Assert.That(((IMembership)withoutDerived[owningMembership.Id]).MemberName, Is.Null);
+                Assert.That(((IMembership)withoutDerived[featureMembership.Id]).MemberElement, Is.EqualTo(Guid.Empty));
+                Assert.That(((IRelationship)withoutDerived[connector.Id]).Target, Is.Empty);
+                Assert.That(((ISubsetting)withoutDerived[referenceSubsetting.Id]).SubsettingFeature, Is.EqualTo(Guid.Empty));
+                Assert.That(((IFeature)withoutDerived[partUsage.Id]).IsVariable, Is.False);
+                Assert.That(elements.All(element => ComparerProvider.Resolve(element).Equals(element, withoutDerived[element.Id])), Is.True);
+            }
+        }
+
+        [Test]
+        public void DeSerialize_WithRedefinedAndRedefiningKeysThatDisagree_KeepsTheRedefiningValue()
+        {
+            var membershipId = Guid.NewGuid();
+            var ownedMember = Guid.NewGuid();
+            var json = $$$"""
+                [{"@id": "{{{membershipId}}}", "@type": "OwningMembership", "memberElement": {"@id": "{{{Guid.NewGuid()}}}"}, "ownedMemberElement": {"@id": "{{{ownedMember}}}"}}]
+                """;
+
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+
+            var membership = (IMembership)this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, true).Single();
+
+            Assert.That(membership.MemberElement, Is.EqualTo(ownedMember));
+        }
+
+        private Dictionary<Guid, IData> RoundTrip(IEnumerable<IData> elements, bool includeDerivedProperties)
+        {
+            using var stream = new MemoryStream();
+            this.serializer.Serialize(elements, SerializationModeKind.JSON, includeDerivedProperties, stream, new JsonWriterOptions());
+            stream.Position = 0;
+
+            return this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, includeDerivedProperties).ToDictionary(element => element.Id, element => (IData)element);
         }
     }
 }
