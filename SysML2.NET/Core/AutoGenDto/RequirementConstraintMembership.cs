@@ -117,7 +117,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_819490_43195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberElement")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberElement", IsDerivedByRedefinition = true)]
         [Implements(implementation: "IMembership.MemberElement")]
         Guid Root.Namespaces.IMembership.MemberElement
         {
@@ -140,7 +140,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberName")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberName", IsDerivedByRedefinition = true)]
         [Implements(implementation: "IMembership.MemberName")]
         string Root.Namespaces.IMembership.MemberName
         {
@@ -166,7 +166,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The short name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberShortName")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberShortName", IsDerivedByRedefinition = true)]
         [Implements(implementation: "IMembership.MemberShortName")]
         string Root.Namespaces.IMembership.MemberShortName
         {
@@ -369,7 +369,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IMembership.MembershipOwningNamespace")]
+        [RedefinedByProperty("IMembership.MembershipOwningNamespace", IsDerivedByRedefinition = true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
@@ -385,7 +385,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IMembership.MemberElement")]
+        [RedefinedByProperty("IMembership.MemberElement", IsDerivedByRedefinition = true)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {

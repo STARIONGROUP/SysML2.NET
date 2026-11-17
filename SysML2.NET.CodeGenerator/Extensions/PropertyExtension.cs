@@ -219,6 +219,27 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             /// <summary>
+            /// Queries whether the <paramref name="property"/> is redefined in the <paramref name="classContext"/> by a chain that ends on a derived property.
+            /// </summary>
+            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
+            /// <returns><c>true</c> when the value of the <paramref name="property"/> is derived in the context</returns>
+            /// <remarks>
+            /// A derived redefinition makes the redefined property derived, as SysML states for <c>Usage::mayTimeVary</c> over <c>Feature::isVariable</c>;
+            /// such a value is therefore neither computed nor exchanged without derived properties (KerML §10.3 Note 4).
+            /// </remarks>
+            public bool QueryHasDerivedValueIn(IClass classContext)
+            {
+                if (!property.TryQueryRedefinedByProperty(classContext, out _))
+                {
+                    return false;
+                }
+
+                var chainEnd = property.QueryRedefinitionChainEnd(classContext);
+
+                return chainEnd.IsDerived || chainEnd.IsDerivedUnion;
+            }
+
+            /// <summary>
             /// Returns the property that ends the redefinition chain of the <paramref name="property"/> in the <paramref name="classContext"/>.
             /// </summary>
             /// <param name="classContext">The <see cref="IClass"/> being generated</param>

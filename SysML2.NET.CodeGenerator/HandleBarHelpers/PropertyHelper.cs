@@ -837,6 +837,35 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return property.QueryIsSerializedRedefinition(generatedClass);
             });
 
+            handlebars.RegisterHelper("Property.WriteRedefinedByPropertyAttribute", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 2 || arguments[0] is not IProperty property || arguments[1] is not IClass generatedClass)
+                {
+                    throw new HandlebarsException("{{#Property.WriteRedefinedByPropertyAttribute}} expects an IProperty and an IClass");
+                }
+
+                if (!property.TryQueryRedefinedByProperty(generatedClass, out var redefinition))
+                {
+                    return;
+                }
+
+                var owner = (INamedElement)redefinition.Owner;
+                var isDerivedByRedefinition = !property.IsDerived && !property.IsDerivedUnion && property.QueryHasDerivedValueIn(generatedClass);
+                var derivedFlag = isDerivedByRedefinition ? ", IsDerivedByRedefinition = true" : string.Empty;
+
+                writer.WriteSafeString($"[RedefinedByProperty(\"I{owner.Name}.{redefinition.Name.CapitalizeFirstLetter()}\"{derivedFlag})]");
+            });
+
+            handlebars.RegisterHelper("Property.HasDerivedValueIn", (_, arguments) =>
+            {
+                if (arguments.Length != 2 || arguments[0] is not IProperty property || arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.HasDerivedValueIn helper expects an IProperty and an IClass");
+                }
+
+                return property.QueryHasDerivedValueIn(generatedClass);
+            });
+
             handlebars.RegisterHelper("Property.WriteRedefinedToDto", (writer, _, arguments) =>
             {
                 if (arguments.Length != 1 || arguments[0] is not IProperty property)
@@ -1477,7 +1506,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             var sb = new StringBuilder();
 
-            foreach (var property in generatedClass.QueryAllProperties().Where(property => property.QueryIsSerializedRedefinition(generatedClass)))
+            var redefinedProperties = generatedClass.QueryAllProperties()
+                .Where(property => property.QueryIsSerializedRedefinition(generatedClass) && (includeDerivedProperties || !property.QueryHasDerivedValueIn(generatedClass)));
+
+            foreach (var property in redefinedProperties)
             {
                 var shape = QueryRedefinedDeserializationShape(property);
 

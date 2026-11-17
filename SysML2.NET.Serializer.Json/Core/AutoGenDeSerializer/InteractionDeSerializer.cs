@@ -1423,12 +1423,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelatedElementSeen = false;
             var owningRelationshipSeen = false;
 
-            var targetRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
-
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
@@ -1628,49 +1622,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("target"u8))
-                {
-                    targetRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            targetRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("source"u8))
-                {
-                    sourceRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (targetRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
-            }
-
-            if (sourceRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
             }
 
 

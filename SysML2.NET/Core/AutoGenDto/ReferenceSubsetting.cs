@@ -280,7 +280,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("ISpecialization.Specific")]
+        [RedefinedByProperty("ISpecialization.Specific", IsDerivedByRedefinition = true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
@@ -300,7 +300,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674982_253967_43281", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        [RedefinedByProperty("ISubsetting.SubsettingFeature")]
+        [RedefinedByProperty("ISubsetting.SubsettingFeature", IsDerivedByRedefinition = true)]
         [Implements(implementation: "ISpecialization.Specific")]
         Guid Core.Types.ISpecialization.Specific
         {
@@ -332,7 +332,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674967_140305_43206", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
-        [RedefinedByProperty("IReferenceSubsetting.ReferencingFeature")]
+        [RedefinedByProperty("IReferenceSubsetting.ReferencingFeature", IsDerivedByRedefinition = true)]
         [Implements(implementation: "ISubsetting.SubsettingFeature")]
         Guid ISubsetting.SubsettingFeature
         {

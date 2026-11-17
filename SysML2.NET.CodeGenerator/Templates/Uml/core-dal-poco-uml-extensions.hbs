@@ -247,7 +247,9 @@ namespace SysML2.NET.Dal
                     {{> core-dal-poco-uml-partial-extensions property}}
                 {{/unless}}
                 {{#if (Property.IsSerializedRedefinition property class)}}
+                {{#unless (Property.HasDerivedValueIn property class)}}
                     {{ #Property.WriteRedefinedToDto property }}
+                {{/unless}}
                 {{/if}}
             {{/unless}}
             {{/unless}}

@@ -35,8 +35,6 @@ namespace SysML2.NET.Serializer.Json.Tests
     [TestFixture]
     public class JsonSerializeAndDeserializeTestFixture
     {
-        private static readonly bool[] IncludeDerivedPropertiesModes = [false, true];
-
         private DeSerializer deSerializer;
         private Serializer serializer;
 
@@ -95,10 +93,13 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void SerializeAndDeSerialize_WithPropertiesRedefinedByDerivedOnes_KeepsTheirValues()
+        public void SerializeAndDeSerialize_WithPropertiesRedefinedByDerivedOnes_ExchangesThemOnlyWithDerivedProperties()
         {
             var owningNamespace = Guid.NewGuid();
             var member = Guid.NewGuid();
+
+            var membership = new Membership { Id = Guid.NewGuid() };
+            ((IRelationship)membership).Target = [member];
 
             var owningMembership = new OwningMembership { Id = Guid.NewGuid() };
             ((IMembership)owningMembership).MemberElement = member;
@@ -120,36 +121,37 @@ namespace SysML2.NET.Serializer.Json.Tests
             var partUsage = new PartUsage { Id = Guid.NewGuid() };
             ((IFeature)partUsage).IsVariable = true;
 
-            List<IData> elements = [owningMembership, featureMembership, namespaceImport, connector, referenceSubsetting, partUsage];
+            List<IData> elements = [membership, owningMembership, featureMembership, namespaceImport, connector, referenceSubsetting, partUsage];
 
-            foreach (var includeDerivedProperties in IncludeDerivedPropertiesModes)
+            var withDerived = this.RoundTrip(elements, true);
+
+            using (Assert.EnterMultipleScope())
             {
-                var stream = new MemoryStream();
-                this.serializer.Serialize(elements, SerializationModeKind.JSON, includeDerivedProperties, stream, new JsonWriterOptions());
-                stream.Position = 0;
-
-                var roundTripped = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, includeDerivedProperties).ToDictionary(element => element.Id);
-
-                using (Assert.EnterMultipleScope())
-                {
-                    Assert.That(((IMembership)roundTripped[owningMembership.Id]).MemberElement, Is.EqualTo(member));
-                    Assert.That(((IMembership)roundTripped[owningMembership.Id]).MemberName, Is.EqualTo("Nested"));
-                    Assert.That(((IRelationship)roundTripped[owningMembership.Id]).Source, Is.EqualTo([owningNamespace]));
-                    Assert.That(((IMembership)roundTripped[featureMembership.Id]).MemberElement, Is.EqualTo(member));
-                    Assert.That(((IRelationship)roundTripped[namespaceImport.Id]).Source, Is.EqualTo([owningNamespace]));
-                    Assert.That(((IRelationship)roundTripped[connector.Id]).Target, Is.EqualTo([member, owningNamespace]));
-                    Assert.That(((ISubsetting)roundTripped[referenceSubsetting.Id]).SubsettingFeature, Is.EqualTo(member));
-                    Assert.That(((IFeature)roundTripped[partUsage.Id]).IsVariable, Is.True);
-                    Assert.That(elements.All(element => ComparerProvider.Resolve(element).Equals(element, (IData)roundTripped[element.Id])), Is.True);
-                }
+                Assert.That(((IRelationship)withDerived[membership.Id]).Target, Is.EqualTo([member]));
+                Assert.That(((IMembership)withDerived[owningMembership.Id]).MemberElement, Is.EqualTo(member));
+                Assert.That(((IMembership)withDerived[owningMembership.Id]).MemberName, Is.EqualTo("Nested"));
+                Assert.That(((IRelationship)withDerived[owningMembership.Id]).Source, Is.EqualTo([owningNamespace]));
+                Assert.That(((IMembership)withDerived[featureMembership.Id]).MemberElement, Is.EqualTo(member));
+                Assert.That(((IRelationship)withDerived[namespaceImport.Id]).Source, Is.EqualTo([owningNamespace]));
+                Assert.That(((IRelationship)withDerived[connector.Id]).Target, Is.EqualTo([member, owningNamespace]));
+                Assert.That(((ISubsetting)withDerived[referenceSubsetting.Id]).SubsettingFeature, Is.EqualTo(member));
+                Assert.That(((IFeature)withDerived[partUsage.Id]).IsVariable, Is.True);
+                Assert.That(elements.All(element => ComparerProvider.Resolve(element).Equals(element, withDerived[element.Id])), Is.True);
             }
 
-            var renamed = new OwningMembership { Id = owningMembership.Id };
-            ((IMembership)renamed).MemberElement = member;
-            ((IMembership)renamed).MemberName = "Renamed";
-            ((IRelationship)renamed).Source = [owningNamespace];
+            var withoutDerived = this.RoundTrip(elements, false);
 
-            Assert.That(ComparerProvider.Resolve(owningMembership).Equals(owningMembership, renamed), Is.False);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(((IRelationship)withoutDerived[membership.Id]).Target, Is.EqualTo([member]));
+                Assert.That(((IMembership)withoutDerived[owningMembership.Id]).MemberElement, Is.EqualTo(Guid.Empty));
+                Assert.That(((IMembership)withoutDerived[owningMembership.Id]).MemberName, Is.Null);
+                Assert.That(((IMembership)withoutDerived[featureMembership.Id]).MemberElement, Is.EqualTo(Guid.Empty));
+                Assert.That(((IRelationship)withoutDerived[connector.Id]).Target, Is.Empty);
+                Assert.That(((ISubsetting)withoutDerived[referenceSubsetting.Id]).SubsettingFeature, Is.EqualTo(Guid.Empty));
+                Assert.That(((IFeature)withoutDerived[partUsage.Id]).IsVariable, Is.False);
+                Assert.That(elements.All(element => ComparerProvider.Resolve(element).Equals(element, withoutDerived[element.Id])), Is.True);
+            }
         }
 
         [Test]
@@ -166,6 +168,15 @@ namespace SysML2.NET.Serializer.Json.Tests
             var membership = (IMembership)this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, true).Single();
 
             Assert.That(membership.MemberElement, Is.EqualTo(ownedMember));
+        }
+
+        private Dictionary<Guid, IData> RoundTrip(IEnumerable<IData> elements, bool includeDerivedProperties)
+        {
+            using var stream = new MemoryStream();
+            this.serializer.Serialize(elements, SerializationModeKind.JSON, includeDerivedProperties, stream, new JsonWriterOptions());
+            stream.Position = 0;
+
+            return this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, includeDerivedProperties).ToDictionary(element => element.Id, element => (IData)element);
         }
     }
 }

@@ -36,5 +36,13 @@ namespace SysML2.NET.Decorators
         /// Gets or sets the name of the property that is redefining this property
         /// </summary>
         public string PropertyName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the decorated property is derived in its class because its redefinition chain ends on a derived property
+        /// </summary>
+        /// <remarks>
+        /// The decorated property may be declared non-derived; a derived redefinition makes it derived, as SysML states for <c>Usage::mayTimeVary</c>.
+        /// </remarks>
+        public bool IsDerivedByRedefinition { get; set; }
     }
 }

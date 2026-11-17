@@ -107,8 +107,6 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.IsUnique != y.IsUnique) return false;
 
-            if (x.IsVariable != y.IsVariable) return false;
-
             if (x.IsVariation != y.IsVariation) return false;
 
             if (!GuidSequenceEquality.OrderedEqual(x.OwnedRelatedElement, y.OwnedRelatedElement)) return false;
@@ -120,10 +118,6 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
             if (x.OwningRelationship != y.OwningRelationship) return false;
 
             if (x.PortionKind != y.PortionKind) return false;
-
-            if (!GuidSequenceEquality.OrderedEqual(x.Source, y.Source)) return false;
-
-            if (!GuidSequenceEquality.OrderedEqual(x.Target, y.Target)) return false;
 
             return true;
         }

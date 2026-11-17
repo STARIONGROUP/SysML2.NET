@@ -849,21 +849,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelationshipSeen = false;
             var visibilitySeen = false;
 
-            var memberShortNameRedefinitionSeen = false;
-            string memberShortNameRedefinitionValue = null;
-
-            var memberElementRedefinitionSeen = false;
-            Guid? memberElementRedefinitionValue = null;
-
-            var memberNameRedefinitionSeen = false;
-            string memberNameRedefinitionValue = null;
-
-            var targetRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
-
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
@@ -1047,91 +1032,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("memberShortName"u8))
-                {
-                    memberShortNameRedefinitionSeen = true;
-                    reader.Read();
-                    memberShortNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("memberElement"u8))
-                {
-                    memberElementRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        memberElementRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("memberName"u8))
-                {
-                    memberNameRedefinitionSeen = true;
-                    reader.Read();
-                    memberNameRedefinitionValue = Utf8JsonReaderHelper.ReadStringOrNull(ref reader);
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("target"u8))
-                {
-                    targetRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            targetRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("source"u8))
-                {
-                    sourceRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (memberShortNameRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberShortName = memberShortNameRedefinitionValue;
-            }
-
-            if (memberElementRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberElement = (memberElementRedefinitionValue ?? Guid.Empty);
-            }
-
-            if (memberNameRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)dtoInstance).MemberName = memberNameRedefinitionValue;
-            }
-
-            if (targetRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
-            }
-
-            if (sourceRedefinitionSeen)
-            {
-                ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
             }
 
 

@@ -2920,9 +2920,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var portionKindSeen = false;
             var reqIdSeen = false;
 
-            var isVariableRedefinitionSeen = false;
-            bool? isVariableRedefinitionValue = null;
-
             var declaredShortNameRedefinitionSeen = false;
             string declaredShortNameRedefinitionValue = null;
 
@@ -3227,14 +3224,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("isVariable"u8))
-                {
-                    isVariableRedefinitionSeen = true;
-                    reader.Read();
-                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("declaredShortName"u8))
                 {
                     declaredShortNameRedefinitionSeen = true;
@@ -3246,11 +3235,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
-            {
-                ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
             }
 
             if (declaredShortNameRedefinitionSeen)

@@ -109,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{#unless this.IsDerived}}
                 {{#unless this.IsTransient}}
                     {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
+                    {{#unless (Property.HasDerivedValueIn property class)}}
                         {{#withPropertyClassContext property class}}
                             {{> core-json-dto-serializer-uml-partial-template this}}
                         {{/withPropertyClassContext}}
+                    {{/unless}}
                     {{/unless}}
                 {{/unless}}
             {{/unless}}
