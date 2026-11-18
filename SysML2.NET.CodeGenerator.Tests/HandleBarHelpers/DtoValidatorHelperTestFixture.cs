@@ -15,6 +15,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using System.Text.RegularExpressions;
 
     using HandlebarsDotNet;
+    using HandlebarsDotNet.Helpers;
 
     using NUnit.Framework;
 
@@ -122,6 +123,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             Assert.That(() => ((IHandlebars)null).RegisterDtoValidatorHelper(), Throws.TypeOf<ArgumentNullException>());
 
             var handlebars = Handlebars.CreateSharedEnvironment();
+            HandlebarsHelpers.Register(handlebars);
             handlebars.RegisterDtoValidatorHelper();
 
             var template = handlebars.Compile("{{DtoValidator.WriteRules this}}");
