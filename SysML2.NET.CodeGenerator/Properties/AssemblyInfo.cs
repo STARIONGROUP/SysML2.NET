@@ -8,5 +8,7 @@
 // ------------------------------------------------------------------------------------------------
 
 using System;
+using System.Runtime.CompilerServices;
 
 [assembly: CLSCompliant(false)]
+[assembly: InternalsVisibleTo("SysML2.NET.CodeGenerator.Tests")]
