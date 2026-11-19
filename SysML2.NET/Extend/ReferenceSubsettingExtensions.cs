@@ -13,7 +13,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="ReferenceSubsettingExtensions" /> class provides extensions methods for
@@ -34,9 +33,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="referenceSubsettingSubject" /> is null.
         /// </exception>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when the owning related element is null or is not an <see cref="IFeature" />.
-        /// </exception>
         [DerivedProperty(name: nameof(IReferenceSubsetting.referencingFeature))]
         internal static IFeature ComputeReferencingFeature(this IReferenceSubsetting referenceSubsettingSubject)
         {
@@ -45,9 +41,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(referenceSubsettingSubject));
             }
 
-            return referenceSubsettingSubject.OwningRelatedElement as IFeature
-                   ?? throw new IncompleteModelException(
-                       $"{nameof(referenceSubsettingSubject)} must have an owning related element of type {nameof(IFeature)}");
+            return referenceSubsettingSubject.OwningRelatedElement as IFeature;
         }
     }
 }

@@ -17,7 +17,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -30,10 +29,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((ISubjectMembership)null).ComputeOwnedSubjectParameter(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var subjectMembership = new SubjectMembership();
 
-            Assert.That(() => subjectMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(subjectMembership.ComputeOwnedSubjectParameter(), Is.Null);
 
             // Single IUsage wired via the public API → returned.
             var owningType = new Type();
@@ -43,7 +41,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subjectMembership.ComputeOwnedSubjectParameter(), Is.SameAs(subjectUsage));
 
-            // Two IUsages in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoUsageMembership = new SubjectMembership();
             var firstUsage = new Usage();
             var secondUsage = new Usage();
@@ -51,7 +48,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoUsageMembership).OwnedRelatedElement.Add(firstUsage);
             ((IContainedRelationship)twoUsageMembership).OwnedRelatedElement.Add(secondUsage);
 
-            Assert.That(() => twoUsageMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoUsageMembership.ComputeOwnedSubjectParameter(), Is.SameAs(firstUsage));
 
             // Mixed-type owned related elements: exactly one IUsage alongside a non-IUsage (Namespace).
             // The OfType<IUsage>() projection MUST pick out the IUsage regardless of its position
@@ -65,14 +62,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(mixedMembership.ComputeOwnedSubjectParameter(), Is.SameAs(mixedUsage));
 
-            // OwnedRelatedElement populated with non-IUsage element(s) only → no IUsage match:
-            // [1..1] violation, throws IncompleteModelException.
             var nonUsageMembership = new SubjectMembership();
             var nonUsageElement = new Namespace();
 
             ((IContainedRelationship)nonUsageMembership).OwnedRelatedElement.Add(nonUsageElement);
 
-            Assert.That(() => nonUsageMembership.ComputeOwnedSubjectParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonUsageMembership.ComputeOwnedSubjectParameter(), Is.Null);
         }
     }
 }

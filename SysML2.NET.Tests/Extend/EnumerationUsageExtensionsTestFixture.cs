@@ -15,7 +15,6 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Enumerations;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -26,10 +25,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IEnumerationUsage)null).ComputeEnumerationDefinition(), Throws.TypeOf<ArgumentNullException>());
 
-            // [1..1] lower-bound violation: no EnumerationDefinition typing → IncompleteModelException.
             var subjectNoTyping = new EnumerationUsage();
 
-            Assert.That(subjectNoTyping.ComputeEnumerationDefinition, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(subjectNoTyping.ComputeEnumerationDefinition(), Is.Null);
 
             // Populated: exactly one FeatureTyping whose Type is an EnumerationDefinition → returned.
             var subjectOneTyping = new EnumerationUsage();
@@ -38,12 +36,9 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subjectOneTyping.ComputeEnumerationDefinition(), Is.SameAs(enumerationDefinition));
 
-            // [1..1] upper-bound violation: two EnumerationDefinition typings → MultiplicityViolationException.
-            var subjectTwoTypings = new EnumerationUsage();
-            subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = new EnumerationDefinition() });
-            subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = new EnumerationDefinition() });
+            subjectOneTyping.AssignOwnership(new FeatureTyping { Type = new EnumerationDefinition() });
 
-            Assert.That(subjectTwoTypings.ComputeEnumerationDefinition, Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(subjectOneTyping.ComputeEnumerationDefinition(), Is.SameAs(enumerationDefinition));
         }
     }
 }

@@ -14,7 +14,6 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="DocumentationExtensions"/> class provides extensions methods for
@@ -45,9 +44,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
                 throw new ArgumentNullException(nameof(documentationSubject));
             }
 
-            return documentationSubject.owner
-                   ?? throw new IncompleteModelException(
-                       $"{nameof(documentationSubject)} must have an owner (its documentedElement)");
+            return documentationSubject.owner;
         }
 
     }

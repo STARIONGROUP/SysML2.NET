@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -23,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ActorMembershipExtensions"/> class provides extensions methods for
@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(actorMembershipSubject));
             }
 
-            return actorMembershipSubject.OwnedRelatedElement.SingleStrict<IPartUsage>(nameof(actorMembershipSubject));
+            return actorMembershipSubject.OwnedRelatedElement.OfType<IPartUsage>().FirstOrDefault();
         }
 
     }

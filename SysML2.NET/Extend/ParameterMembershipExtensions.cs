@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -21,7 +22,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ParameterMembershipExtensions"/> class provides extensions methods for
@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
                 throw new ArgumentNullException(nameof(parameterMembershipSubject));
             }
 
-            return parameterMembershipSubject.OwnedRelatedElement.SingleStrict<IFeature>(nameof(parameterMembershipSubject));
+            return parameterMembershipSubject.OwnedRelatedElement.OfType<IFeature>().FirstOrDefault();
         }
 
         /// <summary>

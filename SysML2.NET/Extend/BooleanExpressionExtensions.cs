@@ -15,8 +15,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="BooleanExpressionExtensions" /> class provides extensions methods for
@@ -37,16 +35,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="booleanExpressionSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IType"/> on the subject is an
-        /// <see cref="IPredicate"/> (upper-bound violation against the derived <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IBooleanExpression.predicate))]
         internal static IPredicate ComputePredicate(this IBooleanExpression booleanExpressionSubject)
         {
             return booleanExpressionSubject == null
                 ? throw new ArgumentNullException(nameof(booleanExpressionSubject))
-                : booleanExpressionSubject.type.SingleOrDefaultStrict<IPredicate>(nameof(booleanExpressionSubject));
+                : booleanExpressionSubject.type.OfType<IPredicate>().FirstOrDefault();
         }
     }
 }

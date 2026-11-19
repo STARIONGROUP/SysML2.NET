@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -31,7 +30,7 @@ namespace SysML2.NET.Tests.Extend
 
             var emptyDifferencing = new Differencing();
 
-            Assert.That(emptyDifferencing.ComputeTypeDifferenced, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyDifferencing.ComputeTypeDifferenced(), Is.Null);
 
             var owningType = new Type();
             var differencing = new Differencing();
@@ -45,7 +44,7 @@ namespace SysML2.NET.Tests.Extend
 
             ((IContainedRelationship)nonTypeDifferencing).OwningRelatedElement = nonTypeOwner;
 
-            Assert.That(nonTypeDifferencing.ComputeTypeDifferenced, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonTypeDifferencing.ComputeTypeDifferenced(), Is.Null);
         }
     }
 }

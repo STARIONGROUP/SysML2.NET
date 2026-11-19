@@ -16,7 +16,6 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.Root.Namespaces;
-    using SysML2.NET.Extensions;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -46,7 +45,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
                 throw new ArgumentNullException(nameof(viewRenderingMembershipSubject));
             }
 
-            return viewRenderingMembershipSubject.OwnedRelatedElement.SingleStrict<IRenderingUsage>(nameof(viewRenderingMembershipSubject));
+            return viewRenderingMembershipSubject.OwnedRelatedElement.OfType<IRenderingUsage>().FirstOrDefault();
         }
 
         /// <summary>

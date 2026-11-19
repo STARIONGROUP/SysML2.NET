@@ -10,11 +10,11 @@
 namespace SysML2.NET.Core.POCO.Systems.Cases
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ObjectiveMembershipExtensions" /> class provides extensions methods for
@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
                 throw new ArgumentNullException(nameof(objectiveMembershipSubject));
             }
 
-            return objectiveMembershipSubject.OwnedRelatedElement.SingleStrict<IRequirementUsage>(nameof(objectiveMembershipSubject));
+            return objectiveMembershipSubject.OwnedRelatedElement.OfType<IRequirementUsage>().FirstOrDefault();
         }
     }
 }

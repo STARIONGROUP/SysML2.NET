@@ -18,7 +18,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -51,10 +50,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeatureValue)null).ComputeValue(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyFeatureValue = new FeatureValue();
 
-            Assert.That(() => emptyFeatureValue.ComputeValue(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyFeatureValue.ComputeValue(), Is.Null);
 
             // Single IExpression wired via the public API → returned.
             var feature = new Feature();
@@ -65,7 +63,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(featureValue.ComputeValue(), Is.SameAs(literalBoolean));
 
-            // Two IExpressions in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoExprFeatureValue = new FeatureValue();
             var firstExpression = new LiteralBoolean();
             var secondExpression = new LiteralBoolean();
@@ -73,7 +70,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoExprFeatureValue).OwnedRelatedElement.Add(firstExpression);
             ((IContainedRelationship)twoExprFeatureValue).OwnedRelatedElement.Add(secondExpression);
 
-            Assert.That(() => twoExprFeatureValue.ComputeValue(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoExprFeatureValue.ComputeValue(), Is.SameAs(firstExpression));
 
             // Mixed-type owned related elements: exactly one IExpression alongside a non-IExpression (Namespace).
             // The OfType<IExpression>() projection MUST pick out the IExpression regardless of its position
@@ -87,14 +84,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(mixedFeatureValue.ComputeValue(), Is.SameAs(mixedExpression));
 
-            // OwnedRelatedElement populated with non-IExpression element(s) only → no IExpression match:
-            // [1..1] violation, throws IncompleteModelException.
             var nonExprFeatureValue = new FeatureValue();
             var nonExprElement = new Namespace();
 
             ((IContainedRelationship)nonExprFeatureValue).OwnedRelatedElement.Add(nonExprElement);
 
-            Assert.That(() => nonExprFeatureValue.ComputeValue(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonExprFeatureValue.ComputeValue(), Is.Null);
         }
     }
 }

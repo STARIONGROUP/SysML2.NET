@@ -16,8 +16,6 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="VerificationCaseUsageExtensions" /> class provides extensions methods for
@@ -39,17 +37,12 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="verificationCaseUsageSubject" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping" /> targets an
-        /// <see cref="IVerificationCaseDefinition" /> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(nameof(IVerificationCaseUsage.verificationCaseDefinition))]
         internal static IVerificationCaseDefinition ComputeVerificationCaseDefinition(this IVerificationCaseUsage verificationCaseUsageSubject)
         {
             return verificationCaseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(verificationCaseUsageSubject))
-                : verificationCaseUsageSubject.ComputeType().SingleOrDefaultStrict<IVerificationCaseDefinition>(nameof(verificationCaseUsageSubject));
+                : verificationCaseUsageSubject.ComputeType().OfType<IVerificationCaseDefinition>().FirstOrDefault();
         }
 
         /// <summary>

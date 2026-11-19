@@ -13,7 +13,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="UnioningExtensions" /> class provides extensions methods for
@@ -38,9 +37,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(unioningSubject));
             }
 
-            return unioningSubject.OwningRelatedElement as IType
-                   ?? throw new IncompleteModelException(
-                       $"{nameof(unioningSubject)} must have an owning related element of type {nameof(IType)}");
+            return unioningSubject.OwningRelatedElement as IType;
         }
     }
 }

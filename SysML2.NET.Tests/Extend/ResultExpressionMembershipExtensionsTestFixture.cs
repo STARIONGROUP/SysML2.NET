@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Expressions;
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -29,10 +28,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IResultExpressionMembership)null).ComputeOwnedResultExpression(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyMembership = new ResultExpressionMembership();
 
-            Assert.That(() => emptyMembership.ComputeOwnedResultExpression(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedResultExpression(), Is.Null);
 
             // Single IExpression wired via the public API → returned.
             var owningType = new Type();
@@ -43,7 +41,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(resultExpressionMembership.ComputeOwnedResultExpression(), Is.SameAs(literalBoolean));
 
-            // Two IExpressions in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoExprMembership = new ResultExpressionMembership();
             var firstExpression = new LiteralBoolean();
             var secondExpression = new LiteralBoolean();
@@ -51,7 +48,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoExprMembership).OwnedRelatedElement.Add(firstExpression);
             ((IContainedRelationship)twoExprMembership).OwnedRelatedElement.Add(secondExpression);
 
-            Assert.That(() => twoExprMembership.ComputeOwnedResultExpression(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoExprMembership.ComputeOwnedResultExpression(), Is.SameAs(firstExpression));
 
             // Mixed-type owned related elements: exactly one IExpression alongside a non-IExpression (Type).
             // The OfType<IExpression>() projection MUST pick out the IExpression regardless of its position
@@ -65,14 +62,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(mixedMembership.ComputeOwnedResultExpression(), Is.SameAs(mixedExpression));
 
-            // OwnedRelatedElement populated with non-IExpression element(s) only → no IExpression match:
-            // [1..1] violation, throws IncompleteModelException.
             var nonExprMembership = new ResultExpressionMembership();
             var nonExprElement = new Type();
 
             ((IContainedRelationship)nonExprMembership).OwnedRelatedElement.Add(nonExprElement);
 
-            Assert.That(() => nonExprMembership.ComputeOwnedResultExpression(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonExprMembership.ComputeOwnedResultExpression(), Is.Null);
         }
     }
 }

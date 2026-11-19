@@ -19,7 +19,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -30,17 +29,15 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IRequirementVerificationMembership)null).ComputeOwnedRequirement(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyMembership = new RequirementVerificationMembership();
 
-            Assert.That(() => emptyMembership.ComputeOwnedRequirement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedRequirement(), Is.Null);
 
-            // Single non-IRequirementUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var nonRequirementMembership = new RequirementVerificationMembership();
             var nonRequirementElement = new Namespace();
             ((IContainedRelationship)nonRequirementMembership).OwnedRelatedElement.Add(nonRequirementElement);
 
-            Assert.That(() => nonRequirementMembership.ComputeOwnedRequirement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonRequirementMembership.ComputeOwnedRequirement(), Is.Null);
 
             // Single IRequirementUsage wired via the public API → returned.
             // RequirementVerificationMembership is a FeatureMembership (via RequirementConstraintMembership)
@@ -53,14 +50,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(membership.ComputeOwnedRequirement(), Is.SameAs(requirementUsage));
 
-            // Two IRequirementUsage in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoRequirementMembership = new RequirementVerificationMembership();
             var firstReq = new RequirementUsage();
             var secondReq = new RequirementUsage();
             ((IContainedRelationship)twoRequirementMembership).OwnedRelatedElement.Add(firstReq);
             ((IContainedRelationship)twoRequirementMembership).OwnedRelatedElement.Add(secondReq);
 
-            Assert.That(() => twoRequirementMembership.ComputeOwnedRequirement(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoRequirementMembership.ComputeOwnedRequirement(), Is.SameAs(firstReq));
 
             // Mixed: non-IRequirementUsage (Namespace) alongside a single IRequirementUsage —
             // the type filter picks out the RequirementUsage regardless of its position.
@@ -78,10 +74,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IRequirementVerificationMembership)null).ComputeVerifiedRequirement(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty ownedRequirement → propagates IncompleteModelException from ownedRequirement's [1..1] guard.
             var emptyMembership = new RequirementVerificationMembership();
 
-            Assert.That(() => emptyMembership.ComputeVerifiedRequirement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeVerifiedRequirement(), Is.Null);
 
             // Populated, no ownedReferenceSubsetting on the ownedRequirement → referencedFeatureTarget is null
             // → returns ownedRequirement itself.

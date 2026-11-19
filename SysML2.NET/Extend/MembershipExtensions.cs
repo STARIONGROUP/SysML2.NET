@@ -14,7 +14,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
 
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="MembershipExtensions" /> class provides extensions methods for
@@ -36,7 +35,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         {
             return membershipSubject == null
                 ? throw new ArgumentNullException(nameof(membershipSubject))
-                : membershipSubject.MemberElement.ElementId;
+                : membershipSubject.MemberElement?.ElementId;
         }
 
         /// <summary>
@@ -48,9 +47,6 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// <returns>
         /// the computed result
         /// </returns>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when the owning related element is null or is not an <see cref="INamespace" />.
-        /// </exception>
         [DerivedProperty(nameof(IMembership.membershipOwningNamespace))]
         internal static INamespace ComputeMembershipOwningNamespace(this IMembership membershipSubject)
         {
@@ -59,9 +55,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(membershipSubject));
             }
 
-            return membershipSubject.OwningRelatedElement as INamespace
-                   ?? throw new IncompleteModelException(
-                       $"{nameof(membershipSubject)} must have an owning related element of type {nameof(INamespace)}");
+            return membershipSubject.OwningRelatedElement as INamespace;
         }
 
         /// <summary>

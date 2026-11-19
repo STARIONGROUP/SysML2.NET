@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
 
     [TestFixture]
     public class FeatureChainingExtensionsTestFixture
@@ -28,7 +27,7 @@ namespace SysML2.NET.Tests.Extend
 
             var featureChaining = new FeatureChaining();
 
-            Assert.That(featureChaining.ComputeFeatureChained, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(featureChaining.ComputeFeatureChained(), Is.Null);
 
             var feature = new Feature();
 
@@ -41,7 +40,7 @@ namespace SysML2.NET.Tests.Extend
 
             ((IContainedRelationship)nonFeatureChaining).OwningRelatedElement = nonFeatureOwner;
 
-            Assert.That(nonFeatureChaining.ComputeFeatureChained, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonFeatureChaining.ComputeFeatureChained(), Is.Null);
         }
     }
 }

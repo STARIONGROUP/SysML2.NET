@@ -227,27 +227,18 @@ XML docs remain required on every type and member (`DEVELOPMENT_STANDARDS.md` §
 - Blank line on both sides of every braced block (`if`, `while`, `foreach`, `switch`, `using`, `try`/`catch`, `lock`, `do…while`) — except at the very start/end of a method body, and between a `}` and a continuation keyword of the same control flow.
 - **One `[Test]` per class/method-under-test** packing every scenario into multiple `Assert.That` calls (`TESTING.md` §2). Split only when a scenario has a genuinely distinct, complex setup.
 
-### Deriving `[0..1]` / `[1..1]` properties from `[0..*]` storage
+### Derivations never throw because of model state
 
-`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` are **always `[0..*]` storage**. The `[1..1]` / `[0..1]` multiplicities in the metamodel belong to *derived*/*redefined* properties (`OwningMembership::ownedMemberElement`, `FeatureMembership::ownedMemberFeature`, …). **Project from the collection — never index positionally.** Use the shared helpers in `SysML2.NET/Extensions/ElementExtensions.cs` (all early-exit on the second match):
+A model read from elsewhere is routinely incomplete or over-populated, so a `Compute*` derivation always returns a value (issue #340); conformance violations are reported by POCO validation (#451), not by the derivation:
 
-- **`SingleStrict<T>`** — `[1..1]`: empty → `IncompleteModelException`; one → return; 2+ → `MultiplicityViolationException`.
-- **`SingleOrDefaultStrict<T>`** — `[0..1]`: empty → `null`; one → return; 2+ → `MultiplicityViolationException`.
+- `[1..1]` or `[0..1]` with nothing to derive → `null`; with 2+ candidates → the first.
+- Collections → what is there, **never containing `null`**: a projection through a single-valued reference (`.Select(x => x.Target)`) is followed by `.Where(target => target != null)`.
+- Every navigation of a possibly-absent reference is null-safe (`?.`, a guard, a pattern), and `null` propagates to the result.
+- `ArgumentNullException` on a null *subject* stays — that is a caller error, not model state.
 
-Each has a homogeneous overload (`IEnumerable<T>`) and a heterogeneous one (`IEnumerable`, bundling an `OfType<TResult>()` filter).
+`IRelationship.OwnedRelatedElement` and `IElement.OwnedRelationship` are `[0..*]` storage; the `[1..1]` / `[0..1]` multiplicities belong to the derived/redefined properties (`OwningMembership::ownedMemberElement`, …). Project from the collection with `OfType<T>().FirstOrDefault()` — never `.Count != 1` plus `OwnedRelatedElement[0] as T`, since a Membership can carry annotation targets alongside the member element.
 
 ```csharp
-return subject.OwnedRelatedElement.SingleStrict<ITargetType>(nameof(subject));            // [1..1] type-narrowed
-return subject.OwnedRelatedElement.SingleStrict<IElement>(nameof(subject));               // [1..1] non-narrowing
-return subject.type.SingleOrDefaultStrict<IPredicate>(nameof(subject));                   // [0..1] type-narrowed
-return subject.OwnedRelationship.OfType<ISomeRelationship>()
-              .Select(r => r.something).SingleOrDefaultStrict(nameof(subject));           // [0..1] multi-hop
+return subject.OwnedRelatedElement.OfType<ITargetType>().FirstOrDefault();
+return subject.type.OfType<IPredicate>().FirstOrDefault();
 ```
-
-Pick the helper from the `[Property(lowerValue:…, upperValue:…)]` attribute on the generated POCO interface. Strictness applies **only to the final filter** of the chain — intermediate `OfType<…>()` hops may legitimately match many.
-
-**OCL gate (overrides the `[0..1]` rule):** when the OCL body explicitly elects the first of many (`->first()`, `->at(1)`), the contract is "pick the first" — keep `FirstOrDefault`. Strict `[0..1]` applies only when the OCL has no first-picking call, or has no body at all.
-
-`IncompleteModelException` (lower-bound: required element missing) and `MultiplicityViolationException` (upper-bound: too many) are the loud signals that a model is malformed. Do not swallow them as `null` when the multiplicity demands a throw, and do not raise them for the empty case of a legitimately-optional `[0..1]`.
-
-Never use `.Count != 1 → throw` plus `OwnedRelatedElement[0] as ITargetType`: a Membership can carry annotation targets alongside the member element, so the correctly-typed element need not sit at index 0.

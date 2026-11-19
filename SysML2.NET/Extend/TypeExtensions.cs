@@ -146,7 +146,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 ? throw new ArgumentNullException(nameof(typeSubject))
                 : [..typeSubject.ownedFeatureMembership.Union(typeSubject.inheritedMembership
                     .OfType<IFeatureMembership>()
-                    .Where(featureMembership => typeSubject.Specializes(featureMembership.owningType)))];
+                    .Where(featureMembership => featureMembership.owningType != null && typeSubject.Specializes(featureMembership.owningType)))];
         }
 
         /// <summary>

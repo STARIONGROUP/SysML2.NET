@@ -20,8 +20,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using SysML2.NET.Core.POCO.Kernel.FeatureValues;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ExpressionExtensions" /> class provides extensions methods for
@@ -42,16 +40,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="expressionSubject" /> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IType" /> on the subject is an <see cref="IFunction" />
-        /// (upper-bound violation against the derived <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(nameof(IExpression.function))]
         internal static IFunction ComputeFunction(this IExpression expressionSubject)
         {
             return expressionSubject == null
                 ? throw new ArgumentNullException(nameof(expressionSubject))
-                : expressionSubject.type.SingleOrDefaultStrict<IFunction>(nameof(expressionSubject));
+                : expressionSubject.type.OfType<IFunction>().FirstOrDefault();
         }
 
         /// <summary>
@@ -224,6 +218,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
             var resultExprs = expressionSubject.ownedFeatureMembership
                 .OfType<IResultExpressionMembership>()
                 .Select(resultExpressionMembership => resultExpressionMembership.ownedResultExpression)
+                .Where(resultExpression => resultExpression != null)
                 .ToList();
 
             return resultExprs.Count == 0

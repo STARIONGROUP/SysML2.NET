@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -19,7 +20,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="FeatureMembershipExtensions"/> class provides extensions methods for
@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(featureMembershipSubject));
             }
 
-            return featureMembershipSubject.OwnedRelatedElement.SingleStrict<IFeature>(nameof(featureMembershipSubject));
+            return featureMembershipSubject.OwnedRelatedElement.OfType<IFeature>().FirstOrDefault();
         }
 
         /// <summary>

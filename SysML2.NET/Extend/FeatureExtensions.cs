@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         {
             return featureSubject == null
                 ? throw new ArgumentNullException(nameof(featureSubject))
-                : [..featureSubject.OwnedRelationship.OfType<IFeatureChaining>().Select(fc => fc.ChainingFeature)];
+                : [..featureSubject.OwnedRelationship.OfType<IFeatureChaining>().Select(fc => fc.ChainingFeature).Where(chainingFeature => chainingFeature != null)];
         }
 
         /// <summary>
@@ -182,12 +182,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 .OfType<ITypeFeaturing>()
                 .Where(typeFeaturing => ReferenceEquals(typeFeaturing.FeatureOfType, featureSubject))
                 .Select(typeFeaturing => typeFeaturing.FeaturingType)
+                .Where(featuringType => featuringType != null)
                 .Distinct()
                 .ToList();
 
             var chainingFeatures = featureSubject.OwnedRelationship
                 .OfType<IFeatureChaining>()
                 .Select(featureChaining => featureChaining.ChainingFeature)
+                .Where(chainingFeature => chainingFeature != null)
                 .ToList();
 
             if (chainingFeatures.Count > 0)

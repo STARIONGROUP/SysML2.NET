@@ -55,16 +55,18 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
                 throw new ArgumentNullException(nameof(membershipImportSubject));
             }
 
+            List<IMembership> importedMembership = membershipImportSubject.ImportedMembership == null ? [] : [membershipImportSubject.ImportedMembership];
+
             if (!membershipImportSubject.IsRecursive
                 || membershipImportSubject.importedElement is not INamespace importedNamespace
                 || (excluded != null && excluded.Contains(importedNamespace)))
             {
-                return [membershipImportSubject.ImportedMembership];
+                return importedMembership;
             }
 
             var visibleMemberships = importedNamespace.VisibleMemberships(excluded, true, membershipImportSubject.IsImportAll);
 
-            return [membershipImportSubject.ImportedMembership, .. visibleMemberships];
+            return [.. importedMembership, .. visibleMemberships];
         }
     }
 }

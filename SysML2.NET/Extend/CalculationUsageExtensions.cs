@@ -48,8 +48,6 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="CalculationUsageExtensions"/> class provides extensions methods for
@@ -71,16 +69,12 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="calculationUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an <see cref="IFunction"/>
-        /// (upper-bound violation against the derived <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(ICalculationUsage.calculationDefinition))]
         internal static IFunction ComputeCalculationDefinition(this ICalculationUsage calculationUsageSubject)
         {
             return calculationUsageSubject == null
                 ? throw new ArgumentNullException(nameof(calculationUsageSubject))
-                : FeatureExtensions.ComputeType(calculationUsageSubject).SingleOrDefaultStrict<IFunction>(nameof(calculationUsageSubject));
+                : FeatureExtensions.ComputeType(calculationUsageSubject).OfType<IFunction>().FirstOrDefault();
         }
 
         /// <summary>

@@ -10,11 +10,10 @@
 namespace SysML2.NET.Core.POCO.Systems.Ports
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ConjugatedPortDefinitionExtensions" /> class provides extensions methods for
@@ -39,9 +38,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
                 throw new ArgumentNullException(nameof(conjugatedPortDefinitionSubject));
             }
 
-            return conjugatedPortDefinitionSubject.owningMembership?.membershipOwningNamespace as IPortDefinition
-                   ?? throw new IncompleteModelException(
-                       $"{nameof(conjugatedPortDefinitionSubject)} must have an owning namespace of type {nameof(IPortDefinition)}");
+            return conjugatedPortDefinitionSubject.owningMembership?.membershipOwningNamespace as IPortDefinition;
         }
 
         /// <summary>
@@ -61,8 +58,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
                 throw new ArgumentNullException(nameof(conjugatedPortDefinitionSubject));
             }
 
-            return conjugatedPortDefinitionSubject.OwnedRelationship
-                .SingleStrict<IPortConjugation>(nameof(conjugatedPortDefinitionSubject));
+            return conjugatedPortDefinitionSubject.OwnedRelationship.OfType<IPortConjugation>().FirstOrDefault();
         }
 
         /// <summary>
@@ -92,7 +88,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
                 throw new ArgumentNullException(nameof(conjugatedPortDefinitionSubject));
             }
 
-            var originalName = conjugatedPortDefinitionSubject.originalPortDefinition.name;
+            var originalName = conjugatedPortDefinitionSubject.originalPortDefinition?.name;
 
             return originalName is null
                 ? null

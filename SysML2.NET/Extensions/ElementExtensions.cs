@@ -17,7 +17,6 @@ namespace SysML2.NET.Extensions
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// Extension methods for the <see cref="IElement"/> interface
@@ -253,90 +252,6 @@ namespace SysML2.NET.Extensions
         {
             Attach(((IContainedElement)owner).OwnedRelationship, relationship, index);
         }
-
-        /// <summary>
-        /// Returns the single element of <paramref name="source"/>, for a derived <c>[1..1]</c> property.
-        /// </summary>
-        /// <typeparam name="T">The element type</typeparam>
-        /// <param name="source">The candidate matches</param>
-        /// <param name="subjectName">The subject name used in the exception messages</param>
-        /// <returns>The single element</returns>
-        /// <exception cref="IncompleteModelException">If <paramref name="source"/> is empty</exception>
-        /// <exception cref="MultiplicityViolationException">If <paramref name="source"/> holds more than one element</exception>
-        internal static T SingleStrict<T>(this IEnumerable<T> source, string subjectName)
-            where T : class
-        {
-            T found = null;
-
-            foreach (var item in source)
-            {
-                if (found is not null)
-                {
-                    throw new MultiplicityViolationException($"{subjectName} contains more than one element of type {typeof(T).Name}");
-                }
-
-                found = item;
-            }
-
-            return found ?? throw new IncompleteModelException($"{subjectName} must have an element of type {typeof(T).Name}");
-        }
-
-        /// <summary>
-        /// Returns the single element of type <typeparamref name="TResult"/> in <paramref name="source"/>, for a derived <c>[1..1]</c> property.
-        /// </summary>
-        /// <typeparam name="TResult">The type to filter on</typeparam>
-        /// <param name="source">The candidate matches</param>
-        /// <param name="subjectName">The subject name used in the exception messages</param>
-        /// <returns>The single element of type <typeparamref name="TResult"/></returns>
-        /// <exception cref="IncompleteModelException">If no element of type <typeparamref name="TResult"/> is present</exception>
-        /// <exception cref="MultiplicityViolationException">If more than one element of type <typeparamref name="TResult"/> is present</exception>
-        internal static TResult SingleStrict<TResult>(this System.Collections.IEnumerable source, string subjectName)
-            where TResult : class
-            => source.OfType<TResult>().SingleStrict(subjectName);
-
-        /// <summary>
-        /// Returns the element of <paramref name="source"/>, if any, for a derived <c>[0..1]</c> property.
-        /// </summary>
-        /// <typeparam name="T">The element type</typeparam>
-        /// <param name="source">The candidate matches</param>
-        /// <param name="subjectName">The subject name used in the exception message</param>
-        /// <returns>The single element, or <c>null</c> when <paramref name="source"/> is empty</returns>
-        /// <exception cref="MultiplicityViolationException">If <paramref name="source"/> holds more than one element</exception>
-        /// <remarks>
-        /// Not for an OCL derivation that elects the first of many (<c>->first()</c>, <c>->at(1)</c>); keep <c>FirstOrDefault</c> there.
-        /// </remarks>
-        internal static T SingleOrDefaultStrict<T>(this IEnumerable<T> source, string subjectName)
-            where T : class
-        {
-            T found = null;
-
-            foreach (var item in source)
-            {
-                if (found is not null)
-                {
-                    throw new MultiplicityViolationException($"{subjectName} contains more than one element of type {typeof(T).Name}");
-                }
-
-                found = item;
-            }
-
-            return found;
-        }
-
-        /// <summary>
-        /// Returns the element of type <typeparamref name="TResult"/> in <paramref name="source"/>, if any, for a derived <c>[0..1]</c> property.
-        /// </summary>
-        /// <typeparam name="TResult">The type to filter on</typeparam>
-        /// <param name="source">The candidate matches</param>
-        /// <param name="subjectName">The subject name used in the exception message</param>
-        /// <returns>The single element of type <typeparamref name="TResult"/>, or <c>null</c> when there is none</returns>
-        /// <exception cref="MultiplicityViolationException">If more than one element of type <typeparamref name="TResult"/> is present</exception>
-        /// <remarks>
-        /// Not for an OCL derivation that elects the first of many (<c>->first()</c>, <c>->at(1)</c>); keep <c>FirstOrDefault</c> there.
-        /// </remarks>
-        internal static TResult SingleOrDefaultStrict<TResult>(this System.Collections.IEnumerable source, string subjectName)
-            where TResult : class
-            => source.OfType<TResult>().SingleOrDefaultStrict(subjectName);
 
         /// <summary>
         /// Makes the owned related elements of the <paramref name="owner"/> exactly the <paramref name="orderedElements"/>, without checking the containment rules.

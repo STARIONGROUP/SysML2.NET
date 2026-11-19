@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -22,7 +23,6 @@ namespace SysML2.NET.Core.POCO.Systems.States
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="TransitionFeatureMembershipExtensions"/> class provides extensions methods for
@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
                 throw new ArgumentNullException(nameof(transitionFeatureMembershipSubject));
             }
 
-            return transitionFeatureMembershipSubject.OwnedRelatedElement.SingleStrict<IStep>(nameof(transitionFeatureMembershipSubject));
+            return transitionFeatureMembershipSubject.OwnedRelatedElement.OfType<IStep>().FirstOrDefault();
         }
     }
 }

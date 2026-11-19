@@ -19,7 +19,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -46,10 +45,9 @@ namespace SysML2.NET.Tests.Extend
             constraintUsage.AssignOwnership(new FeatureTyping { Type = constraintDefinition });
             Assert.That(constraintUsage.ComputeConstraintDefinition(), Is.SameAs(constraintDefinition));
 
-            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
             var secondConstraintDefinition = new ConstraintDefinition();
             constraintUsage.AssignOwnership(new FeatureTyping { Type = secondConstraintDefinition });
-            Assert.That(() => constraintUsage.ComputeConstraintDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(constraintUsage.ComputeConstraintDefinition(), Is.SameAs(constraintDefinition));
         }
 
         [Test]
