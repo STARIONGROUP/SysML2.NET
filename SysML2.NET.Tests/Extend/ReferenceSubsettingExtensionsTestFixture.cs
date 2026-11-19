@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
 
     [TestFixture]
     public class ReferenceSubsettingExtensionsTestFixture
@@ -27,10 +26,9 @@ namespace SysML2.NET.Tests.Extend
             // Null subject → ArgumentNullException.
             Assert.That(() => ((IReferenceSubsetting)null).ComputeReferencingFeature(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty ReferenceSubsetting (OwningRelatedElement is null) → [1..1] violation: IncompleteModelException.
             var emptySubsetting = new ReferenceSubsetting();
 
-            Assert.That(() => emptySubsetting.ComputeReferencingFeature(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptySubsetting.ComputeReferencingFeature(), Is.Null);
 
             // OwningRelatedElement is an IFeature → returns the same instance.
             var feature = new Feature();
@@ -40,13 +38,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(refSubsettingWithFeature.ComputeReferencingFeature(), Is.SameAs(feature));
 
-            // OwningRelatedElement is a non-IFeature (Namespace) → [1..1] type violation: IncompleteModelException.
             var namespaceObj = new Namespace();
             var refSubsettingWithNamespace = new ReferenceSubsetting();
 
             ((IContainedRelationship)refSubsettingWithNamespace).OwningRelatedElement = namespaceObj;
 
-            Assert.That(() => refSubsettingWithNamespace.ComputeReferencingFeature(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(refSubsettingWithNamespace.ComputeReferencingFeature(), Is.Null);
         }
     }
 }

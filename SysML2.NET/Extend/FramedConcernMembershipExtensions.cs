@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -22,7 +23,6 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Constraints;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="FramedConcernMembershipExtensions"/> class provides extensions methods for
@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(framedConcernMembershipSubject));
             }
 
-            return framedConcernMembershipSubject.OwnedRelatedElement.SingleStrict<IConcernUsage>(nameof(framedConcernMembershipSubject));
+            return framedConcernMembershipSubject.OwnedRelatedElement.OfType<IConcernUsage>().FirstOrDefault();
         }
 
         /// <summary>

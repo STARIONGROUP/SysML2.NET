@@ -10,10 +10,10 @@
 namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="VariantMembershipExtensions" /> class provides extensions methods for
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
                 throw new ArgumentNullException(nameof(variantMembershipSubject));
             }
 
-            return variantMembershipSubject.OwnedRelatedElement.SingleStrict<IUsage>(nameof(variantMembershipSubject));
+            return variantMembershipSubject.OwnedRelatedElement.OfType<IUsage>().FirstOrDefault();
         }
     }
 }

@@ -18,7 +18,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -29,17 +28,15 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFramedConcernMembership)null).ComputeOwnedConcern(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyMembership = new FramedConcernMembership();
 
-            Assert.That(() => emptyMembership.ComputeOwnedConcern(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedConcern(), Is.Null);
 
-            // Single non-IConcernUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var nonConcernMembership = new FramedConcernMembership();
             var nonConcernElement = new Namespace();
             ((IContainedRelationship)nonConcernMembership).OwnedRelatedElement.Add(nonConcernElement);
 
-            Assert.That(() => nonConcernMembership.ComputeOwnedConcern(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonConcernMembership.ComputeOwnedConcern(), Is.Null);
 
             // Single IConcernUsage wired via the public API → returned.
             // FramedConcernMembership is a FeatureMembership and requires an IType source per
@@ -52,14 +49,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(framedMembership.ComputeOwnedConcern(), Is.SameAs(concernUsage));
 
-            // Two IConcernUsage in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoConcernMembership = new FramedConcernMembership();
             var firstConcern = new ConcernUsage();
             var secondConcern = new ConcernUsage();
             ((IContainedRelationship)twoConcernMembership).OwnedRelatedElement.Add(firstConcern);
             ((IContainedRelationship)twoConcernMembership).OwnedRelatedElement.Add(secondConcern);
 
-            Assert.That(() => twoConcernMembership.ComputeOwnedConcern(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoConcernMembership.ComputeOwnedConcern(), Is.SameAs(firstConcern));
 
             // Mixed: non-IConcernUsage (Namespace) alongside a single IConcernUsage — the type filter
             // picks out the ConcernUsage regardless of its position.
@@ -77,10 +73,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFramedConcernMembership)null).ComputeReferencedConcern(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty ownedConcern → propagates IncompleteModelException from ownedConcern's [1..1] guard.
             var emptyMembership = new FramedConcernMembership();
 
-            Assert.That(() => emptyMembership.ComputeReferencedConcern(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeReferencedConcern(), Is.Null);
 
             // Populated, no ownedReferenceSubsetting on the ownedConcern → referencedFeatureTarget is null
             // → returns ownedConcern itself.

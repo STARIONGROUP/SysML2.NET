@@ -15,7 +15,6 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -47,7 +46,7 @@ namespace SysML2.NET.Tests.Extend
             var secondConcernDefinition = new ConcernDefinition();
             var typingToSecondConcern = new FeatureTyping { Type = secondConcernDefinition };
             concernUsage.AssignOwnership(typingToSecondConcern);
-            Assert.That(() => concernUsage.ComputeConcernDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(concernUsage.ComputeConcernDefinition(), Is.SameAs(concernDefinition));
         }
     }
 }

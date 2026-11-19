@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
 
     [TestFixture]
     public class CrossSubsettingExtensionsTestFixture
@@ -28,7 +27,7 @@ namespace SysML2.NET.Tests.Extend
 
             var crossSubsetting = new CrossSubsetting();
 
-            Assert.That(crossSubsetting.ComputeCrossingFeature, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(crossSubsetting.ComputeCrossingFeature(), Is.Null);
 
             var feature = new Feature();
 
@@ -41,7 +40,7 @@ namespace SysML2.NET.Tests.Extend
 
             ((IContainedRelationship)nonFeatureCrossSubsetting).OwningRelatedElement = nonFeatureOwner;
 
-            Assert.That(nonFeatureCrossSubsetting.ComputeCrossingFeature, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonFeatureCrossSubsetting.ComputeCrossingFeature(), Is.Null);
         }
     }
 }

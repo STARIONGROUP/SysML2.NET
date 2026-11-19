@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -30,7 +29,7 @@ namespace SysML2.NET.Tests.Extend
 
             // Missing Owning Membership:
             var emptyConjugatedPortDefinition = new ConjugatedPortDefinition();
-            Assert.That(() => emptyConjugatedPortDefinition.ComputeOriginalPortDefinition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyConjugatedPortDefinition.ComputeOriginalPortDefinition(), Is.Null);
 
             // With Original Port Definition:
             var originalPortDefinition = new PortDefinition();
@@ -42,7 +41,7 @@ namespace SysML2.NET.Tests.Extend
             var nonPortDefinitionOwner = new Namespace();
             var conjugatedWithNonPortDefinitionOwner = new ConjugatedPortDefinition();
             nonPortDefinitionOwner.AssignOwnership(new OwningMembership(), conjugatedWithNonPortDefinitionOwner);
-            Assert.That(() => conjugatedWithNonPortDefinitionOwner.ComputeOriginalPortDefinition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(conjugatedWithNonPortDefinitionOwner.ComputeOriginalPortDefinition(), Is.Null);
         }
 
         [Test]
@@ -53,7 +52,7 @@ namespace SysML2.NET.Tests.Extend
 
             // Missing Port Conjugation:
             var emptyConjugatedPortDefinition = new ConjugatedPortDefinition();
-            Assert.That(() => emptyConjugatedPortDefinition.ComputeOwnedPortConjugator(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyConjugatedPortDefinition.ComputeOwnedPortConjugator(), Is.Null);
 
             // With Owned Port Conjugator:
             var conjugatedPortDefinition = new ConjugatedPortDefinition();
@@ -62,10 +61,8 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(conjugatedPortDefinition.ComputeOwnedPortConjugator(), Is.SameAs(portConjugation));
 
             // Multiple Port Conjugations:
-            var conjugatedWithMultiplePortConjugations = new ConjugatedPortDefinition();
-            ((IContainedElement)conjugatedWithMultiplePortConjugations).OwnedRelationship.Add(new PortConjugation());
-            ((IContainedElement)conjugatedWithMultiplePortConjugations).OwnedRelationship.Add(new PortConjugation());
-            Assert.That(() => conjugatedWithMultiplePortConjugations.ComputeOwnedPortConjugator(), Throws.TypeOf<MultiplicityViolationException>());
+            ((IContainedElement)conjugatedPortDefinition).OwnedRelationship.Add(new PortConjugation());
+            Assert.That(conjugatedPortDefinition.ComputeOwnedPortConjugator(), Is.SameAs(portConjugation));
         }
         
         [Test]
@@ -76,7 +73,7 @@ namespace SysML2.NET.Tests.Extend
 
             // Missing original port definition:
             var emptyConjugatedPortDefinition = new ConjugatedPortDefinition();
-            Assert.That(() => emptyConjugatedPortDefinition.ComputeRedefinedEffectiveNameOperation(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyConjugatedPortDefinition.ComputeRedefinedEffectiveNameOperation(), Is.Null);
 
             // Original name is null:
             var originalPortDefinitionWithoutName = new PortDefinition();

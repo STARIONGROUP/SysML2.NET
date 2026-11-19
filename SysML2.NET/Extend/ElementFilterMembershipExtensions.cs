@@ -10,11 +10,11 @@
 namespace SysML2.NET.Core.POCO.Kernel.Packages
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Kernel.Functions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ElementFilterMembershipExtensions" /> class provides extensions methods for
@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
                 throw new ArgumentNullException(nameof(elementFilterMembershipSubject));
             }
 
-            return elementFilterMembershipSubject.OwnedRelatedElement.SingleStrict<IExpression>(nameof(elementFilterMembershipSubject));
+            return elementFilterMembershipSubject.OwnedRelatedElement.OfType<IExpression>().FirstOrDefault();
         }
     }
 }

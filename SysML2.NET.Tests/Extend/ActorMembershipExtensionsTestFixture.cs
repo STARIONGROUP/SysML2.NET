@@ -17,7 +17,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -28,17 +27,15 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IActorMembership)null).ComputeOwnedActorParameter(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyMembership = new ActorMembership();
 
-            Assert.That(() => emptyMembership.ComputeOwnedActorParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedActorParameter(), Is.Null);
 
-            // Single non-IPartUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var nonPartMembership = new ActorMembership();
             var nonPartElement = new Namespace();
             ((IContainedRelationship)nonPartMembership).OwnedRelatedElement.Add(nonPartElement);
 
-            Assert.That(() => nonPartMembership.ComputeOwnedActorParameter(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonPartMembership.ComputeOwnedActorParameter(), Is.Null);
 
             // Single IPartUsage wired via the public API → returned.
             // ActorMembership is a FeatureMembership and requires an IType source per AssignOwnership;
@@ -50,14 +47,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(actorMembership.ComputeOwnedActorParameter(), Is.SameAs(partUsage));
 
-            // Two IPartUsage in OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var twoPartMembership = new ActorMembership();
             var firstPart = new PartUsage();
             var secondPart = new PartUsage();
             ((IContainedRelationship)twoPartMembership).OwnedRelatedElement.Add(firstPart);
             ((IContainedRelationship)twoPartMembership).OwnedRelatedElement.Add(secondPart);
 
-            Assert.That(twoPartMembership.ComputeOwnedActorParameter, Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoPartMembership.ComputeOwnedActorParameter(), Is.SameAs(firstPart));
 
             // Mixed: non-IPartUsage (Namespace) alongside a single IPartUsage — the type filter picks
             // out the PartUsage regardless of its position.

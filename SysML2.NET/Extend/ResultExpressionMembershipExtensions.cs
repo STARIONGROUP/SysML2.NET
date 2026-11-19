@@ -10,10 +10,10 @@
 namespace SysML2.NET.Core.POCO.Kernel.Functions
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ResultExpressionMembershipExtensions" /> class provides extensions methods for
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
                 throw new ArgumentNullException(nameof(resultExpressionMembershipSubject));
             }
 
-            return resultExpressionMembershipSubject.OwnedRelatedElement.SingleStrict<IExpression>(nameof(resultExpressionMembershipSubject));
+            return resultExpressionMembershipSubject.OwnedRelatedElement.OfType<IExpression>().FirstOrDefault();
         }
     }
 }

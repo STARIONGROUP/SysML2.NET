@@ -18,7 +18,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -29,18 +28,15 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IViewRenderingMembership)null).ComputeOwnedRendering(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyMembership = new ViewRenderingMembership();
 
-            Assert.That(() => emptyMembership.ComputeOwnedRendering(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedRendering(), Is.Null);
 
-            // Single non-IRenderingUsage in OwnedRelatedElement (zero matches of target type) →
-            // [1..1] violation: throws IncompleteModelException.
             var nonRenderingMembership = new ViewRenderingMembership();
             var nonRenderingElement = new Namespace();
             ((IContainedRelationship)nonRenderingMembership).OwnedRelatedElement.Add(nonRenderingElement);
 
-            Assert.That(() => nonRenderingMembership.ComputeOwnedRendering(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonRenderingMembership.ComputeOwnedRendering(), Is.Null);
 
             // Single IRenderingUsage wired via parent → returned.
             var owningDefinition = new ViewDefinition();
@@ -50,14 +46,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(renderingMembership.ComputeOwnedRendering(), Is.SameAs(renderingUsage));
 
-            // Two IRenderingUsage in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoRenderingMembership = new ViewRenderingMembership();
             var firstRendering = new RenderingUsage();
             var secondRendering = new RenderingUsage();
             ((IContainedRelationship)twoRenderingMembership).OwnedRelatedElement.Add(firstRendering);
             ((IContainedRelationship)twoRenderingMembership).OwnedRelatedElement.Add(secondRendering);
 
-            Assert.That(() => twoRenderingMembership.ComputeOwnedRendering(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoRenderingMembership.ComputeOwnedRendering(), Is.SameAs(firstRendering));
 
             // Mixed: annotation (Namespace) alongside a single IRenderingUsage — the type filter
             // picks out the RenderingUsage regardless of its position.
@@ -75,11 +70,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IViewRenderingMembership)null).ComputeReferencedRendering(), Throws.TypeOf<ArgumentNullException>());
 
-            // No ownedRendering in OwnedRelatedElement (malformed) → IncompleteModelException
-            // propagated from ComputeOwnedRendering.
             var emptyMembership = new ViewRenderingMembership();
 
-            Assert.That(() => emptyMembership.ComputeReferencedRendering(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeReferencedRendering(), Is.Null);
 
             // Populated, no ownedReferenceSubsetting on the ownedRendering →
             // referencedFeature is null → referencedRendering == ownedRendering.

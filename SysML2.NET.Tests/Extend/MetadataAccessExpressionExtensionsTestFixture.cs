@@ -20,7 +20,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -42,11 +41,9 @@ namespace SysML2.NET.Tests.Extend
                 () => ((IMetadataAccessExpression)null).ComputeRedefinedEvaluateOperation(null),
                 Throws.TypeOf<ArgumentNullException>());
 
-            // referencedElement is [1..1] derived; an empty subject propagates the IncompleteModelException
-            // from ComputeReferencedElement before the metaclassFeature() tail is reached.
             var emptySubject = new MetadataAccessExpression();
 
-            Assert.That(() => emptySubject.ComputeRedefinedEvaluateOperation(null), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptySubject.ComputeRedefinedEvaluateOperation(null), Is.Empty);
 
             // For any well-formed subject, the trailing `->including(metaclassFeature())` step calls
             // ComputeMetaclassFeatureOperation, which is intentionally left as a stub (MOF reflection

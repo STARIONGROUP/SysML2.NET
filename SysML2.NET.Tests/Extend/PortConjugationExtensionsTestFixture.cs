@@ -15,7 +15,6 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Exceptions;
 
     [TestFixture]
     public class PortConjugationExtensionsTestFixture
@@ -26,10 +25,9 @@ namespace SysML2.NET.Tests.Extend
             // Null subject → ArgumentNullException.
             Assert.That(() => ((IPortConjugation)null).ComputeConjugatedPortDefinition(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty PortConjugation (OwningRelatedElement is null) → [1..1] violation: IncompleteModelException.
             var emptyPortConj = new PortConjugation();
 
-            Assert.That(() => emptyPortConj.ComputeConjugatedPortDefinition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyPortConj.ComputeConjugatedPortDefinition(), Is.Null);
 
             // OwningRelatedElement is an IConjugatedPortDefinition → returns the same instance.
             var conjugated = new ConjugatedPortDefinition();
@@ -39,13 +37,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(portConjWithConjugated.ComputeConjugatedPortDefinition(), Is.SameAs(conjugated));
 
-            // OwningRelatedElement is a PortDefinition (IPortDefinition but NOT IConjugatedPortDefinition) → [1..1] type violation: IncompleteModelException.
             var portDefinition = new PortDefinition();
             var portConjWithPortDefinition = new PortConjugation();
 
             ((IContainedRelationship)portConjWithPortDefinition).OwningRelatedElement = portDefinition;
 
-            Assert.That(() => portConjWithPortDefinition.ComputeConjugatedPortDefinition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(portConjWithPortDefinition.ComputeConjugatedPortDefinition(), Is.Null);
         }
     }
 }

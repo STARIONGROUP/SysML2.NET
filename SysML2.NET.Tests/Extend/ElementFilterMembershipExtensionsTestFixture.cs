@@ -17,7 +17,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -28,10 +27,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IElementFilterMembership)null).ComputeCondition(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var emptyMembership = new ElementFilterMembership();
 
-            Assert.That(() => emptyMembership.ComputeCondition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeCondition(), Is.Null);
 
             // Single IExpression wired via the public API → returned.
             var owningNamespace = new Namespace();
@@ -42,7 +40,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(membership.ComputeCondition(), Is.SameAs(literalBoolean));
 
-            // Two IExpressions in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoExprMembership = new ElementFilterMembership();
             var firstExpression = new LiteralBoolean();
             var secondExpression = new LiteralBoolean();
@@ -50,7 +47,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoExprMembership).OwnedRelatedElement.Add(firstExpression);
             ((IContainedRelationship)twoExprMembership).OwnedRelatedElement.Add(secondExpression);
 
-            Assert.That(() => twoExprMembership.ComputeCondition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoExprMembership.ComputeCondition(), Is.SameAs(firstExpression));
 
             // Mixed-type owned related elements: exactly one IExpression alongside a non-IExpression (Namespace).
             // The OfType<IExpression>() projection MUST pick out the IExpression regardless of its position
@@ -64,14 +61,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(mixedMembership.ComputeCondition(), Is.SameAs(mixedExpression));
 
-            // OwnedRelatedElement populated with non-IExpression element(s) only → no IExpression match:
-            // [1..1] violation, throws IncompleteModelException.
             var nonExprMembership = new ElementFilterMembership();
             var nonExprElement = new Namespace();
 
             ((IContainedRelationship)nonExprMembership).OwnedRelatedElement.Add(nonExprElement);
 
-            Assert.That(() => nonExprMembership.ComputeCondition(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonExprMembership.ComputeCondition(), Is.Null);
         }
     }
 }

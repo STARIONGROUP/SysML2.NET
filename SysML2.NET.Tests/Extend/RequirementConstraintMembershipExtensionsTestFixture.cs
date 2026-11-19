@@ -18,7 +18,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -31,10 +30,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IRequirementConstraintMembership)null).ComputeOwnedConstraint(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var membership = new RequirementConstraintMembership();
 
-            Assert.That(() => membership.ComputeOwnedConstraint(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(membership.ComputeOwnedConstraint(), Is.Null);
 
             // Single IConstraintUsage wired via the public API → returned.
             var owningType = new Type();
@@ -44,7 +42,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(membership.ComputeOwnedConstraint(), Is.SameAs(constraintUsage));
 
-            // Two IConstraintUsage elements in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoConstraintMembership = new RequirementConstraintMembership();
             var firstConstraint = new ConstraintUsage();
             var secondConstraint = new ConstraintUsage();
@@ -52,7 +49,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoConstraintMembership).OwnedRelatedElement.Add(firstConstraint);
             ((IContainedRelationship)twoConstraintMembership).OwnedRelatedElement.Add(secondConstraint);
 
-            Assert.That(() => twoConstraintMembership.ComputeOwnedConstraint(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoConstraintMembership.ComputeOwnedConstraint(), Is.SameAs(firstConstraint));
 
             // Mixed-type owned related elements: exactly one IConstraintUsage alongside a non-IConstraintUsage (Namespace).
             // The OfType<IConstraintUsage>() projection MUST pick out the IConstraintUsage regardless of its position
@@ -66,14 +63,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(mixedMembership.ComputeOwnedConstraint(), Is.SameAs(mixedConstraint));
 
-            // OwnedRelatedElement populated with non-IConstraintUsage element(s) only → no IConstraintUsage match:
-            // [1..1] violation, throws IncompleteModelException.
             var nonConstraintMembership = new RequirementConstraintMembership();
             var nonConstraintElement = new Namespace();
 
             ((IContainedRelationship)nonConstraintMembership).OwnedRelatedElement.Add(nonConstraintElement);
 
-            Assert.That(() => nonConstraintMembership.ComputeOwnedConstraint(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonConstraintMembership.ComputeOwnedConstraint(), Is.Null);
         }
 
         [Test]
@@ -81,10 +76,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IRequirementConstraintMembership)null).ComputeReferencedConstraint(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → IncompleteModelException bubbles from ComputeOwnedConstraint.
             var emptyMembership = new RequirementConstraintMembership();
 
-            Assert.That(() => emptyMembership.ComputeReferencedConstraint(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeReferencedConstraint(), Is.Null);
 
             // ownedConstraint has no ReferenceSubsetting → referencedFeatureTarget() returns null → return ownedConstraint itself.
             var owningType3 = new Type();

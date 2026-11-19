@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -20,7 +21,6 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="FeatureValueExtensions"/> class provides extensions methods for
@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
                 throw new ArgumentNullException(nameof(featureValueSubject));
             }
 
-            return featureValueSubject.OwnedRelatedElement.SingleStrict<IExpression>(nameof(featureValueSubject));
+            return featureValueSubject.OwnedRelatedElement.OfType<IExpression>().FirstOrDefault();
         }
     }
 }

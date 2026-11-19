@@ -20,7 +20,6 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="MetadataAccessExpressionExtensions" /> class provides extensions methods for
@@ -122,9 +121,12 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
                 throw new ArgumentNullException(nameof(metadataAccessExpressionSubject));
             }
 
-            var referencedElement = metadataAccessExpressionSubject.referencedElement
-                                    ?? throw new IncompleteModelException(
-                                        $"{nameof(IMetadataAccessExpression)}.Evaluate requires a referencedElement, but '{nameof(metadataAccessExpressionSubject)}' owns no non-FeatureMembership Membership.");
+            var referencedElement = metadataAccessExpressionSubject.referencedElement;
+
+            if (referencedElement == null)
+            {
+                return [];
+            }
 
             var result = new List<IElement>();
 

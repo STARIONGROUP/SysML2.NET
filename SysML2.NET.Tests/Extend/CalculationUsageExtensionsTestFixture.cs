@@ -19,7 +19,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Systems.Actions;
     using SysML2.NET.Core.POCO.Systems.Calculations;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -48,10 +47,9 @@ namespace SysML2.NET.Tests.Extend
             calculationUsage.AssignOwnership(new FeatureTyping { Type = calculationDefinition });
             Assert.That(calculationUsage.ComputeCalculationDefinition(), Is.SameAs(calculationDefinition));
 
-            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
             var secondCalculationDefinition = new CalculationDefinition();
             calculationUsage.AssignOwnership(new FeatureTyping { Type = secondCalculationDefinition });
-            Assert.That(() => calculationUsage.ComputeCalculationDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(calculationUsage.ComputeCalculationDefinition(), Is.SameAs(calculationDefinition));
         }
 
         [Test]

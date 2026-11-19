@@ -20,7 +20,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -71,10 +70,9 @@ namespace SysML2.NET.Tests.Extend
             caseUsage.AssignOwnership(new FeatureTyping { Type = caseDefinition });
             Assert.That(caseUsage.ComputeCaseDefinition(), Is.SameAs(caseDefinition));
 
-            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
             var secondCaseDefinition = new CaseDefinition();
             caseUsage.AssignOwnership(new FeatureTyping { Type = secondCaseDefinition });
-            Assert.That(() => caseUsage.ComputeCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(caseUsage.ComputeCaseDefinition(), Is.SameAs(caseDefinition));
         }
 
         [Test]

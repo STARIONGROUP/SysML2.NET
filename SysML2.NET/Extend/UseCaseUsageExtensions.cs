@@ -48,7 +48,6 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="UseCaseUsageExtensions"/> class provides extensions methods for
@@ -97,7 +96,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         {
             return useCaseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(useCaseUsageSubject))
-                : FeatureExtensions.ComputeType(useCaseUsageSubject).SingleOrDefaultStrict<IUseCaseDefinition>(nameof(useCaseUsageSubject));
+                : FeatureExtensions.ComputeType(useCaseUsageSubject).OfType<IUseCaseDefinition>().FirstOrDefault();
         }
 
     }

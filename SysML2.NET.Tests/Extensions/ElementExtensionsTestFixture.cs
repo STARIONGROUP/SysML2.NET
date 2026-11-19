@@ -10,8 +10,6 @@
 namespace SysML2.NET.Tests.Extensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using NUnit.Framework;
 
@@ -25,7 +23,6 @@ namespace SysML2.NET.Tests.Extensions
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using ElementExtensions = SysML2.NET.Extensions.ElementExtensions;
@@ -34,10 +31,6 @@ namespace SysML2.NET.Tests.Extensions
     [TestFixture]
     public class ElementExtensionsTestFixture
     {
-        private static readonly string[] OneElementSequence = ["only"];
-        private static readonly string[] TwoElementSequence = ["first", "second"];
-        private static readonly string[] ThreeElementSequence = ["a", "b", "c"];
-
         private PartDefinition source;
         private FeatureMembership bridgeRelationship;
         private Specialization referenceBridgeRelationship;
@@ -395,135 +388,6 @@ namespace SysML2.NET.Tests.Extensions
                 Assert.That(this.source.OwnedRelationship, Does.Contain(this.bridgeRelationship));
                 Assert.That(this.bridgeRelationship.OwnedRelatedElement, Does.Contain(this.target));
             }
-        }
-
-        [Test]
-        public void VerifySingleStrictWithOfTypeFilter()
-        {
-            // IEnumerable overload (with implicit OfType<TResult>): used when the source is wider than
-            // the desired result type — bundles OfType<TResult>() + SingleStrict in one call.
-
-            // Empty input → IncompleteModelException (lower-bound violation; the [1..1] property is missing).
-            Assert.That(
-                () => new List<IElement>().SingleStrict<IFeature>("subject"),
-                Throws.TypeOf<IncompleteModelException>());
-
-            // Only non-matching elements → IncompleteModelException (no IFeature match).
-            IReadOnlyList<IElement> nonMatchingOnly = new List<IElement> { new Comment(), new PartDefinition() };
-
-            Assert.That(
-                () => nonMatchingOnly.SingleStrict<IFeature>("subject"),
-                Throws.TypeOf<IncompleteModelException>());
-
-            // Exactly one match among non-matching siblings → returns the match (position-agnostic).
-            var feature = new Feature();
-            IReadOnlyList<IElement> singleMatch = new List<IElement> { new Comment(), feature, new PartDefinition() };
-            Assert.That(singleMatch.SingleStrict<IFeature>("subject"), Is.SameAs(feature));
-
-            // Two matches → MultiplicityViolationException (upper-bound violation).
-            IReadOnlyList<IElement> twoMatches = new List<IElement> { new Feature(), new Feature() };
-
-            Assert.That(
-                () => twoMatches.SingleStrict<IFeature>("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-
-            // Three matches → MultiplicityViolationException (early-exit not regressed).
-            IReadOnlyList<IElement> threeMatches = new List<IElement> { new Feature(), new Feature(), new Feature() };
-
-            Assert.That(
-                () => threeMatches.SingleStrict<IFeature>("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-        }
-
-        [Test]
-        public void VerifySingleOrDefaultStrictWithOfTypeFilter()
-        {
-            // IEnumerable overload (with implicit OfType<TResult>): used when the source is wider than
-            // the desired result type — bundles OfType<TResult>() + SingleOrDefaultStrict in one call.
-
-            // Empty input → null (lower bound is 0; this is the only difference vs SingleStrict<TResult>).
-            Assert.That(
-                new List<IElement>().SingleOrDefaultStrict<IFeature>("subject"),
-                Is.Null);
-
-            // Only non-matching elements → null.
-            IReadOnlyList<IElement> nonMatchingOnly = new List<IElement> { new Comment(), new PartDefinition() };
-            Assert.That(nonMatchingOnly.SingleOrDefaultStrict<IFeature>("subject"), Is.Null);
-
-            // Exactly one match among non-matching siblings → returns the match (position-agnostic).
-            var feature = new Feature();
-            IReadOnlyList<IElement> singleMatch = new List<IElement> { new Comment(), feature, new PartDefinition() };
-            Assert.That(singleMatch.SingleOrDefaultStrict<IFeature>("subject"), Is.SameAs(feature));
-
-            // Two matches → MultiplicityViolationException (upper-bound violation against the [0..1] property).
-            IReadOnlyList<IElement> twoMatches = new List<IElement> { new Feature(), new Feature() };
-
-            Assert.That(
-                () => twoMatches.SingleOrDefaultStrict<IFeature>("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-
-            // Three matches → MultiplicityViolationException (early-exit not regressed).
-            IReadOnlyList<IElement> threeMatches = new List<IElement> { new Feature(), new Feature(), new Feature() };
-
-            Assert.That(
-                () => threeMatches.SingleOrDefaultStrict<IFeature>("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-        }
-
-        [Test]
-        public void VerifySingleStrict()
-        {
-            // Empty sequence → IncompleteModelException (lower-bound violation; the [1..1] property is missing).
-            Assert.That(
-                () => Enumerable.Empty<string>().SingleStrict("subject"),
-                Throws.TypeOf<IncompleteModelException>());
-
-            // Exactly one element → returns it.
-            Assert.That(OneElementSequence.SingleStrict("subject"), Is.EqualTo("only"));
-
-            // Two elements → MultiplicityViolationException (upper-bound violation).
-            Assert.That(
-                () => TwoElementSequence.SingleStrict("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-
-            // Three elements → MultiplicityViolationException (early-exit not regressed).
-            Assert.That(
-                () => ThreeElementSequence.SingleStrict("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-
-            // Explicit OfType<T>() chain — same contract as the IEnumerable overload SingleStrict<TResult>.
-            IReadOnlyList<IElement> threeFeatures = new List<IElement> { new Feature(), new Feature(), new Feature() };
-
-            Assert.That(
-                () => threeFeatures.OfType<IFeature>().SingleStrict("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-        }
-
-        [Test]
-        public void VerifySingleOrDefaultStrict()
-        {
-            // Empty sequence → null (lower bound is 0; the only difference vs SingleStrict).
-            Assert.That(Enumerable.Empty<string>().SingleOrDefaultStrict("subject"), Is.Null);
-
-            // Exactly one element → returns it.
-            Assert.That(OneElementSequence.SingleOrDefaultStrict("subject"), Is.EqualTo("only"));
-
-            // Two elements → MultiplicityViolationException (upper-bound violation against the [0..1] property).
-            Assert.That(
-                () => TwoElementSequence.SingleOrDefaultStrict("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-
-            // Three elements → MultiplicityViolationException (early-exit not regressed).
-            Assert.That(
-                () => ThreeElementSequence.SingleOrDefaultStrict("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
-
-            // Explicit OfType<T>() chain — same contract as the IEnumerable overload SingleOrDefaultStrict<TResult>.
-            IReadOnlyList<IElement> twoFeatures = new List<IElement> { new Feature(), new Feature() };
-
-            Assert.That(
-                () => twoFeatures.OfType<IFeature>().SingleOrDefaultStrict("subject"),
-                Throws.TypeOf<MultiplicityViolationException>());
         }
     }
 }

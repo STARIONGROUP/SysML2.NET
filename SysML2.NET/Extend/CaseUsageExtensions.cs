@@ -48,8 +48,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="CaseUsageExtensions"/> class provides extensions methods for
@@ -96,17 +94,12 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="caseUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
-        /// <see cref="ICaseDefinition"/> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(ICaseUsage.caseDefinition))]
         internal static ICaseDefinition ComputeCaseDefinition(this ICaseUsage caseUsageSubject)
         {
             return caseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(caseUsageSubject))
-                : FeatureExtensions.ComputeType(caseUsageSubject).SingleOrDefaultStrict<ICaseDefinition>(nameof(caseUsageSubject));
+                : FeatureExtensions.ComputeType(caseUsageSubject).OfType<ICaseDefinition>().FirstOrDefault();
         }
 
         /// <summary>

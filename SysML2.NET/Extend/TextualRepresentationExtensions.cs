@@ -14,7 +14,6 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="TextualRepresentationExtensions"/> class provides extensions methods for
@@ -39,9 +38,6 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="textualRepresentationSubject"/> is <see langword="null"/>.
         /// </exception>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when the <see cref="ITextualRepresentation"/> has no owner.
-        /// </exception>
         [DerivedProperty(name: nameof(ITextualRepresentation.representedElement))]
         internal static IElement ComputeRepresentedElement(this ITextualRepresentation textualRepresentationSubject)
         {
@@ -50,9 +46,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
                 throw new ArgumentNullException(nameof(textualRepresentationSubject));
             }
 
-            return textualRepresentationSubject.owner
-                ?? throw new IncompleteModelException(
-                    $"{nameof(textualRepresentationSubject)} must have an owner (its representedElement)");
+            return textualRepresentationSubject.owner;
         }
     }
 }

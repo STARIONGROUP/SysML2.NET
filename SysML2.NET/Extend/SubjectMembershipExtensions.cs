@@ -11,11 +11,11 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="SubjectMembershipExtensions"/> class provides extensions methods for
@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(subjectMembershipSubject));
             }
 
-            return subjectMembershipSubject.OwnedRelatedElement.SingleStrict<IUsage>(nameof(subjectMembershipSubject));
+            return subjectMembershipSubject.OwnedRelatedElement.OfType<IUsage>().FirstOrDefault();
         }
 
     }

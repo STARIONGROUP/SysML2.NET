@@ -60,10 +60,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(emptyMembershipImport.ComputeImportedElement(), Is.Null);
 
-            // IMembershipImport whose ImportedMembership has a null MemberElement → null.
-            // A real OwningMembership with zero OwnedRelatedElement throws IncompleteModelException
-            // from ComputeOwnedMemberElement's invariant guard, so use a Moq'd IMembership to
-            // produce a null MemberElement directly without violating the model invariant.
             var nullMemberMembership = new Mock<IMembership>();
             nullMemberMembership.SetupGet(membership => membership.MemberElement).Returns((IElement)null);
             var membershipImportNoMember = new MembershipImport { ImportedMembership = nullMemberMembership.Object };

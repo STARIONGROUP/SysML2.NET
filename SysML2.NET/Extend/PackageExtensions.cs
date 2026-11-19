@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         {
             return packageSubject == null
                 ? throw new ArgumentNullException(nameof(packageSubject))
-                : [..packageSubject.ownedMembership.OfType<IElementFilterMembership>().Select(x => x.condition)];
+                : [..packageSubject.ownedMembership.OfType<IElementFilterMembership>().Select(x => x.condition).Where(condition => condition != null)];
         }
 
         /// <summary>

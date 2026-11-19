@@ -15,7 +15,6 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -29,12 +28,12 @@ namespace SysML2.NET.Tests.Extend
             // No ConjugatedPortDefinition -> [1..1] violation.
             var emptyConjugatedPortTyping = new ConjugatedPortTyping();
 
-            Assert.That(emptyConjugatedPortTyping.ComputePortDefinition, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyConjugatedPortTyping.ComputePortDefinition(), Is.Null);
 
             // A ConjugatedPortDefinition with no ownership chain resolves no originalPortDefinition.
             var unownedConjugatedPortTyping = new ConjugatedPortTyping { ConjugatedPortDefinition = new ConjugatedPortDefinition() };
 
-            Assert.That(unownedConjugatedPortTyping.ComputePortDefinition, Throws.TypeOf<IncompleteModelException>());
+            Assert.That(unownedConjugatedPortTyping.ComputePortDefinition(), Is.Null);
 
             // Positive case: the ConjugatedPortDefinition's originalPortDefinition derives from its
             // owningMembership -> membershipOwningNamespace, which must be a PortDefinition. Wire that

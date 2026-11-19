@@ -10,10 +10,10 @@
 namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="EndFeatureMembershipExtensions"/> class provides extensions methods for
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(endFeatureMembershipSubject));
             }
 
-            return endFeatureMembershipSubject.OwnedRelatedElement.SingleStrict<IFeature>(nameof(endFeatureMembershipSubject));
+            return endFeatureMembershipSubject.OwnedRelatedElement.OfType<IFeature>().FirstOrDefault();
         }
     }
 }
