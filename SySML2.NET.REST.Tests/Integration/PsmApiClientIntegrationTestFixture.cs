@@ -13,7 +13,10 @@ namespace SySML2.NET.REST.Tests.Integration
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
+
+    using Microsoft.Extensions.DependencyInjection;
 
     using NUnit.Framework;
     using NUnit.Framework.Constraints;
@@ -21,16 +24,20 @@ namespace SySML2.NET.REST.Tests.Integration
     using SysML2.NET.Core.DTO.Kernel.Packages;
     using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.Core.DTO.Systems.Parts;
+    using SysML2.NET.Dal;
     using SysML2.NET.PSM;
     using SysML2.NET.PSM.DTO;
     using SysML2.NET.PSM.Enumerations;
     using SysML2.NET.REST.Exceptions;
+    using SysML2.NET.Serializer.Json;
 
     [TestFixture]
     [Category("Integration")]
     public class PsmApiClientIntegrationTestFixture
     {
         private const int PageSize = 2;
+
+        private const string BaseAddressVariable = "SYSML2_API_BASE_ADDRESS";
 
         private const int DatatypePageSize = 100;
 
@@ -45,6 +52,8 @@ namespace SySML2.NET.REST.Tests.Integration
         private static readonly Guid UnknownId = Guid.Parse("5b0c3f1e-7d2a-4e9b-8f6c-1a2b3c4d5e6f");
 
         private static readonly string[] SelectedProperties = ["@id", "@type"];
+
+        private static readonly Guid[] SeedElementIds = [DefaultSeedModel.PackageId, DefaultSeedModel.MembershipId, DefaultSeedModel.PartDefinitionId];
 
         private readonly List<Guid> createdProjectIds = [];
 
@@ -520,6 +529,67 @@ namespace SySML2.NET.REST.Tests.Integration
         }
 
         [Test]
+        public async Task VerifyLoadBranchHead()
+        {
+            await using var services = CreateSessionServices();
+            await using var scope = services.CreateAsyncScope();
+            var session = await OpenSessionAsync(scope.ServiceProvider);
+
+            await session.LoadBranchHead(this.projectId, this.defaultBranchId, CancellationToken.None);
+
+            Assert.That(session.Assembler.Cache.Keys, Is.EquivalentTo(SeedElementIds));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(session.CurrentCommit, Is.EqualTo((this.projectId, this.seedCommitId)));
+                Assert.That(session.Assembler.Cache[DefaultSeedModel.PartDefinitionId].Value.DeclaredName, Is.EqualTo(DefaultSeedModel.PartDefinitionName));
+                await Assert.ThatAsync(() => session.LoadBranchHead(this.projectId, UnknownId, CancellationToken.None), ThrowsNotFound());
+                Assert.That(session.CurrentCommit, Is.EqualTo((this.projectId, this.seedCommitId)));
+            }
+        }
+
+        [Test]
+        public async Task VerifyLoadCommit()
+        {
+            await using var services = CreateSessionServices();
+            await using var scope = services.CreateAsyncScope();
+            var session = await OpenSessionAsync(scope.ServiceProvider);
+
+            await session.LoadCommit(this.projectId, this.seedCommitId, CancellationToken.None);
+
+            Assert.That(session.Assembler.Cache.Keys, Is.EquivalentTo(SeedElementIds));
+
+            var package = session.Assembler.Cache[DefaultSeedModel.PackageId].Value;
+            var membership = (SysML2.NET.Core.POCO.Root.Elements.IRelationship)session.Assembler.Cache[DefaultSeedModel.MembershipId].Value;
+            var partDefinition = session.Assembler.Cache[DefaultSeedModel.PartDefinitionId].Value;
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(session.CurrentCommit, Is.EqualTo((this.projectId, this.seedCommitId)));
+                Assert.That(package.OwnedRelationship, Is.EquivalentTo([membership]));
+                Assert.That(membership.OwnedRelatedElement, Is.EquivalentTo([partDefinition]));
+                Assert.That(partDefinition.DeclaredName, Is.EqualTo(DefaultSeedModel.PartDefinitionName));
+            }
+
+            var branch = await this.client.PostBranchByProjectAsync(this.projectId, new BranchRequest { Name = "load-commit", Head = this.seedCommitId });
+            var renameCommit = await this.client.PostCommitByProjectAsync(this.projectId, DefaultSeedModel.CreateRenameRequest("Truck"), branch.Id);
+
+            await session.LoadCommit(this.projectId, renameCommit.Id, CancellationToken.None);
+
+            Assert.That(session.Assembler.Cache.Keys, Is.EquivalentTo(SeedElementIds));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(session.CurrentCommit, Is.EqualTo((this.projectId, renameCommit.Id)));
+                Assert.That(session.Assembler.Cache[DefaultSeedModel.PartDefinitionId].Value, Is.SameAs(partDefinition));
+                Assert.That(partDefinition.DeclaredName, Is.EqualTo("Truck"));
+                await Assert.ThatAsync(() => session.LoadCommit(this.projectId, UnknownId, CancellationToken.None), ThrowsNotFound());
+                Assert.That(session.CurrentCommit, Is.EqualTo((this.projectId, renameCommit.Id)));
+                Assert.That(session.Assembler.Cache.Keys, Is.EquivalentTo(SeedElementIds));
+            }
+        }
+
+        [Test]
         public async Task VerifyMergeAsync()
         {
             var source = await this.client.PostBranchByProjectAsync(this.projectId, new BranchRequest { Name = "merge-source", Head = this.seedCommitId });
@@ -715,6 +785,17 @@ namespace SySML2.NET.REST.Tests.Integration
             };
         }
 
+        private static ServiceProvider CreateSessionServices()
+        {
+            return new ServiceCollection()
+                .AddScoped<IAssembler, Assembler>()
+                .AddScoped<IDeSerializer, DeSerializer>()
+                .AddScoped<ISerializer, Serializer>()
+                .AddScoped<ISession, Session>()
+                .AddHttpClient(nameof(Session), httpClient => httpClient.Timeout = TimeSpan.FromSeconds(180)).Services
+                .BuildServiceProvider();
+        }
+
         private static async Task<T> GetOrNullWhenNotFoundAsync<T>(Func<Task<T>> read) where T : class
         {
             try
@@ -725,6 +806,14 @@ namespace SySML2.NET.REST.Tests.Integration
             {
                 return null;
             }
+        }
+
+        private static async Task<ISession> OpenSessionAsync(IServiceProvider services)
+        {
+            var session = services.GetRequiredService<ISession>();
+            await session.Open(new Uri(Environment.GetEnvironmentVariable(BaseAddressVariable)), CancellationToken.None);
+
+            return session;
         }
 
         private static async Task<T> SupportedAsync<T>(Func<Task<T>> operation)
