@@ -27,6 +27,9 @@ namespace SySML2.NET.REST
     /// <summary>
     /// The <see cref="Session"/> holds the connection to a server of the Systems Modeling API and Services and the element model of its current commit
     /// </summary>
+    /// <remarks>
+    /// A <see cref="Session"/> is not thread-safe: it belongs to one scope, and each of its operations is awaited before the next one starts.
+    /// </remarks>
     public class Session : ISession
     {
         /// <summary>
@@ -48,11 +51,6 @@ namespace SySML2.NET.REST
         /// The <see cref="ILoggerFactory"/> handed to each <see cref="PsmApiClient"/>
         /// </summary>
         private readonly ILoggerFactory loggerFactory;
-
-        /// <summary>
-        /// The lock that keeps the <see cref="Assembler"/>, <see cref="loadedCommit"/> and <see cref="generation"/> consistent between a read and <see cref="Close"/>
-        /// </summary>
-        private readonly object gate = new();
 
         /// <summary>
         /// The project and commit loaded in the <see cref="Assembler"/>, with a <c>null</c> commit for a branch without commit, or <c>null</c> when none is loaded
@@ -107,29 +105,16 @@ namespace SySML2.NET.REST
         /// <summary>
         /// Gets the project and commit whose element model the session holds, or <c>null</c> when it holds none
         /// </summary>
-        public (Guid ProjectId, Guid CommitId)? CurrentCommit
-        {
-            get
-            {
-                lock (this.gate)
-                {
-                    return this.loadedCommit is { CommitId: { } commitId } loaded ? (loaded.ProjectId, commitId) : null;
-                }
-            }
-        }
+        public (Guid ProjectId, Guid CommitId)? CurrentCommit => this.loadedCommit is { CommitId: { } commitId } loaded ? (loaded.ProjectId, commitId) : null;
 
         /// <summary>
         /// Closes the connection to the server and drops the element model it read
         /// </summary>
         public void Close()
         {
-            lock (this.gate)
-            {
-                this.generation++;
-                this.loadedCommit = null;
-                this.Assembler.Synchronize([], this.Assembler.Cache.Keys.ToList());
-            }
-
+            this.generation++;
+            this.loadedCommit = null;
+            this.Assembler.Synchronize([], this.Assembler.Cache.Keys.ToList());
             this.Client = null;
         }
 
@@ -154,7 +139,7 @@ namespace SySML2.NET.REST
         public async Task LoadBranchHead(Guid projectId, Guid branchId, CancellationToken cancellationToken)
         {
             var client = this.QueryOpenClient();
-            var readGeneration = Volatile.Read(ref this.generation);
+            var readGeneration = this.generation;
 
             var branch = await client.GetBranchesByProjectAndIdAsync(projectId, branchId, cancellationToken);
 
@@ -194,7 +179,7 @@ namespace SySML2.NET.REST
                 return;
             }
 
-            var readGeneration = Volatile.Read(ref this.generation);
+            var readGeneration = this.generation;
             var elements = await ReadElementsAsync(client, projectId, commitId, cancellationToken);
 
             this.Load((projectId, commitId), elements, readGeneration);
@@ -306,17 +291,14 @@ namespace SySML2.NET.REST
         /// </param>
         private void Load((Guid ProjectId, Guid? CommitId) commit, IReadOnlyCollection<IElement> elements, int readGeneration)
         {
-            lock (this.gate)
+            if (this.generation != readGeneration)
             {
-                if (this.generation != readGeneration)
-                {
-                    return;
-                }
-
-                var keptIdentifiers = elements.Select(element => element.Id).ToHashSet();
-                this.Assembler.Synchronize(elements, this.Assembler.Cache.Keys.Where(identifier => !keptIdentifiers.Contains(identifier)).ToList());
-                this.loadedCommit = commit;
+                return;
             }
+
+            var keptIdentifiers = elements.Select(element => element.Id).ToHashSet();
+            this.Assembler.Synchronize(elements, this.Assembler.Cache.Keys.Where(identifier => !keptIdentifiers.Contains(identifier)).ToList());
+            this.loadedCommit = commit;
         }
 
         /// <summary>
