@@ -145,7 +145,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IAttributeUsage.AttributeDefinition")]
+        [RedefinedByProperty("IAttributeUsage.AttributeDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.attributeDefinition];
 
@@ -400,7 +400,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IAttributeUsage.IsReference")]
+        [RedefinedByProperty("IAttributeUsage.IsReference", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.IsReference")]
         bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
 
@@ -428,7 +428,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -1050,7 +1050,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

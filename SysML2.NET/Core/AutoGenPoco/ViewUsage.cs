@@ -135,7 +135,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
@@ -434,7 +434,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -1043,7 +1043,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591475180488_929065_121", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
-        [RedefinedByProperty("IViewUsage.ViewDefinition")]
+        [RedefinedByProperty("IViewUsage.ViewDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IPartUsage.PartDefinition")]
         List<IPartDefinition> Systems.Parts.IPartUsage.partDefinition => this.viewDefinition != null ? [this.viewDefinition] : [];
 
@@ -1103,7 +1103,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

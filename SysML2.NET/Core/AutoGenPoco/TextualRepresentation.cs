@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// AnnotatingElement.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("ITextualRepresentation.RepresentedElement")]
+        [RedefinedByProperty("ITextualRepresentation.RepresentedElement", isDerivedByRedefinition: false)]
         [Implements(implementation: "IAnnotatingElement.AnnotatedElement")]
         List<IElement> IAnnotatingElement.annotatedElement => this.representedElement != null ? [this.representedElement] : [];
 

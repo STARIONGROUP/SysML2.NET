@@ -75,7 +75,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674983_471497_43284", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IFlow.Interaction")]
+        [RedefinedByProperty("IFlow.Interaction", isDerivedByRedefinition: false)]
         [Implements(implementation: "IConnector.Association")]
         List<IAssociation> Kernel.Connectors.IConnector.association => [.. this.interaction];
 
@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IFlow.Interaction")]
+        [RedefinedByProperty("IFlow.Interaction", isDerivedByRedefinition: false)]
         [Implements(implementation: "IStep.Behavior")]
         List<IBehavior> Kernel.Behaviors.IStep.behavior => [.. this.interaction];
 
@@ -164,7 +164,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
@@ -198,7 +198,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IConnector.ConnectorEnd")]
+        [RedefinedByProperty("IConnector.ConnectorEnd", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.EndFeature")]
         List<IFeature> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
@@ -813,7 +813,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IConnector.RelatedFeature")]
+        [RedefinedByProperty("IConnector.RelatedFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.RelatedElement")]
         List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
@@ -841,7 +841,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IConnector.SourceFeature", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IConnector.SourceFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<IElement> Root.Elements.IRelationship.Source
         {
@@ -871,7 +871,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IConnector.TargetFeature", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IConnector.TargetFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Target")]
         List<IElement> Root.Elements.IRelationship.Target
         {
@@ -913,7 +913,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IConnector.Association")]
+        [RedefinedByProperty("IConnector.Association", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Kernel.Connectors.IConnector)this).association];
 

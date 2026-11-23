@@ -851,9 +851,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var owner = (INamedElement)redefinition.Owner;
                 var isDerivedByRedefinition = !property.IsDerived && !property.IsDerivedUnion && property.QueryHasDerivedValueIn(generatedClass);
-                var derivedFlag = isDerivedByRedefinition ? ", IsDerivedByRedefinition = true" : string.Empty;
+                var derivedFlag = isDerivedByRedefinition ? "true" : "false";
 
-                writer.WriteSafeString($"[RedefinedByProperty(\"I{owner.Name}.{redefinition.Name.CapitalizeFirstLetter()}\"{derivedFlag})]");
+                writer.WriteSafeString($"[RedefinedByProperty(\"I{owner.Name}.{redefinition.Name.CapitalizeFirstLetter()}\", isDerivedByRedefinition: {derivedFlag})]");
             });
 
             handlebars.RegisterHelper("Property.HasDerivedValueIn", (_, arguments) =>

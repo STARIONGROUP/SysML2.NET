@@ -110,7 +110,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674980_563969_43273", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        [RedefinedByProperty("ISubsetting.SubsettedFeature")]
+        [RedefinedByProperty("ISubsetting.SubsettedFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISpecialization.General")]
         Guid Core.Types.ISpecialization.General
         {
@@ -205,7 +205,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1533160674987_236250_43311", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
-        [RedefinedByProperty("ICrossSubsetting.CrossingFeature")]
+        [RedefinedByProperty("ICrossSubsetting.CrossingFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISubsetting.OwningFeature")]
         Guid? ISubsetting.owningFeature => this.crossingFeature;
 
@@ -249,7 +249,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_573157_43226", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
-        [RedefinedByProperty("ISubsetting.OwningFeature")]
+        [RedefinedByProperty("ISubsetting.OwningFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISpecialization.OwningType")]
         Guid? Core.Types.ISpecialization.owningType => ((SysML2.NET.Core.DTO.Core.Features.ISubsetting)this).owningFeature.HasValue ? ((SysML2.NET.Core.DTO.Core.Features.ISubsetting)this).owningFeature.Value : Guid.Empty;
 
@@ -288,7 +288,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("ISpecialization.Specific", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("ISpecialization.Specific", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
@@ -308,7 +308,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674982_253967_43281", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        [RedefinedByProperty("ISubsetting.SubsettingFeature", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("ISubsetting.SubsettingFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "ISpecialization.Specific")]
         Guid Core.Types.ISpecialization.Specific
         {
@@ -324,7 +324,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_393191_43181", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
-        [RedefinedByProperty("ICrossSubsetting.CrossedFeature")]
+        [RedefinedByProperty("ICrossSubsetting.CrossedFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISubsetting.SubsettedFeature")]
         Guid ISubsetting.SubsettedFeature
         {
@@ -340,7 +340,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674967_140305_43206", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
-        [RedefinedByProperty("ICrossSubsetting.CrossingFeature", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("ICrossSubsetting.CrossingFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "ISubsetting.SubsettingFeature")]
         Guid ISubsetting.SubsettingFeature
         {
@@ -356,7 +356,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("ISpecialization.General")]
+        [RedefinedByProperty("ISpecialization.General", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {

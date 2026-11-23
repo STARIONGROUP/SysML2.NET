@@ -129,7 +129,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 

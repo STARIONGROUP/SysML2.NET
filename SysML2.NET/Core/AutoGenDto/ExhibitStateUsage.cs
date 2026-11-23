@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        [RedefinedByProperty("IStateUsage.StateDefinition")]
+        [RedefinedByProperty("IStateUsage.StateDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
         List<Guid> Systems.Actions.IActionUsage.actionDefinition => [.. this.stateDefinition];
 
@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IActionUsage.ActionDefinition")]
+        [RedefinedByProperty("IActionUsage.ActionDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IStep.Behavior")]
         List<Guid> Kernel.Behaviors.IStep.behavior => [.. ((SysML2.NET.Core.DTO.Systems.Actions.IActionUsage)this).actionDefinition];
 
@@ -114,7 +114,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.DTO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
@@ -136,7 +136,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
@@ -216,7 +216,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// EventOccurrenceUsage itself.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IPerformActionUsage.PerformedAction")]
+        [RedefinedByProperty("IPerformActionUsage.PerformedAction", isDerivedByRedefinition: false)]
         [Implements(implementation: "IEventOccurrenceUsage.EventOccurrence")]
         Guid Systems.Occurrences.IEventOccurrenceUsage.eventOccurrence => ((SysML2.NET.Core.DTO.Systems.Actions.IPerformActionUsage)this).performedAction;
 
@@ -433,7 +433,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IEventOccurrenceUsage.IsReference")]
+        [RedefinedByProperty("IEventOccurrenceUsage.IsReference", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.IsReference")]
         bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
 
@@ -469,7 +469,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -763,7 +763,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
-        [RedefinedByProperty("IActionUsage.ActionDefinition")]
+        [RedefinedByProperty("IActionUsage.ActionDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
         List<Guid> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.DTO.Systems.Actions.IActionUsage)this).actionDefinition];
 
@@ -1076,7 +1076,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1567740791820_867719_18017", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
-        [RedefinedByProperty("IExhibitStateUsage.ExhibitedState")]
+        [RedefinedByProperty("IExhibitStateUsage.ExhibitedState", isDerivedByRedefinition: false)]
         [Implements(implementation: "IPerformActionUsage.PerformedAction")]
         Guid Systems.Actions.IPerformActionUsage.performedAction => this.exhibitedState;
 
@@ -1136,7 +1136,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

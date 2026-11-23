@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674980_563969_43273", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        [RedefinedByProperty("ISubclassification.Superclassifier")]
+        [RedefinedByProperty("ISubclassification.Superclassifier", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISpecialization.General")]
         Guid Core.Types.ISpecialization.General
         {
@@ -219,7 +219,7 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_573157_43226", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: true)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
-        [RedefinedByProperty("ISubclassification.OwningClassifier")]
+        [RedefinedByProperty("ISubclassification.OwningClassifier", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISpecialization.OwningType")]
         Guid? Core.Types.ISpecialization.owningType => this.owningClassifier.HasValue ? this.owningClassifier.Value : Guid.Empty;
 
@@ -258,7 +258,7 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("ISpecialization.Specific")]
+        [RedefinedByProperty("ISpecialization.Specific", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
@@ -278,7 +278,7 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674982_253967_43281", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        [RedefinedByProperty("ISubclassification.Subclassifier")]
+        [RedefinedByProperty("ISubclassification.Subclassifier", isDerivedByRedefinition: false)]
         [Implements(implementation: "ISpecialization.Specific")]
         Guid Core.Types.ISpecialization.Specific
         {
@@ -310,7 +310,7 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("ISpecialization.General")]
+        [RedefinedByProperty("ISpecialization.General", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {

@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
+        [RedefinedByProperty("ICalculationUsage.CalculationDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
         List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => this.calculationDefinition != null ? [this.calculationDefinition] : [];
 
@@ -107,7 +107,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IExpression.Function")]
+        [RedefinedByProperty("IExpression.Function", isDerivedByRedefinition: false)]
         [Implements(implementation: "IStep.Behavior")]
         List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
 
@@ -168,7 +168,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
@@ -190,7 +190,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
@@ -286,7 +286,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
+        [RedefinedByProperty("ICalculationUsage.CalculationDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IExpression.Function")]
         IFunction Kernel.Functions.IExpression.function => this.calculationDefinition;
 
@@ -477,7 +477,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -768,7 +768,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
-        [RedefinedByProperty("IActionUsage.ActionDefinition")]
+        [RedefinedByProperty("IActionUsage.ActionDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
         List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
 
@@ -1139,7 +1139,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

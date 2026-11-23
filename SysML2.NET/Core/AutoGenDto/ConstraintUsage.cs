@@ -53,7 +53,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IExpression.Function")]
+        [RedefinedByProperty("IExpression.Function", isDerivedByRedefinition: false)]
         [Implements(implementation: "IStep.Behavior")]
         List<Guid> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.DTO.Kernel.Functions.IExpression)this).function.HasValue ? [((SysML2.NET.Core.DTO.Kernel.Functions.IExpression)this).function.Value] : [];
 
@@ -113,7 +113,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
@@ -135,7 +135,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
@@ -231,7 +231,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        [RedefinedByProperty("IBooleanExpression.Predicate")]
+        [RedefinedByProperty("IBooleanExpression.Predicate", isDerivedByRedefinition: false)]
         [Implements(implementation: "IExpression.Function")]
         Guid? Kernel.Functions.IExpression.function => ((SysML2.NET.Core.DTO.Kernel.Functions.IBooleanExpression)this).predicate.HasValue ? ((SysML2.NET.Core.DTO.Kernel.Functions.IBooleanExpression)this).predicate.Value : Guid.Empty;
 
@@ -422,7 +422,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -1037,7 +1037,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578025035149_386_969", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
-        [RedefinedByProperty("IConstraintUsage.ConstraintDefinition")]
+        [RedefinedByProperty("IConstraintUsage.ConstraintDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IBooleanExpression.Predicate")]
         Guid? Kernel.Functions.IBooleanExpression.predicate => this.constraintDefinition.HasValue ? this.constraintDefinition.Value : Guid.Empty;
 
@@ -1090,7 +1090,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

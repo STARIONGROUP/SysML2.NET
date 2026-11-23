@@ -225,7 +225,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IConnector.ConnectorEnd")]
+        [RedefinedByProperty("IConnector.ConnectorEnd", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.EndFeature")]
         List<IFeature> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
@@ -444,7 +444,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -1067,7 +1067,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IConnector.RelatedFeature")]
+        [RedefinedByProperty("IConnector.RelatedFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.RelatedElement")]
         List<IElement> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
@@ -1095,7 +1095,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IConnector.SourceFeature", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IConnector.SourceFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<IElement> Root.Elements.IRelationship.Source
         {
@@ -1117,7 +1117,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IConnector.TargetFeature", IsDerivedByRedefinition = true)]
+        [RedefinedByProperty("IConnector.TargetFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Target")]
         List<IElement> Root.Elements.IRelationship.Target
         {
@@ -1151,7 +1151,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<IType> Core.Features.IFeature.type => [.. this.definition];
 
