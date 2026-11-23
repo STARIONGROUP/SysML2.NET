@@ -227,7 +227,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         stringBuilder.AppendLine($"    JOIN sysml2.{ancestor.QuerySqlSubtypeTableName()} USING (project_id, version_id)");
                     }
 
-                    stringBuilder.AppendLine($"    WHERE ev.class_kind = {classKind.Value} AND NOT ev.tombstone;");
+                    stringBuilder.AppendLine($"    WHERE ev.class_kind = {classKind.Value} /* {classKind.Key.Name} */ AND NOT ev.tombstone;");
                     stringBuilder.AppendLine("");
                 }
 
@@ -260,20 +260,20 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         var allowedTargetKinds = QueryAllowedTargetKinds(payload, registrationsByName, source.TypeName);
 
-                        return (source.TableName, source.ColumnName,
+                        return (source.TableName, source.ColumnName, source.TypeName,
                             AllowedTargetKinds: allowedTargetKinds.Count == concreteClassCount ? null : allowedTargetKinds);
                     })
                     .ToList();
 
                 boundedSources.AddRange(ApiRecordReferenceColumns
-                    .Select(source => (source.TableName, source.ColumnName,
+                    .Select(source => (source.TableName, source.ColumnName, TypeName: source.TargetKindName ?? "Element",
                         AllowedTargetKinds: source.TargetKindName == null ? null : (IReadOnlyList<int>)[registrationsByName[source.TargetKindName].Id])));
 
                 var fullPassBlocks = boundedSources
-                    .Select(source => FormatReferenceValidationBlock(source.TableName, source.ColumnName, source.AllowedTargetKinds));
+                    .Select(source => FormatReferenceValidationBlock(source.TableName, source.ColumnName, source.TypeName, source.AllowedTargetKinds));
 
                 var outgoingBlocks = boundedSources
-                    .Select(source => FormatOutgoingValidationBlock(source.TableName, source.ColumnName, source.AllowedTargetKinds));
+                    .Select(source => FormatOutgoingValidationBlock(source.TableName, source.ColumnName, source.TypeName, source.AllowedTargetKinds));
 
                 var incomingBlocks = boundedSources
                     .Select(source => FormatIncomingValidationBlock(source.TableName, source.ColumnName));
@@ -585,16 +585,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// The subject <see cref="HandlebarsPayload" />
         /// </param>
         /// <returns>
-        /// The class_kind ids, ordered ascending, keyed by the XmiId of the redefined property
+        /// The class → class_kind id pairs, ordered by id, keyed by the XmiId of the redefined property
         /// </returns>
-        private static Dictionary<string, IReadOnlyList<int>> QueryDerivingClassKinds(HandlebarsPayload payload)
+        private static Dictionary<string, IReadOnlyList<KeyValuePair<IClass, int>>> QueryDerivingClassKinds(HandlebarsPayload payload)
         {
             return QueryClassKinds(payload)
                 .Where(classKind => !classKind.Key.IsAbstract)
                 .SelectMany(classKind => QueryDerivedRedefinedPropertyIds(classKind.Key)
-                    .Select(propertyId => (PropertyId: propertyId, ClassKindId: classKind.Value)))
-                .GroupBy(redefinition => redefinition.PropertyId, redefinition => redefinition.ClassKindId)
-                .ToDictionary(group => group.Key, group => (IReadOnlyList<int>)[.. group.Order()]);
+                    .Select(propertyId => (PropertyId: propertyId, ClassKind: classKind)))
+                .GroupBy(redefinition => redefinition.PropertyId, redefinition => redefinition.ClassKind)
+                .ToDictionary(group => group.Key, group => (IReadOnlyList<KeyValuePair<IClass, int>>)[.. group.OrderBy(classKind => classKind.Value)]);
         }
 
         /// <summary>
@@ -682,21 +682,66 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// The stored <see cref="IProperty" /> that a derived property redefines
         /// </param>
         /// <param name="derivingClassKinds">
-        /// The class_kind ids whose rows do not store the value
+        /// The classes, with their class_kind ids, whose rows do not store the value
         /// </param>
         /// <returns>
         /// The constraint definition, without a trailing separator
         /// </returns>
-        private static string FormatDerivedRedefinitionCheck(string tableName, IProperty property, IReadOnlyList<int> derivingClassKinds)
+        private static string FormatDerivedRedefinitionCheck(string tableName, IProperty property, IReadOnlyList<KeyValuePair<IClass, int>> derivingClassKinds)
         {
             var columnName = property.QuerySqlColumnName();
-            var classKindList = string.Join(", ", derivingClassKinds);
+            var classKindList = FormatCommentedClassKindList(derivingClassKinds, "            ");
 
             var predicate = property.QueryIsNullable()
-                ? $"class_kind NOT IN ({classKindList}) OR {columnName} IS NULL"
-                : $"(class_kind IN ({classKindList})) = ({columnName} IS NULL)";
+                ? $"        class_kind NOT IN (\n{classKindList}\n        ) OR {columnName} IS NULL)"
+                : $"        (class_kind IN (\n{classKindList}\n        )) = ({columnName} IS NULL))";
 
-            return $"    CONSTRAINT ck_{tableName}_{columnName}\n        CHECK ({predicate})";
+            return $"    CONSTRAINT ck_{tableName}_{columnName} CHECK (\n{predicate}";
+        }
+
+        /// <summary>
+        /// Formats a list of class_kind ids one per line, each followed by the name of its class as a SQL comment
+        /// </summary>
+        /// <param name="classKinds">
+        /// The classes with their class_kind ids, in list order
+        /// </param>
+        /// <param name="indentation">
+        /// The leading whitespace of every line
+        /// </param>
+        /// <returns>
+        /// The formatted list, without a trailing line break
+        /// </returns>
+        private static string FormatCommentedClassKindList(IReadOnlyList<KeyValuePair<IClass, int>> classKinds, string indentation)
+        {
+            var idWidth = classKinds.Max(classKind => classKind.Value.ToString().Length) + 1;
+
+            var lines = classKinds.Select((classKind, classKindIndex) =>
+            {
+                var separator = classKindIndex == classKinds.Count - 1 ? string.Empty : ",";
+
+                return $"{indentation}{(classKind.Value + separator).PadRight(idWidth)} -- {classKind.Key.Name}";
+            });
+
+            return string.Join("\n", lines);
+        }
+
+        /// <summary>
+        /// Formats the SQL comment heading a reference-validation arm, naming the type its target must conform to
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the reference's declared type
+        /// </param>
+        /// <param name="allowedTargetKinds">
+        /// The legal target class_kind ids, or null when every concrete metaclass is legal
+        /// </param>
+        /// <returns>
+        /// The comment line, without a trailing line break
+        /// </returns>
+        private static string FormatTargetTypeComment(string typeName, IReadOnlyList<int> allowedTargetKinds)
+        {
+            return allowedTargetKinds == null
+                ? $"    -- target: any {typeName}, never an API data record"
+                : $"    -- target: {typeName}; the class_kind ids are its concrete kinds";
         }
 
         /// <summary>
@@ -772,6 +817,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="columnName">
         /// The reference column
         /// </param>
+        /// <param name="typeName">
+        /// The name of the reference's declared type
+        /// </param>
         /// <param name="allowedTargetKinds">
         /// The legal target class_kind ids, or null when every concrete metaclass is legal (an
         /// Element-typed reference) and only an API data record target is the wrong type
@@ -779,11 +827,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>
         /// The formatted SELECT arm, without a trailing separator
         /// </returns>
-        private static string FormatReferenceValidationBlock(string tableName, string columnName, IReadOnlyList<int> allowedTargetKinds)
+        private static string FormatReferenceValidationBlock(string tableName, string columnName, string typeName, IReadOnlyList<int> allowedTargetKinds)
         {
             var wrongTypePredicate = FormatWrongTypePredicate(allowedTargetKinds);
             var stringBuilder = new StringBuilder();
 
+            stringBuilder.AppendLine(FormatTargetTypeComment(typeName, allowedTargetKinds));
             stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
             stringBuilder.AppendLine($"           snap.identity_id, src.{columnName},");
             stringBuilder.AppendLine($"           CASE WHEN {wrongTypePredicate} THEN 'wrong-type' ELSE 'dangling' END");
@@ -828,6 +877,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="columnName">
         /// The reference column
         /// </param>
+        /// <param name="typeName">
+        /// The name of the reference's declared type
+        /// </param>
         /// <param name="allowedTargetKinds">
         /// The legal target class_kind ids, or null when every concrete metaclass is legal and only
         /// an API data record target is the wrong type
@@ -835,13 +887,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>
         /// The formatted SELECT arm, without a trailing separator
         /// </returns>
-        private static string FormatOutgoingValidationBlock(string tableName, string columnName, IReadOnlyList<int> allowedTargetKinds)
+        private static string FormatOutgoingValidationBlock(string tableName, string columnName, string typeName, IReadOnlyList<int> allowedTargetKinds)
         {
             var wrongTypePredicate = FormatWrongTypePredicate(allowedTargetKinds);
             var stringBuilder = new StringBuilder();
             var isCoreTable = tableName == "element_version";
             var sourceAlias = isCoreTable ? "changed" : "src";
 
+            stringBuilder.AppendLine(FormatTargetTypeComment(typeName, allowedTargetKinds));
             stringBuilder.AppendLine($"    SELECT '{tableName}'::text, '{columnName}'::text,");
             stringBuilder.AppendLine($"           changed.identity_id, {sourceAlias}.{columnName},");
             stringBuilder.AppendLine($"           CASE WHEN {wrongTypePredicate} THEN 'wrong-type' ELSE 'dangling' END");

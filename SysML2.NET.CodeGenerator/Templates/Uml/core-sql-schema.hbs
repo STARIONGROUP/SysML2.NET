@@ -507,7 +507,9 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 --
 -- Every table is keyed by (project_id, version_id) and co-partitioned with element_version, so
 -- the join is partition-local. Each row carries its element's class_kind, pinned to the version
--- row by the composite FK, so a constraint can depend on the metaclass.
+-- row by the composite FK, so a constraint can depend on the metaclass. class_kind is the frozen
+-- ClassKindRegistry id of the metaclass, named in sysml2.class_kind; every class_kind id the
+-- generator writes into a constraint or a view carries that name as a SQL comment.
 --
 -- A [1..1] property is NOT NULL, unless a derived property redefines it, directly or through a
 -- chain of redefinitions: the value is then derived for the classes owning that derived property

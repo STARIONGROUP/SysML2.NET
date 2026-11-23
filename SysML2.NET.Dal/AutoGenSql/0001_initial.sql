@@ -783,7 +783,9 @@ CREATE INDEX ix_relationship_target_target
 --
 -- Every table is keyed by (project_id, version_id) and co-partitioned with element_version, so
 -- the join is partition-local. Each row carries its element's class_kind, pinned to the version
--- row by the composite FK, so a constraint can depend on the metaclass.
+-- row by the composite FK, so a constraint can depend on the metaclass. class_kind is the frozen
+-- ClassKindRegistry id of the metaclass, named in sysml2.class_kind; every class_kind id the
+-- generator writes into a constraint or a view carries that name as a SQL comment.
 --
 -- A [1..1] property is NOT NULL, unless a derived property redefines it, directly or through a
 -- chain of redefinitions: the value is then derived for the classes owning that derived property
@@ -955,12 +957,72 @@ CREATE TABLE sysml2.membership_version (
     PRIMARY KEY (project_id, version_id),
     FOREIGN KEY (project_id, version_id, class_kind)
         REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE,
-    CONSTRAINT ck_membership_version_member_element
-        CHECK ((class_kind IN (4, 51, 52, 63, 66, 73, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171)) = (member_element IS NULL)),
-    CONSTRAINT ck_membership_version_member_name
-        CHECK (class_kind NOT IN (4, 51, 52, 63, 66, 73, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171) OR member_name IS NULL),
-    CONSTRAINT ck_membership_version_member_short_name
-        CHECK (class_kind NOT IN (4, 51, 52, 63, 66, 73, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171) OR member_short_name IS NULL)
+    CONSTRAINT ck_membership_version_member_element CHECK (
+        (class_kind IN (
+            4,   -- ActorMembership
+            51,  -- ElementFilterMembership
+            52,  -- EndFeatureMembership
+            63,  -- FeatureMembership
+            66,  -- FeatureValue
+            73,  -- FramedConcernMembership
+            112, -- ObjectiveMembership
+            116, -- OwningMembership
+            118, -- ParameterMembership
+            133, -- RequirementConstraintMembership
+            136, -- RequirementVerificationMembership
+            137, -- ResultExpressionMembership
+            138, -- ReturnParameterMembership
+            143, -- StakeholderMembership
+            145, -- StateSubactionMembership
+            150, -- SubjectMembership
+            158, -- TransitionFeatureMembership
+            167, -- VariantMembership
+            171  -- ViewRenderingMembership
+        )) = (member_element IS NULL)),
+    CONSTRAINT ck_membership_version_member_name CHECK (
+        class_kind NOT IN (
+            4,   -- ActorMembership
+            51,  -- ElementFilterMembership
+            52,  -- EndFeatureMembership
+            63,  -- FeatureMembership
+            66,  -- FeatureValue
+            73,  -- FramedConcernMembership
+            112, -- ObjectiveMembership
+            116, -- OwningMembership
+            118, -- ParameterMembership
+            133, -- RequirementConstraintMembership
+            136, -- RequirementVerificationMembership
+            137, -- ResultExpressionMembership
+            138, -- ReturnParameterMembership
+            143, -- StakeholderMembership
+            145, -- StateSubactionMembership
+            150, -- SubjectMembership
+            158, -- TransitionFeatureMembership
+            167, -- VariantMembership
+            171  -- ViewRenderingMembership
+        ) OR member_name IS NULL),
+    CONSTRAINT ck_membership_version_member_short_name CHECK (
+        class_kind NOT IN (
+            4,   -- ActorMembership
+            51,  -- ElementFilterMembership
+            52,  -- EndFeatureMembership
+            63,  -- FeatureMembership
+            66,  -- FeatureValue
+            73,  -- FramedConcernMembership
+            112, -- ObjectiveMembership
+            116, -- OwningMembership
+            118, -- ParameterMembership
+            133, -- RequirementConstraintMembership
+            136, -- RequirementVerificationMembership
+            137, -- ResultExpressionMembership
+            138, -- ReturnParameterMembership
+            143, -- StakeholderMembership
+            145, -- StateSubactionMembership
+            150, -- SubjectMembership
+            158, -- TransitionFeatureMembership
+            167, -- VariantMembership
+            171  -- ViewRenderingMembership
+        ) OR member_short_name IS NULL)
 ) PARTITION BY HASH (project_id);
 
 CREATE INDEX ix_membership_version_member_element
@@ -975,8 +1037,11 @@ CREATE TABLE sysml2.specialization_version (
     PRIMARY KEY (project_id, version_id),
     FOREIGN KEY (project_id, version_id, class_kind)
         REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE,
-    CONSTRAINT ck_specialization_version_specific
-        CHECK ((class_kind IN (42, 128)) = (specific IS NULL))
+    CONSTRAINT ck_specialization_version_specific CHECK (
+        (class_kind IN (
+            42,  -- CrossSubsetting
+            128  -- ReferenceSubsetting
+        )) = (specific IS NULL))
 ) PARTITION BY HASH (project_id);
 
 CREATE INDEX ix_specialization_version_general
@@ -1053,8 +1118,56 @@ CREATE TABLE sysml2.feature_version (
     PRIMARY KEY (project_id, version_id),
     FOREIGN KEY (project_id, version_id, class_kind)
         REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE,
-    CONSTRAINT ck_feature_version_is_variable
-        CHECK ((class_kind IN (1, 3, 6, 8, 11, 12, 16, 19, 22, 24, 30, 35, 39, 44, 54, 55, 56, 70, 71, 72, 75, 77, 82, 87, 88, 100, 105, 114, 120, 122, 125, 129, 132, 135, 139, 141, 146, 153, 155, 156, 159, 164, 166, 169, 172, 174, 175)) = (is_variable IS NULL))
+    CONSTRAINT ck_feature_version_is_variable CHECK (
+        (class_kind IN (
+            1,   -- AcceptActionUsage
+            3,   -- ActionUsage
+            6,   -- AllocationUsage
+            8,   -- AnalysisCaseUsage
+            11,  -- AssertConstraintUsage
+            12,  -- AssignmentActionUsage
+            16,  -- AttributeUsage
+            19,  -- BindingConnectorAsUsage
+            22,  -- CalculationUsage
+            24,  -- CaseUsage
+            30,  -- ConcernUsage
+            35,  -- ConnectionUsage
+            39,  -- ConstraintUsage
+            44,  -- DecisionNode
+            54,  -- EnumerationUsage
+            55,  -- EventOccurrenceUsage
+            56,  -- ExhibitStateUsage
+            70,  -- FlowUsage
+            71,  -- ForLoopActionUsage
+            72,  -- ForkNode
+            75,  -- IfActionUsage
+            77,  -- IncludeUseCaseUsage
+            82,  -- InterfaceUsage
+            87,  -- ItemUsage
+            88,  -- JoinNode
+            100, -- MergeNode
+            105, -- MetadataUsage
+            114, -- OccurrenceUsage
+            120, -- PartUsage
+            122, -- PerformActionUsage
+            125, -- PortUsage
+            129, -- ReferenceUsage
+            132, -- RenderingUsage
+            135, -- RequirementUsage
+            139, -- SatisfyRequirementUsage
+            141, -- SendActionUsage
+            146, -- StateUsage
+            153, -- SuccessionAsUsage
+            155, -- SuccessionFlowUsage
+            156, -- TerminateActionUsage
+            159, -- TransitionUsage
+            164, -- Usage
+            166, -- UseCaseUsage
+            169, -- VerificationCaseUsage
+            172, -- ViewUsage
+            174, -- ViewpointUsage
+            175  -- WhileLoopActionUsage
+        )) = (is_variable IS NULL))
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.feature_typing_version (
@@ -1149,8 +1262,11 @@ CREATE TABLE sysml2.subsetting_version (
     PRIMARY KEY (project_id, version_id),
     FOREIGN KEY (project_id, version_id, class_kind)
         REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE,
-    CONSTRAINT ck_subsetting_version_subsetting_feature
-        CHECK ((class_kind IN (42, 128)) = (subsetting_feature IS NULL))
+    CONSTRAINT ck_subsetting_version_subsetting_feature CHECK (
+        (class_kind IN (
+            42,  -- CrossSubsetting
+            128  -- ReferenceSubsetting
+        )) = (subsetting_feature IS NULL))
 ) PARTITION BY HASH (project_id);
 
 CREATE INDEX ix_subsetting_version_subsetted_feature
@@ -2053,7 +2169,7 @@ CREATE VIEW sysml2.vw_accept_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 1 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 1 /* AcceptActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_action_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2065,7 +2181,7 @@ CREATE VIEW sysml2.vw_action_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 2 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 2 /* ActionDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2079,7 +2195,7 @@ CREATE VIEW sysml2.vw_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 3 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 3 /* ActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_actor_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2089,7 +2205,7 @@ CREATE VIEW sysml2.vw_actor_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 4 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 4 /* ActorMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_allocation_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2103,7 +2219,7 @@ CREATE VIEW sysml2.vw_allocation_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 5 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 5 /* AllocationDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_allocation_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2119,7 +2235,7 @@ CREATE VIEW sysml2.vw_allocation_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 6 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 6 /* AllocationUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_analysis_case_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2131,7 +2247,7 @@ CREATE VIEW sysml2.vw_analysis_case_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 7 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 7 /* AnalysisCaseDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_analysis_case_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2145,13 +2261,13 @@ CREATE VIEW sysml2.vw_analysis_case_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 8 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 8 /* AnalysisCaseUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_annotating_element AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
            ev.element_id, ev.declared_name, ev.declared_short_name, ev.is_implied_included, ev.owning_relationship
     FROM sysml2.element_version ev
-    WHERE ev.class_kind = 9 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 9 /* AnnotatingElement */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_annotation AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2161,7 +2277,7 @@ CREATE VIEW sysml2.vw_annotation AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.annotation_version USING (project_id, version_id)
-    WHERE ev.class_kind = 10 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 10 /* Annotation */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_assert_constraint_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2177,7 +2293,7 @@ CREATE VIEW sysml2.vw_assert_constraint_usage AS
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.invariant_version USING (project_id, version_id)
-    WHERE ev.class_kind = 11 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 11 /* AssertConstraintUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_assignment_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2191,7 +2307,7 @@ CREATE VIEW sysml2.vw_assignment_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 12 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 12 /* AssignmentActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_association AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2201,7 +2317,7 @@ CREATE VIEW sysml2.vw_association AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 13 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 13 /* Association */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_association_structure AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2211,7 +2327,7 @@ CREATE VIEW sysml2.vw_association_structure AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 14 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 14 /* AssociationStructure */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_attribute_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2221,7 +2337,7 @@ CREATE VIEW sysml2.vw_attribute_definition AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 15 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 15 /* AttributeDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_attribute_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2233,7 +2349,7 @@ CREATE VIEW sysml2.vw_attribute_usage AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 16 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 16 /* AttributeUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_behavior AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2241,7 +2357,7 @@ CREATE VIEW sysml2.vw_behavior AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 17 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 17 /* Behavior */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_binding_connector AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2253,7 +2369,7 @@ CREATE VIEW sysml2.vw_binding_connector AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 18 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 18 /* BindingConnector */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_binding_connector_as_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2267,7 +2383,7 @@ CREATE VIEW sysml2.vw_binding_connector_as_usage AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 19 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 19 /* BindingConnectorAsUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_boolean_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2277,7 +2393,7 @@ CREATE VIEW sysml2.vw_boolean_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 20 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 20 /* BooleanExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_calculation_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2289,7 +2405,7 @@ CREATE VIEW sysml2.vw_calculation_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 21 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 21 /* CalculationDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_calculation_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2303,7 +2419,7 @@ CREATE VIEW sysml2.vw_calculation_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 22 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 22 /* CalculationUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_case_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2315,7 +2431,7 @@ CREATE VIEW sysml2.vw_case_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 23 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 23 /* CaseDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_case_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2329,7 +2445,7 @@ CREATE VIEW sysml2.vw_case_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 24 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 24 /* CaseUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_class AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2337,7 +2453,7 @@ CREATE VIEW sysml2.vw_class AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 25 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 25 /* Class */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_classifier AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2345,7 +2461,7 @@ CREATE VIEW sysml2.vw_classifier AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 26 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 26 /* Classifier */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_collect_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2357,7 +2473,7 @@ CREATE VIEW sysml2.vw_collect_expression AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.operator_expression_version USING (project_id, version_id)
-    WHERE ev.class_kind = 27 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 27 /* CollectExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_comment AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2365,7 +2481,7 @@ CREATE VIEW sysml2.vw_comment AS
            comment_version.body, comment_version.locale
     FROM sysml2.element_version ev
     JOIN sysml2.comment_version USING (project_id, version_id)
-    WHERE ev.class_kind = 28 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 28 /* Comment */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_concern_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2379,7 +2495,7 @@ CREATE VIEW sysml2.vw_concern_definition AS
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
     JOIN sysml2.requirement_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 29 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 29 /* ConcernDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_concern_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2395,7 +2511,7 @@ CREATE VIEW sysml2.vw_concern_usage AS
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.requirement_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 30 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 30 /* ConcernUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_conjugated_port_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2407,7 +2523,7 @@ CREATE VIEW sysml2.vw_conjugated_port_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 31 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 31 /* ConjugatedPortDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_conjugated_port_typing AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2421,7 +2537,7 @@ CREATE VIEW sysml2.vw_conjugated_port_typing AS
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.feature_typing_version USING (project_id, version_id)
     JOIN sysml2.conjugated_port_typing_version USING (project_id, version_id)
-    WHERE ev.class_kind = 32 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 32 /* ConjugatedPortTyping */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_conjugation AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2431,7 +2547,7 @@ CREATE VIEW sysml2.vw_conjugation AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.conjugation_version USING (project_id, version_id)
-    WHERE ev.class_kind = 33 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 33 /* Conjugation */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_connection_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2445,7 +2561,7 @@ CREATE VIEW sysml2.vw_connection_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 34 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 34 /* ConnectionDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_connection_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2461,7 +2577,7 @@ CREATE VIEW sysml2.vw_connection_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 35 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 35 /* ConnectionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_connector AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2473,7 +2589,7 @@ CREATE VIEW sysml2.vw_connector AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 36 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 36 /* Connector */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_constraint_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2485,7 +2601,7 @@ CREATE VIEW sysml2.vw_constraint_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 38 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 38 /* ConstraintDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_constraint_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2499,7 +2615,7 @@ CREATE VIEW sysml2.vw_constraint_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 39 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 39 /* ConstraintUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_constructor_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2509,7 +2625,7 @@ CREATE VIEW sysml2.vw_constructor_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 40 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 40 /* ConstructorExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_cross_subsetting AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2523,7 +2639,7 @@ CREATE VIEW sysml2.vw_cross_subsetting AS
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.subsetting_version USING (project_id, version_id)
     JOIN sysml2.cross_subsetting_version USING (project_id, version_id)
-    WHERE ev.class_kind = 42 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 42 /* CrossSubsetting */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_data_type AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2531,7 +2647,7 @@ CREATE VIEW sysml2.vw_data_type AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 43 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 43 /* DataType */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_decision_node AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2545,7 +2661,7 @@ CREATE VIEW sysml2.vw_decision_node AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 44 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 44 /* DecisionNode */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2555,7 +2671,7 @@ CREATE VIEW sysml2.vw_definition AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 45 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 45 /* Definition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_dependency AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2563,7 +2679,7 @@ CREATE VIEW sysml2.vw_dependency AS
            relationship_version.is_implied, relationship_version.owning_related_element
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
-    WHERE ev.class_kind = 46 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 46 /* Dependency */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_differencing AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2573,7 +2689,7 @@ CREATE VIEW sysml2.vw_differencing AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.differencing_version USING (project_id, version_id)
-    WHERE ev.class_kind = 47 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 47 /* Differencing */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_disjoining AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2583,7 +2699,7 @@ CREATE VIEW sysml2.vw_disjoining AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.disjoining_version USING (project_id, version_id)
-    WHERE ev.class_kind = 48 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 48 /* Disjoining */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_documentation AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2591,7 +2707,7 @@ CREATE VIEW sysml2.vw_documentation AS
            comment_version.body, comment_version.locale
     FROM sysml2.element_version ev
     JOIN sysml2.comment_version USING (project_id, version_id)
-    WHERE ev.class_kind = 49 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 49 /* Documentation */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_element_filter_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2601,7 +2717,7 @@ CREATE VIEW sysml2.vw_element_filter_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 51 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 51 /* ElementFilterMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_end_feature_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2611,7 +2727,7 @@ CREATE VIEW sysml2.vw_end_feature_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 52 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 52 /* EndFeatureMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_enumeration_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2621,7 +2737,7 @@ CREATE VIEW sysml2.vw_enumeration_definition AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 53 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 53 /* EnumerationDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_enumeration_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2633,7 +2749,7 @@ CREATE VIEW sysml2.vw_enumeration_usage AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 54 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 54 /* EnumerationUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_event_occurrence_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2647,7 +2763,7 @@ CREATE VIEW sysml2.vw_event_occurrence_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 55 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 55 /* EventOccurrenceUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_exhibit_state_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2663,7 +2779,7 @@ CREATE VIEW sysml2.vw_exhibit_state_usage AS
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.state_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 56 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 56 /* ExhibitStateUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2673,7 +2789,7 @@ CREATE VIEW sysml2.vw_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 58 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 58 /* Expression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2683,7 +2799,7 @@ CREATE VIEW sysml2.vw_feature AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 59 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 59 /* Feature */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_chain_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2695,7 +2811,7 @@ CREATE VIEW sysml2.vw_feature_chain_expression AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.operator_expression_version USING (project_id, version_id)
-    WHERE ev.class_kind = 60 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 60 /* FeatureChainExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_chaining AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2705,7 +2821,7 @@ CREATE VIEW sysml2.vw_feature_chaining AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.feature_chaining_version USING (project_id, version_id)
-    WHERE ev.class_kind = 61 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 61 /* FeatureChaining */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_inverting AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2715,7 +2831,7 @@ CREATE VIEW sysml2.vw_feature_inverting AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.feature_inverting_version USING (project_id, version_id)
-    WHERE ev.class_kind = 62 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 62 /* FeatureInverting */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2725,7 +2841,7 @@ CREATE VIEW sysml2.vw_feature_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 63 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 63 /* FeatureMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_reference_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2735,7 +2851,7 @@ CREATE VIEW sysml2.vw_feature_reference_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 64 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 64 /* FeatureReferenceExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_typing AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2747,7 +2863,7 @@ CREATE VIEW sysml2.vw_feature_typing AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.feature_typing_version USING (project_id, version_id)
-    WHERE ev.class_kind = 65 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 65 /* FeatureTyping */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_feature_value AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2759,7 +2875,7 @@ CREATE VIEW sysml2.vw_feature_value AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
     JOIN sysml2.feature_value_version USING (project_id, version_id)
-    WHERE ev.class_kind = 66 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 66 /* FeatureValue */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_flow AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2771,7 +2887,7 @@ CREATE VIEW sysml2.vw_flow AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 67 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 67 /* Flow */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_flow_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2785,7 +2901,7 @@ CREATE VIEW sysml2.vw_flow_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 68 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 68 /* FlowDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_flow_end AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2795,7 +2911,7 @@ CREATE VIEW sysml2.vw_flow_end AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 69 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 69 /* FlowEnd */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_flow_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2811,7 +2927,7 @@ CREATE VIEW sysml2.vw_flow_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 70 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 70 /* FlowUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_for_loop_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2825,7 +2941,7 @@ CREATE VIEW sysml2.vw_for_loop_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 71 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 71 /* ForLoopActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_fork_node AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2839,7 +2955,7 @@ CREATE VIEW sysml2.vw_fork_node AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 72 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 72 /* ForkNode */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_framed_concern_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2851,7 +2967,7 @@ CREATE VIEW sysml2.vw_framed_concern_membership AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
     JOIN sysml2.requirement_constraint_membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 73 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 73 /* FramedConcernMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_function AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2859,7 +2975,7 @@ CREATE VIEW sysml2.vw_function AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 74 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 74 /* Function */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_if_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2873,7 +2989,7 @@ CREATE VIEW sysml2.vw_if_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 75 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 75 /* IfActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_include_use_case_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2887,7 +3003,7 @@ CREATE VIEW sysml2.vw_include_use_case_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 77 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 77 /* IncludeUseCaseUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_index_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2899,7 +3015,7 @@ CREATE VIEW sysml2.vw_index_expression AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.operator_expression_version USING (project_id, version_id)
-    WHERE ev.class_kind = 78 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 78 /* IndexExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_interaction AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2909,7 +3025,7 @@ CREATE VIEW sysml2.vw_interaction AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 80 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 80 /* Interaction */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_interface_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2923,7 +3039,7 @@ CREATE VIEW sysml2.vw_interface_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 81 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 81 /* InterfaceDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_interface_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2939,7 +3055,7 @@ CREATE VIEW sysml2.vw_interface_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 82 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 82 /* InterfaceUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_intersecting AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2949,7 +3065,7 @@ CREATE VIEW sysml2.vw_intersecting AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.intersecting_version USING (project_id, version_id)
-    WHERE ev.class_kind = 83 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 83 /* Intersecting */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_invariant AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2961,7 +3077,7 @@ CREATE VIEW sysml2.vw_invariant AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.invariant_version USING (project_id, version_id)
-    WHERE ev.class_kind = 84 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 84 /* Invariant */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_invocation_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2971,7 +3087,7 @@ CREATE VIEW sysml2.vw_invocation_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 85 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 85 /* InvocationExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_item_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2983,7 +3099,7 @@ CREATE VIEW sysml2.vw_item_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 86 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 86 /* ItemDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_item_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -2997,7 +3113,7 @@ CREATE VIEW sysml2.vw_item_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 87 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 87 /* ItemUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_join_node AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3011,7 +3127,7 @@ CREATE VIEW sysml2.vw_join_node AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 88 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 88 /* JoinNode */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_library_package AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3019,7 +3135,7 @@ CREATE VIEW sysml2.vw_library_package AS
            library_package_version.is_standard
     FROM sysml2.element_version ev
     JOIN sysml2.library_package_version USING (project_id, version_id)
-    WHERE ev.class_kind = 89 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 89 /* LibraryPackage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_literal_boolean AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3031,7 +3147,7 @@ CREATE VIEW sysml2.vw_literal_boolean AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.literal_boolean_version USING (project_id, version_id)
-    WHERE ev.class_kind = 90 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 90 /* LiteralBoolean */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_literal_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3041,7 +3157,7 @@ CREATE VIEW sysml2.vw_literal_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 91 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 91 /* LiteralExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_literal_infinity AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3051,7 +3167,7 @@ CREATE VIEW sysml2.vw_literal_infinity AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 92 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 92 /* LiteralInfinity */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_literal_integer AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3063,7 +3179,7 @@ CREATE VIEW sysml2.vw_literal_integer AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.literal_integer_version USING (project_id, version_id)
-    WHERE ev.class_kind = 93 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 93 /* LiteralInteger */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_literal_rational AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3075,7 +3191,7 @@ CREATE VIEW sysml2.vw_literal_rational AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.literal_rational_version USING (project_id, version_id)
-    WHERE ev.class_kind = 94 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 94 /* LiteralRational */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_literal_string AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3087,7 +3203,7 @@ CREATE VIEW sysml2.vw_literal_string AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.literal_string_version USING (project_id, version_id)
-    WHERE ev.class_kind = 95 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 95 /* LiteralString */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3097,7 +3213,7 @@ CREATE VIEW sysml2.vw_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 97 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 97 /* Membership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_membership_expose AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3109,7 +3225,7 @@ CREATE VIEW sysml2.vw_membership_expose AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.import_version USING (project_id, version_id)
     JOIN sysml2.membership_import_version USING (project_id, version_id)
-    WHERE ev.class_kind = 98 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 98 /* MembershipExpose */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_membership_import AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3121,7 +3237,7 @@ CREATE VIEW sysml2.vw_membership_import AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.import_version USING (project_id, version_id)
     JOIN sysml2.membership_import_version USING (project_id, version_id)
-    WHERE ev.class_kind = 99 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 99 /* MembershipImport */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_merge_node AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3135,7 +3251,7 @@ CREATE VIEW sysml2.vw_merge_node AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 100 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 100 /* MergeNode */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_metaclass AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3143,7 +3259,7 @@ CREATE VIEW sysml2.vw_metaclass AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 101 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 101 /* Metaclass */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_metadata_access_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3153,7 +3269,7 @@ CREATE VIEW sysml2.vw_metadata_access_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 102 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 102 /* MetadataAccessExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_metadata_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3165,7 +3281,7 @@ CREATE VIEW sysml2.vw_metadata_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 103 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 103 /* MetadataDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_metadata_feature AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3175,7 +3291,7 @@ CREATE VIEW sysml2.vw_metadata_feature AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 104 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 104 /* MetadataFeature */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_metadata_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3189,7 +3305,7 @@ CREATE VIEW sysml2.vw_metadata_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 105 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 105 /* MetadataUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_multiplicity AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3199,7 +3315,7 @@ CREATE VIEW sysml2.vw_multiplicity AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 106 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 106 /* Multiplicity */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_multiplicity_range AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3209,13 +3325,13 @@ CREATE VIEW sysml2.vw_multiplicity_range AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 107 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 107 /* MultiplicityRange */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_namespace AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
            ev.element_id, ev.declared_name, ev.declared_short_name, ev.is_implied_included, ev.owning_relationship
     FROM sysml2.element_version ev
-    WHERE ev.class_kind = 108 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 108 /* Namespace */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_namespace_expose AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3227,7 +3343,7 @@ CREATE VIEW sysml2.vw_namespace_expose AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.import_version USING (project_id, version_id)
     JOIN sysml2.namespace_import_version USING (project_id, version_id)
-    WHERE ev.class_kind = 109 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 109 /* NamespaceExpose */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_namespace_import AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3239,7 +3355,7 @@ CREATE VIEW sysml2.vw_namespace_import AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.import_version USING (project_id, version_id)
     JOIN sysml2.namespace_import_version USING (project_id, version_id)
-    WHERE ev.class_kind = 110 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 110 /* NamespaceImport */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_null_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3249,7 +3365,7 @@ CREATE VIEW sysml2.vw_null_expression AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 111 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 111 /* NullExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_objective_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3259,7 +3375,7 @@ CREATE VIEW sysml2.vw_objective_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 112 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 112 /* ObjectiveMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_occurrence_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3271,7 +3387,7 @@ CREATE VIEW sysml2.vw_occurrence_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 113 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 113 /* OccurrenceDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_occurrence_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3285,7 +3401,7 @@ CREATE VIEW sysml2.vw_occurrence_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 114 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 114 /* OccurrenceUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_operator_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3297,7 +3413,7 @@ CREATE VIEW sysml2.vw_operator_expression AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.operator_expression_version USING (project_id, version_id)
-    WHERE ev.class_kind = 115 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 115 /* OperatorExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_owning_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3307,13 +3423,13 @@ CREATE VIEW sysml2.vw_owning_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 116 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 116 /* OwningMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_package AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
            ev.element_id, ev.declared_name, ev.declared_short_name, ev.is_implied_included, ev.owning_relationship
     FROM sysml2.element_version ev
-    WHERE ev.class_kind = 117 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 117 /* Package */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_parameter_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3323,7 +3439,7 @@ CREATE VIEW sysml2.vw_parameter_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 118 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 118 /* ParameterMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_part_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3335,7 +3451,7 @@ CREATE VIEW sysml2.vw_part_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 119 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 119 /* PartDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_part_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3349,7 +3465,7 @@ CREATE VIEW sysml2.vw_part_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 120 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 120 /* PartUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_payload_feature AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3359,7 +3475,7 @@ CREATE VIEW sysml2.vw_payload_feature AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 121 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 121 /* PayloadFeature */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_perform_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3373,7 +3489,7 @@ CREATE VIEW sysml2.vw_perform_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 122 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 122 /* PerformActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_port_conjugation AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3385,7 +3501,7 @@ CREATE VIEW sysml2.vw_port_conjugation AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.conjugation_version USING (project_id, version_id)
     JOIN sysml2.port_conjugation_version USING (project_id, version_id)
-    WHERE ev.class_kind = 123 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 123 /* PortConjugation */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_port_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3397,7 +3513,7 @@ CREATE VIEW sysml2.vw_port_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 124 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 124 /* PortDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_port_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3411,7 +3527,7 @@ CREATE VIEW sysml2.vw_port_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 125 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 125 /* PortUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_predicate AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3419,7 +3535,7 @@ CREATE VIEW sysml2.vw_predicate AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 126 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 126 /* Predicate */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_redefinition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3433,7 +3549,7 @@ CREATE VIEW sysml2.vw_redefinition AS
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.subsetting_version USING (project_id, version_id)
     JOIN sysml2.redefinition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 127 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 127 /* Redefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_reference_subsetting AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3447,7 +3563,7 @@ CREATE VIEW sysml2.vw_reference_subsetting AS
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.subsetting_version USING (project_id, version_id)
     JOIN sysml2.reference_subsetting_version USING (project_id, version_id)
-    WHERE ev.class_kind = 128 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 128 /* ReferenceSubsetting */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_reference_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3459,7 +3575,7 @@ CREATE VIEW sysml2.vw_reference_usage AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 129 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 129 /* ReferenceUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_rendering_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3471,7 +3587,7 @@ CREATE VIEW sysml2.vw_rendering_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 131 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 131 /* RenderingDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_rendering_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3485,7 +3601,7 @@ CREATE VIEW sysml2.vw_rendering_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 132 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 132 /* RenderingUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_requirement_constraint_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3497,7 +3613,7 @@ CREATE VIEW sysml2.vw_requirement_constraint_membership AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
     JOIN sysml2.requirement_constraint_membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 133 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 133 /* RequirementConstraintMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_requirement_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3511,7 +3627,7 @@ CREATE VIEW sysml2.vw_requirement_definition AS
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
     JOIN sysml2.requirement_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 134 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 134 /* RequirementDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_requirement_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3527,7 +3643,7 @@ CREATE VIEW sysml2.vw_requirement_usage AS
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.requirement_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 135 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 135 /* RequirementUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_requirement_verification_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3539,7 +3655,7 @@ CREATE VIEW sysml2.vw_requirement_verification_membership AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
     JOIN sysml2.requirement_constraint_membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 136 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 136 /* RequirementVerificationMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_result_expression_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3549,7 +3665,7 @@ CREATE VIEW sysml2.vw_result_expression_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 137 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 137 /* ResultExpressionMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_return_parameter_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3559,7 +3675,7 @@ CREATE VIEW sysml2.vw_return_parameter_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 138 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 138 /* ReturnParameterMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_satisfy_requirement_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3577,7 +3693,7 @@ CREATE VIEW sysml2.vw_satisfy_requirement_usage AS
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.invariant_version USING (project_id, version_id)
     JOIN sysml2.requirement_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 139 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 139 /* SatisfyRequirementUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_select_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3589,7 +3705,7 @@ CREATE VIEW sysml2.vw_select_expression AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.operator_expression_version USING (project_id, version_id)
-    WHERE ev.class_kind = 140 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 140 /* SelectExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_send_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3603,7 +3719,7 @@ CREATE VIEW sysml2.vw_send_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 141 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 141 /* SendActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_specialization AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3613,7 +3729,7 @@ CREATE VIEW sysml2.vw_specialization AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.specialization_version USING (project_id, version_id)
-    WHERE ev.class_kind = 142 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 142 /* Specialization */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_stakeholder_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3623,7 +3739,7 @@ CREATE VIEW sysml2.vw_stakeholder_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 143 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 143 /* StakeholderMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_state_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3637,7 +3753,7 @@ CREATE VIEW sysml2.vw_state_definition AS
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
     JOIN sysml2.state_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 144 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 144 /* StateDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_state_subaction_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3649,7 +3765,7 @@ CREATE VIEW sysml2.vw_state_subaction_membership AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
     JOIN sysml2.state_subaction_membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 145 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 145 /* StateSubactionMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_state_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3665,7 +3781,7 @@ CREATE VIEW sysml2.vw_state_usage AS
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.state_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 146 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 146 /* StateUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_step AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3675,7 +3791,7 @@ CREATE VIEW sysml2.vw_step AS
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 147 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 147 /* Step */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_structure AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3683,7 +3799,7 @@ CREATE VIEW sysml2.vw_structure AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 148 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 148 /* Structure */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_subclassification AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3695,7 +3811,7 @@ CREATE VIEW sysml2.vw_subclassification AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.subclassification_version USING (project_id, version_id)
-    WHERE ev.class_kind = 149 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 149 /* Subclassification */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_subject_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3705,7 +3821,7 @@ CREATE VIEW sysml2.vw_subject_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 150 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 150 /* SubjectMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_subsetting AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3717,7 +3833,7 @@ CREATE VIEW sysml2.vw_subsetting AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.specialization_version USING (project_id, version_id)
     JOIN sysml2.subsetting_version USING (project_id, version_id)
-    WHERE ev.class_kind = 151 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 151 /* Subsetting */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_succession AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3729,7 +3845,7 @@ CREATE VIEW sysml2.vw_succession AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 152 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 152 /* Succession */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_succession_as_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3743,7 +3859,7 @@ CREATE VIEW sysml2.vw_succession_as_usage AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 153 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 153 /* SuccessionAsUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_succession_flow AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3755,7 +3871,7 @@ CREATE VIEW sysml2.vw_succession_flow AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
-    WHERE ev.class_kind = 154 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 154 /* SuccessionFlow */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_succession_flow_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3771,7 +3887,7 @@ CREATE VIEW sysml2.vw_succession_flow_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 155 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 155 /* SuccessionFlowUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_terminate_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3785,7 +3901,7 @@ CREATE VIEW sysml2.vw_terminate_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 156 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 156 /* TerminateActionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_textual_representation AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3793,7 +3909,7 @@ CREATE VIEW sysml2.vw_textual_representation AS
            textual_representation_version.body, textual_representation_version.language
     FROM sysml2.element_version ev
     JOIN sysml2.textual_representation_version USING (project_id, version_id)
-    WHERE ev.class_kind = 157 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 157 /* TextualRepresentation */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_transition_feature_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3805,7 +3921,7 @@ CREATE VIEW sysml2.vw_transition_feature_membership AS
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
     JOIN sysml2.transition_feature_membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 158 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 158 /* TransitionFeatureMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_transition_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3819,7 +3935,7 @@ CREATE VIEW sysml2.vw_transition_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 159 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 159 /* TransitionUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_trigger_invocation_expression AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3831,7 +3947,7 @@ CREATE VIEW sysml2.vw_trigger_invocation_expression AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.trigger_invocation_expression_version USING (project_id, version_id)
-    WHERE ev.class_kind = 160 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 160 /* TriggerInvocationExpression */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_type AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3839,7 +3955,7 @@ CREATE VIEW sysml2.vw_type AS
            type_version.is_abstract, type_version.is_sufficient
     FROM sysml2.element_version ev
     JOIN sysml2.type_version USING (project_id, version_id)
-    WHERE ev.class_kind = 161 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 161 /* Type */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_type_featuring AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3849,7 +3965,7 @@ CREATE VIEW sysml2.vw_type_featuring AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.type_featuring_version USING (project_id, version_id)
-    WHERE ev.class_kind = 162 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 162 /* TypeFeaturing */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_unioning AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3859,7 +3975,7 @@ CREATE VIEW sysml2.vw_unioning AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.unioning_version USING (project_id, version_id)
-    WHERE ev.class_kind = 163 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 163 /* Unioning */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3871,7 +3987,7 @@ CREATE VIEW sysml2.vw_usage AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 164 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 164 /* Usage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_use_case_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3883,7 +3999,7 @@ CREATE VIEW sysml2.vw_use_case_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 165 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 165 /* UseCaseDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_use_case_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3897,7 +4013,7 @@ CREATE VIEW sysml2.vw_use_case_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 166 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 166 /* UseCaseUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_variant_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3907,7 +4023,7 @@ CREATE VIEW sysml2.vw_variant_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 167 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 167 /* VariantMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_verification_case_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3919,7 +4035,7 @@ CREATE VIEW sysml2.vw_verification_case_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 168 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 168 /* VerificationCaseDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_verification_case_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3933,7 +4049,7 @@ CREATE VIEW sysml2.vw_verification_case_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 169 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 169 /* VerificationCaseUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_view_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3945,7 +4061,7 @@ CREATE VIEW sysml2.vw_view_definition AS
     JOIN sysml2.type_version USING (project_id, version_id)
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 170 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 170 /* ViewDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_view_rendering_membership AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3955,7 +4071,7 @@ CREATE VIEW sysml2.vw_view_rendering_membership AS
     FROM sysml2.element_version ev
     JOIN sysml2.relationship_version USING (project_id, version_id)
     JOIN sysml2.membership_version USING (project_id, version_id)
-    WHERE ev.class_kind = 171 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 171 /* ViewRenderingMembership */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_view_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3969,7 +4085,7 @@ CREATE VIEW sysml2.vw_view_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 172 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 172 /* ViewUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_viewpoint_definition AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3983,7 +4099,7 @@ CREATE VIEW sysml2.vw_viewpoint_definition AS
     JOIN sysml2.definition_version USING (project_id, version_id)
     JOIN sysml2.occurrence_definition_version USING (project_id, version_id)
     JOIN sysml2.requirement_definition_version USING (project_id, version_id)
-    WHERE ev.class_kind = 173 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 173 /* ViewpointDefinition */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_viewpoint_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -3999,7 +4115,7 @@ CREATE VIEW sysml2.vw_viewpoint_usage AS
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
     JOIN sysml2.requirement_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 174 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 174 /* ViewpointUsage */ AND NOT ev.tombstone;
 
 CREATE VIEW sysml2.vw_while_loop_action_usage AS
     SELECT ev.project_id, ev.version_id, ev.identity_id, ev.commit_id,
@@ -4013,7 +4129,7 @@ CREATE VIEW sysml2.vw_while_loop_action_usage AS
     JOIN sysml2.feature_version USING (project_id, version_id)
     JOIN sysml2.usage_version USING (project_id, version_id)
     JOIN sysml2.occurrence_usage_version USING (project_id, version_id)
-    WHERE ev.class_kind = 175 AND NOT ev.tombstone;
+    WHERE ev.class_kind = 175 /* WhileLoopActionUsage */ AND NOT ev.tombstone;
 
 ------------------------------------------------------------------------------------------------
 -- 12. PARTITIONS
@@ -4249,6 +4365,7 @@ BEGIN
     ANALYZE validation_snapshot;
 
     RETURN QUERY
+    -- target: any Element, never an API data record
     SELECT 'annotation_version'::text, 'annotated_element'::text,
            snap.identity_id, src.annotated_element,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4261,6 +4378,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: ConjugatedPortDefinition; the class_kind ids are its concrete kinds
     SELECT 'conjugated_port_typing_version'::text, 'conjugated_port_definition'::text,
            snap.identity_id, src.conjugated_port_definition,
            CASE WHEN ti.class_kind NOT IN (31) THEN 'wrong-type' ELSE 'dangling' END
@@ -4273,6 +4391,7 @@ BEGIN
       AND (ti.class_kind NOT IN (31)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'conjugation_version'::text, 'conjugated_type'::text,
            snap.identity_id, src.conjugated_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4285,6 +4404,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'conjugation_version'::text, 'original_type'::text,
            snap.identity_id, src.original_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4297,6 +4417,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'cross_subsetting_version'::text, 'crossed_feature'::text,
            snap.identity_id, src.crossed_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4309,6 +4430,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'dependency_client'::text, 'target_identity'::text,
            snap.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4321,6 +4443,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'dependency_supplier'::text, 'target_identity'::text,
            snap.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4333,6 +4456,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'differencing_version'::text, 'differencing_type'::text,
            snap.identity_id, src.differencing_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4345,6 +4469,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'disjoining_version'::text, 'disjoining_type'::text,
            snap.identity_id, src.disjoining_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4357,6 +4482,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'disjoining_version'::text, 'type_disjoined'::text,
            snap.identity_id, src.type_disjoined,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4369,6 +4495,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Relationship; the class_kind ids are its concrete kinds
     SELECT 'element_version'::text, 'owning_relationship'::text,
            snap.identity_id, src.owning_relationship,
            CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
@@ -4381,6 +4508,7 @@ BEGIN
       AND (ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Relationship; the class_kind ids are its concrete kinds
     SELECT 'element_owned_relationship'::text, 'target_identity'::text,
            snap.identity_id, src.target_identity,
            CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
@@ -4393,6 +4521,7 @@ BEGIN
       AND (ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_chaining_version'::text, 'chaining_feature'::text,
            snap.identity_id, src.chaining_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4405,6 +4534,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_inverting_version'::text, 'feature_inverted'::text,
            snap.identity_id, src.feature_inverted,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4417,6 +4547,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_inverting_version'::text, 'inverting_feature'::text,
            snap.identity_id, src.inverting_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4429,6 +4560,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'feature_typing_version'::text, 'type'::text,
            snap.identity_id, src.type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4441,6 +4573,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_typing_version'::text, 'typed_feature'::text,
            snap.identity_id, src.typed_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4453,6 +4586,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'intersecting_version'::text, 'intersecting_type'::text,
            snap.identity_id, src.intersecting_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4465,6 +4599,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'membership_version'::text, 'member_element'::text,
            snap.identity_id, src.member_element,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4477,6 +4612,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Membership; the class_kind ids are its concrete kinds
     SELECT 'membership_import_version'::text, 'imported_membership'::text,
            snap.identity_id, src.imported_membership,
            CASE WHEN ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
@@ -4489,6 +4625,7 @@ BEGIN
       AND (ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Namespace; the class_kind ids are its concrete kinds
     SELECT 'namespace_import_version'::text, 'imported_namespace'::text,
            snap.identity_id, src.imported_namespace,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4501,6 +4638,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: PortDefinition; the class_kind ids are its concrete kinds
     SELECT 'port_conjugation_version'::text, 'original_port_definition'::text,
            snap.identity_id, src.original_port_definition,
            CASE WHEN ti.class_kind NOT IN (31, 124) THEN 'wrong-type' ELSE 'dangling' END
@@ -4513,6 +4651,7 @@ BEGIN
       AND (ti.class_kind NOT IN (31, 124)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'redefinition_version'::text, 'redefined_feature'::text,
            snap.identity_id, src.redefined_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4525,6 +4664,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'redefinition_version'::text, 'redefining_feature'::text,
            snap.identity_id, src.redefining_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4537,6 +4677,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'reference_subsetting_version'::text, 'referenced_feature'::text,
            snap.identity_id, src.referenced_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4549,6 +4690,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_version'::text, 'owning_related_element'::text,
            snap.identity_id, src.owning_related_element,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4561,6 +4703,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_owned_related_element'::text, 'target_identity'::text,
            snap.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4573,6 +4716,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_source'::text, 'target_identity'::text,
            snap.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4585,6 +4729,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_target'::text, 'target_identity'::text,
            snap.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4597,6 +4742,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'specialization_version'::text, 'general'::text,
            snap.identity_id, src.general,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4609,6 +4755,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'specialization_version'::text, 'specific'::text,
            snap.identity_id, src.specific,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4621,6 +4768,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Classifier; the class_kind ids are its concrete kinds
     SELECT 'subclassification_version'::text, 'subclassifier'::text,
            snap.identity_id, src.subclassifier,
            CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
@@ -4633,6 +4781,7 @@ BEGIN
       AND (ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Classifier; the class_kind ids are its concrete kinds
     SELECT 'subclassification_version'::text, 'superclassifier'::text,
            snap.identity_id, src.superclassifier,
            CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
@@ -4645,6 +4794,7 @@ BEGIN
       AND (ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'subsetting_version'::text, 'subsetted_feature'::text,
            snap.identity_id, src.subsetted_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4657,6 +4807,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'subsetting_version'::text, 'subsetting_feature'::text,
            snap.identity_id, src.subsetting_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4669,6 +4820,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'type_featuring_version'::text, 'feature_of_type'::text,
            snap.identity_id, src.feature_of_type,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4681,6 +4833,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'type_featuring_version'::text, 'featuring_type'::text,
            snap.identity_id, src.featuring_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4693,6 +4846,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'unioning_version'::text, 'unioning_type'::text,
            snap.identity_id, src.unioning_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4705,6 +4859,7 @@ BEGIN
       AND (ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175)
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'external_relationship_version'::text, 'element_end'::text,
            snap.identity_id, src.element_end,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4717,6 +4872,7 @@ BEGIN
       AND (ti.class_kind >= 1000
            OR (ti.project_id = p_project_id AND live.identity_id IS NULL))
     UNION ALL
+    -- target: ExternalData; the class_kind ids are its concrete kinds
     SELECT 'external_relationship_version'::text, 'external_data_end'::text,
            snap.identity_id, src.external_data_end,
            CASE WHEN ti.class_kind NOT IN (1001) THEN 'wrong-type' ELSE 'dangling' END
@@ -4753,6 +4909,7 @@ AS $$
     SELECT DISTINCT findings.source_table, findings.source_column,
            findings.source_identity, findings.target_identity, findings.problem
     FROM (
+    -- target: any Element, never an API data record
     SELECT 'annotation_version'::text, 'annotated_element'::text,
            changed.identity_id, src.annotated_element,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4768,6 +4925,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.annotated_element))))
     UNION ALL
+    -- target: ConjugatedPortDefinition; the class_kind ids are its concrete kinds
     SELECT 'conjugated_port_typing_version'::text, 'conjugated_port_definition'::text,
            changed.identity_id, src.conjugated_port_definition,
            CASE WHEN ti.class_kind NOT IN (31) THEN 'wrong-type' ELSE 'dangling' END
@@ -4783,6 +4941,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.conjugated_port_definition))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'conjugation_version'::text, 'conjugated_type'::text,
            changed.identity_id, src.conjugated_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4798,6 +4957,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.conjugated_type))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'conjugation_version'::text, 'original_type'::text,
            changed.identity_id, src.original_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4813,6 +4973,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.original_type))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'cross_subsetting_version'::text, 'crossed_feature'::text,
            changed.identity_id, src.crossed_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4828,6 +4989,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.crossed_feature))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'dependency_client'::text, 'target_identity'::text,
            changed.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4843,6 +5005,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'dependency_supplier'::text, 'target_identity'::text,
            changed.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -4858,6 +5021,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'differencing_version'::text, 'differencing_type'::text,
            changed.identity_id, src.differencing_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4873,6 +5037,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.differencing_type))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'disjoining_version'::text, 'disjoining_type'::text,
            changed.identity_id, src.disjoining_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4888,6 +5053,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.disjoining_type))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'disjoining_version'::text, 'type_disjoined'::text,
            changed.identity_id, src.type_disjoined,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4903,6 +5069,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.type_disjoined))))
     UNION ALL
+    -- target: Relationship; the class_kind ids are its concrete kinds
     SELECT 'element_version'::text, 'owning_relationship'::text,
            changed.identity_id, changed.owning_relationship,
            CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
@@ -4916,6 +5083,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, changed.owning_relationship))))
     UNION ALL
+    -- target: Relationship; the class_kind ids are its concrete kinds
     SELECT 'element_owned_relationship'::text, 'target_identity'::text,
            changed.identity_id, src.target_identity,
            CASE WHEN ti.class_kind NOT IN (4, 5, 6, 10, 13, 14, 18, 19, 32, 33, 34, 35, 36, 42, 46, 47, 48, 51, 52, 61, 62, 63, 65, 66, 67, 68, 70, 73, 80, 81, 82, 83, 97, 98, 99, 109, 110, 112, 116, 118, 123, 127, 128, 133, 136, 137, 138, 142, 143, 145, 149, 150, 151, 152, 153, 154, 155, 158, 162, 163, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
@@ -4931,6 +5099,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_chaining_version'::text, 'chaining_feature'::text,
            changed.identity_id, src.chaining_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4946,6 +5115,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.chaining_feature))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_inverting_version'::text, 'feature_inverted'::text,
            changed.identity_id, src.feature_inverted,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4961,6 +5131,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.feature_inverted))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_inverting_version'::text, 'inverting_feature'::text,
            changed.identity_id, src.inverting_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4976,6 +5147,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.inverting_feature))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'feature_typing_version'::text, 'type'::text,
            changed.identity_id, src.type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -4991,6 +5163,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.type))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'feature_typing_version'::text, 'typed_feature'::text,
            changed.identity_id, src.typed_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5006,6 +5179,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.typed_feature))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'intersecting_version'::text, 'intersecting_type'::text,
            changed.identity_id, src.intersecting_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5021,6 +5195,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.intersecting_type))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'membership_version'::text, 'member_element'::text,
            changed.identity_id, src.member_element,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -5036,6 +5211,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.member_element))))
     UNION ALL
+    -- target: Membership; the class_kind ids are its concrete kinds
     SELECT 'membership_import_version'::text, 'imported_membership'::text,
            changed.identity_id, src.imported_membership,
            CASE WHEN ti.class_kind NOT IN (4, 51, 52, 63, 66, 73, 97, 112, 116, 118, 133, 136, 137, 138, 143, 145, 150, 158, 167, 171) THEN 'wrong-type' ELSE 'dangling' END
@@ -5051,6 +5227,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.imported_membership))))
     UNION ALL
+    -- target: Namespace; the class_kind ids are its concrete kinds
     SELECT 'namespace_import_version'::text, 'imported_namespace'::text,
            changed.identity_id, src.imported_namespace,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 108, 111, 113, 114, 115, 117, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5066,6 +5243,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.imported_namespace))))
     UNION ALL
+    -- target: PortDefinition; the class_kind ids are its concrete kinds
     SELECT 'port_conjugation_version'::text, 'original_port_definition'::text,
            changed.identity_id, src.original_port_definition,
            CASE WHEN ti.class_kind NOT IN (31, 124) THEN 'wrong-type' ELSE 'dangling' END
@@ -5081,6 +5259,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.original_port_definition))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'redefinition_version'::text, 'redefined_feature'::text,
            changed.identity_id, src.redefined_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5096,6 +5275,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.redefined_feature))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'redefinition_version'::text, 'redefining_feature'::text,
            changed.identity_id, src.redefining_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5111,6 +5291,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.redefining_feature))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'reference_subsetting_version'::text, 'referenced_feature'::text,
            changed.identity_id, src.referenced_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5126,6 +5307,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.referenced_feature))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_version'::text, 'owning_related_element'::text,
            changed.identity_id, src.owning_related_element,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -5141,6 +5323,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.owning_related_element))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_owned_related_element'::text, 'target_identity'::text,
            changed.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -5156,6 +5339,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_source'::text, 'target_identity'::text,
            changed.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -5171,6 +5355,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'relationship_target'::text, 'target_identity'::text,
            changed.identity_id, src.target_identity,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -5186,6 +5371,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.target_identity))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'specialization_version'::text, 'general'::text,
            changed.identity_id, src.general,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5201,6 +5387,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.general))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'specialization_version'::text, 'specific'::text,
            changed.identity_id, src.specific,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5216,6 +5403,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.specific))))
     UNION ALL
+    -- target: Classifier; the class_kind ids are its concrete kinds
     SELECT 'subclassification_version'::text, 'subclassifier'::text,
            changed.identity_id, src.subclassifier,
            CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
@@ -5231,6 +5419,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.subclassifier))))
     UNION ALL
+    -- target: Classifier; the class_kind ids are its concrete kinds
     SELECT 'subclassification_version'::text, 'superclassifier'::text,
            changed.identity_id, src.superclassifier,
            CASE WHEN ti.class_kind NOT IN (2, 5, 7, 13, 14, 15, 17, 21, 23, 25, 26, 29, 31, 34, 38, 43, 45, 53, 68, 74, 80, 81, 86, 101, 103, 113, 119, 124, 126, 131, 134, 144, 148, 165, 168, 170, 173) THEN 'wrong-type' ELSE 'dangling' END
@@ -5246,6 +5435,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.superclassifier))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'subsetting_version'::text, 'subsetted_feature'::text,
            changed.identity_id, src.subsetted_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5261,6 +5451,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.subsetted_feature))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'subsetting_version'::text, 'subsetting_feature'::text,
            changed.identity_id, src.subsetting_feature,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5276,6 +5467,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.subsetting_feature))))
     UNION ALL
+    -- target: Feature; the class_kind ids are its concrete kinds
     SELECT 'type_featuring_version'::text, 'feature_of_type'::text,
            changed.identity_id, src.feature_of_type,
            CASE WHEN ti.class_kind NOT IN (1, 3, 6, 8, 11, 12, 16, 18, 19, 20, 22, 24, 27, 30, 35, 36, 39, 40, 44, 54, 55, 56, 58, 59, 60, 64, 67, 69, 70, 71, 72, 75, 77, 78, 82, 84, 85, 87, 88, 90, 91, 92, 93, 94, 95, 100, 102, 104, 105, 106, 107, 111, 114, 115, 120, 121, 122, 125, 129, 132, 135, 139, 140, 141, 146, 147, 152, 153, 154, 155, 156, 159, 160, 164, 166, 169, 172, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5291,6 +5483,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.feature_of_type))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'type_featuring_version'::text, 'featuring_type'::text,
            changed.identity_id, src.featuring_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5306,6 +5499,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.featuring_type))))
     UNION ALL
+    -- target: Type; the class_kind ids are its concrete kinds
     SELECT 'unioning_version'::text, 'unioning_type'::text,
            changed.identity_id, src.unioning_type,
            CASE WHEN ti.class_kind NOT IN (1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 34, 35, 36, 38, 39, 40, 43, 44, 45, 53, 54, 55, 56, 58, 59, 60, 64, 67, 68, 69, 70, 71, 72, 74, 75, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 100, 101, 102, 103, 104, 105, 106, 107, 111, 113, 114, 115, 119, 120, 121, 122, 124, 125, 126, 129, 131, 132, 134, 135, 139, 140, 141, 144, 146, 147, 148, 152, 153, 154, 155, 156, 159, 160, 161, 164, 165, 166, 168, 169, 170, 172, 173, 174, 175) THEN 'wrong-type' ELSE 'dangling' END
@@ -5321,6 +5515,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.unioning_type))))
     UNION ALL
+    -- target: any Element, never an API data record
     SELECT 'external_relationship_version'::text, 'element_end'::text,
            changed.identity_id, src.element_end,
            CASE WHEN ti.class_kind >= 1000 THEN 'wrong-type' ELSE 'dangling' END
@@ -5336,6 +5531,7 @@ AS $$
            OR (ti.project_id = p_project_id
            AND NOT EXISTS (SELECT 1 FROM sysml2.resolve_element_at_commit(p_project_id, p_commit_id, src.element_end))))
     UNION ALL
+    -- target: ExternalData; the class_kind ids are its concrete kinds
     SELECT 'external_relationship_version'::text, 'external_data_end'::text,
            changed.identity_id, src.external_data_end,
            CASE WHEN ti.class_kind NOT IN (1001) THEN 'wrong-type' ELSE 'dangling' END
