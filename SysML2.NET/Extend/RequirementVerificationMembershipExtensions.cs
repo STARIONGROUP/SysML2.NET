@@ -11,6 +11,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
@@ -23,7 +24,6 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RequirementVerificationMembershipExtensions"/> class provides extensions methods for
@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
                 throw new ArgumentNullException(nameof(requirementVerificationMembershipSubject));
             }
 
-            return requirementVerificationMembershipSubject.OwnedRelatedElement.SingleStrict<IRequirementUsage>(nameof(requirementVerificationMembershipSubject));
+            return requirementVerificationMembershipSubject.OwnedRelatedElement.OfType<IRequirementUsage>().FirstOrDefault();
         }
 
         /// <summary>

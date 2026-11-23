@@ -10,11 +10,11 @@
 namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="StakeholderMembershipExtensions" /> class provides extensions methods for
@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(stakeholderMembershipSubject));
             }
 
-            return stakeholderMembershipSubject.OwnedRelatedElement.SingleStrict<IPartUsage>(nameof(stakeholderMembershipSubject));
+            return stakeholderMembershipSubject.OwnedRelatedElement.OfType<IPartUsage>().FirstOrDefault();
         }
     }
 }

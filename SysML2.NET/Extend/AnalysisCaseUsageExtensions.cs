@@ -48,8 +48,6 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="AnalysisCaseUsageExtensions"/> class provides extensions methods for
@@ -71,17 +69,12 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="analysisCaseUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
-        /// <see cref="IAnalysisCaseDefinition"/> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IAnalysisCaseUsage.analysisCaseDefinition))]
         internal static IAnalysisCaseDefinition ComputeAnalysisCaseDefinition(this IAnalysisCaseUsage analysisCaseUsageSubject)
         {
             return analysisCaseUsageSubject == null
                 ? throw new ArgumentNullException(nameof(analysisCaseUsageSubject))
-                : FeatureExtensions.ComputeType(analysisCaseUsageSubject).SingleOrDefaultStrict<IAnalysisCaseDefinition>(nameof(analysisCaseUsageSubject));
+                : FeatureExtensions.ComputeType(analysisCaseUsageSubject).OfType<IAnalysisCaseDefinition>().FirstOrDefault();
         }
 
         /// <summary>

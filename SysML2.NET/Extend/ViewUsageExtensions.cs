@@ -23,8 +23,6 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ViewUsageExtensions"/> class provides extensions methods for
@@ -135,15 +133,10 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="viewUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
-        /// <see cref="IViewDefinition"/> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IViewUsage.viewDefinition))]
         internal static IViewDefinition ComputeViewDefinition(this IViewUsage viewUsageSubject)
         {
-            return viewUsageSubject is null ? throw new ArgumentNullException(nameof(viewUsageSubject)) : FeatureExtensions.ComputeType(viewUsageSubject).SingleOrDefaultStrict<IViewDefinition>(nameof(viewUsageSubject));
+            return viewUsageSubject is null ? throw new ArgumentNullException(nameof(viewUsageSubject)) : FeatureExtensions.ComputeType(viewUsageSubject).OfType<IViewDefinition>().FirstOrDefault();
         }
 
         /// <summary>

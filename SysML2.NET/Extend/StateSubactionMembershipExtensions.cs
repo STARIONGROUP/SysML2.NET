@@ -10,11 +10,11 @@
 namespace SysML2.NET.Core.POCO.Systems.States
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Systems.Actions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="StateSubactionMembershipExtensions" /> class provides extensions methods for
@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
                 throw new ArgumentNullException(nameof(stateSubactionMembershipSubject));
             }
 
-            return stateSubactionMembershipSubject.OwnedRelatedElement.SingleStrict<IActionUsage>(nameof(stateSubactionMembershipSubject));
+            return stateSubactionMembershipSubject.OwnedRelatedElement.OfType<IActionUsage>().FirstOrDefault();
         }
     }
 }

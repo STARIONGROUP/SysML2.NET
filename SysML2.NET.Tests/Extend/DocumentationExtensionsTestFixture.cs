@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -28,12 +27,9 @@ namespace SysML2.NET.Tests.Extend
             Assert.That(() => ((IDocumentation)null).ComputeDocumentedElement(),
                 Throws.TypeOf<ArgumentNullException>());
 
-            // Fresh Documentation has no owning relationship, so the documented element cannot be
-            // resolved — the implementation must throw IncompleteModelException (Option A path).
             var emptyDoc = new Documentation();
 
-            Assert.That(() => emptyDoc.ComputeDocumentedElement(),
-                Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyDoc.ComputeDocumentedElement(), Is.Null);
 
             // Populated case: wire a Definition as the owner of the Documentation via an Annotation.
             // After AssignOwnership, documentation.OwningRelationship.OwningRelatedElement == target,

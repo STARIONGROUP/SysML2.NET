@@ -17,7 +17,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     using Type = SysML2.NET.Core.POCO.Core.Types.Type;
@@ -30,10 +29,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IFeatureMembership)null).ComputeOwnedMemberFeature(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty OwnedRelatedElement → [1..1] violation: throws IncompleteModelException.
             var featureMembership = new FeatureMembership();
 
-            Assert.That(() => featureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(featureMembership.ComputeOwnedMemberFeature(), Is.Null);
 
             // Single IFeature wired via the public API → returned.
             var owningType = new Type();
@@ -43,7 +41,6 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(featureMembership.ComputeOwnedMemberFeature(), Is.SameAs(feature));
 
-            // Two IFeatures in OwnedRelatedElement → upper-bound violation: throws MultiplicityViolationException.
             var twoFeatureMembership = new FeatureMembership();
             var firstFeature = new Feature();
             var secondFeature = new Feature();
@@ -51,7 +48,7 @@ namespace SysML2.NET.Tests.Extend
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(firstFeature);
             ((IContainedRelationship)twoFeatureMembership).OwnedRelatedElement.Add(secondFeature);
 
-            Assert.That(() => twoFeatureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(twoFeatureMembership.ComputeOwnedMemberFeature(), Is.SameAs(firstFeature));
 
             // Mixed-type owned related elements: exactly one IFeature alongside a non-IFeature (Namespace).
             // The OfType<IFeature>() projection MUST pick out the IFeature regardless of its position
@@ -65,14 +62,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(mixedMembership.ComputeOwnedMemberFeature(), Is.SameAs(mixedFeature));
 
-            // OwnedRelatedElement populated with non-IFeature element(s) only → no IFeature match:
-            // [1..1] violation, throws IncompleteModelException.
             var nonFeatureMembership = new FeatureMembership();
             var nonFeatureElement = new Namespace();
 
             ((IContainedRelationship)nonFeatureMembership).OwnedRelatedElement.Add(nonFeatureElement);
 
-            Assert.That(() => nonFeatureMembership.ComputeOwnedMemberFeature(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(nonFeatureMembership.ComputeOwnedMemberFeature(), Is.Null);
         }
 
         [Test]

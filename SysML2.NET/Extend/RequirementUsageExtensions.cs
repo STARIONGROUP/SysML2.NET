@@ -22,8 +22,6 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Core.POCO.Systems.Constraints;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
     using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RequirementUsageExtensions"/> class provides extensions methods for
@@ -153,17 +151,12 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="requirementUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
-        /// <see cref="IRequirementDefinition"/> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IRequirementUsage.requirementDefinition))]
         internal static IRequirementDefinition ComputeRequirementDefinition(this IRequirementUsage requirementUsageSubject)
         {
             return requirementUsageSubject == null
                 ? throw new ArgumentNullException(nameof(requirementUsageSubject))
-                : FeatureExtensions.ComputeType(requirementUsageSubject).SingleOrDefaultStrict<IRequirementDefinition>(nameof(requirementUsageSubject));
+                : FeatureExtensions.ComputeType(requirementUsageSubject).OfType<IRequirementDefinition>().FirstOrDefault();
         }
 
         /// <summary>

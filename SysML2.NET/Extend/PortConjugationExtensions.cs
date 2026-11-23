@@ -13,7 +13,6 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
 
     using SysML2.NET.Decorators;
 
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="PortConjugationExtensions" /> class provides extensions methods for
@@ -38,9 +37,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
                 throw new ArgumentNullException(nameof(portConjugationSubject));
             }
 
-            return portConjugationSubject.OwningRelatedElement as IConjugatedPortDefinition
-                   ?? throw new IncompleteModelException(
-                       $"{nameof(portConjugationSubject)} must have an owning related element of type {nameof(IConjugatedPortDefinition)}");
+            return portConjugationSubject.OwningRelatedElement as IConjugatedPortDefinition;
         }
     }
 }

@@ -10,11 +10,11 @@
 namespace SysML2.NET.Core.POCO.Systems.Enumerations
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="EnumerationUsageExtensions" /> class provides extensions methods for
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         {
             return enumerationUsageSubject == null
                 ? throw new ArgumentNullException(nameof(enumerationUsageSubject))
-                : enumerationUsageSubject.ComputeType().SingleStrict<IEnumerationDefinition>(nameof(enumerationUsageSubject));
+                : enumerationUsageSubject.ComputeType().OfType<IEnumerationDefinition>().FirstOrDefault();
         }
     }
 }

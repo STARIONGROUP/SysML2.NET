@@ -144,7 +144,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
                 : [..connectorSubject.connectorEnd
                       .Select(connectorEndFeature => connectorEndFeature.ownedReferenceSubsetting)
                       .Where(referenceSubsetting => referenceSubsetting != null)
-                      .Select(referenceSubsetting => referenceSubsetting.SubsettedFeature)];
+                      .Select(referenceSubsetting => referenceSubsetting.SubsettedFeature)
+                      .Where(subsettedFeature => subsettedFeature != null)];
         }
 
         /// <summary>

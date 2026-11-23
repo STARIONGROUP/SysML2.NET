@@ -21,7 +21,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -184,10 +183,9 @@ namespace SysML2.NET.Tests.Extend
             viewUsage.AssignOwnership(new FeatureTyping { Type = viewDefinition });
             Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition));
 
-            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
             var secondViewDefinition = new ViewDefinition();
             viewUsage.AssignOwnership(new FeatureTyping { Type = secondViewDefinition });
-            Assert.That(() => viewUsage.ComputeViewDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(viewUsage.ComputeViewDefinition(), Is.SameAs(viewDefinition));
         }
 
         [Test]

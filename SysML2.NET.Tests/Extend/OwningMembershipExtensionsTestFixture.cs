@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -27,9 +26,8 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElement(), Throws.TypeOf<ArgumentNullException>());
 
-            // OwnedRelatedElement.Count == 0 → IncompleteModelException
             var emptyMembership = new OwningMembership();
-            Assert.That(() => emptyMembership.ComputeOwnedMemberElement(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedMemberElement(), Is.Null);
 
             // OwnedRelatedElement.Count == 1 → returns that element
             var container = new Namespace();
@@ -38,11 +36,11 @@ namespace SysML2.NET.Tests.Extend
             container.AssignOwnership(singleMembership, ownedElement);
             Assert.That(singleMembership.ComputeOwnedMemberElement(), Is.SameAs(ownedElement));
 
-            // OwnedRelatedElement.Count > 1 → MultiplicityViolationException (upper-bound)
             var multiMembership = new OwningMembership();
+            var firstElement = new Definition();
+            ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(firstElement);
             ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(new Definition());
-            ((IContainedRelationship)multiMembership).OwnedRelatedElement.Add(new Definition());
-            Assert.That(() => multiMembership.ComputeOwnedMemberElement(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(multiMembership.ComputeOwnedMemberElement(), Is.SameAs(firstElement));
         }
 
         [Test]
@@ -50,10 +48,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IOwningMembership)null).ComputeOwnedMemberElementId(), Throws.TypeOf<ArgumentNullException>());
 
-            // OwnedRelatedElement.Count != 1 → IncompleteModelException propagated from ComputeOwnedMemberElement
             var emptyMembership = new OwningMembership();
 
-            Assert.That(() => emptyMembership.ComputeOwnedMemberElementId(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeOwnedMemberElementId(), Is.Null);
 
             // Populated: one owned element → returns that element's ElementId
             var container = new Namespace();
@@ -81,10 +78,9 @@ namespace SysML2.NET.Tests.Extend
         {
             Assert.That(() => ((IOwningMembership)null).ComputeRedefinedPathOperation(), Throws.TypeOf<ArgumentNullException>());
 
-            // OwnedRelatedElement.Count != 1 → IncompleteModelException propagated from ComputeOwnedMemberElement
             var emptyMembership = new OwningMembership();
 
-            Assert.That(() => emptyMembership.ComputeRedefinedPathOperation(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyMembership.ComputeRedefinedPathOperation(), Is.Empty);
 
             // qualifiedName != null → returns qualifiedName + "/owningMembership"
             // Wire: owning package → named child namespace → named member definition

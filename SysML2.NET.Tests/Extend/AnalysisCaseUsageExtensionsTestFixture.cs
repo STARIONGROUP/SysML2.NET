@@ -18,7 +18,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Systems.AnalysisCases;
     using SysML2.NET.Core.POCO.Systems.Cases;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -48,12 +47,9 @@ namespace SysML2.NET.Tests.Extend
             analysisCaseUsage.AssignOwnership(new FeatureTyping { Type = analysisCaseDefinition });
             Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.SameAs(analysisCaseDefinition));
 
-            // [0..1] upper-bound violation: two FeatureTypings each targeting an IAnalysisCaseDefinition
-            // → SingleOrDefaultStrict throws MultiplicityViolationException per the derived property's
-            //   [0..1] multiplicity.
             var secondAnalysisCaseDefinition = new AnalysisCaseDefinition();
             analysisCaseUsage.AssignOwnership(new FeatureTyping { Type = secondAnalysisCaseDefinition });
-            Assert.That(() => analysisCaseUsage.ComputeAnalysisCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(analysisCaseUsage.ComputeAnalysisCaseDefinition(), Is.SameAs(analysisCaseDefinition));
         }
 
         [Test]

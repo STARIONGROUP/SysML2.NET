@@ -48,8 +48,6 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ViewpointUsageExtensions"/> class provides extensions methods for
@@ -71,17 +69,12 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="viewpointUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
-        /// <see cref="IViewpointDefinition"/> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IViewpointUsage.viewpointDefinition))]
         internal static IViewpointDefinition ComputeViewpointDefinition(this IViewpointUsage viewpointUsageSubject)
         {
             return viewpointUsageSubject == null
                 ? throw new ArgumentNullException(nameof(viewpointUsageSubject))
-                : FeatureExtensions.ComputeType(viewpointUsageSubject).SingleOrDefaultStrict<IViewpointDefinition>(nameof(viewpointUsageSubject));
+                : FeatureExtensions.ComputeType(viewpointUsageSubject).OfType<IViewpointDefinition>().FirstOrDefault();
         }
 
         /// <summary>

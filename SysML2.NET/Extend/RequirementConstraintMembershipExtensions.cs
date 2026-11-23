@@ -10,11 +10,11 @@
 namespace SysML2.NET.Core.POCO.Systems.Requirements
 {
     using System;
+    using System.Linq;
 
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Systems.Constraints;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RequirementConstraintMembershipExtensions" /> class provides extensions methods for
@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
                 throw new ArgumentNullException(nameof(requirementConstraintMembershipSubject));
             }
 
-            return requirementConstraintMembershipSubject.OwnedRelatedElement.SingleStrict<IConstraintUsage>(nameof(requirementConstraintMembershipSubject));
+            return requirementConstraintMembershipSubject.OwnedRelatedElement.OfType<IConstraintUsage>().FirstOrDefault();
         }
 
         /// <summary>

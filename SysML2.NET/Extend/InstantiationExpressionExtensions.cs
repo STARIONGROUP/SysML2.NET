@@ -53,7 +53,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
             return instantiationExpressionSubject is IConstructorExpression constructor
                 ? [
                     .. instantiatedType.feature.SelectMany(f =>
-                        constructor.result.ownedFeature.Where(of => of.Redefines(f)).Select(ValueOf).Where(value => value != null))
+                        (constructor.result?.ownedFeature ?? []).Where(of => of.Redefines(f)).Select(ValueOf).Where(value => value != null))
                 ]
                 : [
                     .. instantiatedType.input.SelectMany(inp =>

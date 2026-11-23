@@ -15,7 +15,6 @@ namespace SysML2.NET.Tests.Extend
 
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -29,8 +28,7 @@ namespace SysML2.NET.Tests.Extend
 
             var emptyTextualRep = new TextualRepresentation();
 
-            Assert.That(() => emptyTextualRep.ComputeRepresentedElement(),
-                Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyTextualRep.ComputeRepresentedElement(), Is.Null);
 
             var target = new Definition();
             var textualRep = new TextualRepresentation();

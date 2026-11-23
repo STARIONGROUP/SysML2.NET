@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.UseCases;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -71,14 +70,13 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(subjectOneTyping.ComputeUseCaseDefinition(), Is.SameAs(useCaseDefinition));
 
-            // [0..1] upper-bound violation: two typings both resolving to UseCaseDefinition → MultiplicityViolationException.
             var subjectTwoTypings = new UseCaseUsage();
             var firstUseCaseDefinition = new UseCaseDefinition();
             var secondUseCaseDefinition = new UseCaseDefinition();
             subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = firstUseCaseDefinition });
             subjectTwoTypings.AssignOwnership(new FeatureTyping { Type = secondUseCaseDefinition });
 
-            Assert.That(() => subjectTwoTypings.ComputeUseCaseDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(subjectTwoTypings.ComputeUseCaseDefinition(), Is.SameAs(firstUseCaseDefinition));
         }
     }
 }

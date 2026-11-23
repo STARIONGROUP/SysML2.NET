@@ -12,7 +12,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using System;
 
     using SysML2.NET.Decorators;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="CrossSubsettingExtensions" /> class provides extensions methods for
@@ -29,9 +28,6 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// <returns>
         /// the computed result
         /// </returns>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when the owning related element is null or is not an <see cref="IFeature" />.
-        /// </exception>
         [DerivedProperty(nameof(ICrossSubsetting.crossingFeature))]
         internal static IFeature ComputeCrossingFeature(this ICrossSubsetting crossSubsettingSubject)
         {
@@ -40,8 +36,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
                 throw new ArgumentNullException(nameof(crossSubsettingSubject));
             }
 
-            return crossSubsettingSubject.OwningRelatedElement as IFeature
-                   ?? throw new IncompleteModelException($"{nameof(crossSubsettingSubject)} must have an owning related element of type {nameof(IFeature)}");
+            return crossSubsettingSubject.OwningRelatedElement as IFeature;
         }
     }
 }

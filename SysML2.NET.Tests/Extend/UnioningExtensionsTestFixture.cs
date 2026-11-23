@@ -16,7 +16,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Exceptions;
 
     using SysMLType = SysML2.NET.Core.POCO.Core.Types.Type;
 
@@ -29,10 +28,9 @@ namespace SysML2.NET.Tests.Extend
             // Null subject → ArgumentNullException.
             Assert.That(() => ((IUnioning)null).ComputeTypeUnioned(), Throws.TypeOf<ArgumentNullException>());
 
-            // Empty Unioning (OwningRelatedElement is null) → [1..1] violation: IncompleteModelException.
             var emptyUnioning = new Unioning();
 
-            Assert.That(() => emptyUnioning.ComputeTypeUnioned(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(emptyUnioning.ComputeTypeUnioned(), Is.Null);
 
             // OwningRelatedElement is an IType → returns the same instance.
             var type = new SysMLType();
@@ -42,13 +40,12 @@ namespace SysML2.NET.Tests.Extend
 
             Assert.That(unioningWithType.ComputeTypeUnioned(), Is.SameAs(type));
 
-            // OwningRelatedElement is a non-IType element (Annotation) → [1..1] type violation: IncompleteModelException.
             var annotation = new Annotation();
             var unioningWithAnnotation = new Unioning();
 
             ((IContainedRelationship)unioningWithAnnotation).OwningRelatedElement = annotation;
 
-            Assert.That(() => unioningWithAnnotation.ComputeTypeUnioned(), Throws.TypeOf<IncompleteModelException>());
+            Assert.That(unioningWithAnnotation.ComputeTypeUnioned(), Is.Null);
         }
     }
 }

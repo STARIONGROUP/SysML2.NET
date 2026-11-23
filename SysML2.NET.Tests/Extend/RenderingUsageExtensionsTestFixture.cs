@@ -17,7 +17,6 @@ namespace SysML2.NET.Tests.Extend
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Systems.Parts;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
     using SysML2.NET.Extensions;
 
     [TestFixture]
@@ -44,10 +43,9 @@ namespace SysML2.NET.Tests.Extend
             renderingUsage.AssignOwnership(new FeatureTyping { Type = renderingDefinition });
             Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
 
-            // [0..1] upper-bound violation: two matching typings → MultiplicityViolationException.
             var secondRenderingDefinition = new RenderingDefinition();
             renderingUsage.AssignOwnership(new FeatureTyping { Type = secondRenderingDefinition });
-            Assert.That(() => renderingUsage.ComputeRenderingDefinition(), Throws.TypeOf<MultiplicityViolationException>());
+            Assert.That(renderingUsage.ComputeRenderingDefinition(), Is.SameAs(renderingDefinition));
         }
 
         [Test]

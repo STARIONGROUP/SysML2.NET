@@ -47,8 +47,6 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using SysML2.NET.Core.POCO.Systems.States;
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="RenderingUsageExtensions"/> class provides extensions methods for
@@ -70,17 +68,12 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="renderingUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an
-        /// <see cref="IRenderingDefinition"/> (upper-bound violation against the derived
-        /// <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IRenderingUsage.renderingDefinition))]
         internal static IRenderingDefinition ComputeRenderingDefinition(this IRenderingUsage renderingUsageSubject)
         {
             return renderingUsageSubject == null
                 ? throw new ArgumentNullException(nameof(renderingUsageSubject))
-                : FeatureExtensions.ComputeType(renderingUsageSubject).SingleOrDefaultStrict<IRenderingDefinition>(nameof(renderingUsageSubject));
+                : FeatureExtensions.ComputeType(renderingUsageSubject).OfType<IRenderingDefinition>().FirstOrDefault();
         }
 
         /// <summary>
@@ -120,7 +113,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
             if (renderingUsageSubject.owningFeatureMembership is IViewRenderingMembership
                 && renderingUsageSubject.ownedReferenceSubsetting != null)
             {
-                return renderingUsageSubject.ownedReferenceSubsetting.ReferencedFeature.featureTarget;
+                return renderingUsageSubject.ownedReferenceSubsetting.ReferencedFeature?.featureTarget;
             }
 
             return UsageExtensions.ComputeRedefinedNamingFeatureOperation(renderingUsageSubject);

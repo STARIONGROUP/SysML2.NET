@@ -15,7 +15,6 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     using SysML2.NET.Decorators;
 
     using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ConcernUsageExtensions" /> class provides extensions methods for
@@ -37,7 +36,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         {
             return concernUsageSubject == null
                 ? throw new ArgumentNullException(nameof(concernUsageSubject))
-                : FeatureExtensions.ComputeType(concernUsageSubject).SingleOrDefaultStrict<IConcernDefinition>(nameof(concernUsageSubject));
+                : FeatureExtensions.ComputeType(concernUsageSubject).OfType<IConcernDefinition>().FirstOrDefault();
         }
     }
 }

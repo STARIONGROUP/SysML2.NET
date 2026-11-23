@@ -12,7 +12,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System;
 
     using SysML2.NET.Decorators;
-    using SysML2.NET.Exceptions;
 
     /// <summary>
     /// The <see cref="DifferencingExtensions" /> class provides extensions methods for
@@ -29,9 +28,6 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// <returns>
         /// the computed result
         /// </returns>
-        /// <exception cref="IncompleteModelException">
-        /// Thrown when the owning related element is null or is not an <see cref="IType" />.
-        /// </exception>
         [DerivedProperty(nameof(IDifferencing.typeDifferenced))]
         internal static IType ComputeTypeDifferenced(this IDifferencing differencingSubject)
         {
@@ -40,8 +36,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
                 throw new ArgumentNullException(nameof(differencingSubject));
             }
 
-            return differencingSubject.OwningRelatedElement as IType
-                   ?? throw new IncompleteModelException($"{nameof(differencingSubject)} must have an owning related element of type {nameof(IType)}");
+            return differencingSubject.OwningRelatedElement as IType;
         }
     }
 }

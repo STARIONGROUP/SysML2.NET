@@ -48,8 +48,6 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
-    using SysML2.NET.Exceptions;
-    using SysML2.NET.Extensions;
 
     /// <summary>
     /// The <see cref="ConstraintUsageExtensions"/> class provides extensions methods for
@@ -71,16 +69,12 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="constraintUsageSubject"/> is <c>null</c>.
         /// </exception>
-        /// <exception cref="MultiplicityViolationException">
-        /// Thrown when more than one <see cref="IFeatureTyping"/> targets an <see cref="IPredicate"/>
-        /// (upper-bound violation against the derived <c>[0..1]</c> property).
-        /// </exception>
         [DerivedProperty(name: nameof(IConstraintUsage.constraintDefinition))]
         internal static IPredicate ComputeConstraintDefinition(this IConstraintUsage constraintUsageSubject)
         {
             return constraintUsageSubject == null
                 ? throw new ArgumentNullException(nameof(constraintUsageSubject))
-                : FeatureExtensions.ComputeType(constraintUsageSubject).SingleOrDefaultStrict<IPredicate>(nameof(constraintUsageSubject));
+                : FeatureExtensions.ComputeType(constraintUsageSubject).OfType<IPredicate>().FirstOrDefault();
         }
 
         /// <summary>
