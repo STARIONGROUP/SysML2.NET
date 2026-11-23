@@ -151,25 +151,36 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             handlebars.RegisterHelper("uml_template.SQL.WriteSubtypeTables", (writer, _, parameters) =>
             {
                 var payload = ResolvePayload(parameters[0]);
+                var derivingClassKinds = QueryDerivingClassKinds(payload);
 
                 var stringBuilder = new StringBuilder();
 
                 foreach (var @class in QueryStorageIntroducingClasses(payload))
                 {
                     var tableName = @class.QuerySqlSubtypeTableName();
+                    var scalarProperties = @class.QueryStoredScalarOwnProperties();
 
                     stringBuilder.AppendLine($"CREATE TABLE sysml2.{tableName} (");
                     stringBuilder.AppendLine("    project_id uuid NOT NULL,");
                     stringBuilder.AppendLine("    version_id uuid NOT NULL,");
+                    stringBuilder.AppendLine("    class_kind smallint NOT NULL,");
 
-                    foreach (var property in @class.QueryStoredScalarOwnProperties())
+                    foreach (var property in scalarProperties)
                     {
-                        stringBuilder.AppendLine($"    {FormatSubtypeColumn(property)},");
+                        stringBuilder.AppendLine($"    {FormatSubtypeColumn(property, derivingClassKinds.ContainsKey(property.XmiId))},");
                     }
 
                     stringBuilder.AppendLine("    PRIMARY KEY (project_id, version_id),");
-                    stringBuilder.AppendLine("    FOREIGN KEY (project_id, version_id)");
-                    stringBuilder.AppendLine("        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE");
+                    stringBuilder.AppendLine("    FOREIGN KEY (project_id, version_id, class_kind)");
+                    stringBuilder.Append("        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE");
+
+                    foreach (var property in scalarProperties.Where(property => derivingClassKinds.ContainsKey(property.XmiId)))
+                    {
+                        stringBuilder.AppendLine(",");
+                        stringBuilder.Append(FormatDerivedRedefinitionCheck(tableName, property, derivingClassKinds[property.XmiId]));
+                    }
+
+                    stringBuilder.AppendLine("");
                     stringBuilder.AppendLine(") PARTITION BY HASH (project_id);");
                     stringBuilder.AppendLine("");
 
@@ -567,26 +578,85 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Formats a single column definition of a subtype table, including nullability from the
-        /// property's lower bound, the FK to data_identity for references, and the UML-declared
-        /// default value when one exists
+        /// Queries, per redefined property, the class_kind ids of the concrete classes for which a derived
+        /// property redefines it and whose rows therefore do not store its value
+        /// </summary>
+        /// <param name="payload">
+        /// The subject <see cref="HandlebarsPayload" />
+        /// </param>
+        /// <returns>
+        /// The class_kind ids, ordered ascending, keyed by the XmiId of the redefined property
+        /// </returns>
+        private static Dictionary<string, IReadOnlyList<int>> QueryDerivingClassKinds(HandlebarsPayload payload)
+        {
+            return QueryClassKinds(payload)
+                .Where(classKind => !classKind.Key.IsAbstract)
+                .SelectMany(classKind => QueryDerivedRedefinedPropertyIds(classKind.Key)
+                    .Select(propertyId => (PropertyId: propertyId, ClassKindId: classKind.Value)))
+                .GroupBy(redefinition => redefinition.PropertyId, redefinition => redefinition.ClassKindId)
+                .ToDictionary(group => group.Key, group => (IReadOnlyList<int>)[.. group.Order()]);
+        }
+
+        /// <summary>
+        /// Queries the XmiIds of the properties that a derived property of the class redefines, directly
+        /// or through a chain of redefinitions
+        /// </summary>
+        /// <param name="class">
+        /// The subject <see cref="IClass" />
+        /// </param>
+        /// <returns>
+        /// The XmiIds of the redefined properties
+        /// </returns>
+        private static HashSet<string> QueryDerivedRedefinedPropertyIds(IClass @class)
+        {
+            var redefinedPropertyIds = new HashSet<string>();
+
+            var pendingProperties = new Stack<IProperty>(@class.QueryAllProperties()
+                .Where(property => property.IsDerived || property.IsDerivedUnion)
+                .SelectMany(property => property.RedefinedProperty));
+
+            while (pendingProperties.Count != 0)
+            {
+                var redefinedProperty = pendingProperties.Pop();
+
+                if (!redefinedPropertyIds.Add(redefinedProperty.XmiId))
+                {
+                    continue;
+                }
+
+                foreach (var nextRedefinedProperty in redefinedProperty.RedefinedProperty)
+                {
+                    pendingProperties.Push(nextRedefinedProperty);
+                }
+            }
+
+            return redefinedPropertyIds;
+        }
+
+        /// <summary>
+        /// Formats a single column definition of a subtype table, including nullability, the FK to
+        /// data_identity for references, and the UML-declared default value when one exists
         /// </summary>
         /// <param name="property">
         /// The subject scalar stored <see cref="IProperty" />
         /// </param>
+        /// <param name="isRedefinedAsDerived">
+        /// Whether a derived property redefines <paramref name="property" />, which makes the column
+        /// nullable and default-free whatever the property's lower bound and default value
+        /// </param>
         /// <returns>
         /// The column definition, without the trailing comma
         /// </returns>
-        private static string FormatSubtypeColumn(IProperty property)
+        private static string FormatSubtypeColumn(IProperty property, bool isRedefinedAsDerived)
         {
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append(property.QuerySqlColumnName());
             stringBuilder.Append(' ');
             stringBuilder.Append(property.QuerySqlTypeName());
-            stringBuilder.Append(property.QueryIsNullable() ? " NULL" : " NOT NULL");
+            stringBuilder.Append(property.QueryIsNullable() || isRedefinedAsDerived ? " NULL" : " NOT NULL");
 
-            var defaultValue = FormatSqlDefaultValue(property);
+            var defaultValue = isRedefinedAsDerived ? null : FormatSqlDefaultValue(property);
 
             if (defaultValue != null)
             {
@@ -599,6 +669,34 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Formats the CHECK constraint that keeps a column empty for the class kinds that derive its
+        /// value and, when the property is required, populated for every other class kind
+        /// </summary>
+        /// <param name="tableName">
+        /// The subtype table carrying the column
+        /// </param>
+        /// <param name="property">
+        /// The stored <see cref="IProperty" /> that a derived property redefines
+        /// </param>
+        /// <param name="derivingClassKinds">
+        /// The class_kind ids whose rows do not store the value
+        /// </param>
+        /// <returns>
+        /// The constraint definition, without a trailing separator
+        /// </returns>
+        private static string FormatDerivedRedefinitionCheck(string tableName, IProperty property, IReadOnlyList<int> derivingClassKinds)
+        {
+            var columnName = property.QuerySqlColumnName();
+            var classKindList = string.Join(", ", derivingClassKinds);
+
+            var predicate = property.QueryIsNullable()
+                ? $"class_kind NOT IN ({classKindList}) OR {columnName} IS NULL"
+                : $"(class_kind IN ({classKindList})) = ({columnName} IS NULL)";
+
+            return $"    CONSTRAINT ck_{tableName}_{columnName}\n        CHECK ({predicate})";
         }
 
         /// <summary>

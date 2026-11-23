@@ -75,11 +75,15 @@ VALUES
      '{"@id":"e2222222-0000-0000-0000-000000000000","@type":"PartUsage","declaredName":"wheel"}');
 
 -- PartUsage participates in type_version / feature_version / usage_version / occurrence_usage_version
-INSERT INTO sysml2.type_version    VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false, false);
+INSERT INTO sysml2.type_version    VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
+                                     (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'), false, false);
 INSERT INTO sysml2.feature_version VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
-                                     NULL, false, false, false, false, false, false, true, false);
-INSERT INTO sysml2.usage_version   VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false);
-INSERT INTO sysml2.occurrence_usage_version VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000', false, NULL);
+                                     (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'),
+                                     NULL, false, false, false, false, false, false, true, NULL);
+INSERT INTO sysml2.usage_version   VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
+                                     (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'), false);
+INSERT INTO sysml2.occurrence_usage_version VALUES ('11111111-0000-0000-0000-000000000000', 'a2222222-0000-0000-0000-000000000000',
+                                     (SELECT id FROM sysml2.class_kind WHERE name = 'PartUsage'), false, NULL);
 
 INSERT INTO sysml2.derived_version
     (project_id, derived_id, identity_id, commit_id, owner, qualified_name, name, derived_json)
@@ -1708,5 +1712,149 @@ BEGIN
         RAISE EXCEPTION 'FAIL 28e: deleteExternalRelationship left r1 visible at c20 (% rows, % by element) or kept it off c18', row_count, other_count;
     END IF;
     RAISE NOTICE 'PASS 28e: deleteExternalRelationship is a tombstone commit; r1 is gone at c20 and kept at c18';
+END;
+$$;
+
+----------------------------------------------------------------------------------------------
+-- DERIVED-REDEFINITION SCENARIO — a column whose property a derived property redefines holds
+-- no value for the class kinds owning that derived property, and is required (when [1..1]) for
+-- every other kind: OwningMembership::ownedMemberElement (memberElement), OwningMembership::
+-- ownedMemberName (memberName), ReferenceSubsetting::referencingFeature (subsettingFeature, and
+-- through it specific) and Usage::mayTimeVary (isVariable). Each subtype row carries its
+-- element's class_kind, pinned to the version row by the composite FK.
+----------------------------------------------------------------------------------------------
+
+DO $$
+DECLARE
+    proj            constant uuid := '11111111-0000-0000-0000-000000000000';
+    c20             constant uuid := 'cf222222-0000-0000-0000-000000000000';
+    c21             constant uuid := 'c0333333-0000-0000-0000-000000000000';
+    e2              constant uuid := 'e2222222-0000-0000-0000-000000000000';
+    m1              constant uuid := 'ee111111-0000-0000-0000-000000000000';
+    s1              constant uuid := 'ee222222-0000-0000-0000-000000000000';
+    u1              constant uuid := 'ee333333-0000-0000-0000-000000000000';
+    m2              constant uuid := 'ee444444-0000-0000-0000-000000000000';
+    f2              constant uuid := 'ee555555-0000-0000-0000-000000000000';
+    vm1             constant uuid := 'b0777777-0000-0000-0000-000000000000';
+    vs1             constant uuid := 'b0888888-0000-0000-0000-000000000000';
+    vu1             constant uuid := 'b0999999-0000-0000-0000-000000000000';
+    vm2             constant uuid := 'b0aaaaaa-0000-0000-0000-000000000000';
+    vf2             constant uuid := 'b0bbbbbb-0000-0000-0000-000000000000';
+    owning_kind     smallint;
+    reference_kind  smallint;
+    part_usage_kind smallint;
+    membership_kind smallint;
+    feature_kind    smallint;
+    row_count       int;
+BEGIN
+    SELECT id INTO owning_kind     FROM sysml2.class_kind WHERE name = 'OwningMembership';
+    SELECT id INTO reference_kind  FROM sysml2.class_kind WHERE name = 'ReferenceSubsetting';
+    SELECT id INTO part_usage_kind FROM sysml2.class_kind WHERE name = 'PartUsage';
+    SELECT id INTO membership_kind FROM sysml2.class_kind WHERE name = 'Membership';
+    SELECT id INTO feature_kind    FROM sysml2.class_kind WHERE name = 'Feature';
+
+    INSERT INTO sysml2.commit (id, project_id, created, description, model_version_id)
+    VALUES (c21, proj, '2026-01-02T00:00:00Z', 'store rows whose redefined values are derived', 1);
+
+    INSERT INTO sysml2.commit_parent (commit_id, parent_commit_id, ordinal) VALUES (c21, c20, 0);
+
+    INSERT INTO sysml2.data_identity (id, project_id, class_kind) VALUES
+        (m1, proj, owning_kind),
+        (s1, proj, reference_kind),
+        (u1, proj, part_usage_kind),
+        (m2, proj, membership_kind),
+        (f2, proj, feature_kind);
+
+    INSERT INTO sysml2.element_version
+        (project_id, version_id, identity_id, commit_id, class_kind, tombstone,
+         element_id, is_implied_included, stored_json)
+    VALUES
+        (proj, vm1, m1, c21, owning_kind,     false, 'ee111111-0000-0000-0000-000000000000', false, '{}'),
+        (proj, vs1, s1, c21, reference_kind,  false, 'ee222222-0000-0000-0000-000000000000', false, '{}'),
+        (proj, vu1, u1, c21, part_usage_kind, false, 'ee333333-0000-0000-0000-000000000000', false, '{}'),
+        (proj, vm2, m2, c21, membership_kind, false, 'ee444444-0000-0000-0000-000000000000', false, '{}'),
+        (proj, vf2, f2, c21, feature_kind,    false, 'ee555555-0000-0000-0000-000000000000', false, '{}');
+
+    -- 29a. A [1..1] column no derived property redefines stays NOT NULL.
+    BEGIN
+        INSERT INTO sysml2.subsetting_version (project_id, version_id, class_kind) VALUES (proj, vs1, reference_kind);
+
+        RAISE EXCEPTION 'FAIL 29a: subsetting_version row without subsetted_feature was ACCEPTED';
+    EXCEPTION WHEN not_null_violation THEN
+        RAISE NOTICE 'PASS 29a: subsetted_feature stays NOT NULL';
+    END;
+
+    -- 29b. A deriving kind must not store the derived value of a [1..1] property.
+    BEGIN
+        INSERT INTO sysml2.membership_version (project_id, version_id, class_kind, member_element)
+        VALUES (proj, vm1, owning_kind, e2);
+
+        RAISE EXCEPTION 'FAIL 29b: OwningMembership row storing member_element was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 29b: an OwningMembership cannot store its derived member_element';
+    END;
+
+    -- 29c. A deriving kind must not store the derived value of a [0..1] property either.
+    BEGIN
+        INSERT INTO sysml2.membership_version (project_id, version_id, class_kind, member_name)
+        VALUES (proj, vm1, owning_kind, 'wheel');
+
+        RAISE EXCEPTION 'FAIL 29c: OwningMembership row storing member_name was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 29c: an OwningMembership cannot store its derived member_name';
+    END;
+
+    -- 29d. A kind that stores the value must supply it.
+    BEGIN
+        INSERT INTO sysml2.membership_version (project_id, version_id, class_kind) VALUES (proj, vm2, membership_kind);
+
+        RAISE EXCEPTION 'FAIL 29d: Membership row without member_element was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 29d: a Membership must store member_element';
+    END;
+
+    -- 29e. The same holds where the UML default no longer applies.
+    BEGIN
+        INSERT INTO sysml2.feature_version (project_id, version_id, class_kind) VALUES (proj, vf2, feature_kind);
+
+        RAISE EXCEPTION 'FAIL 29e: Feature row without is_variable was ACCEPTED';
+    EXCEPTION WHEN check_violation THEN
+        RAISE NOTICE 'PASS 29e: a Feature must store is_variable';
+    END;
+
+    -- 29f. A subtype row cannot claim a metaclass other than its version's.
+    BEGIN
+        INSERT INTO sysml2.membership_version (project_id, version_id, class_kind) VALUES (proj, vm2, owning_kind);
+
+        RAISE EXCEPTION 'FAIL 29f: membership_version row with a mismatched class_kind was ACCEPTED';
+    EXCEPTION WHEN foreign_key_violation THEN
+        RAISE NOTICE 'PASS 29f: a subtype row''s class_kind must match its element_version row';
+    END;
+
+    -- 29g. Each kind is accepted with exactly the values it stores.
+    INSERT INTO sysml2.membership_version (project_id, version_id, class_kind) VALUES (proj, vm1, owning_kind);
+    INSERT INTO sysml2.membership_version (project_id, version_id, class_kind, member_element, member_name)
+    VALUES (proj, vm2, membership_kind, e2, 'wheel');
+    INSERT INTO sysml2.specialization_version (project_id, version_id, class_kind, general) VALUES (proj, vs1, reference_kind, e2);
+    INSERT INTO sysml2.subsetting_version (project_id, version_id, class_kind, subsetted_feature) VALUES (proj, vs1, reference_kind, e2);
+    INSERT INTO sysml2.feature_version (project_id, version_id, class_kind) VALUES (proj, vu1, part_usage_kind);
+    INSERT INTO sysml2.feature_version (project_id, version_id, class_kind, is_variable) VALUES (proj, vf2, feature_kind, false);
+
+    SELECT count(*) INTO row_count
+    FROM sysml2.membership_version mv
+    WHERE mv.project_id = proj
+      AND ((mv.version_id = vm1 AND mv.member_element IS NULL AND mv.member_name IS NULL)
+           OR (mv.version_id = vm2 AND mv.member_element = e2 AND mv.member_name = 'wheel'));
+
+    IF row_count <> 2
+       OR NOT EXISTS (SELECT 1 FROM sysml2.specialization_version sv
+                      WHERE sv.project_id = proj AND sv.version_id = vs1 AND sv.specific IS NULL)
+       OR NOT EXISTS (SELECT 1 FROM sysml2.subsetting_version ssv
+                      WHERE ssv.project_id = proj AND ssv.version_id = vs1 AND ssv.subsetting_feature IS NULL)
+       OR NOT EXISTS (SELECT 1 FROM sysml2.feature_version fv
+                      WHERE fv.project_id = proj AND fv.version_id = vu1 AND fv.is_variable IS NULL) THEN
+        RAISE EXCEPTION 'FAIL 29g: the subtype rows did not read back with exactly their stored values';
+    END IF;
+    RAISE NOTICE 'PASS 29g: each kind is stored with exactly the values it does not derive';
 END;
 $$;

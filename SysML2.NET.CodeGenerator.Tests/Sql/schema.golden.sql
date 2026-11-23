@@ -457,6 +457,7 @@ CREATE TABLE sysml2.element_version (
     stored_json          jsonb      NULL,
 
     PRIMARY KEY (project_id, version_id),
+    UNIQUE (project_id, version_id, class_kind),   -- FK target of every subtype table (§7)
 
     -- TYPED IDENTITY (§4): one composite FK both anchors the identity AND makes a version
     -- that claims a different metaclass than its identity impossible.
@@ -612,8 +613,14 @@ CREATE INDEX ix_dependency_supplier_target
 --   RequirementVerificationMembership::kind -> requirement_constraint_membership_version.kind
 --
 -- Every table is keyed by (project_id, version_id) and co-partitioned with element_version, so
--- the join is partition-local. NOT NULL is safe on [1..1] properties: a row only exists here if
--- the element's class actually inherits this metaclass.
+-- the join is partition-local. Each row carries its element's class_kind, pinned to the version
+-- row by the composite FK, so a constraint can depend on the metaclass.
+--
+-- A [1..1] property is NOT NULL, unless a derived property redefines it, directly or through a
+-- chain of redefinitions: the value is then derived for the classes owning that derived property
+-- and stored for all others. Such a column is NULL, carries no DEFAULT, and gets a generated
+-- ck_{table}_{column} CHECK listing the deriving class kinds: the value must be absent for them
+-- and, for a [1..1] property, present for every other class kind.
 --
 -- Dependency introduces no scalar properties (client/supplier are link tables), so it has no
 -- subtype table.
@@ -632,26 +639,29 @@ CREATE INDEX ix_dependency_supplier_target
 CREATE TABLE sysml2.relationship_version (
     project_id            uuid    NOT NULL,
     version_id            uuid    NOT NULL,
+    class_kind            smallint NOT NULL,
     is_implied            boolean NOT NULL,
     owning_related_element uuid   NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.type_version (
     project_id    uuid    NOT NULL,
     version_id    uuid    NOT NULL,
+    class_kind    smallint NOT NULL,
     is_abstract   boolean NOT NULL,
     is_sufficient boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.feature_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
+    class_kind   smallint NOT NULL,
     direction    sysml2.feature_direction_kind NULL,
     is_composite boolean NOT NULL,
     is_constant  boolean NOT NULL,
@@ -660,23 +670,24 @@ CREATE TABLE sysml2.feature_version (
     is_ordered   boolean NOT NULL,
     is_portion   boolean NOT NULL,
     is_unique    boolean NOT NULL,
-    is_variable  boolean NOT NULL,
+    is_variable  boolean NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.membership_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
-    member_element     uuid NOT NULL REFERENCES sysml2.data_identity (id),
+    class_kind         smallint NOT NULL,
+    member_element     uuid NULL REFERENCES sysml2.data_identity (id),
     member_name        text NULL,
     member_short_name  text NULL,
     -- KerML: Membership::visibility defaults to public
     visibility         sysml2.visibility_kind NOT NULL DEFAULT 'public',
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE INDEX ix_membership_version_member_element ON sysml2.membership_version (project_id, member_element);
@@ -684,32 +695,35 @@ CREATE INDEX ix_membership_version_member_element ON sysml2.membership_version (
 CREATE TABLE sysml2.import_version (
     project_id     uuid    NOT NULL,
     version_id     uuid    NOT NULL,
+    class_kind     smallint NOT NULL,
     is_import_all  boolean NOT NULL DEFAULT false,
     is_recursive   boolean NOT NULL DEFAULT false,
     -- KerML: Import::visibility defaults to PRIVATE (unlike Membership), and a top-level
     -- Import owned by a root Namespace MUST be private.
     visibility     sysml2.visibility_kind NOT NULL DEFAULT 'private',
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.membership_import_version (
     project_id          uuid NOT NULL,
     version_id          uuid NOT NULL,
+    class_kind          smallint NOT NULL,
     imported_membership uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.namespace_import_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
+    class_kind         smallint NOT NULL,
     imported_namespace uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- Specialization and its 8 refinements. Each carries its own pair of endpoint references, which
@@ -717,11 +731,12 @@ CREATE TABLE sysml2.namespace_import_version (
 CREATE TABLE sysml2.specialization_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     general    uuid NOT NULL REFERENCES sysml2.data_identity (id),
-    specific   uuid NOT NULL REFERENCES sysml2.data_identity (id),
+    specific   uuid NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- The specialization graph is walked by Type::allSupertypes / inheritedMembership / feature.
@@ -732,59 +747,65 @@ CREATE INDEX ix_specialization_version_specific ON sysml2.specialization_version
 CREATE TABLE sysml2.subclassification_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
+    class_kind      smallint NOT NULL,
     subclassifier   uuid NOT NULL REFERENCES sysml2.data_identity (id),
     superclassifier uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.subsetting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
+    class_kind         smallint NOT NULL,
     subsetted_feature  uuid NOT NULL REFERENCES sysml2.data_identity (id),
-    subsetting_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
+    subsetting_feature uuid NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.redefinition_version (
     project_id          uuid NOT NULL,
     version_id          uuid NOT NULL,
+    class_kind          smallint NOT NULL,
     redefined_feature   uuid NOT NULL REFERENCES sysml2.data_identity (id),
     redefining_feature  uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.reference_subsetting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
+    class_kind         smallint NOT NULL,
     referenced_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.cross_subsetting_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
+    class_kind      smallint NOT NULL,
     crossed_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.feature_typing_version (
     project_id    uuid NOT NULL,
     version_id    uuid NOT NULL,
+    class_kind    smallint NOT NULL,
     type          uuid NOT NULL REFERENCES sysml2.data_identity (id),
     typed_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE INDEX ix_feature_typing_version_type ON sysml2.feature_typing_version (project_id, type);
@@ -792,114 +813,126 @@ CREATE INDEX ix_feature_typing_version_type ON sysml2.feature_typing_version (pr
 CREATE TABLE sysml2.conjugated_port_typing_version (
     project_id               uuid NOT NULL,
     version_id               uuid NOT NULL,
+    class_kind               smallint NOT NULL,
     conjugated_port_definition uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.conjugation_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
+    class_kind      smallint NOT NULL,
     conjugated_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
     original_type   uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.port_conjugation_version (
     project_id               uuid NOT NULL,
     version_id               uuid NOT NULL,
+    class_kind               smallint NOT NULL,
     original_port_definition uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.disjoining_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
+    class_kind      smallint NOT NULL,
     disjoining_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
     type_disjoined  uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.differencing_version (
     project_id        uuid NOT NULL,
     version_id        uuid NOT NULL,
+    class_kind        smallint NOT NULL,
     differencing_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.intersecting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
+    class_kind         smallint NOT NULL,
     intersecting_type  uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.unioning_version (
     project_id    uuid NOT NULL,
     version_id    uuid NOT NULL,
+    class_kind    smallint NOT NULL,
     unioning_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.feature_chaining_version (
     project_id       uuid NOT NULL,
     version_id       uuid NOT NULL,
+    class_kind       smallint NOT NULL,
     chaining_feature uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.feature_inverting_version (
     project_id         uuid NOT NULL,
     version_id         uuid NOT NULL,
+    class_kind         smallint NOT NULL,
     feature_inverted   uuid NOT NULL REFERENCES sysml2.data_identity (id),
     inverting_feature  uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.type_featuring_version (
     project_id      uuid NOT NULL,
     version_id      uuid NOT NULL,
+    class_kind      smallint NOT NULL,
     feature_of_type uuid NOT NULL REFERENCES sysml2.data_identity (id),
     featuring_type  uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.feature_value_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
+    class_kind smallint NOT NULL,
     is_default boolean NOT NULL,
     is_initial boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.annotation_version (
     project_id        uuid NOT NULL,
     version_id        uuid NOT NULL,
+    class_kind        smallint NOT NULL,
     annotated_element uuid NOT NULL REFERENCES sysml2.data_identity (id),
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE INDEX ix_annotation_version_annotated_element
@@ -908,30 +941,33 @@ CREATE INDEX ix_annotation_version_annotated_element
 CREATE TABLE sysml2.comment_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     body       text NOT NULL,
     locale     text NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.textual_representation_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     body       text NOT NULL,
     language   text NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.library_package_version (
     project_id  uuid    NOT NULL,
     version_id  uuid    NOT NULL,
+    class_kind  smallint NOT NULL,
     is_standard boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- Expressions. Note that `operator` is declared ONCE on OperatorExpression; CollectExpression,
@@ -939,10 +975,11 @@ CREATE TABLE sysml2.library_package_version (
 CREATE TABLE sysml2.operator_expression_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     operator   text NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- `value` is a DIFFERENT TYPE on each of the four Literal metaclasses. This is the single
@@ -950,65 +987,72 @@ CREATE TABLE sysml2.operator_expression_version (
 CREATE TABLE sysml2.literal_boolean_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
+    class_kind smallint NOT NULL,
     value      boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.literal_integer_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
+    class_kind smallint NOT NULL,
     value      integer NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.literal_rational_version (
     project_id uuid             NOT NULL,
     version_id uuid             NOT NULL,
+    class_kind smallint NOT NULL,
     value      double precision NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.literal_string_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     value      text NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.invariant_version (
     project_id uuid    NOT NULL,
     version_id uuid    NOT NULL,
+    class_kind smallint NOT NULL,
     is_negated boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- SysML layer
 CREATE TABLE sysml2.definition_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
+    class_kind   smallint NOT NULL,
     is_variation boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.usage_version (
     project_id   uuid    NOT NULL,
     version_id   uuid    NOT NULL,
+    class_kind   smallint NOT NULL,
     is_variation boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- isIndividual is declared independently on OccurrenceDefinition and OccurrenceUsage — they sit
@@ -1016,93 +1060,103 @@ CREATE TABLE sysml2.usage_version (
 CREATE TABLE sysml2.occurrence_definition_version (
     project_id    uuid    NOT NULL,
     version_id    uuid    NOT NULL,
+    class_kind    smallint NOT NULL,
     is_individual boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.occurrence_usage_version (
     project_id    uuid    NOT NULL,
     version_id    uuid    NOT NULL,
+    class_kind    smallint NOT NULL,
     is_individual boolean NOT NULL,
     portion_kind  sysml2.portion_kind NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.state_definition_version (
     project_id  uuid    NOT NULL,
     version_id  uuid    NOT NULL,
+    class_kind  smallint NOT NULL,
     is_parallel boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.state_usage_version (
     project_id  uuid    NOT NULL,
     version_id  uuid    NOT NULL,
+    class_kind  smallint NOT NULL,
     is_parallel boolean NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.requirement_definition_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     req_id     text NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.requirement_usage_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     req_id     text NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 -- `kind` is a DIFFERENT ENUM TYPE on each of these four. Same argument as Literal::value.
 CREATE TABLE sysml2.requirement_constraint_membership_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     kind       sysml2.requirement_constraint_kind NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.state_subaction_membership_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     kind       sysml2.state_subaction_kind NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.transition_feature_membership_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     kind       sysml2.transition_feature_kind NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 CREATE TABLE sysml2.trigger_invocation_expression_version (
     project_id uuid NOT NULL,
     version_id uuid NOT NULL,
+    class_kind smallint NOT NULL,
     kind       sysml2.trigger_kind NOT NULL,
     PRIMARY KEY (project_id, version_id),
-    FOREIGN KEY (project_id, version_id)
-        REFERENCES sysml2.element_version (project_id, version_id) ON DELETE CASCADE
+    FOREIGN KEY (project_id, version_id, class_kind)
+        REFERENCES sysml2.element_version (project_id, version_id, class_kind) ON DELETE CASCADE
 ) PARTITION BY HASH (project_id);
 
 ------------------------------------------------------------------------------------------------
