@@ -76,7 +76,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// model or relative to some other context.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IRequirementDefinition.ReqId")]
+        [RedefinedByProperty("IRequirementDefinition.ReqId", isDerivedByRedefinition: false)]
         [Implements(implementation: "IElement.DeclaredShortName")]
         string Root.Elements.IElement.DeclaredShortName
         {
@@ -105,7 +105,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IBehavior.Parameter")]
+        [RedefinedByProperty("IBehavior.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 

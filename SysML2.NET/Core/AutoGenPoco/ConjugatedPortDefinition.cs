@@ -417,7 +417,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_19_0_2_12e503d9_1575482646809_280165_440", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        [RedefinedByProperty("IConjugatedPortDefinition.OwnedPortConjugator")]
+        [RedefinedByProperty("IConjugatedPortDefinition.OwnedPortConjugator", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.OwnedConjugator")]
         IConjugation Core.Types.IType.ownedConjugator => this.ownedPortConjugator;
 
@@ -749,7 +749,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
-        [RedefinedByProperty("IConjugatedPortDefinition.OriginalPortDefinition")]
+        [RedefinedByProperty("IConjugatedPortDefinition.OriginalPortDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IElement.OwningNamespace")]
         INamespace Root.Elements.IElement.owningNamespace => this.originalPortDefinition;
 

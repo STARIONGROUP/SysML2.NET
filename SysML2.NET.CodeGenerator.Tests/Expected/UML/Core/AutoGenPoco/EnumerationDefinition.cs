@@ -288,7 +288,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         /// Definition must be VariantMemberships.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590978283180_265362_419", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IEnumerationDefinition.IsVariation")]
+        [RedefinedByProperty("IEnumerationDefinition.IsVariation", isDerivedByRedefinition: false)]
         [Implements(implementation: "IDefinition.IsVariation")]
         bool Systems.DefinitionAndUsage.IDefinition.IsVariation
         {
@@ -807,7 +807,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590979457191_746167_951", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        [RedefinedByProperty("IEnumerationDefinition.EnumeratedValue")]
+        [RedefinedByProperty("IEnumerationDefinition.EnumeratedValue", isDerivedByRedefinition: false)]
         [Implements(implementation: "IDefinition.Variant")]
         List<IUsage> Systems.DefinitionAndUsage.IDefinition.variant => [.. this.enumeratedValue];
 

@@ -223,12 +223,15 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IUnioning.TypeUnioned")]
+        [RedefinedByProperty("IUnioning.TypeUnioned", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.typeUnioned];
-            set { }
+            set
+            {
+                this.typeUnioned = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>
@@ -236,7 +239,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IUnioning.UnioningType")]
+        [RedefinedByProperty("IUnioning.UnioningType", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {

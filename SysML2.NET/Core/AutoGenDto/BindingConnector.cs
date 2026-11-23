@@ -160,7 +160,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IConnector.ConnectorEnd")]
+        [RedefinedByProperty("IConnector.ConnectorEnd", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.EndFeature")]
         List<Guid> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
@@ -721,7 +721,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IConnector.RelatedFeature")]
+        [RedefinedByProperty("IConnector.RelatedFeature", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.RelatedElement")]
         List<Guid> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
@@ -749,12 +749,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IConnector.SourceFeature")]
+        [RedefinedByProperty("IConnector.SourceFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => this.sourceFeature.HasValue ? [this.sourceFeature.Value] : [];
-            set { }
+            set
+            {
+                this.sourceFeature = value.Count != 0 ? value[0] : null;
+            }
         }
 
         /// <summary>
@@ -771,12 +774,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IConnector.TargetFeature")]
+        [RedefinedByProperty("IConnector.TargetFeature", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
             get => [.. this.targetFeature];
-            set { }
+            set
+            {
+                this.targetFeature = [.. value];
+            }
         }
 
         /// <summary>
@@ -805,7 +811,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IConnector.Association")]
+        [RedefinedByProperty("IConnector.Association", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<Guid> Core.Features.IFeature.type => [.. this.association];
 

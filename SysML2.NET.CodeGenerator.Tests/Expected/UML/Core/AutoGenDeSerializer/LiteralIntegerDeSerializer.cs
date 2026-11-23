@@ -169,6 +169,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var unioningTypeSeen = false;
             var valueSeen = false;
 
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -1444,9 +1445,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+
                 reader.Read();
                 reader.Skip();
             }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -1797,6 +1800,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelationshipSeen = false;
             var valueSeen = false;
 
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
                 if (reader.TokenType != JsonTokenType.PropertyName)
@@ -2071,9 +2075,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+
                 reader.Read();
                 reader.Skip();
             }
+
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

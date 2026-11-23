@@ -59,7 +59,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IExpression.Function")]
+        [RedefinedByProperty("IExpression.Function", isDerivedByRedefinition: false)]
         [Implements(implementation: "IStep.Behavior")]
         List<Guid> Kernel.Behaviors.IStep.behavior => this.function.HasValue ? [this.function.Value] : [];
 
@@ -120,7 +120,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
@@ -433,7 +433,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// Kernel Function Library .
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1557528808100_646606_111674", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IFeatureChainExpression.Operator")]
+        [RedefinedByProperty("IFeatureChainExpression.Operator", isDerivedByRedefinition: false)]
         [Implements(implementation: "IOperatorExpression.Operator")]
         string IOperatorExpression.Operator
         {

@@ -112,7 +112,7 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
@@ -402,12 +402,15 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary")]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
             get => this.mayTimeVary;
-            set { }
+            set
+            {
+                this.mayTimeVary = value;
+            }
         }
 
         /// <summary>
@@ -425,7 +428,7 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        [RedefinedByProperty("IMetadataUsage.MetadataDefinition")]
+        [RedefinedByProperty("IMetadataUsage.MetadataDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IItemUsage.ItemDefinition")]
         List<Guid> Systems.Items.IItemUsage.itemDefinition => this.metadataDefinition.HasValue ? [this.metadataDefinition.Value] : [];
 
@@ -463,7 +466,7 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606345564958_925589_327", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IMetadataUsage.MetadataDefinition")]
+        [RedefinedByProperty("IMetadataUsage.MetadataDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IMetadataFeature.Metaclass")]
         Guid? Kernel.Metadata.IMetadataFeature.metaclass => this.metadataDefinition.HasValue ? this.metadataDefinition.Value : Guid.Empty;
 
@@ -1085,7 +1088,7 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

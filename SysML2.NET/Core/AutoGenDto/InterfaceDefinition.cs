@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562477648742_24204_22901", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
-        [RedefinedByProperty("IConnectionDefinition.ConnectionEnd")]
+        [RedefinedByProperty("IConnectionDefinition.ConnectionEnd", isDerivedByRedefinition: false)]
         [Implements(implementation: "IAssociation.AssociationEnd")]
         List<Guid> Kernel.Associations.IAssociation.associationEnd => [.. ((SysML2.NET.Core.DTO.Systems.Connections.IConnectionDefinition)this).connectionEnd];
 
@@ -59,7 +59,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591476421094_685440_682", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
-        [RedefinedByProperty("IInterfaceDefinition.InterfaceEnd")]
+        [RedefinedByProperty("IInterfaceDefinition.InterfaceEnd", isDerivedByRedefinition: false)]
         [Implements(implementation: "IConnectionDefinition.ConnectionEnd")]
         List<Guid> Systems.Connections.IConnectionDefinition.connectionEnd => [.. this.interfaceEnd];
 
@@ -132,7 +132,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IAssociation.AssociationEnd")]
+        [RedefinedByProperty("IAssociation.AssociationEnd", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.EndFeature")]
         List<Guid> Core.Types.IType.endFeature => [.. ((SysML2.NET.Core.DTO.Kernel.Associations.IAssociation)this).associationEnd];
 
@@ -272,7 +272,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// sufficient, it would classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IConnectionDefinition.IsSufficient")]
+        [RedefinedByProperty("IConnectionDefinition.IsSufficient", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.IsSufficient")]
         bool Core.Types.IType.IsSufficient
         {
@@ -770,7 +770,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IAssociation.RelatedType")]
+        [RedefinedByProperty("IAssociation.RelatedType", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.RelatedElement")]
         List<Guid> Root.Elements.IRelationship.relatedElement => [.. this.relatedType];
 
@@ -798,12 +798,15 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IAssociation.SourceType")]
+        [RedefinedByProperty("IAssociation.SourceType", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => this.sourceType.HasValue ? [this.sourceType.Value] : [];
-            set { }
+            set
+            {
+                this.sourceType = value.Count != 0 ? value[0] : null;
+            }
         }
 
         /// <summary>
@@ -820,12 +823,15 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IAssociation.TargetType")]
+        [RedefinedByProperty("IAssociation.TargetType", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
             get => [.. this.targetType];
-            set { }
+            set
+            {
+                this.targetType = [.. value];
+            }
         }
 
         /// <summary>

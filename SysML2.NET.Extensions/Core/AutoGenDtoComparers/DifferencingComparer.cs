@@ -93,6 +93,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.OwningRelationship != y.OwningRelationship) return false;
 
+            if (!GuidSequenceEquality.OrderedEqual(x.Target, y.Target)) return false;
+
             return true;
         }
 

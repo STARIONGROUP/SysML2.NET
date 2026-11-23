@@ -110,19 +110,22 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_819490_43195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberElement")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberElement", isDerivedByRedefinition: true)]
         [Implements(implementation: "IMembership.MemberElement")]
         Guid Root.Namespaces.IMembership.MemberElement
         {
             get => ((SysML2.NET.Core.DTO.Root.Namespaces.IOwningMembership)this).ownedMemberElement;
-            set { }
+            set
+            {
+                this.ownedVariantUsage = value;
+            }
         }
 
         /// <summary>
         /// The elementId of the memberElement.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberElementId", isDerivedByRedefinition: false)]
         [Implements(implementation: "IMembership.MemberElementId")]
         string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
 
@@ -130,12 +133,15 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// The name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberName")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberName", isDerivedByRedefinition: true)]
         [Implements(implementation: "IMembership.MemberName")]
         string Root.Namespaces.IMembership.MemberName
         {
             get => this.ownedMemberName;
-            set { }
+            set
+            {
+                this.ownedMemberName = value;
+            }
         }
 
         /// <summary>
@@ -152,12 +158,15 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// The short name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IOwningMembership.OwnedMemberShortName")]
+        [RedefinedByProperty("IOwningMembership.OwnedMemberShortName", isDerivedByRedefinition: true)]
         [Implements(implementation: "IMembership.MemberShortName")]
         string Root.Namespaces.IMembership.MemberShortName
         {
             get => this.ownedMemberShortName;
-            set { }
+            set
+            {
+                this.ownedMemberShortName = value;
+            }
         }
 
         /// <summary>
@@ -195,7 +204,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674965_501750_43196", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_59873_43302")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
-        [RedefinedByProperty("IVariantMembership.OwnedVariantUsage")]
+        [RedefinedByProperty("IVariantMembership.OwnedVariantUsage", isDerivedByRedefinition: false)]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
         Guid Root.Namespaces.IOwningMembership.ownedMemberElement => this.ownedVariantUsage;
 
@@ -325,12 +334,15 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IMembership.MembershipOwningNamespace")]
+        [RedefinedByProperty("IMembership.MembershipOwningNamespace", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.membershipOwningNamespace];
-            set { }
+            set
+            {
+                this.membershipOwningNamespace = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>
@@ -338,7 +350,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IMembership.MemberElement")]
+        [RedefinedByProperty("IMembership.MemberElement", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {

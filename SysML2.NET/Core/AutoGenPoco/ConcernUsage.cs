@@ -114,7 +114,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IExpression.Function")]
+        [RedefinedByProperty("IExpression.Function", isDerivedByRedefinition: false)]
         [Implements(implementation: "IStep.Behavior")]
         List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
 
@@ -145,7 +145,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
-        [RedefinedByProperty("IRequirementUsage.RequirementDefinition")]
+        [RedefinedByProperty("IRequirementUsage.RequirementDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IConstraintUsage.ConstraintDefinition")]
         IPredicate Systems.Constraints.IConstraintUsage.constraintDefinition => ((SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage)this).requirementDefinition;
 
@@ -173,7 +173,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// model or relative to some other context.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IRequirementUsage.ReqId")]
+        [RedefinedByProperty("IRequirementUsage.ReqId", isDerivedByRedefinition: false)]
         [Implements(implementation: "IElement.DeclaredShortName")]
         string Root.Elements.IElement.DeclaredShortName
         {
@@ -191,7 +191,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IUsage.Definition")]
         List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
@@ -213,7 +213,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        [RedefinedByProperty("IStep.Parameter")]
+        [RedefinedByProperty("IStep.Parameter", isDerivedByRedefinition: false)]
         [Implements(implementation: "IType.DirectedFeature")]
         List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
@@ -318,7 +318,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        [RedefinedByProperty("IBooleanExpression.Predicate")]
+        [RedefinedByProperty("IBooleanExpression.Predicate", isDerivedByRedefinition: false)]
         [Implements(implementation: "IExpression.Function")]
         IFunction Kernel.Functions.IExpression.function => ((SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression)this).predicate;
 
@@ -509,7 +509,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.MayTimeVary")]
+        [RedefinedByProperty("IUsage.MayTimeVary", isDerivedByRedefinition: true)]
         [Implements(implementation: "IFeature.IsVariable")]
         bool Core.Features.IFeature.IsVariable
         {
@@ -1127,7 +1127,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578025035149_386_969", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
-        [RedefinedByProperty("IConstraintUsage.ConstraintDefinition")]
+        [RedefinedByProperty("IConstraintUsage.ConstraintDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IBooleanExpression.Predicate")]
         IPredicate Kernel.Functions.IBooleanExpression.predicate => ((SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage)this).constraintDefinition;
 
@@ -1168,7 +1168,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583000408905_769743_1223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578067546711_751168_1745")]
-        [RedefinedByProperty("IConcernUsage.ConcernDefinition")]
+        [RedefinedByProperty("IConcernUsage.ConcernDefinition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRequirementUsage.RequirementDefinition")]
         IRequirementDefinition IRequirementUsage.requirementDefinition => this.concernDefinition;
 
@@ -1235,7 +1235,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
-        [RedefinedByProperty("IUsage.Definition")]
+        [RedefinedByProperty("IUsage.Definition", isDerivedByRedefinition: false)]
         [Implements(implementation: "IFeature.Type")]
         List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 

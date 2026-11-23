@@ -135,7 +135,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
         /// Whether to import memberships without regard to declared visibility.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1622577942205_869984_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false", isOwnerEnd: false)]
-        [RedefinedByProperty("IExpose.IsImportAll")]
+        [RedefinedByProperty("IExpose.IsImportAll", isDerivedByRedefinition: false)]
         [Implements(implementation: "IImport.IsImportAll")]
         bool Root.Namespaces.IImport.IsImportAll
         {
@@ -281,12 +281,15 @@ namespace SysML2.NET.Core.DTO.Systems.Views
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IImport.ImportOwningNamespace")]
+        [RedefinedByProperty("IImport.ImportOwningNamespace", isDerivedByRedefinition: true)]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
             get => [this.importOwningNamespace];
-            set { }
+            set
+            {
+                this.importOwningNamespace = value.Count != 0 ? value[0] : Guid.Empty;
+            }
         }
 
         /// <summary>
@@ -294,7 +297,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null, isOwnerEnd: false)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("INamespaceImport.ImportedNamespace")]
+        [RedefinedByProperty("INamespaceImport.ImportedNamespace", isDerivedByRedefinition: false)]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
@@ -331,7 +334,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
         /// The default is private.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674976_798509_43257", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "private", isOwnerEnd: false)]
-        [RedefinedByProperty("IExpose.Visibility")]
+        [RedefinedByProperty("IExpose.Visibility", isDerivedByRedefinition: false)]
         [Implements(implementation: "IImport.Visibility")]
         VisibilityKind Root.Namespaces.IImport.Visibility
         {

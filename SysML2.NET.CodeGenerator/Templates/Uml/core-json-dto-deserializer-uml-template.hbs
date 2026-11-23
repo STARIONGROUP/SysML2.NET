@@ -100,6 +100,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 {{/unless}}
             {{/each}}
 
+            {{ #Property.WriteRedefinedDeserialization class "declarations" true }}
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
             if (reader.TokenType != JsonTokenType.PropertyName)
@@ -130,9 +132,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 {{/unless}}
             {{/each}}
 
+            {{ #Property.WriteRedefinedDeserialization class "reads" true }}
+
             reader.Read();
             reader.Skip();
             }
+
+            {{ #Property.WriteRedefinedDeserialization class "assignments" true }}
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -177,6 +183,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{/unless}}
         {{/each}}
 
+            {{ #Property.WriteRedefinedDeserialization class "declarations" false }}
+
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
             {
             if (reader.TokenType != JsonTokenType.PropertyName)
@@ -209,9 +217,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{/unless}}
         {{/each}}
 
+            {{ #Property.WriteRedefinedDeserialization class "reads" false }}
+
             reader.Read();
             reader.Skip();
             }
+
+            {{ #Property.WriteRedefinedDeserialization class "assignments" false }}
 
             if (logger.IsEnabled(LogLevel.Debug))
             {

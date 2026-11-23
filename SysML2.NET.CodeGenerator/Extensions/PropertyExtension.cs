@@ -199,5 +199,62 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return operation.OwnedRule;
         }
+
+        /// <param name="property">The <see cref="IProperty"/> to inspect</param>
+        extension(IProperty property)
+        {
+            /// <summary>
+            /// Queries whether the <paramref name="property"/>, redefined in the <paramref name="classContext"/>, is still serialized under its own name.
+            /// </summary>
+            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
+            /// <returns><c>true</c> when the property is non-derived and is redefined in the context by a property of another name</returns>
+            /// <remarks>
+            /// KerML §10.4.5 serializes a redefined property when its name differs from the redefining one.
+            /// </remarks>
+            public bool QueryIsSerializedRedefinition(IClass classContext)
+            {
+                return !property.IsDerived && !property.IsDerivedUnion
+                       && property.TryQueryRedefinedByProperty(classContext, out var redefinition)
+                       && redefinition.Name != property.Name;
+            }
+
+            /// <summary>
+            /// Queries whether the <paramref name="property"/> is redefined in the <paramref name="classContext"/> by a chain that ends on a derived property.
+            /// </summary>
+            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
+            /// <returns><c>true</c> when the value of the <paramref name="property"/> is derived in the context</returns>
+            /// <remarks>
+            /// A derived redefinition makes the redefined property derived, as SysML states for <c>Usage::mayTimeVary</c> over <c>Feature::isVariable</c>;
+            /// such a value is therefore neither computed nor exchanged without derived properties (KerML §10.3 Note 4).
+            /// </remarks>
+            public bool QueryHasDerivedValueIn(IClass classContext)
+            {
+                if (!property.TryQueryRedefinedByProperty(classContext, out _))
+                {
+                    return false;
+                }
+
+                var chainEnd = property.QueryRedefinitionChainEnd(classContext);
+
+                return chainEnd.IsDerived || chainEnd.IsDerivedUnion;
+            }
+
+            /// <summary>
+            /// Returns the property that ends the redefinition chain of the <paramref name="property"/> in the <paramref name="classContext"/>.
+            /// </summary>
+            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
+            /// <returns>The last redefinition, or the <paramref name="property"/> itself when the context does not redefine it</returns>
+            public IProperty QueryRedefinitionChainEnd(IClass classContext)
+            {
+                var chainEnd = property;
+
+                while (chainEnd.TryQueryRedefinedByProperty(classContext, out var redefinition))
+                {
+                    chainEnd = redefinition;
+                }
+
+                return chainEnd;
+            }
+        }
     }
 }
