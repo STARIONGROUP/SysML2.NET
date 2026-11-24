@@ -437,6 +437,7 @@ CREATE TABLE sysml2.element_version (
     stored_json          jsonb      NULL,
 
     PRIMARY KEY (project_id, version_id),
+    UNIQUE (project_id, version_id, class_kind),   -- FK target of every subtype table (§7)
 
     -- TYPED IDENTITY (§4): one composite FK both anchors the identity AND makes a version
     -- that claims a different metaclass than its identity impossible.
@@ -505,8 +506,16 @@ CREATE INDEX ix_element_version_owning_rel ON sysml2.element_version (project_id
 --   RequirementVerificationMembership::kind -> requirement_constraint_membership_version.kind
 --
 -- Every table is keyed by (project_id, version_id) and co-partitioned with element_version, so
--- the join is partition-local. NOT NULL is safe on [1..1] properties: a row only exists here if
--- the element's class actually inherits this metaclass.
+-- the join is partition-local. Each row carries its element's class_kind, pinned to the version
+-- row by the composite FK, so a constraint can depend on the metaclass. class_kind is the frozen
+-- ClassKindRegistry id of the metaclass, named in sysml2.class_kind; every class_kind id the
+-- generator writes into a constraint or a view carries that name as a SQL comment.
+--
+-- A [1..1] property is NOT NULL, unless a derived property redefines it, directly or through a
+-- chain of redefinitions: the value is then derived for the classes owning that derived property
+-- and stored for all others. Such a column is NULL, carries no DEFAULT, and gets a generated
+-- ck_{table}_{column} CHECK listing the deriving class kinds: the value must be absent for them
+-- and, for a [1..1] property, present for every other class kind.
 --
 -- Dependency introduces no scalar properties (client/supplier are link tables), so it has no
 -- subtype table.

@@ -270,10 +270,10 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
             foreach (var (table, columns, writeRow) in new (string, string, Action<NpgsqlBinaryImporter, int>)[]
             {
-                ("type_version", "project_id, version_id, is_abstract, is_sufficient", (imp, _) => { imp.Write(false, NpgsqlDbType.Boolean); imp.Write(false, NpgsqlDbType.Boolean); }),
-                ("feature_version", "project_id, version_id, is_composite, is_unique", (imp, _) => { imp.Write(true, NpgsqlDbType.Boolean); imp.Write(true, NpgsqlDbType.Boolean); }),
-                ("usage_version", "project_id, version_id, is_variation", (imp, _) => imp.Write(false, NpgsqlDbType.Boolean)),
-                ("occurrence_usage_version", "project_id, version_id, is_individual", (imp, _) => imp.Write(false, NpgsqlDbType.Boolean))
+                ("type_version", "project_id, version_id, class_kind, is_abstract, is_sufficient", (imp, _) => { imp.Write(false, NpgsqlDbType.Boolean); imp.Write(false, NpgsqlDbType.Boolean); }),
+                ("feature_version", "project_id, version_id, class_kind, is_composite, is_unique", (imp, _) => { imp.Write(true, NpgsqlDbType.Boolean); imp.Write(true, NpgsqlDbType.Boolean); }),
+                ("usage_version", "project_id, version_id, class_kind, is_variation", (imp, _) => imp.Write(false, NpgsqlDbType.Boolean)),
+                ("occurrence_usage_version", "project_id, version_id, class_kind, is_individual", (imp, _) => imp.Write(false, NpgsqlDbType.Boolean))
             })
             {
                 await using var importer = await connection.BeginBinaryImportAsync(
@@ -289,6 +289,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                     await importer.StartRowAsync();
                     importer.Write(projectId, NpgsqlDbType.Uuid);
                     importer.Write(versions[elementIndex], NpgsqlDbType.Uuid);
+                    importer.Write((short)ClassKind.PartUsage, NpgsqlDbType.Smallint);
                     writeRow(importer, elementIndex);
                 }
 

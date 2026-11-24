@@ -154,6 +154,10 @@ Each metaclass exists twice: **DTO** (lightweight, relationships by `Guid`, for 
 
 Generated namespaces mirror the KerML/SysML package hierarchy: `SysML2.NET.Core.DTO.Root.Elements`, `…Core.Types`, `…Systems.Actions`.
 
+### Redefinition by a derived property
+
+**A property redefined by a derived property is itself derived for the redefining class**, transitively along the redefinition chain: `OwningMembership::ownedMemberElement` makes `Membership::memberElement` derived for every OwningMembership, and `ReferenceSubsetting::referencingFeature` does the same to `Subsetting::subsettingFeature` and, through it, `Specialization::specific`. Any layer that stores only non-derived values (the SQL schema, a DAO) must treat such a property as unstored for those classes, whatever its lower bound or default value.
+
 ### PIM vs PSM — two models, not two copies
 
 The Systems Modeling API & Services specification defines a Platform Independent Model (Clause 7) and, on top of it, a REST/HTTP Platform Specific Model (Clause 8). **The solution ships both because they are different models, related by Clause 8.1.2 Table 9 — neither is a redundant copy of the other.** Mixing them produces wrong conclusions; keep the two columns below straight.
