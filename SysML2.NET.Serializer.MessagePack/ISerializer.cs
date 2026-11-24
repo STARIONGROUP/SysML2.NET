@@ -78,10 +78,13 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="dataItems">
         /// The <see cref="IEnumerable{IData}"/> that shall be serialized
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts whether the derived properties are serialized
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
-        void Serialize(IEnumerable<IData> dataItems, Stream stream);
+        void Serialize(IEnumerable<IData> dataItems, bool includeDerivedProperties, Stream stream);
 
         /// <summary>
         /// Serialize an <see cref="IData"/> as MessagePack to a target <see cref="IBufferWriter{Byte}"/>
@@ -89,13 +92,16 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="dataItems">
         /// The <see cref="IEnumerable{IData}"/> that shall be serialized
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts whether the derived properties are serialized
+        /// </param>
         /// <param name="writer">
         /// The target <see cref="IBufferWriter{Byte}"/>.
         /// </param>
         /// <param name="cancellationToken">
         /// A <see cref="CancellationToken"/>
         /// </param>
-        void SerializeToBufferWriter(IEnumerable<IData> dataItems, IBufferWriter<byte> writer, CancellationToken cancellationToken = default);
+        void SerializeToBufferWriter(IEnumerable<IData> dataItems, bool includeDerivedProperties, IBufferWriter<byte> writer, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously serialize an <see cref="IEnumerable{IData}"/> as MessagePack to a target <see cref="Stream"/>
@@ -103,12 +109,15 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="dataItems">
         /// The <see cref="IEnumerable{IData}"/> that shall be serialized
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts whether the derived properties are serialized
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(IEnumerable<IData> dataItems, Stream stream, CancellationToken cancellationToken);
+        Task SerializeAsync(IEnumerable<IData> dataItems, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken);
     }
 }

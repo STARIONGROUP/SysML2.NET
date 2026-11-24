@@ -62,10 +62,13 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts whether the derived properties are deserialized when present or skipped
+        /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        IEnumerable<IData> DeSerialize(Stream stream, SerializationTargetKind serializationTargetKind);
+        IEnumerable<IData> DeSerialize(Stream stream, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties);
 
         /// <summary>
         /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
@@ -76,12 +79,15 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts whether the derived properties are deserialized when present or skipped
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationTargetKind serializationTargetKind, CancellationToken cancellationToken);
+        Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken);
     }
 }

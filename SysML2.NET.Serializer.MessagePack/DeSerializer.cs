@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright (C) 2022-2026 Starion Group S.A.
@@ -55,17 +55,20 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts whether the derived properties are deserialized when present or skipped
+        /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public IEnumerable<IData> DeSerialize(Stream stream, SerializationTargetKind serializationTargetKind)
+        public IEnumerable<IData> DeSerialize(Stream stream, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             if (stream == null)
             {
                 throw new ArgumentNullException(nameof(stream), "Stream may not be null");
             }
 
-            var options = CreateSerializerOptions();
+            var options = CreateSerializerOptions(deserializeDerivedProperties);
 
             var sw = Stopwatch.StartNew();
 
@@ -193,20 +196,23 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts whether the derived properties are deserialized when present or skipped
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationTargetKind serializationTargetKind, CancellationToken cancellationToken)
+        public Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken)
         {
             if (stream == null)
             {
                 throw new ArgumentNullException(nameof(stream), "Stream may not be null");
             }
 
-            return this.DeserializeInternalAsync(stream, serializationTargetKind, cancellationToken);
+            return this.DeserializeInternalAsync(stream, serializationTargetKind, deserializeDerivedProperties, cancellationToken);
         }
 
         /// <summary>
@@ -218,6 +224,9 @@ namespace SysML2.NET.Serializer.MessagePack
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts whether the derived properties are deserialized when present or skipped
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
@@ -228,9 +237,9 @@ namespace SysML2.NET.Serializer.MessagePack
         /// This method is used to split asynchronous code from parameter checking.
         /// The <see cref="DeSerializeAsync"/> method is exposed and shall be used.
         /// </remarks>
-        public async Task<IEnumerable<IData>> DeserializeInternalAsync(Stream stream, SerializationTargetKind serializationTargetKind, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IData>> DeserializeInternalAsync(Stream stream, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken)
         {
-            var options = CreateSerializerOptions();
+            var options = CreateSerializerOptions(deserializeDerivedProperties);
 
             var sw = Stopwatch.StartNew();
 

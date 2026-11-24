@@ -38,5 +38,17 @@ namespace SysML2.NET.Serializer.MessagePack
 
             return options;
         }
+
+        /// <summary>
+        /// Creates an instance of the <see cref="SysMLMessagePackSerializerOptions"/> that tells whether derived properties are exchanged
+        /// </summary>
+        /// <param name="includeDerivedProperties">Whether derived properties are written and read</param>
+        /// <returns>
+        /// An instance of <see cref="SysMLMessagePackSerializerOptions"/>
+        /// </returns>
+        protected static SysMLMessagePackSerializerOptions CreateSerializerOptions(bool includeDerivedProperties)
+        {
+            return new SysMLMessagePackSerializerOptions(CreateSerializerOptions(), includeDerivedProperties);
+        }
     }
 }

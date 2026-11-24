@@ -9,6 +9,7 @@
 
 namespace SysML2.NET.CodeGenerator.Extensions
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using uml4net.Classification;
@@ -46,6 +47,24 @@ namespace SysML2.NET.CodeGenerator.Extensions
         public static int CountAllNonDerivedNonRedefinedProperties(this IClass @class)
         {
             return @class.QueryAllNonDerivedNonRedefinedProperties().Count;
+        }
+
+        /// <summary>
+        /// Queries the properties of the class that are exchanged only when derived properties are included
+        /// </summary>
+        /// <param name="class">
+        /// The subject <see cref="IClass" />
+        /// </param>
+        /// <returns>
+        /// The derived properties the class does not redefine and the redefined properties whose value the class derives
+        /// </returns>
+        public static IReadOnlyList<IProperty> QueryDerivedSerializedProperties(this IClass @class)
+        {
+            return @class.QueryAllProperties()
+                .Where(property => property.IsDerived || property.IsDerivedUnion
+                    ? !property.TryQueryRedefinedByProperty(@class, out _)
+                    : property.QueryIsSerializedRedefinition(@class) && property.QueryHasDerivedValueIn(@class))
+                .ToList();
         }
 
         /// <summary>
