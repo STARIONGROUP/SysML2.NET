@@ -195,6 +195,7 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.isConjugated = poco.isConjugated);
                 IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
                 IElement.TryMap(() => dto.isReference = poco.isReference);
+                IElement.TryMap(() => ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable);
                 IElement.TryMap(() => dto.mayTimeVary = poco.mayTimeVary);
                 IElement.TryMap(() => dto.member = poco.member.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.membership = poco.membership.Select(x => x.Id).ToList());
@@ -263,8 +264,10 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
                 IElement.TryMap(() => dto.relatedFeature = poco.relatedFeature.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.sourceFeature = poco.sourceFeature?.Id);
                 IElement.TryMap(() => dto.sourceOutputFeature = poco.sourceOutputFeature?.Id);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.targetFeature = poco.targetFeature.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.targetInputFeature = poco.targetInputFeature?.Id);
                 IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());

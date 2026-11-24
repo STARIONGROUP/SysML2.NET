@@ -145,7 +145,10 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.documentation = poco.documentation.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.featureWithValue = poco.featureWithValue?.Id ?? Guid.Empty);
                 IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
+                IElement.TryMap(() => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberElement = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberElement?.Id ?? Guid.Empty);
+                IElement.TryMap(() => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberName);
                 IElement.TryMap(() => dto.membershipOwningNamespace = poco.membershipOwningNamespace?.Id ?? Guid.Empty);
+                IElement.TryMap(() => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberShortName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName);
                 IElement.TryMap(() => dto.name = poco.name);
                 IElement.TryMap(() => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList());
@@ -158,6 +161,8 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
                 IElement.TryMap(() => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList());
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.value = poco.value?.Id ?? Guid.Empty);
             }

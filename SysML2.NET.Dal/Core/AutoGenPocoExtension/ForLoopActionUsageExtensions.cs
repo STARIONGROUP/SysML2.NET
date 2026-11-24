@@ -189,6 +189,7 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.isConjugated = poco.isConjugated);
                 IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
                 IElement.TryMap(() => dto.isReference = poco.isReference);
+                IElement.TryMap(() => ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable);
                 IElement.TryMap(() => dto.loopVariable = poco.loopVariable?.Id ?? Guid.Empty);
                 IElement.TryMap(() => dto.mayTimeVary = poco.mayTimeVary);
                 IElement.TryMap(() => dto.member = poco.member.Select(x => x.Id).ToList());

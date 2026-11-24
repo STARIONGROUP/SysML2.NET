@@ -188,7 +188,7 @@ namespace SysML2.NET.Dal
                 {{/unless}}
                 {{#if (Property.IsSerializedRedefinition property class)}}
                 {{#unless (Property.HasDerivedValueIn property class)}}
-                    {{ #Property.WriteRedefinedToDto property }}
+                    {{ #Property.WriteRedefinedToDtoAssignment property }};
                 {{/unless}}
                 {{/if}}
             {{/unless}}
@@ -205,6 +205,13 @@ namespace SysML2.NET.Dal
                             IElement.TryMap(() => {{ #Property.WriteToDtoAssignment property }});
                         {{/unless}}
                     {{/if}}
+                    {{#unless property.IsTransient }}
+                    {{#if (Property.IsSerializedRedefinition property class)}}
+                    {{#if (Property.HasDerivedValueIn property class)}}
+                        IElement.TryMap(() => {{ #Property.WriteRedefinedToDtoAssignment property }});
+                    {{/if}}
+                    {{/if}}
+                    {{/unless}}
                 {{/each}}
                 {{/with}}
             }

@@ -866,14 +866,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return property.QueryHasDerivedValueIn(generatedClass);
             });
 
-            handlebars.RegisterHelper("Property.WriteRedefinedToDto", (writer, _, arguments) =>
+            handlebars.RegisterHelper("Property.WriteRedefinedToDtoAssignment", (writer, _, arguments) =>
             {
                 if (arguments.Length != 1 || arguments[0] is not IProperty property)
                 {
-                    throw new HandlebarsException("{{#Property.WriteRedefinedToDto}} expects an IProperty");
+                    throw new HandlebarsException("{{#Property.WriteRedefinedToDtoAssignment}} expects an IProperty");
                 }
 
-                writer.WriteSafeString(WriteRedefinedToDto(property));
+                writer.WriteSafeString(WriteRedefinedToDtoAssignment(property));
             });
 
             handlebars.RegisterHelper("Property.WriteToDtoAssignment", (writer, _, arguments) =>
@@ -1554,11 +1554,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Writes the DAL statement that copies a redefined property still serialized under its own name from a POCO to its DTO.
+        /// Writes the assignment, without its terminating semicolon, that copies a redefined property still serialized under its own name from a POCO to its DTO.
         /// </summary>
         /// <param name="property">The redefined <see cref="IProperty"/></param>
-        /// <returns>The generated statement</returns>
-        private static string WriteRedefinedToDto(IProperty property)
+        /// <returns>The generated assignment</returns>
+        private static string WriteRedefinedToDtoAssignment(IProperty property)
         {
             var owner = (INamedElement)property.Owner;
             var ownerNamespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
@@ -1566,7 +1566,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var target = $"((Core.DTO.{ownerNamespace}.I{owner.Name})dto).{propertyName}";
             var source = $"((Core.POCO.{ownerNamespace}.I{owner.Name})poco).{propertyName}";
 
-            return $"{QueryToDtoAssignment(property, target, source)};{Environment.NewLine}";
+            return QueryToDtoAssignment(property, target, source);
         }
 
         /// <summary>

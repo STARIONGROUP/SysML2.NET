@@ -166,6 +166,7 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
                 IElement.TryMap(() => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
             }
 

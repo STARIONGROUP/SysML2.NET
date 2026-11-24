@@ -178,7 +178,9 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
                 IElement.TryMap(() => dto.relatedType = poco.relatedType.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.sourceType = poco.sourceType?.Id);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.targetType = poco.targetType.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.unioningType = poco.unioningType.Select(x => x.Id).ToList());

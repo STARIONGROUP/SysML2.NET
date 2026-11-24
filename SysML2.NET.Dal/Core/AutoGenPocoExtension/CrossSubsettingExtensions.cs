@@ -158,6 +158,9 @@ namespace SysML2.NET.Dal
                 IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
                 IElement.TryMap(() => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList());
                 IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList());
+                IElement.TryMap(() => ((Core.DTO.Core.Types.ISpecialization)dto).Specific = ((Core.POCO.Core.Types.ISpecialization)poco).Specific?.Id ?? Guid.Empty);
+                IElement.TryMap(() => ((Core.DTO.Core.Features.ISubsetting)dto).SubsettingFeature = ((Core.POCO.Core.Features.ISubsetting)poco).SubsettingFeature?.Id ?? Guid.Empty);
                 IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
             }
 
