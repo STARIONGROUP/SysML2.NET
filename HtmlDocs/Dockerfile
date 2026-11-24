@@ -1,7 +1,11 @@
-FROM nginx:alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
 WORKDIR /usr/share/nginx/html
 
 COPY HtmlDocs/nginx.conf /etc/nginx/nginx.conf
 
 COPY ../SysML2.NET.CodeGenerator.Tests/bin/Debug/net10.0/UML/_SysML2.NET.Core.AutoGenHtmlDocs/index.html .
+
+USER 101
+
+EXPOSE 8080

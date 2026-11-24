@@ -12,8 +12,8 @@ fi
 
 VERSION="$1"
 
-echo "pulling latest version of nginx:alpine"
-docker pull nginx:alpine
+echo "pulling latest version of nginxinc/nginx-unprivileged:alpine"
+docker pull nginxinc/nginx-unprivileged:alpine
 
 echo "Building local Docker image for version: $VERSION"
 
