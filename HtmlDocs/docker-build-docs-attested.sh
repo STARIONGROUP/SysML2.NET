@@ -22,8 +22,8 @@ else
   docker buildx use "$BUILDER"
 fi
 
-echo "pulling latest version of nginx:alpine"
-docker pull nginx:alpine
+echo "pulling latest version of nginxinc/nginx-unprivileged:alpine"
+docker pull nginxinc/nginx-unprivileged:alpine
 
 echo "Building and Pushing Docker image with SBOM and provenance for version: $VERSION"
 
