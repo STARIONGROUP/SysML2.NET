@@ -9,9 +9,11 @@
 
 namespace SysML2.NET.Serializer.MessagePack.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Text.Json;
 
@@ -97,6 +99,68 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
                     Assert.That(this.WriteJson(skipped, false), Is.EqualTo(this.WriteJson(jsonWithDerivedById[skipped.Id], false)), $"Stored properties lost while skipping derived properties for id {skipped.Id}");
                 }
             }
+        }
+
+        [Test]
+        public void SerializeAndDeSerialize_WithEveryPropertyPopulated_RoundTrips()
+        {
+            var dataItems = typeof(IElement).Assembly.GetTypes()
+                .Where(type => type is { IsClass: true, IsAbstract: false, Namespace: not null } && type.Namespace.StartsWith("SysML2.NET.Core.DTO") && typeof(IElement).IsAssignableFrom(type))
+                .Select((type, typeIndex) => CreatePopulatedDto(type, typeIndex))
+                .ToList();
+
+            Assert.That(dataItems, Has.Count.GreaterThan(150));
+
+            foreach (var includeDerivedProperties in new[] { false, true })
+            {
+                var roundTripped = this.RoundTrip(dataItems, includeDerivedProperties, includeDerivedProperties).ToDictionary(x => x.Id);
+
+                using (Assert.EnterMultipleScope())
+                {
+                    foreach (var original in dataItems)
+                    {
+                        Assert.That(this.WriteJson(roundTripped[original.Id], includeDerivedProperties), Is.EqualTo(this.WriteJson(original, includeDerivedProperties)),
+                            $"Round-trip mismatch for {original.GetType().Name} with includeDerivedProperties={includeDerivedProperties}");
+                    }
+                }
+            }
+        }
+
+        private static IData CreatePopulatedDto(Type type, int typeIndex)
+        {
+            var dto = (IData)Activator.CreateInstance(type);
+            var seed = typeIndex * 10000;
+
+            foreach (var property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(x => x.SetMethod != null))
+            {
+                seed++;
+                property.SetValue(dto, CreateFakeValue(property.PropertyType, seed));
+            }
+
+            return dto;
+        }
+
+        private static object CreateFakeValue(Type type, int seed)
+        {
+            var underlyingType = Nullable.GetUnderlyingType(type) ?? type;
+
+            return underlyingType switch
+            {
+                _ when underlyingType == typeof(Guid) => CreateGuid(seed),
+                _ when underlyingType == typeof(string) => $"value {seed}",
+                _ when underlyingType == typeof(bool) => true,
+                _ when underlyingType == typeof(int) => seed,
+                _ when underlyingType == typeof(double) => seed + 0.5,
+                _ when underlyingType.IsEnum => Enum.GetValues(underlyingType).GetValue(seed % Enum.GetValues(underlyingType).Length),
+                _ when underlyingType == typeof(List<Guid>) => new List<Guid> { CreateGuid(seed), CreateGuid(seed + 1000) },
+                _ when underlyingType == typeof(List<string>) => new List<string> { $"value {seed}", $"value {seed + 1000}" },
+                _ => throw new NotSupportedException($"No fake value for {type.Name}")
+            };
+        }
+
+        private static Guid CreateGuid(int seed)
+        {
+            return new Guid(seed, 0, 0, [1, 2, 3, 4, 5, 6, 7, 8]);
         }
 
         private List<IData> ReadJson(bool deserializeDerivedProperties)

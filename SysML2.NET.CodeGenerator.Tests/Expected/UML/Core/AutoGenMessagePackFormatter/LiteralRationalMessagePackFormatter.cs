@@ -655,7 +655,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                         }
                         break;
                     case 19:
-                        dto.Value = reader.ReadInt32();
+                        dto.Value = reader.ReadDouble();
                         break;
                     case 20:
                         if (reader.TryReadNil())

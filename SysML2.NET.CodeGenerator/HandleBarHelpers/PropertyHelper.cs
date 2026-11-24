@@ -1522,8 +1522,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else if (property.QueryIsNumeric())
                     {
-
-                        sb.AppendLine($"{collection}.Add(reader.ReadInt32());");
+                        sb.AppendLine($"{collection}.Add(reader.{QueryMessagePackNumericReadMethod(property)}());");
                     }
 
                     sb.Append('}');
@@ -1545,7 +1544,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else if (property.QueryIsNumeric())
                     {
-                        sb.AppendLine($"{accessor} = reader.ReadInt32();");
+                        sb.AppendLine($"{accessor} = reader.{QueryMessagePackNumericReadMethod(property)}();");
                     }
                 }
             }
@@ -1658,7 +1657,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return "string";
             }
 
-            return property.QueryCSharpTypeName() == "DateTime" ? "DateTime" : "int";
+            return property.QueryCSharpTypeName() switch
+            {
+                "DateTime" => "DateTime",
+                "double" => "double",
+                _ => "int"
+            };
+        }
+
+        /// <summary>
+        /// Queries the <c>MessagePackReader</c> method that reads one value of a numeric property.
+        /// </summary>
+        /// <param name="property">The numeric <see cref="IProperty"/></param>
+        /// <returns>The name of the read method</returns>
+        private static string QueryMessagePackNumericReadMethod(IProperty property)
+        {
+            return property.QueryCSharpTypeName() == "double" ? "ReadDouble" : "ReadInt32";
         }
 
         /// <summary>

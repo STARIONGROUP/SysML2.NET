@@ -44,10 +44,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                 throw new ArgumentNullException(nameof(dataItems));
             }
 
-            var payload = new Payload
-            {
-                Created = DateTime.UtcNow,
-            };
+            var payload = new Payload();
 
             // compute the capacity of each DTO type to optimize the size of the Payload properties
             var capacity = new Dictionary<Type, int>(capacity: 167);

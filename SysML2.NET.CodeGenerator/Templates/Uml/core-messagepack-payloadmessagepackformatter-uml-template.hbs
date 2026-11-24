@@ -16,10 +16,8 @@
  | index | property name                                                      |
  | -------------------------------------------------------------------------- |
  | -------------------------------------------------------------------------- |
- |  0    | Created                                                            |
- | -------------------------------------------------------------------------- |
 {{#each this as | class |}}
- | {{Math.Add @index 1}}    | {{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{class.Name}}
+ | {{@index}}    | {{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{class.Name}}
  | -------------------------------------------------------------------------- |
 {{/each}}
  * -------------------------------------------------------------------------- | */
@@ -59,8 +57,6 @@ namespace SysML2.NET.Serializer.MessagePack.Core
             var formatterResolver = options.Resolver;
 
             writer.WriteArrayHeader({{Enumerable.Count this}});
-
-            writer.Write(payload.Created);
 
             {{#each this as | class |}}
             writer.WriteArrayHeader(payload.{{ class.Name }}.Count);
@@ -107,11 +103,8 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                 switch (i)
                 {
-                    case 0:
-                        payload.Created = reader.ReadDateTime();
-                        break;
                     {{#each this as | class |}}
-                    case {{Math.Add @index 1}}:
+                    case {{@index}}:
                         valueLength = reader.ReadArrayHeader();
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
