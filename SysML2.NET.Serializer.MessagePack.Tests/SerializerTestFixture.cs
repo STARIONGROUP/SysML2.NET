@@ -109,7 +109,11 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
                 .Select((type, typeIndex) => CreatePopulatedDto(type, typeIndex))
                 .ToList();
 
-            Assert.That(dataItems, Has.Count.GreaterThan(150));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(dataItems, Has.Count.GreaterThan(150));
+                Assert.That(dataItems.SelectMany(QueryUnpopulatedMembers), Is.Empty);
+            }
 
             foreach (var includeDerivedProperties in new[] { false, true })
             {
@@ -151,10 +155,27 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
                 _ when underlyingType == typeof(bool) => true,
                 _ when underlyingType == typeof(int) => seed,
                 _ when underlyingType == typeof(double) => seed + 0.5,
-                _ when underlyingType.IsEnum => Enum.GetValues(underlyingType).GetValue(seed % Enum.GetValues(underlyingType).Length),
+                _ when underlyingType.IsEnum => Enum.GetValues(underlyingType).GetValue(1 + seed % (Enum.GetValues(underlyingType).Length - 1)),
                 _ when underlyingType == typeof(List<Guid>) => new List<Guid> { CreateGuid(seed), CreateGuid(seed + 1000) },
                 _ when underlyingType == typeof(List<string>) => new List<string> { $"value {seed}", $"value {seed + 1000}" },
                 _ => throw new NotSupportedException($"No fake value for {type.Name}")
+            };
+        }
+
+        private static IEnumerable<string> QueryUnpopulatedMembers(IData dto)
+        {
+            return dto.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(property => property.GetMethod != null && IsDefault(property.GetValue(dto)))
+                .Select(property => $"{dto.GetType().Name}.{property.Name}");
+        }
+
+        private static bool IsDefault(object value)
+        {
+            return value switch
+            {
+                null => true,
+                System.Collections.ICollection collection => collection.Count == 0,
+                _ => value.GetType().IsValueType && value.Equals(Activator.CreateInstance(value.GetType()))
             };
         }
 
