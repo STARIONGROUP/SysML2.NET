@@ -16,8 +16,10 @@
  | index | property name                                                      |
  | -------------------------------------------------------------------------- |
  | -------------------------------------------------------------------------- |
+ |  0    | Created                                                            |
+ | -------------------------------------------------------------------------- |
 {{#each this as | class |}}
- | {{@index}}    | {{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{class.Name}}
+ | {{Math.Add @index 1}}    | {{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{class.Name}}
  | -------------------------------------------------------------------------- |
 {{/each}}
  * -------------------------------------------------------------------------- | */
@@ -33,6 +35,11 @@ namespace SysML2.NET.Serializer.MessagePack.Core
     /// </summary>
     internal class Payload
     {
+        /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> at which the <see cref="Payload"/> was created
+        /// </summary>
+        internal DateTime Created { get; set; } = DateTime.UtcNow;
+
         {{#each this as | class |}}
         /// <summary>
         /// Gets or sets the list of <see cref="AnnotatingElement"/>.
