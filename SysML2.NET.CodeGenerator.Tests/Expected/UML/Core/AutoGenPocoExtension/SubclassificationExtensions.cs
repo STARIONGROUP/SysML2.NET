@@ -142,7 +142,7 @@ namespace SysML2.NET.Dal
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
-            ((Core.DTO.Core.Types.ISpecialization)dto).General = ((Core.POCO.Core.Types.ISpecialization)poco).General.Id;
+            ((Core.DTO.Core.Types.ISpecialization)dto).General = ((Core.POCO.Core.Types.ISpecialization)poco).General?.Id ?? Guid.Empty;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
@@ -150,26 +150,26 @@ namespace SysML2.NET.Dal
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList();
-            ((Core.DTO.Core.Types.ISpecialization)dto).Specific = ((Core.POCO.Core.Types.ISpecialization)poco).Specific.Id;
-            dto.Subclassifier = poco.Subclassifier.Id;
-            dto.Superclassifier = poco.Superclassifier.Id;
+            ((Core.DTO.Core.Types.ISpecialization)dto).Specific = ((Core.POCO.Core.Types.ISpecialization)poco).Specific?.Id ?? Guid.Empty;
+            dto.Subclassifier = poco.Subclassifier?.Id ?? Guid.Empty;
+            dto.Superclassifier = poco.Superclassifier?.Id ?? Guid.Empty;
             ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList();
 
             if (includeDerivedProperties)
             {
-                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
-                dto.isLibraryElement = poco.isLibraryElement;
-                dto.name = poco.name;
-                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
-                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
-                dto.owner = poco.owner?.Id;
-                dto.owningClassifier = poco.owningClassifier?.Id;
-                dto.owningMembership = poco.owningMembership?.Id;
-                dto.owningNamespace = poco.owningNamespace?.Id;
-                dto.qualifiedName = poco.qualifiedName;
-                dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList();
-                dto.shortName = poco.shortName;
-                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+                IElement.TryMap(() => dto.documentation = poco.documentation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
+                IElement.TryMap(() => dto.name = poco.name);
+                IElement.TryMap(() => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.owner = poco.owner?.Id);
+                IElement.TryMap(() => dto.owningClassifier = poco.owningClassifier?.Id);
+                IElement.TryMap(() => dto.owningMembership = poco.owningMembership?.Id);
+                IElement.TryMap(() => dto.owningNamespace = poco.owningNamespace?.Id);
+                IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
+                IElement.TryMap(() => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
             }
 
             return dto;

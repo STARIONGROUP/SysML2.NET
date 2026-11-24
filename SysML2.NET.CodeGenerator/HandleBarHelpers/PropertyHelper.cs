@@ -876,6 +876,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(WriteRedefinedToDto(property));
             });
 
+            handlebars.RegisterHelper("Property.WriteToDtoAssignment", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 1 || arguments[0] is not IProperty property)
+                {
+                    throw new HandlebarsException("{{#Property.WriteToDtoAssignment}} expects an IProperty");
+                }
+
+                var propertyName = property.QueryPropertyNameBasedOnUmlProperties();
+
+                writer.WriteSafeString(QueryToDtoAssignment(property, $"dto.{propertyName}", $"poco.{propertyName}"));
+            });
+
             handlebars.RegisterHelper("Property.WriteRedefinedDeserialization", (writer, _, arguments) =>
             {
                 if (arguments.Length != 3 || arguments[0] is not IClass generatedClass || arguments[1] is not string section || arguments[2] is not bool includeDerivedProperties)
@@ -1554,19 +1566,31 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var target = $"((Core.DTO.{ownerNamespace}.I{owner.Name})dto).{propertyName}";
             var source = $"((Core.POCO.{ownerNamespace}.I{owner.Name})poco).{propertyName}";
 
+            return $"{QueryToDtoAssignment(property, target, source)};{Environment.NewLine}";
+        }
+
+        /// <summary>
+        /// Writes the assignment, without its terminating semicolon, that copies the <paramref name="property"/> from a POCO to its DTO.
+        /// </summary>
+        /// <param name="property">The <see cref="IProperty"/> to copy</param>
+        /// <param name="target">The DTO member assigned to</param>
+        /// <param name="source">The POCO member read from</param>
+        /// <returns>The generated assignment, which maps an absent single reference to <see cref="Guid.Empty"/> when the DTO cannot hold <c>null</c></returns>
+        private static string QueryToDtoAssignment(IProperty property, string target, string source)
+        {
             if (!property.QueryIsReferenceType())
             {
-                return property.QueryIsEnumerable() ? $"{target} = [.. {source}];{Environment.NewLine}" : $"{target} = {source};{Environment.NewLine}";
+                return property.QueryIsEnumerable() ? $"{target} = [.. {source}]" : $"{target} = {source}";
             }
 
             if (property.QueryIsEnumerable())
             {
-                return $"{target} = {source}.Select(x => x.Id).ToList();{Environment.NewLine}";
+                return $"{target} = {source}.Select(x => x.Id).ToList()";
             }
 
             return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property)
-                ? $"{target} = {source}?.Id;{Environment.NewLine}"
-                : $"{target} = {source}.Id;{Environment.NewLine}";
+                ? $"{target} = {source}?.Id"
+                : $"{target} = {source}?.Id ?? Guid.Empty";
         }
 
         /// <summary>

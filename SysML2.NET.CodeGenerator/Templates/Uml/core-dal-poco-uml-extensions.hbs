@@ -184,7 +184,7 @@ namespace SysML2.NET.Dal
             {{#unless property.IsDerived }}
             {{#unless property.IsTransient }}
                 {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                    {{> core-dal-poco-uml-partial-extensions property}}
+                    {{ #Property.WriteToDtoAssignment property }};
                 {{/unless}}
                 {{#if (Property.IsSerializedRedefinition property class)}}
                 {{#unless (Property.HasDerivedValueIn property class)}}
@@ -202,7 +202,7 @@ namespace SysML2.NET.Dal
                 {{#each (Class.QueryAllProperties this) as | property |}}
                     {{#if property.IsDerived }}
                         {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                            {{> core-dal-poco-uml-partial-extensions property}}
+                            IElement.TryMap(() => {{ #Property.WriteToDtoAssignment property }});
                         {{/unless}}
                     {{/if}}
                 {{/each}}

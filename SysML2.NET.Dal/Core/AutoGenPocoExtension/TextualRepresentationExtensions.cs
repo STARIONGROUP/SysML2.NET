@@ -134,21 +134,21 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
-                dto.annotation = poco.annotation.Select(x => x.Id).ToList();
-                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
-                dto.isLibraryElement = poco.isLibraryElement;
-                dto.name = poco.name;
-                dto.ownedAnnotatingRelationship = poco.ownedAnnotatingRelationship.Select(x => x.Id).ToList();
-                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
-                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
-                dto.owner = poco.owner?.Id;
-                dto.owningAnnotatingRelationship = poco.owningAnnotatingRelationship?.Id;
-                dto.owningMembership = poco.owningMembership?.Id;
-                dto.owningNamespace = poco.owningNamespace?.Id;
-                dto.qualifiedName = poco.qualifiedName;
-                dto.representedElement = poco.representedElement.Id;
-                dto.shortName = poco.shortName;
-                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+                IElement.TryMap(() => dto.annotation = poco.annotation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.documentation = poco.documentation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
+                IElement.TryMap(() => dto.name = poco.name);
+                IElement.TryMap(() => dto.ownedAnnotatingRelationship = poco.ownedAnnotatingRelationship.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.owner = poco.owner?.Id);
+                IElement.TryMap(() => dto.owningAnnotatingRelationship = poco.owningAnnotatingRelationship?.Id);
+                IElement.TryMap(() => dto.owningMembership = poco.owningMembership?.Id);
+                IElement.TryMap(() => dto.owningNamespace = poco.owningNamespace?.Id);
+                IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
+                IElement.TryMap(() => dto.representedElement = poco.representedElement?.Id ?? Guid.Empty);
+                IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
             }
 
             return dto;

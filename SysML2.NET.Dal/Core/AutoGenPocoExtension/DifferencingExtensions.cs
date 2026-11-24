@@ -132,7 +132,7 @@ namespace SysML2.NET.Dal
             dto.AliasIds = [.. poco.AliasIds];
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
-            dto.DifferencingType = poco.DifferencingType.Id;
+            dto.DifferencingType = poco.DifferencingType?.Id ?? Guid.Empty;
             dto.ElementId = poco.ElementId;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
@@ -144,19 +144,19 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
-                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
-                dto.isLibraryElement = poco.isLibraryElement;
-                dto.name = poco.name;
-                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
-                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
-                dto.owner = poco.owner?.Id;
-                dto.owningMembership = poco.owningMembership?.Id;
-                dto.owningNamespace = poco.owningNamespace?.Id;
-                dto.qualifiedName = poco.qualifiedName;
-                dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList();
-                dto.shortName = poco.shortName;
-                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
-                dto.typeDifferenced = poco.typeDifferenced.Id;
+                IElement.TryMap(() => dto.documentation = poco.documentation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
+                IElement.TryMap(() => dto.name = poco.name);
+                IElement.TryMap(() => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.owner = poco.owner?.Id);
+                IElement.TryMap(() => dto.owningMembership = poco.owningMembership?.Id);
+                IElement.TryMap(() => dto.owningNamespace = poco.owningNamespace?.Id);
+                IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
+                IElement.TryMap(() => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.shortName = poco.shortName);
+                IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
+                IElement.TryMap(() => dto.typeDifferenced = poco.typeDifferenced?.Id ?? Guid.Empty);
             }
 
             return dto;
