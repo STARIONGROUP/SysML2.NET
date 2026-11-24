@@ -19,6 +19,8 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.Extensions.Logging;
+
     using Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -114,10 +116,13 @@ namespace SysML2.NET.Dal
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Root.Annotations.Documentation"/>
         /// </param>
+        /// <param name="logger">
+        /// The optional <see cref="ILogger"/> that reports a derived property whose derivation is not supported
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Root.Annotations.Documentation"/>
         /// </returns>
-        public static Core.DTO.Root.Annotations.Documentation ToDto(this Core.POCO.Root.Annotations.Documentation poco, bool includeDerivedProperties = false)
+        public static Core.DTO.Root.Annotations.Documentation ToDto(this Core.POCO.Root.Annotations.Documentation poco, bool includeDerivedProperties = false, ILogger logger = null)
         {
             var dto = new Core.DTO.Root.Annotations.Documentation();
 
@@ -134,21 +139,21 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
-                dto.annotation = poco.annotation.Select(x => x.Id).ToList();
-                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
-                dto.documentedElement = poco.documentedElement.Id;
-                dto.isLibraryElement = poco.isLibraryElement;
-                dto.name = poco.name;
-                dto.ownedAnnotatingRelationship = poco.ownedAnnotatingRelationship.Select(x => x.Id).ToList();
-                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
-                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
-                dto.owner = poco.owner?.Id;
-                dto.owningAnnotatingRelationship = poco.owningAnnotatingRelationship?.Id;
-                dto.owningMembership = poco.owningMembership?.Id;
-                dto.owningNamespace = poco.owningNamespace?.Id;
-                dto.qualifiedName = poco.qualifiedName;
-                dto.shortName = poco.shortName;
-                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+                poco.TryMap("annotation", () => dto.annotation = poco.annotation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("documentation", () => dto.documentation = poco.documentation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("documentedElement", () => dto.documentedElement = poco.documentedElement?.Id ?? Guid.Empty, logger);
+                poco.TryMap("isLibraryElement", () => dto.isLibraryElement = poco.isLibraryElement, logger);
+                poco.TryMap("name", () => dto.name = poco.name, logger);
+                poco.TryMap("ownedAnnotatingRelationship", () => dto.ownedAnnotatingRelationship = poco.ownedAnnotatingRelationship.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedAnnotation", () => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedElement", () => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("owner", () => dto.owner = poco.owner?.Id, logger);
+                poco.TryMap("owningAnnotatingRelationship", () => dto.owningAnnotatingRelationship = poco.owningAnnotatingRelationship?.Id, logger);
+                poco.TryMap("owningMembership", () => dto.owningMembership = poco.owningMembership?.Id, logger);
+                poco.TryMap("owningNamespace", () => dto.owningNamespace = poco.owningNamespace?.Id, logger);
+                poco.TryMap("qualifiedName", () => dto.qualifiedName = poco.qualifiedName, logger);
+                poco.TryMap("shortName", () => dto.shortName = poco.shortName, logger);
+                poco.TryMap("textualRepresentation", () => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList(), logger);
             }
 
             return dto;

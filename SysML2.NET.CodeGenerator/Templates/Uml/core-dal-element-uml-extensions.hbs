@@ -21,7 +21,7 @@ namespace SysML2.NET.Dal
     /// <summary>
     /// A static class that provides extension methods for the <see cref="Core.POCO.Root.Elements.IElement"/> class
     /// </summary>
-    public static class ElementExtensions
+    public static partial class ElementExtensions
     {
         /// <summary>
         /// Updates the value properties of the <see cref="Core.POCO.Root.Elements.IElement"/> by setting the value equal to that of the dto.

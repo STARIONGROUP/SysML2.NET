@@ -19,6 +19,8 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.Extensions.Logging;
+
     using Core.POCO.Kernel.Packages;
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -110,10 +112,13 @@ namespace SysML2.NET.Dal
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Kernel.Packages.Package"/>
         /// </param>
+        /// <param name="logger">
+        /// The optional <see cref="ILogger"/> that reports a derived property whose derivation is not supported
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Kernel.Packages.Package"/>
         /// </returns>
-        public static Core.DTO.Kernel.Packages.Package ToDto(this Core.POCO.Kernel.Packages.Package poco, bool includeDerivedProperties = false)
+        public static Core.DTO.Kernel.Packages.Package ToDto(this Core.POCO.Kernel.Packages.Package poco, bool includeDerivedProperties = false, ILogger logger = null)
         {
             var dto = new Core.DTO.Kernel.Packages.Package();
 
@@ -128,24 +133,24 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
-                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
-                dto.filterCondition = poco.filterCondition.Select(x => x.Id).ToList();
-                dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList();
-                dto.isLibraryElement = poco.isLibraryElement;
-                dto.member = poco.member.Select(x => x.Id).ToList();
-                dto.membership = poco.membership.Select(x => x.Id).ToList();
-                dto.name = poco.name;
-                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
-                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
-                dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList();
-                dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList();
-                dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList();
-                dto.owner = poco.owner?.Id;
-                dto.owningMembership = poco.owningMembership?.Id;
-                dto.owningNamespace = poco.owningNamespace?.Id;
-                dto.qualifiedName = poco.qualifiedName;
-                dto.shortName = poco.shortName;
-                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+                poco.TryMap("documentation", () => dto.documentation = poco.documentation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("filterCondition", () => dto.filterCondition = poco.filterCondition.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("importedMembership", () => dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("isLibraryElement", () => dto.isLibraryElement = poco.isLibraryElement, logger);
+                poco.TryMap("member", () => dto.member = poco.member.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("membership", () => dto.membership = poco.membership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("name", () => dto.name = poco.name, logger);
+                poco.TryMap("ownedAnnotation", () => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedElement", () => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedImport", () => dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedMember", () => dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedMembership", () => dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("owner", () => dto.owner = poco.owner?.Id, logger);
+                poco.TryMap("owningMembership", () => dto.owningMembership = poco.owningMembership?.Id, logger);
+                poco.TryMap("owningNamespace", () => dto.owningNamespace = poco.owningNamespace?.Id, logger);
+                poco.TryMap("qualifiedName", () => dto.qualifiedName = poco.qualifiedName, logger);
+                poco.TryMap("shortName", () => dto.shortName = poco.shortName, logger);
+                poco.TryMap("textualRepresentation", () => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList(), logger);
             }
 
             return dto;
