@@ -19,6 +19,8 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.Extensions.Logging;
+
     using Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -116,10 +118,13 @@ namespace SysML2.NET.Dal
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Systems.Requirements.FramedConcernMembership"/>
         /// </param>
+        /// <param name="logger">
+        /// The optional <see cref="ILogger"/> that reports a derived property whose derivation is not supported
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Systems.Requirements.FramedConcernMembership"/>
         /// </returns>
-        public static Core.DTO.Systems.Requirements.FramedConcernMembership ToDto(this Core.POCO.Systems.Requirements.FramedConcernMembership poco, bool includeDerivedProperties = false)
+        public static Core.DTO.Systems.Requirements.FramedConcernMembership ToDto(this Core.POCO.Systems.Requirements.FramedConcernMembership poco, bool includeDerivedProperties = false, ILogger logger = null)
         {
             var dto = new Core.DTO.Systems.Requirements.FramedConcernMembership();
 
@@ -139,29 +144,29 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
-                IElement.TryMap(() => dto.documentation = poco.documentation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
-                IElement.TryMap(() => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberElement = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberElement?.Id ?? Guid.Empty);
-                IElement.TryMap(() => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberName);
-                IElement.TryMap(() => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberShortName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName);
-                IElement.TryMap(() => dto.name = poco.name);
-                IElement.TryMap(() => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedConcern = poco.ownedConcern?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedMemberElementId = poco.ownedMemberElementId);
-                IElement.TryMap(() => dto.ownedMemberName = poco.ownedMemberName);
-                IElement.TryMap(() => dto.ownedMemberShortName = poco.ownedMemberShortName);
-                IElement.TryMap(() => dto.owner = poco.owner?.Id);
-                IElement.TryMap(() => dto.owningMembership = poco.owningMembership?.Id);
-                IElement.TryMap(() => dto.owningNamespace = poco.owningNamespace?.Id);
-                IElement.TryMap(() => dto.owningType = poco.owningType?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
-                IElement.TryMap(() => dto.referencedConcern = poco.referencedConcern?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.shortName = poco.shortName);
-                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList());
-                IElement.TryMap(() => ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
+                poco.TryMap("documentation", () => dto.documentation = poco.documentation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("isLibraryElement", () => dto.isLibraryElement = poco.isLibraryElement, logger);
+                poco.TryMap("memberElement", () => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberElement = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberElement?.Id ?? Guid.Empty, logger);
+                poco.TryMap("memberName", () => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberName, logger);
+                poco.TryMap("memberShortName", () => ((Core.DTO.Root.Namespaces.IMembership)dto).MemberShortName = ((Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName, logger);
+                poco.TryMap("name", () => dto.name = poco.name, logger);
+                poco.TryMap("ownedAnnotation", () => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedConcern", () => dto.ownedConcern = poco.ownedConcern?.Id ?? Guid.Empty, logger);
+                poco.TryMap("ownedElement", () => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedMemberElementId", () => dto.ownedMemberElementId = poco.ownedMemberElementId, logger);
+                poco.TryMap("ownedMemberName", () => dto.ownedMemberName = poco.ownedMemberName, logger);
+                poco.TryMap("ownedMemberShortName", () => dto.ownedMemberShortName = poco.ownedMemberShortName, logger);
+                poco.TryMap("owner", () => dto.owner = poco.owner?.Id, logger);
+                poco.TryMap("owningMembership", () => dto.owningMembership = poco.owningMembership?.Id, logger);
+                poco.TryMap("owningNamespace", () => dto.owningNamespace = poco.owningNamespace?.Id, logger);
+                poco.TryMap("owningType", () => dto.owningType = poco.owningType?.Id ?? Guid.Empty, logger);
+                poco.TryMap("qualifiedName", () => dto.qualifiedName = poco.qualifiedName, logger);
+                poco.TryMap("referencedConcern", () => dto.referencedConcern = poco.referencedConcern?.Id ?? Guid.Empty, logger);
+                poco.TryMap("relatedElement", () => dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("shortName", () => dto.shortName = poco.shortName, logger);
+                poco.TryMap("source", () => ((Core.DTO.Root.Elements.IRelationship)dto).Source = ((Core.POCO.Root.Elements.IRelationship)poco).Source.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("target", () => ((Core.DTO.Root.Elements.IRelationship)dto).Target = ((Core.POCO.Root.Elements.IRelationship)poco).Target.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("textualRepresentation", () => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList(), logger);
             }
 
             return dto;

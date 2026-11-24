@@ -19,6 +19,8 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.Extensions.Logging;
+
     using Core.POCO.Systems.Requirements;
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -138,10 +140,13 @@ namespace SysML2.NET.Dal
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Systems.Requirements.SatisfyRequirementUsage"/>
         /// </param>
+        /// <param name="logger">
+        /// The optional <see cref="ILogger"/> that reports a derived property whose derivation is not supported
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Systems.Requirements.SatisfyRequirementUsage"/>
         /// </returns>
-        public static Core.DTO.Systems.Requirements.SatisfyRequirementUsage ToDto(this Core.POCO.Systems.Requirements.SatisfyRequirementUsage poco, bool includeDerivedProperties = false)
+        public static Core.DTO.Systems.Requirements.SatisfyRequirementUsage ToDto(this Core.POCO.Systems.Requirements.SatisfyRequirementUsage poco, bool includeDerivedProperties = false, ILogger logger = null)
         {
             var dto = new Core.DTO.Systems.Requirements.SatisfyRequirementUsage();
 
@@ -171,110 +176,110 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
-                IElement.TryMap(() => dto.actorParameter = poco.actorParameter.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.assumedConstraint = poco.assumedConstraint.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.chainingFeature = poco.chainingFeature.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.crossFeature = poco.crossFeature?.Id);
-                IElement.TryMap(() => dto.differencingType = poco.differencingType.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.directedUsage = poco.directedUsage.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.documentation = poco.documentation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.endFeature = poco.endFeature.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.endOwningType = poco.endOwningType?.Id);
-                IElement.TryMap(() => dto.feature = poco.feature.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.featureMembership = poco.featureMembership.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.featureTarget = poco.featureTarget?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.featuringType = poco.featuringType.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.framedConcern = poco.framedConcern.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.individualDefinition = poco.individualDefinition?.Id);
-                IElement.TryMap(() => dto.inheritedFeature = poco.inheritedFeature.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.inheritedMembership = poco.inheritedMembership.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.input = poco.input.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.intersectingType = poco.intersectingType.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.isConjugated = poco.isConjugated);
-                IElement.TryMap(() => dto.isLibraryElement = poco.isLibraryElement);
-                IElement.TryMap(() => dto.isModelLevelEvaluable = poco.isModelLevelEvaluable);
-                IElement.TryMap(() => dto.isReference = poco.isReference);
-                IElement.TryMap(() => ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable);
-                IElement.TryMap(() => dto.mayTimeVary = poco.mayTimeVary);
-                IElement.TryMap(() => dto.member = poco.member.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.membership = poco.membership.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.multiplicity = poco.multiplicity?.Id);
-                IElement.TryMap(() => dto.name = poco.name);
-                IElement.TryMap(() => dto.nestedAction = poco.nestedAction.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedAllocation = poco.nestedAllocation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedAnalysisCase = poco.nestedAnalysisCase.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedAttribute = poco.nestedAttribute.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedCalculation = poco.nestedCalculation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedCase = poco.nestedCase.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedConcern = poco.nestedConcern.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedConnection = poco.nestedConnection.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedConstraint = poco.nestedConstraint.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedEnumeration = poco.nestedEnumeration.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedFlow = poco.nestedFlow.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedInterface = poco.nestedInterface.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedItem = poco.nestedItem.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedMetadata = poco.nestedMetadata.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedOccurrence = poco.nestedOccurrence.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedPart = poco.nestedPart.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedPort = poco.nestedPort.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedReference = poco.nestedReference.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedRendering = poco.nestedRendering.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedRequirement = poco.nestedRequirement.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedState = poco.nestedState.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedTransition = poco.nestedTransition.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedUsage = poco.nestedUsage.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedUseCase = poco.nestedUseCase.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedVerificationCase = poco.nestedVerificationCase.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedView = poco.nestedView.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.nestedViewpoint = poco.nestedViewpoint.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.occurrenceDefinition = poco.occurrenceDefinition.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.output = poco.output.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedConjugator = poco.ownedConjugator?.Id);
-                IElement.TryMap(() => dto.ownedCrossSubsetting = poco.ownedCrossSubsetting?.Id);
-                IElement.TryMap(() => dto.ownedDifferencing = poco.ownedDifferencing.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedDisjoining = poco.ownedDisjoining.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedEndFeature = poco.ownedEndFeature.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedFeature = poco.ownedFeature.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedFeatureChaining = poco.ownedFeatureChaining.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedFeatureInverting = poco.ownedFeatureInverting.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedFeatureMembership = poco.ownedFeatureMembership.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedIntersecting = poco.ownedIntersecting.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedRedefinition = poco.ownedRedefinition.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedReferenceSubsetting = poco.ownedReferenceSubsetting?.Id);
-                IElement.TryMap(() => dto.ownedSpecialization = poco.ownedSpecialization.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedSubsetting = poco.ownedSubsetting.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedTypeFeaturing = poco.ownedTypeFeaturing.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedTyping = poco.ownedTyping.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.ownedUnioning = poco.ownedUnioning.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.owner = poco.owner?.Id);
-                IElement.TryMap(() => dto.owningDefinition = poco.owningDefinition?.Id);
-                IElement.TryMap(() => dto.owningFeatureMembership = poco.owningFeatureMembership?.Id);
-                IElement.TryMap(() => dto.owningMembership = poco.owningMembership?.Id);
-                IElement.TryMap(() => dto.owningNamespace = poco.owningNamespace?.Id);
-                IElement.TryMap(() => dto.owningType = poco.owningType?.Id);
-                IElement.TryMap(() => dto.owningUsage = poco.owningUsage?.Id);
-                IElement.TryMap(() => dto.parameter = poco.parameter.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.qualifiedName = poco.qualifiedName);
-                IElement.TryMap(() => dto.requiredConstraint = poco.requiredConstraint.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.requirementDefinition = poco.requirementDefinition?.Id);
-                IElement.TryMap(() => dto.result = poco.result?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.satisfiedRequirement = poco.satisfiedRequirement?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.satisfyingFeature = poco.satisfyingFeature?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.shortName = poco.shortName);
-                IElement.TryMap(() => dto.stakeholderParameter = poco.stakeholderParameter.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.subjectParameter = poco.subjectParameter?.Id ?? Guid.Empty);
-                IElement.TryMap(() => dto.text = [.. poco.text]);
-                IElement.TryMap(() => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.unioningType = poco.unioningType.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.usage = poco.usage.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.variant = poco.variant.Select(x => x.Id).ToList());
-                IElement.TryMap(() => dto.variantMembership = poco.variantMembership.Select(x => x.Id).ToList());
+                poco.TryMap("actorParameter", () => dto.actorParameter = poco.actorParameter.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("assumedConstraint", () => dto.assumedConstraint = poco.assumedConstraint.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("chainingFeature", () => dto.chainingFeature = poco.chainingFeature.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("crossFeature", () => dto.crossFeature = poco.crossFeature?.Id, logger);
+                poco.TryMap("differencingType", () => dto.differencingType = poco.differencingType.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("directedUsage", () => dto.directedUsage = poco.directedUsage.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("documentation", () => dto.documentation = poco.documentation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("endFeature", () => dto.endFeature = poco.endFeature.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("endOwningType", () => dto.endOwningType = poco.endOwningType?.Id, logger);
+                poco.TryMap("feature", () => dto.feature = poco.feature.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("featureMembership", () => dto.featureMembership = poco.featureMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("featureTarget", () => dto.featureTarget = poco.featureTarget?.Id ?? Guid.Empty, logger);
+                poco.TryMap("featuringType", () => dto.featuringType = poco.featuringType.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("framedConcern", () => dto.framedConcern = poco.framedConcern.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("importedMembership", () => dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("individualDefinition", () => dto.individualDefinition = poco.individualDefinition?.Id, logger);
+                poco.TryMap("inheritedFeature", () => dto.inheritedFeature = poco.inheritedFeature.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("inheritedMembership", () => dto.inheritedMembership = poco.inheritedMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("input", () => dto.input = poco.input.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("intersectingType", () => dto.intersectingType = poco.intersectingType.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("isConjugated", () => dto.isConjugated = poco.isConjugated, logger);
+                poco.TryMap("isLibraryElement", () => dto.isLibraryElement = poco.isLibraryElement, logger);
+                poco.TryMap("isModelLevelEvaluable", () => dto.isModelLevelEvaluable = poco.isModelLevelEvaluable, logger);
+                poco.TryMap("isReference", () => dto.isReference = poco.isReference, logger);
+                poco.TryMap("isVariable", () => ((Core.DTO.Core.Features.IFeature)dto).IsVariable = ((Core.POCO.Core.Features.IFeature)poco).IsVariable, logger);
+                poco.TryMap("mayTimeVary", () => dto.mayTimeVary = poco.mayTimeVary, logger);
+                poco.TryMap("member", () => dto.member = poco.member.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("membership", () => dto.membership = poco.membership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("multiplicity", () => dto.multiplicity = poco.multiplicity?.Id, logger);
+                poco.TryMap("name", () => dto.name = poco.name, logger);
+                poco.TryMap("nestedAction", () => dto.nestedAction = poco.nestedAction.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedAllocation", () => dto.nestedAllocation = poco.nestedAllocation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedAnalysisCase", () => dto.nestedAnalysisCase = poco.nestedAnalysisCase.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedAttribute", () => dto.nestedAttribute = poco.nestedAttribute.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedCalculation", () => dto.nestedCalculation = poco.nestedCalculation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedCase", () => dto.nestedCase = poco.nestedCase.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedConcern", () => dto.nestedConcern = poco.nestedConcern.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedConnection", () => dto.nestedConnection = poco.nestedConnection.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedConstraint", () => dto.nestedConstraint = poco.nestedConstraint.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedEnumeration", () => dto.nestedEnumeration = poco.nestedEnumeration.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedFlow", () => dto.nestedFlow = poco.nestedFlow.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedInterface", () => dto.nestedInterface = poco.nestedInterface.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedItem", () => dto.nestedItem = poco.nestedItem.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedMetadata", () => dto.nestedMetadata = poco.nestedMetadata.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedOccurrence", () => dto.nestedOccurrence = poco.nestedOccurrence.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedPart", () => dto.nestedPart = poco.nestedPart.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedPort", () => dto.nestedPort = poco.nestedPort.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedReference", () => dto.nestedReference = poco.nestedReference.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedRendering", () => dto.nestedRendering = poco.nestedRendering.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedRequirement", () => dto.nestedRequirement = poco.nestedRequirement.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedState", () => dto.nestedState = poco.nestedState.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedTransition", () => dto.nestedTransition = poco.nestedTransition.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedUsage", () => dto.nestedUsage = poco.nestedUsage.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedUseCase", () => dto.nestedUseCase = poco.nestedUseCase.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedVerificationCase", () => dto.nestedVerificationCase = poco.nestedVerificationCase.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedView", () => dto.nestedView = poco.nestedView.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("nestedViewpoint", () => dto.nestedViewpoint = poco.nestedViewpoint.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("occurrenceDefinition", () => dto.occurrenceDefinition = poco.occurrenceDefinition.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("output", () => dto.output = poco.output.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedAnnotation", () => dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedConjugator", () => dto.ownedConjugator = poco.ownedConjugator?.Id, logger);
+                poco.TryMap("ownedCrossSubsetting", () => dto.ownedCrossSubsetting = poco.ownedCrossSubsetting?.Id, logger);
+                poco.TryMap("ownedDifferencing", () => dto.ownedDifferencing = poco.ownedDifferencing.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedDisjoining", () => dto.ownedDisjoining = poco.ownedDisjoining.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedElement", () => dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedEndFeature", () => dto.ownedEndFeature = poco.ownedEndFeature.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedFeature", () => dto.ownedFeature = poco.ownedFeature.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedFeatureChaining", () => dto.ownedFeatureChaining = poco.ownedFeatureChaining.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedFeatureInverting", () => dto.ownedFeatureInverting = poco.ownedFeatureInverting.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedFeatureMembership", () => dto.ownedFeatureMembership = poco.ownedFeatureMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedImport", () => dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedIntersecting", () => dto.ownedIntersecting = poco.ownedIntersecting.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedMember", () => dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedMembership", () => dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedRedefinition", () => dto.ownedRedefinition = poco.ownedRedefinition.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedReferenceSubsetting", () => dto.ownedReferenceSubsetting = poco.ownedReferenceSubsetting?.Id, logger);
+                poco.TryMap("ownedSpecialization", () => dto.ownedSpecialization = poco.ownedSpecialization.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedSubsetting", () => dto.ownedSubsetting = poco.ownedSubsetting.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedTypeFeaturing", () => dto.ownedTypeFeaturing = poco.ownedTypeFeaturing.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedTyping", () => dto.ownedTyping = poco.ownedTyping.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("ownedUnioning", () => dto.ownedUnioning = poco.ownedUnioning.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("owner", () => dto.owner = poco.owner?.Id, logger);
+                poco.TryMap("owningDefinition", () => dto.owningDefinition = poco.owningDefinition?.Id, logger);
+                poco.TryMap("owningFeatureMembership", () => dto.owningFeatureMembership = poco.owningFeatureMembership?.Id, logger);
+                poco.TryMap("owningMembership", () => dto.owningMembership = poco.owningMembership?.Id, logger);
+                poco.TryMap("owningNamespace", () => dto.owningNamespace = poco.owningNamespace?.Id, logger);
+                poco.TryMap("owningType", () => dto.owningType = poco.owningType?.Id, logger);
+                poco.TryMap("owningUsage", () => dto.owningUsage = poco.owningUsage?.Id, logger);
+                poco.TryMap("parameter", () => dto.parameter = poco.parameter.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("qualifiedName", () => dto.qualifiedName = poco.qualifiedName, logger);
+                poco.TryMap("requiredConstraint", () => dto.requiredConstraint = poco.requiredConstraint.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("requirementDefinition", () => dto.requirementDefinition = poco.requirementDefinition?.Id, logger);
+                poco.TryMap("result", () => dto.result = poco.result?.Id ?? Guid.Empty, logger);
+                poco.TryMap("satisfiedRequirement", () => dto.satisfiedRequirement = poco.satisfiedRequirement?.Id ?? Guid.Empty, logger);
+                poco.TryMap("satisfyingFeature", () => dto.satisfyingFeature = poco.satisfyingFeature?.Id ?? Guid.Empty, logger);
+                poco.TryMap("shortName", () => dto.shortName = poco.shortName, logger);
+                poco.TryMap("stakeholderParameter", () => dto.stakeholderParameter = poco.stakeholderParameter.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("subjectParameter", () => dto.subjectParameter = poco.subjectParameter?.Id ?? Guid.Empty, logger);
+                poco.TryMap("text", () => dto.text = [.. poco.text], logger);
+                poco.TryMap("textualRepresentation", () => dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("unioningType", () => dto.unioningType = poco.unioningType.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("usage", () => dto.usage = poco.usage.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("variant", () => dto.variant = poco.variant.Select(x => x.Id).ToList(), logger);
+                poco.TryMap("variantMembership", () => dto.variantMembership = poco.variantMembership.Select(x => x.Id).ToList(), logger);
             }
 
             return dto;

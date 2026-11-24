@@ -19,6 +19,8 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
+    using Microsoft.Extensions.Logging;
+
     using Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
     using SysML2.NET.Core.POCO.Root.Elements;
 
@@ -171,10 +173,13 @@ namespace SysML2.NET.Dal
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/>
         /// </param>
+        /// <param name="logger">
+        /// The optional <see cref="ILogger"/> that reports a derived property whose derivation is not supported
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/>
         /// </returns>
-        public static Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} ToDto(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco, bool includeDerivedProperties = false)
+        public static Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} ToDto(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco, bool includeDerivedProperties = false, ILogger logger = null)
         {
             var dto = new Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
 
@@ -202,13 +207,13 @@ namespace SysML2.NET.Dal
                 {{#each (Class.QueryAllProperties this) as | property |}}
                     {{#if property.IsDerived }}
                         {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                            IElement.TryMap(() => {{ #Property.WriteToDtoAssignment property }});
+                            poco.TryMap("{{ property.Name }}", () => {{ #Property.WriteToDtoAssignment property }}, logger);
                         {{/unless}}
                     {{/if}}
                     {{#unless property.IsTransient }}
                     {{#if (Property.IsSerializedRedefinition property class)}}
                     {{#if (Property.HasDerivedValueIn property class)}}
-                        IElement.TryMap(() => {{ #Property.WriteRedefinedToDtoAssignment property }});
+                        poco.TryMap("{{ property.Name }}", () => {{ #Property.WriteRedefinedToDtoAssignment property }}, logger);
                     {{/if}}
                     {{/if}}
                     {{/unless}}

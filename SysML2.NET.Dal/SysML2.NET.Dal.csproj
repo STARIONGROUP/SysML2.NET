@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
       <PackageReference Include="Microsoft.Sbom.Targets" />
+      <InternalsVisibleTo Include="SysML2.NET.Dal.Tests" />
     </ItemGroup>
 
     <ItemGroup>
