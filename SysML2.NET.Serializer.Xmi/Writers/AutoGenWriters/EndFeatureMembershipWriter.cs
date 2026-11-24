@@ -111,6 +111,30 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
+                if (writerOptions.WriteIdRefAsAttribute && ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement != null && ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+                {
+                    xmlWriter.WriteAttributeString("memberElement", ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.Id.ToString());
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberName))
+                {
+                    xmlWriter.WriteAttributeString("memberName", ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberName);
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName))
+                {
+                    xmlWriter.WriteAttributeString("memberShortName", ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName);
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
                 if (!string.IsNullOrWhiteSpace(poco.name))
                 {
                     xmlWriter.WriteAttributeString("name", poco.name);
@@ -201,6 +225,17 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
+                if (((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement != null)
+                {
+                    if (!writerOptions.WriteIdRefAsAttribute || !((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement, "memberElement", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
                 if (poco.ownedAnnotation != null)
                 {
                     foreach (var item in poco.ownedAnnotation)
@@ -280,6 +315,28 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "source", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "target", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
                 if (poco.textualRepresentation != null)
                 {
                     foreach (var item in poco.textualRepresentation)
@@ -345,6 +402,30 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                 if (poco.isLibraryElement)
                 {
                     await xmlWriter.WriteAttributeStringAsync(null, "isLibraryElement", null, "true");
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (writerOptions.WriteIdRefAsAttribute && ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement != null && ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "memberElement", null, ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.Id.ToString());
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberName))
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "memberName", null, ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberName);
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName))
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "memberShortName", null, ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberShortName);
                 }
             }
 
@@ -440,6 +521,17 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
+                if (((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement != null)
+                {
+                    if (!writerOptions.WriteIdRefAsAttribute || !((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, ((SysML2.NET.Core.POCO.Root.Namespaces.IMembership)poco).MemberElement, "memberElement", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
                 if (poco.ownedAnnotation != null)
                 {
                     foreach (var item in poco.ownedAnnotation)
@@ -513,6 +605,28 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                     foreach (var item in poco.relatedElement)
                     {
                         await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "relatedElement", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "source", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "target", elementOriginMap, currentFileUri, true);
                     }
                 }
             }

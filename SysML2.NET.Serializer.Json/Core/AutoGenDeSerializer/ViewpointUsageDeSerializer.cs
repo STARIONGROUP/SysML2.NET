@@ -214,11 +214,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var viewpointDefinitionSeen = false;
             var viewpointStakeholderSeen = false;
 
-            var isVariableRedefinitionSeen = false;
-            bool? isVariableRedefinitionValue = null;
-
             var declaredShortNameRedefinitionSeen = false;
             string declaredShortNameRedefinitionValue = null;
+
+            var isVariableRedefinitionSeen = false;
+            bool? isVariableRedefinitionValue = null;
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -2294,14 +2294,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("isVariable"u8))
-                {
-                    isVariableRedefinitionSeen = true;
-                    reader.Read();
-                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("declaredShortName"u8))
                 {
                     declaredShortNameRedefinitionSeen = true;
@@ -2310,21 +2302,17 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
+                if (reader.ValueTextEquals("isVariable"u8))
+                {
+                    isVariableRedefinitionSeen = true;
+                    reader.Read();
+                    isVariableRedefinitionValue = Utf8JsonReaderHelper.ReadBoolOrNull(ref reader);
+                    continue;
+                }
+
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
-            {
-                if (!mayTimeVarySeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable != isVariableRedefinitionValue.Value && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The isVariable Json property of the ViewpointUsage {Id} disagrees with mayTimeVary; the mayTimeVary value is kept", dtoInstance.Id);
-                }
             }
 
             if (declaredShortNameRedefinitionSeen)
@@ -2336,6 +2324,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!string.Equals(((SysML2.NET.Core.DTO.Root.Elements.IElement)dtoInstance).DeclaredShortName, declaredShortNameRedefinitionValue, StringComparison.Ordinal) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The declaredShortName Json property of the ViewpointUsage {Id} disagrees with reqId; the reqId value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (isVariableRedefinitionSeen && isVariableRedefinitionValue.HasValue)
+            {
+                if (!mayTimeVarySeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable = isVariableRedefinitionValue.Value;
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Features.IFeature)dtoInstance).IsVariable != isVariableRedefinitionValue.Value && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The isVariable Json property of the ViewpointUsage {Id} disagrees with mayTimeVary; the mayTimeVary value is kept", dtoInstance.Id);
                 }
             }
 

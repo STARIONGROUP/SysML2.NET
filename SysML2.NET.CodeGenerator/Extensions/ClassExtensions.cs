@@ -50,21 +50,37 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
+        /// Queries the properties of the class that play one of the given roles when an instance is serialized
+        /// </summary>
+        /// <param name="class">
+        /// The subject <see cref="IClass" />
+        /// </param>
+        /// <param name="kinds">
+        /// The <see cref="SerializedPropertyKind" />s to select
+        /// </param>
+        /// <returns>
+        /// The selected properties, ordered by name
+        /// </returns>
+        public static IReadOnlyList<IProperty> QuerySerializedProperties(this IClass @class, params SerializedPropertyKind[] kinds)
+        {
+            return @class.QueryAllProperties()
+                .Where(property => property.QuerySerializedPropertyKind(@class) is { } kind && kinds.Contains(kind))
+                .OrderBy(property => property.Name)
+                .ToList();
+        }
+
+        /// <summary>
         /// Queries the properties of the class that are exchanged only when derived properties are included
         /// </summary>
         /// <param name="class">
         /// The subject <see cref="IClass" />
         /// </param>
         /// <returns>
-        /// The derived properties the class does not redefine and the redefined properties whose value the class derives
+        /// The <see cref="SerializedPropertyKind.Derived" /> and <see cref="SerializedPropertyKind.DerivedAlias" /> properties
         /// </returns>
         public static IReadOnlyList<IProperty> QueryDerivedSerializedProperties(this IClass @class)
         {
-            return @class.QueryAllProperties()
-                .Where(property => property.IsDerived || property.IsDerivedUnion
-                    ? !property.TryQueryRedefinedByProperty(@class, out _)
-                    : property.QueryIsSerializedRedefinition(@class) && property.QueryHasDerivedValueIn(@class))
-                .ToList();
+            return @class.QuerySerializedProperties(SerializedPropertyKind.Derived, SerializedPropertyKind.DerivedAlias);
         }
 
         /// <summary>

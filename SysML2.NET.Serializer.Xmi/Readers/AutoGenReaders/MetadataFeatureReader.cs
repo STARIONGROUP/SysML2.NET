@@ -629,6 +629,63 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "annotatedElement":
+                            case "annotation":
+                            case "chainingFeature":
+                            case "crossFeature":
+                            case "differencingType":
+                            case "directedFeature":
+                            case "documentation":
+                            case "endFeature":
+                            case "endOwningType":
+                            case "feature":
+                            case "featureMembership":
+                            case "featureTarget":
+                            case "featuringType":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "metaclass":
+                            case "multiplicity":
+                            case "output":
+                            case "ownedAnnotatingRelationship":
+                            case "ownedAnnotation":
+                            case "ownedConjugator":
+                            case "ownedCrossSubsetting":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedFeature":
+                            case "ownedFeatureChaining":
+                            case "ownedFeatureInverting":
+                            case "ownedFeatureMembership":
+                            case "ownedImport":
+                            case "ownedIntersecting":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedRedefinition":
+                            case "ownedReferenceSubsetting":
+                            case "ownedSpecialization":
+                            case "ownedSubsetting":
+                            case "ownedTypeFeaturing":
+                            case "ownedTyping":
+                            case "ownedUnioning":
+                            case "owner":
+                            case "owningAnnotatingRelationship":
+                            case "owningFeatureMembership":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "owningType":
+                            case "textualRepresentation":
+                            case "type":
+                            case "unioningType":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading MetadataFeature at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -1209,6 +1266,63 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "annotatedElement":
+                            case "annotation":
+                            case "chainingFeature":
+                            case "crossFeature":
+                            case "differencingType":
+                            case "directedFeature":
+                            case "documentation":
+                            case "endFeature":
+                            case "endOwningType":
+                            case "feature":
+                            case "featureMembership":
+                            case "featureTarget":
+                            case "featuringType":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "metaclass":
+                            case "multiplicity":
+                            case "output":
+                            case "ownedAnnotatingRelationship":
+                            case "ownedAnnotation":
+                            case "ownedConjugator":
+                            case "ownedCrossSubsetting":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedFeature":
+                            case "ownedFeatureChaining":
+                            case "ownedFeatureInverting":
+                            case "ownedFeatureMembership":
+                            case "ownedImport":
+                            case "ownedIntersecting":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedRedefinition":
+                            case "ownedReferenceSubsetting":
+                            case "ownedSpecialization":
+                            case "ownedSubsetting":
+                            case "ownedTypeFeaturing":
+                            case "ownedTyping":
+                            case "ownedUnioning":
+                            case "owner":
+                            case "owningAnnotatingRelationship":
+                            case "owningFeatureMembership":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "owningType":
+                            case "textualRepresentation":
+                            case "type":
+                            case "unioningType":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading MetadataFeature at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

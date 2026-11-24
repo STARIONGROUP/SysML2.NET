@@ -449,6 +449,83 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "action":
+                            case "actorParameter":
+                            case "calculation":
+                            case "differencingType":
+                            case "directedUsage":
+                            case "documentation":
+                            case "endFeature":
+                            case "expression":
+                            case "feature":
+                            case "featureMembership":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "multiplicity":
+                            case "objectiveRequirement":
+                            case "output":
+                            case "ownedAction":
+                            case "ownedAllocation":
+                            case "ownedAnalysisCase":
+                            case "ownedAnnotation":
+                            case "ownedAttribute":
+                            case "ownedCalculation":
+                            case "ownedCase":
+                            case "ownedConcern":
+                            case "ownedConjugator":
+                            case "ownedConnection":
+                            case "ownedConstraint":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedEnumeration":
+                            case "ownedFeature":
+                            case "ownedFeatureMembership":
+                            case "ownedFlow":
+                            case "ownedImport":
+                            case "ownedInterface":
+                            case "ownedIntersecting":
+                            case "ownedItem":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedMetadata":
+                            case "ownedOccurrence":
+                            case "ownedPart":
+                            case "ownedPort":
+                            case "ownedReference":
+                            case "ownedRendering":
+                            case "ownedRequirement":
+                            case "ownedSpecialization":
+                            case "ownedState":
+                            case "ownedSubclassification":
+                            case "ownedTransition":
+                            case "ownedUnioning":
+                            case "ownedUsage":
+                            case "ownedUseCase":
+                            case "ownedVerificationCase":
+                            case "ownedView":
+                            case "ownedViewpoint":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "parameter":
+                            case "result":
+                            case "step":
+                            case "subjectParameter":
+                            case "textualRepresentation":
+                            case "unioningType":
+                            case "usage":
+                            case "variant":
+                            case "variantMembership":
+                            case "verifiedRequirement":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading VerificationCaseDefinition at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -826,6 +903,83 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "action":
+                            case "actorParameter":
+                            case "calculation":
+                            case "differencingType":
+                            case "directedUsage":
+                            case "documentation":
+                            case "endFeature":
+                            case "expression":
+                            case "feature":
+                            case "featureMembership":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "multiplicity":
+                            case "objectiveRequirement":
+                            case "output":
+                            case "ownedAction":
+                            case "ownedAllocation":
+                            case "ownedAnalysisCase":
+                            case "ownedAnnotation":
+                            case "ownedAttribute":
+                            case "ownedCalculation":
+                            case "ownedCase":
+                            case "ownedConcern":
+                            case "ownedConjugator":
+                            case "ownedConnection":
+                            case "ownedConstraint":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedEnumeration":
+                            case "ownedFeature":
+                            case "ownedFeatureMembership":
+                            case "ownedFlow":
+                            case "ownedImport":
+                            case "ownedInterface":
+                            case "ownedIntersecting":
+                            case "ownedItem":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedMetadata":
+                            case "ownedOccurrence":
+                            case "ownedPart":
+                            case "ownedPort":
+                            case "ownedReference":
+                            case "ownedRendering":
+                            case "ownedRequirement":
+                            case "ownedSpecialization":
+                            case "ownedState":
+                            case "ownedSubclassification":
+                            case "ownedTransition":
+                            case "ownedUnioning":
+                            case "ownedUsage":
+                            case "ownedUseCase":
+                            case "ownedVerificationCase":
+                            case "ownedView":
+                            case "ownedViewpoint":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "parameter":
+                            case "result":
+                            case "step":
+                            case "subjectParameter":
+                            case "textualRepresentation":
+                            case "unioningType":
+                            case "usage":
+                            case "variant":
+                            case "variantMembership":
+                            case "verifiedRequirement":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading VerificationCaseDefinition at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

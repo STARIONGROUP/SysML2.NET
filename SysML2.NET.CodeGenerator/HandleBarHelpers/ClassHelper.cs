@@ -180,6 +180,20 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(@class.QueryDerivedSerializedProperties().Count);
             });
 
+            handlebars.RegisterHelper("Class.QuerySerializedProperties", (_, arguments) =>
+            {
+                var (@class, kinds) = QuerySerializedPropertiesArguments("Class.QuerySerializedProperties", arguments);
+
+                return @class.QuerySerializedProperties(kinds);
+            });
+
+            handlebars.RegisterHelper("Class.WriteCountSerializedProperties", (writer, _, arguments) =>
+            {
+                var (@class, kinds) = QuerySerializedPropertiesArguments("Class.WriteCountSerializedProperties", arguments);
+
+                writer.WriteSafeString(@class.QuerySerializedProperties(kinds).Count);
+            });
+
             handlebars.RegisterHelper("Class.WriteMessagePackDerivedSerialization", (writer, context, _) =>
             {
                 if (context.Value is not IClass @class)
@@ -279,6 +293,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 .Select(Extensions.NamedElementExtensions.QueryNamespace));
 
             return uniqueNamespaces;
+        }
+
+        /// <summary>
+        /// Reads the arguments of a serialized-properties helper: the <see cref="IClass" /> followed by the names of the <see cref="SerializedPropertyKind" />s
+        /// </summary>
+        /// <param name="helperName">The name of the helper, used in the error message</param>
+        /// <param name="arguments">The helper arguments</param>
+        /// <returns>The <see cref="IClass" /> and the selected <see cref="SerializedPropertyKind" />s</returns>
+        /// <exception cref="ArgumentException">When the first argument is not an <see cref="IClass" /> or a name is not a <see cref="SerializedPropertyKind" /></exception>
+        private static (IClass Class, SerializedPropertyKind[] Kinds) QuerySerializedPropertiesArguments(string helperName, Arguments arguments)
+        {
+            if (arguments.Length < 2 || arguments[0] is not IClass @class)
+            {
+                throw new ArgumentException($"{helperName} expects an IClass followed by at least one SerializedPropertyKind name");
+            }
+
+            var kinds = arguments.Skip(1)
+                .Select(argument => Enum.TryParse<SerializedPropertyKind>(argument as string, out var kind)
+                    ? kind
+                    : throw new ArgumentException($"{helperName}: '{argument}' is not a SerializedPropertyKind"))
+                .ToArray();
+
+            return (@class, kinds);
         }
     }
 }

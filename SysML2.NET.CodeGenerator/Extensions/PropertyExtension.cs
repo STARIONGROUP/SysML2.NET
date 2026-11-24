@@ -255,6 +255,54 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
                 return chainEnd;
             }
+
+            /// <summary>
+            /// Queries the role the <paramref name="property"/> plays when an instance of the <paramref name="classContext"/> is serialized.
+            /// </summary>
+            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
+            /// <returns>The <see cref="SerializedPropertyKind"/>, or <c>null</c> when a redefinition of the same name carries the value</returns>
+            public SerializedPropertyKind? QuerySerializedPropertyKind(IClass classContext)
+            {
+                var isDerived = property.IsDerived || property.IsDerivedUnion;
+
+                if (!property.TryQueryRedefinedByProperty(classContext, out var redefinition))
+                {
+                    return isDerived ? SerializedPropertyKind.Derived : SerializedPropertyKind.Stored;
+                }
+
+                if (redefinition.Name == property.Name)
+                {
+                    return null;
+                }
+
+                if (isDerived)
+                {
+                    return SerializedPropertyKind.RedefinedDerived;
+                }
+
+                return property.QueryHasDerivedValueIn(classContext) ? SerializedPropertyKind.DerivedAlias : SerializedPropertyKind.StoredAlias;
+            }
+
+            /// <summary>
+            /// Queries the C# expression that reads or assigns the <paramref name="property"/> on an instance of the <paramref name="classContext"/>.
+            /// </summary>
+            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
+            /// <param name="variable">The name of the variable that holds the instance</param>
+            /// <param name="modelNamespace">The root namespace of the instance's interfaces, such as <c>SysML2.NET.Core.DTO</c></param>
+            /// <returns>The member access, cast to the interface that owns the property when the class implements it explicitly</returns>
+            public string QueryMemberAccessor(IClass classContext, string variable, string modelNamespace)
+            {
+                var memberName = property.QueryPropertyNameBasedOnUmlProperties();
+
+                if (property.QuerySerializedPropertyKind(classContext) is not (SerializedPropertyKind.StoredAlias or SerializedPropertyKind.DerivedAlias or SerializedPropertyKind.RedefinedDerived))
+                {
+                    return $"{variable}.{memberName}";
+                }
+
+                var owner = (INamedElement)property.Owner;
+
+                return $"(({modelNamespace}.{owner.QueryNamespace()}.I{owner.Name}){variable}).{memberName}";
+            }
         }
     }
 }

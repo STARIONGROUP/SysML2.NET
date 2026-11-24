@@ -46,15 +46,9 @@ namespace SysML2.NET.Dal
             
             poco.Id = dto.Id;
                 {{#with this as | class |}}
-                    {{#each (Class.QueryAllProperties this) as | property |}}
-                    {{#unless property.IsDerived }}
-                    {{#unless property.IsTransient }}
-                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                    {{#each (Class.QuerySerializedProperties this "Stored") as | property |}}
                             {{#unless (Property.QueryIsReferenceProperty property) }}
                             poco.{{String.CapitalizeFirstLetter property.Name }} = dto.{{String.CapitalizeFirstLetter property.Name }};
-                    {{/unless}}
-                    {{/unless}}
-                    {{/unless}}
                     {{/unless}}
                     {{/each}}
                 {{/with}}

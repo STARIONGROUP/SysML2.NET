@@ -458,6 +458,21 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "memberElement":
+                            case "membershipOwningNamespace":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "ownedVariantUsage":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "relatedElement":
+                            case "source":
+                            case "target":
+                            case "textualRepresentation":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading VariantMembership at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -869,6 +884,21 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "memberElement":
+                            case "membershipOwningNamespace":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "ownedVariantUsage":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "relatedElement":
+                            case "source":
+                            case "target":
+                            case "textualRepresentation":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading VariantMembership at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

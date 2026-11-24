@@ -118,11 +118,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var textualRepresentationSeen = false;
             var typedFeatureSeen = false;
 
-            var typeRedefinitionSeen = false;
-            Guid? typeRedefinitionValue = null;
-
             var generalRedefinitionSeen = false;
             Guid? generalRedefinitionValue = null;
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
 
             var specificRedefinitionSeen = false;
             Guid? specificRedefinitionValue = null;
@@ -130,8 +130,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var targetRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
 
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+            var typeRedefinitionSeen = false;
+            Guid? typeRedefinitionValue = null;
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -573,17 +573,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("type"u8))
-                {
-                    typeRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        typeRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("general"u8))
                 {
                     generalRedefinitionSeen = true;
@@ -591,6 +580,21 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
                     {
                         generalRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
                     }
                     continue;
                 }
@@ -621,17 +625,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("source"u8))
+                if (reader.ValueTextEquals("type"u8))
                 {
-                    sourceRedefinitionSeen = true;
+                    typeRedefinitionSeen = true;
                     reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
                     {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
+                        typeRedefinitionValue = redefinitionItem;
                     }
                     continue;
                 }
@@ -639,18 +639,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (typeRedefinitionSeen)
-            {
-                if (!conjugatedPortDefinitionSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type = (typeRedefinitionValue ?? Guid.Empty);
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type != (typeRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The type Json property of the ConjugatedPortTyping {Id} disagrees with conjugatedPortDefinition; the conjugatedPortDefinition value is kept", dtoInstance.Id);
-                }
             }
 
             if (generalRedefinitionSeen)
@@ -662,6 +650,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The general Json property of the ConjugatedPortTyping {Id} disagrees with conjugatedPortDefinition; the conjugatedPortDefinition value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!typedFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the ConjugatedPortTyping {Id} disagrees with typedFeature; the typedFeature value is kept", dtoInstance.Id);
                 }
             }
 
@@ -689,15 +689,15 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
-            if (sourceRedefinitionSeen)
+            if (typeRedefinitionSeen)
             {
-                if (!typedFeatureSeen)
+                if (!conjugatedPortDefinitionSeen)
                 {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                    ((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type = (typeRedefinitionValue ?? Guid.Empty);
                 }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                else if (((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type != (typeRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
                 {
-                    logger.LogWarning("The source Json property of the ConjugatedPortTyping {Id} disagrees with typedFeature; the typedFeature value is kept", dtoInstance.Id);
+                    logger.LogWarning("The type Json property of the ConjugatedPortTyping {Id} disagrees with conjugatedPortDefinition; the conjugatedPortDefinition value is kept", dtoInstance.Id);
                 }
             }
 
@@ -840,11 +840,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelationshipSeen = false;
             var typedFeatureSeen = false;
 
-            var typeRedefinitionSeen = false;
-            Guid? typeRedefinitionValue = null;
-
             var generalRedefinitionSeen = false;
             Guid? generalRedefinitionValue = null;
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
 
             var specificRedefinitionSeen = false;
             Guid? specificRedefinitionValue = null;
@@ -852,8 +852,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var targetRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
 
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+            var typeRedefinitionSeen = false;
+            Guid? typeRedefinitionValue = null;
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -1072,17 +1072,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("type"u8))
-                {
-                    typeRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        typeRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("general"u8))
                 {
                     generalRedefinitionSeen = true;
@@ -1090,6 +1079,21 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
                     {
                         generalRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
                     }
                     continue;
                 }
@@ -1120,17 +1124,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("source"u8))
+                if (reader.ValueTextEquals("type"u8))
                 {
-                    sourceRedefinitionSeen = true;
+                    typeRedefinitionSeen = true;
                     reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
                     {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
+                        typeRedefinitionValue = redefinitionItem;
                     }
                     continue;
                 }
@@ -1138,18 +1138,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (typeRedefinitionSeen)
-            {
-                if (!conjugatedPortDefinitionSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type = (typeRedefinitionValue ?? Guid.Empty);
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type != (typeRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The type Json property of the ConjugatedPortTyping {Id} disagrees with conjugatedPortDefinition; the conjugatedPortDefinition value is kept", dtoInstance.Id);
-                }
             }
 
             if (generalRedefinitionSeen)
@@ -1161,6 +1149,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The general Json property of the ConjugatedPortTyping {Id} disagrees with conjugatedPortDefinition; the conjugatedPortDefinition value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!typedFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the ConjugatedPortTyping {Id} disagrees with typedFeature; the typedFeature value is kept", dtoInstance.Id);
                 }
             }
 
@@ -1188,15 +1188,15 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
-            if (sourceRedefinitionSeen)
+            if (typeRedefinitionSeen)
             {
-                if (!typedFeatureSeen)
+                if (!conjugatedPortDefinitionSeen)
                 {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                    ((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type = (typeRedefinitionValue ?? Guid.Empty);
                 }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                else if (((SysML2.NET.Core.DTO.Core.Features.IFeatureTyping)dtoInstance).Type != (typeRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
                 {
-                    logger.LogWarning("The source Json property of the ConjugatedPortTyping {Id} disagrees with typedFeature; the typedFeature value is kept", dtoInstance.Id);
+                    logger.LogWarning("The type Json property of the ConjugatedPortTyping {Id} disagrees with conjugatedPortDefinition; the conjugatedPortDefinition value is kept", dtoInstance.Id);
                 }
             }
 

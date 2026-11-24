@@ -45,6 +45,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         protected override void RegisterHelpers()
         {
             this.Handlebars.RegisterStringHelper();
+            SysML2.NET.CodeGenerator.HandleBarHelpers.ClassHelper.RegisterClassHelper(this.Handlebars);
             this.Handlebars.RegisterClassHelper();
             this.Handlebars.RegisterPropertyHelper();
 

@@ -107,34 +107,6 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
             if (includeDerivedProperties)
             {
-                var relatedTypeDerived = dto.relatedType;
-                writer.WriteArrayHeader(relatedTypeDerived.Count);
-                for (var i = 0; i < relatedTypeDerived.Count; i++)
-                {
-                    WriteGuidBin16(ref writer, relatedTypeDerived[i]);
-                }
-
-                if (dto.sourceType.HasValue)
-                {
-                    WriteGuidBin16(ref writer, dto.sourceType.Value);
-                }
-                else
-                {
-                    writer.WriteNil();
-                }
-
-                var targetTypeDerived = dto.targetType;
-                if (targetTypeDerived.Count > 1)
-                {
-                    targetTypeDerived.Sort(GuidComparer);
-                }
-
-                writer.WriteArrayHeader(targetTypeDerived.Count);
-                for (var i = 0; i < targetTypeDerived.Count; i++)
-                {
-                    WriteGuidBin16(ref writer, targetTypeDerived[i]);
-                }
-
                 var associationEndDerived = dto.associationEnd;
                 if (associationEndDerived.Count > 1)
                 {
@@ -147,30 +119,25 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, associationEndDerived[i]);
                 }
 
-                var ownedSubclassificationDerived = dto.ownedSubclassification;
-                if (ownedSubclassificationDerived.Count > 1)
+                var differencingTypeDerived = dto.differencingType;
+                writer.WriteArrayHeader(differencingTypeDerived.Count);
+                for (var i = 0; i < differencingTypeDerived.Count; i++)
                 {
-                    ownedSubclassificationDerived.Sort(GuidComparer);
+                    WriteGuidBin16(ref writer, differencingTypeDerived[i]);
                 }
 
-                writer.WriteArrayHeader(ownedSubclassificationDerived.Count);
-                for (var i = 0; i < ownedSubclassificationDerived.Count; i++)
+                var directedFeatureDerived = dto.directedFeature;
+                writer.WriteArrayHeader(directedFeatureDerived.Count);
+                for (var i = 0; i < directedFeatureDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedSubclassificationDerived[i]);
+                    WriteGuidBin16(ref writer, directedFeatureDerived[i]);
                 }
 
-                var ownedSpecializationDerived = dto.ownedSpecialization;
-                writer.WriteArrayHeader(ownedSpecializationDerived.Count);
-                for (var i = 0; i < ownedSpecializationDerived.Count; i++)
+                var documentationDerived = dto.documentation;
+                writer.WriteArrayHeader(documentationDerived.Count);
+                for (var i = 0; i < documentationDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedSpecializationDerived[i]);
-                }
-
-                var ownedFeatureMembershipDerived = dto.ownedFeatureMembership;
-                writer.WriteArrayHeader(ownedFeatureMembershipDerived.Count);
-                for (var i = 0; i < ownedFeatureMembershipDerived.Count; i++)
-                {
-                    WriteGuidBin16(ref writer, ownedFeatureMembershipDerived[i]);
+                    WriteGuidBin16(ref writer, documentationDerived[i]);
                 }
 
                 var featureDerived = dto.feature;
@@ -180,25 +147,25 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, featureDerived[i]);
                 }
 
-                var ownedFeatureDerived = dto.ownedFeature;
-                writer.WriteArrayHeader(ownedFeatureDerived.Count);
-                for (var i = 0; i < ownedFeatureDerived.Count; i++)
+                var featureMembershipDerived = dto.featureMembership;
+                writer.WriteArrayHeader(featureMembershipDerived.Count);
+                for (var i = 0; i < featureMembershipDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedFeatureDerived[i]);
+                    WriteGuidBin16(ref writer, featureMembershipDerived[i]);
                 }
 
-                var inputDerived = dto.input;
-                writer.WriteArrayHeader(inputDerived.Count);
-                for (var i = 0; i < inputDerived.Count; i++)
+                var importedMembershipDerived = dto.importedMembership;
+                writer.WriteArrayHeader(importedMembershipDerived.Count);
+                for (var i = 0; i < importedMembershipDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, inputDerived[i]);
+                    WriteGuidBin16(ref writer, importedMembershipDerived[i]);
                 }
 
-                var outputDerived = dto.output;
-                writer.WriteArrayHeader(outputDerived.Count);
-                for (var i = 0; i < outputDerived.Count; i++)
+                var inheritedFeatureDerived = dto.inheritedFeature;
+                writer.WriteArrayHeader(inheritedFeatureDerived.Count);
+                for (var i = 0; i < inheritedFeatureDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, outputDerived[i]);
+                    WriteGuidBin16(ref writer, inheritedFeatureDerived[i]);
                 }
 
                 var inheritedMembershipDerived = dto.inheritedMembership;
@@ -208,29 +175,36 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, inheritedMembershipDerived[i]);
                 }
 
-                var ownedEndFeatureDerived = dto.ownedEndFeature;
-                writer.WriteArrayHeader(ownedEndFeatureDerived.Count);
-                for (var i = 0; i < ownedEndFeatureDerived.Count; i++)
+                var inputDerived = dto.input;
+                writer.WriteArrayHeader(inputDerived.Count);
+                for (var i = 0; i < inputDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedEndFeatureDerived[i]);
+                    WriteGuidBin16(ref writer, inputDerived[i]);
                 }
 
-                if (dto.ownedConjugator.HasValue)
+                var intersectingTypeDerived = dto.intersectingType;
+                writer.WriteArrayHeader(intersectingTypeDerived.Count);
+                for (var i = 0; i < intersectingTypeDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, dto.ownedConjugator.Value);
-                }
-                else
-                {
-                    writer.WriteNil();
+                    WriteGuidBin16(ref writer, intersectingTypeDerived[i]);
                 }
 
                 writer.Write(dto.isConjugated);
 
-                var inheritedFeatureDerived = dto.inheritedFeature;
-                writer.WriteArrayHeader(inheritedFeatureDerived.Count);
-                for (var i = 0; i < inheritedFeatureDerived.Count; i++)
+                writer.Write(dto.isLibraryElement);
+
+                var memberDerived = dto.member;
+                writer.WriteArrayHeader(memberDerived.Count);
+                for (var i = 0; i < memberDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, inheritedFeatureDerived[i]);
+                    WriteGuidBin16(ref writer, memberDerived[i]);
+                }
+
+                var membershipDerived = dto.membership;
+                writer.WriteArrayHeader(membershipDerived.Count);
+                for (var i = 0; i < membershipDerived.Count; i++)
+                {
+                    WriteGuidBin16(ref writer, membershipDerived[i]);
                 }
 
                 if (dto.multiplicity.HasValue)
@@ -242,32 +216,36 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     writer.WriteNil();
                 }
 
-                var unioningTypeDerived = dto.unioningType;
-                writer.WriteArrayHeader(unioningTypeDerived.Count);
-                for (var i = 0; i < unioningTypeDerived.Count; i++)
+                writer.Write(dto.name);
+
+                var outputDerived = dto.output;
+                writer.WriteArrayHeader(outputDerived.Count);
+                for (var i = 0; i < outputDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, unioningTypeDerived[i]);
+                    WriteGuidBin16(ref writer, outputDerived[i]);
                 }
 
-                var ownedIntersectingDerived = dto.ownedIntersecting;
-                writer.WriteArrayHeader(ownedIntersectingDerived.Count);
-                for (var i = 0; i < ownedIntersectingDerived.Count; i++)
+                var ownedAnnotationDerived = dto.ownedAnnotation;
+                writer.WriteArrayHeader(ownedAnnotationDerived.Count);
+                for (var i = 0; i < ownedAnnotationDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedIntersectingDerived[i]);
+                    WriteGuidBin16(ref writer, ownedAnnotationDerived[i]);
                 }
 
-                var intersectingTypeDerived = dto.intersectingType;
-                writer.WriteArrayHeader(intersectingTypeDerived.Count);
-                for (var i = 0; i < intersectingTypeDerived.Count; i++)
+                if (dto.ownedConjugator.HasValue)
                 {
-                    WriteGuidBin16(ref writer, intersectingTypeDerived[i]);
+                    WriteGuidBin16(ref writer, dto.ownedConjugator.Value);
+                }
+                else
+                {
+                    writer.WriteNil();
                 }
 
-                var ownedUnioningDerived = dto.ownedUnioning;
-                writer.WriteArrayHeader(ownedUnioningDerived.Count);
-                for (var i = 0; i < ownedUnioningDerived.Count; i++)
+                var ownedDifferencingDerived = dto.ownedDifferencing;
+                writer.WriteArrayHeader(ownedDifferencingDerived.Count);
+                for (var i = 0; i < ownedDifferencingDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedUnioningDerived[i]);
+                    WriteGuidBin16(ref writer, ownedDifferencingDerived[i]);
                 }
 
                 var ownedDisjoiningDerived = dto.ownedDisjoining;
@@ -282,39 +260,32 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, ownedDisjoiningDerived[i]);
                 }
 
-                var featureMembershipDerived = dto.featureMembership;
-                writer.WriteArrayHeader(featureMembershipDerived.Count);
-                for (var i = 0; i < featureMembershipDerived.Count; i++)
+                var ownedElementDerived = dto.ownedElement;
+                writer.WriteArrayHeader(ownedElementDerived.Count);
+                for (var i = 0; i < ownedElementDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, featureMembershipDerived[i]);
+                    WriteGuidBin16(ref writer, ownedElementDerived[i]);
                 }
 
-                var differencingTypeDerived = dto.differencingType;
-                writer.WriteArrayHeader(differencingTypeDerived.Count);
-                for (var i = 0; i < differencingTypeDerived.Count; i++)
+                var ownedEndFeatureDerived = dto.ownedEndFeature;
+                writer.WriteArrayHeader(ownedEndFeatureDerived.Count);
+                for (var i = 0; i < ownedEndFeatureDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, differencingTypeDerived[i]);
+                    WriteGuidBin16(ref writer, ownedEndFeatureDerived[i]);
                 }
 
-                var ownedDifferencingDerived = dto.ownedDifferencing;
-                writer.WriteArrayHeader(ownedDifferencingDerived.Count);
-                for (var i = 0; i < ownedDifferencingDerived.Count; i++)
+                var ownedFeatureDerived = dto.ownedFeature;
+                writer.WriteArrayHeader(ownedFeatureDerived.Count);
+                for (var i = 0; i < ownedFeatureDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedDifferencingDerived[i]);
+                    WriteGuidBin16(ref writer, ownedFeatureDerived[i]);
                 }
 
-                var directedFeatureDerived = dto.directedFeature;
-                writer.WriteArrayHeader(directedFeatureDerived.Count);
-                for (var i = 0; i < directedFeatureDerived.Count; i++)
+                var ownedFeatureMembershipDerived = dto.ownedFeatureMembership;
+                writer.WriteArrayHeader(ownedFeatureMembershipDerived.Count);
+                for (var i = 0; i < ownedFeatureMembershipDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, directedFeatureDerived[i]);
-                }
-
-                var membershipDerived = dto.membership;
-                writer.WriteArrayHeader(membershipDerived.Count);
-                for (var i = 0; i < membershipDerived.Count; i++)
-                {
-                    WriteGuidBin16(ref writer, membershipDerived[i]);
+                    WriteGuidBin16(ref writer, ownedFeatureMembershipDerived[i]);
                 }
 
                 var ownedImportDerived = dto.ownedImport;
@@ -324,11 +295,11 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, ownedImportDerived[i]);
                 }
 
-                var memberDerived = dto.member;
-                writer.WriteArrayHeader(memberDerived.Count);
-                for (var i = 0; i < memberDerived.Count; i++)
+                var ownedIntersectingDerived = dto.ownedIntersecting;
+                writer.WriteArrayHeader(ownedIntersectingDerived.Count);
+                for (var i = 0; i < ownedIntersectingDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, memberDerived[i]);
+                    WriteGuidBin16(ref writer, ownedIntersectingDerived[i]);
                 }
 
                 var ownedMemberDerived = dto.ownedMember;
@@ -345,11 +316,39 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, ownedMembershipDerived[i]);
                 }
 
-                var importedMembershipDerived = dto.importedMembership;
-                writer.WriteArrayHeader(importedMembershipDerived.Count);
-                for (var i = 0; i < importedMembershipDerived.Count; i++)
+                var ownedSpecializationDerived = dto.ownedSpecialization;
+                writer.WriteArrayHeader(ownedSpecializationDerived.Count);
+                for (var i = 0; i < ownedSpecializationDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, importedMembershipDerived[i]);
+                    WriteGuidBin16(ref writer, ownedSpecializationDerived[i]);
+                }
+
+                var ownedSubclassificationDerived = dto.ownedSubclassification;
+                if (ownedSubclassificationDerived.Count > 1)
+                {
+                    ownedSubclassificationDerived.Sort(GuidComparer);
+                }
+
+                writer.WriteArrayHeader(ownedSubclassificationDerived.Count);
+                for (var i = 0; i < ownedSubclassificationDerived.Count; i++)
+                {
+                    WriteGuidBin16(ref writer, ownedSubclassificationDerived[i]);
+                }
+
+                var ownedUnioningDerived = dto.ownedUnioning;
+                writer.WriteArrayHeader(ownedUnioningDerived.Count);
+                for (var i = 0; i < ownedUnioningDerived.Count; i++)
+                {
+                    WriteGuidBin16(ref writer, ownedUnioningDerived[i]);
+                }
+
+                if (dto.owner.HasValue)
+                {
+                    WriteGuidBin16(ref writer, dto.owner.Value);
+                }
+                else
+                {
+                    writer.WriteNil();
                 }
 
                 if (dto.owningMembership.HasValue)
@@ -370,34 +369,50 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     writer.WriteNil();
                 }
 
-                if (dto.owner.HasValue)
+                writer.Write(dto.qualifiedName);
+
+                var relatedTypeDerived = dto.relatedType;
+                writer.WriteArrayHeader(relatedTypeDerived.Count);
+                for (var i = 0; i < relatedTypeDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, dto.owner.Value);
+                    WriteGuidBin16(ref writer, relatedTypeDerived[i]);
+                }
+
+                writer.Write(dto.shortName);
+
+                var sourceDerived = ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Source;
+                writer.WriteArrayHeader(sourceDerived.Count);
+                for (var i = 0; i < sourceDerived.Count; i++)
+                {
+                    WriteGuidBin16(ref writer, sourceDerived[i]);
+                }
+
+                if (dto.sourceType.HasValue)
+                {
+                    WriteGuidBin16(ref writer, dto.sourceType.Value);
                 }
                 else
                 {
                     writer.WriteNil();
                 }
 
-                var ownedElementDerived = dto.ownedElement;
-                writer.WriteArrayHeader(ownedElementDerived.Count);
-                for (var i = 0; i < ownedElementDerived.Count; i++)
+                var targetDerived = ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Target;
+                writer.WriteArrayHeader(targetDerived.Count);
+                for (var i = 0; i < targetDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedElementDerived[i]);
+                    WriteGuidBin16(ref writer, targetDerived[i]);
                 }
 
-                var documentationDerived = dto.documentation;
-                writer.WriteArrayHeader(documentationDerived.Count);
-                for (var i = 0; i < documentationDerived.Count; i++)
+                var targetTypeDerived = dto.targetType;
+                if (targetTypeDerived.Count > 1)
                 {
-                    WriteGuidBin16(ref writer, documentationDerived[i]);
+                    targetTypeDerived.Sort(GuidComparer);
                 }
 
-                var ownedAnnotationDerived = dto.ownedAnnotation;
-                writer.WriteArrayHeader(ownedAnnotationDerived.Count);
-                for (var i = 0; i < ownedAnnotationDerived.Count; i++)
+                writer.WriteArrayHeader(targetTypeDerived.Count);
+                for (var i = 0; i < targetTypeDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, ownedAnnotationDerived[i]);
+                    WriteGuidBin16(ref writer, targetTypeDerived[i]);
                 }
 
                 var textualRepresentationDerived = dto.textualRepresentation;
@@ -407,26 +422,11 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     WriteGuidBin16(ref writer, textualRepresentationDerived[i]);
                 }
 
-                writer.Write(dto.shortName);
-
-                writer.Write(dto.name);
-
-                writer.Write(dto.qualifiedName);
-
-                writer.Write(dto.isLibraryElement);
-
-                var targetDerived = ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Target;
-                writer.WriteArrayHeader(targetDerived.Count);
-                for (var i = 0; i < targetDerived.Count; i++)
+                var unioningTypeDerived = dto.unioningType;
+                writer.WriteArrayHeader(unioningTypeDerived.Count);
+                for (var i = 0; i < unioningTypeDerived.Count; i++)
                 {
-                    WriteGuidBin16(ref writer, targetDerived[i]);
-                }
-
-                var sourceDerived = ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Source;
-                writer.WriteArrayHeader(sourceDerived.Count);
-                for (var i = 0; i < sourceDerived.Count; i++)
-                {
-                    WriteGuidBin16(ref writer, sourceDerived[i]);
+                    WriteGuidBin16(ref writer, unioningTypeDerived[i]);
                 }
 
             }
@@ -544,37 +544,6 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                         break;
                     case 13:
                         valueLength = reader.ReadArrayHeader();
-                        var relatedTypeDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            relatedTypeDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.relatedType = relatedTypeDerivedValues;
-                        break;
-                    case 14:
-                        if (reader.TryReadNil())
-                        {
-                            dto.sourceType = null;
-                        }
-                        else
-                        {
-                            dto.sourceType = ReadGuidBin16(ref reader);
-                        }
-
-                        break;
-                    case 15:
-                        valueLength = reader.ReadArrayHeader();
-                        var targetTypeDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            targetTypeDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.targetType = targetTypeDerivedValues;
-                        break;
-                    case 16:
-                        valueLength = reader.ReadArrayHeader();
                         var associationEndDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
@@ -583,37 +552,37 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                         dto.associationEnd = associationEndDerivedValues;
                         break;
+                    case 14:
+                        valueLength = reader.ReadArrayHeader();
+                        var differencingTypeDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            differencingTypeDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.differencingType = differencingTypeDerivedValues;
+                        break;
+                    case 15:
+                        valueLength = reader.ReadArrayHeader();
+                        var directedFeatureDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            directedFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.directedFeature = directedFeatureDerivedValues;
+                        break;
+                    case 16:
+                        valueLength = reader.ReadArrayHeader();
+                        var documentationDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            documentationDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.documentation = documentationDerivedValues;
+                        break;
                     case 17:
-                        valueLength = reader.ReadArrayHeader();
-                        var ownedSubclassificationDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            ownedSubclassificationDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.ownedSubclassification = ownedSubclassificationDerivedValues;
-                        break;
-                    case 18:
-                        valueLength = reader.ReadArrayHeader();
-                        var ownedSpecializationDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            ownedSpecializationDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.ownedSpecialization = ownedSpecializationDerivedValues;
-                        break;
-                    case 19:
-                        valueLength = reader.ReadArrayHeader();
-                        var ownedFeatureMembershipDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            ownedFeatureMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.ownedFeatureMembership = ownedFeatureMembershipDerivedValues;
-                        break;
-                    case 20:
                         valueLength = reader.ReadArrayHeader();
                         var featureDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -623,15 +592,45 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                         dto.feature = featureDerivedValues;
                         break;
-                    case 21:
+                    case 18:
                         valueLength = reader.ReadArrayHeader();
-                        var ownedFeatureDerivedValues = new List<Guid>(valueLength);
+                        var featureMembershipDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            ownedFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
+                            featureMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.ownedFeature = ownedFeatureDerivedValues;
+                        dto.featureMembership = featureMembershipDerivedValues;
+                        break;
+                    case 19:
+                        valueLength = reader.ReadArrayHeader();
+                        var importedMembershipDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            importedMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.importedMembership = importedMembershipDerivedValues;
+                        break;
+                    case 20:
+                        valueLength = reader.ReadArrayHeader();
+                        var inheritedFeatureDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            inheritedFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.inheritedFeature = inheritedFeatureDerivedValues;
+                        break;
+                    case 21:
+                        valueLength = reader.ReadArrayHeader();
+                        var inheritedMembershipDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            inheritedMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.inheritedMembership = inheritedMembershipDerivedValues;
                         break;
                     case 22:
                         valueLength = reader.ReadArrayHeader();
@@ -645,60 +644,43 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                         break;
                     case 23:
                         valueLength = reader.ReadArrayHeader();
-                        var outputDerivedValues = new List<Guid>(valueLength);
+                        var intersectingTypeDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            outputDerivedValues.Add(ReadGuidBin16(ref reader));
+                            intersectingTypeDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.output = outputDerivedValues;
+                        dto.intersectingType = intersectingTypeDerivedValues;
                         break;
                     case 24:
-                        valueLength = reader.ReadArrayHeader();
-                        var inheritedMembershipDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            inheritedMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.inheritedMembership = inheritedMembershipDerivedValues;
-                        break;
-                    case 25:
-                        valueLength = reader.ReadArrayHeader();
-                        var ownedEndFeatureDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            ownedEndFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.ownedEndFeature = ownedEndFeatureDerivedValues;
-                        break;
-                    case 26:
-                        if (reader.TryReadNil())
-                        {
-                            dto.ownedConjugator = null;
-                        }
-                        else
-                        {
-                            dto.ownedConjugator = ReadGuidBin16(ref reader);
-                        }
-
-                        break;
-                    case 27:
                         dto.isConjugated = reader.ReadBoolean();
 
                         break;
-                    case 28:
+                    case 25:
+                        dto.isLibraryElement = reader.ReadBoolean();
+
+                        break;
+                    case 26:
                         valueLength = reader.ReadArrayHeader();
-                        var inheritedFeatureDerivedValues = new List<Guid>(valueLength);
+                        var memberDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            inheritedFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
+                            memberDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.inheritedFeature = inheritedFeatureDerivedValues;
+                        dto.member = memberDerivedValues;
                         break;
-                    case 29:
+                    case 27:
+                        valueLength = reader.ReadArrayHeader();
+                        var membershipDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            membershipDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.membership = membershipDerivedValues;
+                        break;
+                    case 28:
                         if (reader.TryReadNil())
                         {
                             dto.multiplicity = null;
@@ -709,45 +691,50 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                         }
 
                         break;
+                    case 29:
+                        dto.name = reader.ReadString();
+
+                        break;
                     case 30:
                         valueLength = reader.ReadArrayHeader();
-                        var unioningTypeDerivedValues = new List<Guid>(valueLength);
+                        var outputDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            unioningTypeDerivedValues.Add(ReadGuidBin16(ref reader));
+                            outputDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.unioningType = unioningTypeDerivedValues;
+                        dto.output = outputDerivedValues;
                         break;
                     case 31:
                         valueLength = reader.ReadArrayHeader();
-                        var ownedIntersectingDerivedValues = new List<Guid>(valueLength);
+                        var ownedAnnotationDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            ownedIntersectingDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedAnnotationDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.ownedIntersecting = ownedIntersectingDerivedValues;
+                        dto.ownedAnnotation = ownedAnnotationDerivedValues;
                         break;
                     case 32:
-                        valueLength = reader.ReadArrayHeader();
-                        var intersectingTypeDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        if (reader.TryReadNil())
                         {
-                            intersectingTypeDerivedValues.Add(ReadGuidBin16(ref reader));
+                            dto.ownedConjugator = null;
+                        }
+                        else
+                        {
+                            dto.ownedConjugator = ReadGuidBin16(ref reader);
                         }
 
-                        dto.intersectingType = intersectingTypeDerivedValues;
                         break;
                     case 33:
                         valueLength = reader.ReadArrayHeader();
-                        var ownedUnioningDerivedValues = new List<Guid>(valueLength);
+                        var ownedDifferencingDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            ownedUnioningDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedDifferencingDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.ownedUnioning = ownedUnioningDerivedValues;
+                        dto.ownedDifferencing = ownedDifferencingDerivedValues;
                         break;
                     case 34:
                         valueLength = reader.ReadArrayHeader();
@@ -761,55 +748,45 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                         break;
                     case 35:
                         valueLength = reader.ReadArrayHeader();
-                        var featureMembershipDerivedValues = new List<Guid>(valueLength);
+                        var ownedElementDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            featureMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedElementDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.featureMembership = featureMembershipDerivedValues;
+                        dto.ownedElement = ownedElementDerivedValues;
                         break;
                     case 36:
                         valueLength = reader.ReadArrayHeader();
-                        var differencingTypeDerivedValues = new List<Guid>(valueLength);
+                        var ownedEndFeatureDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            differencingTypeDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedEndFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.differencingType = differencingTypeDerivedValues;
+                        dto.ownedEndFeature = ownedEndFeatureDerivedValues;
                         break;
                     case 37:
                         valueLength = reader.ReadArrayHeader();
-                        var ownedDifferencingDerivedValues = new List<Guid>(valueLength);
+                        var ownedFeatureDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            ownedDifferencingDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.ownedDifferencing = ownedDifferencingDerivedValues;
+                        dto.ownedFeature = ownedFeatureDerivedValues;
                         break;
                     case 38:
                         valueLength = reader.ReadArrayHeader();
-                        var directedFeatureDerivedValues = new List<Guid>(valueLength);
+                        var ownedFeatureMembershipDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            directedFeatureDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedFeatureMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.directedFeature = directedFeatureDerivedValues;
+                        dto.ownedFeatureMembership = ownedFeatureMembershipDerivedValues;
                         break;
                     case 39:
-                        valueLength = reader.ReadArrayHeader();
-                        var membershipDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            membershipDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.membership = membershipDerivedValues;
-                        break;
-                    case 40:
                         valueLength = reader.ReadArrayHeader();
                         var ownedImportDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -819,17 +796,17 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                         dto.ownedImport = ownedImportDerivedValues;
                         break;
-                    case 41:
+                    case 40:
                         valueLength = reader.ReadArrayHeader();
-                        var memberDerivedValues = new List<Guid>(valueLength);
+                        var ownedIntersectingDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            memberDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedIntersectingDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.member = memberDerivedValues;
+                        dto.ownedIntersecting = ownedIntersectingDerivedValues;
                         break;
-                    case 42:
+                    case 41:
                         valueLength = reader.ReadArrayHeader();
                         var ownedMemberDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -839,7 +816,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                         dto.ownedMember = ownedMemberDerivedValues;
                         break;
-                    case 43:
+                    case 42:
                         valueLength = reader.ReadArrayHeader();
                         var ownedMembershipDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -849,39 +826,37 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                         dto.ownedMembership = ownedMembershipDerivedValues;
                         break;
-                    case 44:
+                    case 43:
                         valueLength = reader.ReadArrayHeader();
-                        var importedMembershipDerivedValues = new List<Guid>(valueLength);
+                        var ownedSpecializationDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            importedMembershipDerivedValues.Add(ReadGuidBin16(ref reader));
+                            ownedSpecializationDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        dto.importedMembership = importedMembershipDerivedValues;
+                        dto.ownedSpecialization = ownedSpecializationDerivedValues;
+                        break;
+                    case 44:
+                        valueLength = reader.ReadArrayHeader();
+                        var ownedSubclassificationDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            ownedSubclassificationDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.ownedSubclassification = ownedSubclassificationDerivedValues;
                         break;
                     case 45:
-                        if (reader.TryReadNil())
+                        valueLength = reader.ReadArrayHeader();
+                        var ownedUnioningDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            dto.owningMembership = null;
-                        }
-                        else
-                        {
-                            dto.owningMembership = ReadGuidBin16(ref reader);
+                            ownedUnioningDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
+                        dto.ownedUnioning = ownedUnioningDerivedValues;
                         break;
                     case 46:
-                        if (reader.TryReadNil())
-                        {
-                            dto.owningNamespace = null;
-                        }
-                        else
-                        {
-                            dto.owningNamespace = ReadGuidBin16(ref reader);
-                        }
-
-                        break;
-                    case 47:
                         if (reader.TryReadNil())
                         {
                             dto.owner = null;
@@ -892,63 +867,68 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                         }
 
                         break;
-                    case 48:
-                        valueLength = reader.ReadArrayHeader();
-                        var ownedElementDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                    case 47:
+                        if (reader.TryReadNil())
                         {
-                            ownedElementDerivedValues.Add(ReadGuidBin16(ref reader));
+                            dto.owningMembership = null;
+                        }
+                        else
+                        {
+                            dto.owningMembership = ReadGuidBin16(ref reader);
                         }
 
-                        dto.ownedElement = ownedElementDerivedValues;
+                        break;
+                    case 48:
+                        if (reader.TryReadNil())
+                        {
+                            dto.owningNamespace = null;
+                        }
+                        else
+                        {
+                            dto.owningNamespace = ReadGuidBin16(ref reader);
+                        }
+
                         break;
                     case 49:
-                        valueLength = reader.ReadArrayHeader();
-                        var documentationDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            documentationDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.documentation = documentationDerivedValues;
-                        break;
-                    case 50:
-                        valueLength = reader.ReadArrayHeader();
-                        var ownedAnnotationDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            ownedAnnotationDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.ownedAnnotation = ownedAnnotationDerivedValues;
-                        break;
-                    case 51:
-                        valueLength = reader.ReadArrayHeader();
-                        var textualRepresentationDerivedValues = new List<Guid>(valueLength);
-                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
-                        {
-                            textualRepresentationDerivedValues.Add(ReadGuidBin16(ref reader));
-                        }
-
-                        dto.textualRepresentation = textualRepresentationDerivedValues;
-                        break;
-                    case 52:
-                        dto.shortName = reader.ReadString();
-
-                        break;
-                    case 53:
-                        dto.name = reader.ReadString();
-
-                        break;
-                    case 54:
                         dto.qualifiedName = reader.ReadString();
 
                         break;
-                    case 55:
-                        dto.isLibraryElement = reader.ReadBoolean();
+                    case 50:
+                        valueLength = reader.ReadArrayHeader();
+                        var relatedTypeDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            relatedTypeDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.relatedType = relatedTypeDerivedValues;
+                        break;
+                    case 51:
+                        dto.shortName = reader.ReadString();
 
                         break;
-                    case 56:
+                    case 52:
+                        valueLength = reader.ReadArrayHeader();
+                        var sourceDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            sourceDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Source = sourceDerivedValues;
+                        break;
+                    case 53:
+                        if (reader.TryReadNil())
+                        {
+                            dto.sourceType = null;
+                        }
+                        else
+                        {
+                            dto.sourceType = ReadGuidBin16(ref reader);
+                        }
+
+                        break;
+                    case 54:
                         valueLength = reader.ReadArrayHeader();
                         var targetDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
@@ -958,15 +938,35 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
                         ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Target = targetDerivedValues;
                         break;
-                    case 57:
+                    case 55:
                         valueLength = reader.ReadArrayHeader();
-                        var sourceDerivedValues = new List<Guid>(valueLength);
+                        var targetTypeDerivedValues = new List<Guid>(valueLength);
                         for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
                         {
-                            sourceDerivedValues.Add(ReadGuidBin16(ref reader));
+                            targetTypeDerivedValues.Add(ReadGuidBin16(ref reader));
                         }
 
-                        ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dto).Source = sourceDerivedValues;
+                        dto.targetType = targetTypeDerivedValues;
+                        break;
+                    case 56:
+                        valueLength = reader.ReadArrayHeader();
+                        var textualRepresentationDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            textualRepresentationDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.textualRepresentation = textualRepresentationDerivedValues;
+                        break;
+                    case 57:
+                        valueLength = reader.ReadArrayHeader();
+                        var unioningTypeDerivedValues = new List<Guid>(valueLength);
+                        for (valueCounter = 0; valueCounter < valueLength; valueCounter++)
+                        {
+                            unioningTypeDerivedValues.Add(ReadGuidBin16(ref reader));
+                        }
+
+                        dto.unioningType = unioningTypeDerivedValues;
                         break;
                     default:
                         reader.Skip();

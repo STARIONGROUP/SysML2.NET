@@ -369,6 +369,46 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "differencingType":
+                            case "documentation":
+                            case "endFeature":
+                            case "expression":
+                            case "feature":
+                            case "featureMembership":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "multiplicity":
+                            case "output":
+                            case "ownedAnnotation":
+                            case "ownedConjugator":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedFeature":
+                            case "ownedFeatureMembership":
+                            case "ownedImport":
+                            case "ownedIntersecting":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedSpecialization":
+                            case "ownedSubclassification":
+                            case "ownedUnioning":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "parameter":
+                            case "result":
+                            case "step":
+                            case "textualRepresentation":
+                            case "unioningType":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading Function at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -688,6 +728,46 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "differencingType":
+                            case "documentation":
+                            case "endFeature":
+                            case "expression":
+                            case "feature":
+                            case "featureMembership":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "multiplicity":
+                            case "output":
+                            case "ownedAnnotation":
+                            case "ownedConjugator":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedFeature":
+                            case "ownedFeatureMembership":
+                            case "ownedImport":
+                            case "ownedIntersecting":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedSpecialization":
+                            case "ownedSubclassification":
+                            case "ownedUnioning":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "parameter":
+                            case "result":
+                            case "step":
+                            case "textualRepresentation":
+                            case "unioningType":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading Function at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

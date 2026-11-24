@@ -572,11 +572,33 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "source", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
                 if (poco.sourceType != null)
                 {
                     if (!writerOptions.WriteIdRefAsAttribute || !poco.sourceType.QueryIsValidIdRef(elementOriginMap, currentFileUri))
                     {
                         this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.sourceType, "sourceType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "target", elementOriginMap, currentFileUri, true);
                     }
                 }
             }
@@ -1135,11 +1157,33 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 
             if (writerOptions.IncludeDerivedProperties)
             {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Source)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "source", elementOriginMap, currentFileUri, true);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
                 if (poco.sourceType != null)
                 {
                     if (!writerOptions.WriteIdRefAsAttribute || !poco.sourceType.QueryIsValidIdRef(elementOriginMap, currentFileUri))
                     {
                         await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, poco.sourceType, "sourceType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target != null)
+                {
+                    foreach (var item in ((SysML2.NET.Core.POCO.Root.Elements.IRelationship)poco).Target)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, item, "target", elementOriginMap, currentFileUri, true);
                     }
                 }
             }

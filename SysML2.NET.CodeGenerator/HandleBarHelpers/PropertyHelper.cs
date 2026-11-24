@@ -37,6 +37,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         private const string ValuePlaceholder = "{value}";
 
         /// <summary>
+        /// The root namespace of the generated DTO interfaces
+        /// </summary>
+        private const string DtoNamespace = "SysML2.NET.Core.DTO";
+
+        /// <summary>
         /// The placeholder for the left operand of a <see cref="RedefinedDeserializationShape"/> comparison
         /// </summary>
         private const string LeftPlaceholder = "{left}";
@@ -679,6 +684,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString($"[RedefinedByProperty(\"I{owner.Name}.{redefinition.Name.CapitalizeFirstLetter()}\", isDerivedByRedefinition: {derivedFlag})]");
             });
 
+            handlebars.RegisterHelper("Property.IsDerivedSerialization", (_, arguments) =>
+            {
+                if (arguments.Length != 2 || arguments[0] is not IProperty property || arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.IsDerivedSerialization helper expects an IProperty and an IClass");
+                }
+
+                return property.QuerySerializedPropertyKind(generatedClass) is SerializedPropertyKind.Derived or SerializedPropertyKind.DerivedAlias;
+            });
+
+            handlebars.RegisterHelper("Property.WriteMemberAccessor", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 4 || arguments[0] is not IProperty property || arguments[1] is not IClass generatedClass
+                    || arguments[2] is not string variable || arguments[3] is not string modelNamespace)
+                {
+                    throw new HandlebarsException("{{#Property.WriteMemberAccessor}} expects an IProperty, an IClass, a variable name and a model namespace");
+                }
+
+                writer.WriteSafeString(property.QueryMemberAccessor(generatedClass, variable, modelNamespace));
+            });
+
             handlebars.RegisterHelper("Property.HasDerivedValueIn", (_, arguments) =>
             {
                 if (arguments.Length != 2 || arguments[0] is not IProperty property || arguments[1] is not IClass generatedClass)
@@ -1097,14 +1123,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             var property = (IProperty)parameters[0];
             var classContext = (IClass)parameters[1];
 
-            if (property.TryQueryRedefinedByProperty(classContext, out _) && !property.QueryIsSerializedRedefinition(classContext))
+            if (property.QuerySerializedPropertyKind(classContext) is not (SerializedPropertyKind.Stored or SerializedPropertyKind.StoredAlias))
             {
-                throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for redefined properties that are not serialized under their own name");
-            }
-
-            if (property.IsDerived || property.IsDerivedUnion)
-            {
-                throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for derived or derivedunion properties");
+                throw new InvalidOperationException("Property.WriteForDTOComparer is only valid for Stored and StoredAlias properties");
             }
 
             var sb = new StringBuilder();
@@ -1341,8 +1362,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             var sb = new StringBuilder();
 
-            var redefinedProperties = generatedClass.QueryAllProperties()
-                .Where(property => property.QueryIsSerializedRedefinition(generatedClass) && (includeDerivedProperties || !property.QueryHasDerivedValueIn(generatedClass)));
+            var redefinedProperties = includeDerivedProperties
+                ? generatedClass.QuerySerializedProperties(SerializedPropertyKind.StoredAlias, SerializedPropertyKind.DerivedAlias)
+                : generatedClass.QuerySerializedProperties(SerializedPropertyKind.StoredAlias);
 
             foreach (var property in redefinedProperties)
             {
@@ -1591,7 +1613,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             foreach (var property in generatedClass.QueryDerivedSerializedProperties())
             {
-                sb.Append(WriteMessagePackSerialization(property, QueryDerivedDtoAccessor(property), $"{property.Name.LowerCaseFirstLetter()}Derived"));
+                sb.Append(WriteMessagePackSerialization(property, property.QueryMemberAccessor(generatedClass, "dto", DtoNamespace), $"{property.Name.LowerCaseFirstLetter()}Derived"));
             }
 
             return sb.ToString();
@@ -1605,34 +1627,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         internal static string WriteMessagePackDerivedDeserializationCases(IClass generatedClass)
         {
             var sb = new StringBuilder();
-            var caseIndex = generatedClass.CountAllNonDerivedNonRedefinedProperties();
+            var caseIndex = generatedClass.QuerySerializedProperties(SerializedPropertyKind.Stored).Count;
 
             foreach (var property in generatedClass.QueryDerivedSerializedProperties())
             {
                 caseIndex++;
                 sb.AppendLine($"case {caseIndex}:");
-                sb.AppendLine(WriteMessagePackDeserialization(property, QueryDerivedDtoAccessor(property), $"{property.Name.LowerCaseFirstLetter()}Derived", true));
+                sb.AppendLine(WriteMessagePackDeserialization(property, property.QueryMemberAccessor(generatedClass, "dto", DtoNamespace), $"{property.Name.LowerCaseFirstLetter()}Derived", true));
                 sb.AppendLine("break;");
             }
 
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Queries the C# expression that reads or stores a derived property on the generated DTO.
-        /// </summary>
-        /// <param name="property">The derived <see cref="IProperty"/>, or a property made derived by redefinition</param>
-        /// <returns>The member of the DTO, cast to the owner interface when the property is implemented explicitly</returns>
-        private static string QueryDerivedDtoAccessor(IProperty property)
-        {
-            if (property.IsDerived || property.IsDerivedUnion)
-            {
-                return $"dto.{property.QueryPropertyNameBasedOnUmlProperties()}";
-            }
-
-            var owner = (INamedElement)property.Owner;
-
-            return $"((SysML2.NET.Core.DTO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})dto).{property.QueryPropertyNameBasedOnUmlProperties()}";
         }
 
         /// <summary>

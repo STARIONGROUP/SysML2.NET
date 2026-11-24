@@ -120,6 +120,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         protected override void RegisterHelpers()
         {
             this.Handlebars.RegisterStringHelper();
+            SysML2.NET.CodeGenerator.HandleBarHelpers.ClassHelper.RegisterClassHelper(this.Handlebars);
             ClassHelper.RegisterClassHelper(this.Handlebars);
             uml4net.HandleBars.PropertyHelper.RegisterPropertyHelper(this.Handlebars);
 

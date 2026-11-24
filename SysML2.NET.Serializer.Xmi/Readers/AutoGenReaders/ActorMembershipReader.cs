@@ -462,6 +462,21 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "memberElement":
+                            case "ownedActorParameter":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "owningType":
+                            case "relatedElement":
+                            case "source":
+                            case "target":
+                            case "textualRepresentation":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading ActorMembership at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -873,6 +888,21 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "memberElement":
+                            case "ownedActorParameter":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "owningType":
+                            case "relatedElement":
+                            case "source":
+                            case "target":
+                            case "textualRepresentation":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading ActorMembership at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();
