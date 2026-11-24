@@ -219,44 +219,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             /// <summary>
-            /// Queries whether the <paramref name="property"/> is redefined in the <paramref name="classContext"/> by a chain that ends on a derived property.
-            /// </summary>
-            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
-            /// <returns><c>true</c> when the value of the <paramref name="property"/> is derived in the context</returns>
-            /// <remarks>
-            /// A derived redefinition makes the redefined property derived, as SysML states for <c>Usage::mayTimeVary</c> over <c>Feature::isVariable</c>;
-            /// such a value is therefore neither computed nor exchanged without derived properties (KerML §10.3 Note 4).
-            /// </remarks>
-            public bool QueryHasDerivedValueIn(IClass classContext)
-            {
-                if (!property.TryQueryRedefinedByProperty(classContext, out _))
-                {
-                    return false;
-                }
-
-                var chainEnd = property.QueryRedefinitionChainEnd(classContext);
-
-                return chainEnd.IsDerived || chainEnd.IsDerivedUnion;
-            }
-
-            /// <summary>
-            /// Returns the property that ends the redefinition chain of the <paramref name="property"/> in the <paramref name="classContext"/>.
-            /// </summary>
-            /// <param name="classContext">The <see cref="IClass"/> being generated</param>
-            /// <returns>The last redefinition, or the <paramref name="property"/> itself when the context does not redefine it</returns>
-            public IProperty QueryRedefinitionChainEnd(IClass classContext)
-            {
-                var chainEnd = property;
-
-                while (chainEnd.TryQueryRedefinedByProperty(classContext, out var redefinition))
-                {
-                    chainEnd = redefinition;
-                }
-
-                return chainEnd;
-            }
-
-            /// <summary>
             /// Queries the role the <paramref name="property"/> plays when an instance of the <paramref name="classContext"/> is serialized.
             /// </summary>
             /// <param name="classContext">The <see cref="IClass"/> being generated</param>
@@ -280,7 +242,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                     return SerializedPropertyKind.RedefinedDerived;
                 }
 
-                return property.QueryHasDerivedValueIn(classContext) ? SerializedPropertyKind.DerivedAlias : SerializedPropertyKind.StoredAlias;
+                return property.QueryIsDerivedByRedefinition(classContext) ? SerializedPropertyKind.DerivedAlias : SerializedPropertyKind.StoredAlias;
             }
 
             /// <summary>

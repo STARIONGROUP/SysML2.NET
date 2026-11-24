@@ -678,7 +678,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var owner = (INamedElement)redefinition.Owner;
-                var isDerivedByRedefinition = !property.IsDerived && !property.IsDerivedUnion && property.QueryHasDerivedValueIn(generatedClass);
+                var isDerivedByRedefinition = !property.IsDerived && !property.IsDerivedUnion && property.QueryIsDerivedByRedefinition(generatedClass);
                 var derivedFlag = isDerivedByRedefinition ? "true" : "false";
 
                 writer.WriteSafeString($"[RedefinedByProperty(\"I{owner.Name}.{redefinition.Name.CapitalizeFirstLetter()}\", isDerivedByRedefinition: {derivedFlag})]");
@@ -712,7 +712,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("The #Property.HasDerivedValueIn helper expects an IProperty and an IClass");
                 }
 
-                return property.QueryHasDerivedValueIn(generatedClass);
+                return property.QueryIsDerivedByRedefinition(generatedClass);
             });
 
             handlebars.RegisterHelper("Property.WriteRedefinedToDtoAssignment", (writer, _, arguments) =>
