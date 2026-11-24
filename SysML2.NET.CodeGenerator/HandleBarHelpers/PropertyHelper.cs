@@ -560,85 +560,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return;
                 }
 
-                var sb = new StringBuilder();
-
-                if (property.Type is IDataType)
-                {
-                    if (property.QueryIsEnum())
-                    {
-                        if (property.QueryIsNullable())
-                        {
-                            sb.AppendLine($"if (dto.{property.Name.CapitalizeFirstLetter()}.HasValue)");
-                            sb.AppendLine("{");
-                            sb.AppendLine($"    var {property.Name}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes(dto.{property.Name.CapitalizeFirstLetter()}.Value);");
-                            sb.AppendLine($"    writer.WriteString({property.Name}Bytes);");
-                            sb.AppendLine("}");
-                            sb.AppendLine("else");
-                            sb.AppendLine("{");
-                            sb.AppendLine("    writer.WriteNil();");
-                            sb.AppendLine("}");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"    var {property.Name}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes(dto.{property.Name.CapitalizeFirstLetter()});");
-                            sb.AppendLine($"    writer.WriteString({property.Name}Bytes);");
-                        }
-                    }
-                    else if (property.QueryIsEnumerable())
-                    {
-                        sb.AppendLine($"writer.WriteArrayHeader(dto.{property.Name.CapitalizeFirstLetter()}.Count);");
-                        sb.AppendLine($"for (var i = 0; i < dto.{property.Name.CapitalizeFirstLetter()}.Count; i++)");
-                        sb.AppendLine("{");
-                        sb.AppendLine($"writer.Write(dto.{property.Name.CapitalizeFirstLetter()}[i]);");
-                        sb.AppendLine("}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"writer.Write(dto.{property.Name.CapitalizeFirstLetter()});");
-                    }
-                }
-                else if (property.QueryIsReferenceType())
-                {
-                    if (property.QueryIsEnumerable())
-                    {
-                        sb.AppendLine($"var {property.Name.LowerCaseFirstLetter()} = dto.{property.Name.CapitalizeFirstLetter()};");
-
-                        // when properties are not ordered, they are serialized ordered by GUID
-                        if (!property.IsOrdered)
-                        {
-                            sb.AppendLine($"if ({property.Name.LowerCaseFirstLetter()}.Count > 1)");
-                            sb.AppendLine("{");
-                            sb.AppendLine($"{property.Name.LowerCaseFirstLetter()}.Sort(GuidComparer);");
-                            sb.AppendLine("}");
-                            sb.AppendLine();
-                        }
-
-                        sb.AppendLine($"writer.WriteArrayHeader({property.Name.LowerCaseFirstLetter()}.Count);");
-                        sb.AppendLine($"for (var i = 0; i < {property.Name.LowerCaseFirstLetter()}.Count; i++)");
-                        sb.AppendLine("{");
-                        sb.AppendLine($"WriteGuidBin16(ref writer, {property.Name.LowerCaseFirstLetter()}[i]);");
-                        sb.AppendLine("}");
-                    }
-                    else if (property.QueryIsNullable())
-                    {
-                        sb.AppendLine($"if (dto.{property.Name.CapitalizeFirstLetter()}.HasValue)");
-                        sb.AppendLine("{");
-                        sb.AppendLine($"WriteGuidBin16(ref writer, dto.{property.Name.CapitalizeFirstLetter()}.Value);");
-                        sb.AppendLine("}");
-                        sb.AppendLine("else");
-                        sb.AppendLine("{");
-                        sb.AppendLine("writer.WriteNil();");
-                        sb.AppendLine("}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"WriteGuidBin16(ref writer, dto.{property.Name.CapitalizeFirstLetter()});");
-                    }
-                }
-
-                sb.AppendLine();
-
-                writer.WriteSafeString(sb);
+                writer.WriteSafeString(WriteMessagePackSerialization(property, $"dto.{property.Name.CapitalizeFirstLetter()}", property.Name.LowerCaseFirstLetter()));
             });
 
             handlebars.RegisterHelper("Property.WriteForDTOMessagePackFormatterDeSerialize", (writer, context, arguments) =>
@@ -671,106 +593,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return;
                 }
 
-                var sb = new StringBuilder();
-
-                if (property.Type is IDataType)
-                {
-                    if (property.QueryIsEnum())
-                    {
-                        sb.AppendLine($"var {property.Name}Sequence = reader.ReadStringSequence();");
-
-                        if (property.QueryIsNullable())
-                        {
-                            sb.AppendLine($"if (!{property.Name}Sequence.HasValue)");
-                            sb.AppendLine("{");
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = null;");
-                            sb.AppendLine("}");
-                            sb.AppendLine("else");
-                            sb.AppendLine("{");
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = {property.QueryTypeName()}Provider.Parse({property.Name}Sequence.Value);");
-                            sb.AppendLine("}");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = {property.QueryTypeName()}Provider.Parse({property.Name}Sequence.Value);");
-                        }
-                    }
-                    else if (property.QueryIsEnumerable())
-                    {
-                        sb.AppendLine("valueLength = reader.ReadArrayHeader();");
-                        sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Capacity = valueLength;");
-                        sb.AppendLine("for (valueCounter = 0; valueCounter < valueLength; valueCounter++)");
-                        sb.AppendLine("{");
-
-                        if (property.QueryIsBool())
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadBoolean());");
-                        }
-                        else if (property.QueryCSharpTypeName() == "DateTime")
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadDateTime());");
-                        }
-                        else if (property.QueryIsString())
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadString());");
-                        }
-                        else if (property.QueryIsNumeric())
-                        {
-
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Add(reader.ReadInt32());");
-                        }
-
-                        sb.Append("}");
-                    }
-                    else
-                    {
-                        if (property.QueryIsBool())
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadBoolean();");
-                        }
-                        else if (property.QueryCSharpTypeName() == "DateTime")
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadDateTime();");
-                        }
-                        else if (property.QueryIsString())
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadString();");
-                        }
-                        else if (property.QueryIsNumeric())
-                        {
-                            sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = reader.ReadInt32();");
-                        }
-                    }
-                }
-                else if (property.QueryIsReferenceType())
-                {
-                    if (property.QueryIsEnumerable())
-                    {
-                        sb.AppendLine("valueLength = reader.ReadArrayHeader();");
-                        sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()}.Capacity = valueLength;");
-                        sb.AppendLine("for (valueCounter = 0; valueCounter < valueLength; valueCounter++)");
-                        sb.AppendLine("{");
-                        sb.AppendLine($"    dto.{property.Name.CapitalizeFirstLetter()}.Add(ReadGuidBin16(ref reader));");
-                        sb.AppendLine("}");
-                    }
-                    else if (property.QueryIsNullable())
-                    {
-                        sb.AppendLine("if (reader.TryReadNil())");
-                        sb.AppendLine("{");
-                        sb.AppendLine($"    dto.{property.Name.CapitalizeFirstLetter()} = null;");
-                        sb.AppendLine("}");
-                        sb.AppendLine("else");
-                        sb.AppendLine("{");
-                        sb.AppendLine($"    dto.{property.Name.CapitalizeFirstLetter()} = ReadGuidBin16(ref reader);");
-                        sb.AppendLine("}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"dto.{property.Name.CapitalizeFirstLetter()} = ReadGuidBin16(ref reader);");
-                    }
-                }
-
-                writer.WriteSafeString(sb);
+                writer.WriteSafeString(WriteMessagePackDeserialization(property, $"dto.{property.Name.CapitalizeFirstLetter()}", property.Name.LowerCaseFirstLetter(), false));
             });
 
             handlebars.RegisterHelper("Property.WriteTypeForExtendClass", (writer, context, _) =>
@@ -1551,6 +1374,335 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Writes the MessagePack serialization of the <paramref name="property"/> read through the <paramref name="accessor"/>.
+        /// </summary>
+        /// <param name="property">The serialized <see cref="IProperty"/></param>
+        /// <param name="accessor">The C# expression that reads the property from the DTO</param>
+        /// <param name="localName">The base name of the locals the generated code declares</param>
+        /// <returns>The generated code</returns>
+        internal static string WriteMessagePackSerialization(IProperty property, string accessor, string localName)
+        {
+            var sb = new StringBuilder();
+
+            if (property.Type is IDataType)
+            {
+                if (property.QueryIsEnum())
+                {
+                    if (property.QueryIsNullable())
+                    {
+                        sb.AppendLine($"if ({accessor}.HasValue)");
+                        sb.AppendLine("{");
+                        sb.AppendLine($"    var {localName}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes({accessor}.Value);");
+                        sb.AppendLine($"    writer.WriteString({localName}Bytes);");
+                        sb.AppendLine("}");
+                        sb.AppendLine("else");
+                        sb.AppendLine("{");
+                        sb.AppendLine("    writer.WriteNil();");
+                        sb.AppendLine("}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"    var {localName}Bytes = {property.QueryTypeName()}Provider.ToUtf8LowerBytes({accessor});");
+                        sb.AppendLine($"    writer.WriteString({localName}Bytes);");
+                    }
+                }
+                else if (property.QueryIsEnumerable())
+                {
+                    sb.AppendLine($"writer.WriteArrayHeader({accessor}.Count);");
+                    sb.AppendLine($"for (var i = 0; i < {accessor}.Count; i++)");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"writer.Write({accessor}[i]);");
+                    sb.AppendLine("}");
+                }
+                else
+                {
+                    sb.AppendLine($"writer.Write({accessor});");
+                }
+            }
+            else if (property.QueryIsReferenceType())
+            {
+                if (property.QueryIsEnumerable())
+                {
+                    sb.AppendLine($"var {localName} = {accessor};");
+
+                    // when properties are not ordered, they are serialized ordered by GUID
+                    if (!property.IsOrdered)
+                    {
+                        sb.AppendLine($"if ({localName}.Count > 1)");
+                        sb.AppendLine("{");
+                        sb.AppendLine($"{localName}.Sort(GuidComparer);");
+                        sb.AppendLine("}");
+                        sb.AppendLine();
+                    }
+
+                    sb.AppendLine($"writer.WriteArrayHeader({localName}.Count);");
+                    sb.AppendLine($"for (var i = 0; i < {localName}.Count; i++)");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"WriteGuidBin16(ref writer, {localName}[i]);");
+                    sb.AppendLine("}");
+                }
+                else if (property.QueryIsNullable())
+                {
+                    sb.AppendLine($"if ({accessor}.HasValue)");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"WriteGuidBin16(ref writer, {accessor}.Value);");
+                    sb.AppendLine("}");
+                    sb.AppendLine("else");
+                    sb.AppendLine("{");
+                    sb.AppendLine("writer.WriteNil();");
+                    sb.AppendLine("}");
+                }
+                else
+                {
+                    sb.AppendLine($"WriteGuidBin16(ref writer, {accessor});");
+                }
+            }
+
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Writes the MessagePack deserialization of the <paramref name="property"/> into the <paramref name="accessor"/>.
+        /// </summary>
+        /// <param name="property">The deserialized <see cref="IProperty"/></param>
+        /// <param name="accessor">The C# expression that stores the property on the DTO</param>
+        /// <param name="localName">The base name of the locals the generated code declares</param>
+        /// <param name="assignCollection">Whether a collection is assigned to the <paramref name="accessor"/> as a whole instead of filled in place</param>
+        /// <returns>The generated code</returns>
+        internal static string WriteMessagePackDeserialization(IProperty property, string accessor, string localName, bool assignCollection)
+        {
+            var sb = new StringBuilder();
+            var collection = assignCollection ? $"{localName}Values" : accessor;
+
+            if (property.Type is IDataType)
+            {
+                if (property.QueryIsEnum())
+                {
+                    sb.AppendLine($"var {localName}Sequence = reader.ReadStringSequence();");
+
+                    if (property.QueryIsNullable())
+                    {
+                        sb.AppendLine($"if (!{localName}Sequence.HasValue)");
+                        sb.AppendLine("{");
+                        sb.AppendLine($"{accessor} = null;");
+                        sb.AppendLine("}");
+                        sb.AppendLine("else");
+                        sb.AppendLine("{");
+                        sb.AppendLine($"{accessor} = {property.QueryTypeName()}Provider.Parse({localName}Sequence.Value);");
+                        sb.AppendLine("}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{accessor} = {property.QueryTypeName()}Provider.Parse({localName}Sequence.Value);");
+                    }
+                }
+                else if (property.QueryIsEnumerable())
+                {
+                    sb.AppendLine("valueLength = reader.ReadArrayHeader();");
+                    AppendCollectionStart(sb, accessor, localName, assignCollection, QueryMessagePackElementTypeName(property));
+                    sb.AppendLine("for (valueCounter = 0; valueCounter < valueLength; valueCounter++)");
+                    sb.AppendLine("{");
+
+                    if (property.QueryIsBool())
+                    {
+                        sb.AppendLine($"{collection}.Add(reader.ReadBoolean());");
+                    }
+                    else if (property.QueryCSharpTypeName() == "DateTime")
+                    {
+                        sb.AppendLine($"{collection}.Add(reader.ReadDateTime());");
+                    }
+                    else if (property.QueryIsString())
+                    {
+                        sb.AppendLine($"{collection}.Add(reader.ReadString());");
+                    }
+                    else if (property.QueryIsNumeric())
+                    {
+                        sb.AppendLine($"{collection}.Add(reader.{QueryMessagePackNumericReadMethod(property)}());");
+                    }
+
+                    sb.Append('}');
+                    AppendCollectionEnd(sb, accessor, localName, assignCollection);
+                }
+                else
+                {
+                    if (property.QueryIsBool())
+                    {
+                        sb.AppendLine($"{accessor} = reader.ReadBoolean();");
+                    }
+                    else if (property.QueryCSharpTypeName() == "DateTime")
+                    {
+                        sb.AppendLine($"{accessor} = reader.ReadDateTime();");
+                    }
+                    else if (property.QueryIsString())
+                    {
+                        sb.AppendLine($"{accessor} = reader.ReadString();");
+                    }
+                    else if (property.QueryIsNumeric())
+                    {
+                        sb.AppendLine($"{accessor} = reader.{QueryMessagePackNumericReadMethod(property)}();");
+                    }
+                }
+            }
+            else if (property.QueryIsReferenceType())
+            {
+                if (property.QueryIsEnumerable())
+                {
+                    sb.AppendLine("valueLength = reader.ReadArrayHeader();");
+                    AppendCollectionStart(sb, accessor, localName, assignCollection, QueryMessagePackElementTypeName(property));
+                    sb.AppendLine("for (valueCounter = 0; valueCounter < valueLength; valueCounter++)");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"    {collection}.Add(ReadGuidBin16(ref reader));");
+                    sb.AppendLine("}");
+                    AppendCollectionEnd(sb, accessor, localName, assignCollection);
+                }
+                else if (property.QueryIsNullable())
+                {
+                    sb.AppendLine("if (reader.TryReadNil())");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"    {accessor} = null;");
+                    sb.AppendLine("}");
+                    sb.AppendLine("else");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"    {accessor} = ReadGuidBin16(ref reader);");
+                    sb.AppendLine("}");
+                }
+                else
+                {
+                    sb.AppendLine($"{accessor} = ReadGuidBin16(ref reader);");
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Writes the MessagePack serialization of the derived properties of the <paramref name="generatedClass"/>, one block per property.
+        /// </summary>
+        /// <param name="generatedClass">The <see cref="IClass"/> whose formatter is generated</param>
+        /// <returns>The generated code</returns>
+        internal static string WriteMessagePackDerivedSerialization(IClass generatedClass)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var property in generatedClass.QueryDerivedSerializedProperties())
+            {
+                sb.Append(WriteMessagePackSerialization(property, QueryDerivedDtoAccessor(property), $"{property.Name.LowerCaseFirstLetter()}Derived"));
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Writes the MessagePack deserialization cases of the derived properties of the <paramref name="generatedClass"/>, numbered after its stored properties.
+        /// </summary>
+        /// <param name="generatedClass">The <see cref="IClass"/> whose formatter is generated</param>
+        /// <returns>The generated code</returns>
+        internal static string WriteMessagePackDerivedDeserializationCases(IClass generatedClass)
+        {
+            var sb = new StringBuilder();
+            var caseIndex = generatedClass.CountAllNonDerivedNonRedefinedProperties();
+
+            foreach (var property in generatedClass.QueryDerivedSerializedProperties())
+            {
+                caseIndex++;
+                sb.AppendLine($"case {caseIndex}:");
+                sb.AppendLine(WriteMessagePackDeserialization(property, QueryDerivedDtoAccessor(property), $"{property.Name.LowerCaseFirstLetter()}Derived", true));
+                sb.AppendLine("break;");
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Queries the C# expression that reads or stores a derived property on the generated DTO.
+        /// </summary>
+        /// <param name="property">The derived <see cref="IProperty"/>, or a property made derived by redefinition</param>
+        /// <returns>The member of the DTO, cast to the owner interface when the property is implemented explicitly</returns>
+        private static string QueryDerivedDtoAccessor(IProperty property)
+        {
+            if (property.IsDerived || property.IsDerivedUnion)
+            {
+                return $"dto.{property.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+
+            var owner = (INamedElement)property.Owner;
+
+            return $"((SysML2.NET.Core.DTO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})dto).{property.QueryPropertyNameBasedOnUmlProperties()}";
+        }
+
+        /// <summary>
+        /// Queries the C# type name of one element of a multi-valued property as MessagePack reads it.
+        /// </summary>
+        /// <param name="property">The multi-valued <see cref="IProperty"/></param>
+        /// <returns>The element type name</returns>
+        private static string QueryMessagePackElementTypeName(IProperty property)
+        {
+            if (property.QueryIsReferenceType())
+            {
+                return "Guid";
+            }
+
+            if (property.QueryIsBool())
+            {
+                return "bool";
+            }
+
+            if (property.QueryIsString())
+            {
+                return "string";
+            }
+
+            return property.QueryCSharpTypeName() switch
+            {
+                "DateTime" => "DateTime",
+                "double" => "double",
+                _ => "int"
+            };
+        }
+
+        /// <summary>
+        /// Queries the <c>MessagePackReader</c> method that reads one value of a numeric property.
+        /// </summary>
+        /// <param name="property">The numeric <see cref="IProperty"/></param>
+        /// <returns>The name of the read method</returns>
+        private static string QueryMessagePackNumericReadMethod(IProperty property)
+        {
+            return property.QueryCSharpTypeName() == "double" ? "ReadDouble" : "ReadInt32";
+        }
+
+        /// <summary>
+        /// Appends the start of a collection read: either a local list or the capacity of the DTO list filled in place.
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="accessor">The C# expression of the DTO collection</param>
+        /// <param name="localName">The base name of the local list</param>
+        /// <param name="assignCollection">Whether the collection is read into a local list</param>
+        /// <param name="elementTypeName">The C# type name of one element</param>
+        private static void AppendCollectionStart(StringBuilder sb, string accessor, string localName, bool assignCollection, string elementTypeName)
+        {
+            sb.AppendLine(assignCollection
+                ? $"var {localName}Values = new List<{elementTypeName}>(valueLength);"
+                : $"{accessor}.Capacity = valueLength;");
+        }
+
+        /// <summary>
+        /// Appends the assignment of a local list to the DTO collection when the collection was read into a local list.
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to</param>
+        /// <param name="accessor">The C# expression of the DTO collection</param>
+        /// <param name="localName">The base name of the local list</param>
+        /// <param name="assignCollection">Whether the collection was read into a local list</param>
+        private static void AppendCollectionEnd(StringBuilder sb, string accessor, string localName, bool assignCollection)
+        {
+            if (assignCollection)
+            {
+                sb.AppendLine().Append($"{accessor} = {localName}Values;");
+            }
         }
 
         /// <summary>

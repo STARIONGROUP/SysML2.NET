@@ -15,6 +15,7 @@
 namespace SysML2.NET.Serializer.MessagePack.Core
 {
     using System;
+    using System.Collections.Generic;
 
     using SysML2.NET.Extensions.Core;
 
@@ -46,13 +47,20 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                 throw new ArgumentNullException(nameof(dto), "The {{this.Name}} may not be null");
             }
 
-            writer.WriteArrayHeader({{Math.Add (Class.WriteCountAllNonDerivedNonRedefinedProperties this) 1 }} );
+            var includeDerivedProperties = options is SysMLMessagePackSerializerOptions { IncludeDerivedProperties: true };
+
+            writer.WriteArrayHeader(includeDerivedProperties ? {{Math.Add (Class.WriteCountAllNonDerivedNonRedefinedProperties this) 1 }} + {{Class.WriteCountDerivedSerializedProperties this}} : {{Math.Add (Class.WriteCountAllNonDerivedNonRedefinedProperties this) 1 }});
 
             WriteGuidBin16(ref writer, dto.Id);
 
             {{ #each (Class.QueryAllNonDerivedNonRedefinedProperties this) as | property | }}
             {{ # Property.WriteForDTOMessagePackFormatterSerialize property ../}}
             {{/each}}
+            if (includeDerivedProperties)
+            {
+                {{ #Class.WriteMessagePackDerivedSerialization this }}
+            }
+
             writer.Flush();
         }
 
@@ -79,10 +87,18 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
             var dto = new SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}();
 
+            var deserializeDerivedProperties = options is SysMLMessagePackSerializerOptions { IncludeDerivedProperties: true };
+
             var propertyCounter = reader.ReadArrayHeader();
 
             for (var i = 0; i < propertyCounter; i++)
             {
+                if (i > {{Class.WriteCountAllNonDerivedNonRedefinedProperties this}} && !deserializeDerivedProperties)
+                {
+                    reader.Skip();
+                    continue;
+                }
+
                 int valueLength;
                 int valueCounter;
 
@@ -96,6 +112,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
                     {{ # Property.WriteForDTOMessagePackFormatterDeSerialize property ../}}
                     break;
                     {{/each}}
+                    {{ #Class.WriteMessagePackDerivedDeserializationCases this }}
                     default:
                         reader.Skip();
                         break;

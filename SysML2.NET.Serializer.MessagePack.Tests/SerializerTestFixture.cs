@@ -9,12 +9,18 @@
 
 namespace SysML2.NET.Serializer.MessagePack.Tests
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Text.Json;
 
     using NUnit.Framework;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Serializer.Json;
     using SysML2.NET.Extensions.Core.DTO.Comparers;
 
@@ -25,6 +31,8 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
     {
         private Json.DeSerializer jsonDeSerializer;
 
+        private Json.Serializer jsonSerializer;
+
         private MessagePack.DeSerializer messagePackDeSerializer;
 
         private MessagePack.Serializer messagePackSerializer;
@@ -33,55 +41,174 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
         public void SetUp()
         {
             this.jsonDeSerializer = new Json.DeSerializer();
+            this.jsonSerializer = new Json.Serializer();
             this.messagePackDeSerializer = new MessagePack.DeSerializer();
             this.messagePackSerializer = new MessagePack.Serializer();
         }
 
         [Test]
-        public void Verify_that_iData_from_sysml2_core_json_can_be_deserialized()
+        public void VerifySerializeAndDeSerialize()
         {
-            var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
-            using var jsonStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var jsonData = this.ReadJson(false);
 
-            var jsonData = this.jsonDeSerializer.DeSerialize(jsonStream, SerializationModeKind.JSON, Json.SerializationTargetKind.CORE,false).ToList();
+            Assert.That(jsonData, Has.Count.EqualTo(100));
 
-            Assert.That(jsonData.Count, Is.EqualTo(100));
-
-            var messagePackStream = new MemoryStream();
-
-            this.messagePackSerializer.Serialize(jsonData.Cast<IData>(), messagePackStream);
-
-            messagePackStream.Position = 0;
-
-            var messagePackData= this.messagePackDeSerializer.DeSerialize(messagePackStream, SerializationTargetKind.CORE).ToList();
+            var messagePackData = this.RoundTrip(jsonData, false, false);
 
             Assert.That(messagePackData, Has.Count.EqualTo(jsonData.Count));
 
             var jsonById = jsonData.ToDictionary(x => x.Id);
-            var msgById = messagePackData.ToDictionary(x => x.Id);
+            var messagePackById = messagePackData.ToDictionary(x => x.Id);
 
-            Assert.That(jsonById.Keys, Is.EquivalentTo(msgById.Keys));
+            Assert.That(messagePackById.Keys, Is.EquivalentTo(jsonById.Keys));
 
             using (Assert.EnterMultipleScope())
             {
                 foreach (var id in jsonById.Keys)
                 {
                     var left = jsonById[id];
-                    var right = msgById[id];
+                    var right = messagePackById[id];
 
-                    Assert.That(
-                        right.GetType(),
-                        Is.EqualTo(left.GetType()),
-                        $"Type mismatch for id {id}. Left={left.GetType().FullName}, Right={right.GetType().FullName}");
-
-                    var comparer = ComparerProvider.Resolve((IData)left);
-
-                    Assert.That(
-                        comparer.Equals((IData)left, right),
-                        Is.True,
-                        $"Round-trip semantic mismatch for id {id} ({left.GetType().Name}).");
+                    Assert.That(right.GetType(), Is.EqualTo(left.GetType()), $"Type mismatch for id {id}");
+                    Assert.That(ComparerProvider.Resolve(left).Equals(left, right), Is.True, $"Round-trip semantic mismatch for id {id} ({left.GetType().Name})");
+                    Assert.That(this.WriteJson(right, false), Is.EqualTo(this.WriteJson(left, false)), $"Round-trip mismatch without derived properties for id {id}");
                 }
             }
+
+            var jsonDataWithDerived = this.ReadJson(true);
+            var jsonWithDerivedById = jsonDataWithDerived.ToDictionary(x => x.Id);
+            var messagePackWithDerivedById = this.RoundTrip(jsonDataWithDerived, true, true).ToDictionary(x => x.Id);
+
+            using (Assert.EnterMultipleScope())
+            {
+                foreach (var id in jsonWithDerivedById.Keys)
+                {
+                    Assert.That(this.WriteJson(messagePackWithDerivedById[id], true), Is.EqualTo(this.WriteJson(jsonWithDerivedById[id], true)), $"Round-trip mismatch with derived properties for id {id}");
+                }
+            }
+
+            var derivedSkipped = this.RoundTrip(jsonDataWithDerived, true, false);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(jsonDataWithDerived.OfType<IElement>().Count(x => x.qualifiedName != null), Is.GreaterThan(0));
+                Assert.That(derivedSkipped.OfType<IElement>().Where(x => x.qualifiedName != null), Is.Empty);
+
+                foreach (var skipped in derivedSkipped)
+                {
+                    Assert.That(this.WriteJson(skipped, false), Is.EqualTo(this.WriteJson(jsonWithDerivedById[skipped.Id], false)), $"Stored properties lost while skipping derived properties for id {skipped.Id}");
+                }
+            }
+        }
+
+        [Test]
+        public void SerializeAndDeSerialize_WithEveryPropertyPopulated_RoundTrips()
+        {
+            var dataItems = typeof(IElement).Assembly.GetTypes()
+                .Where(type => type is { IsClass: true, IsAbstract: false, Namespace: not null } && type.Namespace.StartsWith("SysML2.NET.Core.DTO") && typeof(IElement).IsAssignableFrom(type))
+                .Select((type, typeIndex) => CreatePopulatedDto(type, typeIndex))
+                .ToList();
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(dataItems, Has.Count.GreaterThan(150));
+                Assert.That(dataItems.SelectMany(QueryUnpopulatedMembers), Is.Empty);
+            }
+
+            foreach (var includeDerivedProperties in new[] { false, true })
+            {
+                var roundTripped = this.RoundTrip(dataItems, includeDerivedProperties, includeDerivedProperties).ToDictionary(x => x.Id);
+
+                using (Assert.EnterMultipleScope())
+                {
+                    foreach (var original in dataItems)
+                    {
+                        Assert.That(this.WriteJson(roundTripped[original.Id], includeDerivedProperties), Is.EqualTo(this.WriteJson(original, includeDerivedProperties)),
+                            $"Round-trip mismatch for {original.GetType().Name} with includeDerivedProperties={includeDerivedProperties}");
+                    }
+                }
+            }
+        }
+
+        private static IData CreatePopulatedDto(Type type, int typeIndex)
+        {
+            var dto = (IData)Activator.CreateInstance(type);
+            var seed = typeIndex * 10000;
+
+            foreach (var property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(x => x.SetMethod != null))
+            {
+                seed++;
+                property.SetValue(dto, CreateFakeValue(property.PropertyType, seed));
+            }
+
+            return dto;
+        }
+
+        private static object CreateFakeValue(Type type, int seed)
+        {
+            var underlyingType = Nullable.GetUnderlyingType(type) ?? type;
+
+            return underlyingType switch
+            {
+                _ when underlyingType == typeof(Guid) => CreateGuid(seed),
+                _ when underlyingType == typeof(string) => $"value {seed}",
+                _ when underlyingType == typeof(bool) => true,
+                _ when underlyingType == typeof(int) => seed,
+                _ when underlyingType == typeof(double) => seed + 0.5,
+                _ when underlyingType.IsEnum => Enum.GetValues(underlyingType).GetValue(1 + seed % (Enum.GetValues(underlyingType).Length - 1)),
+                _ when underlyingType == typeof(List<Guid>) => new List<Guid> { CreateGuid(seed), CreateGuid(seed + 1000) },
+                _ when underlyingType == typeof(List<string>) => new List<string> { $"value {seed}", $"value {seed + 1000}" },
+                _ => throw new NotSupportedException($"No fake value for {type.Name}")
+            };
+        }
+
+        private static IEnumerable<string> QueryUnpopulatedMembers(IData dto)
+        {
+            return dto.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(property => property.GetMethod != null && IsDefault(property.GetValue(dto)))
+                .Select(property => $"{dto.GetType().Name}.{property.Name}");
+        }
+
+        private static bool IsDefault(object value)
+        {
+            return value switch
+            {
+                null => true,
+                System.Collections.ICollection collection => collection.Count == 0,
+                _ => value.GetType().IsValueType && value.Equals(Activator.CreateInstance(value.GetType()))
+            };
+        }
+
+        private static Guid CreateGuid(int seed)
+        {
+            return new Guid(seed, 0, 0, [1, 2, 3, 4, 5, 6, 7, 8]);
+        }
+
+        private List<IData> ReadJson(bool deserializeDerivedProperties)
+        {
+            var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
+            using var jsonStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            return this.jsonDeSerializer.DeSerialize(jsonStream, SerializationModeKind.JSON, Json.SerializationTargetKind.CORE, deserializeDerivedProperties).Cast<IData>().ToList();
+        }
+
+        private List<IData> RoundTrip(List<IData> dataItems, bool includeDerivedProperties, bool deserializeDerivedProperties)
+        {
+            using var messagePackStream = new MemoryStream();
+
+            this.messagePackSerializer.Serialize(dataItems, includeDerivedProperties, messagePackStream);
+            messagePackStream.Position = 0;
+
+            return this.messagePackDeSerializer.DeSerialize(messagePackStream, SerializationTargetKind.CORE, deserializeDerivedProperties).ToList();
+        }
+
+        private string WriteJson(IData dataItem, bool includeDerivedProperties)
+        {
+            using var jsonStream = new MemoryStream();
+
+            this.jsonSerializer.Serialize((IIdentified)dataItem, SerializationModeKind.JSON, includeDerivedProperties, jsonStream, new JsonWriterOptions());
+
+            return Encoding.UTF8.GetString(jsonStream.ToArray());
         }
     }
 }

@@ -388,7 +388,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
 
             var formatterResolver = options.Resolver;
 
-            writer.WriteArrayHeader(167);
+            writer.WriteArrayHeader(168);
 
             writer.Write(payload.Created);
 

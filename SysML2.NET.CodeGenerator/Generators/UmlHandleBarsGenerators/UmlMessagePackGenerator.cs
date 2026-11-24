@@ -97,7 +97,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             generatedPayloadMessagePackFormatter  = this.CodeCleanup(generatedPayloadMessagePackFormatter );
 
-            const string fileName = "PayloadMessagePackFormatter.cs";
+            const string fileName = "PayloadFactory.cs";
 
             await Write(generatedPayloadMessagePackFormatter , outputDirectory, fileName);
 

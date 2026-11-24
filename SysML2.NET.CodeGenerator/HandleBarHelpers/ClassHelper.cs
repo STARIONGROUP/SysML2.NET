@@ -169,6 +169,36 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 writer.WriteSafeString(@class.CountAllNonDerivedNonRedefinedProperties());
             });
+
+            handlebars.RegisterHelper("Class.WriteCountDerivedSerializedProperties", (writer, context, _) =>
+            {
+                if (context.Value is not IClass @class)
+                {
+                    throw new ArgumentException("Class.WriteCountDerivedSerializedProperties context supposed to be IClass");
+                }
+
+                writer.WriteSafeString(@class.QueryDerivedSerializedProperties().Count);
+            });
+
+            handlebars.RegisterHelper("Class.WriteMessagePackDerivedSerialization", (writer, context, _) =>
+            {
+                if (context.Value is not IClass @class)
+                {
+                    throw new ArgumentException("Class.WriteMessagePackDerivedSerialization context supposed to be IClass");
+                }
+
+                writer.WriteSafeString(PropertyHelper.WriteMessagePackDerivedSerialization(@class));
+            });
+
+            handlebars.RegisterHelper("Class.WriteMessagePackDerivedDeserializationCases", (writer, context, _) =>
+            {
+                if (context.Value is not IClass @class)
+                {
+                    throw new ArgumentException("Class.WriteMessagePackDerivedDeserializationCases context supposed to be IClass");
+                }
+
+                writer.WriteSafeString(PropertyHelper.WriteMessagePackDerivedDeserializationCases(@class));
+            });
             
             handlebars.RegisterHelper("Class.WriteInternalInterface", (writer, context, _) =>
             {
