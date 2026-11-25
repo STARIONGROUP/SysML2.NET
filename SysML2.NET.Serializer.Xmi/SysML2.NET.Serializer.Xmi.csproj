@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
         <LangVersion>14.0</LangVersion>
-        <Version>0.26.0</Version>
+        <Version>0.27.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 Xmi serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Xmi</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -14,7 +14,8 @@
         <Authors>Sam Gerené, Théate Antoine</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] Aligned with SysML2.NET.Extensions 0.26.0
+            [Fix] The XMI writers write the members that a subclass redefines with a derived property, such as memberElement, memberName, source and target, when derived properties are included (#456)
+            [Fix] The XMI readers skip derived properties without logging them as unexpected elements (#456)
         </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>

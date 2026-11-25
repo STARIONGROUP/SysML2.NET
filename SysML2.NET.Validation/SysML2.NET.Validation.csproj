@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <LangVersion>14.0</LangVersion>
-        <Version>0.26.0</Version>
+        <Version>0.27.0</Version>
         <Description>A .NET implementation of the OMG SysML v2 REST/HTTP PSM request validators</Description>
         <PackageId>SysML2.NET.Validation</PackageId>
         <Company>Starion Group S.A.</Company>
@@ -13,6 +13,10 @@
         <RepositoryType>Git</RepositoryType>
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <PackageReleaseNotes>
+            [Add] FluentValidation validators for the 12 request types of the Systems Modeling API and Services REST/HTTP PSM, generated from its OpenAPI description (#444)
+            [Add] RequestValidator&lt;TRequest&gt; base class, whose AddCustomValidation registers hand-coded rules alongside the generated ones (#444)
+        </PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GenerateSBOM>true</GenerateSBOM>
     </PropertyGroup>

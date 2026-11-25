@@ -3,7 +3,7 @@
    <PropertyGroup>
       <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
        <LangVersion>14.0</LangVersion>
-       <Version>0.26.0</Version>
+       <Version>0.27.0</Version>
       <Description>A .NET implementation of the OMG SysML v2 specification data-acces-layer.</Description>
       <PackageId>SysML2.NET.Dal</PackageId>
       <Company>Starion Group S.A.</Company>
@@ -14,7 +14,12 @@
       <Authors>Sam Gerené</Authors>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
-          [Add] SqlSchemaScripts exposes the generated PostgreSQL schema embedded in the assembly, ordered for sequential application (#417)
+          [Add] IAssembler.Synchronize overload taking the identifiers of deleted elements; an element that a DTO no longer lists as owned is detached, not deleted (#427)
+          [Add] ElementContainmentExtensions.UpdateContainment brings the owned relationships, owned related elements and owner of a POCO in line with its DTO (#427)
+          [Update] ToDto takes an optional ILogger and, when derived properties are included, maps each of them independently, leaving an unsupported derivation at its default value with a logged warning instead of throwing (#455)
+          [Update] ToDto maps the members that a subclass redefines with a derived property, such as Membership.MemberElement and Relationship.Source and Target, only when derived properties are included (#455)
+          [Fix] ToDto and FromDto copy value lists such as AliasIds instead of sharing them between the POCO and the DTO (#428)
+          [Fix] The SQL schema makes a column nullable and drops its default when a subclass redefines its property with a derived one, so OwningMembership and ReferenceSubsetting rows can be inserted (#453)
       </PackageReleaseNotes>
        <GenerateDocumentationFile>true</GenerateDocumentationFile>
        <GenerateSBOM>true</GenerateSBOM>
