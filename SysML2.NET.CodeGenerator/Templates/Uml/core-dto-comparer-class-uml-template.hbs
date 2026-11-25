@@ -72,15 +72,8 @@ namespace SysML2.NET.Extensions.Core.DTO.Comparers
 
             if (x.Id != y.Id) return false;
 
-            {{ #each (Class.QueryAllNonDerivedProperties this) as | property | }}
-                {{#unless (Property.IsPropertyRedefinedInClass this ../)}}
-                    {{ #Property.WriteForDTOComparer property ../ }}
-                {{/unless}}
-                {{#if (Property.IsSerializedRedefinition property ../)}}
-                {{#unless (Property.HasDerivedValueIn property ../)}}
-                    {{ #Property.WriteForDTOComparer property ../ }}
-                {{/unless}}
-                {{/if}}
+            {{ #each (Class.QuerySerializedProperties this "Stored" "StoredAlias") as | property | }}
+                {{ #Property.WriteForDTOComparer property ../ }}
             {{/each}}
             return true;
         }

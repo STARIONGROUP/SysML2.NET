@@ -512,6 +512,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "owner":
+                            case "owningFeature":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "portDefinition":
+                            case "relatedElement":
+                            case "textualRepresentation":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading ConjugatedPortTyping at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -976,6 +988,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "owner":
+                            case "owningFeature":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "portDefinition":
+                            case "relatedElement":
+                            case "textualRepresentation":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading ConjugatedPortTyping at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

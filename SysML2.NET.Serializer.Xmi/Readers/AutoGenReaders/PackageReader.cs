@@ -308,6 +308,22 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "filterCondition":
+                            case "importedMembership":
+                            case "member":
+                            case "membership":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "ownedImport":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "textualRepresentation":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading Package at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -569,6 +585,22 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "documentation":
+                            case "filterCondition":
+                            case "importedMembership":
+                            case "member":
+                            case "membership":
+                            case "ownedAnnotation":
+                            case "ownedElement":
+                            case "ownedImport":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "owner":
+                            case "owningMembership":
+                            case "owningNamespace":
+                            case "textualRepresentation":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading Package at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

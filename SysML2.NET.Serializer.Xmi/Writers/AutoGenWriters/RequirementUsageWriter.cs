@@ -237,6 +237,14 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                 xmlWriter.WriteAttributeString("isUnique", "false");
             }
 
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Core.Features.IFeature)poco).IsVariable)
+                {
+                    xmlWriter.WriteAttributeString("isVariable", "true");
+                }
+            }
+
             if (poco.IsVariation)
             {
                 xmlWriter.WriteAttributeString("isVariation", "true");
@@ -1537,6 +1545,14 @@ namespace SysML2.NET.Serializer.Xmi.Writers
             if (!poco.IsUnique)
             {
                 await xmlWriter.WriteAttributeStringAsync(null, "isUnique", null, "false");
+            }
+
+            if (writerOptions.IncludeDerivedProperties)
+            {
+                if (((SysML2.NET.Core.POCO.Core.Features.IFeature)poco).IsVariable)
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "isVariable", null, "true");
+                }
             }
 
             if (poco.IsVariation)

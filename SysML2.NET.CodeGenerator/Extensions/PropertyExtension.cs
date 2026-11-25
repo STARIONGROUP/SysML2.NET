@@ -219,41 +219,51 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             /// <summary>
-            /// Queries whether the <paramref name="property"/> is redefined in the <paramref name="classContext"/> by a chain that ends on a derived property.
+            /// Queries the role the <paramref name="property"/> plays when an instance of the <paramref name="classContext"/> is serialized.
             /// </summary>
             /// <param name="classContext">The <see cref="IClass"/> being generated</param>
-            /// <returns><c>true</c> when the value of the <paramref name="property"/> is derived in the context</returns>
-            /// <remarks>
-            /// A derived redefinition makes the redefined property derived, as SysML states for <c>Usage::mayTimeVary</c> over <c>Feature::isVariable</c>;
-            /// such a value is therefore neither computed nor exchanged without derived properties (KerML §10.3 Note 4).
-            /// </remarks>
-            public bool QueryHasDerivedValueIn(IClass classContext)
+            /// <returns>The <see cref="SerializedPropertyKind"/>, or <c>null</c> when a redefinition of the same name carries the value</returns>
+            public SerializedPropertyKind? QuerySerializedPropertyKind(IClass classContext)
             {
-                if (!property.TryQueryRedefinedByProperty(classContext, out _))
+                var isDerived = property.IsDerived || property.IsDerivedUnion;
+
+                if (!property.TryQueryRedefinedByProperty(classContext, out var redefinition))
                 {
-                    return false;
+                    return isDerived ? SerializedPropertyKind.Derived : SerializedPropertyKind.Stored;
                 }
 
-                var chainEnd = property.QueryRedefinitionChainEnd(classContext);
+                if (redefinition.Name == property.Name)
+                {
+                    return null;
+                }
 
-                return chainEnd.IsDerived || chainEnd.IsDerivedUnion;
+                if (isDerived)
+                {
+                    return SerializedPropertyKind.RedefinedDerived;
+                }
+
+                return property.QueryIsDerivedByRedefinition(classContext) ? SerializedPropertyKind.DerivedAlias : SerializedPropertyKind.StoredAlias;
             }
 
             /// <summary>
-            /// Returns the property that ends the redefinition chain of the <paramref name="property"/> in the <paramref name="classContext"/>.
+            /// Queries the C# expression that reads or assigns the <paramref name="property"/> on an instance of the <paramref name="classContext"/>.
             /// </summary>
             /// <param name="classContext">The <see cref="IClass"/> being generated</param>
-            /// <returns>The last redefinition, or the <paramref name="property"/> itself when the context does not redefine it</returns>
-            public IProperty QueryRedefinitionChainEnd(IClass classContext)
+            /// <param name="variable">The name of the variable that holds the instance</param>
+            /// <param name="modelNamespace">The root namespace of the instance's interfaces, such as <c>SysML2.NET.Core.DTO</c></param>
+            /// <returns>The member access, cast to the interface that owns the property when the class implements it explicitly</returns>
+            public string QueryMemberAccessor(IClass classContext, string variable, string modelNamespace)
             {
-                var chainEnd = property;
+                var memberName = property.QueryPropertyNameBasedOnUmlProperties();
 
-                while (chainEnd.TryQueryRedefinedByProperty(classContext, out var redefinition))
+                if (property.QuerySerializedPropertyKind(classContext) is not (SerializedPropertyKind.StoredAlias or SerializedPropertyKind.DerivedAlias or SerializedPropertyKind.RedefinedDerived))
                 {
-                    chainEnd = redefinition;
+                    return $"{variable}.{memberName}";
                 }
 
-                return chainEnd;
+                var owner = (INamedElement)property.Owner;
+
+                return $"(({modelNamespace}.{owner.QueryNamespace()}.I{owner.Name}){variable}).{memberName}";
             }
         }
     }

@@ -66,58 +66,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
-        /// Queries the non-derived properties DECLARED by the class itself — the flattened property set
-        /// minus everything the direct generalizations already carry. This deliberately does NOT use
-        /// OwnedAttribute: reference properties that are association ends (e.g. Membership::memberElement)
-        /// are owned by the association, not the class, and would be silently dropped.
-        ///
-        /// Same-name redefinitions (e.g. CollectExpression::operator redefining OperatorExpression::operator)
-        /// are excluded — they resolve to the storage of the property they redefine. A redefinition under a
-        /// NEW name (e.g. Membership::memberElement redefining Relationship::target) is a distinct API
-        /// property and introduces storage of its own, exactly as it does in the generated DTOs.
-        /// </summary>
-        /// <param name="class">
-        /// The subject <see cref="IClass" />
-        /// </param>
-        /// <returns>
-        /// The stored properties declared by the class, ordered by name
-        /// </returns>
-        public static IReadOnlyList<IProperty> QueryStoredOwnProperties(this IClass @class)
-        {
-            ArgumentNullException.ThrowIfNull(@class);
-
-            var inheritedPropertyIds = @class.Generalization
-                .Select(generalization => generalization.General)
-                .OfType<IClass>()
-                .SelectMany(general => general.QueryAllProperties())
-                .Select(property => property.XmiId)
-                .ToHashSet();
-
-            return @class.QueryAllProperties()
-                .Where(property => !inheritedPropertyIds.Contains(property.XmiId))
-                .Where(property => !property.IsDerived && !property.IsDerivedUnion && !property.QueryIsSameNameRedefinition())
-                .OrderBy(property => property.Name, StringComparer.Ordinal)
-                .ToList();
-        }
-
-        /// <summary>
-        /// Asserts whether the property is a same-name redefinition — a redeclaration of an inherited
-        /// property under the same name, carrying no storage of its own
-        /// </summary>
-        /// <param name="property">
-        /// The subject <see cref="IProperty" />
-        /// </param>
-        /// <returns>
-        /// True when the property redefines a property of the same name
-        /// </returns>
-        public static bool QueryIsSameNameRedefinition(this IProperty property)
-        {
-            ArgumentNullException.ThrowIfNull(property);
-
-            return property.RedefinedProperty.Any(redefined => redefined.Name == property.Name);
-        }
-
-        /// <summary>
         /// Queries the single-valued stored properties declared by the class itself — the properties that
         /// become columns on the class's subtype table
         /// </summary>
@@ -129,8 +77,9 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </returns>
         public static IReadOnlyList<IProperty> QueryStoredScalarOwnProperties(this IClass @class)
         {
-            return @class.QueryStoredOwnProperties()
+            return @class.QueryIntroducedNonDerivedProperties()
                 .Where(property => !property.QueryIsEnumerable())
+                .OrderBy(property => property.Name, StringComparer.Ordinal)
                 .ToList();
         }
 
@@ -146,8 +95,9 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </returns>
         public static IReadOnlyList<IProperty> QueryStoredMultiOwnProperties(this IClass @class)
         {
-            return @class.QueryStoredOwnProperties()
+            return @class.QueryIntroducedNonDerivedProperties()
                 .Where(property => property.QueryIsEnumerable())
+                .OrderBy(property => property.Name, StringComparer.Ordinal)
                 .ToList();
         }
 

@@ -1,7 +1,7 @@
 {{#if (Property.QueryIsEnumerable property)}}
-    if(poco.{{Property.WritePropertyName property}} != null)
+    if({{Property.WriteMemberAccessor property class "poco" "SysML2.NET.Core.POCO"}} != null)
     {
-        foreach(var item in poco.{{Property.WritePropertyName property}})
+        foreach(var item in {{Property.WriteMemberAccessor property class "poco" "SysML2.NET.Core.POCO"}})
         {
             {{#if property.IsComposite}}
                 await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, item, "{{String.LowerCaseFirstLetter property.Name}}", writerOptions, elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
@@ -11,14 +11,14 @@
         }
     }
 {{else}}
-    if(poco.{{Property.WritePropertyName property}} != null)
+    if({{Property.WriteMemberAccessor property class "poco" "SysML2.NET.Core.POCO"}} != null)
     {
         {{#if property.IsComposite}}
-            await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", writerOptions, elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
+            await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, {{Property.WriteMemberAccessor property class "poco" "SysML2.NET.Core.POCO"}}, "{{String.LowerCaseFirstLetter property.Name}}", writerOptions, elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
         {{else}}
-            if(!writerOptions.WriteIdRefAsAttribute || !poco.{{Property.WritePropertyName property}}.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+            if(!writerOptions.WriteIdRefAsAttribute || !{{Property.WriteMemberAccessor property class "poco" "SysML2.NET.Core.POCO"}}.QueryIsValidIdRef(elementOriginMap, currentFileUri))
             {
-                await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
+                await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, {{Property.WriteMemberAccessor property class "poco" "SysML2.NET.Core.POCO"}}, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
             }
         {{/if}}
     }

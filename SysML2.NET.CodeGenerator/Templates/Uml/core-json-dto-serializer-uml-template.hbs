@@ -81,14 +81,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         private static void SerializeAsJsonWithDerivedProperties(I{{ this.Name }} i{{this.Name }}, Utf8JsonWriter writer)
         {
             {{#with this as |class| }}
-                {{ #each (Class.QueryAllProperties this) as | property | }}
-                {{#unless this.IsTransient}}
-                    {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
-                        {{#withPropertyClassContext property class}}
-                            {{> core-json-dto-serializer-uml-partial-template this}}
-                        {{/withPropertyClassContext}}
-                    {{/unless}}
-                {{/unless}}
+                {{ #each (Class.QuerySerializedProperties this "Stored" "StoredAlias" "Derived" "DerivedAlias" "RedefinedDerived") as | property | }}
+                    {{#withPropertyClassContext property class}}
+                        {{> core-json-dto-serializer-uml-partial-template this}}
+                    {{/withPropertyClassContext}}
             {{/each}}
         {{/with}}
         }
@@ -105,18 +101,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         private static void SerializeAsJsonWithoutDerivedProperties(I{{ this.Name }} i{{this.Name }}, Utf8JsonWriter writer)
         {
         {{#with this as |class| }}
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-            {{#unless this.IsDerived}}
-                {{#unless this.IsTransient}}
-                    {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
-                    {{#unless (Property.HasDerivedValueIn property class)}}
-                        {{#withPropertyClassContext property class}}
-                            {{> core-json-dto-serializer-uml-partial-template this}}
-                        {{/withPropertyClassContext}}
-                    {{/unless}}
-                    {{/unless}}
-                {{/unless}}
-            {{/unless}}
+            {{ #each (Class.QuerySerializedProperties this "Stored" "StoredAlias") as | property | }}
+                {{#withPropertyClassContext property class}}
+                    {{> core-json-dto-serializer-uml-partial-template this}}
+                {{/withPropertyClassContext}}
         {{/each}}
     {{/with}}
         }

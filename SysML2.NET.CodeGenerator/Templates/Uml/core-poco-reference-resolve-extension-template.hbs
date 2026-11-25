@@ -55,12 +55,9 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
             switch (propertyName)
             {
             {{#with this as |class| }}
-                {{ #each (Class.QueryAllProperties this) as | property | }}
+                {{ #each (Class.QuerySerializedProperties this "Stored") as | property | }}
                 {{#if (Property.QueryIsReferenceProperty property)}}
                     {{#unless (Property.QueryIsEnumerable property)}}
-                        {{#unless this.IsTransient}}
-                        {{#unless this.IsDerived}}
-                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                             case "{{String.LowerCaseFirstLetter property.Name}}":
                             {
                                 if(!xmiDataCache.TryGetData(reference, out var referencedData))
@@ -84,9 +81,6 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                                 return;
                             }
                             
-                            {{/unless}}
-                        {{/unless}}
-                    {{/unless}}
                     {{/unless}}
                 {{/if}}
                 {{/each}}
@@ -129,12 +123,9 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
         switch (propertyName)
         {
         {{#with this as |class| }}
-            {{ #each (Class.QueryAllProperties this) as | property | }}
+            {{ #each (Class.QuerySerializedProperties this "Stored") as | property | }}
             {{#if (Property.QueryIsReferenceProperty property)}}
                 {{#if (Property.QueryIsEnumerable property)}}
-                    {{#unless this.IsTransient}}
-                        {{#unless this.IsDerived}}
-                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                                     case "{{String.LowerCaseFirstLetter property.Name}}":
                                     {
                                         foreach(var reference in references)
@@ -162,9 +153,6 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                                         return;
                                     }
 
-                            {{/unless}}
-                        {{/unless}}
-                    {{/unless}}
                 {{/if}}
             {{/if}}
         {{/each}}

@@ -117,23 +117,23 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var shortNameSeen = false;
             var textualRepresentationSeen = false;
 
+            var generalRedefinitionSeen = false;
+            Guid? generalRedefinitionValue = null;
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+            var specificRedefinitionSeen = false;
+            Guid? specificRedefinitionValue = null;
+
             var subsettedFeatureRedefinitionSeen = false;
             Guid? subsettedFeatureRedefinitionValue = null;
 
             var subsettingFeatureRedefinitionSeen = false;
             Guid? subsettingFeatureRedefinitionValue = null;
 
-            var generalRedefinitionSeen = false;
-            Guid? generalRedefinitionValue = null;
-
-            var specificRedefinitionSeen = false;
-            Guid? specificRedefinitionValue = null;
-
             var targetRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -553,6 +553,43 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("general"u8))
+                {
+                    generalRedefinitionSeen = true;
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                    {
+                        generalRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("specific"u8))
+                {
+                    specificRedefinitionSeen = true;
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                    {
+                        specificRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
                 if (reader.ValueTextEquals("subsettedFeature"u8))
                 {
                     subsettedFeatureRedefinitionSeen = true;
@@ -575,28 +612,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("general"u8))
-                {
-                    generalRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        generalRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("specific"u8))
-                {
-                    specificRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        specificRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("target"u8))
                 {
                     targetRedefinitionSeen = true;
@@ -612,24 +627,45 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("source"u8))
-                {
-                    sourceRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
 
                 reader.Read();
                 reader.Skip();
+            }
+
+            if (generalRedefinitionSeen)
+            {
+                if (!redefinedFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General = (generalRedefinitionValue ?? Guid.Empty);
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The general Json property of the Redefinition {Id} disagrees with redefinedFeature; the redefinedFeature value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!redefiningFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (specificRedefinitionSeen)
+            {
+                if (!redefiningFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific = (specificRedefinitionValue ?? Guid.Empty);
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific != (specificRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The specific Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
+                }
             }
 
             if (subsettedFeatureRedefinitionSeen)
@@ -656,30 +692,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
-            if (generalRedefinitionSeen)
-            {
-                if (!redefinedFeatureSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General = (generalRedefinitionValue ?? Guid.Empty);
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The general Json property of the Redefinition {Id} disagrees with redefinedFeature; the redefinedFeature value is kept", dtoInstance.Id);
-                }
-            }
-
-            if (specificRedefinitionSeen)
-            {
-                if (!redefiningFeatureSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific = (specificRedefinitionValue ?? Guid.Empty);
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific != (specificRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The specific Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
-                }
-            }
-
             if (targetRedefinitionSeen)
             {
                 if (!redefinedFeatureSeen)
@@ -689,18 +701,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The target Json property of the Redefinition {Id} disagrees with redefinedFeature; the redefinedFeature value is kept", dtoInstance.Id);
-                }
-            }
-
-            if (sourceRedefinitionSeen)
-            {
-                if (!redefiningFeatureSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
-                }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The source Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
                 }
             }
 
@@ -839,23 +839,23 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var redefinedFeatureSeen = false;
             var redefiningFeatureSeen = false;
 
+            var generalRedefinitionSeen = false;
+            Guid? generalRedefinitionValue = null;
+
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+            var specificRedefinitionSeen = false;
+            Guid? specificRedefinitionValue = null;
+
             var subsettedFeatureRedefinitionSeen = false;
             Guid? subsettedFeatureRedefinitionValue = null;
 
             var subsettingFeatureRedefinitionSeen = false;
             Guid? subsettingFeatureRedefinitionValue = null;
 
-            var generalRedefinitionSeen = false;
-            Guid? generalRedefinitionValue = null;
-
-            var specificRedefinitionSeen = false;
-            Guid? specificRedefinitionValue = null;
-
             var targetRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -1074,6 +1074,43 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
+                if (reader.ValueTextEquals("general"u8))
+                {
+                    generalRedefinitionSeen = true;
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                    {
+                        generalRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("specific"u8))
+                {
+                    specificRedefinitionSeen = true;
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                    {
+                        specificRedefinitionValue = redefinitionItem;
+                    }
+                    continue;
+                }
+
                 if (reader.ValueTextEquals("subsettedFeature"u8))
                 {
                     subsettedFeatureRedefinitionSeen = true;
@@ -1096,28 +1133,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("general"u8))
-                {
-                    generalRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        generalRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
-                if (reader.ValueTextEquals("specific"u8))
-                {
-                    specificRedefinitionSeen = true;
-                    reader.Read();
-                    if (reader.TokenType != JsonTokenType.Null && Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                    {
-                        specificRedefinitionValue = redefinitionItem;
-                    }
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("target"u8))
                 {
                     targetRedefinitionSeen = true;
@@ -1133,24 +1148,45 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("source"u8))
-                {
-                    sourceRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
 
                 reader.Read();
                 reader.Skip();
+            }
+
+            if (generalRedefinitionSeen)
+            {
+                if (!redefinedFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General = (generalRedefinitionValue ?? Guid.Empty);
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The general Json property of the Redefinition {Id} disagrees with redefinedFeature; the redefinedFeature value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!redefiningFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (specificRedefinitionSeen)
+            {
+                if (!redefiningFeatureSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific = (specificRedefinitionValue ?? Guid.Empty);
+                }
+                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific != (specificRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The specific Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
+                }
             }
 
             if (subsettedFeatureRedefinitionSeen)
@@ -1177,30 +1213,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
-            if (generalRedefinitionSeen)
-            {
-                if (!redefinedFeatureSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General = (generalRedefinitionValue ?? Guid.Empty);
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The general Json property of the Redefinition {Id} disagrees with redefinedFeature; the redefinedFeature value is kept", dtoInstance.Id);
-                }
-            }
-
-            if (specificRedefinitionSeen)
-            {
-                if (!redefiningFeatureSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific = (specificRedefinitionValue ?? Guid.Empty);
-                }
-                else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).Specific != (specificRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The specific Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
-                }
-            }
-
             if (targetRedefinitionSeen)
             {
                 if (!redefinedFeatureSeen)
@@ -1210,18 +1222,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The target Json property of the Redefinition {Id} disagrees with redefinedFeature; the redefinedFeature value is kept", dtoInstance.Id);
-                }
-            }
-
-            if (sourceRedefinitionSeen)
-            {
-                if (!redefiningFeatureSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
-                }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The source Json property of the Redefinition {Id} disagrees with redefiningFeature; the redefiningFeature value is kept", dtoInstance.Id);
                 }
             }
 

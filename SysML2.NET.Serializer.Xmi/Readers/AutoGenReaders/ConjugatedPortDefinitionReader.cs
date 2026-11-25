@@ -447,6 +447,75 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "conjugatedPortDefinition":
+                            case "differencingType":
+                            case "directedFeature":
+                            case "directedUsage":
+                            case "documentation":
+                            case "endFeature":
+                            case "feature":
+                            case "featureMembership":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "multiplicity":
+                            case "originalPortDefinition":
+                            case "output":
+                            case "ownedAction":
+                            case "ownedAllocation":
+                            case "ownedAnalysisCase":
+                            case "ownedAnnotation":
+                            case "ownedAttribute":
+                            case "ownedCalculation":
+                            case "ownedCase":
+                            case "ownedConcern":
+                            case "ownedConnection":
+                            case "ownedConstraint":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedEnumeration":
+                            case "ownedFeature":
+                            case "ownedFeatureMembership":
+                            case "ownedFlow":
+                            case "ownedImport":
+                            case "ownedInterface":
+                            case "ownedIntersecting":
+                            case "ownedItem":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedMetadata":
+                            case "ownedOccurrence":
+                            case "ownedPart":
+                            case "ownedPort":
+                            case "ownedPortConjugator":
+                            case "ownedReference":
+                            case "ownedRendering":
+                            case "ownedRequirement":
+                            case "ownedSpecialization":
+                            case "ownedState":
+                            case "ownedSubclassification":
+                            case "ownedTransition":
+                            case "ownedUnioning":
+                            case "ownedUsage":
+                            case "ownedUseCase":
+                            case "ownedVerificationCase":
+                            case "ownedView":
+                            case "ownedViewpoint":
+                            case "owner":
+                            case "owningMembership":
+                            case "textualRepresentation":
+                            case "unioningType":
+                            case "usage":
+                            case "variant":
+                            case "variantMembership":
+                                xmiReader.Skip();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading ConjugatedPortDefinition at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 xmiReader.Skip();
@@ -824,6 +893,75 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            case "conjugatedPortDefinition":
+                            case "differencingType":
+                            case "directedFeature":
+                            case "directedUsage":
+                            case "documentation":
+                            case "endFeature":
+                            case "feature":
+                            case "featureMembership":
+                            case "importedMembership":
+                            case "inheritedFeature":
+                            case "inheritedMembership":
+                            case "input":
+                            case "intersectingType":
+                            case "member":
+                            case "membership":
+                            case "multiplicity":
+                            case "originalPortDefinition":
+                            case "output":
+                            case "ownedAction":
+                            case "ownedAllocation":
+                            case "ownedAnalysisCase":
+                            case "ownedAnnotation":
+                            case "ownedAttribute":
+                            case "ownedCalculation":
+                            case "ownedCase":
+                            case "ownedConcern":
+                            case "ownedConnection":
+                            case "ownedConstraint":
+                            case "ownedDifferencing":
+                            case "ownedDisjoining":
+                            case "ownedElement":
+                            case "ownedEndFeature":
+                            case "ownedEnumeration":
+                            case "ownedFeature":
+                            case "ownedFeatureMembership":
+                            case "ownedFlow":
+                            case "ownedImport":
+                            case "ownedInterface":
+                            case "ownedIntersecting":
+                            case "ownedItem":
+                            case "ownedMember":
+                            case "ownedMembership":
+                            case "ownedMetadata":
+                            case "ownedOccurrence":
+                            case "ownedPart":
+                            case "ownedPort":
+                            case "ownedPortConjugator":
+                            case "ownedReference":
+                            case "ownedRendering":
+                            case "ownedRequirement":
+                            case "ownedSpecialization":
+                            case "ownedState":
+                            case "ownedSubclassification":
+                            case "ownedTransition":
+                            case "ownedUnioning":
+                            case "ownedUsage":
+                            case "ownedUseCase":
+                            case "ownedVerificationCase":
+                            case "ownedView":
+                            case "ownedViewpoint":
+                            case "owner":
+                            case "owningMembership":
+                            case "textualRepresentation":
+                            case "unioningType":
+                            case "usage":
+                            case "variant":
+                            case "variantMembership":
+                                await xmiReader.SkipAsync();
+                                break;
                             default:
                                 this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading ConjugatedPortDefinition at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                                 await xmiReader.SkipAsync();

@@ -120,14 +120,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var generalRedefinitionSeen = false;
             Guid? generalRedefinitionValue = null;
 
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
             var specificRedefinitionSeen = false;
             Guid? specificRedefinitionValue = null;
 
             var targetRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -558,6 +558,21 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
                 if (reader.ValueTextEquals("specific"u8))
                 {
                     specificRedefinitionSeen = true;
@@ -584,21 +599,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("source"u8))
-                {
-                    sourceRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
 
                 reader.Read();
                 reader.Skip();
@@ -613,6 +613,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The general Json property of the Subclassification {Id} disagrees with superclassifier; the superclassifier value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!subclassifierSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the Subclassification {Id} disagrees with subclassifier; the subclassifier value is kept", dtoInstance.Id);
                 }
             }
 
@@ -637,18 +649,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The target Json property of the Subclassification {Id} disagrees with superclassifier; the superclassifier value is kept", dtoInstance.Id);
-                }
-            }
-
-            if (sourceRedefinitionSeen)
-            {
-                if (!subclassifierSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
-                }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The source Json property of the Subclassification {Id} disagrees with subclassifier; the subclassifier value is kept", dtoInstance.Id);
                 }
             }
 
@@ -790,14 +790,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var generalRedefinitionSeen = false;
             Guid? generalRedefinitionValue = null;
 
+            var sourceRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
             var specificRedefinitionSeen = false;
             Guid? specificRedefinitionValue = null;
 
             var targetRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
-            var sourceRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -1027,6 +1027,21 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
+                if (reader.ValueTextEquals("source"u8))
+                {
+                    sourceRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            sourceRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
                 if (reader.ValueTextEquals("specific"u8))
                 {
                     specificRedefinitionSeen = true;
@@ -1053,21 +1068,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
-                if (reader.ValueTextEquals("source"u8))
-                {
-                    sourceRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            sourceRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
 
                 reader.Read();
                 reader.Skip();
@@ -1082,6 +1082,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (((SysML2.NET.Core.DTO.Core.Types.ISpecialization)dtoInstance).General != (generalRedefinitionValue ?? Guid.Empty) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The general Json property of the Subclassification {Id} disagrees with superclassifier; the superclassifier value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (sourceRedefinitionSeen)
+            {
+                if (!subclassifierSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The source Json property of the Subclassification {Id} disagrees with subclassifier; the subclassifier value is kept", dtoInstance.Id);
                 }
             }
 
@@ -1106,18 +1118,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The target Json property of the Subclassification {Id} disagrees with superclassifier; the superclassifier value is kept", dtoInstance.Id);
-                }
-            }
-
-            if (sourceRedefinitionSeen)
-            {
-                if (!subclassifierSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source = sourceRedefinitionValue;
-                }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The source Json property of the Subclassification {Id} disagrees with subclassifier; the subclassifier value is kept", dtoInstance.Id);
                 }
             }
 

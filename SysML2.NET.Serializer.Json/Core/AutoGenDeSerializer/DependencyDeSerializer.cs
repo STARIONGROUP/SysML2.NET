@@ -116,11 +116,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var supplierSeen = false;
             var textualRepresentationSeen = false;
 
-            var targetRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
             var sourceRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+            var targetRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -515,21 +515,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("target"u8))
-                {
-                    targetRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            targetRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("source"u8))
                 {
                     sourceRedefinitionSeen = true;
@@ -545,21 +530,24 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
+                if (reader.ValueTextEquals("target"u8))
+                {
+                    targetRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            targetRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (targetRedefinitionSeen)
-            {
-                if (!supplierSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
-                }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The target Json property of the Dependency {Id} disagrees with supplier; the supplier value is kept", dtoInstance.Id);
-                }
             }
 
             if (sourceRedefinitionSeen)
@@ -571,6 +559,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The source Json property of the Dependency {Id} disagrees with client; the client value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (targetRedefinitionSeen)
+            {
+                if (!supplierSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The target Json property of the Dependency {Id} disagrees with supplier; the supplier value is kept", dtoInstance.Id);
                 }
             }
 
@@ -705,11 +705,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             var owningRelationshipSeen = false;
             var supplierSeen = false;
 
-            var targetRedefinitionSeen = false;
-            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
-
             var sourceRedefinitionSeen = false;
             System.Collections.Generic.List<Guid> sourceRedefinitionValue = [];
+
+            var targetRedefinitionSeen = false;
+            System.Collections.Generic.List<Guid> targetRedefinitionValue = [];
 
 
             while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
@@ -920,21 +920,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
 
 
-                if (reader.ValueTextEquals("target"u8))
-                {
-                    targetRedefinitionSeen = true;
-                    reader.Read();
-                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
-                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-                    {
-                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
-                        {
-                            targetRedefinitionValue.Add(redefinitionItem);
-                        }
-                    }
-                    continue;
-                }
-
                 if (reader.ValueTextEquals("source"u8))
                 {
                     sourceRedefinitionSeen = true;
@@ -950,21 +935,24 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                     continue;
                 }
 
+                if (reader.ValueTextEquals("target"u8))
+                {
+                    targetRedefinitionSeen = true;
+                    reader.Read();
+                    Utf8JsonReaderHelper.ExpectArrayStart(ref reader);
+                    while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+                    {
+                        if (Utf8JsonReaderHelper.TryReadReferenceIdentifier(ref reader, out var redefinitionItem))
+                        {
+                            targetRedefinitionValue.Add(redefinitionItem);
+                        }
+                    }
+                    continue;
+                }
+
 
                 reader.Read();
                 reader.Skip();
-            }
-
-            if (targetRedefinitionSeen)
-            {
-                if (!supplierSeen)
-                {
-                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
-                }
-                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("The target Json property of the Dependency {Id} disagrees with supplier; the supplier value is kept", dtoInstance.Id);
-                }
             }
 
             if (sourceRedefinitionSeen)
@@ -976,6 +964,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Source, sourceRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("The source Json property of the Dependency {Id} disagrees with client; the client value is kept", dtoInstance.Id);
+                }
+            }
+
+            if (targetRedefinitionSeen)
+            {
+                if (!supplierSeen)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target = targetRedefinitionValue;
+                }
+                else if (!System.Linq.Enumerable.SequenceEqual(((SysML2.NET.Core.DTO.Root.Elements.IRelationship)dtoInstance).Target, targetRedefinitionValue) && logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("The target Json property of the Dependency {Id} disagrees with supplier; the supplier value is kept", dtoInstance.Id);
                 }
             }
 

@@ -92,12 +92,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
             {{#with this as |class| }}
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-                {{#unless this.IsTransient}}
-                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+            {{ #each (Class.QuerySerializedProperties this "Stored" "Derived") as | property | }}
                         var {{ property.Name }}Seen = false;
-                    {{/unless}}
-                {{/unless}}
             {{/each}}
 
             {{ #Property.WriteRedefinedDeserialization class "declarations" true }}
@@ -122,14 +118,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             continue;
             }
 
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-                {{#unless this.IsTransient}}
-                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+            {{ #each (Class.QuerySerializedProperties this "Stored" "Derived") as | property | }}
                         {{#withPropertyClassContext property class}}
                             {{> core-json-dto-deserializer-uml-partial-template this}}
                         {{/withPropertyClassContext}}
-                    {{/unless}}
-                {{/unless}}
             {{/each}}
 
             {{ #Property.WriteRedefinedDeserialization class "reads" true }}
@@ -142,15 +134,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-                {{#unless this.IsTransient}}
-                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+            {{ #each (Class.QuerySerializedProperties this "Stored" "Derived") as | property | }}
                         if (!{{ property.Name }}Seen)
                         {
                         logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: {Id}", dtoInstance.Id);
                         }
-                    {{/unless}}
-                {{/unless}}
             {{/each}}
             }
             {{/with}}
@@ -173,14 +161,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, ref Utf8JsonReader reader, ILogger logger)
         {
         {{#with this as |class| }}
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-            {{#unless this.IsTransient}}
-            {{#unless this.IsDerived}}
-                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+            {{ #each (Class.QuerySerializedProperties this "Stored") as | property | }}
                     var {{ property.Name }}Seen = false;
-                {{/unless}}
-            {{/unless}}
-            {{/unless}}
         {{/each}}
 
             {{ #Property.WriteRedefinedDeserialization class "declarations" false }}
@@ -205,16 +187,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             continue;
             }
 
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-            {{#unless this.IsTransient}}
-            {{#unless this.IsDerived}}
-                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+            {{ #each (Class.QuerySerializedProperties this "Stored") as | property | }}
                     {{#withPropertyClassContext property class}}
                         {{> core-json-dto-deserializer-uml-partial-template this}}
                     {{/withPropertyClassContext}}
-                {{/unless}}
-            {{/unless}}
-            {{/unless}}
         {{/each}}
 
             {{ #Property.WriteRedefinedDeserialization class "reads" false }}
@@ -227,17 +203,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-            {{#unless this.IsTransient}}
-            {{#unless this.IsDerived}}
-                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+            {{ #each (Class.QuerySerializedProperties this "Stored") as | property | }}
                     if (!{{ property.Name }}Seen)
                     {
                     logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: {Id}", dtoInstance.Id);
                     }
-                {{/unless}}
-            {{/unless}}
-            {{/unless}}
         {{/each}}
             }
 {{/with}}
