@@ -119,6 +119,22 @@ The `OpenApi*Generator`s read `Resources/ptc-25-02-30.json` and emit the PSM DTO
 
 Author and reviewer both re-ground in `SysML2.NET.CodeGenerator/GRAMMAR.md`, `Resources/SysML-textual-bnf.kebnf` / `Resources/KerML-textual-bnf.kebnf`, and the rule's `<para>{…}</para>` XML doc on the generated sibling method. The agent enforces the `Move()` ↔ `+=` Golden Rule, EBNF quantifier semantics (`?` → single `if`; `*` → `while`; `+` → emit-once then loop), correct runtime type discriminators, absence of greedy-builder element drops, and consistency with the grammar rule. Reviewer passes have caught real bugs that no existing test would have failed on.
 
+### SQL schema documentation is MANDATORY reading and MANDATORY upkeep
+
+The PostgreSQL persistence schema is documented in `doc/`, the starting point for any SQL work:
+
+| Document | Read it for |
+|---|---|
+| `doc/SQLSCHEMA.md` | entry point: artifacts, layers, census rules, measurements, verification, open defects |
+| `doc/SQLSCHEMA-GUIDE.md` | the reasoning behind every table, function and index (§-numbered like the schema banners) |
+| `doc/SQLSCHEMA-FLOWS.md` | which parts each API flow touches, and which smoke `PASS` proves it |
+| `doc/IMPACT-RADIUS.md` | the derived-property impact-radius engine (design sketch, not built) |
+| `doc/SQL_SCHEMA_REVIEW.md` | the PR #344 review, with the GitHub issue and current status of each finding |
+
+- **Read them before** answering a question about, or changing, the SQL schema: `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema.hbs`, `HandleBarHelpers/SqlSchemaHelpers.cs`, `Extensions/SqlSchemaExtensions.cs`, `Generators/UmlHandleBarsGenerators/SQLSchemaGenerator.cs` / `ClassKindRegistry.cs`, anything under `SysML2.NET.CodeGenerator.Tests/Sql/`, the expected `schema.generated.sql`, and `SysML2.NET.Dal/AutoGenSql/`. Start with `doc/SQLSCHEMA.md`, then the guide section for the layer in question.
+- **Update them in the same change** whenever any of those paths changes: counts (tables, arms, `PASS` assertions, registry members), table and function names, paths, the smoke assertion map, and the status of a review finding or open defect. `SysML2.NET.CodeGenerator.Tests/Sql/SQL.md` follows the same rule for the test assets. A schema change is not complete while the documents describe the previous schema.
+- **Where a document and the generated schema disagree, the schema says what is built**: correct the document, or — if the schema is what is wrong — record it as an open defect in `doc/SQLSCHEMA.md`.
+
 ### Project dependency graph
 
 ```
