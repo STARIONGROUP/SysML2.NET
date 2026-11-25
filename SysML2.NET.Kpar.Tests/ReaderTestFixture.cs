@@ -322,7 +322,7 @@ namespace SysML2.NET.Kpar.Tests
 
             Assert.That(archive.Project.Name, Is.EqualTo("Kernel Semantic Library"));
             Assert.That(archive.Project.Description, Is.EqualTo("Standard semantic library for the Kernel Modeling Language (KerML)"));
-            Assert.That(archive.Project.Version, Is.EqualTo("1.1.0-dev.20260801"));
+            Assert.That(archive.Project.Version, Is.EqualTo("1.1.0-dev.20260901"));
 
             Assert.That(archive.Project.Usage, Is.Not.Null);
             Assert.That(archive.Project.Usage.Count, Is.EqualTo(2));
@@ -330,10 +330,10 @@ namespace SysML2.NET.Kpar.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(archive.Project.Usage[0].Resource, Is.EqualTo(new Uri("https://www.omg.org/spec/KerML/20250201/Data-Type-Library.kpar")));
-                Assert.That(archive.Project.Usage[0].VersionConstraint, Is.EqualTo("1.1.0-dev.20260801"));
+                Assert.That(archive.Project.Usage[0].VersionConstraint, Is.EqualTo("1.1.0-dev.20260901"));
 
                 Assert.That(archive.Project.Usage[1].Resource, Is.EqualTo(new Uri("https://www.omg.org/spec/KerML/20250201/Function-Library.kpar")));
-                Assert.That(archive.Project.Usage[1].VersionConstraint, Is.EqualTo("1.1.0-dev.20260801"));
+                Assert.That(archive.Project.Usage[1].VersionConstraint, Is.EqualTo("1.1.0-dev.20260901"));
             });
         }
     }
