@@ -129,7 +129,7 @@ The PostgreSQL persistence schema is documented in `doc/`, the starting point fo
 | `doc/SQLSCHEMA-GUIDE.md` | the reasoning behind every table, function and index (§-numbered like the schema banners) |
 | `doc/SQLSCHEMA-FLOWS.md` | which parts each API flow touches, and which smoke `PASS` proves it |
 | `doc/IMPACT-RADIUS.md` | the derived-property impact-radius engine (design sketch, not built) |
-| `doc/SQL_SCHEMA_REVIEW.md`, `doc/SQL_SCHEMA_ISSUES.md` | the PR #344 review and its issues, with their current status |
+| `doc/SQL_SCHEMA_REVIEW.md` | the PR #344 review, with the GitHub issue and current status of each finding |
 
 - **Read them before** answering a question about, or changing, the SQL schema: `SysML2.NET.CodeGenerator/Templates/Uml/core-sql-schema.hbs`, `HandleBarHelpers/SqlSchemaHelpers.cs`, `Extensions/SqlSchemaExtensions.cs`, `Generators/UmlHandleBarsGenerators/SQLSchemaGenerator.cs` / `ClassKindRegistry.cs`, anything under `SysML2.NET.CodeGenerator.Tests/Sql/`, the expected `schema.generated.sql`, and `SysML2.NET.Dal/AutoGenSql/`. Start with `doc/SQLSCHEMA.md`, then the guide section for the layer in question.
 - **Update them in the same change** whenever any of those paths changes: counts (tables, arms, `PASS` assertions, registry members), table and function names, paths, the smoke assertion map, and the status of a review finding or open defect. `SysML2.NET.CodeGenerator.Tests/Sql/SQL.md` follows the same rule for the test assets. A schema change is not complete while the documents describe the previous schema.

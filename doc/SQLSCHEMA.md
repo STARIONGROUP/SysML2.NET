@@ -1,7 +1,7 @@
 # SQLSCHEMA.md — PostgreSQL persistence schema for SysML v2 models
 
 This document is the compact design reference for the SQL schema code-generation pipeline.
-It is one of six documents at the repository root that together describe the SQL work:
+It is one of five documents in `doc/` that together describe the SQL work:
 
 | Document | Role |
 |---|---|
@@ -10,7 +10,6 @@ It is one of six documents at the repository root that together describe the SQL
 | `doc/SQLSCHEMA-FLOWS.md` | The use-case walkthrough: which moving parts each API flow touches, in order, and which smoke assertion proves it. |
 | `doc/IMPACT-RADIUS.md` | Design sketch (not built) for the derived-property impact-radius engine, guide obligation §15.1. |
 | `doc/SQL_SCHEMA_REVIEW.md` | The review of the generated schema (PR #344, snapshot `d5a90f2e`), with the current status of each finding. |
-| `doc/SQL_SCHEMA_ISSUES.md` | The issue drafts that review produced, mapped to the GitHub issues they became. |
 
 Guide section map: §1–§5 problem, census and rejected alternatives; §6–§13 layer-by-layer
 walkthrough (§6.4: multi-version support — commit-stamped metamodel releases, the append-only
@@ -381,7 +380,7 @@ still describes `PreviousCommit` as ordered; the C# member and the model are uno
 ## Open defects
 
 Filed from the PR #344 review (`doc/SQL_SCHEMA_REVIEW.md`); none is fixed in the generated schema
-yet. Each has a draft body in `doc/SQL_SCHEMA_ISSUES.md`.
+yet.
 
 | Issue | Defect |
 |---|---|

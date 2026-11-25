@@ -692,7 +692,7 @@ plus catastrophic — is the schema's general FK philosophy.
 | 4 | Copy the reviewed output over the expected file and `SysML2.NET.Dal/AutoGenSql/` | The expected file is the generator test's oracle; the Dal script is what ships (guide §17.1 on released scripts). |
 | 5 | Run `ClassKindEnumGeneratorTestFixture` and `SqlSchemaScriptsTestFixture` | Regenerates `ClassKind.cs` from the same registry; checks the shipped scripts seed every compiled member. |
 | 6 | Run the `Integration` fixtures (`SqlSchemaSmokeTestFixture`, `SqlSchemaConcurrencyTestFixture`) | Installs the generated schema on a PostgreSQL 18 Testcontainer and runs the 76-assertion smoke + the concurrency suite. |
-| 7 | Update the documents under `doc/` | `doc/SQLSCHEMA.md`, `doc/SQLSCHEMA-GUIDE.md`, this file, `doc/IMPACT-RADIUS.md` and the review/issue status must follow the schema (CLAUDE.md). |
+| 7 | Update the documents under `doc/` | `doc/SQLSCHEMA.md`, `doc/SQLSCHEMA-GUIDE.md`, this file, `doc/IMPACT-RADIUS.md` and the review's finding status must follow the schema (CLAUDE.md). |
 
 Census rules the generator encodes (and that are easy to get wrong by hand, guide §3): declared
 properties are computed as `QueryAllProperties(class)` minus the generals' — never from
