@@ -28,6 +28,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     public static class DtoValidatorHelper
     {
         /// <summary>
+        /// The suffix that lowers a rule inferred from a required derived property to a warning
+        /// </summary>
+        private const string WarningSeverity = ".WithSeverity(Severity.Warning)";
+
+        /// <summary>
         /// Queries the rule statements derived from every non-derived property of the class that is not redefined in it
         /// </summary>
         /// <param name="class">The <see cref="IClass"/> that the validator validates.</param>
@@ -83,8 +88,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </summary>
         /// <param name="lower">The lower bound of the collection.</param>
         /// <param name="upper">The upper bound of the collection, <see cref="int.MaxValue"/> when unbounded.</param>
+        /// <param name="isLowerInferred">Whether the lower bound is raised by a required derived property, which reports its violation as a warning.</param>
         /// <returns>The rule chain appended to <c>RuleFor</c>, or <c>null</c> when the bounds demand nothing.</returns>
-        internal static string QueryCollectionCountRule(int lower, int upper)
+        internal static string QueryCollectionCountRule(int lower, int upper, bool isLowerInferred)
         {
             var isBounded = upper != int.MaxValue;
 
@@ -93,11 +99,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return isBounded ? $".Must(value => value == null || value.Count <= {upper})" : null;
             }
 
-            List<string> validators = [".NotEmpty()"];
+            var lowerSeverity = isLowerInferred ? WarningSeverity : string.Empty;
+
+            List<string> validators = [".NotEmpty()" + lowerSeverity];
 
             if (lower > 1)
             {
-                validators.Add($".Must(value => value.Count >= {lower})");
+                validators.Add($".Must(value => value.Count >= {lower})" + lowerSeverity);
             }
 
             if (isBounded)
@@ -119,7 +127,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>The rule statements.</returns>
         private static IEnumerable<string> QueryCollectionRules(IProperty property, int lower, string selector)
         {
-            var countRule = QueryCollectionCountRule(lower, property.QueryUpperValue());
+            var countRule = QueryCollectionCountRule(lower, property.QueryUpperValue(), lower > property.Lower);
 
             if (countRule != null)
             {
@@ -168,20 +176,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <returns>The rule statements.</returns>
         private static IEnumerable<string> QueryScalarRules(IProperty property, int lower, string selector)
         {
+            var severity = lower > property.Lower ? WarningSeverity : string.Empty;
+
             switch (property.Type)
             {
                 case IEnumeration:
                     yield return $"this.RuleFor({selector}).IsInEnum();";
                     break;
                 case IDataType when property.QueryIsString() && lower > 0:
-                    yield return $"this.RuleFor({selector}).NotNull();";
+                    yield return $"this.RuleFor({selector}).NotNull(){severity};";
                     break;
                 case IDataType:
                     break;
                 default:
                     if (lower > 0)
                     {
-                        yield return $"this.RuleFor({selector}).NotEmpty();";
+                        yield return $"this.RuleFor({selector}).NotEmpty(){severity};";
                     }
 
                     break;

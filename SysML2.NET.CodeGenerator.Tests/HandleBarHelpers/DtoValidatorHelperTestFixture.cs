@@ -7,7 +7,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
+namespace SysML2.NET.CodeGenerator.Tests.HandleBarHelpers
 {
     using System;
     using System.Collections.Generic;
@@ -21,6 +21,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
+    using SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators;
 
     using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
@@ -44,12 +45,18 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(0, int.MaxValue), Is.Null);
-                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(0, 3), Is.EqualTo(".Must(value => value == null || value.Count <= 3)"));
-                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(1, int.MaxValue), Is.EqualTo(".NotEmpty()"));
-                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(2, int.MaxValue), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().Must(value => value.Count >= 2)"));
-                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(1, 3), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().Must(value => value.Count <= 3)"));
-                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(2, 5), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().Must(value => value.Count >= 2).Must(value => value.Count <= 5)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(0, int.MaxValue, false), Is.Null);
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(0, 3, false), Is.EqualTo(".Must(value => value == null || value.Count <= 3)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(1, int.MaxValue, false), Is.EqualTo(".NotEmpty()"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(2, int.MaxValue, false), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().Must(value => value.Count >= 2)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(1, 3, false), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().Must(value => value.Count <= 3)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(2, 5, false), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().Must(value => value.Count >= 2).Must(value => value.Count <= 5)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(0, int.MaxValue, true), Is.Null);
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(0, 3, true), Is.EqualTo(".Must(value => value == null || value.Count <= 3)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(1, int.MaxValue, true), Is.EqualTo(".NotEmpty().WithSeverity(Severity.Warning)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(2, int.MaxValue, true), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().WithSeverity(Severity.Warning).Must(value => value.Count >= 2).WithSeverity(Severity.Warning)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(1, 3, true), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().WithSeverity(Severity.Warning).Must(value => value.Count <= 3)"));
+                Assert.That(DtoValidatorHelper.QueryCollectionCountRule(2, 5, true), Is.EqualTo(".Cascade(CascadeMode.Stop).NotEmpty().WithSeverity(Severity.Warning).Must(value => value.Count >= 2).WithSeverity(Severity.Warning).Must(value => value.Count <= 5)"));
             }
         }
 
@@ -66,7 +73,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             [
                 "this.RuleFor(dto => dto.ElementId).NotNull();",
                 "this.RuleFor(dto => dto.MemberElement).NotEmpty();",
-                "this.RuleFor(dto => dto.OwningRelatedElement).NotEmpty();",
+                "this.RuleFor(dto => dto.OwningRelatedElement).NotEmpty().WithSeverity(Severity.Warning);",
                 "this.RuleFor(dto => dto.Visibility).IsInEnum();"
             ];
 
@@ -76,9 +83,10 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
                 Assert.That(QueryValidatedPropertyNames(owningMembership), Does.Not.Contain("MemberElement"));
                 Assert.That(QueryValidatedPropertyNames(owningMembership), Does.Not.Contain("OwnedMemberElement"));
-                Assert.That(DtoValidatorHelper.QueryRules(owningMembership), Does.Contain("this.RuleFor(dto => dto.OwnedRelatedElement).NotEmpty();"));
-                Assert.That(DtoValidatorHelper.QueryRules(this.QueryClass("FeatureMembership")), Does.Contain("this.RuleFor(dto => dto.OwnedRelatedElement).NotEmpty();"));
-                Assert.That(DtoValidatorHelper.QueryRules(this.QueryClass("ConjugatedPortDefinition")), Does.Contain("this.RuleFor(dto => dto.OwnedRelationship).NotEmpty();"));
+                Assert.That(DtoValidatorHelper.QueryRules(owningMembership), Does.Contain("this.RuleFor(dto => dto.OwnedRelatedElement).NotEmpty().WithSeverity(Severity.Warning);"));
+                Assert.That(DtoValidatorHelper.QueryRules(this.QueryClass("FeatureMembership")), Does.Contain("this.RuleFor(dto => dto.OwnedRelatedElement).NotEmpty().WithSeverity(Severity.Warning);"));
+                Assert.That(DtoValidatorHelper.QueryRules(this.QueryClass("ConjugatedPortDefinition")), Does.Contain("this.RuleFor(dto => dto.OwnedRelationship).NotEmpty().WithSeverity(Severity.Warning);"));
+                Assert.That(DtoValidatorHelper.QueryRules(this.QueryClass("Dependency")), Does.Contain("this.RuleFor(dto => dto.Client).NotEmpty();"));
 
                 Assert.That(QueryValidatedPropertyNames(this.QueryClass("PortDefinition")), Does.Not.Contain("OwnedRelationship"));
                 Assert.That(QueryValidatedPropertyNames(feature), Does.Not.Contain("OwnedRelationship"));
@@ -131,22 +139,9 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(template(this.QueryClass("Membership")), Does.Contain("this.RuleFor(dto => dto.MemberElement).NotEmpty();"));
-                Assert.That(template(this.QueryClass("Membership")), Does.Contain("=>"));
                 Assert.That(() => template(new { }), Throws.TypeOf<ArgumentException>());
                 Assert.That(() => handlebars.Compile("{{DtoValidator.WriteRules}}")(new { }), Throws.TypeOf<HandlebarsException>());
             }
-        }
-
-        private static string QuerySelectedPropertyName(string rule)
-        {
-            return RuleSelectorRegex().Match(rule).Groups[1].Value;
-        }
-
-        private static HashSet<string> QueryValidatedPropertyNames(IClass @class)
-        {
-            return DtoValidatorHelper.QueryRules(@class)
-                .Select(QuerySelectedPropertyName)
-                .ToHashSet(StringComparer.Ordinal);
         }
 
         private static HashSet<string> QueryDerivedPropertyNames(IClass @class)
@@ -161,6 +156,18 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 .Where(property => property.IsDerived || property.IsDerivedUnion)
                 .Select(property => property.Name.CapitalizeFirstLetter())
                 .Except(nonDerivedNames)
+                .ToHashSet(StringComparer.Ordinal);
+        }
+
+        private static string QuerySelectedPropertyName(string rule)
+        {
+            return RuleSelectorRegex().Match(rule).Groups[1].Value;
+        }
+
+        private static HashSet<string> QueryValidatedPropertyNames(IClass @class)
+        {
+            return DtoValidatorHelper.QueryRules(@class)
+                .Select(QuerySelectedPropertyName)
                 .ToHashSet(StringComparer.Ordinal);
         }
 

@@ -12,6 +12,8 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
     using System;
     using System.Linq;
 
+    using FluentValidation;
+
     using NUnit.Framework;
 
     using SysML2.NET.Core.DTO.Systems.Requirements;
@@ -35,12 +37,12 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
 
             membership.OwnedRelatedElement = [];
 
-            Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwnedRelatedElement"]));
+            Assert.That(validator.Validate(membership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwnedRelatedElement", Severity.Warning)]));
 
             membership.OwnedRelatedElement = [Guid.NewGuid()];
             membership.Kind = (RequirementConstraintKind)int.MaxValue;
 
-            Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["Kind"]));
+            Assert.That(validator.Validate(membership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("Kind", Severity.Error)]));
         }
     }
 }

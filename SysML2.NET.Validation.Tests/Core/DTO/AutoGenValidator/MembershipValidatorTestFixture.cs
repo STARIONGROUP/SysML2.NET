@@ -12,6 +12,8 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
     using System;
     using System.Linq;
 
+    using FluentValidation;
+
     using NUnit.Framework;
 
     using SysML2.NET.Core.DTO.Root.Namespaces;
@@ -32,13 +34,13 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
 
             membership.OwningRelatedElement = null;
 
-            Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwningRelatedElement"]));
+            Assert.That(validator.Validate(membership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwningRelatedElement", Severity.Warning)]));
 
             membership.OwningRelatedElement = Guid.NewGuid();
 
             membership.MemberElement = Guid.Empty;
 
-            Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["MemberElement"]));
+            Assert.That(validator.Validate(membership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("MemberElement", Severity.Error)]));
 
             membership.MemberElement = Guid.NewGuid();
             membership.ElementId = null;
@@ -46,6 +48,10 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
             Assert.That(validator.Validate(membership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["ElementId"]));
 
             membership.ElementId = string.Empty;
+
+            Assert.That(validator.Validate(membership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("ElementId", Severity.Error)]));
+
+            membership.ElementId = "the element id";
             membership.OwningRelationship = Guid.Empty;
             membership.OwnedRelationship = [relationshipId, relationshipId, Guid.Empty];
             membership.AliasIds = [null, null];

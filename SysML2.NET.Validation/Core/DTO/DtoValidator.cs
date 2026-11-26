@@ -22,11 +22,12 @@ namespace SysML2.NET.Validation.Core.DTO
     public abstract class DtoValidator<TElement> : AbstractValidator<TElement> where TElement : IElement
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DtoValidator{TElement}"/> class, registers the identifier rule and the hand-coded rules
+        /// Initializes a new instance of the <see cref="DtoValidator{TElement}"/> class, registers the identifier rules and the hand-coded rules
         /// </summary>
         protected DtoValidator()
         {
             this.RuleFor(dto => dto.Id).NotEmpty();
+            this.RuleFor(dto => dto.ElementId).NotEmpty().When(dto => dto.ElementId != null);
             this.RegisterCustomValidation();
         }
 

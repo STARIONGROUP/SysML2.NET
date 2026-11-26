@@ -23,7 +23,7 @@ namespace SysML2.NET.Validation.Core.DTO
 
     /// <summary>
     /// Validates a <see cref="NamespaceExpose"/> against the multiplicities and types of the non-derived properties of the NamespaceExpose metaclass.
-    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
+    /// A rule inferred from a required derived property reports a warning and only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class NamespaceExposeValidator : DtoValidator<NamespaceExpose>
@@ -36,7 +36,7 @@ namespace SysML2.NET.Validation.Core.DTO
         {
             this.RuleFor(dto => dto.ElementId).NotNull();
             this.RuleFor(dto => dto.ImportedNamespace).NotEmpty();
-            this.RuleFor(dto => dto.OwningRelatedElement).NotEmpty();
+            this.RuleFor(dto => dto.OwningRelatedElement).NotEmpty().WithSeverity(Severity.Warning);
             this.RuleFor(dto => dto.Visibility).IsInEnum();
         }
     }

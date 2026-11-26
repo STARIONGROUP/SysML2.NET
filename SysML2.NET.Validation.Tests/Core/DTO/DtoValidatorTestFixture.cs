@@ -41,6 +41,20 @@ namespace SysML2.NET.Validation.Tests.Core.DTO
             comment.Id = Guid.Empty;
 
             Assert.That(new ValidatorWithoutCustomValidation().Validate(comment).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo([nameof(Comment.Id)]));
+
+            comment.Id = Guid.NewGuid();
+            comment.ElementId = string.Empty;
+
+            Assert.That(new ValidatorWithoutCustomValidation().Validate(comment).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo([nameof(Comment.ElementId)]));
+
+            comment.ElementId = " ";
+
+            Assert.That(new ValidatorWithoutCustomValidation().Validate(comment).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo([nameof(Comment.ElementId)]));
+
+            comment.ElementId = "the element id";
+            comment.Body = string.Empty;
+
+            Assert.That(new CommentValidator().Validate(comment).IsValid, Is.True);
         }
 
         private sealed class ValidatorWithoutCustomValidation : DtoValidator<Comment>

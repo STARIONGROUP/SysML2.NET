@@ -22,7 +22,7 @@ namespace SysML2.NET.Validation.Core.DTO
 
     /// <summary>
     /// Validates a <see cref="Metaclass"/> against the multiplicities and types of the non-derived properties of the Metaclass metaclass.
-    /// A rule inferred from a required derived property only checks the lower bound of its storage, not its upper bound or element type.
+    /// A rule inferred from a required derived property reports a warning and only checks the lower bound of its storage, not its upper bound or element type.
     /// </summary>
     [GeneratedCode("SysML2.NET", "latest")]
     public sealed partial class MetaclassValidator : DtoValidator<Metaclass>

@@ -12,6 +12,8 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
     using System;
     using System.Linq;
 
+    using FluentValidation;
+
     using NUnit.Framework;
 
     using SysML2.NET.Core.DTO.Systems.Ports;
@@ -30,11 +32,11 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
 
             conjugatedPortDefinition.OwnedRelationship = [];
 
-            Assert.That(validator.Validate(conjugatedPortDefinition).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwnedRelationship"]));
+            Assert.That(validator.Validate(conjugatedPortDefinition).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwnedRelationship", Severity.Warning)]));
 
             conjugatedPortDefinition.OwnedRelationship = null;
 
-            Assert.That(validator.Validate(conjugatedPortDefinition).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwnedRelationship"]));
+            Assert.That(validator.Validate(conjugatedPortDefinition).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwnedRelationship", Severity.Warning)]));
         }
     }
 }

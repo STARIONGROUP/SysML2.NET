@@ -12,6 +12,8 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
     using System;
     using System.Linq;
 
+    using FluentValidation;
+
     using NUnit.Framework;
 
     using SysML2.NET.Core.DTO.Root.Namespaces;
@@ -30,17 +32,17 @@ namespace SysML2.NET.Validation.Tests.Core.DTO.AutoGenValidator
 
             owningMembership.OwningRelatedElement = null;
 
-            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwningRelatedElement"]));
+            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwningRelatedElement", Severity.Warning)]));
 
             owningMembership.OwningRelatedElement = Guid.NewGuid();
 
             owningMembership.OwnedRelatedElement = [];
 
-            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwnedRelatedElement"]));
+            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwnedRelatedElement", Severity.Warning)]));
 
             owningMembership.OwnedRelatedElement = null;
 
-            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => failure.PropertyName), Is.EquivalentTo(["OwnedRelatedElement"]));
+            Assert.That(validator.Validate(owningMembership).Errors.Select(failure => (failure.PropertyName, failure.Severity)), Is.EquivalentTo([("OwnedRelatedElement", Severity.Warning)]));
         }
     }
 }
