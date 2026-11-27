@@ -307,7 +307,7 @@ namespace SySML2.NET.REST
         }
 
         /// <summary>
-        /// Creates the JSON body of a request from a sequence of data items
+        /// Creates the JSON body of a request from a sequence of data items, each written as a full <c>Data</c> including its derived properties
         /// </summary>
         /// <param name="requestBody">
         /// The <see cref="IData"/> items to send, or <c>null</c> to send no body
@@ -327,7 +327,7 @@ namespace SySML2.NET.REST
 
             var stream = new MemoryStream();
 
-            await this.serializer.SerializeAsync(requestBody, SerializationModeKind.JSON, false, stream, WriterOptions, cancellationToken);
+            await this.serializer.SerializeAsync(requestBody, SerializationModeKind.JSON, true, stream, WriterOptions, cancellationToken);
 
             return CreateContent(stream);
         }
